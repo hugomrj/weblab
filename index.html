@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Catálogo de Páginas</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css" rel="stylesheet">
+    <style>
+        .catalog-card {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border-radius: 12px;
+            overflow: hidden;
+            background-color: white;
+            transition: transform 0.2s ease;
+        }
+
+        .catalog-card:hover {
+            transform: scale(1.02);
+        }
+
+        .preview-container {
+            width: 100%;
+            height: 0;
+            padding-bottom: 56.25%; /* Aspect ratio 16:9 */
+            position: relative;
+            overflow: hidden;
+            background: #f5f5f5;
+        }
+
+        .preview-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .card-content {
+            padding: 1rem;
+        }
+
+        .card-footer {
+            padding: 1rem;
+            text-align: center;
+            border-top: 1px solid #eee;
+        }
+    </style>
+</head>
+<body>
+    <section class="section">
+        <div class="container">
+            <h1 class="title has-text-centered is-size-3 mb-6">Catálogo de Páginas</h1>
+            <div class="columns is-multiline is-variable is-4">
+
+                <div class="column is-one-quarter-desktop is-half-tablet">
+                    <div class="catalog-card">
+                        <div class="card-content">
+                            <h2 class="subtitle is-6">Salón de Belleza</h2>
+                        </div>
+                        <div class="preview-container" title="Vista previa de Salón de Belleza">
+                            <iframe src="https://hugomrj.github.io/salonbelleza/" scrolling="no"></iframe>
+                        </div>
+                        <div class="card-footer">
+                            <a class="button is-link is-light is-small" href="https://hugomrj.github.io/salonbelleza/" target="_blank">
+                                Ver página
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="column is-one-quarter-desktop is-half-tablet">
+                    <div class="catalog-card">
+                        <div class="card-content">
+                            <h2 class="subtitle is-6">Bonsai Arte</h2>
+                        </div>
+                        <div class="preview-container" title="Vista previa de Bonsai Arte">
+                            <iframe src="https://hugomrj.github.io/bonsai-arte/" scrolling="no"></iframe>
+                        </div>
+                        <div class="card-footer">
+                            <a class="button is-link is-light is-small" href="https://hugomrj.github.io/bonsai-arte/" target="_blank">
+                                Ver página
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                </div>
+        </div>
+    </section>
+</body>
+</html>
