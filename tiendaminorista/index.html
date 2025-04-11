@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nombre de Tu Tienda - Moda y Estilo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Estilos personalizados */
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* Asegurar que el contenido principal empuje el footer hacia abajo */
+        .main-content {
+            min-height: calc(100vh - 10rem); /* Ajusta 10rem según la altura de tu header y footer */
+        }
+        /* Estilo sutil para tarjetas de producto */
+        .product-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+
+    <header class="bg-white shadow-md sticky top-0 z-50 rounded-b-lg">
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex justify-between items-center">
+                <a href="#" class="text-2xl font-bold text-gray-800">Nombre Tienda</a>
+
+                <div class="hidden md:flex items-center border border-gray-300 rounded-full px-4 py-1 flex-grow max-w-lg mx-4">
+                    <input type="text" placeholder="Buscar productos..." class="outline-none w-full text-sm">
+                    <button class="text-gray-500 hover:text-blue-600 ml-2">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+
+                <div class="flex items-center space-x-4">
+                    <a href="#" class="text-gray-600 hover:text-blue-600">
+                        <i class="fas fa-user fa-lg"></i>
+                    </a>
+                    <a href="#" class="text-gray-600 hover:text-blue-600 relative">
+                        <i class="fas fa-shopping-cart fa-lg"></i>
+                        <span class="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-4 w-4 flex items-center justify-center">3</span>
+                    </a>
+                </div>
+            </div>
+            <nav class="mt-4 flex justify-center space-x-6 border-t pt-3">
+                <a href="#categorias" class="text-gray-600 hover:text-blue-600 font-medium">Categorías</a>
+                <a href="#nuevos" class="text-gray-600 hover:text-blue-600 font-medium">Novedades</a>
+                <a href="#ofertas" class="text-gray-600 hover:text-blue-600 font-medium text-red-500">Ofertas</a>
+                <a href="#contacto" class="text-gray-600 hover:text-blue-600 font-medium">Contacto</a>
+                <a href="#nosotros" class="text-gray-600 hover:text-blue-600 font-medium">Nosotros</a>
+            </nav>
+             <div class="md:hidden mt-4 flex items-center border border-gray-300 rounded-full px-4 py-1 w-full">
+                <input type="text" placeholder="Buscar productos..." class="outline-none w-full text-sm">
+                <button class="text-gray-500 hover:text-blue-600 ml-2">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content container mx-auto px-4 py-8">
+
+        <section class="bg-gradient-to-r from-blue-500 to-purple-600 text-white py-16 px-8 rounded-lg mb-12 text-center shadow-lg">
+             <h1 class="text-4xl font-bold mb-4">¡Nueva Colección Primavera/Verano!</h1>
+             <p class="text-lg mb-6">Descubre las últimas tendencias y renueva tu estilo.</p>
+             <a href="#nuevos" class="bg-white text-blue-600 font-bold py-2 px-6 rounded-full hover:bg-gray-100 transition duration-300">Ver Novedades</a>
+        </section>
+
+        <section id="categorias" class="mb-12">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-6 text-center">Explora Nuestras Categorías</h2>
+            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+                <a href="#" class="block group text-center">
+                    <div class="bg-white p-4 rounded-lg shadow hover:shadow-md transition duration-300">
+                        <img src="https://placehold.co/150x150/e0f2fe/0c4a6e?text=Ropa+Mujer" alt="[Imagen de Ropa Mujer]" class="w-24 h-24 object-cover rounded-full mx-auto mb-2" onerror="this.onerror=null; this.src='https://placehold.co/150x150/e0f2fe/0c4a6e?text=Imagen+no+disponible';">
+                        <span class="text-gray-700 font-medium group-hover:text-blue-600">Mujer</span>
+                    </div>
+                </a>
+                <a href="#" class="block group text-center">
+                    <div class="bg-white p-4 rounded-lg shadow hover:shadow-md transition duration-300">
+                        <img src="https://placehold.co/150x150/dbeafe/1e3a8a?text=Ropa+Hombre" alt="[Imagen de Ropa Hombre]" class="w-24 h-24 object-cover rounded-full mx-auto mb-2" onerror="this.onerror=null; this.src='https://placehold.co/150x150/dbeafe/1e3a8a?text=Imagen+no+disponible';">
+                        <span class="text-gray-700 font-medium group-hover:text-blue-600">Hombre</span>
+                    </div>
+                </a>
+                 <a href="#" class="block group text-center">
+                    <div class="bg-white p-4 rounded-lg shadow hover:shadow-md transition duration-300">
+                        <img src="https://placehold.co/150x150/ede9fe/4c1d95?text=Niños" alt="[Imagen de Ropa Niños]" class="w-24 h-24 object-cover rounded-full mx-auto mb-2" onerror="this.onerror=null; this.src='https://placehold.co/150x150/ede9fe/4c1d95?text=Imagen+no+disponible';">
+                        <span class="text-gray-700 font-medium group-hover:text-blue-600">Niños</span>
+                    </div>
+                </a>
+                 <a href="#" class="block group text-center">
+                    <div class="bg-white p-4 rounded-lg shadow hover:shadow-md transition duration-300">
+                        <img src="https://placehold.co/150x150/fce7f3/831843?text=Accesorios" alt="[Imagen de Accesorios]" class="w-24 h-24 object-cover rounded-full mx-auto mb-2" onerror="this.onerror=null; this.src='https://placehold.co/150x150/fce7f3/831843?text=Imagen+no+disponible';">
+                        <span class="text-gray-700 font-medium group-hover:text-blue-600">Accesorios</span>
+                    </div>
+                </a>
+                 <a href="#" class="block group text-center">
+                    <div class="bg-white p-4 rounded-lg shadow hover:shadow-md transition duration-300">
+                        <img src="https://placehold.co/150x150/ecfccb/365314?text=Calzado" alt="[Imagen de Calzado]" class="w-24 h-24 object-cover rounded-full mx-auto mb-2" onerror="this.onerror=null; this.src='https://placehold.co/150x150/ecfccb/365314?text=Imagen+no+disponible';">
+                        <span class="text-gray-700 font-medium group-hover:text-blue-600">Calzado</span>
+                    </div>
+                </a>
+                 <a href="#" class="block group text-center">
+                    <div class="bg-white p-4 rounded-lg shadow hover:shadow-md transition duration-300">
+                        <img src="https://placehold.co/150x150/fee2e2/7f1d1d?text=Ofertas" alt="[Imagen de Ofertas]" class="w-24 h-24 object-cover rounded-full mx-auto mb-2" onerror="this.onerror=null; this.src='https://placehold.co/150x150/fee2e2/7f1d1d?text=Imagen+no+disponible';">
+                        <span class="text-red-500 font-medium group-hover:text-red-700">Ofertas</span>
+                    </div>
+                </a>
+            </div>
+        </section>
+
+        <section id="nuevos" class="mb-12">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-6 text-center">Novedades</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="bg-white rounded-lg shadow overflow-hidden product-card">
+                    <a href="#"> <img src="https://placehold.co/300x400/dbeafe/1e40af?text=Producto+1" alt="[Imagen de Producto 1]" class="w-full h-64 object-cover" onerror="this.onerror=null; this.src='https://placehold.co/300x400/dbeafe/1e40af?text=Imagen+no+disponible';">
+                    </a>
+                    <div class="p-4">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-1 truncate">Nombre del Producto Largo</h3>
+                        <p class="text-gray-600 text-sm mb-2">Breve descripción o marca</p>
+                        <div class="flex justify-between items-center mb-3">
+                            <span class="text-xl font-bold text-blue-600">₲ 150.000</span>
+                            <span class="text-xs text-green-600 bg-green-100 px-2 py-0.5 rounded-full">En Stock</span>
+                            </div>
+                         <div class="mb-3 text-sm">
+                            <span class="text-gray-500">Tallas: S, M, L</span>
+                        </div>
+                        <button class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition duration-300 flex items-center justify-center space-x-2">
+                            <i class="fas fa-cart-plus"></i>
+                            <span>Añadir al Carrito</span>
+                        </button>
+                         <a href="#" class="mt-2 text-center block text-sm text-gray-500 hover:text-blue-600">Ver detalles</a>
+                    </div>
+                </div>
+                 <div class="bg-white rounded-lg shadow overflow-hidden product-card relative">
+                     <span class="absolute top-2 left-2 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded">-20%</span>
+                    <a href="#">
+                        <img src="https://placehold.co/300x400/fef3c7/92400e?text=Producto+2+Oferta" alt="[Imagen de Producto 2]" class="w-full h-64 object-cover" onerror="this.onerror=null; this.src='https://placehold.co/300x400/fef3c7/92400e?text=Imagen+no+disponible';">
+                    </a>
+                    <div class="p-4">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-1 truncate">Otro Producto Interesante</h3>
+                        <p class="text-gray-600 text-sm mb-2">Marca Conocida</p>
+                        <div class="flex justify-between items-center mb-3">
+                             <div>
+                                <span class="text-xl font-bold text-red-600">₲ 120.000</span>
+                                <span class="text-sm text-gray-500 line-through ml-1">₲ 150.000</span>
+                             </div>
+                            <span class="text-xs text-green-600 bg-green-100 px-2 py-0.5 rounded-full">En Stock</span>
+                        </div>
+                        <div class="mb-3 text-sm">
+                            <span class="text-gray-500">Colores: Rojo, Azul</span>
+                        </div>
+                        <button class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition duration-300 flex items-center justify-center space-x-2">
+                            <i class="fas fa-cart-plus"></i>
+                            <span>Añadir al Carrito</span>
+                        </button>
+                         <a href="#" class="mt-2 text-center block text-sm text-gray-500 hover:text-blue-600">Ver detalles</a>
+                    </div>
+                </div>
+                 <div class="bg-white rounded-lg shadow overflow-hidden product-card">
+                    <a href="#">
+                        <img src="https://placehold.co/300x400/ecfccb/3f6212?text=Producto+3" alt="[Imagen de Producto 3]" class="w-full h-64 object-cover" onerror="this.onerror=null; this.src='https://placehold.co/300x400/ecfccb/3f6212?text=Imagen+no+disponible';">
+                    </a>
+                     <div class="p-4">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-1 truncate">Artículo Esencial</h3>
+                        <p class="text-gray-600 text-sm mb-2">Calidad Superior</p>
+                        <div class="flex justify-between items-center mb-3">
+                            <span class="text-xl font-bold text-blue-600">₲ 95.000</span>
+                            <span class="text-xs text-green-600 bg-green-100 px-2 py-0.5 rounded-full">En Stock</span>
+                        </div>
+                        <div class="mb-3 text-sm">
+                            <span class="text-gray-500">Tallas: M, L, XL</span>
+                        </div>
+                        <button class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition duration-300 flex items-center justify-center space-x-2">
+                            <i class="fas fa-cart-plus"></i>
+                            <span>Añadir al Carrito</span>
+                        </button>
+                        <a href="#" class="mt-2 text-center block text-sm text-gray-500 hover:text-blue-600">Ver detalles</a>
+                    </div>
+                </div>
+                 <div class="bg-white rounded-lg shadow overflow-hidden product-card">
+                    <a href="#">
+                        <img src="https://placehold.co/300x400/f3e8ff/581c87?text=Producto+4" alt="[Imagen de Producto 4]" class="w-full h-64 object-cover" onerror="this.onerror=null; this.src='https://placehold.co/300x400/f3e8ff/581c87?text=Imagen+no+disponible';">
+                    </a>
+                     <div class="p-4">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-1 truncate">Accesorio de Moda</h3>
+                        <p class="text-gray-600 text-sm mb-2">Última tendencia</p>
+                        <div class="flex justify-between items-center mb-3">
+                            <span class="text-xl font-bold text-blue-600">₲ 70.000</span>
+                            <span class="text-xs text-orange-600 bg-orange-100 px-2 py-0.5 rounded-full">Pocas Unidades</span>
+                        </div>
+                         <div class="mb-3 text-sm">
+                            <span class="text-gray-500">Color: Único</span>
+                        </div>
+                        <button class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition duration-300 flex items-center justify-center space-x-2">
+                            <i class="fas fa-cart-plus"></i>
+                            <span>Añadir al Carrito</span>
+                        </button>
+                        <a href="#" class="mt-2 text-center block text-sm text-gray-500 hover:text-blue-600">Ver detalles</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="bg-white py-12 px-6 rounded-lg shadow mb-12">
+             <h2 class="text-2xl font-semibold text-gray-800 mb-6 text-center">¿Por Qué Comprar con Nosotros?</h2>
+             <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+                <div class="p-4">
+                    <i class="fas fa-shipping-fast text-4xl text-blue-600 mb-3"></i>
+                    <h3 class="text-lg font-semibold text-gray-700 mb-1">Envíos a Todo el País</h3>
+                    <p class="text-gray-600 text-sm">Recibe tu compra donde estés. Gratis en compras superiores a ₲ 300.000.</p>
+                </div>
+                 <div class="p-4">
+                    <i class="fas fa-undo-alt text-4xl text-blue-600 mb-3"></i>
+                    <h3 class="text-lg font-semibold text-gray-700 mb-1">Devoluciones Fáciles</h3>
+                    <p class="text-gray-600 text-sm">Si no estás satisfecho, te lo cambiamos o devolvemos tu dinero (ver políticas).</p>
+                </div>
+                 <div class="p-4">
+                     <i class="fas fa-headset text-4xl text-blue-600 mb-3"></i>
+                    <h3 class="text-lg font-semibold text-gray-700 mb-1">Atención Personalizada</h3>
+                    <p class="text-gray-600 text-sm">¿Dudas? Contáctanos por WhatsApp o teléfono, estamos para ayudarte.</p>
+                </div>
+             </div>
+        </section>
+
+        <section id="contacto" class="mb-12">
+             <h2 class="text-2xl font-semibold text-gray-800 mb-6 text-center">Visítanos o Contáctanos</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="bg-gray-200 h-64 md:h-full rounded-lg flex items-center justify-center">
+                     <p class="text-gray-500">Espacio para Mapa Interactivo (Google Maps)</p>
+                     </div>
+                <div class="bg-white p-6 rounded-lg shadow">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-4">Nuestra Tienda Física</h3>
+                    <div class="space-y-3 text-gray-700">
+                        <p><i class="fas fa-map-marker-alt mr-2 text-blue-600"></i>Tu Dirección Completa, San Lorenzo, Paraguay</p>
+                        <p><i class="fas fa-phone mr-2 text-blue-600"></i>+595 XXX XXX XXX</p>
+                        <p><i class="fab fa-whatsapp mr-2 text-green-500"></i>+595 XXX XXX XXX (Solo WhatsApp)</p>
+                        <p><i class="fas fa-envelope mr-2 text-blue-600"></i>tuemail@tienda.com</p>
+                        <p class="font-semibold mt-4">Horario de Atención:</p>
+                        <p>Lunes a Viernes: 08:30 - 18:00 hs</p>
+                        <p>Sábados: 09:00 - 13:00 hs</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-gray-800 text-gray-300 py-8 rounded-t-lg">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-6">
+                <div>
+                    <h4 class="text-lg font-semibold text-white mb-3">Nombre Tienda</h4>
+                    <p class="text-sm">Tu tienda de confianza para [tipo de productos] en San Lorenzo. Calidad y buen servicio.</p>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold text-white mb-3">Enlaces Útiles</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#" class="hover:text-white">Preguntas Frecuentes (FAQ)</a></li>
+                        <li><a href="#" class="hover:text-white">Política de Envíos</a></li>
+                        <li><a href="#" class="hover:text-white">Política de Devoluciones</a></li>
+                        <li><a href="#" class="hover:text-white">Términos y Condiciones</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold text-white mb-3">Contacto Rápido</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><i class="fas fa-phone mr-2"></i>+595 XXX XXX XXX</li>
+                        <li><i class="fas fa-envelope mr-2"></i>tuemail@tienda.com</li>
+                        <li><i class="fas fa-map-marker-alt mr-2"></i>Tu Dirección, San Lorenzo</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold text-white mb-3">Síguenos</h4>
+                    <div class="flex space-x-4 mb-4">
+                        <a href="#" class="text-gray-300 hover:text-white"><i class="fab fa-facebook-f fa-lg"></i></a>
+                        <a href="#" class="text-gray-300 hover:text-white"><i class="fab fa-instagram fa-lg"></i></a>
+                        <a href="#" class="text-gray-300 hover:text-white"><i class="fab fa-whatsapp fa-lg"></i></a>
+                    </div>
+                    <h4 class="text-lg font-semibold text-white mb-2">Pagos Seguros</h4>
+                    <div class="flex space-x-2">
+                         <i class="fab fa-cc-visa fa-2x" title="Visa"></i>
+                         <i class="fab fa-cc-mastercard fa-2x" title="Mastercard"></i>
+                         <i class="fas fa-money-bill-wave fa-2x" title="Efectivo/Transferencia"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 pt-6 text-center text-sm">
+                <p>&copy; 2025 Nombre de Tu Tienda. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>

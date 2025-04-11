@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nombre Herrería - Arte y Fuerza en Metal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Estilos personalizados */
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .hero-bg-herreria {
+            /* Imagen de fondo sugerente de herrería */
+            background-image: url('https://placehold.co/1920x800/44403c/f5f5f4?text=Taller+de+Herrería');
+            background-size: cover;
+            background-position: center;
+        }
+        .portfolio-item {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .portfolio-item:hover {
+            transform: scale(1.03);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+
+    <header class="bg-gray-800 shadow-md sticky top-0 z-50 rounded-b-lg">
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <a href="#" class="text-xl font-bold text-white tracking-wider">HERRERÍA [Tu Nombre]</a>
+
+            <nav class="hidden md:flex space-x-6">
+                <a href="#servicios" class="text-gray-300 hover:text-white font-medium">Servicios</a>
+                <a href="#portafolio" class="text-gray-300 hover:text-white font-medium">Portafolio</a>
+                <a href="#presupuesto" class="text-gray-300 hover:text-white font-medium">Presupuestos</a>
+                <a href="#nosotros" class="text-gray-300 hover:text-white font-medium">Nosotros</a>
+                <a href="#contacto" class="text-gray-300 hover:text-white font-medium">Contacto</a>
+            </nav>
+
+            <div class="md:hidden">
+                 <button id="mobile-menu-button" class="text-gray-300 hover:text-white focus:outline-none">
+                     <i class="fas fa-bars fa-lg"></i>
+                 </button>
+             </div>
+        </div>
+         <div id="mobile-menu" class="md:hidden hidden bg-gray-700 rounded-b-lg">
+            <nav class="px-2 pt-2 pb-4 space-y-1">
+                <a href="#servicios" class="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-600">Servicios</a>
+                <a href="#portafolio" class="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-600">Portafolio</a>
+                <a href="#presupuesto" class="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-600">Presupuestos</a>
+                <a href="#nosotros" class="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-600">Nosotros</a>
+                <a href="#contacto" class="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-600">Contacto</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+
+        <section class="hero-bg-herreria text-white py-24 md:py-36 relative">
+            <div class="absolute inset-0 bg-black opacity-60 rounded-lg"></div>
+            <div class="container mx-auto px-6 text-center relative z-10">
+                <h1 class="text-4xl md:text-6xl font-bold mb-4 uppercase tracking-wide">Forjando Ideas en Metal</h1>
+                <p class="text-lg md:text-xl mb-8 max-w-2xl mx-auto">Diseño, fabricación y reparación en hierro. Soluciones duraderas y a medida para tus proyectos.</p>
+                <a href="#presupuesto" class="bg-yellow-500 hover:bg-yellow-600 text-gray-900 font-bold py-3 px-8 rounded-lg transition duration-300 text-lg shadow-lg">Solicitar Presupuesto</a>
+            </div>
+        </section>
+
+        <section id="servicios" class="py-16 bg-white rounded-lg m-4 shadow-md">
+            <div class="container mx-auto px-6">
+                <h2 class="text-3xl font-bold text-center text-gray-800 mb-10">Nuestros Servicios</h2>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div class="text-center p-6 bg-gray-50 rounded-lg border border-gray-200 hover:shadow-lg transition duration-300">
+                        <i class="fas fa-door-closed text-4xl text-yellow-600 mb-4"></i>
+                        <h3 class="text-xl font-semibold text-gray-700 mb-2">Rejas y Portones</h3>
+                        <p class="text-gray-600 text-sm">Fabricación a medida de rejas de seguridad, portones batientes, corredizos y basculantes.</p>
+                    </div>
+                    <div class="text-center p-6 bg-gray-50 rounded-lg border border-gray-200 hover:shadow-lg transition duration-300">
+                        <i class="fas fa-grip-lines text-4xl text-yellow-600 mb-4"></i>
+                        <h3 class="text-xl font-semibold text-gray-700 mb-2">Barandas y Pasamanos</h3>
+                        <p class="text-gray-600 text-sm">Diseño e instalación de barandas para escaleras, balcones y pasamanos seguros y estéticos.</p>
+                    </div>
+                    <div class="text-center p-6 bg-gray-50 rounded-lg border border-gray-200 hover:shadow-lg transition duration-300">
+                        <i class="fas fa-building text-4xl text-yellow-600 mb-4"></i>
+                        <h3 class="text-xl font-semibold text-gray-700 mb-2">Estructuras Metálicas</h3>
+                        <p class="text-gray-600 text-sm">Construcción de techos, pérgolas, tinglados y otras estructuras metálicas livianas.</p>
+                    </div>
+                    <div class="text-center p-6 bg-gray-50 rounded-lg border border-gray-200 hover:shadow-lg transition duration-300">
+                        <i class="fas fa-chair text-4xl text-yellow-600 mb-4"></i>
+                        <h3 class="text-xl font-semibold text-gray-700 mb-2">Muebles de Hierro</h3>
+                        <p class="text-gray-600 text-sm">Diseño y fabricación de mesas, sillas, estanterías y otros muebles con estilo industrial o clásico.</p>
+                    </div>
+                    <div class="text-center p-6 bg-gray-50 rounded-lg border border-gray-200 hover:shadow-lg transition duration-300">
+                        <i class="fas fa-tools text-4xl text-yellow-600 mb-4"></i>
+                        <h3 class="text-xl font-semibold text-gray-700 mb-2">Reparaciones Generales</h3>
+                        <p class="text-gray-600 text-sm">Soldaduras, refuerzos y reparaciones en todo tipo de elementos de hierro.</p>
+                    </div>
+                    <div class="text-center p-6 bg-gray-50 rounded-lg border border-gray-200 hover:shadow-lg transition duration-300">
+                        <i class="fas fa-drafting-compass text-4xl text-yellow-600 mb-4"></i>
+                        <h3 class="text-xl font-semibold text-gray-700 mb-2">Proyectos a Medida</h3>
+                        <p class="text-gray-600 text-sm">¿Tienes una idea? La convertimos en realidad. Trabajos artísticos y especiales.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="portafolio" class="py-16 bg-gray-200 rounded-lg m-4">
+            <div class="container mx-auto px-6">
+                <h2 class="text-3xl font-bold text-center text-gray-800 mb-10">Nuestros Trabajos</h2>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="bg-white rounded-lg shadow overflow-hidden portfolio-item">
+                        <img src="https://placehold.co/600x400/78716c/fafaf9?text=Portón+Corredizo" alt="[Imagen de Portón Corredizo]" class="w-full h-48 object-cover" onerror="this.onerror=null; this.src='https://placehold.co/600x400/78716c/fafaf9?text=Imagen+no+disponible';">
+                        <div class="p-4">
+                            <h4 class="font-semibold text-gray-700">Portón Corredizo Moderno</h4>
+                            <p class="text-sm text-gray-500">Cliente: Residencia Privada</p>
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-lg shadow overflow-hidden portfolio-item">
+                        <img src="https://placehold.co/600x400/a16207/fefce8?text=Reja+Ventana" alt="[Imagen de Reja para Ventana]" class="w-full h-48 object-cover" onerror="this.onerror=null; this.src='https://placehold.co/600x400/a16207/fefce8?text=Imagen+no+disponible';">
+                        <div class="p-4">
+                            <h4 class="font-semibold text-gray-700">Reja de Seguridad para Ventana</h4>
+                             <p class="text-sm text-gray-500">Material: Hierro forjado</p>
+                        </div>
+                    </div>
+                     <div class="bg-white rounded-lg shadow overflow-hidden portfolio-item">
+                        <img src="https://placehold.co/600x400/3f3f46/e5e5e5?text=Baranda+Escalera" alt="[Imagen de Baranda de Escalera]" class="w-full h-48 object-cover" onerror="this.onerror=null; this.src='https://placehold.co/600x400/3f3f46/e5e5e5?text=Imagen+no+disponible';">
+                        <div class="p-4">
+                            <h4 class="font-semibold text-gray-700">Baranda Interior Minimalista</h4>
+                             <p class="text-sm text-gray-500">Acabado: Pintura epoxi negra</p>
+                        </div>
+                    </div>
+                     <div class="bg-white rounded-lg shadow overflow-hidden portfolio-item">
+                        <img src="https://placehold.co/600x400/57534e/d6d3d1?text=Mesa+Hierro+y+Madera" alt="[Imagen de Mesa de Hierro y Madera]" class="w-full h-48 object-cover" onerror="this.onerror=null; this.src='https://placehold.co/600x400/57534e/d6d3d1?text=Imagen+no+disponible';">
+                        <div class="p-4">
+                            <h4 class="font-semibold text-gray-700">Mesa Estilo Industrial</h4>
+                            <p class="text-sm text-gray-500">Combinación: Hierro y madera</p>
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-lg shadow overflow-hidden portfolio-item">
+                        <img src="https://placehold.co/600x400/b45309/fdf4ff?text=Pérgola+Jardín" alt="[Imagen de Pérgola de Jardín]" class="w-full h-48 object-cover" onerror="this.onerror=null; this.src='https://placehold.co/600x400/b45309/fdf4ff?text=Imagen+no+disponible';">
+                        <div class="p-4">
+                            <h4 class="font-semibold text-gray-700">Pérgola para Jardín</h4>
+                             <p class="text-sm text-gray-500">Estructura resistente a la intemperie</p>
+                        </div>
+                    </div>
+                     <div class="bg-white rounded-lg shadow overflow-hidden portfolio-item">
+                        <img src="https://placehold.co/600x400/1c1917/a8a29e?text=Detalle+Forjado" alt="[Imagen de Detalle Forjado]" class="w-full h-48 object-cover" onerror="this.onerror=null; this.src='https://placehold.co/600x400/1c1917/a8a29e?text=Imagen+no+disponible';">
+                        <div class="p-4">
+                            <h4 class="font-semibold text-gray-700">Detalle Artístico Forjado</h4>
+                             <p class="text-sm text-gray-500">Trabajo personalizado</p>
+                        </div>
+                    </div>
+                </div>
+                 <div class="text-center mt-10">
+                     <a href="#contacto" class="text-blue-600 hover:text-blue-800 font-medium">Ver más trabajos o solicitar uno similar <i class="fas fa-arrow-right ml-1"></i></a>
+                 </div>
+            </div>
+        </section>
+
+         <section id="presupuesto" class="py-16 bg-yellow-50 rounded-lg m-4 border border-yellow-200">
+            <div class="container mx-auto px-6 text-center">
+                <i class="fas fa-pencil-ruler text-5xl text-yellow-600 mb-5"></i>
+                <h2 class="text-3xl font-bold text-gray-800 mb-4">¿Tienes un Proyecto en Mente?</h2>
+                <p class="text-gray-700 mb-8 max-w-xl mx-auto">Cuéntanos tu idea, envíanos tus medidas o planos si los tienes, y te prepararemos un presupuesto detallado sin compromiso.</p>
+                <a href="#contacto" class="bg-gray-800 hover:bg-gray-900 text-white font-bold py-3 px-8 rounded-lg transition duration-300 text-lg shadow-md">Contactar para Presupuesto</a>
+            </div>
+        </section>
+
+        <section id="nosotros" class="py-16 bg-white rounded-lg m-4 shadow-md">
+            <div class="container mx-auto px-6 md:flex md:items-center">
+                <div class="md:w-1/2 mb-8 md:mb-0 md:pr-10">
+                     <img src="https://placehold.co/600x400/57534e/f5f5f4?text=Herrero+Trabajando" alt="[Imagen del Herrero o Taller]" class="rounded-lg shadow-md w-full" onerror="this.onerror=null; this.src='https://placehold.co/600x400/57534e/f5f5f4?text=Imagen+no+disponible';">
+                </div>
+                <div class="md:w-1/2">
+                    <h2 class="text-3xl font-bold text-gray-800 mb-4">El Arte de la Herrería Tradicional</h2>
+                    <p class="text-gray-600 mb-4">Somos [Nombre Herrería], un taller con [X] años de experiencia dedicados a trabajar el hierro con pasión y precisión. Combinamos técnicas tradicionales con diseños modernos para crear piezas únicas y funcionales.</p>
+                    <p class="text-gray-600 mb-4">Creemos en la durabilidad, la seguridad y la estética. Cada proyecto es un compromiso con la calidad y la satisfacción del cliente.</p>
+                    <p class="text-gray-600 font-semibold">Ubicados en el corazón de San Lorenzo, al servicio de toda la comunidad.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="contacto" class="py-16 bg-gray-800 text-gray-300 rounded-lg m-4">
+            <div class="container mx-auto px-6">
+                <h2 class="text-3xl font-bold text-center text-white mb-10">Contacto y Ubicación</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+                    <div class="space-y-4">
+                        <h3 class="text-xl font-semibold text-white mb-3">Información de Contacto</h3>
+                        <p><i class="fas fa-map-marker-alt mr-3 text-yellow-400 fa-fw"></i>Tu Dirección Completa, San Lorenzo, Paraguay</p>
+                        <p><i class="fas fa-phone mr-3 text-yellow-400 fa-fw"></i>+595 XXX XXX XXX</p>
+                        <p><i class="fab fa-whatsapp mr-3 text-green-400 fa-fw"></i>+595 XXX XXX XXX (Consultas por WhatsApp)</p>
+                        <p><i class="fas fa-envelope mr-3 text-yellow-400 fa-fw"></i>tuemail@herreria.com</p>
+                        <p class="font-semibold mt-4 text-white">Horario del Taller:</p>
+                        <p>Lunes a Viernes: 07:30 - 17:00 hs</p>
+                        <p>Sábados: 08:00 - 12:00 hs</p>
+                         <div class="mt-6">
+                             <h4 class="text-lg font-semibold text-white mb-2">Síguenos:</h4>
+                             <a href="#" class="text-gray-300 hover:text-white mr-4"><i class="fab fa-facebook-f fa-lg"></i></a>
+                             <a href="#" class="text-gray-300 hover:text-white"><i class="fab fa-instagram fa-lg"></i></a>
+                        </div>
+                    </div>
+                    <div class="bg-gray-600 h-72 md:h-full rounded-lg flex items-center justify-center">
+                         <p class="text-gray-400">Espacio para Mapa Interactivo (Google Maps)</p>
+                         </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-gray-900 text-gray-400 py-6 rounded-t-lg">
+        <div class="container mx-auto px-6 text-center text-sm">
+            <p>&copy; 2025 Herrería [Tu Nombre]. Todos los derechos reservados.</p>
+            <p class="mt-1">Diseño y Calidad en Hierro - San Lorenzo, Paraguay.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Script para menú móvil
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // Opcional: Cerrar menú al hacer clic en un enlace
+        const mobileMenuLinks = mobileMenu.querySelectorAll('a');
+        mobileMenuLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+            });
+        });
+    </script>
+
+</body>
+</html>

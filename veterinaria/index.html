@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PetCare - Clínica Veterinaria</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+            --primary: #48c78e;
+            --primary-light: #e8f5f0;
+            --dark: #363636;
+            --light: #f5f5f5;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .hero.is-primary {
+            background: linear-gradient(135deg, var(--primary) 0%, #3ab982 100%);
+        }
+        
+        .navbar {
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .service-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .service-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        
+        .pet-icon {
+            color: var(--primary);
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .testimonial-card {
+            border-left: 4px solid var(--primary);
+        }
+        
+        .footer {
+            background-color: var(--dark);
+            color: white;
+        }
+        
+        .has-bg-pattern {
+            background-color: var(--primary-light);
+            background-image: radial-gradient(var(--primary) 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+        
+        .cta-button {
+            transition: all 0.3s ease;
+        }
+        
+        .cta-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(72, 199, 142, 0.4);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar is-fixed-top is-white" role="navigation" aria-label="main navigation">
+        <div class="container">
+            <div class="navbar-brand">
+                <a class="navbar-item" href="#">
+                    <span class="icon-text">
+                        <span class="icon">
+                            <i class="fas fa-paw has-text-primary"></i>
+                        </span>
+                        <span class="title is-4 has-text-primary">PetCare</span>
+                    </span>
+                </a>
+                
+                <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasic">
+                    <span aria-hidden="true"></span>
+                    <span aria-hidden="true"></span>
+                    <span aria-hidden="true"></span>
+                </a>
+            </div>
+            
+            <div id="navbarBasic" class="navbar-menu">
+                <div class="navbar-end">
+                    <a class="navbar-item is-active">Inicio</a>
+                    <a class="navbar-item">Servicios</a>
+                    <a class="navbar-item">Equipo</a>
+                    <a class="navbar-item">Testimonios</a>
+                    <a class="navbar-item">Contacto</a>
+                    
+                    <div class="navbar-item">
+                        <div class="buttons">
+                            <a class="button is-primary cta-button">
+                                <strong>Reservar cita</strong>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- Hero Section -->
+    <section class="hero is-primary is-medium">
+        <div class="hero-body">
+            <div class="container">
+                <div class="columns is-vcentered">
+                    <div class="column is-6">
+                        <h1 class="title is-1 has-text-white">
+                            Cuidamos a tu mascota como en casa
+                        </h1>
+                        <p class="subtitle has-text-white-bis">
+                            Servicios veterinarios de calidad con el mayor amor y profesionalismo.
+                        </p>
+                        <div class="buttons">
+                            <a class="button is-white is-medium cta-button">
+                                <strong>Conoce nuestros servicios</strong>
+                            </a>
+                            <a class="button is-primary is-inverted is-medium">
+                                <span class="icon">
+                                    <i class="fas fa-phone"></i>
+                                </span>
+                                <strong>Llamar ahora</strong>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="column is-6">
+                        <figure class="image">
+                            <img src="https://images.unsplash.com/photo-1583511655826-05700d52f4d9?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80" alt="Veterinaria con perro" style="border-radius: 8px;">
+                        </figure>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Features -->
+    <section class="section">
+        <div class="container">
+            <div class="has-text-centered mb-6">
+                <h2 class="title is-2">Nuestros Servicios</h2>
+                <p class="subtitle">Ofrecemos atención integral para la salud de tu mascota</p>
+            </div>
+            
+            <div class="columns is-multiline">
+                <div class="column is-4">
+                    <div class="service-card card">
+                        <div class="card-content has-text-centered">
+                            <div class="pet-icon">
+                                <i class="fas fa-stethoscope"></i>
+                            </div>
+                            <h3 class="title is-4">Consultas generales</h3>
+                            <p>Revisiones completas, diagnóstico y tratamiento para mantener a tu mascota saludable.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="column is-4">
+                    <div class="service-card card">
+                        <div class="card-content has-text-centered">
+                            <div class="pet-icon">
+                                <i class="fas fa-syringe"></i>
+                            </div>
+                            <h3 class="title is-4">Vacunación</h3>
+                            <p>Programas completos de vacunación para perros, gatos y otras mascotas.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="column is-4">
+                    <div class="service-card card">
+                        <div class="card-content has-text-centered">
+                            <div class="pet-icon">
+                                <i class="fas fa-cut"></i>
+                            </div>
+                            <h3 class="title is-4">Estética canina</h3>
+                            <p>Baños, cortes de pelo, limpieza dental y otros servicios de estética profesional.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="column is-4">
+                    <div class="service-card card">
+                        <div class="card-content has-text-centered">
+                            <div class="pet-icon">
+                                <i class="fas fa-bone"></i>
+                            </div>
+                            <h3 class="title is-4">Nutrición</h3>
+                            <p>Asesoramiento nutricional personalizado y dietas especiales para cada necesidad.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="column is-4">
+                    <div class="service-card card">
+                        <div class="card-content has-text-centered">
+                            <div class="pet-icon">
+                                <i class="fas fa-x-ray"></i>
+                            </div>
+                            <h3 class="title is-4">Diagnóstico avanzado</h3>
+                            <p>Ecografías, radiografías y laboratorio clínico para un diagnóstico preciso.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="column is-4">
+                    <div class="service-card card">
+                        <div class="card-content has-text-centered">
+                            <div class="pet-icon">
+                                <i class="fas fa-procedures"></i>
+                            </div>
+                            <h3 class="title is-4">Cirugía</h3>
+                            <p>Intervenciones quirúrgicas con equipos modernos y seguimiento postoperatorio.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="has-text-centered mt-6">
+                <a class="button is-primary is-large cta-button">
+                    <strong>Ver todos los servicios</strong>
+                </a>
+            </div>
+        </div>
+    </section>
+    
+    <!-- About Section -->
+    <section class="section has-bg-pattern">
+        <div class="container">
+            <div class="columns is-vcentered">
+                <div class="column is-6">
+                    <figure class="image">
+                        <img src="https://images.unsplash.com/photo-1534361960057-19889db9621e?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80" alt="Veterinario con mascota" style="border-radius: 8px;">
+                    </figure>
+                </div>
+                <div class="column is-6">
+                    <h2 class="title is-2">Nuestra Filosofía</h2>
+                    <p class="mb-4">En PetCare creemos que cada mascota merece atención médica de calidad y un trato amoroso. Nuestro equipo de profesionales está comprometido con el bienestar animal.</p>
+                    
+                    <div class="content">
+                        <ul>
+                            <li class="mb-2">
+                                <span class="icon has-text-primary">
+                                    <i class="fas fa-check-circle"></i>
+                                </span>
+                                <span>Equipo de veterinarios certificados</span>
+                            </li>
+                            <li class="mb-2">
+                                <span class="icon has-text-primary">
+                                    <i class="fas fa-check-circle"></i>
+                                </span>
+                                <span>Instalaciones modernas y equipamiento de última generación</span>
+                            </li>
+                            <li class="mb-2">
+                                <span class="icon has-text-primary">
+                                    <i class="fas fa-check-circle"></i>
+                                </span>
+                                <span>Enfoque preventivo para una vida más larga y saludable</span>
+                            </li>
+                            <li class="mb-2">
+                                <span class="icon has-text-primary">
+                                    <i class="fas fa-check-circle"></i>
+                                </span>
+                                <span>Trato personalizado y seguimiento continuo</span>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <a class="button is-primary is-medium mt-4 cta-button">
+                        <strong>Conoce a nuestro equipo</strong>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Testimonials -->
+    <section class="section">
+        <div class="container">
+            <div class="has-text-centered mb-6">
+                <h2 class="title is-2">Lo que dicen nuestros clientes</h2>
+                <p class="subtitle">Experiencias reales de dueños felices</p>
+            </div>
+            
+            <div class="columns is-multiline">
+                <div class="column is-4">
+                    <div class="testimonial-card box">
+                        <div class="media">
+                            <div class="media-left">
+                                <figure class="image is-48x48">
+                                    <img src="https://randomuser.me/api/portraits/women/43.jpg" class="is-rounded" alt="Cliente">
+                                </figure>
+                            </div>
+                            <div class="media-content">
+                                <p class="title is-5">María González</p>
+                                <p class="subtitle is-6">Dueña de Max</p>
+                            </div>
+                        </div>
+                        <div class="content">
+                            <p>"Llevo a Max desde cachorro y siempre recibe la mejor atención. Los veterinarios son muy profesionales y explican todo con detalle. ¡Recomiendo PetCare a todos los dueños de mascotas!"</p>
+                            <div class="has-text-primary">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="column is-4">
+                    <div class="testimonial-card box">
+                        <div class="media">
+                            <div class="media-left">
+                                <figure class="image is-48x48">
+                                    <img src="https://randomuser.me/api/portraits/men/32.jpg" class="is-rounded" alt="Cliente">
+                                </figure>
+                            </div>
+                            <div class="media-content">
+                                <p class="title is-5">Carlos Martínez</p>
+                                <p class="subtitle is-6">Dueño de Luna</p>
+                            </div>
+                        </div>
+                        <div class="content">
+                            <p>"Cuando Luna tuvo una emergencia, el equipo de PetCare la atendió inmediatamente. Gracias a su rápida intervención y conocimiento, mi gata se recuperó por completo. Estoy muy agradecido."</p>
+                            <div class="has-text-primary">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="column is-4">
+                    <div class="testimonial-card box">
+                        <div class="media">
+                            <div class="media-left">
+                                <figure class="image is-48x48">
+                                    <img src="https://randomuser.me/api/portraits/women/65.jpg" class="is-rounded" alt="Cliente">
+                                </figure>
+                            </div>
+                            <div class="media-content">
+                                <p class="title is-5">Ana Rodríguez</p>
+                                <p class="subtitle is-6">Dueña de Rocky</p>
+                            </div>
+                        </div>
+                        <div class="content">
+                            <p>"Me encanta el trato que le dan a Rocky. No solo son excelentes profesionales, sino que realmente aman a los animales. Las instalaciones son impecables y siempre salgo con todas mis dudas resueltas."</p>
+                            <div class="has-text-primary">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star-half-alt"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- CTA Section -->
+    <section class="hero is-primary is-medium">
+        <div class="hero-body">
+            <div class="container has-text-centered">
+                <h2 class="title is-2 has-text-white mb-4">¿Listo para cuidar de tu mascota?</h2>
+                <p class="subtitle has-text-white-bis mb-6">Agenda una cita hoy mismo y recibe un 10% de descuento en la primera consulta</p>
+                <div class="buttons is-centered">
+                    <a class="button is-white is-large cta-button">
+                        <strong>Reservar ahora</strong>
+                    </a>
+                    <a class="button is-primary is-inverted is-large">
+                        <span class="icon">
+                            <i class="fas fa-phone"></i>
+                        </span>
+                        <strong>Llámanos</strong>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="columns">
+                <div class="column is-4">
+                    <h3 class="title is-4 has-text-white">PetCare</h3>
+                    <p class="has-text-white-bis">Clínica veterinaria especializada en el cuidado y bienestar de tus mascotas.</p>
+                    <div class="mt-4">
+                        <span class="icon-text">
+                            <span class="icon has-text-white">
+                                <i class="fas fa-map-marker-alt"></i>
+                            </span>
+                            <span class="has-text-white-bis">Av. Principal 123, Ciudad</span>
+                        </span>
+                    </div>
+                    <div class="mt-2">
+                        <span class="icon-text">
+                            <span class="icon has-text-white">
+                                <i class="fas fa-phone"></i>
+                            </span>
+                            <span class="has-text-white-bis">(123) 456-7890</span>
+                        </span>
+                    </div>
+                    <div class="mt-2">
+                        <span class="icon-text">
+                            <span class="icon has-text-white">
+                                <i class="fas fa-envelope"></i>
+                            </span>
+                            <span class="has-text-white-bis">info@petcare.com</span>
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="column is-2">
+                    <h4 class="title is-5 has-text-white">Servicios</h4>
+                    <ul>
+                        <li><a class="has-text-white-bis">Consultas</a></li>
+                        <li><a class="has-text-white-bis">Vacunación</a></li>
+                        <li><a class="has-text-white-bis">Cirugía</a></li>
+                        <li><a class="has-text-white-bis">Estética</a></li>
+                        <li><a class="has-text-white-bis">Emergencias</a></li>
+                    </ul>
+                </div>
+                
+                <div class="column is-2">
+                    <h4 class="title is-5 has-text-white">Nosotros</h4>
+                    <ul>
+                        <li><a class="has-text-white-bis">Equipo</a></li>
+                        <li><a class="has-text-white-bis">Instalaciones</a></li>
+                        <li><a class="has-text-white-bis">Historia</a></li>
+                        <li><a class="has-text-white-bis">Trabaja con nosotros</a></li>
+                    </ul>
+                </div>
+                
+                <div class="column is-4">
+                    <h4 class="title is-5 has-text-white">Horario</h4>
+                    <p class="has-text-white-bis">Lunes a Viernes: 9:00 AM - 7:00 PM</p>
+                    <p class="has-text-white-bis">Sábados: 9:00 AM - 2:00 PM</p>
+                    <p class="has-text-white-bis">Emergencias: 24/7</p>
+                    
+                    <div class="mt-4">
+                        <h4 class="title is-5 has-text-white">Síguenos</h4>
+                        <div class="buttons">
+                            <a class="button is-white is-small">
+                                <span class="icon">
+                                    <i class="fab fa-facebook-f"></i>
+                                </span>
+                            </a>
+                            <a class="button is-white is-small">
+                                <span class="icon">
+                                    <i class="fab fa-instagram"></i>
+                                </span>
+                            </a>
+                            <a class="button is-white is-small">
+                                <span class="icon">
+                                    <i class="fab fa-twitter"></i>
+                                </span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="has-text-centered mt-6">
+                <p class="has-text-white-bis">© 2023 PetCare Veterinaria. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+    
+    <script>
+        // Mobile menu toggle
+        document.addEventListener('DOMContentLoaded', () => {
+            const $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
+            
+            if ($navbarBurgers.length > 0) {
+                $navbarBurgers.forEach( el => {
+                    el.addEventListener('click', () => {
+                        const target = el.dataset.target;
+                        const $target = document.getElementById(target);
+                        
+                        el.classList.toggle('is-active');
+                        $target.classList.toggle('is-active');
+                    });
+                });
+            }
+        });
+    </script>
+</body>
+</html>

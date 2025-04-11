@@ -1,0 +1,1522 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NOVO | Muebles & Diseño</title>
+
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #e67e22;
+            --accent-color: #3498db;
+            --light-color: #f8f9fa;
+            --dark-color: #1a1a1a;
+            --text-color: #333333;
+            --grey-color: #f4f4f4;
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: var(--light-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Scrollbar personalizado */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--light-color);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--secondary-color);
+            border-radius: 10px;
+        }
+
+        /* Header y navegación */
+        header {
+            background-color: rgba(255, 255, 255, 0.95);
+            position: fixed;
+            width: 100%;
+            z-index: 1000;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+            transition: var(--transition);
+        }
+
+        header.scrolled {
+            padding: 0.5rem 2rem;
+        }
+
+        .header-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .logo span {
+            color: var(--secondary-color);
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+
+        nav ul li {
+            margin-left: 2rem;
+        }
+
+        nav ul li a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition);
+            position: relative;
+            padding-bottom: 5px;
+        }
+
+        nav ul li a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background-color: var(--secondary-color);
+            transition: var(--transition);
+        }
+
+        nav ul li a:hover {
+            color: var(--secondary-color);
+        }
+
+        nav ul li a:hover::after {
+            width: 100%;
+        }
+
+        .menu-toggle {
+            display: none;
+            flex-direction: column;
+            justify-content: space-between;
+            width: 30px;
+            height: 21px;
+            cursor: pointer;
+        }
+
+        .menu-toggle span {
+            display: block;
+            height: 3px;
+            width: 100%;
+            background-color: var(--primary-color);
+            transition: var(--transition);
+        }
+
+        .header-icons {
+            display: flex;
+            align-items: center;
+        }
+
+        .header-icon {
+            font-size: 1.3rem;
+            margin-left: 1.5rem;
+            color: var(--primary-color);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .header-icon:hover {
+            color: var(--secondary-color);
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-slider {
+            height: 100%;
+            display: flex;
+            transition: transform 0.5s ease-in-out;
+        }
+
+        .hero-slide {
+            min-width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: center;
+            position: relative;
+        }
+
+        .hero-slide::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to right, rgba(0, 0, 0, 0.7) 30%, rgba(0, 0, 0, 0.3));
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            color: white;
+            max-width: 600px;
+            margin-left: 10%;
+        }
+
+        .hero-content h2 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+
+        .hero-content p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 0.8rem 2rem;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background-color: var(--secondary-color);
+            color: white;
+            border: 2px solid var(--secondary-color);
+        }
+
+        .btn-primary:hover {
+            background-color: transparent;
+            color: var(--secondary-color);
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            color: white;
+            border: 2px solid white;
+            margin-left: 1rem;
+        }
+
+        .btn-outline:hover {
+            background-color: white;
+            color: var(--primary-color);
+        }
+
+        .slider-controls {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            z-index: 10;
+        }
+
+        .slider-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin: 0 8px;
+            background-color: rgba(255, 255, 255, 0.5);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .slider-dot.active {
+            background-color: var(--secondary-color);
+            transform: scale(1.3);
+        }
+
+        /* Categorías */
+        .categories {
+            padding: 5rem 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+
+        .section-title h2 {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            display: inline-block;
+            position: relative;
+            z-index: 1;
+        }
+
+        .section-title h2::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 70px;
+            height: 3px;
+            background-color: var(--secondary-color);
+        }
+
+        .categories-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .category-card {
+            position: relative;
+            height: 300px;
+            border-radius: 10px;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .category-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: var(--transition);
+        }
+
+        .category-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            padding: 1.5rem;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+            color: white;
+            transition: var(--transition);
+        }
+
+        .category-card:hover .category-img {
+            transform: scale(1.1);
+        }
+
+        .category-card:hover .category-overlay {
+            padding-bottom: 2.5rem;
+        }
+
+        .category-title {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Productos Destacados */
+        .featured-products {
+            padding: 5rem 2rem;
+            background-color: var(--grey-color);
+        }
+
+        .products-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .product-card {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+            transition: var(--transition);
+        }
+
+        .product-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .product-img-container {
+            position: relative;
+            height: 250px;
+            overflow: hidden;
+        }
+
+        .product-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: var(--transition);
+        }
+
+        .product-card:hover .product-img {
+            transform: scale(1.05);
+        }
+
+        .product-badge {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background-color: var(--secondary-color);
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .product-actions {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .product-action {
+            background-color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transform: translateX(60px);
+            opacity: 0;
+            transition: var(--transition);
+        }
+
+        .product-card:hover .product-action {
+            transform: translateX(0);
+            opacity: 1;
+        }
+
+        .product-card:hover .product-action:nth-child(1) {
+            transition-delay: 0.1s;
+        }
+
+        .product-card:hover .product-action:nth-child(2) {
+            transition-delay: 0.2s;
+        }
+
+        .product-info {
+            padding: 1.5rem;
+        }
+
+        .product-category {
+            color: var(--secondary-color);
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+
+        .product-title {
+            font-size: 1.3rem;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+            line-height: 1.3;
+            font-weight: 600;
+        }
+
+        .product-price {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .current-price {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .old-price {
+            font-size: 1rem;
+            color: #999;
+            text-decoration: line-through;
+            margin-left: 1rem;
+        }
+
+        .add-to-cart {
+            display: block;
+            width: 100%;
+            background-color: var(--primary-color);
+            color: white;
+            text-align: center;
+            padding: 0.8rem;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .add-to-cart:hover {
+            background-color: var(--secondary-color);
+        }
+
+        /* Sección de descuento */
+        .discount-section {
+            background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('/api/placeholder/1400/600');
+            background-attachment: fixed;
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 6rem 2rem;
+            text-align: center;
+        }
+
+        .discount-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .discount-title {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .discount-text {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        .countdown {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 3rem;
+        }
+
+        .countdown-item {
+            width: 100px;
+            height: 100px;
+            background-color: rgba(255, 255, 255, 0.1);
+            margin: 0 10px;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            backdrop-filter: blur(5px);
+        }
+
+        .countdown-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            line-height: 1;
+        }
+
+        .countdown-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        /* Testimonios */
+        .testimonials {
+            padding: 5rem 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .testimonials-container {
+            position: relative;
+            overflow: hidden;
+            padding: 2rem 0;
+        }
+
+        .testimonials-track {
+            display: flex;
+            transition: var(--transition);
+        }
+
+        .testimonial {
+            min-width: calc(33.333% - 2rem);
+            margin: 0 1rem;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            padding: 2rem;
+            transition: var(--transition);
+        }
+
+        .testimonial-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .testimonial-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 1rem;
+        }
+
+        .testimonial-name {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        .testimonial-location {
+            font-size: 0.9rem;
+            color: #777;
+        }
+
+        .testimonial-rating {
+            display: flex;
+            margin-bottom: 1rem;
+            color: var(--secondary-color);
+        }
+
+        .testimonial-text {
+            color: #555;
+            font-style: italic;
+            line-height: 1.7;
+        }
+
+        .testimonial-nav {
+            display: flex;
+            justify-content: center;
+            margin-top: 2rem;
+        }
+
+        .testimonial-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--primary-color);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+            margin: 0 0.5rem;
+        }
+
+        .testimonial-btn:hover {
+            background-color: var(--secondary-color);
+        }
+
+        /* Instagram Feed */
+        .instagram-feed {
+            padding: 5rem 2rem;
+            background-color: var(--grey-color);
+        }
+
+        .instagram-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .instagram-title {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .instagram-title h2 {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .instagram-title p {
+            color: #777;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .instagram-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 0.5rem;
+        }
+
+        .instagram-item {
+            position: relative;
+            overflow: hidden;
+            aspect-ratio: 1/1;
+        }
+
+        .instagram-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: var(--transition);
+        }
+
+        .instagram-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: var(--transition);
+        }
+
+        .instagram-icon {
+            color: white;
+            font-size: 2rem;
+        }
+
+        .instagram-item:hover .instagram-img {
+            transform: scale(1.1);
+        }
+
+        .instagram-item:hover .instagram-overlay {
+            opacity: 1;
+        }
+
+        /* Newsletter */
+        .newsletter {
+            padding: 5rem 2rem;
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .newsletter h2 {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .newsletter p {
+            color: #777;
+            margin-bottom: 2rem;
+        }
+
+        .newsletter-form {
+            display: flex;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            border-radius: 50px;
+            overflow: hidden;
+        }
+
+        .newsletter-input {
+            flex: 1;
+            padding: 1rem 1.5rem;
+            border: none;
+            outline: none;
+            font-size: 1rem;
+        }
+
+        .newsletter-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .newsletter-btn:hover {
+            background-color: var(--secondary-color);
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--dark-color);
+            color: white;
+            padding-top: 5rem;
+        }
+
+        .footer-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .footer-top {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .footer-logo {
+            color: white;
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            display: inline-block;
+        }
+
+        .footer-logo span {
+            color: var(--secondary-color);
+        }
+
+        .footer-text {
+            color: #aaa;
+            margin-bottom: 1.5rem;
+            line-height: 1.8;
+        }
+
+        .footer-social {
+            display: flex;
+        }
+
+        .footer-social-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1rem;
+            transition: var(--transition);
+        }
+
+        .footer-social-icon:hover {
+            background-color: var(--secondary-color);
+        }
+
+        .footer-title {
+            font-size: 1.3rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+            padding-bottom: 0.5rem;
+        }
+
+        .footer-title::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 50px;
+            height: 2px;
+            background-color: var(--secondary-color);
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 1rem;
+        }
+
+        .footer-links a {
+            color: #aaa;
+            text-decoration: none;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+        }
+
+        .footer-links a::before {
+            content: '→';
+            margin-right: 0.5rem;
+            color: var(--secondary-color);
+        }
+
+        .footer-links a:hover {
+            color: var(--secondary-color);
+            padding-left: 0.5rem;
+        }
+
+        .footer-contact-item {
+            display: flex;
+            margin-bottom: 1rem;
+            align-items: center;
+        }
+
+        .contact-icon {
+            margin-right: 1rem;
+            color: var(--secondary-color);
+        }
+
+        .contact-text {
+            color: #aaa;
+        }
+
+        .footer-bottom {
+            background-color: rgba(0, 0, 0, 0.3);
+            padding: 1.5rem 0;
+            text-align: center;
+        }
+
+        .footer-bottom p {
+            color: #aaa;
+        }
+
+        /* Botón para subir */
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background-color: var(--secondary-color);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition);
+            z-index: 99;
+        }
+
+        .back-to-top.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Modal de producto rápido */
+        .quick-view-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition);
+        }
+
+        .quick-view-modal.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .quick-view-content {
+            background-color: white;
+            width: 90%;
+            max-width: 1000px;
+            max-height: 90vh;
+            overflow-y: auto;
+            border-radius: 10px;
+            padding: 2rem;
+            position: relative;
+            transform: translateY(50px);
+            transition: var(--transition);
+        }
+
+        .quick-view-modal.show .quick-view-content {
+            transform: translateY(0);
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background-color: var(--primary-color);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .quick-view-product {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .quick-view-gallery {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .quick-view-main-img {
+            width: 100%;
+            height: 350px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+        }
+
+        .quick-view-thumbnails {
+            display: flex;
+            gap: 10px;
+        }
+
+        .quick-view-thumbnail {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .quick-view-thumbnail:hover {
+            opacity: 0.8;
+        }
+
+        .quick-view-info {
+            flex: 1;
+            min-width: 300px;
+            padding-left: 2rem;
+        }
+
+        .quick-view-category {
+            color: var(--secondary-color);
+            font-size: 1rem;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+
+        .quick-view-title {
+            font-size: 2rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .quick-view-price {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .quick-view-current-price {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .quick-view-old-price {
+            font-size: 1.3rem;
+            color: #999;
+            text-decoration: line-through;
+            margin-left: 1.5rem;
+        }
+
+        .quick-view-description {
+            color: #555;
+            line-height: 1.8;
+            margin-bottom: 2rem;
+        }
+
+        .quantity-selector {
+            display: flex;
+            align-items: center;
+            margin-bottom: 2rem;
+            width: 150px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .quantity-btn {
+            width: 40px;
+            height: 40px;
+            background-color: #f4f4f4;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+
+        .quantity-btn:hover {
+            background-color: #ddd;
+        }
+
+        .quantity-input {
+            flex: 1;
+            height: 40px;
+            border: none;
+            text-align: center;
+            font-size: 1rem;
+        }
+
+        .quick-view-actions {
+            display: flex;
+        }
+
+        .quick-view-add-to-cart {
+            flex: 1;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 1rem;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .quick-view-add-to-cart:hover {
+            background-color: var(--secondary-color);
+        }
+
+        .quick-view-wishlist {
+            width: 50px;
+            height: 50px;
+            background-color: #f4f4f4;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-left: 1rem;
+        }
+    </style>
+
+
+    
+</head>
+<body>
+
+    <header id="header">
+        <div class="header-container">
+            <div class="logo">
+                <h1>NOVO<span>.</span></h1>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="#hero">Inicio</a></li>
+                    <li><a href="#categories">Categorías</a></li>
+                    <li><a href="#featured-products">Productos</a></li>
+                    <li><a href="#testimonials">Testimonios</a></li>
+                    <li><a href="#instagram-feed">Instagram</a></li>
+                </ul>
+            </nav>
+            <div class="header-icons">
+                <i class="fas fa-search header-icon"></i>
+                <i class="fas fa-shopping-cart header-icon"></i>
+                <div class="menu-toggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <section class="hero" id="hero">
+        <div class="hero-slider">
+            <div class="hero-slide" style="background-image: url('/api/placeholder/1920/1080');">
+                <div class="hero-content">
+                    <h2>Diseño Moderno y Elegante</h2>
+                    <p>Encuentra los muebles perfectos para tu hogar.</p>
+                    <a href="#featured-products" class="btn btn-primary">Ver Productos</a>
+                    <a href="#categories" class="btn btn-outline">Explorar Categorías</a>
+                </div>
+            </div>
+            <div class="hero-slide" style="background-image: url('/api/placeholder/1920/1080');">
+                <div class="hero-content">
+                    <h2>Ofertas Exclusivas</h2>
+                    <p>Descubre nuestras promociones y descuentos.</p>
+                    <a href="#discount-section" class="btn btn-primary">Ver Ofertas</a>
+                </div>
+            </div>
+        </div>
+        <div class="slider-controls">
+            <div class="slider-dot active"></div>
+            <div class="slider-dot"></div>
+        </div>
+    </section>
+
+    <section class="categories" id="categories">
+        <div class="section-title">
+            <h2>Categorías</h2>
+        </div>
+        <div class="categories-grid">
+            <div class="category-card">
+                <img src="/api/placeholder/600/400" alt="Sofás" class="category-img">
+                <div class="category-overlay">
+                    <h3 class="category-title">Sofás</h3>
+                </div>
+            </div>
+            <div class="category-card">
+                <img src="/api/placeholder/600/400" alt="Mesas" class="category-img">
+                <div class="category-overlay">
+                    <h3 class="category-title">Mesas</h3>
+                </div>
+            </div>
+            <div class="category-card">
+                <img src="/api/placeholder/600/400" alt="Sillas" class="category-img">
+                <div class="category-overlay">
+                    <h3 class="category-title">Sillas</h3>
+                </div>
+            </div>
+            <div class="category-card">
+                <img src="/api/placeholder/600/400" alt="Lámparas" class="category-img">
+                <div class="category-overlay">
+                    <h3 class="category-title">Lámparas</h3>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="featured-products" id="featured-products">
+        <div class="section-title">
+            <h2>Productos Destacados</h2>
+        </div>
+        <div class="products-container">
+            <div class="products-grid">
+                <div class="product-card">
+                    <div class="product-img-container">
+                        <img src="/api/placeholder/400/300" alt="Producto 1" class="product-img">
+                        <span class="product-badge">Nuevo</span>
+                        <div class="product-actions">
+                            <div class="product-action"><i class="fas fa-eye"></i></div>
+                            <div class="product-action"><i class="fas fa-heart"></i></div>
+                        </div>
+                    </div>
+                    <div class="product-info">
+                        <p class="product-category">Sofás</p>
+                        <h3 class="product-title">Sofá Moderno</h3>
+                        <div class="product-price">
+                            <span class="current-price">$499</span>
+                            <span class="old-price">$599</span>
+                        </div>
+                        <button class="add-to-cart">Añadir al carrito</button>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="product-img-container">
+                        <img src="/api/placeholder/400/300" alt="Producto 2" class="product-img">
+                        <span class="product-badge">Oferta</span>
+                        <div class="product-actions">
+                            <div class="product-action"><i class="fas fa-eye"></i></div>
+                            <div class="product-action"><i class="fas fa-heart"></i></div>
+                        </div>
+                    </div>
+                    <div class="product-info">
+                        <p class="product-category">Mesas</p>
+                        <h3 class="product-title">Mesa de Centro</h3>
+                        <div class="product-price">
+                            <span class="current-price">$299</span>
+                        </div>
+                        <button class="add-to-cart">Añadir al carrito</button>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="product-img-container">
+                        <img src="/api/placeholder/400/300" alt="Producto 3" class="product-img">
+                        <div class="product-actions">
+                            <div class="product-action"><i class="fas fa-eye"></i></div>
+                            <div class="product-action"><i class="fas fa-heart"></i></div>
+                        </div>
+                    </div>
+                    <div class="product-info">
+                        <p class="product-category">Sillas</p>
+                        <h3 class="product-title">Silla de Diseño</h3>
+                        <div class="product-price">
+                            <span class="current-price">$149</span>
+                        </div>
+                        <button class="add-to-cart">Añadir al carrito</button>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="product-img-container">
+                        <img src="/api/placeholder/400/300" alt="Producto 4" class="product-img">
+                        <div class="product-actions">
+                            <div class="product-action"><i class="fas fa-eye"></i></div>
+                            <div class="product-action"><i class="fas fa-heart"></i></div>
+                        </div>
+                    </div>
+                    <div class="product-info">
+                        <p class="product-category">Lámparas</p>
+                        <h3 class="product-title">Lámpara de Pie</h3>
+                        <div class="product-price">
+                            <span class="current-price">$199</span>
+                        </div>
+                        <button class="add-to-cart">Añadir al carrito</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="discount-section" id="discount-section">
+        <div class="discount-content">
+            <h2 class="discount-title">Descuentos de Temporada</h2>
+            <p class="discount-text">Aprovecha nuestras ofertas por tiempo limitado.</p>
+            <div class="countdown">
+                <div class="countdown-item">
+                    <span class="countdown-number">24</span>
+                    <span class="countdown-label">Horas</span>
+                </div>
+                <div class="countdown-item">
+                    <span class="countdown-number">59</span>
+                    <span class="countdown-label">Minutos</span>
+                </div>
+                <div class="countdown-item">
+                    <span class="countdown-number">59</span>
+                    <span class="countdown-label">Segundos</span>
+                </div>
+            </div>
+            <a href="#featured-products" class="btn btn-primary">Comprar Ahora</a>
+        </div>
+    </section>
+
+    <section class="testimonials" id="testimonials">
+        <div class="section-title">
+            <h2>Testimonios</h2>
+        </div>
+        <div class="testimonials-container">
+            <div class="testimonials-track">
+                <div class="testimonial">
+                    <div class="testimonial-header">
+                        <img src="/api/placeholder/60/60" alt="Avatar 1" class="testimonial-avatar">
+                        <div>
+                            <h4 class="testimonial-name">María García</h4>
+                            <p class="testimonial-location">Madrid, España</p>
+                        </div>
+                    </div>
+                    <div class="testimonial-rating">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <p class="testimonial-text">"Excelente calidad y servicio. ¡Muy recomendados!"</p>
+                </div>
+                <div class="testimonial">
+                    <div class="testimonial-header">
+                        <img src="/api/placeholder/60/60" alt="Avatar 2" class="testimonial-avatar">
+                        <div>
+                            <h4 class="testimonial-name">Juan Pérez</h4>
+                            <p class="testimonial-location">Barcelona, España</p>
+                        </div>
+                    </div>
+                    <div class="testimonial-rating">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="far fa-star"></i>
+                    </div>
+                    <p class="testimonial-text">"Muy buenos productos y entrega rápida."</p>
+                </div>
+                 <div class="testimonial">
+                    <div class="testimonial-header">
+                        <img src="/api/placeholder/60/60" alt="Avatar 3" class="testimonial-avatar">
+                        <div>
+                            <h4 class="testimonial-name">Laura Rodriguez</h4>
+                            <p class="testimonial-location">Valencia, España</p>
+                        </div>
+                    </div>
+                    <div class="testimonial-rating">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <p class="testimonial-text">"Los muebles son preciosos y de gran calidad. Muy contenta con la compra."</p>
+                </div>
+            </div>
+        </div>
+        <div class="testimonial-nav">
+            <div class="testimonial-btn"><i class="fas fa-chevron-left"></i></div>
+            <div class="testimonial-btn"><i class="fas fa-chevron-right"></i></div>
+        </div>
+    </section>
+
+    <section class="instagram-feed" id="instagram-feed">
+        <div class="instagram-container">
+            <div class="instagram-title">
+                <h2>Síguenos en Instagram</h2>
+                <p>Inspírate con nuestras últimas fotos y novedades.</p>
+            </div>
+            <div class="instagram-grid">
+                <div class="instagram-item">
+                    <img src="/api/placeholder/200/200" alt="Instagram 1" class="instagram-img">
+                    <div class="instagram-overlay">
+                        <i class="fab fa-instagram instagram-icon"></i>
+                    </div>
+                </div>
+                <div class="instagram-item">
+                    <img src="/api/placeholder/200/200" alt="Instagram 2" class="instagram-img">
+                    <div class="instagram-overlay">
+                        <i class="fab fa-instagram instagram-icon"></i>
+                    </div>
+                </div>
+                <div class="instagram-item">
+                    <img src="/api/placeholder/200/200" alt="Instagram 3" class="instagram-img">
+                    <div class="instagram-overlay">
+                        <i class="fab fa-instagram instagram-icon"></i>
+                    </div>
+                </div>
+                <div class="instagram-item">
+                    <img src="/api/placeholder/200/200" alt="Instagram 4" class="instagram-img">
+                    <div class="instagram-overlay">
+                        <i class="fab fa-instagram instagram-icon"></i>
+                    </div>
+                </div>
+                <div class="instagram-item">
+                    <img src="/api/placeholder/200/200" alt="Instagram 5" class="instagram-img">
+                    <div class="instagram-overlay">
+                        <i class="fab fa-instagram instagram-icon"></i>
+                    </div>
+                </div>
+                <div class="instagram-item">
+                    <img src="/api/placeholder/200/200" alt="Instagram 6" class="instagram-img">
+                    <div class="instagram-overlay">
+                        <i class="fab fa-instagram instagram-icon"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="newsletter">
+        <h2>Suscríbete a nuestro boletín</h2>
+        <p>Recibe las últimas novedades y ofertas directamente en tu correo.</p>
+        <form class="newsletter-form">
+            <input type="email" class="newsletter-input" placeholder="Tu correo electrónico">
+            <button class="newsletter-btn">Suscribirse</button>
+        </form>
+    </section>
+
+    <footer>
+        <div class="footer-container">
+            <div class="footer-top">
+                <div>
+                    <a href="#" class="footer-logo">NOVO<span>.</span></a>
+                    <p class="footer-text">Muebles y diseño para tu hogar.</p>
+                    <div class="footer-social">
+                        <a href="#" class="footer-social-icon"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="footer-social-icon"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="footer-social-icon"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="footer-title">Enlaces</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Inicio</a></li>
+                        <li><a href="#">Categorías</a></li>
+                        <li><a href="#">Productos</a></li>
+                        <li><a href="#">Contacto</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="footer-title">Contacto</h3>
+                    <div class="footer-contact-item">
+                        <i class="fas fa-map-marker-alt contact-icon"></i>
+                        <span class="contact-text">Calle Principal 123, Ciudad</span>
+                    </div>
+                    <div class="footer-contact-item">
+                        <i class="fas fa-phone contact-icon"></i>
+                        <span class="contact-text">+1 123 456 7890</span>
+                    </div>
+                    <div class="footer-contact-item">
+                        <i class="fas fa-envelope contact-icon"></i>
+                        <span class="contact-text">info@novo.com</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 NOVO | Muebles & Diseño. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <div class="back-to-top">
+        <i class="fas fa-chevron-up"></i>
+    </div>
+
+    <div class="quick-view-modal">
+        <div class="quick-view-content">
+            <span class="close-modal">&times;</span>
+            <div class="quick-view-product">
+                <div class="quick-view-gallery">
+                    <img src="/api/placeholder/400/300" alt="Producto Principal" class="quick-view-main-img">
+                    <div class="quick-view-thumbnails">
+                        <img src="/api/placeholder/80/80" alt="Miniatura 1" class="quick-view-thumbnail">
+                        <img src="/api/placeholder/80/80" alt="Miniatura 2" class="quick-view-thumbnail">
+                        <img src="/api/placeholder/80/80" alt="Miniatura 3" class="quick-view-thumbnail">
+                    </div>
+                </div>
+                <div class="quick-view-info">
+                    <p class="quick-view-category">Sofás</p>
+                    <h2 class="quick-view-title">Sofá Moderno</h2>
+                    <div class="quick-view-price">
+                        <span class="quick-view-current-price">$499</span>
+                        <span class="quick-view-old-price">$599</span>
+                    </div>
+                    <p class="quick-view-description">Descripción detallada del producto.</p>
+                    <div class="quantity-selector">
+                        <button class="quantity-btn">-</button>
+                        <input type="number" value="1" class="quantity-input">
+                        <button class="quantity-btn">+</button>
+                    </div>
+                    <div class="quick-view-actions">
+                        <button class="quick-view-add-to-cart">Añadir al carrito</button>
+                        <div class="quick-view-wishlist">
+                            <i class="fas fa-heart"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://kit.fontawesome.com/your-fontawesome-kit.js"></script>
+    <script>
+        // ... (tu código JavaScript existente) ...
+    </script>
+
+</body>
+</html>

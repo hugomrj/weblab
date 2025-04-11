@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aroma Vital - Café de Especialidad & Tostaduría</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <style>
+        /* Estilos personalizados y animaciones */
+        body {
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden; /* Prevenir scroll horizontal por animaciones */
+        }
+        .hero-bg-cafe {
+            /* Idealmente, aquí iría un video de fondo sutil */
+            background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://placehold.co/1920x1080/6b4f4b/ffffff?text=Granos+de+Café+Tostado');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed; /* Efecto Parallax simple */
+        }
+        /* Animación fade-in para elementos al hacer scroll */
+        .fade-in-element {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        .fade-in-element.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        /* Animación sutil para tarjetas */
+        .card-hover-effect {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card-hover-effect:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 25px rgba(0, 0, 0, 0.15);
+        }
+        /* Estilo para botones con gradiente */
+        .btn-gradient {
+            background-image: linear-gradient(to right, #8a5a44, #6b4f4b);
+            transition: all 0.3s ease;
+        }
+        .btn-gradient:hover {
+            background-image: linear-gradient(to right, #6b4f4b, #8a5a44);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+</head>
+<body class="bg-cream-100 text-gray-800" x-data="{ mobileMenuOpen: false }">
+
+    <header class="bg-white shadow-md sticky top-0 z-50" @click.away="mobileMenuOpen = false">
+        <div class="container mx-auto px-4 py-3">
+            <div class="flex justify-between items-center">
+                <a href="#" class="text-2xl font-bold text-brown-800" style="color: #6b4f4b;">
+                    <i class="fas fa-mug-hot mr-2"></i>Aroma Vital
+                </a>
+
+                <nav class="hidden md:flex space-x-6 items-center">
+                    <a href="#menu" class="text-gray-600 hover:text-brown-700 transition duration-300 font-medium">Menú</a>
+                    <a href="#nuestro-cafe" class="text-gray-600 hover:text-brown-700 transition duration-300 font-medium">Nuestro Café</a>
+                    <a href="#galeria" class="text-gray-600 hover:text-brown-700 transition duration-300 font-medium">Galería</a>
+                    <a href="#visitanos" class="text-gray-600 hover:text-brown-700 transition duration-300 font-medium">Visítanos</a>
+                    <a href="#contacto" class="bg-brown-700 hover:bg-brown-800 text-white font-medium py-2 px-4 rounded-full transition duration-300 text-sm btn-gradient" style="background-color: #8a5a44;">Pedir Online</a>
+                </nav>
+
+                <div class="md:hidden">
+                    <button @click="mobileMenuOpen = !mobileMenuOpen" class="text-gray-700 hover:text-brown-800 focus:outline-none">
+                        <i class="fas fa-bars fa-lg"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div x-show="mobileMenuOpen" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 transform -translate-y-2" x-transition:enter-end="opacity-100 transform translate-y-0" x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100 transform translate-y-0" x-transition:leave-end="opacity-0 transform -translate-y-2" class="md:hidden absolute top-full left-0 w-full bg-white shadow-lg rounded-b-lg py-2">
+            <nav class="flex flex-col px-4 space-y-2">
+                <a href="#menu" @click="mobileMenuOpen = false" class="block py-2 text-gray-600 hover:text-brown-700 hover:bg-gray-100 rounded px-2">Menú</a>
+                <a href="#nuestro-cafe" @click="mobileMenuOpen = false" class="block py-2 text-gray-600 hover:text-brown-700 hover:bg-gray-100 rounded px-2">Nuestro Café</a>
+                <a href="#galeria" @click="mobileMenuOpen = false" class="block py-2 text-gray-600 hover:text-brown-700 hover:bg-gray-100 rounded px-2">Galería</a>
+                <a href="#visitanos" @click="mobileMenuOpen = false" class="block py-2 text-gray-600 hover:text-brown-700 hover:bg-gray-100 rounded px-2">Visítanos</a>
+                <a href="#contacto" @click="mobileMenuOpen = false" class="block py-2 text-center bg-brown-700 hover:bg-brown-800 text-white font-medium rounded-full transition duration-300 my-2 btn-gradient" style="background-color: #8a5a44;">Pedir Online</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+
+        <section class="hero-bg-cafe h-screen flex items-center justify-center text-white relative overflow-hidden">
+            <div class="text-center z-10 p-4">
+                <h1 class="text-5xl md:text-7xl font-extrabold mb-4 drop-shadow-lg" style="font-family: 'Georgia', serif;">Despierta tus Sentidos</h1>
+                <p class="text-xl md:text-2xl mb-8 max-w-2xl mx-auto drop-shadow-md">Café de especialidad tostado artesanalmente en San Lorenzo. Pura pasión en cada taza.</p>
+                <a href="#menu" class="bg-white text-brown-800 font-bold py-3 px-8 rounded-full text-lg hover:bg-gray-200 transition duration-300 shadow-xl transform hover:scale-105" style="color: #6b4f4b;">Descubre el Menú</a>
+            </div>
+            <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 z-10 animate-bounce">
+                 <a href="#nuestro-cafe"><i class="fas fa-chevron-down text-white text-3xl opacity-70"></i></a>
+            </div>
+        </section>
+
+        <section id="nuestro-cafe" class="py-20 bg-white">
+            <div class="container mx-auto px-6 grid md:grid-cols-2 gap-12 items-center">
+                <div class="fade-in-element">
+                    <img src="https://placehold.co/600x500/e0c4b6/6b4f4b?text=Tostando+Café+Artesanal" alt="[Imagen de Tostando Café Artesanalmente]" class="rounded-lg shadow-xl w-full object-cover">
+                </div>
+                <div class="fade-in-element">
+                    <h2 class="text-3xl md:text-4xl font-bold text-brown-800 mb-4" style="color: #6b4f4b;">Del Grano a tu Taza</h2>
+                    <p class="text-lg text-gray-700 mb-4">En Aroma Vital, seleccionamos los mejores granos de café de origen único y los tostamos aquí mismo, en pequeños lotes, para garantizar la máxima frescura y sabor.</p>
+                    <p class="text-gray-600 mb-6">Nuestra pasión es compartir contigo una experiencia cafetera excepcional, cuidando cada detalle desde la selección hasta la preparación final.</p>
+                    <a href="#" class="text-brown-700 hover:text-brown-900 font-semibold transition duration-300" style="color: #8a5a44;">Conoce nuestra historia <i class="fas fa-arrow-right ml-1 text-sm"></i></a>
+                </div>
+            </div>
+        </section>
+
+        <section id="menu" class="py-20 bg-cream-50" style="background-color: #fdfbf7;">
+            <div class="container mx-auto px-6">
+                <h2 class="text-3xl md:text-4xl font-bold text-center text-brown-800 mb-12" style="color: #6b4f4b;">Favoritos de la Casa</h2>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div class="bg-white rounded-lg shadow-lg overflow-hidden card-hover-effect fade-in-element">
+                        <img src="https://placehold.co/400x300/c8b7a6/6b4f4b?text=Café+Latte+Arte" alt="[Imagen de Café Latte con Arte]" class="w-full h-56 object-cover">
+                        <div class="p-6">
+                            <h3 class="text-xl font-semibold text-brown-800 mb-2" style="color: #6b4f4b;">Latte Artesanal</h3>
+                            <p class="text-gray-600 text-sm mb-3">Espresso perfectamente extraído con leche vaporizada cremosa y un toque de arte.</p>
+                            <span class="text-lg font-bold text-brown-700" style="color: #8a5a44;">₲ 18.000</span>
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-lg shadow-lg overflow-hidden card-hover-effect fade-in-element" style="transition-delay: 0.1s;">
+                         <img src="https://placehold.co/400x300/d6ccc2/6b4f4b?text=Chemex+Café+Filtrado" alt="[Imagen de Café Filtrado Chemex]" class="w-full h-56 object-cover">
+                        <div class="p-6">
+                            <h3 class="text-xl font-semibold text-brown-800 mb-2" style="color: #6b4f4b;">Café Filtrado (V60/Chemex)</h3>
+                            <p class="text-gray-600 text-sm mb-3">Descubre los matices de nuestros granos de origen con métodos de filtrado manual.</p>
+                            <span class="text-lg font-bold text-brown-700" style="color: #8a5a44;">₲ 20.000</span>
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-lg shadow-lg overflow-hidden card-hover-effect fade-in-element" style="transition-delay: 0.2s;">
+                         <img src="https://placehold.co/400x300/ede0d4/6b4f4b?text=Croissant+Almendras" alt="[Imagen de Croissant de Almendras]" class="w-full h-56 object-cover">
+                        <div class="p-6">
+                            <h3 class="text-xl font-semibold text-brown-800 mb-2" style="color: #6b4f4b;">Croissant de Almendras</h3>
+                            <p class="text-gray-600 text-sm mb-3">Recién horneado, crujiente por fuera, tierno por dentro. El acompañante perfecto.</p>
+                            <span class="text-lg font-bold text-brown-700" style="color: #8a5a44;">₲ 15.000</span>
+                        </div>
+                    </div>
+                </div>
+                 <div class="text-center mt-12">
+                     <a href="#" class="btn-gradient text-white font-bold py-3 px-8 rounded-full text-lg hover:shadow-xl transition duration-300 transform hover:scale-105">Ver Menú Completo</a>
+                 </div>
+            </div>
+        </section>
+
+        <section id="galeria" class="py-20 bg-white">
+            <div class="container mx-auto px-6">
+                <h2 class="text-3xl md:text-4xl font-bold text-center text-brown-800 mb-12" style="color: #6b4f4b;">Nuestro Espacio, Tu Momento</h2>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div class="overflow-hidden rounded-lg shadow-md fade-in-element">
+                        <img src="https://placehold.co/400x400/b08968/ffffff?text=Ambiente+Cafetería+1" alt="[Imagen de Ambiente Cafetería 1]" class="w-full h-full object-cover transform hover:scale-110 transition duration-500 ease-in-out">
+                    </div>
+                     <div class="overflow-hidden rounded-lg shadow-md fade-in-element" style="transition-delay: 0.1s;">
+                        <img src="https://placehold.co/400x400/ddb892/ffffff?text=Detalle+Café+Arte" alt="[Imagen de Detalle Café Arte]" class="w-full h-full object-cover transform hover:scale-110 transition duration-500 ease-in-out">
+                    </div>
+                     <div class="overflow-hidden rounded-lg shadow-md fade-in-element" style="transition-delay: 0.2s;">
+                        <img src="https://placehold.co/400x400/e6ccb2/ffffff?text=Clientes+Disfrutando" alt="[Imagen de Clientes Disfrutando]" class="w-full h-full object-cover transform hover:scale-110 transition duration-500 ease-in-out">
+                    </div>
+                     <div class="overflow-hidden rounded-lg shadow-md fade-in-element" style="transition-delay: 0.3s;">
+                        <img src="https://placehold.co/400x400/7f5539/ffffff?text=Bolsa+Café+Grano" alt="[Imagen de Bolsa Café en Grano]" class="w-full h-full object-cover transform hover:scale-110 transition duration-500 ease-in-out">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+         <section id="visitanos" class="py-20 bg-cream-50" style="background-color: #fdfbf7;">
+            <div class="container mx-auto px-6">
+                 <h2 class="text-3xl md:text-4xl font-bold text-center text-brown-800 mb-12" style="color: #6b4f4b;">Encuéntranos en San Lorenzo</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+                    <div class="bg-gray-300 h-72 md:h-full rounded-lg shadow-lg flex items-center justify-center fade-in-element">
+                         <p class="text-gray-600">Espacio para Mapa Interactivo (Google Maps)</p>
+                         </div>
+                    <div class="fade-in-element" style="transition-delay: 0.1s;">
+                        <div class="bg-white p-8 rounded-lg shadow-lg h-full flex flex-col justify-center">
+                            <h3 class="text-2xl font-semibold text-brown-800 mb-4" style="color: #6b4f4b;">Aroma Vital Café</h3>
+                            <div class="space-y-3 text-gray-700 mb-6">
+                                <p><i class="fas fa-map-marker-alt mr-3 text-brown-600 fa-fw" style="color: #a07d60;"></i>Tu Dirección Exacta, San Lorenzo, Paraguay</p>
+                                <p><i class="fas fa-phone mr-3 text-brown-600 fa-fw" style="color: #a07d60;"></i>+595 9XX XXX XXX</p>
+                                <p><i class="fas fa-envelope mr-3 text-brown-600 fa-fw" style="color: #a07d60;"></i>hola@aromavital.com.py</p>
+                                <p class="font-semibold mt-4 text-brown-800" style="color: #6b4f4b;">Nuestro Horario:</p>
+                                <p><i class="far fa-clock mr-3 text-brown-600 fa-fw" style="color: #a07d60;"></i>Lunes a Sábado: 07:00 - 20:00 hs</p>
+                                <p><i class="far fa-clock mr-3 text-brown-600 fa-fw" style="color: #a07d60;"></i>Domingos: 09:00 - 19:00 hs</p>
+                            </div>
+                            <div class="flex space-x-4">
+                                <a href="#" class="text-brown-700 hover:text-brown-900 transition duration-300"><i class="fab fa-instagram fa-2x"></i></a>
+                                <a href="#" class="text-brown-700 hover:text-brown-900 transition duration-300"><i class="fab fa-facebook-f fa-2x"></i></a>
+                                <a href="#" class="text-brown-700 hover:text-brown-900 transition duration-300"><i class="fab fa-whatsapp fa-2x"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-gray-800 text-gray-300 py-10">
+        <div class="container mx-auto px-6 text-center">
+            <div class="mb-4">
+                 <a href="#" class="text-xl font-bold text-white tracking-wider">
+                    <i class="fas fa-mug-hot mr-2"></i>Aroma Vital
+                </a>
+            </div>
+            <nav class="flex justify-center space-x-4 mb-6 text-sm">
+                <a href="#menu" class="hover:text-white">Menú</a>
+                <a href="#nuestro-cafe" class="hover:text-white">Nuestro Café</a>
+                <a href="#galeria" class="hover:text-white">Galería</a>
+                <a href="#visitanos" class="hover:text-white">Visítanos</a>
+            </nav>
+            <div class="flex justify-center space-x-5 mb-6">
+                 <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-instagram fa-lg"></i></a>
+                 <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-facebook-f fa-lg"></i></a>
+                 <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-whatsapp fa-lg"></i></a>
+            </div>
+            <p class="text-xs text-gray-500">&copy; 2025 Aroma Vital Café. Todos los derechos reservados. San Lorenzo, Paraguay.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Script para animaciones fade-in al hacer scroll
+        const fadeInElements = document.querySelectorAll('.fade-in-element');
+
+        const observerOptions = {
+            root: null, // relative to the viewport
+            rootMargin: '0px',
+            threshold: 0.1 // trigger when 10% of the element is visible
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                    // Optional: stop observing the element once it's visible
+                    // observer.unobserve(entry.target);
+                } else {
+                    // Optional: remove class if you want fade-out when scrolling up
+                    // entry.target.classList.remove('is-visible');
+                }
+            });
+        }, observerOptions);
+
+        fadeInElements.forEach(el => {
+            observer.observe(el);
+        });
+    </script>
+
+</body>
+</html>

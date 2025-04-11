@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="es" class="has-navbar-fixed-top">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bonsaiki - El Arte del Bonsái</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.0/css/bulma.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap" rel="stylesheet">
+    <script defer src="https://use.fontawesome.com/releases/v5.15.4/js/all.js"></script>
+
+    <style>
+        /* Estilos personalizados */
+        :root {
+            --bonsaiki-verde: #5A7D5A; /* Verde musgo */
+            --bonsaiki-tierra: #A0522D; /* Siena */
+            --bonsaiki-crema: #F5F5DC; /* Beige */
+            --bonsaiki-texto: #363636; /* Gris oscuro de Bulma */
+        }
+
+        html {
+            scroll-behavior: smooth; /* Desplazamiento suave */
+            background-color: var(--bonsaiki-crema); /* Fondo general */
+        }
+
+        body {
+            font-family: 'Nunito', sans-serif; /* Tipografía amigable */
+            color: var(--bonsaiki-texto);
+        }
+
+        /* Navbar fija */
+        .navbar.is-fixed-top {
+            background-color: var(--bonsaiki-verde);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .navbar-item, .navbar-link {
+            color: white;
+        }
+        .navbar-item:hover, .navbar-link:hover, .navbar-item.is-active {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+        .navbar-burger {
+            color: white;
+        }
+        .navbar-brand .navbar-item {
+            font-weight: bold;
+            font-size: 1.5rem;
+        }
+        .navbar-brand .navbar-item:hover {
+             background-color: transparent; /* Evitar cambio de fondo en el brand */
+        }
+
+
+        /* Hero Section */
+        .hero.is-bonsaiki {
+            background-color: var(--bonsaiki-verde);
+            background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('https://placehold.co/1920x1080/5A7D5A/FFFFFF?text=Bonsái+Destacado');
+            background-size: cover;
+            background-position: center;
+        }
+        .hero .title, .hero .subtitle {
+            color: white;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.7);
+        }
+
+        /* Secciones */
+        .section {
+            padding: 3rem 1.5rem;
+        }
+        .section-title {
+            text-align: center;
+            margin-bottom: 2.5rem;
+            color: var(--bonsaiki-verde);
+            font-weight: bold;
+        }
+
+        /* Cards */
+        .card {
+            border-radius: 8px; /* Bordes redondeados */
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            height: 100%; /* Asegurar misma altura en columnas */
+            display: flex;
+            flex-direction: column;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+        }
+        .card-image img {
+            border-top-left-radius: 8px;
+            border-top-right-radius: 8px;
+            object-fit: cover; /* Asegura que la imagen cubra el espacio */
+            aspect-ratio: 4 / 3; /* Proporción común para imágenes */
+        }
+         .card-content {
+            flex-grow: 1; /* El contenido crece para llenar el espacio */
+        }
+        .card .tag {
+            margin-top: 0.5rem;
+        }
+        .price {
+            font-weight: bold;
+            color: var(--bonsaiki-verde);
+            font-size: 1.2em;
+        }
+
+        /* Botones */
+        .button.is-primary {
+            background-color: var(--bonsaiki-verde);
+            border-color: transparent;
+        }
+        .button.is-primary:hover {
+            background-color: #4a6b4a; /* Un verde ligeramente más oscuro */
+        }
+        .button.is-link {
+            background-color: var(--bonsaiki-tierra);
+        }
+         .button.is-link:hover {
+            background-color: #80421d; /* Un tierra ligeramente más oscuro */
+        }
+
+        /* Tabla CRM */
+        .table-container {
+            overflow-x: auto; /* Permitir scroll horizontal en tablas grandes */
+        }
+        .table {
+            background-color: white;
+            border-radius: 6px;
+        }
+        .table thead th {
+            background-color: var(--bonsaiki-verde);
+            color: white;
+        }
+        .table tbody tr:nth-child(even) {
+            background-color: #f8f8f8; /* Alternar color filas */
+        }
+
+        /* Formulario Contacto */
+        .contact-form .field {
+            margin-bottom: 1rem;
+        }
+        .map-placeholder {
+            background-color: #e0e0e0;
+            border-radius: 6px;
+            text-align: center;
+            padding: 4rem 1rem;
+            color: #777;
+            font-style: italic;
+            height: 400px; /* Altura fija para el mapa */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Footer */
+        .footer {
+            background-color: var(--bonsaiki-tierra);
+            color: var(--bonsaiki-crema);
+            padding: 2rem 1.5rem 2rem; /* Menos padding vertical */
+        }
+        .footer a {
+            color: white;
+            text-decoration: underline;
+        }
+         .footer a:hover {
+            color: #f0eada; /* Un crema más claro al pasar el mouse */
+        }
+
+    </style>
+</head>
+<body>
+
+    <nav class="navbar is-fixed-top" role="navigation" aria-label="main navigation">
+        <div class="container">
+            <div class="navbar-brand">
+                <a class="navbar-item" href="#inicio">
+                    Bonsaiki
+                </a>
+
+                <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBonsaiki">
+                    <span aria-hidden="true"></span>
+                    <span aria-hidden="true"></span>
+                    <span aria-hidden="true"></span>
+                    <span aria-hidden="true"></span>
+                </a>
+            </div>
+
+            <div id="navbarBonsaiki" class="navbar-menu">
+                <div class="navbar-start">
+                    <a class="navbar-item" href="#inicio">
+                        Inicio
+                    </a>
+                    <a class="navbar-item" href="#catalogo">
+                        Catálogo
+                    </a>
+                    <a class="navbar-item" href="#clientes">
+                        Clientes
+                    </a>
+                    <a class="navbar-item" href="#blog">
+                        Blog
+                    </a>
+                    <a class="navbar-item" href="#contacto">
+                        Contacto
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <section id="inicio" class="hero is-large is-bonsaiki">
+        <div class="hero-body">
+            <div class="container has-text-centered">
+                <p class="title is-1">
+                    Bonsaiki
+                </p>
+                <p class="subtitle is-3">
+                    Cultivando paciencia, cosechando belleza.
+                </p>
+                <a href="#catalogo" class="button is-primary is-medium">Ver Catálogo</a>
+            </div>
+        </div>
+    </section>
+
+    <section id="catalogo" class="section">
+        <div class="container">
+            <h2 class="title is-2 section-title">Nuestro Catálogo de Bonsáis</h2>
+            <div class="columns is-multiline is-centered">
+                <div class="column is-12-mobile is-6-tablet is-4-desktop">
+                    <div class="card">
+                        <div class="card-image">
+                            <figure class="image">
+                                <img src="https://placehold.co/600x450/90EE90/333333?text=Bonsái+Arce" alt="[Imagen de Bonsái Arce Japonés]">
+                            </figure>
+                        </div>
+                        <div class="card-content">
+                            <p class="title is-4">Arce Japonés</p>
+                            <p class="subtitle is-6">Acer palmatum</p>
+                            <div class="content">
+                                <p>Edad: 8 años</p>
+                                <p class="price">Precio: $120.00</p>
+                                <span class="tag is-success">Disponible</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="column is-12-mobile is-6-tablet is-4-desktop">
+                    <div class="card">
+                        <div class="card-image">
+                            <figure class="image">
+                                <img src="https://placehold.co/600x450/8FBC8F/333333?text=Bonsái+Pino" alt="[Imagen de Bonsái Pino Negro]">
+                            </figure>
+                        </div>
+                        <div class="card-content">
+                            <p class="title is-4">Pino Negro Japonés</p>
+                            <p class="subtitle is-6">Pinus thunbergii</p>
+                            <div class="content">
+                                <p>Edad: 15 años</p>
+                                <p class="price">Precio: $250.00</p>
+                                <span class="tag is-success">Disponible</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="column is-12-mobile is-6-tablet is-4-desktop">
+                    <div class="card">
+                        <div class="card-image">
+                            <figure class="image">
+                                <img src="https://placehold.co/600x450/3CB371/333333?text=Bonsái+Olivo" alt="[Imagen de Bonsái Olivo]">
+                            </figure>
+                        </div>
+                        <div class="card-content">
+                            <p class="title is-4">Olivo</p>
+                            <p class="subtitle is-6">Olea europaea</p>
+                            <div class="content">
+                                <p>Edad: 5 años</p>
+                                <p class="price">Precio: $90.00</p>
+                                <span class="tag is-danger">Agotado</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                 </div>
+        </div>
+    </section>
+
+    <section id="clientes" class="section has-background-light">
+        <div class="container">
+            <h2 class="title is-2 section-title">Nuestros Clientes</h2>
+            <div class="table-container">
+                <table class="table is-striped is-fullwidth is-hoverable">
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Última Compra</th>
+                            <th>Total Gastado (aprox.)</th>
+                            <th>Contacto</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Ana García</td>
+                            <td>Arce Japonés (03/2025)</td>
+                            <td>$120.00</td>
+                            <td>ana.garcia@email.com</td>
+                             <td><button class="button is-small is-link">Ver Detalles</button></td>
+                        </tr>
+                         <tr>
+                            <td>Carlos Rodríguez</td>
+                            <td>Kit Herramientas (01/2025)</td>
+                            <td>$45.00</td>
+                            <td>carlos.r@email.com</td>
+                             <td><button class="button is-small is-link">Ver Detalles</button></td>
+                        </tr>
+                        <tr>
+                            <td>Elena Fernández</td>
+                            <td>Pino Negro (11/2024)</td>
+                            <td>$250.00</td>
+                            <td>elena.f@email.com</td>
+                            <td><button class="button is-small is-link">Ver Detalles</button></td>
+                        </tr>
+                        </tbody>
+                </table>
+            </div>
+             <div class="has-text-centered mt-4">
+                <p class="is-size-7 has-text-grey">Nota: Esta es una representación simplificada.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="blog" class="section">
+        <div class="container">
+            <h2 class="title is-2 section-title">Blog Bonsaiki</h2>
+            <div class="columns is-multiline is-centered">
+                <div class="column is-12-mobile is-6-tablet is-4-desktop">
+                    <div class="card">
+                         <div class="card-image">
+                            <figure class="image">
+                                <img src="https://placehold.co/600x450/9ACD32/333333?text=Riego+Bonsái" alt="[Imagen sobre riego de bonsáis]">
+                            </figure>
+                        </div>
+                        <div class="card-content">
+                            <p class="title is-5">El Arte de Regar tu Bonsái</p>
+                            <p class="subtitle is-7 has-text-grey">Publicado: 01 Abril 2025</p>
+                            <div class="content">
+                                Aprende la frecuencia y técnica correctas para mantener tu bonsái hidratado y saludable...
+                                <br>
+                                <a href="#" class="button is-small is-primary mt-3">Leer más</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="column is-12-mobile is-6-tablet is-4-desktop">
+                    <div class="card">
+                         <div class="card-image">
+                            <figure class="image">
+                                <img src="https://placehold.co/600x450/6B8E23/FFFFFF?text=Poda+Bonsái" alt="[Imagen sobre poda de bonsáis]">
+                            </figure>
+                        </div>
+                        <div class="card-content">
+                            <p class="title is-5">Guía de Poda para Principiantes</p>
+                             <p class="subtitle is-7 has-text-grey">Publicado: 15 Marzo 2025</p>
+                            <div class="content">
+                                Descubre los tipos de poda y cómo dar forma a tu árbol en miniatura sin dañarlo...
+                                <br>
+                                <a href="#" class="button is-small is-primary mt-3">Leer más</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                 <div class="column is-12-mobile is-6-tablet is-4-desktop">
+                    <div class="card">
+                         <div class="card-image">
+                            <figure class="image">
+                                <img src="https://placehold.co/600x450/556B2F/FFFFFF?text=Especies+Bonsái" alt="[Imagen sobre especies de bonsáis]">
+                            </figure>
+                        </div>
+                        <div class="card-content">
+                            <p class="title is-5">Especies Populares para Bonsái</p>
+                             <p class="subtitle is-7 has-text-grey">Publicado: 01 Marzo 2025</p>
+                            <div class="content">
+                               Explora las características de los árboles más comunes utilizados en el arte del bonsái...
+                                <br>
+                                <a href="#" class="button is-small is-primary mt-3">Leer más</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                </div>
+        </div>
+    </section>
+
+    <section id="contacto" class="section has-background-light">
+        <div class="container">
+            <h2 class="title is-2 section-title">Contacto</h2>
+            <div class="columns is-vcentered">
+                <div class="column is-half">
+                    <form class="contact-form">
+                        <div class="field">
+                            <label class="label">Nombre</label>
+                            <div class="control has-icons-left">
+                                <input class="input" type="text" placeholder="Tu nombre">
+                                <span class="icon is-small is-left">
+                                    <i class="fas fa-user"></i>
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <label class="label">Email</label>
+                            <div class="control has-icons-left">
+                                <input class="input" type="email" placeholder="tu@email.com">
+                                 <span class="icon is-small is-left">
+                                    <i class="fas fa-envelope"></i>
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <label class="label">Mensaje</label>
+                            <div class="control">
+                                <textarea class="textarea" placeholder="Escribe tu consulta aquí..."></textarea>
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <div class="control">
+                                <button class="button is-primary">Enviar Mensaje</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="column is-half">
+                     <div class="map-placeholder">
+                        <p>Aquí iría el mapa de ubicación (Ej: Google Maps Embed)</p>
+                        </div>
+                     <div class="content has-text-centered mt-4">
+                        <p><strong>Dirección:</strong> Calle Ficticia 123, Ciudad Ejemplo, País</p>
+                        <p><strong>Teléfono:</strong> +123 456 7890</p>
+                        <p><strong>Horario:</strong> Lunes a Sábado, 9:00 - 18:00</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="content has-text-centered">
+            <p>
+                <strong>Bonsaiki</strong> por <a href="#">Tu Nombre/Empresa</a>. El código fuente está licenciado
+                <a href="http://opensource.org/licenses/mit-license.php">MIT</a>. El contenido del sitio web es © 2025 Bonsaiki.
+            </p>
+             <p>
+                <a href="#inicio">Volver arriba</a>
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Get all "navbar-burger" elements
+            const $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
+
+            // Add a click event on each of them
+            $navbarBurgers.forEach( el => {
+                el.addEventListener('click', () => {
+                    // Get the target from the "data-target" attribute
+                    const target = el.dataset.target;
+                    const $target = document.getElementById(target);
+
+                    // Toggle the "is-active" class on both the "navbar-burger" and the "navbar-menu"
+                    el.classList.toggle('is-active');
+                    $target.classList.toggle('is-active');
+                });
+            });
+
+            // Close navbar menu when a link is clicked (optional, good UX)
+             const $navbarLinks = Array.prototype.slice.call(document.querySelectorAll('.navbar-item'), 0);
+             $navbarLinks.forEach( el => {
+                if (el.href && el.href.includes('#')) { // Check if it's an internal link
+                    el.addEventListener('click', () => {
+                        const $navbarBurger = el.closest('.navbar').querySelector('.navbar-burger');
+                        const target = $navbarBurger.dataset.target;
+                        const $target = document.getElementById(target);
+
+                        // If menu is active, close it
+                        if ($navbarBurger.classList.contains('is-active')) {
+                             $navbarBurger.classList.remove('is-active');
+                             $target.classList.remove('is-active');
+                        }
+                    });
+                }
+             });
+        });
+    </script>
+
+</body>
+</html>
