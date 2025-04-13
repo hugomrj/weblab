@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Finanzas Inteligentes - Consultoría Financiera</title>
+    <style>
+        /* Estilos generales */
+        :root {
+            --primary-color: #004080;
+            --secondary-color: #002b5c;
+            --accent-color: #00bcd4;
+            --text-color: #333;
+            --light-gray: #f5f5f5;
+            --white: #ffffff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Sección Hero */
+        header {
+            background: linear-gradient(135deg, var(--secondary-color), var(--primary-color));
+            color: var(--white);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-content {
+            z-index: 10;
+            width: 100%;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 2rem 0;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--white);
+            text-decoration: none;
+        }
+
+        .logo span {
+            color: var(--accent-color);
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+
+        .nav-links li {
+            margin-left: 2rem;
+        }
+
+        .nav-links a {
+            color: var(--white);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent-color);
+        }
+
+        .hero-text {
+            max-width: 600px;
+            margin-top: 4rem;
+        }
+
+        .hero-text h1 {
+            font-size: 3.5rem;
+            line-height: 1.2;
+            margin-bottom: 1.5rem;
+        }
+
+        .hero-text p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        .cta-btn {
+            display: inline-block;
+            background-color: var(--accent-color);
+            color: var(--secondary-color);
+            padding: 0.8rem 2rem;
+            border-radius: 50px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .cta-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .hero-image {
+            position: absolute;
+            right: -5%;
+            bottom: -10%;
+            width: 65%;
+            max-width: 800px;
+            opacity: 0.8;
+        }
+
+        /* Sección servicios */
+        .services {
+            padding: 6rem 0;
+            background-color: var(--light-gray);
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-title h2 {
+            font-size: 2.5rem;
+            color: var(--secondary-color);
+            margin-bottom: 1rem;
+        }
+
+        .section-title p {
+            max-width: 600px;
+            margin: 0 auto;
+            color: #666;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .service-card {
+            background-color: var(--white);
+            border-radius: 10px;
+            padding: 2rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .service-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .service-icon {
+            background-color: rgba(0, 64, 128, 0.1);
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .service-icon i {
+            color: var(--primary-color);
+            font-size: 1.5rem;
+        }
+
+        .service-card h3 {
+            margin-bottom: 1rem;
+            color: var(--secondary-color);
+        }
+
+        /* Sección equipo */
+        .team {
+            padding: 6rem 0;
+        }
+
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .team-card {
+            background-color: var(--white);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .team-card img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .team-card-content {
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .team-card-content h3 {
+            margin-bottom: 0.5rem;
+            color: var(--secondary-color);
+        }
+
+        .team-card-content p {
+            margin-bottom: 1rem;
+            color: #666;
+        }
+
+        /* Sección testimonios */
+        .testimonials {
+            padding: 6rem 0;
+            background-color: var(--light-gray);
+        }
+
+        .testimonial-slider {
+            display: flex;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            scrollbar-width: none;
+            margin-top: 3rem;
+        }
+
+        .testimonial-slider::-webkit-scrollbar {
+            display: none;
+        }
+
+        .testimonial {
+            flex: 0 0 100%;
+            scroll-snap-align: start;
+            background-color: var(--white);
+            border-radius: 10px;
+            padding: 2rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            margin-right: 2rem;
+        }
+
+        .testimonial-text {
+            font-style: italic;
+            margin-bottom: 1.5rem;
+        }
+
+        .client-info {
+            display: flex;
+            align-items: center;
+        }
+
+        .client-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: #ddd;
+            margin-right: 1rem;
+            overflow: hidden;
+        }
+
+        .client-details h4 {
+            color: var(--secondary-color);
+        }
+
+        .client-details p {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        /* Sección blog */
+        .blog {
+            padding: 6rem 0;
+        }
+
+        .blog-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .blog-card {
+            background-color: var(--white);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .blog-card img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .blog-card-content {
+            padding: 1.5rem;
+        }
+
+        .blog-card-content h3 {
+            margin-bottom: 0.5rem;
+            color: var(--secondary-color);
+        }
+
+        .blog-card-content p {
+            margin-bottom: 1rem;
+            color: #666;
+        }
+
+        .blog-card-content a {
+            display: inline-block;
+            background-color: var(--primary-color);
+            color: var(--white);
+            padding: 0.6rem 1.2rem;
+            border-radius: 50px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .blog-card-content a:hover {
+            background-color: var(--secondary-color);
+        }
+
+        /* Sección contacto */
+        .contact {
+            padding: 6rem 0;
+        }
+
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .contact-form {
+            background-color: var(--white);
+            border-radius: 10px;
+            padding: 2rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .contact-form h3 {
+            margin-bottom: 1.5rem;
+            color: var(--secondary-color);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        button {
+            background-color: var(--primary-color);
+            color: var(--white);
+            border: none;
+            padding: 0.8rem 2rem;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        button:hover {
+            background-color: var(--secondary-color);
+        }
+
+        .contact-info {
+            background-color: var(--secondary-color);
+            color: var(--white);
+            border-radius: 10px;
+            padding: 2rem;
+        }
+
+        .contact-info h3 {
+            margin-bottom: 1.5rem;
+        }
+
+        .contact-item {
+            display: flex;
+            margin-bottom: 1rem;
+        }
+
+        .contact-item i {
+            margin-right: 1rem;
+            color: var(--accent-color);
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--secondary-color);
+            color: var(--white);
+            padding: 4rem 0 2rem;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .footer-column h3 {
+            margin-bottom: 1.5rem;
+            color: var(--accent-color);
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.8rem;
+        }
+
+        .footer-links a {
+            color: #aaa;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--accent-color);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .social-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+
+        .social-link:hover {
+            background-color: var(--accent-color);
+            color: var(--secondary-color);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Responsive design */
+        @media (max-width: 992px) {
+            .hero-text h1 {
+                font-size: 2.8rem;
+            }
+
+            .hero-image {
+                width: 80%;
+                right: -20%;
+            }
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                flex-direction: column;
+                padding: 1rem 0;
+            }
+
+            .nav-links {
+                margin-top: 1rem;
+            }
+
+            .nav-links li {
+                margin-left: 1rem;
+                margin-right: 1rem;
+            }
+
+            .hero-text h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero-image {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Sección Hero -->
+    <header>
+        <div class="container">
+            <nav>
+                <a href="#" class="logo">Finanzas<span>Inteligentes</span></a>
+                <ul class="nav-links">
+                    <li><a href="#">Inicio</a></li>
+                    <li><a href="#services">Servicios</a></li>
+                    <li><a href="#team">Equipo</a></li>
+                    <li><a href="#blog">Blog</a></li>
+                    <li><a href="#testimonials">Testimonios</a></li>
+                    <li><a href="#contact">Contacto</a></li>
+                </ul>
+            </nav>
+
+            <div class="hero-content">
+                <div class="hero-text">
+                    <h1>Soluciones Financieras Inteligentes para tu Negocio</h1>
+                    <p>En Finanzas Inteligentes, ofrecemos asesoramiento financiero experto para ayudarte a tomar decisiones informadas y alcanzar tus objetivos financieros.</p>
+                    <a href="#contact" class="cta-btn">Agenda una consulta</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="hero-image">
+            <img src="/api/placeholder/600/450" alt="Ilustración de finanzas">
+        </div>
+    </header>
+
+    <!-- Sección Servicios -->
+    <section id="services" class="services">
+        <div class="container">
+            <div class="section-title">
+                <h2>Nuestros Servicios</h2>
+                <p>Ofrecemos una amplia gama de servicios financieros para satisfacer todas tus necesidades.</p>
+            </div>
+
+            <div class="services-grid">
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i>💰</i>
+                    </div>
+                    <h3>Planificación Financiera</h3>
+                    <p>Te ayudamos a crear un plan financiero personalizado para alcanzar tus objetivos a corto y largo plazo.</p>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i>📈</i>
+                    </div>
+                    <h3>Gestión de Inversiones</h3>
+                    <p>Asesoramiento en la gestión de tus inversiones para maximizar tus rendimientos y minimizar riesgos.</p>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i>🏦</i>
+                    </div>
+                    <h3>Asesoramiento Empresarial</h3>
+                    <p>Apoyamos a empresas en la toma de decisiones financieras estratégicas para impulsar su crecimiento.</p>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i>📊</i>
+                    </div>
+                    <h3>Análisis de Riesgos</h3>
+                    <p>Evaluamos los riesgos financieros y te ayudamos a implementar estrategias para mitigarlos.</p>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i>🏠</i>
+                    </div>
+                    <h3>Planificación de Jubilación</h3>
+                    <p>Te ayudamos a planificar tu jubilación para asegurar un futuro financiero estable.</p>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i>💼</i>
+                    </div>
+                    <h3>Consultoría Fiscal</h3>
+                    <p>Asesoramiento en la optimización de tus impuestos y cumplimiento de obligaciones fiscales.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sección Equipo -->
+    <section id="team" class="team">
+        <div class="container">
+            <div class="section-title">
+                <h2>Nuestro Equipo</h2>
+                <p>Conoce a los expertos financieros que trabajan incansablemente para ayudarte a alcanzar tus objetivos financieros.</p>
+            </div>
+
+            <div class="team-grid">
+                <div class="team-card">
+                    <img src="/api/placeholder/300/300" alt="Miembro del equipo">
+                    <div class="team-card-content">
+                        <h3>Dr. Juan Pérez</h3>
+                        <p>Consultor financiero especialista en planificación financiera</p>
+                    </div>
+                </div>
+
+                <div class="team-card">
+                    <img src="/api/placeholder/300/300" alt="Miembro del equipo">
+                    <div class="team-card-content">
+                        <h3>Dra. María López</h3>
+                        <p>Consultora financiera especialista en gestión de inversiones</p>
+                    </div>
+                </div>
+
+                <div class="team-card">
+                    <img src="/api/placeholder/300/300" alt="Miembro del equipo">
+                    <div class="team-card-content">
+                        <h3>Dr. Carlos Rodríguez</h3>
+                        <p>Consultor financiero especialista en asesoramiento empresarial</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sección Blog -->
+    <section id="blog" class="blog">
+        <div class="container">
+            <div class="section-title">
+                <h2>Nuestro Blog</h2>
+                <p>Mantente informado con nuestros artículos sobre temas financieros y actualidad.</p>
+            </div>
+
+            <div class="blog-grid">
+                <div class="blog-card">
+                    <img src="/api/placeholder/300/200" alt="Imagen del blog">
+                    <div class="blog-card-content">
+                        <h3>La Importancia de la Planificación Financiera</h3>
+                        <p>Descubre cómo una planificación financiera adecuada puede cambiar tu futuro.</p>
+                        <a href="#">Leer más</a>
+                    </div>
+                </div>
+
+                <div class="blog-card">
+                    <img src="/api/placeholder/300/200" alt="Imagen del blog">
+                    <div class="blog-card-content">
+                        <h3>Estrategias de Inversión para Principiantes</h3>
+                        <p>Consejos y estrategias para comenzar a invertir de manera inteligente.</p>
+                        <a href="#">Leer más</a>
+                    </div>
+                </div>
+
+                <div class="blog-card">
+                    <img src="/api/placeholder/300/200" alt="Imagen del blog">
+                    <div class="blog-card-content">
+                        <h3>Cómo Optimizar tus Impuestos</h3>
+                        <p>Recomendaciones para optimizar tus impuestos y ahorrar dinero.</p>
+                        <a href="#">Leer más</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sección Testimonios -->
+    <section id="testimonials" class="testimonials">
+        <div class="container">
+            <div class="section-title">
+                <h2>Lo Que Dicen Nuestros Clientes</h2>
+                <p>Descubre cómo hemos ayudado a nuestros clientes a alcanzar sus objetivos financieros.</p>
+            </div>
+
+            <div class="testimonial-slider">
+                <div class="testimonial">
+                    <div class="testimonial-text">
+                        <p>"Gracias a Finanzas Inteligentes, pude organizar mis finanzas y ahora tengo un plan claro para mi jubilación. ¡Altamente recomendado!"</p>
+                    </div>
+
+                    <div class="client-info">
+                        <div class="client-avatar">
+                            <img src="/api/placeholder/50/50" alt="Cliente">
+                        </div>
+                        <div class="client-details">
+                            <h4>Ana García</h4>
+                            <p>Cliente satisfecha</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="testimonial">
+                    <div class="testimonial-text">
+                        <p>"El equipo de Finanzas Inteligentes me ayudó a diversificar mis inversiones y ahora estoy viendo mejores rendimientos. ¡Excelente servicio!"</p>
+                    </div>
+
+                    <div class="client-info">
+                        <div class="client-avatar">
+                            <img src="/api/placeholder/50/50" alt="Cliente">
+                        </div>
+                        <div class="client-details">
+                            <h4>Luis Martínez</h4>
+                            <p>Cliente satisfecho</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="testimonial">
+                    <div class="testimonial-text">
+                        <p>"La asesoría empresarial de Finanzas Inteligentes ha sido crucial para el crecimiento de mi negocio. ¡Muy recomendable!"</p>
+                    </div>
+
+                    <div class="client-info">
+                        <div class="client-avatar">
+                            <img src="/api/placeholder/50/50" alt="Cliente">
+                        </div>
+                        <div class="client-details">
+                            <h4>Laura Torres</h4>
+                            <p>Cliente satisfecha</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sección Contacto -->
+    <section id="contact" class="contact">
+        <div class="container">
+            <div class="section-title">
+                <h2>Contáctanos</h2>
+                <p>Estamos aquí para ayudarte. Contáctanos para una consulta gratuita.</p>
+            </div>
+
+            <div class="contact-grid">
+                <div class="contact-form">
+                    <h3>Envíanos un mensaje</h3>
+                    <form>
+                        <div class="form-group">
+                            <label for="name">Nombre</label>
+                            <input type="text" id="name" placeholder="Tu nombre">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="email">Correo electrónico</label>
+                            <input type="email" id="email" placeholder="tu@email.com">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="subject">Asunto</label>
+                            <input type="text" id="subject" placeholder="Asunto">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="message">Mensaje</label>
+                            <textarea id="message" rows="5" placeholder="¿En qué podemos ayudarte?"></textarea>
+                        </div>
+
+                        <button type="submit">Enviar mensaje</button>
+                    </form>
+                </div>
+
+                <div class="contact-info">
+                    <h3>Información de contacto</h3>
+
+                    <div class="contact-item">
+                        <i>📍</i>
+                        <p>Calle Finanzas 123, Ciudad Económica</p>
+                    </div>
+
+                    <div class="contact-item">
+                        <i>📞</i>
+                        <p>+595 123 456 789</p>
+                    </div>
+
+                    <div class="contact-item">
+                        <i>✉️</i>
+                        <p>info@finanzasinteligentes.com</p>
+                    </div>
+
+                    <div class="contact-item">
+                        <i>⏰</i>
+                        <p>Lunes a Viernes: 9:00 - 18:00</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>Finanzas Inteligentes</h3>
+                    <p>Ayudándote a tomar decisiones financieras informadas para un futuro seguro.</p>
+
+                    <div class="social-links">
+                        <a href="#" class="social-link">FB</a>
+                        <a href="#" class="social-link">TW</a>
+                        <a href="#" class="social-link">IN</a>
+                        <a href="#" class="social-link">IG</a>
+                    </div>
+                </div>
+
+                <div class="footer-column">
+                    <h3>Servicios</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Planificación Financiera</a></li>
+                        <li><a href="#">Gestión de Inversiones</a></li>
+                        <li><a href="#">Asesoramiento Empresarial</a></li>
+                        <li><a href="#">Análisis de Riesgos</a></li>
+                        <li><a href="#">Planificación de Jubilación</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-column">
+                    <h3>Enlaces rápidos</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Inicio</a></li>
+                        <li><a href="#team">Equipo</a></li>
+                        <li><a href="#blog">Blog</a></li>
+                        <li><a href="#services">Servicios</a></li>
+                        <li><a href="#testimonials">Testimonios</a></li>
+                        <li><a href="#contact">Contacto</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-column">
+                    <h3>Newsletter</h3>
+                    <p>Suscríbete para recibir noticias y actualizaciones financieras.</p>
+                    <form>
+                        <div class="form-group">
+                            <input type="email" placeholder="Tu correo electrónico">
+                        </div>
+                        <button type="submit">Suscribirse</button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>&copy; 2025 Finanzas Inteligentes. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

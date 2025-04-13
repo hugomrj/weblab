@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dulce Arte - Pastelería Fina</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #fffaf5; /* Very light warm background */
+            color: #5c5c5c; /* Soft dark gray text */
+        }
+        html {
+            scroll-behavior: smooth;
+        }
+        /* Use Dancing Script for main headings and logo */
+        h1, h2, .font-logo {
+            font-family: 'Dancing Script', cursive;
+        }
+        /* Accent colors - Soft Pink and Mint Green */
+        :root {
+            --primary-color: #f4abc4; /* Soft Pink */
+            --secondary-color: #a8e6cf; /* Soft Mint Green */
+            --text-dark: #4a4a4a;
+            --accent-gold: #d4af37; /* Optional Gold Accent */
+        }
+        .primary-text { color: var(--primary-color); }
+        .primary-bg { background-color: var(--primary-color); }
+        .primary-border { border-color: var(--primary-color); }
+        .secondary-text { color: var(--secondary-color); }
+        .secondary-bg { background-color: var(--secondary-color); }
+        .text-dark { color: var(--text-dark); }
+
+        /* Animation */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .fade-in {
+            opacity: 0;
+            animation: fadeIn 0.7s ease-out forwards;
+        }
+        .delay-100 { animation-delay: 0.1s; }
+        .delay-200 { animation-delay: 0.2s; }
+        .delay-300 { animation-delay: 0.3s; }
+        .delay-400 { animation-delay: 0.4s; }
+        .delay-500 { animation-delay: 0.5s; }
+
+        /* Custom shadow for cards */
+        .pastel-shadow {
+            box-shadow: 0 4px 15px rgba(244, 171, 196, 0.2); /* Soft pink shadow */
+        }
+        .pastel-shadow:hover {
+             box-shadow: 0 6px 20px rgba(244, 171, 196, 0.3);
+        }
+    </style>
+</head>
+<body class="text-gray-700">
+
+    <header class="bg-white/90 backdrop-blur-sm shadow-sm sticky top-0 z-50 border-b border-pink-100">
+        <nav class="container mx-auto px-6 py-3 flex justify-between items-center">
+            <a href="#" class="font-logo text-4xl font-bold primary-text flex items-center">
+                <i class="fas fa-birthday-cake mr-2 text-3xl"></i> Dulce Arte
+            </a>
+            <div class="hidden md:flex space-x-7 items-center font-medium text-gray-600">
+                <a href="#inicio" class="hover:primary-text transition duration-300">Inicio</a>
+                <a href="#productos" class="hover:primary-text transition duration-300">Productos</a>
+                <a href="#tortas" class="hover:primary-text transition duration-300">Tortas Personalizadas</a>
+                <a href="#nosotros" class="hover:primary-text transition duration-300">Nosotros</a>
+                <a href="#contacto" class="hover:primary-text transition duration-300">Contacto</a>
+                <a href="#contacto" class="primary-bg text-white px-5 py-2 rounded-full font-semibold hover:bg-opacity-90 transition duration-300 shadow-sm text-sm">Hacer Pedido</a>
+            </div>
+            <button id="mobile-menu-button" class="md:hidden focus:outline-none text-gray-600 hover:primary-text">
+                <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+            </button>
+        </nav>
+        <div id="mobile-menu" class="md:hidden hidden bg-white py-2 border-t border-pink-100">
+            <a href="#inicio" class="block px-6 py-2 text-gray-600 hover:bg-pink-50 hover:primary-text rounded-md mx-2">Inicio</a>
+            <a href="#productos" class="block px-6 py-2 text-gray-600 hover:bg-pink-50 hover:primary-text rounded-md mx-2">Productos</a>
+            <a href="#tortas" class="block px-6 py-2 text-gray-600 hover:bg-pink-50 hover:primary-text rounded-md mx-2">Tortas Personalizadas</a>
+            <a href="#nosotros" class="block px-6 py-2 text-gray-600 hover:bg-pink-50 hover:primary-text rounded-md mx-2">Nosotros</a>
+            <a href="#contacto" class="block px-6 py-2 text-gray-600 hover:bg-pink-50 hover:primary-text rounded-md mx-2">Contacto</a>
+            <a href="#contacto" class="block px-6 py-2 primary-bg text-white text-center rounded-full mx-4 my-2 font-semibold hover:bg-opacity-90 transition duration-300 text-sm">Hacer Pedido</a>
+        </div>
+    </header>
+
+    <main>
+        <section id="inicio" class="relative h-[75vh] md:h-screen bg-cover bg-center flex items-center text-center" style="background-image: url('https://placehold.co/1600x900/fce7f3/db2777?text=Pastelería+Exquisita');">
+            <div class="absolute inset-0 bg-gradient-to-t from-white/30 to-transparent"></div> <div class="container mx-auto px-6 relative z-10 fade-in">
+                <h1 class="text-6xl md:text-8xl font-bold text-white mb-4" style="text-shadow: 2px 2px 6px rgba(0,0,0,0.3);">
+                    Dulces Momentos,<br> Hechos Arte
+                </h1>
+                <p class="text-lg md:text-xl text-white mb-8 max-w-xl mx-auto font-light" style="text-shadow: 1px 1px 3px rgba(0,0,0,0.4);">
+                    Descubre nuestras creaciones artesanales, elaboradas con los mejores ingredientes y una pizca de amor.
+                </p>
+                <a href="#productos" class="primary-bg text-white px-8 py-3 rounded-full text-lg font-semibold hover:bg-opacity-90 transition duration-300 shadow-lg hover:shadow-xl transform hover:scale-105">Descubrir Delicias</a>
+            </div>
+        </section>
+
+        <section id="productos" class="py-16 md:py-24 bg-white">
+            <div class="container mx-auto px-6">
+                <h2 class="text-5xl md:text-6xl font-bold text-center mb-16 text-dark fade-in">Nuestras Creaciones Estrella</h2>
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-10">
+                    <div class="bg-white rounded-lg overflow-hidden pastel-shadow transition duration-300 fade-in delay-100">
+                        <img src="https://placehold.co/600x500/fbcfe8/9d174d?text=Torta+de+Frutos+Rojos" alt="[Imagen de Torta de Frutos Rojos]" class="w-full h-64 object-cover" onerror="this.src='https://placehold.co/600x500/cccccc/ffffff?text=Producto'">
+                        <div class="p-6 text-center">
+                            <h3 class="text-2xl font-semibold mb-2 text-dark">Torta Selva Rosa</h3>
+                            <p class="text-gray-600 mb-4">Bizcocho de vainilla relleno de crema y frutos rojos frescos, cubierta delicada.</p>
+                            <a href="#" class="primary-text font-medium hover:underline">Ver Detalles</a>
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-lg overflow-hidden pastel-shadow transition duration-300 fade-in delay-200">
+                        <img src="https://placehold.co/600x500/d1fae5/047857?text=Cupcakes+Variados" alt="[Imagen de Cupcakes Variados]" class="w-full h-64 object-cover" onerror="this.src='https://placehold.co/600x500/cccccc/ffffff?text=Producto'">
+                        <div class="p-6 text-center">
+                            <h3 class="text-2xl font-semibold mb-2 text-dark">Colección de Cupcakes</h3>
+                            <p class="text-gray-600 mb-4">Sabores surtidos como chocolate, vainilla y red velvet con frosting artesanal.</p>
+                             <a href="#" class="primary-text font-medium hover:underline">Ver Detalles</a>
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-lg overflow-hidden pastel-shadow transition duration-300 fade-in delay-300">
+                        <img src="https://placehold.co/600x500/fed7aa/9a3412?text=Macarons+Coloridos" alt="[Imagen de Macarons Coloridos]" class="w-full h-64 object-cover" onerror="this.src='https://placehold.co/600x500/cccccc/ffffff?text=Producto'">
+                        <div class="p-6 text-center">
+                            <h3 class="text-2xl font-semibold mb-2 text-dark">Macarons Parisinos</h3>
+                            <p class="text-gray-600 mb-4">Delicados macarons de almendra en vibrantes colores y exquisitos rellenos.</p>
+                             <a href="#" class="primary-text font-medium hover:underline">Ver Detalles</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="tortas" class="py-16 md:py-24 bg-gradient-to-br from-pink-50 to-emerald-50">
+            <div class="container mx-auto px-6 text-center">
+                <h2 class="text-5xl md:text-6xl font-bold mb-6 text-dark fade-in">Tortas Personalizadas para Tus Eventos</h2>
+                <p class="text-lg text-gray-600 mb-10 max-w-2xl mx-auto fade-in delay-100">
+                    Creamos la torta de tus sueños para bodas, cumpleaños, aniversarios y cualquier ocasión especial. Cuéntanos tu idea y la haremos realidad.
+                </p>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10 max-w-4xl mx-auto">
+                     <img src="https://placehold.co/300x300/fce7f3/db2777?text=Torta+Boda" alt="[Imagen de Torta de Boda]" class="rounded-lg shadow-md w-full h-full object-cover fade-in delay-200" onerror="this.src='https://placehold.co/300x300/cccccc/ffffff?text=Torta'">
+                     <img src="https://placehold.co/300x300/fbcfe8/db2777?text=Torta+Cumpleaños" alt="[Imagen de Torta de Cumpleaños]" class="rounded-lg shadow-md w-full h-full object-cover fade-in delay-300" onerror="this.src='https://placehold.co/300x300/cccccc/ffffff?text=Torta'">
+                     <img src="https://placehold.co/300x300/f9a8d4/db2777?text=Torta+Infantil" alt="[Imagen de Torta Infantil]" class="rounded-lg shadow-md w-full h-full object-cover fade-in delay-400" onerror="this.src='https://placehold.co/300x300/cccccc/ffffff?text=Torta'">
+                     <img src="https://placehold.co/300x300/f4abc4/db2777?text=Torta+Evento" alt="[Imagen de Torta de Evento]" class="rounded-lg shadow-md w-full h-full object-cover fade-in delay-500" onerror="this.src='https://placehold.co/300x300/cccccc/ffffff?text=Torta'">
+                </div>
+                <a href="#contacto" class="secondary-bg text-white px-8 py-3 rounded-full text-lg font-semibold hover:bg-opacity-90 transition duration-300 shadow-md hover:shadow-lg transform hover:scale-105 fade-in delay-500">Solicitar Presupuesto</a>
+            </div>
+        </section>
+
+        <section id="nosotros" class="py-16 md:py-24 bg-white">
+            <div class="container mx-auto px-6 flex flex-col md:flex-row items-center gap-12">
+                 <div class="md:w-1/2 fade-in">
+                     <img src="https://placehold.co/600x500/fde6f0/f472b6?text=Equipo+Dulce+Arte" alt="[Imagen del equipo o la tienda]" class="rounded-lg shadow-lg w-full" onerror="this.src='https://placehold.co/600x500/cccccc/ffffff?text=Nosotros'">
+                </div>
+                 <div class="md:w-1/2 fade-in delay-100">
+                    <h2 class="text-5xl md:text-6xl font-bold mb-6 text-dark">Nuestra Dulce Historia</h2>
+                    <p class="text-gray-600 mb-4 leading-relaxed">
+                        En Dulce Arte, cada pastel es una obra de amor. Comenzamos como un pequeño sueño en la cocina de casa, impulsados por la pasión de crear postres que no solo sepan increíble, sino que también traigan alegría.
+                    </p>
+                    <p class="text-gray-600 mb-6 leading-relaxed">
+                        Utilizamos ingredientes de la más alta calidad, recetas probadas y un toque de creatividad para ofrecerte lo mejor de la pastelería fina. ¡Gracias por dejarnos ser parte de tus momentos especiales!
+                    </p>
+                     <div class="border-l-4 primary-border pl-4 italic text-gray-500">
+                         "La repostería es el arte de hacer comestible la felicidad."
+                     </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="contacto" class="py-16 md:py-24 bg-pink-50">
+            <div class="container mx-auto px-6">
+                 <h2 class="text-5xl md:text-6xl font-bold text-center mb-12 text-dark fade-in">Endulza Tu Día, Contáctanos</h2>
+                <div class="grid md:grid-cols-2 gap-12 items-start">
+                    <div class="fade-in delay-100">
+                        <h3 class="text-3xl font-semibold mb-6 text-dark">Visítanos o Llámanos</h3>
+                        <div class="space-y-5 text-lg text-gray-700">
+                            <p class="flex items-start">
+                                 <i class="fas fa-map-marker-alt mt-1 mr-3 fa-fw primary-text"></i>
+                                 <span>Av. Pasteleros Felices 123, <br>San Lorenzo Centro</span>
+                            </p>
+                            <p class="flex items-center">
+                                <i class="fas fa-phone mr-3 fa-fw primary-text"></i>
+                                <span>+595 9XX ABC DEF</span>
+                            </p>
+                             <p class="flex items-center">
+                                <i class="fab fa-whatsapp mr-3 fa-fw secondary-text text-xl"></i>
+                                <span>+595 9XX ABC DEF (Solo WhatsApp para pedidos)</span>
+                            </p>
+                            <p class="flex items-center">
+                                <i class="fas fa-envelope mr-3 fa-fw primary-text"></i>
+                                <span>pedidos@dulcearte.com.py</span>
+                            </p>
+                        </div>
+                        <h3 class="text-3xl font-semibold mt-8 mb-4 text-dark">Horario</h3>
+                        <div class="space-y-2 text-lg text-gray-700">
+                            <p><i class="fas fa-clock mr-2 fa-fw primary-text"></i> <strong>Martes a Domingo:</strong> 9:00 AM - 7:00 PM</p>
+                            <p><i class="fas fa-times-circle mr-2 fa-fw text-red-500"></i> <strong>Lunes:</strong> Cerrado por inspiración</p>
+                        </div>
+                    </div>
+                    <div class="fade-in delay-200">
+                         <h3 class="text-3xl font-semibold mb-6 text-dark">Encuéntranos Fácilmente</h3>
+                        <div class="rounded-lg overflow-hidden shadow-xl border-2 primary-border">
+                             <img src="https://placehold.co/600x400/fbcfe8/9d174d?text=Mapa+Pastelería" alt="[Mapa de ubicación de la pastelería]" class="w-full h-80 object-cover" onerror="this.src='https://placehold.co/600x400/cccccc/ffffff?text=Mapa'">
+                             </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-gray-800 text-gray-400 py-10">
+        <div class="container mx-auto px-6 text-center">
+             <a href="#" class="font-logo text-3xl font-bold text-white flex items-center justify-center mb-5">
+                <i class="fas fa-birthday-cake mr-2 text-2xl primary-text"></i> Dulce Arte
+            </a>
+            <p class="mb-5">Horneando felicidad, un postre a la vez.</p>
+            <div class="mb-5 flex justify-center space-x-6">
+                <a href="#" class="text-gray-400 hover:text-white text-2xl transition duration-300"><i class="fab fa-instagram"></i></a>
+                <a href="#" class="text-gray-400 hover:text-white text-2xl transition duration-300"><i class="fab fa-facebook-square"></i></a>
+                <a href="#" class="text-gray-400 hover:text-white text-2xl transition duration-300"><i class="fab fa-pinterest"></i></a>
+            </div>
+            <p class="text-sm">&copy; 2025 Dulce Arte Pastelería Fina. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <script>
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // Close menu when a link is clicked
+        const mobileLinks = mobileMenu.querySelectorAll('a');
+        mobileLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                if (link.getAttribute('href').startsWith('#')) {
+                    mobileMenu.classList.add('hidden');
+                }
+            });
+        });
+
+        // Intersection Observer for animations
+        const animatedElements = document.querySelectorAll('.fade-in');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.animationPlayState = 'running';
+                    observer.unobserve(entry.target); // Animate only once
+                }
+            });
+        }, { threshold: 0.1 });
+
+        animatedElements.forEach(el => {
+            el.style.animationPlayState = 'paused'; // Start paused
+            observer.observe(el);
+        });
+    </script>
+
+</body>
+</html>

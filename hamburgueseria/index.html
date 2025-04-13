@@ -1,0 +1,1049 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BRGR | Hamburguesas Artesanales</title>
+    <style>
+        :root {
+            --bg-color: #111111;
+            --text-color: #ffffff;
+            --accent: #FF3E41;
+            --accent-dark: #D7262A;
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-800: #1f2937;
+            --gray-900: #111827;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', system-ui, sans-serif;
+        }
+        
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.5;
+            overflow-x: hidden;
+        }
+        
+        /* Blur Grid Background */
+        .bg-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: -1;
+            background-size: 50px 50px;
+            background-image: 
+                linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+            opacity: 0.4;
+        }
+        
+        .bg-glow {
+            position: fixed;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at center, rgba(255, 62, 65, 0.08) 0%, transparent 35%);
+            z-index: -1;
+            animation: rotate 30s linear infinite;
+        }
+        
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .header {
+            position: fixed;
+            width: 100%;
+            z-index: 1000;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            background: rgba(17, 17, 17, 0.6);
+            padding: 1.25rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+        
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.75rem;
+            font-weight: 800;
+            letter-spacing: -0.05em;
+            background: linear-gradient(90deg, #ffffff, #FF3E41);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .nav-menu {
+            display: flex;
+            gap: 2.5rem;
+            align-items: center;
+        }
+        
+        .nav-link {
+            color: var(--text-color);
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            position: relative;
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -4px;
+            left: 0;
+            background: var(--accent);
+            transition: width 0.3s ease;
+        }
+        
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        
+        .cta-button {
+            background-color: var(--accent);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 4px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 0.9rem;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+        
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: var(--accent-dark);
+            transition: left 0.3s ease;
+            z-index: -1;
+        }
+        
+        .cta-button:hover::before {
+            left: 0;
+        }
+        
+        /* Hero Section */
+        .hero {
+            padding-top: 10rem;
+            padding-bottom: 8rem;
+            position: relative;
+        }
+        
+        .hero-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+        
+        .hero-content {
+            max-width: 600px;
+        }
+        
+        .hero-tag {
+            display: inline-flex;
+            align-items: center;
+            background: rgba(255, 62, 65, 0.1);
+            color: var(--accent);
+            padding: 0.5rem 1rem;
+            border-radius: 100px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(255, 62, 65, 0.2);
+        }
+        
+        .hero-tag svg {
+            margin-right: 0.5rem;
+        }
+        
+        .hero-title {
+            font-size: 3.75rem;
+            line-height: 1.1;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.025em;
+            background: linear-gradient(90deg, #ffffff 70%, rgba(255, 255, 255, 0.7));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .hero-description {
+            font-size: 1.125rem;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 2.5rem;
+            line-height: 1.7;
+        }
+        
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .outline-button {
+            background: transparent;
+            color: var(--text-color);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 0.75rem 1.5rem;
+            border-radius: 4px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 0.9rem;
+        }
+        
+        .outline-button:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+        
+        .hero-image {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .hero-image img {
+            width: 100%;
+            height: auto;
+            border-radius: 16px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+        
+        /* Features Section */
+        .features-grid {
+            position: relative;
+            z-index: 2;
+            margin-top: -4rem;
+        }
+        
+        .features-row {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+        }
+        
+        .feature-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 2rem;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        .feature-icon {
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+        }
+        
+        .feature-icon span {
+            font-size: 1.5rem;
+        }
+        
+        .feature-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+        }
+        
+        .feature-description {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.95rem;
+            line-height: 1.7;
+        }
+        
+        /* Menu Section */
+        .section {
+            padding: 8rem 0;
+            position: relative;
+        }
+        
+        .section-header {
+            text-align: center;
+            max-width: 600px;
+            margin: 0 auto 5rem;
+        }
+        
+        .section-tag {
+            display: inline-flex;
+            align-items: center;
+            background: rgba(255, 62, 65, 0.1);
+            color: var(--accent);
+            padding: 0.5rem 1rem;
+            border-radius: 100px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            margin-bottom: 1rem;
+            border: 1px solid rgba(255, 62, 65, 0.2);
+        }
+        
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.025em;
+        }
+        
+        .section-description {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 1.125rem;
+            line-height: 1.7;
+        }
+        
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+        
+        .menu-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            height: 100%;
+        }
+        
+        .menu-card:hover {
+            transform: translateY(-10px);
+            border-color: rgba(255, 62, 65, 0.3);
+            box-shadow: 0 20px 40px -12px rgba(255, 62, 65, 0.1);
+        }
+        
+        .menu-image {
+            position: relative;
+            height: 220px;
+            overflow: hidden;
+        }
+        
+        .menu-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        
+        .menu-card:hover .menu-image img {
+            transform: scale(1.05);
+        }
+        
+        .menu-badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: var(--accent);
+            color: white;
+            padding: 0.35rem 0.75rem;
+            border-radius: 100px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        
+        .menu-content {
+            padding: 1.5rem;
+        }
+        
+        .menu-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 1rem;
+        }
+        
+        .menu-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            letter-spacing: -0.01em;
+        }
+        
+        .menu-price {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--accent);
+        }
+        
+        .menu-description {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.95rem;
+            line-height: 1.7;
+            margin-bottom: 1.5rem;
+        }
+        
+        .menu-meta {
+            display: flex;
+            gap: 0.75rem;
+        }
+        
+        .menu-tag {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.6);
+        }
+        
+        /* Gallery Section */
+        .gallery {
+            background: #0A0A0A;
+        }
+        
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-template-rows: repeat(2, 200px);
+            gap: 1rem;
+        }
+        
+        .gallery-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        
+        .gallery-item:first-child {
+            grid-column: span 2;
+            grid-row: span 2;
+        }
+        
+        .gallery-item:nth-child(4) {
+            grid-column: span 2;
+        }
+        
+        .gallery-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        
+        .gallery-item:hover .gallery-image {
+            transform: scale(1.05);
+        }
+        
+        /* Testimonials Section */
+        .testimonials {
+            background: linear-gradient(to bottom, var(--bg-color), #0A0A0A);
+        }
+        
+        .testimonial-slider {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 3rem;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            position: relative;
+        }
+        
+        .testimonial-slider::before {
+            content: '"';
+            position: absolute;
+            top: 1.5rem;
+            left: 2rem;
+            font-size: 5rem;
+            color: rgba(255, 62, 65, 0.2);
+            font-family: Georgia, serif;
+            line-height: 1;
+        }
+        
+        .testimonial-text {
+            font-size: 1.25rem;
+            line-height: 1.8;
+            margin-bottom: 2rem;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.9);
+        }
+        
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+        }
+        
+        .author-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            overflow: hidden;
+        }
+        
+        .author-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .author-info h4 {
+            font-size: 1.125rem;
+            font-weight: 600;
+        }
+        
+        .author-info p {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.9rem;
+        }
+        
+        /* CTA Section */
+        .cta-section {
+            text-align: center;
+            padding: 8rem 0;
+            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://images.unsplash.com/photo-1568901346375-23c9450c58cd?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80') center/cover no-repeat;
+            position: relative;
+        }
+        
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--bg-color);
+            opacity: 0.85;
+        }
+        
+        .cta-content {
+            position: relative;
+            z-index: 1;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .cta-title {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.025em;
+        }
+        
+        .cta-description {
+            font-size: 1.25rem;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 2.5rem;
+            line-height: 1.7;
+        }
+        
+        /* Footer */
+        .footer {
+            background: #0A0A0A;
+            padding: 5rem 0 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 4rem;
+        }
+        
+        .footer-brand {
+            margin-bottom: 1.5rem;
+        }
+        
+        .footer-description {
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: 2rem;
+            font-size: 0.95rem;
+            line-height: 1.7;
+        }
+        
+        .footer-social {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .social-icon {
+            width: 38px;
+            height: 38px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-color);
+            border-radius: 50%;
+            transition: all 0.2s ease;
+        }
+        
+        .social-icon:hover {
+            background: var(--accent);
+            transform: translateY(-3px);
+        }
+        
+        .footer-heading {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 0.75rem;
+        }
+        
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.6);
+            text-decoration: none;
+            transition: all 0.2s ease;
+            font-size: 0.95rem;
+        }
+        
+        .footer-links a:hover {
+            color: var(--accent);
+        }
+        
+        .copyright {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.9rem;
+            padding-top: 3rem;
+            margin-top: 3rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .hero-container {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+                text-align: center;
+            }
+            
+            .hero-content {
+                max-width: 100%;
+            }
+            
+            .hero-buttons {
+                justify-content: center;
+            }
+            
+            .menu-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .features-row {
+                grid-template-columns: 1fr 1fr;
+            }
+            
+            .gallery-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            
+            .gallery-item:first-child,
+            .gallery-item:nth-child(4) {
+                grid-column: span 2;
+            }
+            
+            .footer-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 3rem;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .nav-menu {
+                display: none;
+            }
+            
+            .hero-title {
+                font-size: 2.5rem;
+            }
+            
+            .features-row,
+            .menu-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .gallery-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .gallery-item:first-child,
+            .gallery-item:nth-child(4) {
+                grid-column: span 1;
+            }
+            
+            .testimonial-slider {
+                padding: 2rem 1.5rem;
+            }
+            
+            .footer-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+            
+            .section {
+                padding: 4rem 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-grid"></div>
+    <div class="bg-glow"></div>
+    
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <nav class="navbar">
+                <div class="logo">BRGR</div>
+                <div class="nav-menu">
+                    <a href="#inicio" class="nav-link">Inicio</a>
+                    <a href="#menu" class="nav-link">Menú</a>
+                    <a href="#nosotros" class="nav-link">Nosotros</a>
+                    <a href="#galeria" class="nav-link">Galería</a>
+                </div>
+                <button class="cta-button">Ordenar Ahora</button>
+            </nav>
+        </div>
+    </header>
+    
+    <!-- Hero Section -->
+    <section class="hero" id="inicio">
+        <div class="container hero-container">
+            <div class="hero-content">
+                <div class="hero-tag">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" fill="#FF3E41"/>
+                    </svg>
+                    La mejor hamburguesa de la ciudad
+                </div>
+                <h1 class="hero-title">Redefine tu experiencia de sabor</h1>
+                <p class="hero-description">Hamburguesas artesanales elaboradas con ingredientes seleccionados. Probamos cada receta hasta la perfección para ofrecerte la experiencia culinaria más auténtica.</p>
+                <div class="hero-buttons">
+                    <button class="cta-button">Ver Menú</button>
+                    <button class="outline-button">Reservar Mesa</button>
+                </div>
+            </div>
+            <div class="hero-image">
+                <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Hamburguesa Gourmet">
+            </div>
+        </div>
+    </section>
+    
+    <!-- Features Section -->
+    <section class="features-grid">
+        <div class="container">
+            <div class="features-row">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <span>🍔</span>
+                    </div>
+                    <h3 class="feature-title">Ingredientes Premium</h3>
+                    <p class="feature-description">Carne 100% Angus, panes artesanales y vegetales frescos seleccionados para garantizar la máxima calidad.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <span>🔥</span>
+                    </div>
+                    <h3 class="feature-title">Cocción Perfecta</h3>
+                    <p class="feature-description">Nuestras hamburguesas se cocinan a la parrilla al punto exacto para realzar su sabor y jugosidad.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <span>🌱</span>
+                    </div>
+                    <h3 class="feature-title">Opciones Veganas</h3>
+                    <p class="feature-description">Deliciosas alternativas vegetales que no sacrifican el sabor. Todos encuentran algo para disfrutar.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Menu Section -->
+    <section class="section" id="menu">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Nuestro Menú</span>
+                <h2 class="section-title">Sabores que inspiran</h2>
+                <p class="section-description">Explora nuestra selección de hamburguesas gourmet, cada una creada con una combinación única de sabores.</p>
+            </div>
+            <div class="menu-grid">
+                <div class="menu-card">
+                    <div class="menu-image">
+                        <img src="https://images.unsplash.com/photo-1553979459-d2229ba7433b?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Clásica BRGR">
+                        <span class="menu-badge">Más Popular</span>
+                    </div>
+                    <div class="menu-content">
+                        <div class="menu-top">
+                            <h3 class="menu-title">Clásica BRGR</h3>
+                            <span class="menu-price">$12.99</span>
+                        </div>
+                        <p class="menu-description">Carne Angus, queso cheddar, lechuga, tomate, cebolla caramelizada y nuestra salsa especial en pan brioche.</p>
+                        <div class="menu-meta">
+                            <span class="menu-tag">🥩 200g</span>
+                            <span class="menu-tag">🧀 Queso</span>
+                            <span class="menu-tag">🌶️ Picante</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="menu-card">
+                    <div class="menu-image">
+                        <img src="https://images.unsplash.com/photo-1561758033-d89a9ad46330?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="BBQ Bacon">
+                    </div>
+                    <div class="menu-content">
+                        <div class="menu-top">
+                            <h3 class="menu-title">BBQ Bacon</h3>
+                            <span class="menu-price">$14.99</span>
+                        </div>
+                        <p class="menu-description">Doble carne, bacon crujiente, aros de cebolla, queso americano y salsa BBQ ahumada.</p>
+                        <div class="menu-meta">
+                            <span class="menu-tag">🥩 2x150g</span>
+                            <span class="menu-tag">🥓 Bacon</span>
+                            <span class="menu-tag">🧅 Cebolla</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="menu-card">
+                    <div class="menu-image">
+                        <img src="https://images.unsplash.com/photo-1596662951482-0c4ba74a6df6?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Trufa & Hongos">
+                    </div>
+                    <div class="menu-content">
+                        <div class="menu-top">
+                            <h3 class="menu-title">Trufa & Hongos</h3>
+                            <span class="menu-price">$16.99</span>
+                        </div>
+                        <p class="menu-description">Carne wagyu, queso brie, hongos salteados, rúcula y mayonesa de trufa negra en pan de centeno.</p>
+                        <div class="menu-meta">
+                            <span class="menu-tag">🥩 Wagyu</span>
+                            <span class="menu-tag">🍄 Hongos</span>
+                            <span class="menu-tag">🖤 Trufa</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="menu-card">
+                    <div class="menu-image">
+                        <img src="https://images.unsplash.com/photo-1596662951482-0c4ba74a6df6?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Vegana Delight">
+                        <span class="menu-badge">Nuevo</span>
+                    </div>
+                    <div class="menu-content">
+                        <div class="menu-top">
+                            <h3 class="menu-title">Vegana Delight</h3>
+                            <span class="menu-price">$13.99</span>
+                        </div>
+                        <p class="menu-description">Hamburguesa de lentejas y quinoa, queso vegano, aguacate, tomate seco y alioli de ajo negro.</p>
+                        <div class="menu-meta">
+                            <span class="menu-tag">🌱 Vegano</span>
+                            <span class="menu-tag">🥑 Aguacate</span>
+                            <span class="menu-tag">🧄 Ajo</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="menu-card">
+                    <div class="menu-image">
+                        <img src="https://images.unsplash.com/photo-1553979459-d2229ba7433b?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Picante Mexicana">
+                    </div>
+                    <div class="menu-content">
+                        <div class="menu-top">
+                            <h3 class="menu-title">Picante Mexicana</h3>
+                            <span class="menu-price">$14.49</span>
+                        </div>
+                        <p class="menu-description">Carne sazonada, jalapeños, guacamole, queso pepper jack y salsa chipotle en pan de maíz.</p>
+                        <div class="menu-meta">
+                            <span class="menu-tag">🌶️ Picante</span>
+                            <span class="menu-tag">🥑 Guacamole</span>
+                            <span class="menu-tag">🇲🇽 Mexicana</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="menu-card">
+                    <div class="menu-image">
+                        <img src="https://images.unsplash.com/photo-1561758033-d89a9ad46330?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Blue Cheese">
+                    </div>
+                    <div class="menu-content">
+                        <div class="menu-top">
+                            <h3 class="menu-title">Blue Cheese</h3>
+                            <span class="menu-price">$15.99</span>
+                        </div>
+                        <p class="menu-description">Carne madurada, queso azul, peras caramelizadas, rúcula y reducción de vino tinto.</p>
+                        <div class="menu-meta">
+                            <span class="menu-tag">🧀 Queso Azul</span>
+                            <span class="menu-tag">🍐 Pera</span>
+                            <span class="menu-tag">🍷 Vino</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Gallery Section -->
+    <section class="section gallery" id="galeria">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Nuestro Trabajo</span>
+                <h2 class="section-title">Galería de Sabores</h2>
+                <p class="section-description">Un vistazo a nuestras creaciones y el ambiente único de BRGR.</p>
+            </div>
+            <div class="gallery-grid">
+                <div class="gallery-item">
+                    <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Hamburguesa" class="gallery-image">
+                </div>
+                <div class="gallery-item">
+                    <img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Pizza" class="gallery-image">
+                </div>
+                <div class="gallery-item">
+                    <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Comida saludable" class="gallery-image">
+                </div>
+                <div class="gallery-item">
+                    <img src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Restaurante" class="gallery-image">
+                </div>
+                <div class="gallery-item">
+                    <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Chef" class="gallery-image">
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Testimonials Section -->
+    <section class="section testimonials" id="nosotros">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Testimonios</span>
+                <h2 class="section-title">Lo que dicen nuestros clientes</h2>
+                <p class="section-description">La opinión de quienes han probado nuestras hamburguesas.</p>
+            </div>
+            <div class="testimonial-slider">
+                <p class="testimonial-text">Las mejores hamburguesas que he probado en mi vida. La combinación de sabores es increíble y los ingredientes son de primera calidad. Definitivamente volveré una y otra vez.</p>
+                <div class="testimonial-author">
+                    <div class="author-avatar">
+                        <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Carlos Martínez">
+                    </div>
+                    <div class="author-info">
+                        <h4>Carlos Martínez</h4>
+                        <p>Food Blogger</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="container">
+            <div class="cta-content">
+                <h2 class="cta-title">¿Listo para una experiencia gastronómica única?</h2>
+                <p class="cta-description">Visítanos hoy y descubre por qué somos considerados los mejores en hamburguesas artesanales. Haz tu reserva ahora o pide para llevar.</p>
+                <div class="hero-buttons">
+                    <button class="cta-button">Ordenar Ahora</button>
+                    <button class="outline-button">Reservar Mesa</button>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <div class="footer-brand logo">BRGR</div>
+                    <p class="footer-description">Hamburguesas artesanales elaboradas con pasión y los mejores ingredientes. Redefiniendo el concepto de comida rápida desde 2015.</p>
+                    <div class="footer-social">
+                        <a href="#" class="social-icon">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M22 12C22 6.477 17.523 2 12 2C6.477 2 2 6.477 2 12C2 16.991 5.657 21.128 10.438 21.878V14.891H7.898V12H10.438V9.797C10.438 7.291 11.93 5.907 14.215 5.907C15.309 5.907 16.453 6.102 16.453 6.102V8.562H15.193C13.95 8.562 13.563 9.333 13.563 10.124V12H16.336L15.893 14.891H13.563V21.878C18.343 21.128 22 16.991 22 12Z" fill="currentColor"/>
+                            </svg>
+                        </a>
+                        <a href="#" class="social-icon">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12.315 2C8.066 2 4 6.066 4 10.315C4 14.564 8.066 18.63 12.315 18.63C16.564 18.63 20.63 14.564 20.63 10.315C20.63 6.066 16.564 2 12.315 2ZM12.315 16.461C9.418 16.461 7.168 14.212 7.168 11.315C7.168 8.418 9.418 6.168 12.315 6.168C15.212 6.168 17.461 8.418 17.461 11.315C17.461 14.212 15.212 16.461 12.315 16.461ZM18.456 3.369C19.214 3.369 19.827 3.982 19.827 4.74C19.827 5.498 19.214 6.111 18.456 6.111C17.698 6.111 17.085 5.498 17.085 4.74C17.085 3.982 17.698 3.369 18.456 3.369Z" fill="currentColor"/>
+                            </svg>
+                        </a>
+                        <a href="#" class="social-icon">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M22.162 5.656C21.398 5.994 20.589 6.229 19.761 6.355C20.634 5.858 21.288 5.058 21.606 4.105C20.79 4.563 19.898 4.893 18.966 5.078C18.188 4.255 17.083 3.778 15.882 3.778C13.555 3.778 11.672 5.661 11.672 7.988C11.672 8.301 11.704 8.613 11.766 8.914C8.728 8.741 6.032 7.243 4.264 4.931C3.923 5.539 3.73 6.229 3.73 6.963C3.73 8.354 4.405 9.589 5.469 10.353C4.759 10.333 4.085 10.139 3.491 9.803V9.845C3.491 11.915 4.997 13.661 7.007 14.042C6.671 14.131 6.322 14.178 5.97 14.178C5.708 14.178 5.449 14.149 5.196 14.101C5.722 15.82 7.318 17.097 9.192 17.135C7.692 18.318 5.825 19.026 3.81 19.026C3.491 19.026 3.172 19.003 2.857 18.968C4.747 20.221 7.036 20.978 9.486 20.978C15.873 20.978 19.337 14.238 19.337 8.451C19.337 8.27 19.333 8.089 19.326 7.909C20.138 7.317 20.824 6.571 21.355 5.729L22.162 5.656Z" fill="currentColor"/>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h3 class="footer-heading">Enlaces Rápidos</h3>
+                    <ul class="footer-links">
+                        <li><a href="#inicio">Inicio</a></li>
+                        <li><a href="#menu">Menú</a></li>
+                        <li><a href="#nosotros">Nosotros</a></li>
+                        <li><a href="#galeria">Galería</a></li>
+                        <li><a href="#">Contacto</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h3 class="footer-heading">Horario</h3>
+                    <ul class="footer-links">
+                        <li>Lunes - Viernes: 11am - 10pm</li>
+                        <li>Sábado: 11am - 11pm</li>
+                        <li>Domingo: 12pm - 8pm</li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h3 class="footer-heading">Contacto</h3>
+                    <ul class="footer-links">
+                        <li>Calle Principal 123</li>
+                        <li>Ciudad, País</li>
+                        <li>info@brgr.com</li>
+                        <li>+1 234 567 890</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2023 BRGR. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

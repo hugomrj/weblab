@@ -1,0 +1,1094 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pizzería Bella Napoli</title>
+    <style>
+        /* Reset y estilos generales */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+        
+        body {
+            line-height: 1.6;
+            color: #333;
+            background-color: #fff9f2;
+        }
+        
+        a {
+            text-decoration: none;
+            color: #d62300;
+        }
+        
+        ul {
+            list-style: none;
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+        
+        /* Header */
+        header {
+            background-color: #d62300;
+            color: white;
+            padding: 20px 0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo img {
+            height: 50px;
+            margin-right: 15px;
+        }
+        
+        .logo h1 {
+            font-size: 1.8rem;
+            font-family: 'Georgia', serif;
+            font-style: italic;
+        }
+        
+        /* Navegación */
+        nav ul {
+            display: flex;
+        }
+        
+        nav ul li {
+            margin-left: 20px;
+        }
+        
+        nav ul li a {
+            color: white;
+            font-weight: 500;
+            transition: color 0.3s;
+            font-size: 1.1rem;
+        }
+        
+        nav ul li a:hover {
+            color: #ffcc00;
+        }
+        
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 150px 0;
+            text-align: center;
+        }
+        
+        .hero h2 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            font-family: 'Georgia', serif;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+        
+        .hero p {
+            font-size: 1.5rem;
+            max-width: 700px;
+            margin: 0 auto 30px;
+        }
+        
+        .btn {
+            display: inline-block;
+            background-color: #ffcc00;
+            color: #333;
+            padding: 15px 40px;
+            border-radius: 50px;
+            font-weight: bold;
+            transition: all 0.3s;
+            font-size: 1.1rem;
+            border: 2px solid #ffcc00;
+        }
+        
+        .btn:hover {
+            background-color: transparent;
+            color: #ffcc00;
+        }
+        
+        /* Especialidades */
+        .specialties {
+            padding: 80px 0;
+            background-color: white;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+        
+        .section-title h2 {
+            font-size: 2.5rem;
+            color: #d62300;
+            position: relative;
+            display: inline-block;
+            padding-bottom: 15px;
+            font-family: 'Georgia', serif;
+        }
+        
+        .section-title h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background-color: #ffcc00;
+        }
+        
+        .pizza-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+        }
+        
+        .pizza-card {
+            background-color: #fff9f2;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            position: relative;
+        }
+        
+        .pizza-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+        }
+        
+        .pizza-img {
+            height: 200px;
+            overflow: hidden;
+        }
+        
+        .pizza-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+        
+        .pizza-card:hover .pizza-img img {
+            transform: scale(1.1);
+        }
+        
+        .pizza-info {
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .pizza-info h3 {
+            color: #d62300;
+            margin-bottom: 10px;
+            font-size: 1.5rem;
+        }
+        
+        .pizza-info p {
+            color: #666;
+            margin-bottom: 15px;
+        }
+        
+        .price {
+            font-weight: bold;
+            color: #333;
+            font-size: 1.3rem;
+        }
+        
+        .badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background-color: #ffcc00;
+            color: #333;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+        
+        /* Menú */
+        .menu {
+            padding: 80px 0;
+            background-color: #fff9f2;
+        }
+        
+        .menu-categories {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+        }
+        
+        .menu-categories button {
+            background: none;
+            border: none;
+            padding: 10px 20px;
+            margin: 0 10px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            color: #666;
+            transition: all 0.3s;
+            border-bottom: 2px solid transparent;
+        }
+        
+        .menu-categories button.active,
+        .menu-categories button:hover {
+            color: #d62300;
+            border-bottom: 2px solid #d62300;
+        }
+        
+        .menu-items {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+        }
+        
+        .menu-item {
+            display: flex;
+            background-color: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .menu-item-img {
+            width: 120px;
+            height: 120px;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+        
+        .menu-item-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .menu-item-info {
+            padding: 15px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        
+        .menu-item-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+        
+        .menu-item-header h4 {
+            color: #d62300;
+            font-size: 1.2rem;
+        }
+        
+        .menu-item-header .price {
+            color: #333;
+            font-weight: bold;
+        }
+        
+        .menu-item p {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+        }
+        
+        .add-to-cart {
+            align-self: flex-end;
+            background-color: #ffcc00;
+            color: #333;
+            border: none;
+            padding: 5px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .add-to-cart:hover {
+            background-color: #e6b800;
+        }
+        
+        /* Testimonios */
+        .testimonials {
+            padding: 80px 0;
+            background-color: white;
+        }
+        
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+        
+        .testimonial-card {
+            background-color: #fff9f2;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .testimonial-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .testimonial-img {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            overflow: hidden;
+            margin-right: 15px;
+        }
+        
+        .testimonial-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .testimonial-author h4 {
+            color: #d62300;
+            margin-bottom: 5px;
+        }
+        
+        .testimonial-author p {
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        .stars {
+            color: #ffcc00;
+            margin-bottom: 15px;
+        }
+        
+        /* Pedido */
+        .order {
+            padding: 80px 0;
+            background-color: #fff9f2;
+        }
+        
+        .order-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 50px;
+        }
+        
+        .order-info h3 {
+            color: #d62300;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+        
+        .order-details {
+            margin-bottom: 30px;
+        }
+        
+        .order-details div {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .order-details i {
+            margin-right: 15px;
+            color: #d62300;
+            font-size: 1.2rem;
+        }
+        
+        .opening-hours h4 {
+            color: #d62300;
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+        }
+        
+        .opening-hours ul li {
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            max-width: 250px;
+        }
+        
+        .order-form .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .order-form label {
+            display: block;
+            margin-bottom: 5px;
+            color: #d62300;
+            font-weight: 500;
+        }
+        
+        .order-form input,
+        .order-form textarea,
+        .order-form select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+            background-color: white;
+        }
+        
+        .order-form textarea {
+            height: 150px;
+            resize: vertical;
+        }
+        
+        .order-form button {
+            width: 100%;
+            padding: 15px;
+            background-color: #d62300;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .order-form button:hover {
+            background-color: #b51d00;
+        }
+        
+        /* Footer */
+        footer {
+            background-color: #1a1a1a;
+            color: white;
+            padding: 50px 0 20px;
+        }
+        
+        .footer-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .footer-col h3 {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            position: relative;
+            padding-bottom: 10px;
+            color: #ffcc00;
+        }
+        
+        .footer-col h3::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 2px;
+            background-color: #d62300;
+        }
+        
+        .footer-col ul li {
+            margin-bottom: 10px;
+        }
+        
+        .footer-col ul li a {
+            color: #ccc;
+            transition: color 0.3s;
+        }
+        
+        .footer-col ul li a:hover {
+            color: #ffcc00;
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .social-links a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background-color: #333;
+            color: white;
+            border-radius: 50%;
+            transition: background-color 0.3s;
+        }
+        
+        .social-links a:hover {
+            background-color: #d62300;
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            color: #ccc;
+            font-size: 0.9rem;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            nav {
+                margin-top: 20px;
+                width: 100%;
+            }
+            
+            nav ul {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            nav ul li {
+                margin: 5px 0;
+            }
+            
+            .hero h2 {
+                font-size: 2rem;
+            }
+            
+            .hero p {
+                font-size: 1.1rem;
+            }
+            
+            .mobile-menu-btn {
+                display: block;
+                position: absolute;
+                top: 20px;
+                right: 20px;
+            }
+            
+            .nav-menu {
+                display: none;
+            }
+            
+            .nav-menu.active {
+                display: flex;
+            }
+            
+            .menu-item {
+                flex-direction: column;
+            }
+            
+            .menu-item-img {
+                width: 100%;
+                height: 150px;
+            }
+        }
+    </style>
+    <!-- Font Awesome para iconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container header-container">
+            <div class="logo">
+                <img src="https://cdn-icons-png.flaticon.com/512/1404/1404945.png" alt="Logo Pizzería">
+                <h1>Bella Napoli</h1>
+            </div>
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <i class="fas fa-bars"></i>
+            </button>
+            <nav class="nav-menu" id="navMenu">
+                <ul>
+                    <li><a href="#inicio">Inicio</a></li>
+                    <li><a href="#especialidades">Especialidades</a></li>
+                    <li><a href="#menu">Menú</a></li>
+                    <li><a href="#pedido">Pedidos</a></li>
+                    <li><a href="#contacto">Contacto</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="inicio">
+        <div class="container">
+            <h2>Auténtica pizza napolitana</h2>
+            <p>Elaboradas con ingredientes frescos y masa madre tradicional, horneadas en horno de leña</p>
+            <a href="#pedido" class="btn">Hacer pedido</a>
+        </div>
+    </section>
+
+    <!-- Especialidades -->
+    <section class="specialties" id="especialidades">
+        <div class="container">
+            <div class="section-title">
+                <h2>Nuestras Especialidades</h2>
+            </div>
+            <div class="pizza-grid">
+                <div class="pizza-card">
+                    <div class="badge">Más vendida</div>
+                    <div class="pizza-img">
+                        <img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Pizza Margherita">
+                    </div>
+                    <div class="pizza-info">
+                        <h3>Margherita</h3>
+                        <p>Salsa de tomate, mozzarella fresca, albahaca y aceite de oliva virgen extra</p>
+                        <div class="price">$12.99</div>
+                    </div>
+                </div>
+                <div class="pizza-card">
+                    <div class="badge">Novedad</div>
+                    <div class="pizza-img">
+                        <img src="https://images.unsplash.com/photo-1541745537411-b8046dc6d66c?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Pizza Pepperoni">
+                    </div>
+                    <div class="pizza-info">
+                        <h3>Pepperoni</h3>
+                        <p>Salsa de tomate, mozzarella y generosas porciones de pepperoni picante</p>
+                        <div class="price">$14.99</div>
+                    </div>
+                </div>
+                <div class="pizza-card">
+                    <div class="pizza-img">
+                        <img src="https://images.unsplash.com/photo-1595854341625-f33ee10dbf94?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Pizza Vegetariana">
+                    </div>
+                    <div class="pizza-info">
+                        <h3>Vegetariana</h3>
+                        <p>Salsa de tomate, mozzarella, pimientos, champiñones, cebolla y aceitunas</p>
+                        <div class="price">$13.99</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Menú -->
+    <section class="menu" id="menu">
+        <div class="container">
+            <div class="section-title">
+                <h2>Nuestro Menú</h2>
+            </div>
+            <div class="menu-categories">
+                <button class="active" data-category="pizzas">Pizzas</button>
+                <button data-category="pastas">Pastas</button>
+                <button data-category="ensaladas">Ensaladas</button>
+                <button data-category="bebidas">Bebidas</button>
+                <button data-category="postres">Postres</button>
+            </div>
+            <div class="menu-items" id="menuItems">
+                <!-- Pizzas -->
+                <div class="menu-item" data-category="pizzas">
+                    <div class="menu-item-img">
+                        <img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Margherita">
+                    </div>
+                    <div class="menu-item-info">
+                        <div class="menu-item-header">
+                            <h4>Margherita</h4>
+                            <span class="price">$12.99</span>
+                        </div>
+                        <p>Salsa de tomate, mozzarella fresca, albahaca</p>
+                        <button class="add-to-cart">Añadir</button>
+                    </div>
+                </div>
+                <div class="menu-item" data-category="pizzas">
+                    <div class="menu-item-img">
+                        <img src="https://images.unsplash.com/photo-1541745537411-b8046dc6d66c?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Pepperoni">
+                    </div>
+                    <div class="menu-item-info">
+                        <div class="menu-item-header">
+                            <h4>Pepperoni</h4>
+                            <span class="price">$14.99</span>
+                        </div>
+                        <p>Salsa de tomate, mozzarella, pepperoni picante</p>
+                        <button class="add-to-cart">Añadir</button>
+                    </div>
+                </div>
+                <div class="menu-item" data-category="pizzas">
+                    <div class="menu-item-img">
+                        <img src="https://images.unsplash.com/photo-1595854341625-f33ee10dbf94?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Vegetariana">
+                    </div>
+                    <div class="menu-item-info">
+                        <div class="menu-item-header">
+                            <h4>Vegetariana</h4>
+                            <span class="price">$13.99</span>
+                        </div>
+                        <p>Verduras frescas, mozzarella, salsa de tomate</p>
+                        <button class="add-to-cart">Añadir</button>
+                    </div>
+                </div>
+                <!-- Pastas -->
+                <div class="menu-item" data-category="pastas">
+                    <div class="menu-item-img">
+                        <img src="https://images.unsplash.com/photo-1555949258-eb67b1ef0ceb?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Spaghetti Bolognese">
+                    </div>
+                    <div class="menu-item-info">
+                        <div class="menu-item-header">
+                            <h4>Spaghetti Bolognese</h4>
+                            <span class="price">$11.99</span>
+                        </div>
+                        <p>Pasta al dente con salsa bolognesa casera</p>
+                        <button class="add-to-cart">Añadir</button>
+                    </div>
+                </div>
+                <div class="menu-item" data-category="pastas">
+                    <div class="menu-item-img">
+                        <img src="https://images.unsplash.com/photo-1611270629569-8b357cb88da9?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Lasagna">
+                    </div>
+                    <div class="menu-item-info">
+                        <div class="menu-item-header">
+                            <h4>Lasagna</h4>
+                            <span class="price">$13.99</span>
+                        </div>
+                        <p>Capas de pasta, carne, bechamel y queso gratinado</p>
+                        <button class="add-to-cart">Añadir</button>
+                    </div>
+                </div>
+                <!-- Ensaladas -->
+                <div class="menu-item" data-category="ensaladas">
+                    <div class="menu-item-img">
+                        <img src="https://images.unsplash.com/photo-1546793665-c74683f339c1?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="César">
+                    </div>
+                    <div class="menu-item-info">
+                        <div class="menu-item-header">
+                            <h4>Ensalada César</h4>
+                            <span class="price">$9.99</span>
+                        </div>
+                        <p>Lechuga romana, croutons, parmesano y aderezo césar</p>
+                        <button class="add-to-cart">Añadir</button>
+                    </div>
+                </div>
+                <!-- Bebidas -->
+                <div class="menu-item" data-category="bebidas">
+                    <div class="menu-item-img">
+                        <img src="https://images.unsplash.com/photo-1513309914637-65c20a5962e1?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Refrescos">
+                    </div>
+                    <div class="menu-item-info">
+                        <div class="menu-item-header">
+                            <h4>Refrescos</h4>
+                            <span class="price">$2.50</span>
+                        </div>
+                        <p>Coca-Cola, Fanta, Sprite (330ml)</p>
+                        <button class="add-to-cart">Añadir</button>
+                    </div>
+                </div>
+                <!-- Postres -->
+                <div class="menu-item" data-category="postres">
+                    <div class="menu-item-img">
+                        <img src="https://images.unsplash.com/photo-1551024506-0bccd828d307?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Tiramisú">
+                    </div>
+                    <div class="menu-item-info">
+                        <div class="menu-item-header">
+                            <h4>Tiramisú</h4>
+                            <span class="price">$6.99</span>
+                        </div>
+                        <p>Postre italiano clásico con café y mascarpone</p>
+                        <button class="add-to-cart">Añadir</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonios -->
+    <section class="testimonials">
+        <div class="container">
+            <div class="section-title">
+                <h2>Lo que dicen nuestros clientes</h2>
+            </div>
+            <div class="testimonials-grid">
+                <div class="testimonial-card">
+                    <div class="testimonial-header">
+                        <div class="testimonial-img">
+                            <img src="https://randomuser.me/api/portraits/women/43.jpg" alt="María González">
+                        </div>
+                        <div class="testimonial-author">
+                            <h4>María González</h4>
+                            <p>Cliente frecuente</p>
+                        </div>
+                    </div>
+                    <div class="stars">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <p>"La mejor pizza que he probado en la ciudad. La masa es perfecta, crujiente por fuera y esponjosa por dentro. Siempre que tengo visita les traigo aquí."</p>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-header">
+                        <div class="testimonial-img">
+                            <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Carlos Martínez">
+                        </div>
+                        <div class="testimonial-author">
+                            <h4>Carlos Martínez</h4>
+                            <p>Primera visita</p>
+                        </div>
+                    </div>
+                    <div class="stars">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star-half-alt"></i>
+                    </div>
+                    <p>"Increíble relación calidad-precio. Pedí la pepperoni y estaba espectacular. El servicio fue rápido y muy amable. Volveré seguro."</p>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-header">
+                        <div class="testimonial-img">
+                            <img src="https://randomuser.me/api/portraits/women/65.jpg" alt="Ana López">
+                        </div>
+                        <div class="testimonial-author">
+                            <h4>Ana López</h4>
+                            <p>Cliente desde 2018</p>
+                        </div>
+                    </div>
+                    <div class="stars">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <p>"Llevo años viniendo y nunca me decepcionan. Las pastas son caseras y los ingredientes siempre frescos. Mi lugar favorito para cenar en familia."</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pedido -->
+    <section class="order" id="pedido">
+        <div class="container">
+            <div class="section-title">
+                <h2>Haz tu pedido</h2>
+            </div>
+            <div class="order-container">
+                <div class="order-info">
+                    <h3>Información de contacto</h3>
+                    <div class="order-details">
+                        <div>
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>Calle del Sabor 45, Centro, Ciudad</span>
+                        </div>
+                        <div>
+                            <i class="fas fa-phone-alt"></i>
+                            <span>+52 55 9876 5432</span>
+                        </div>
+                        <div>
+                            <i class="fas fa-envelope"></i>
+                            <span>pedidos@bellanapoli.com</span>
+                        </div>
+                    </div>
+                    <div class="opening-hours">
+                        <h4>Horario de entrega</h4>
+                        <ul>
+                            <li><span>Lunes - Jueves:</span> <span>12:00 - 23:00</span></li>
+                            <li><span>Viernes - Sábado:</span> <span>12:00 - 00:00</span></li>
+                            <li><span>Domingo:</span> <span>12:00 - 22:00</span></li>
+                        </ul>
+                    </div>
+                    <div class="delivery-info">
+                        <h4>Zonas de entrega</h4>
+                        <p>Entregamos en un radio de 5km. Costo de envío: $2.50 (gratis en pedidos mayores a $25)</p>
+                    </div>
+                </div>
+                <form class="order-form" id="orderForm">
+                    <div class="form-group">
+                        <label for="name">Nombre completo</label>
+                        <input type="text" id="name" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Teléfono</label>
+                        <input type="tel" id="phone" name="phone" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="address">Dirección de entrega</label>
+                        <input type="text" id="address" name="address" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="order">Tu pedido</label>
+                        <textarea id="order" name="order" placeholder="Ej: 1 Pizza Margherita, 2 Spaghetti Bolognese..." required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="payment">Método de pago</label>
+                        <select id="payment" name="payment" required>
+                            <option value="">Seleccione método</option>
+                            <option value="efectivo">Efectivo</option>
+                            <option value="tarjeta">Tarjeta (al recibir)</option>
+                            <option value="online">Pago online</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="notes">Notas adicionales</label>
+                        <textarea id="notes" name="notes" placeholder="Alergias, instrucciones especiales..."></textarea>
+                    </div>
+                    <button type="submit">Realizar pedido</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="contacto">
+        <div class="container">
+            <div class="footer-container">
+                <div class="footer-col">
+                    <h3>Bella Napoli</h3>
+                    <p>Auténtica pizza napolitana desde 2010. Elaborada con ingredientes frescos y tradicionales recetas italianas.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-whatsapp"></i></a>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h3>Enlaces rápidos</h3>
+                    <ul>
+                        <li><a href="#inicio">Inicio</a></li>
+                        <li><a href="#especialidades">Especialidades</a></li>
+                        <li><a href="#menu">Menú</a></li>
+                        <li><a href="#pedido">Pedidos</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h3>Horario</h3>
+                    <ul>
+                        <li>Lunes-Jueves: 12:00-23:00</li>
+                        <li>Viernes-Sábado: 12:00-00:00</li>
+                        <li>Domingo: 12:00-22:00</li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h3>Contacto</h3>
+                    <ul>
+                        <li><i class="fas fa-map-marker-alt"></i> Calle del Sabor 45, Centro</li>
+                        <li><i class="fas fa-phone-alt"></i> +52 55 9876 5432</li>
+                        <li><i class="fas fa-envelope"></i> contacto@bellanapoli.com</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2023 Pizzería Bella Napoli. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        // Menú móvil
+        document.getElementById('mobileMenuBtn').addEventListener('click', function() {
+            document.getElementById('navMenu').classList.toggle('active');
+        });
+        
+        // Smooth scrolling para enlaces
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+                
+                // Cerrar menú móvil después de hacer clic
+                if (window.innerWidth <= 768) {
+                    document.getElementById('navMenu').classList.remove('active');
+                }
+            });
+        });
+        
+        // Filtrado de categorías del menú
+        const categoryButtons = document.querySelectorAll('.menu-categories button');
+        const menuItems = document.querySelectorAll('.menu-item');
+        
+        categoryButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                // Remover clase active de todos los botones
+                categoryButtons.forEach(btn => btn.classList.remove('active'));
+                // Añadir clase active al botón clickeado
+                button.classList.add('active');
+                
+                const category = button.getAttribute('data-category');
+                
+                // Mostrar/ocultar items del menú según categoría
+                menuItems.forEach(item => {
+                    if (category === 'all' || item.getAttribute('data-category') === category) {
+                        item.style.display = 'flex';
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+            });
+        });
+        
+        // Funcionalidad del carrito (añadir items)
+        const addToCartButtons = document.querySelectorAll('.add-to-cart');
+        
+        addToCartButtons.forEach(button => {
+            button.addEventListener('click', function(e) {
+                e.preventDefault();
+                const itemName = this.parentElement.querySelector('h4').textContent;
+                const itemPrice = this.parentElement.querySelector('.price').textContent;
+                
+                // Aquí puedes implementar la lógica para añadir al carrito
+                alert(`Añadido: ${itemName} - ${itemPrice} al pedido`);
+                
+                // Opcional: Añadir al textarea del formulario de pedido
+                const orderTextarea = document.getElementById('order');
+                orderTextarea.value += `${itemName} - ${itemPrice}\n`;
+            });
+        });
+        
+        // Formulario de pedido
+        document.getElementById('orderForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Validación básica
+            const name = document.getElementById('name').value;
+            const phone = document.getElementById('phone').value;
+            const address = document.getElementById('address').value;
+            const order = document.getElementById('order').value;
+            
+            if (!name || !phone || !address || !order) {
+                alert('Por favor complete todos los campos obligatorios');
+                return;
+            }
+            
+            // Simular envío del pedido
+            alert('¡Pedido realizado con éxito!\nNos pondremos en contacto para confirmar. Gracias por su preferencia.');
+            this.reset();
+        });
+    </script>
+</body>
+</html>

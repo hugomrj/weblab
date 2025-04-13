@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clínica Bienestar - Cuidado Médico de Confianza</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc; /* Light gray background */
+            color: #334155; /* Slate gray text */
+        }
+        html {
+            scroll-behavior: smooth;
+        }
+        /* Accent color - Professional Blue */
+        :root {
+            --accent-color: #3b82f6; /* Blue-500 */
+            --secondary-color: #10b981; /* Emerald-500 */
+        }
+        .accent-text { color: var(--accent-color); }
+        .accent-bg { background-color: var(--accent-color); }
+        .accent-border { border-color: var(--accent-color); }
+        .secondary-text { color: var(--secondary-color); }
+        .secondary-bg { background-color: var(--secondary-color); }
+
+        /* Subtle animation */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .fade-in {
+            opacity: 0;
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.2s; }
+        .delay-3 { animation-delay: 0.3s; }
+        .delay-4 { animation-delay: 0.4s; }
+    </style>
+</head>
+<body class="text-slate-700">
+
+    <header class="bg-white shadow-sm sticky top-0 z-50 border-b border-gray-200">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="#" class="text-2xl font-bold accent-text flex items-center">
+                <i class="fas fa-clinic-medical mr-2"></i> Clínica Bienestar
+            </a>
+            <div class="hidden md:flex space-x-7 items-center">
+                <a href="#inicio" class="hover:accent-text transition duration-300">Inicio</a>
+                <a href="#servicios" class="hover:accent-text transition duration-300">Servicios</a>
+                <a href="#equipo" class="hover:accent-text transition duration-300">Equipo Médico</a>
+                <a href="#nosotros" class="hover:accent-text transition duration-300">Nosotros</a>
+                <a href="#contacto" class="hover:accent-text transition duration-300">Contacto</a>
+                <a href="#contacto" class="accent-bg text-white px-5 py-2 rounded-md font-medium hover:bg-blue-600 transition duration-300 shadow-sm">Agendar Cita</a>
+            </div>
+            <button id="mobile-menu-button" class="md:hidden focus:outline-none text-slate-600 hover:accent-text">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+            </button>
+        </nav>
+        <div id="mobile-menu" class="md:hidden hidden bg-white py-2 border-t border-gray-200">
+            <a href="#inicio" class="block px-6 py-2 text-slate-600 hover:bg-blue-50 hover:accent-text rounded-md mx-2">Inicio</a>
+            <a href="#servicios" class="block px-6 py-2 text-slate-600 hover:bg-blue-50 hover:accent-text rounded-md mx-2">Servicios</a>
+            <a href="#equipo" class="block px-6 py-2 text-slate-600 hover:bg-blue-50 hover:accent-text rounded-md mx-2">Equipo Médico</a>
+            <a href="#nosotros" class="block px-6 py-2 text-slate-600 hover:bg-blue-50 hover:accent-text rounded-md mx-2">Nosotros</a>
+            <a href="#contacto" class="block px-6 py-2 text-slate-600 hover:bg-blue-50 hover:accent-text rounded-md mx-2">Contacto</a>
+            <a href="#contacto" class="block px-6 py-2 accent-bg text-white text-center rounded-md mx-4 my-2 font-medium hover:bg-blue-600 transition duration-300">Agendar Cita</a>
+        </div>
+    </header>
+
+    <main>
+        <section id="inicio" class="relative bg-gradient-to-r from-blue-50 to-emerald-50 pt-24 pb-20 md:pt-32 md:pb-28 text-center">
+             <div class="container mx-auto px-6 relative z-10 fade-in">
+                <h1 class="text-4xl md:text-5xl font-bold text-slate-800 mb-4 leading-tight">
+                    Cuidado Médico Compasivo <br class="hidden md:inline"> en el que Puede Confiar
+                </h1>
+                <p class="text-lg md:text-xl text-slate-600 mb-8 max-w-3xl mx-auto">
+                    Ofrecemos atención médica integral para usted y su familia, con un enfoque en la prevención y el bienestar.
+                </p>
+                <a href="#contacto" class="accent-bg text-white px-8 py-3 rounded-md text-lg font-semibold hover:bg-blue-600 transition duration-300 shadow hover:shadow-md">Solicitar una Cita</a>
+            </div>
+        </section>
+
+        <section id="servicios" class="py-16 md:py-24 bg-white">
+            <div class="container mx-auto px-6">
+                <h2 class="text-3xl md:text-4xl font-bold text-center mb-12 text-slate-800 fade-in">Nuestros Servicios Médicos</h2>
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div class="bg-gray-50 p-6 rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition duration-300 fade-in delay-1">
+                        <div class="accent-text mb-4 text-3xl">
+                            <i class="fas fa-stethoscope fa-fw"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-2 text-slate-700">Medicina General</h3>
+                        <p class="text-slate-600">Chequeos de rutina, diagnóstico y tratamiento de enfermedades comunes para todas las edades.</p>
+                    </div>
+                    <div class="bg-gray-50 p-6 rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition duration-300 fade-in delay-2">
+                         <div class="secondary-text mb-4 text-3xl">
+                            <i class="fas fa-baby fa-fw"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-2 text-slate-700">Pediatría</h3>
+                        <p class="text-slate-600">Cuidado especializado para bebés, niños y adolescentes, incluyendo vacunaciones y control de crecimiento.</p>
+                    </div>
+                    <div class="bg-gray-50 p-6 rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition duration-300 fade-in delay-3">
+                         <div class="accent-text mb-4 text-3xl">
+                            <i class="fas fa-heartbeat fa-fw"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-2 text-slate-700">Cardiología</h3>
+                        <p class="text-slate-600">Prevención, diagnóstico y manejo de enfermedades del corazón y del sistema circulatorio.</p>
+                    </div>
+                     <div class="bg-gray-50 p-6 rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition duration-300 fade-in delay-1">
+                         <div class="secondary-text mb-4 text-3xl">
+                            <i class="fas fa-female fa-fw"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-2 text-slate-700">Ginecología</h3>
+                        <p class="text-slate-600">Atención integral de la salud femenina, incluyendo exámenes preventivos y planificación familiar.</p>
+                    </div>
+                     <div class="bg-gray-50 p-6 rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition duration-300 fade-in delay-2">
+                         <div class="accent-text mb-4 text-3xl">
+                            <i class="fas fa-tooth fa-fw"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-2 text-slate-700">Odontología</h3>
+                        <p class="text-slate-600">Servicios dentales completos, desde limpiezas y empastes hasta tratamientos especializados.</p>
+                    </div>
+                     <div class="bg-gray-50 p-6 rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition duration-300 fade-in delay-3">
+                         <div class="secondary-text mb-4 text-3xl">
+                            <i class="fas fa-vial fa-fw"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-2 text-slate-700">Laboratorio Clínico</h3>
+                        <p class="text-slate-600">Análisis de sangre, orina y otros estudios para un diagnóstico preciso y rápido.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="equipo" class="py-16 md:py-24 bg-blue-50">
+            <div class="container mx-auto px-6">
+                <h2 class="text-3xl md:text-4xl font-bold text-center mb-12 text-slate-800 fade-in">Conozca a Nuestro Equipo Médico</h2>
+                <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-10">
+                    <div class="bg-white p-6 rounded-lg shadow-md text-center transform hover:scale-105 transition duration-300 fade-in delay-1">
+                        <img src="https://placehold.co/200x200/e0e7ff/3b82f6?text=Dr.+Pérez" alt="[Foto del Dr. Juan Pérez]" class="w-32 h-32 rounded-full mx-auto mb-4 border-4 border-blue-200" onerror="this.src='https://placehold.co/200x200/cccccc/ffffff?text=Doctor'">
+                        <h3 class="text-xl font-semibold text-slate-800">Dr. Juan Pérez</h3>
+                        <p class="accent-text font-medium mb-2">Médico General</p>
+                        <p class="text-sm text-slate-500">Más de 15 años de experiencia en atención primaria y medicina familiar.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-md text-center transform hover:scale-105 transition duration-300 fade-in delay-2">
+                        <img src="https://placehold.co/200x200/d1fae5/10b981?text=Dra.+Gómez" alt="[Foto de la Dra. Ana Gómez]" class="w-32 h-32 rounded-full mx-auto mb-4 border-4 border-emerald-200" onerror="this.src='https://placehold.co/200x200/cccccc/ffffff?text=Doctora'">
+                        <h3 class="text-xl font-semibold text-slate-800">Dra. Ana Gómez</h3>
+                        <p class="secondary-text font-medium mb-2">Pediatra</p>
+                        <p class="text-sm text-slate-500">Especialista en salud infantil, apasionada por el cuidado de los más pequeños.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-md text-center transform hover:scale-105 transition duration-300 fade-in delay-3">
+                        <img src="https://placehold.co/200x200/e0e7ff/3b82f6?text=Dr.+Martínez" alt="[Foto del Dr. Carlos Martínez]" class="w-32 h-32 rounded-full mx-auto mb-4 border-4 border-blue-200" onerror="this.src='https://placehold.co/200x200/cccccc/ffffff?text=Doctor'">
+                        <h3 class="text-xl font-semibold text-slate-800">Dr. Carlos Martínez</h3>
+                        <p class="accent-text font-medium mb-2">Cardiólogo</p>
+                        <p class="text-sm text-slate-500">Experto en salud cardiovascular y prevención de enfermedades del corazón.</p>
+                    </div>
+                     </div>
+            </div>
+        </section>
+
+        <section id="nosotros" class="py-16 md:py-24 bg-white">
+            <div class="container mx-auto px-6 flex flex-col md:flex-row items-center gap-12">
+                <div class="md:w-1/2 fade-in">
+                     <img src="https://placehold.co/600x400/f0f9ff/60a5fa?text=Clínica+Bienestar" alt="[Imagen del interior de la clínica]" class="rounded-lg shadow-md w-full" onerror="this.src='https://placehold.co/600x400/cccccc/ffffff?text=Imagen+Clínica'">
+                </div>
+                <div class="md:w-1/2 fade-in delay-1">
+                    <h2 class="text-3xl md:text-4xl font-bold mb-6 text-slate-800">Nuestra Misión: Su Bienestar</h2>
+                    <p class="text-slate-600 mb-4">
+                        En Clínica Bienestar, nuestra misión es proporcionar atención médica accesible, compasiva y de alta calidad a la comunidad de San Lorenzo y sus alrededores. Creemos en un enfoque centrado en el paciente, donde escuchamos sus necesidades y trabajamos juntos para lograr sus objetivos de salud.
+                    </p>
+                    <p class="text-slate-600 mb-6">
+                        Nuestro equipo está comprometido con la excelencia médica, la ética profesional y la mejora continua. Nos esforzamos por crear un ambiente cálido y acogedor donde se sienta seguro y cuidado.
+                    </p>
+                    <ul class="space-y-2">
+                        <li class="flex items-center"><i class="fas fa-check-circle accent-text mr-2"></i> Atención Personalizada</li>
+                        <li class="flex items-center"><i class="fas fa-check-circle accent-text mr-2"></i> Equipo Médico Experimentado</li>
+                        <li class="flex items-center"><i class="fas fa-check-circle accent-text mr-2"></i> Tecnología Moderna</li>
+                        <li class="flex items-center"><i class="fas fa-check-circle accent-text mr-2"></i> Enfoque Preventivo</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="contacto" class="py-16 md:py-24 bg-gradient-to-r from-blue-500 to-blue-600 text-white">
+            <div class="container mx-auto px-6">
+                <h2 class="text-3xl md:text-4xl font-bold text-center mb-10 fade-in">Contacto y Agendamiento</h2>
+                <div class="grid md:grid-cols-2 gap-12">
+                    <div class="fade-in delay-1">
+                        <h3 class="text-2xl font-semibold mb-4">Información de Contacto</h3>
+                        <div class="space-y-4 text-lg">
+                            <p class="flex items-start">
+                                <i class="fas fa-map-marker-alt mt-1 mr-3 fa-fw"></i>
+                                <span>Av. Avelino Martínez casi Tte. Rodi, <br>San Lorenzo, Paraguay</span>
+                            </p>
+                            <p class="flex items-center">
+                                <i class="fas fa-phone mr-3 fa-fw"></i>
+                                <span>+595 21 58X XXX / +595 9XX XXX XXX</span>
+                            </p>
+                            <p class="flex items-center">
+                                <i class="fas fa-envelope mr-3 fa-fw"></i>
+                                <span>info@clinicabienestar.com.py</span>
+                            </p>
+                        </div>
+                        <h3 class="text-2xl font-semibold mt-8 mb-4">Horario de Atención</h3>
+                        <p class="flex items-center text-lg">
+                            <i class="fas fa-clock mr-3 fa-fw"></i>
+                            <span>Lunes a Viernes: 8:00 AM - 6:00 PM</span>
+                        </p>
+                         <p class="flex items-center text-lg ml-8"> <span>Sábados: 8:00 AM - 12:00 PM</span>
+                        </p>
+                         <div class="mt-8 rounded-lg overflow-hidden shadow-md">
+                             <img src="https://placehold.co/600x300/ffffff/3b82f6?text=Mapa+de+Ubicación+(Placeholder)" alt="[Mapa de ubicación]" class="w-full h-48 object-cover" onerror="this.src='https://placehold.co/600x300/cccccc/ffffff?text=Mapa+no+disponible'">
+                             </div>
+                    </div>
+
+                    <div class="bg-white p-8 rounded-lg shadow-xl text-slate-700 fade-in delay-2">
+                        <h3 class="text-2xl font-semibold mb-6 text-slate-800">Solicitar una Cita</h3>
+                        <form action="#" method="POST"> <div class="mb-4">
+                                <label for="name" class="block text-sm font-medium text-slate-600 mb-1">Nombre Completo</label>
+                                <input type="text" id="name" name="name" required class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" placeholder="Su nombre">
+                            </div>
+                            <div class="mb-4">
+                                <label for="phone" class="block text-sm font-medium text-slate-600 mb-1">Número de Teléfono</label>
+                                <input type="tel" id="phone" name="phone" required class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" placeholder="Su número de teléfono">
+                            </div>
+                             <div class="mb-4">
+                                <label for="service" class="block text-sm font-medium text-slate-600 mb-1">Servicio Deseado (Opcional)</label>
+                                <select id="service" name="service" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 bg-white">
+                                    <option value="">Seleccione un servicio...</option>
+                                    <option value="general">Medicina General</option>
+                                    <option value="pediatria">Pediatría</option>
+                                    <option value="cardiologia">Cardiología</option>
+                                    <option value="ginecologia">Ginecología</option>
+                                    <option value="odontologia">Odontología</option>
+                                    <option value="otro">Otro</option>
+                                </select>
+                            </div>
+                            <div class="mb-6">
+                                <label for="message" class="block text-sm font-medium text-slate-600 mb-1">Mensaje Adicional (Opcional)</label>
+                                <textarea id="message" name="message" rows="3" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" placeholder="¿Alguna preferencia de horario o motivo de consulta?"></textarea>
+                            </div>
+                            <button type="submit" class="w-full accent-bg text-white px-6 py-3 rounded-md text-lg font-semibold hover:bg-blue-600 transition duration-300 shadow hover:shadow-md">
+                                Enviar Solicitud de Cita
+                            </button>
+                            <p class="text-xs text-slate-500 mt-3 text-center">Nos pondremos en contacto para confirmar su cita.</p>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-slate-800 text-slate-400 py-8">
+        <div class="container mx-auto px-6 text-center">
+            <div class="mb-4">
+                <a href="#" class="text-slate-400 hover:text-white mx-2 transition duration-300"><i class="fab fa-facebook-f"></i></a>
+                 <a href="#" class="text-slate-400 hover:text-white mx-2 transition duration-300"><i class="fab fa-instagram"></i></a>
+                 <a href="#" class="text-slate-400 hover:text-white mx-2 transition duration-300"><i class="fab fa-whatsapp"></i></a>
+            </div>
+            <p class="text-sm">&copy; 2025 Clínica Bienestar. Todos los derechos reservados.</p>
+             <p class="text-sm mt-2">
+                <a href="#" class="hover:text-white underline">Política de Privacidad</a> |
+                <a href="#" class="hover:text-white underline">Términos de Servicio</a>
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // Close menu when a link is clicked
+        const mobileLinks = mobileMenu.querySelectorAll('a');
+        mobileLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+            });
+        });
+
+        // Intersection Observer for animations
+        const animatedElements = document.querySelectorAll('.fade-in');
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    // Add delay based on class
+                    const delayClass = Array.from(entry.target.classList).find(cls => cls.startsWith('delay-'));
+                    if (delayClass) {
+                        const delay = parseInt(delayClass.replace('delay-', ''), 10) * 100; // Convert delay class to ms
+                         setTimeout(() => {
+                            entry.target.style.animationPlayState = 'running';
+                         }, delay);
+                    } else {
+                        entry.target.style.animationPlayState = 'running';
+                    }
+                    observer.unobserve(entry.target); // Animate only once
+                }
+            });
+        }, {
+            threshold: 0.1 // Trigger when 10% of the element is visible
+        });
+
+        animatedElements.forEach(el => {
+            // Ensure animation is paused initially
+            el.style.animationPlayState = 'paused';
+            observer.observe(el);
+        });
+    </script>
+
+</body>
+</html>

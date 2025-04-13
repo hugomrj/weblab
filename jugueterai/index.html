@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Juguetería Alegría | Juguetes educativos y divertidos</title>
+    <style>
+        /* Estilos Base */
+        :root {
+            --color-primario: #5D9B9B;
+            --color-secundario: #E8A87C;
+            --color-terciario: #F5F5F5;
+            --color-fondo: #FFFFFF;
+            --color-texto: #333333;
+            --color-accento: #41B3A3;
+            --sombra: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Nunito', sans-serif;
+        }
+        
+        body {
+            background-color: var(--color-fondo);
+            color: var(--color-texto);
+            line-height: 1.6;
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+        
+        /* Header */
+        header {
+            background-color: var(--color-fondo);
+            box-shadow: var(--sombra);
+            position: fixed;
+            width: 100%;
+            z-index: 1000;
+        }
+        
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+        }
+        
+        .logo {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--color-primario);
+        }
+        
+        .logo span {
+            color: var(--color-secundario);
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+        
+        nav ul li {
+            margin-left: 30px;
+        }
+        
+        nav ul li a {
+            text-decoration: none;
+            color: var(--color-texto);
+            font-weight: 600;
+            transition: color 0.3s;
+            position: relative;
+        }
+        
+        nav ul li a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--color-accento);
+            transition: width 0.3s;
+        }
+        
+        nav ul li a:hover {
+            color: var(--color-accento);
+        }
+        
+        nav ul li a:hover::after {
+            width: 100%;
+        }
+        
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.9)), url('https://images.unsplash.com/photo-1599623560574-39d485900c95?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-position: center;
+            height: 90vh;
+            display: flex;
+            align-items: center;
+            padding-top: 80px;
+        }
+        
+        .hero-content {
+            max-width: 600px;
+        }
+        
+        .hero-content h1 {
+            font-size: 48px;
+            margin-bottom: 20px;
+            color: var(--color-primario);
+            line-height: 1.2;
+        }
+        
+        .hero-content h1 span {
+            color: var(--color-accento);
+        }
+        
+        .hero-content p {
+            font-size: 18px;
+            margin-bottom: 30px;
+            color: var(--color-texto);
+        }
+        
+        .btn {
+            display: inline-block;
+            background-color: var(--color-accento);
+            color: white;
+            padding: 12px 30px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            border: 2px solid var(--color-accento);
+        }
+        
+        .btn:hover {
+            background-color: transparent;
+            color: var(--color-accento);
+        }
+        
+        .btn-outline {
+            background-color: transparent;
+            color: var(--color-accento);
+            margin-left: 15px;
+        }
+        
+        .btn-outline:hover {
+            background-color: var(--color-accento);
+            color: white;
+        }
+        
+        /* Featured Section */
+        .featured {
+            padding: 80px 0;
+            background-color: var(--color-terciario);
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 50px;
+            font-size: 36px;
+            color: var(--color-primario);
+        }
+        
+        .section-title span {
+            color: var(--color-secundario);
+        }
+        
+        .section-subtitle {
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto 50px;
+            color: var(--color-texto);
+        }
+        
+        .toys-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+        }
+        
+        .toy-card {
+            background-color: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: var(--sombra);
+            transition: transform 0.3s;
+        }
+        
+        .toy-card:hover {
+            transform: translateY(-10px);
+        }
+        
+        .toy-img {
+            height: 250px;
+            overflow: hidden;
+            background-color: #f9f9f9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .toy-img img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            transition: transform 0.5s;
+        }
+        
+        .toy-card:hover .toy-img img {
+            transform: scale(1.05);
+        }
+        
+        .toy-info {
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .toy-info h3 {
+            font-size: 20px;
+            margin-bottom: 10px;
+            color: var(--color-primario);
+        }
+        
+        .toy-info p {
+            color: #666;
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
+        
+        .price {
+            font-size: 22px;
+            font-weight: bold;
+            color: var(--color-secundario);
+            margin-bottom: 15px;
+        }
+        
+        /* Categories */
+        .categories {
+            padding: 80px 0;
+            background-color: white;
+        }
+        
+        .categories-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+        
+        .category-card {
+            background-color: var(--color-terciario);
+            border-radius: 10px;
+            padding: 30px 20px;
+            text-align: center;
+            transition: all 0.3s;
+            border: 1px solid #eee;
+        }
+        
+        .category-card:hover {
+            background-color: var(--color-primario);
+            color: white;
+        }
+        
+        .category-card:hover h3 {
+            color: white;
+        }
+        
+        .category-card:hover .category-icon {
+            color: white;
+        }
+        
+        .category-icon {
+            font-size: 40px;
+            margin-bottom: 20px;
+            color: var(--color-accento);
+        }
+        
+        .category-card h3 {
+            font-size: 18px;
+            color: var(--color-primario);
+        }
+        
+        /* About */
+        .about {
+            padding: 80px 0;
+            background-color: var(--color-terciario);
+        }
+        
+        .about-content {
+            display: flex;
+            align-items: center;
+            gap: 50px;
+        }
+        
+        .about-text {
+            flex: 1;
+        }
+        
+        .about-text h3 {
+            font-size: 28px;
+            margin-bottom: 20px;
+            color: var(--color-primario);
+        }
+        
+        .about-text p {
+            margin-bottom: 15px;
+        }
+        
+        .about-image {
+            flex: 1;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: var(--sombra);
+        }
+        
+        .about-image img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        
+        /* Testimonials */
+        .testimonials {
+            padding: 80px 0;
+            background-color: white;
+        }
+        
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+        
+        .testimonial-card {
+            background-color: var(--color-terciario);
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: var(--sombra);
+        }
+        
+        .testimonial-text {
+            font-style: italic;
+            margin-bottom: 20px;
+            position: relative;
+        }
+        
+        .testimonial-text::before {
+            content: '"';
+            position: absolute;
+            top: -15px;
+            left: -10px;
+            font-size: 50px;
+            color: rgba(0, 0, 0, 0.1);
+            font-family: serif;
+        }
+        
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+        }
+        
+        .author-img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            overflow: hidden;
+            margin-right: 15px;
+        }
+        
+        .author-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .author-info h4 {
+            color: var(--color-primario);
+        }
+        
+        .author-info p {
+            font-size: 14px;
+            color: #666;
+        }
+        
+        /* Newsletter */
+        .newsletter {
+            padding: 80px 0;
+            background-color: var(--color-primario);
+            text-align: center;
+            color: white;
+        }
+        
+        .newsletter h2 {
+            font-size: 32px;
+            margin-bottom: 20px;
+        }
+        
+        .newsletter p {
+            max-width: 600px;
+            margin: 0 auto 30px;
+        }
+        
+        .newsletter-form {
+            display: flex;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        
+        .newsletter-form input {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            border-radius: 30px 0 0 30px;
+            font-size: 16px;
+        }
+        
+        .newsletter-form button {
+            background-color: var(--color-secundario);
+            color: white;
+            border: none;
+            padding: 0 30px;
+            border-radius: 0 30px 30px 0;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .newsletter-form button:hover {
+            background-color: var(--color-accento);
+        }
+        
+        /* Footer */
+        footer {
+            background-color: #2C3E50;
+            color: white;
+            padding: 60px 0 20px;
+        }
+        
+        .footer-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 50px;
+        }
+        
+        .footer-col h3 {
+            font-size: 20px;
+            margin-bottom: 20px;
+            color: var(--color-secundario);
+            position: relative;
+            padding-bottom: 10px;
+        }
+        
+        .footer-col h3::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 2px;
+            background-color: var(--color-accento);
+        }
+        
+        .footer-col p, .footer-col a {
+            color: #ddd;
+            margin-bottom: 10px;
+            display: block;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer-col a:hover {
+            color: var(--color-secundario);
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .social-links a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            color: white;
+            transition: all 0.3s;
+        }
+        
+        .social-links a:hover {
+            background-color: var(--color-accento);
+        }
+        
+        .payment-methods {
+            margin-top: 20px;
+        }
+        
+        .payment-methods img {
+            height: 25px;
+            margin-right: 10px;
+            filter: brightness(0) invert(1);
+            opacity: 0.8;
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #aaa;
+            font-size: 14px;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+            }
+            
+            nav ul {
+                margin-top: 20px;
+            }
+            
+            nav ul li {
+                margin-left: 15px;
+                margin-right: 15px;
+            }
+            
+            .hero-content h1 {
+                font-size: 36px;
+            }
+            
+            .hero {
+                height: auto;
+                padding: 120px 0 60px;
+            }
+            
+            .about-content {
+                flex-direction: column;
+            }
+            
+            .newsletter-form {
+                flex-direction: column;
+            }
+            
+            .newsletter-form input {
+                border-radius: 30px;
+                margin-bottom: 10px;
+            }
+            
+            .newsletter-form button {
+                border-radius: 30px;
+                padding: 15px;
+            }
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container header-container">
+            <div class="logo">Juguetería <span>Alegría</span></div>
+            <nav>
+                <ul>
+                    <li><a href="#inicio">Inicio</a></li>
+                    <li><a href="#productos">Productos</a></li>
+                    <li><a href="#categorias">Categorías</a></li>
+                    <li><a href="#nosotros">Nosotros</a></li>
+                    <li><a href="#contacto">Contacto</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="inicio">
+        <div class="container">
+            <div class="hero-content">
+                <h1>Juguetes que inspiran <span>creatividad y aprendizaje</span></h1>
+                <p>Descubre nuestra selección cuidadosamente elegida de juguetes educativos y divertidos para niños de todas las edades.</p>
+                <div>
+                    <a href="#productos" class="btn">Explorar juguetes</a>
+                    <a href="#nosotros" class="btn btn-outline">Conócenos</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Products -->
+    <section class="featured" id="productos">
+        <div class="container">
+            <h2 class="section-title">Nuestros <span>productos destacados</span></h2>
+            <p class="section-subtitle">Juguetes de alta calidad seleccionados por su valor educativo y factor de diversión</p>
+            <div class="toys-grid">
+                <div class="toy-card">
+                    <div class="toy-img">
+                        <img src="https://images.unsplash.com/photo-1596461404969-9ae70f2830c1?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Set de Construcción">
+                    </div>
+                    <div class="toy-info">
+                        <h3>Bloques de Construcción</h3>
+                        <p>Set de 120 piezas para estimular la creatividad</p>
+                        <div class="price">$39.99</div>
+                        <a href="#" class="btn">Añadir al carrito</a>
+                    </div>
+                </div>
+                <div class="toy-card">
+                    <div class="toy-img">
+                        <img src="https://images.unsplash.com/photo-1594782915052-5b0e5b60d5e3?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Muñeca Interactiva">
+                    </div>
+                    <div class="toy-info">
+                        <h3>Muñeca Educativa</h3>
+                        <p>Interactiva con 50 frases y canciones educativas</p>
+                        <div class="price">$29.99</div>
+                        <a href="#" class="btn">Añadir al carrito</a>
+                    </div>
+                </div>
+                <div class="toy-card">
+                    <div class="toy-img">
+                        <img src="https://images.unsplash.com/photo-1599623560574-39d485900c95?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Robot Programable">
+                    </div>
+                    <div class="toy-info">
+                        <h3>Robot Programable</h3>
+                        <p>Introduce a los niños en el mundo de la programación</p>
+                        <div class="price">$59.99</div>
+                        <a href="#" class="btn">Añadir al carrito</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Categories -->
+    <section class="categories" id="categorias">
+        <div class="container">
+            <h2 class="section-title">Explora por <span>categorías</span></h2>
+            <p class="section-subtitle">Encuentra el juguete perfecto para cada edad e interés</p>
+            <div class="categories-container">
+                <div class="category-card">
+                    <div class="category-icon">
+                        <i class="fas fa-baby"></i>
+                    </div>
+                    <h3>0-2 años</h3>
+                </div>
+                <div class="category-card">
+                    <div class="category-icon">
+                        <i class="fas fa-puzzle-piece"></i>
+                    </div>
+                    <h3>Juegos Educativos</h3>
+                </div>
+                <div class="category-card">
+                    <div class="category-icon">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <h3>Tecnología</h3>
+                </div>
+                <div class="category-card">
+                    <div class="category-icon">
+                        <i class="fas fa-paint-brush"></i>
+                    </div>
+                    <h3>Arte y Creatividad</h3>
+                </div>
+                <div class="category-card">
+                    <div class="category-icon">
+                        <i class="fas fa-gamepad"></i>
+                    </div>
+                    <h3>Juegos de Mesa</h3>
+                </div>
+                <div class="category-card">
+                    <div class="category-icon">
+                        <i class="fas fa-music"></i>
+                    </div>
+                    <h3>Musicales</h3>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About -->
+    <section class="about" id="nosotros">
+        <div class="container">
+            <div class="about-content">
+                <div class="about-text">
+                    <h3>Nuestra filosofía</h3>
+                    <p>En Juguetería Alegría creemos que el juego es una parte fundamental del desarrollo infantil. Por eso seleccionamos cada juguete con cuidado, priorizando aquellos que fomentan la creatividad, el aprendizaje y la imaginación.</p>
+                    <p>Fundada en 2010 por una educadora y una psicóloga infantil, nuestra juguetería se ha convertido en un referente para padres que buscan opciones de calidad para sus hijos.</p>
+                    <p>No solo vendemos juguetes, sino que asesoramos a las familias para elegir la opción más adecuada para cada etapa del desarrollo.</p>
+                    <a href="#contacto" class="btn">Visítanos</a>
+                </div>
+                <div class="about-image">
+                    <img src="https://images.unsplash.com/photo-1608889825271-9696287ab804?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Juguetería Alegría">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="testimonials">
+        <div class="container">
+            <h2 class="section-title">Lo que dicen <span>nuestros clientes</span></h2>
+            <p class="section-subtitle">Las familias que confían en nuestra selección de juguetes</p>
+            <div class="testimonials-grid">
+                <div class="testimonial-card">
+                    <p class="testimonial-text">Los juegos educativos que compramos han sido un éxito con nuestros hijos. Aprenden sin darse cuenta mientras se divierten. La asesoría que nos dieron fue invaluable.</p>
+                    <div class="testimonial-author">
+                        <div class="author-img">
+                            <img src="https://randomuser.me/api/portraits/women/43.jpg" alt="María González">
+                        </div>
+                        <div class="author-info">
+                            <h4>María González</h4>
+                            <p>Madre de dos niños</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <p class="testimonial-text">Como educadora, valoro mucho la calidad de los juguetes que ofrecen. Son duraderos, seguros y con un claro propósito educativo. Mi sobrino adora el robot programable.</p>
+                    <div class="testimonial-author">
+                        <div class="author-img">
+                            <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Carlos Martínez">
+                        </div>
+                        <div class="author-info">
+                            <h4>Carlos Martínez</h4>
+                            <p>Maestro de primaria</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <p class="testimonial-text">Siempre encuentro algo especial para mis nietos. Me gusta que tienen juguetes diferentes a los de las grandes tiendas, más originales y mejor pensados.</p>
+                    <div class="testimonial-author">
+                        <div class="author-img">
+                            <img src="https://randomuser.me/api/portraits/women/65.jpg" alt="Laura Fernández">
+                        </div>
+                        <div class="author-info">
+                            <h4>Laura Fernández</h4>
+                            <p>Abuela de tres</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Newsletter -->
+    <section class="newsletter">
+        <div class="container">
+            <h2>Únete a nuestro boletín</h2>
+            <p>Recibe ideas de juegos, novedades y ofertas especiales directamente en tu correo.</p>
+            <form class="newsletter-form">
+                <input type="email" placeholder="Tu correo electrónico" required>
+                <button type="submit">Suscribirse</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="contacto">
+        <div class="container">
+            <div class="footer-container">
+                <div class="footer-col">
+                    <h3>Juguetería Alegría</h3>
+                    <p>Especialistas en juguetes educativos y de calidad para todas las edades.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-pinterest-p"></i></a>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h3>Horario</h3>
+                    <p>Lunes a Viernes: 9:30 - 19:30</p>
+                    <p>Sábados: 10:00 - 14:00</p>
+                    <p>Domingos: Cerrado</p>
+                </div>
+                <div class="footer-col">
+                    <h3>Contacto</h3>
+                    <p><i class="fas fa-map-marker-alt"></i> Calle Alegría 123, Ciudad</p>
+                    <p><i class="fas fa-phone"></i> +1 234 567 890</p>
+                    <p><i class="fas fa-envelope"></i> hola@jugueteriaalegria.com</p>
+                </div>
+                <div class="footer-col">
+                    <h3>Métodos de pago</h3>
+                    <div class="payment-methods">
+                        <img src="https://cdn-icons-png.flaticon.com/512/196/196578.png" alt="Visa">
+                        <img src="https://cdn-icons-png.flaticon.com/512/196/196561.png" alt="Mastercard">
+                        <img src="https://cdn-icons-png.flaticon.com/512/825/825454.png" alt="PayPal">
+                    </div>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2023 Juguetería Alegría. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,964 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Frutalocura | Jugos Naturales Explosivos</title>
+    <style>
+        :root {
+            --primary: #FF6B6B;
+            --secondary: #4ECDC4;
+            --accent: #FFE66D;
+            --dark: #292F36;
+            --light: #F7FFF7;
+            --fruit-1: #FF9F1C;
+            --fruit-2: #FF69EB;
+            --fruit-3: #7BED9F;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Comic Neue', cursive;
+        }
+        
+        body {
+            background-color: var(--light);
+            color: var(--dark);
+            overflow-x: hidden;
+        }
+        
+        /* Patrón de fondo */
+        .bg-pattern {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(255, 107, 107, 0.1) 0%, transparent 20%),
+                radial-gradient(circle at 90% 30%, rgba(78, 205, 196, 0.1) 0%, transparent 20%),
+                radial-gradient(circle at 50% 80%, rgba(255, 230, 109, 0.1) 0%, transparent 20%);
+            z-index: -1;
+        }
+        
+        /* Header */
+        header {
+            position: fixed;
+            width: 100%;
+            z-index: 1000;
+            background-color: rgba(247, 255, 247, 0.95);
+            padding: 1.5rem 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 2.2rem;
+            font-weight: 700;
+            background: linear-gradient(45deg, var(--primary), var(--fruit-1), var(--fruit-2));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .nav-menu {
+            display: flex;
+            gap: 2rem;
+        }
+        
+        .nav-link {
+            color: var(--dark);
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .nav-link:hover {
+            color: var(--primary);
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 3px;
+            bottom: -5px;
+            left: 0;
+            background-color: var(--secondary);
+            transition: width 0.3s ease;
+            border-radius: 3px;
+        }
+        
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        
+        .cta-button {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.8rem;
+            border-radius: 50px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4);
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(255, 107, 107, 0.6);
+            background-color: #ff5252;
+        }
+        
+        /* Hero Section */
+        .hero {
+            padding: 12rem 0 6rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: center;
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .hero-title {
+            font-size: 4rem;
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(45deg, var(--primary), var(--fruit-1));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .hero-text {
+            font-size: 1.2rem;
+            color: var(--dark);
+            margin-bottom: 2.5rem;
+            line-height: 1.6;
+        }
+        
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .secondary-button {
+            background-color: var(--secondary);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.8rem;
+            border-radius: 50px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+            box-shadow: 0 4px 15px rgba(78, 205, 196, 0.4);
+        }
+        
+        .secondary-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(78, 205, 196, 0.6);
+            background-color: #3dcabf;
+        }
+        
+        .hero-image {
+            position: relative;
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        .hero-image img {
+            width: 100%;
+            max-width: 500px;
+            filter: drop-shadow(0 20px 30px rgba(0, 0, 0, 0.15));
+        }
+        
+        .fruit-decoration {
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background-color: var(--fruit-1);
+            opacity: 0.3;
+            z-index: 1;
+        }
+        
+        .fruit-1 {
+            top: 10%;
+            left: 5%;
+            width: 100px;
+            height: 100px;
+            background-color: var(--fruit-1);
+            animation: pulse 4s infinite;
+        }
+        
+        .fruit-2 {
+            top: 70%;
+            left: 80%;
+            width: 60px;
+            height: 60px;
+            background-color: var(--fruit-2);
+            animation: pulse 3s infinite 1s;
+        }
+        
+        .fruit-3 {
+            top: 30%;
+            left: 90%;
+            width: 80px;
+            height: 80px;
+            background-color: var(--fruit-3);
+            animation: pulse 5s infinite 0.5s;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 0.3; }
+            50% { transform: scale(1.1); opacity: 0.2; }
+            100% { transform: scale(1); opacity: 0.3; }
+        }
+        
+        /* Features Section */
+        .features {
+            padding: 6rem 0;
+            background-color: white;
+            position: relative;
+        }
+        
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+        
+        .section-title {
+            font-size: 2.8rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--dark);
+        }
+        
+        .section-title span {
+            color: var(--primary);
+        }
+        
+        .section-text {
+            color: var(--dark);
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+        
+        .feature-card {
+            background-color: var(--light);
+            padding: 2.5rem 2rem;
+            border-radius: 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+            border: 3px dashed var(--accent);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+            border-color: var(--secondary);
+        }
+        
+        .feature-icon {
+            width: 100px;
+            height: 100px;
+            background-color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            font-size: 2.5rem;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .feature-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--dark);
+        }
+        
+        .feature-text {
+            color: var(--dark);
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+        
+        /* Menu Section */
+        .menu {
+            padding: 6rem 0;
+            background-color: var(--light);
+            position: relative;
+        }
+        
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+        
+        .menu-card {
+            background-color: white;
+            border-radius: 20px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            position: relative;
+        }
+        
+        .menu-card:hover {
+            transform: translateY(-10px) rotate(2deg);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+        }
+        
+        .menu-image {
+            height: 250px;
+            overflow: hidden;
+        }
+        
+        .menu-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        
+        .menu-card:hover .menu-image img {
+            transform: scale(1.1);
+        }
+        
+        .menu-badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background-color: var(--accent);
+            color: var(--dark);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .menu-content {
+            padding: 1.5rem;
+        }
+        
+        .menu-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--dark);
+        }
+        
+        .menu-price {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+        
+        .menu-description {
+            color: var(--dark);
+            font-size: 1rem;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+        
+        .menu-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+        
+        .menu-tag {
+            background-color: var(--light);
+            color: var(--dark);
+            padding: 0.4rem 0.8rem;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 700;
+        }
+        
+        /* Testimonials */
+        .testimonials {
+            padding: 6rem 0;
+            background-color: white;
+        }
+        
+        .testimonial-slider {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: var(--light);
+            padding: 3rem;
+            border-radius: 20px;
+            text-align: center;
+            position: relative;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            border: 3px dashed var(--secondary);
+        }
+        
+        .testimonial-slider::before {
+            content: '"';
+            position: absolute;
+            top: 1rem;
+            left: 2rem;
+            font-size: 8rem;
+            color: rgba(255, 107, 107, 0.1);
+            font-family: Georgia, serif;
+            line-height: 1;
+            z-index: 1;
+        }
+        
+        .testimonial-text {
+            font-size: 1.3rem;
+            color: var(--dark);
+            line-height: 1.8;
+            margin-bottom: 2rem;
+            position: relative;
+            z-index: 2;
+            font-style: italic;
+        }
+        
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .author-avatar {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 3px solid var(--accent);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .author-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .author-info h4 {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--dark);
+        }
+        
+        .author-info p {
+            color: var(--dark);
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        
+        /* CTA Section */
+        .cta {
+            padding: 8rem 0;
+            background: linear-gradient(45deg, var(--primary), var(--fruit-1));
+            color: white;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .cta::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background-image: 
+                radial-gradient(circle at 20% 30%, rgba(255, 255, 255, 0.1) 0%, transparent 20%),
+                radial-gradient(circle at 80% 70%, rgba(255, 255, 255, 0.1) 0%, transparent 20%);
+            animation: rotate 20s linear infinite;
+        }
+        
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .cta-content {
+            position: relative;
+            z-index: 2;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .cta-title {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            text-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .cta-text {
+            font-size: 1.2rem;
+            margin-bottom: 2.5rem;
+            line-height: 1.6;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .cta-button {
+            background-color: white;
+            color: var(--primary);
+            border: none;
+            padding: 1rem 2.5rem;
+            border-radius: 50px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1.1rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+        }
+        
+        /* Footer */
+        footer {
+            background-color: var(--dark);
+            color: white;
+            padding: 5rem 0 2rem;
+        }
+        
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+        
+        .footer-logo {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .footer-about {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .social-link {
+            width: 45px;
+            height: 45px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
+        
+        .social-link:hover {
+            background-color: var(--primary);
+            transform: translateY(-3px);
+        }
+        
+        .footer-heading {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: white;
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 0.8rem;
+        }
+        
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+        }
+        
+        .footer-links a:hover {
+            color: var(--accent);
+            padding-left: 5px;
+        }
+        
+        .footer-contact p {
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 0.8rem;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 3rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.9rem;
+        }
+        
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .hero-container {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+            
+            .hero-image {
+                order: -1;
+                margin-bottom: 3rem;
+            }
+            
+            .hero-buttons {
+                justify-content: center;
+            }
+            
+            .features-grid,
+            .menu-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .footer-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .nav-menu {
+                display: none;
+            }
+            
+            .hero-title {
+                font-size: 3rem;
+            }
+            
+            .section-title {
+                font-size: 2.2rem;
+            }
+            
+            .features-grid,
+            .menu-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .testimonial-slider {
+                padding: 2rem;
+            }
+            
+            .cta-title {
+                font-size: 2.5rem;
+            }
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="bg-pattern"></div>
+    
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <nav class="navbar">
+                <div class="logo">Frutalocura</div>
+                <div class="nav-menu">
+                    <a href="#inicio" class="nav-link">Inicio</a>
+                    <a href="#jugos" class="nav-link">Jugos</a>
+                    <a href="#beneficios" class="nav-link">Beneficios</a>
+                    <a href="#contacto" class="nav-link">Contacto</a>
+                </div>
+                <button class="cta-button">¡Lo quiero!</button>
+            </nav>
+        </div>
+    </header>
+    
+    <!-- Hero Section -->
+    <section class="hero" id="inicio">
+        <div class="container hero-container">
+            <div class="hero-content">
+                <h1 class="hero-title">Explosión de sabor y energía</h1>
+                <p class="hero-text">Jugos 100% naturales llenos de vitaminas y colores vibrantes. Preparamos cada bebida con frutas frescas y mucha actitud positiva.</p>
+                <div class="hero-buttons">
+                    <button class="cta-button">Ver jugos</button>
+                    <button class="secondary-button">Cómo lo hacemos</button>
+                </div>
+            </div>
+            <div class="hero-image">
+                <img src="https://images.unsplash.com/photo-1603569283847-aa295f0d016a?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Jugos coloridos">
+            </div>
+            <div class="fruit-decoration fruit-1"></div>
+            <div class="fruit-decoration fruit-2"></div>
+            <div class="fruit-decoration fruit-3"></div>
+        </div>
+    </section>
+    
+    <!-- Features Section -->
+    <section class="features" id="beneficios">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">¿Por qué <span>amamos</span> los jugos?</h2>
+                <p class="section-text">Cada sorbo es un viaje de sabores y beneficios para tu cuerpo</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">💪</div>
+                    <h3 class="feature-title">Energía Instantánea</h3>
+                    <p class="feature-text">Cargamos tus baterías con vitaminas naturales y azúcares saludables para que brilles todo el día.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🧠</div>
+                    <h3 class="feature-title">Cerebro Feliz</h3>
+                    <p class="feature-text">Nutrientes que mejoran tu concentración y estado de ánimo. ¡Adiós estrés!</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🌈</div>
+                    <h3 class="feature-title">Arcoíris de Sabores</h3>
+                    <p class="feature-text">Combinaciones locas que desafían tus papilas gustativas. ¿Te atreves?</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Menu Section -->
+    <section class="menu" id="jugos">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Nuestras <span>creaciones</span></h2>
+                <p class="section-text">Mezclas únicas que harán bailar a tus papilas gustativas</p>
+            </div>
+            <div class="menu-grid">
+                <div class="menu-card">
+                    <div class="menu-image">
+                        <img src="https://images.unsplash.com/photo-1603569283847-aa295f0d016a?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Jugo verde">
+                    </div>
+                    <div class="menu-content">
+                        <h3 class="menu-title">Green Monster</h3>
+                        <p class="menu-price">$7.99</p>
+                        <p class="menu-description">Espinaca, piña, manzana verde, pepino y jengibre. Una bomba detox llena de energía.</p>
+                        <div class="menu-tags">
+                            <span class="menu-tag">Detox</span>
+                            <span class="menu-tag">Energizante</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="menu-card">
+                    <div class="menu-image">
+                        <img src="https://images.unsplash.com/photo-1621263764928-df1444c5e859?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Jugo rojo">
+                    </div>
+                    <div class="menu-content">
+                        <h3 class="menu-title">Red Power</h3>
+                        <p class="menu-price">$8.50</p>
+                        <p class="menu-description">Sandía, fresa, frambuesa y un toque de menta. Refrescante y lleno de antioxidantes.</p>
+                        <div class="menu-tags">
+                            <span class="menu-tag">Antioxidante</span>
+                            <span class="menu-tag">Hidratante</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="menu-card">
+                    <div class="menu-image">
+                        <img src="https://images.unsplash.com/photo-1603569283847-aa295f0d016a?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Jugo naranja">
+                        <span class="menu-badge">Nuevo</span>
+                    </div>
+                    <div class="menu-content">
+                        <h3 class="menu-title">Sunshine</h3>
+                        <p class="menu-price">$7.50</p>
+                        <p class="menu-description">Zanahoria, naranja, mango y cúrcuma. Vitamina C pura para tu sistema inmunológico.</p>
+                        <div class="menu-tags">
+                            <span class="menu-tag">Vitamina C</span>
+                            <span class="menu-tag">Inmunológico</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="menu-card">
+                    <div class="menu-image">
+                        <img src="https://images.unsplash.com/photo-1621263764928-df1444c5e859?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Jugo morado">
+                    </div>
+                    <div class="menu-content">
+                        <h3 class="menu-title">Purple Rain</h3>
+                        <p class="menu-price">$8.99</p>
+                        <p class="menu-description">Arándanos, mora, plátano y leche de almendras. Creemos que Prince lo aprobaría.</p>
+                        <div class="menu-tags">
+                            <span class="menu-tag">Antioxidante</span>
+                            <span class="menu-tag">Vegano</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="menu-card">
+                    <div class="menu-image">
+                        <img src="https://images.unsplash.com/photo-1603569283847-aa295f0d016a?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Jugo amarillo">
+                    </div>
+                    <div class="menu-content">
+                        <h3 class="menu-title">Tropical Punch</h3>
+                        <p class="menu-price">$8.25</p>
+                        <p class="menu-description">Piña, mango, maracuyá y coco. Un viaje a las playas tropicales en cada sorbo.</p>
+                        <div class="menu-tags">
+                            <span class="menu-tag">Energético</span>
+                            <span class="menu-tag">Tropical</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="menu-card">
+                    <div class="menu-image">
+                        <img src="https://images.unsplash.com/photo-1621263764928-df1444c5e859?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Jugo detox">
+                        <span class="menu-badge">Más vendido</span>
+                    </div>
+                    <div class="menu-content">
+                        <h3 class="menu-title">Detox Master</h3>
+                        <p class="menu-price">$9.50</p>
+                        <p class="menu-description">Remolacha, manzana, limón y jengibre. Limpia tu cuerpo mientras disfrutas.</p>
+                        <div class="menu-tags">
+                            <span class="menu-tag">Detox</span>
+                            <span class="menu-tag">Superfood</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Testimonials Section -->
+    <section class="testimonials">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Lo que dicen nuestros <span>clientes</span></h2>
+                <p class="section-text">Personas felices que han descubierto el poder de los jugos</p>
+            </div>
+            <div class="testimonial-slider">
+                <p class="testimonial-text">"Desde que descubrí Frutalocura no puedo empezar mi día sin mi Green Monster. Me da tanta energía que hasta mi jefe ha notado la diferencia. ¡Y eso que él no nota nada!"</p>
+                <div class="testimonial-author">
+                    <div class="author-avatar">
+                        <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="María González">
+                    </div>
+                    <div class="author-info">
+                        <h4>María González</h4>
+                        <p>Clienta feliz desde 2022</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- CTA Section -->
+    <section class="cta">
+        <div class="container">
+            <div class="cta-content">
+                <h2 class="cta-title">¿Listo para la explosión de sabor?</h2>
+                <p class="cta-text">Visítanos hoy y descubre por qué somos la juguería más loca (y deliciosa) de la ciudad</p>
+                <button class="cta-button">¡Quiero mi jugo ya!</button>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Footer -->
+    <footer id="contacto">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <div class="footer-logo">Frutalocura</div>
+                    <p class="footer-about">Jugos naturales llenos de color, sabor y actitud positiva. Desde 2020 haciendo felices a las papilas gustativas.</p>
+                    <div class="social-links">
+                        <a href="#" class="social-link">📱</a>
+                        <a href="#" class="social-link">📸</a>
+                        <a href="#" class="social-link">🍹</a>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h3 class="footer-heading">Jugos</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Clásicos</a></li>
+                        <li><a href="#">Detox</a></li>
+                        <li><a href="#">Energéticos</a></li>
+                        <li><a href="#">Especiales</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h3 class="footer-heading">Horario</h3>
+                    <ul class="footer-links">
+                        <li>Lun-Vie: 7am - 8pm</li>
+                        <li>Sáb-Dom: 8am - 6pm</li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h3 class="footer-heading">Contacto</h3>
+                    <div class="footer-contact">
+                        <p>📍 Calle Frutal 123, Ciudad</p>
+                        <p>📞 +1 234 567 890</p>
+                        <p>✉️ hola@frutalocura.com</p>
+                    </div>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2023 Frutalocura. Todos los derechos reservados. Hecho con ❤️ y mucha fruta</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

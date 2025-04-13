@@ -1,0 +1,904 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pasta Italia | Pastas Artesanales</title>
+    <style>
+        :root {
+            --bg-color: #F8F5F0;
+            --text-color: #3A2E26;
+            --accent: #E67E22;
+            --accent-dark: #D35400;
+            --secondary: #8E6C4F;
+            --light-bg: #FFF9F0;
+            --border: rgba(58, 46, 38, 0.1);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Lora', serif;
+        }
+        
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+        
+        /* Background Pattern */
+        .bg-pattern {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: -1;
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M54 50c-3.9 0-7-3.1-7-7 0-3.9 3.1-7 7-7s7 3.1 7 7c0 3.9-3.1 7-7 7zm0-16c-5 0-9 4-9 9s4 9 9 9 9-4 9-9-4-9-9-9zM6 10C2.1 10-1 6.9-1 3s3.1-7 7-7 7 3.1 7 7-3.1 7-7 7zm0-16c-5 0-9 4-9 9s4 9 9 9 9-4 9-9-4-9-9-9zm24 36c-3.9 0-7-3.1-7-7 0-3.9 3.1-7 7-7s7 3.1 7 7c0 3.9-3.1 7-7 7zm0-16c-5 0-9 4-9 9s4 9 9 9 9-4 9-9-4-9-9-9z' fill='%23e67e22' fill-opacity='0.05' fill-rule='evenodd'/%3E%3C/svg%3E");
+            opacity: 0.6;
+        }
+        
+        /* Header */
+        .header {
+            position: fixed;
+            width: 100%;
+            z-index: 1000;
+            background: rgba(248, 245, 240, 0.9);
+            padding: 1.25rem 0;
+            border-bottom: 1px solid var(--border);
+            box-shadow: 0 2px 10px rgba(58, 46, 38, 0.05);
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.75rem;
+            font-weight: 700;
+            font-family: 'Playfair Display', serif;
+            color: var(--accent-dark);
+        }
+        
+        .nav-menu {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+        
+        .nav-link {
+            color: var(--text-color);
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            position: relative;
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -4px;
+            left: 0;
+            background: var(--accent);
+            transition: width 0.3s ease;
+        }
+        
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        
+        .cta-button {
+            background-color: var(--accent);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 30px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 0.9rem;
+        }
+        
+        .cta-button:hover {
+            background-color: var(--accent-dark);
+            transform: translateY(-2px);
+        }
+        
+        /* Hero Section */
+        .hero {
+            padding-top: 10rem;
+            padding-bottom: 6rem;
+            position: relative;
+            background: linear-gradient(to bottom, var(--bg-color) 60%, var(--light-bg));
+        }
+        
+        .hero-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+        
+        .hero-content {
+            max-width: 550px;
+        }
+        
+        .hero-tag {
+            display: inline-flex;
+            align-items: center;
+            background: rgba(230, 126, 34, 0.1);
+            color: var(--accent-dark);
+            padding: 0.5rem 1.25rem;
+            border-radius: 30px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            margin-bottom: 1.5rem;
+            border: 1px solid rgba(230, 126, 34, 0.2);
+        }
+        
+        .hero-title {
+            font-size: 3.25rem;
+            line-height: 1.1;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            font-family: 'Playfair Display', serif;
+            color: var(--text-color);
+        }
+        
+        .hero-description {
+            font-size: 1.125rem;
+            color: var(--secondary);
+            margin-bottom: 2.5rem;
+            line-height: 1.7;
+        }
+        
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .outline-button {
+            background: transparent;
+            color: var(--text-color);
+            border: 1px solid var(--border);
+            padding: 0.75rem 1.5rem;
+            border-radius: 30px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 0.9rem;
+        }
+        
+        .outline-button:hover {
+            background: rgba(58, 46, 38, 0.05);
+            border-color: var(--accent);
+        }
+        
+        .hero-image {
+            position: relative;
+            z-index: 1;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(58, 46, 38, 0.1);
+        }
+        
+        .hero-image img {
+            width: 100%;
+            height: auto;
+            display: block;
+            transition: transform 0.5s ease;
+        }
+        
+        .hero-image:hover img {
+            transform: scale(1.03);
+        }
+        
+        /* Features Section */
+        .features {
+            padding: 5rem 0;
+            background-color: var(--light-bg);
+            position: relative;
+        }
+        
+        .features::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23e67e22' fill-opacity='0.05' fill-rule='evenodd'/%3E%3C/svg%3E");
+            opacity: 0.3;
+        }
+        
+        .section-header {
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto 4rem;
+            position: relative;
+        }
+        
+        .section-tag {
+            display: inline-block;
+            background: rgba(230, 126, 34, 0.1);
+            color: var(--accent-dark);
+            padding: 0.5rem 1.25rem;
+            border-radius: 30px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            margin-bottom: 1rem;
+            border: 1px solid rgba(230, 126, 34, 0.2);
+        }
+        
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            font-family: 'Playfair Display', serif;
+        }
+        
+        .section-description {
+            color: var(--secondary);
+            font-size: 1.125rem;
+            line-height: 1.7;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            position: relative;
+        }
+        
+        .feature-card {
+            background: white;
+            border-radius: 12px;
+            padding: 2.5rem 2rem;
+            box-shadow: 0 10px 30px rgba(58, 46, 38, 0.05);
+            transition: all 0.3s ease;
+            text-align: center;
+            border: 1px solid var(--border);
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(58, 46, 38, 0.1);
+        }
+        
+        .feature-icon {
+            width: 70px;
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(230, 126, 34, 0.1);
+            border-radius: 50%;
+            margin: 0 auto 1.5rem;
+            color: var(--accent-dark);
+            font-size: 1.75rem;
+        }
+        
+        .feature-title {
+            font-size: 1.375rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            font-family: 'Playfair Display', serif;
+        }
+        
+        .feature-description {
+            color: var(--secondary);
+            font-size: 0.95rem;
+            line-height: 1.7;
+        }
+        
+        /* Menu Section */
+        .menu {
+            padding: 6rem 0;
+            position: relative;
+        }
+        
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+        }
+        
+        .menu-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(58, 46, 38, 0.05);
+            border: 1px solid var(--border);
+            display: flex;
+        }
+        
+        .menu-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(58, 46, 38, 0.1);
+        }
+        
+        .menu-image {
+            width: 40%;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .menu-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        
+        .menu-card:hover .menu-image img {
+            transform: scale(1.05);
+        }
+        
+        .menu-badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: var(--accent);
+            color: white;
+            padding: 0.35rem 0.75rem;
+            border-radius: 30px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        
+        .menu-content {
+            width: 60%;
+            padding: 1.5rem;
+        }
+        
+        .menu-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+        
+        .menu-title {
+            font-size: 1.375rem;
+            font-weight: 600;
+            font-family: 'Playfair Display', serif;
+        }
+        
+        .menu-price {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--accent-dark);
+        }
+        
+        .menu-description {
+            color: var(--secondary);
+            font-size: 0.95rem;
+            line-height: 1.7;
+            margin-bottom: 1.5rem;
+        }
+        
+        .menu-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+        
+        .menu-tag {
+            display: inline-flex;
+            align-items: center;
+            background: rgba(142, 108, 79, 0.1);
+            color: var(--secondary);
+            padding: 0.35rem 0.75rem;
+            border-radius: 30px;
+            font-size: 0.8rem;
+        }
+        
+        /* Testimonials Section */
+        .testimonials {
+            padding: 6rem 0;
+            background-color: var(--light-bg);
+            position: relative;
+        }
+        
+        .testimonial-slider {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            padding: 3rem;
+            box-shadow: 0 10px 30px rgba(58, 46, 38, 0.05);
+            border: 1px solid var(--border);
+            position: relative;
+        }
+        
+        .testimonial-slider::before {
+            content: '"';
+            position: absolute;
+            top: 1.5rem;
+            left: 2rem;
+            font-size: 5rem;
+            color: rgba(230, 126, 34, 0.1);
+            font-family: 'Playfair Display', serif;
+            line-height: 1;
+        }
+        
+        .testimonial-text {
+            font-size: 1.25rem;
+            line-height: 1.8;
+            margin-bottom: 2rem;
+            text-align: center;
+            font-style: italic;
+            color: var(--text-color);
+        }
+        
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+        }
+        
+        .author-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 2px solid var(--accent);
+        }
+        
+        .author-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .author-info h4 {
+            font-size: 1.125rem;
+            font-weight: 600;
+        }
+        
+        .author-info p {
+            color: var(--secondary);
+            font-size: 0.9rem;
+        }
+        
+        /* CTA Section */
+        .cta-section {
+            text-align: center;
+            padding: 8rem 0;
+            background: linear-gradient(rgba(58, 46, 38, 0.7), rgba(58, 46, 38, 0.7)), url('https://images.unsplash.com/photo-1604382354936-07c5d9983bd3?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80') center/cover no-repeat;
+            position: relative;
+            color: white;
+        }
+        
+        .cta-content {
+            position: relative;
+            z-index: 1;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .cta-title {
+            font-size: 2.75rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            font-family: 'Playfair Display', serif;
+        }
+        
+        .cta-description {
+            font-size: 1.25rem;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 2.5rem;
+            line-height: 1.7;
+        }
+        
+        /* Footer */
+        .footer {
+            background: var(--text-color);
+            padding: 5rem 0 2rem;
+            color: white;
+        }
+        
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 4rem;
+        }
+        
+        .footer-brand {
+            font-size: 1.75rem;
+            font-weight: 700;
+            font-family: 'Playfair Display', serif;
+            color: white;
+            margin-bottom: 1.5rem;
+        }
+        
+        .footer-description {
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 2rem;
+            font-size: 0.95rem;
+            line-height: 1.7;
+        }
+        
+        .footer-social {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .social-icon {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border-radius: 50%;
+            transition: all 0.2s ease;
+        }
+        
+        .social-icon:hover {
+            background: var(--accent);
+            transform: translateY(-3px);
+        }
+        
+        .footer-heading {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            font-family: 'Playfair Display', serif;
+            color: white;
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 0.75rem;
+        }
+        
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            transition: all 0.2s ease;
+            font-size: 0.95rem;
+        }
+        
+        .footer-links a:hover {
+            color: var(--accent);
+        }
+        
+        .copyright {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.9rem;
+            padding-top: 3rem;
+            margin-top: 3rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .hero-container {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+                text-align: center;
+            }
+            
+            .hero-content {
+                max-width: 100%;
+            }
+            
+            .hero-buttons {
+                justify-content: center;
+            }
+            
+            .features-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            
+            .footer-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 3rem;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .nav-menu {
+                display: none;
+            }
+            
+            .hero-title {
+                font-size: 2.5rem;
+            }
+            
+            .features-grid,
+            .menu-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .menu-card {
+                flex-direction: column;
+            }
+            
+            .menu-image,
+            .menu-content {
+                width: 100%;
+            }
+            
+            .footer-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+            
+            .section {
+                padding: 4rem 0;
+            }
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Lora:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="bg-pattern"></div>
+    
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <nav class="navbar">
+                <div class="logo">Pasta Italia</div>
+                <div class="nav-menu">
+                    <a href="#inicio" class="nav-link">Inicio</a>
+                    <a href="#menu" class="nav-link">Menú</a>
+                    <a href="#nosotros" class="nav-link">Nosotros</a>
+                    <a href="#contacto" class="nav-link">Contacto</a>
+                </div>
+                <button class="cta-button">Reservar Mesa</button>
+            </nav>
+        </div>
+    </header>
+    
+    <!-- Hero Section -->
+    <section class="hero" id="inicio">
+        <div class="container hero-container">
+            <div class="hero-content">
+                <div class="hero-tag">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" fill="#E67E22"/>
+                    </svg>
+                    Auténtica pasta italiana
+                </div>
+                <h1 class="hero-title">Sabores que transportan a Italia</h1>
+                <p class="hero-description">Elaboramos pasta fresca diariamente con ingredientes de la más alta calidad. Cada plato es una experiencia culinaria que honra las tradiciones italianas.</p>
+                <div class="hero-buttons">
+                    <button class="cta-button">Ver Menú</button>
+                    <button class="outline-button">Nuestra Historia</button>
+                </div>
+            </div>
+            <div class="hero-image">
+                <img src="https://images.unsplash.com/photo-1604382354936-07c5d9983bd3?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Pasta italiana">
+            </div>
+        </div>
+    </section>
+    
+    <!-- Features Section -->
+    <section class="features">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Nuestra Esencia</span>
+                <h2 class="section-title">El arte de la pasta</h2>
+                <p class="section-description">En Pasta Italia, cada plato cuenta una historia de tradición, pasión y los mejores ingredientes.</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🍝</div>
+                    <h3 class="feature-title">Pasta Fresca</h3>
+                    <p class="feature-description">Elaboramos nuestra pasta diariamente con sémola de trigo duro y huevos frescos, siguiendo recetas tradicionales italianas.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🧑‍🍳</div>
+                    <h3 class="feature-title">Chef Italiano</h3>
+                    <p class="feature-description">Nuestro chef, formado en Nápoles, trae auténticas técnicas y sabores directamente desde Italia.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🍅</div>
+                    <h3 class="feature-title">Ingredientes Premium</h3>
+                    <p class="feature-description">Tomates San Marzano DOP, aceite de oliva virgen extra y quesos importados para garantizar autenticidad.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Menu Section -->
+    <section class="menu" id="menu">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Nuestras Especialidades</span>
+                <h2 class="section-title">Menú de Pastas</h2>
+                <p class="section-description">Descubre nuestras creaciones artesanales, cada una con su propio carácter y sabor único.</p>
+            </div>
+            <div class="menu-grid">
+                <div class="menu-card">
+                    <div class="menu-image">
+                        <img src="https://images.unsplash.com/photo-1555949258-eb67b1ef0ceb?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Spaghetti Carbonara">
+                        <span class="menu-badge">Recomendado</span>
+                    </div>
+                    <div class="menu-content">
+                        <div class="menu-top">
+                            <h3 class="menu-title">Spaghetti Carbonara</h3>
+                            <span class="menu-price">$14.99</span>
+                        </div>
+                        <p class="menu-description">Auténtica carbonara romana con guanciale, huevo, queso pecorino y pimienta negra.</p>
+                        <div class="menu-meta">
+                            <span class="menu-tag">🥓 Guanciale</span>
+                            <span class="menu-tag">🧀 Pecorino</span>
+                            <span class="menu-tag">🍝 Pasta fresca</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="menu-card">
+                    <div class="menu-image">
+                        <img src="https://images.unsplash.com/photo-1611270629569-8b357cb88da9?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Pappardelle al Ragu">
+                    </div>
+                    <div class="menu-content">
+                        <div class="menu-top">
+                            <h3 class="menu-title">Pappardelle al Ragu</h3>
+                            <span class="menu-price">$16.99</span>
+                        </div>
+                        <p class="menu-description">Pasta ancha con ragú boloñés tradicional cocinado lentamente durante 6 horas.</p>
+                        <div class="menu-meta">
+                            <span class="menu-tag">🍖 Carne de res</span>
+                            <span class="menu-tag">🍷 Vino tinto</span>
+                            <span class="menu-tag">🧅 Sofrito</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="menu-card">
+                    <div class="menu-image">
+                        <img src="https://images.unsplash.com/photo-1473093295043-cdd812d0e601?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Gnocchi al Pesto">
+                    </div>
+                    <div class="menu-content">
+                        <div class="menu-top">
+                            <h3 class="menu-title">Gnocchi al Pesto</h3>
+                            <span class="menu-price">$15.49</span>
+                        </div>
+                        <p class="menu-description">Ñoquis caseros con pesto genovés de albahaca fresca, piñones y parmesano.</p>
+                        <div class="menu-meta">
+                            <span class="menu-tag">🌿 Albahaca</span>
+                            <span class="menu-tag">🧄 Ajo</span>
+                            <span class="menu-tag">🧀 Parmesano</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="menu-card">
+                    <div class="menu-image">
+                        <img src="https://images.unsplash.com/photo-1613564834361-9436948817d1?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Risotto ai Funghi">
+                        <span class="menu-badge">Nuevo</span>
+                    </div>
+                    <div class="menu-content">
+                        <div class="menu-top">
+                            <h3 class="menu-title">Risotto ai Funghi</h3>
+                            <span class="menu-price">$17.99</span>
+                        </div>
+                        <p class="menu-description">Arborio cremoso con mezcla de hongos silvestres, vino blanco y trufa negra.</p>
+                        <div class="menu-meta">
+                            <span class="menu-tag">🍄 Hongos</span>
+                            <span class="menu-tag">🍷 Vino blanco</span>
+                            <span class="menu-tag">🖤 Trufa</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Testimonials Section -->
+    <section class="testimonials" id="nosotros">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Testimonios</span>
+                <h2 class="section-title">Lo que dicen nuestros comensales</h2>
+                <p class="section-description">La opinión de quienes han disfrutado de nuestra auténtica cocina italiana.</p>
+            </div>
+            <div class="testimonial-slider">
+                <p class="testimonial-text">La mejor pasta que he probado fuera de Italia. Los sabores son auténticos y la textura de la pasta es perfecta. El ambiente te transporta directamente a una trattoria en Roma.</p>
+                <div class="testimonial-author">
+                    <div class="author-avatar">
+                        <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="María González">
+                    </div>
+                    <div class="author-info">
+                        <h4>María González</h4>
+                        <p>Crítica gastronómica</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="container">
+            <div class="cta-content">
+                <h2 class="cta-title">¿Listo para un viaje culinario a Italia?</h2>
+                <p class="cta-description">Reserva tu mesa hoy y déjanos llevarte en un viaje gastronómico a través de las regiones de Italia con nuestros auténticos sabores y ambiente acogedor.</p>
+                <div class="hero-buttons">
+                    <button class="cta-button">Reservar Mesa</button>
+                    <button class="outline-button">Llamar Ahora</button>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Footer -->
+    <footer class="footer" id="contacto">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <div class="footer-brand">Pasta Italia</div>
+                    <p class="footer-description">Auténtica cocina italiana desde 2010. Elaboramos pasta fresca diariamente siguiendo recetas tradicionales transmitidas por generaciones.</p>
+                    <div class="footer-social">
+                        <a href="#" class="social-icon">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M22 12C22 6.477 17.523 2 12 2C6.477 2 2 6.477 2 12C2 16.991 5.657 21.128 10.438 21.878V14.891H7.898V12H10.438V9.797C10.438 7.291 11.93 5.907 14.215 5.907C15.309 5.907 16.453 6.102 16.453 6.102V8.562H15.193C13.95 8.562 13.563 9.333 13.563 10.124V12H16.336L15.893 14.891H13.563V21.878C18.343 21.128 22 16.991 22 12Z" fill="currentColor"/>
+                            </svg>
+                        </a>
+                        <a href="#" class="social-icon">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12.315 2C8.066 2 4 6.066 4 10.315C4 14.564 8.066 18.63 12.315 18.63C16.564 18.63 20.63 14.564 20.63 10.315C20.63 6.066 16.564 2 12.315 2ZM12.315 16.461C9.418 16.461 7.168 14.212 7.168 11.315C7.168 8.418 9.418 6.168 12.315 6.168C15.212 6.168 17.461 8.418 17.461 11.315C17.461 14.212 15.212 16.461 12.315 16.461ZM18.456 3.369C19.214 3.369 19.827 3.982 19.827 4.74C19.827 5.498 19.214 6.111 18.456 6.111C17.698 6.111 17.085 5.498 17.085 4.74C17.085 3.982 17.698 3.369 18.456 3.369Z" fill="currentColor"/>
+                            </svg>
+                        </a>
+                        <a href="#" class="social-icon">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M22.162 5.656C21.398 5.994 20.589 6.229 19.761 6.355C20.634 5.858 21.288 5.058 21.606 4.105C20.79 4.563 19.898 4.893 18.966 5.078C18.188 4.255 17.083 3.778 15.882 3.778C13.555 3.778 11.672 5.661 11.672 7.988C11.672 8.301 11.704 8.613 11.766 8.914C8.728 8.741 6.032 7.243 4.264 4.931C3.923 5.539 3.73 6.229 3.73 6.963C3.73 8.354 4.405 9.589 5.469 10.353C4.759 10.333 4.085 10.139 3.491 9.803V9.845C3.491 11.915 4.997 13.661 7.007 14.042C6.671 14.131 6.322 14.178 5.97 14.178C5.708 14.178 5.449 14.149 5.196 14.101C5.722 15.82 7.318 17.097 9.192 17.135C7.692 18.318 5.825 19.026 3.81 19.026C3.491 19.026 3.172 19.003 2.857 18.968C4.747 20.221 7.036 20.978 9.486 20.978C15.873 20.978 19.337 14.238 19.337 8.451C19.337 8.27 19.333 8.089 19.326 7.909C20.138 7.317 20.824 6.571 21.355 5.729L22.162 5.656Z" fill="currentColor"/>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h3 class="footer-heading">Horario</h3>
+                    <ul class="footer-links">
+                        <li>Lunes - Jueves: 12pm - 10pm</li>
+                        <li>Viernes - Sábado: 12pm - 11pm</li>
+                        <li>Domingo: 12pm - 9pm</li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h3 class="footer-heading">Contacto</h3>
+                    <ul class="footer-links">
+                        <li>Calle Italia 123</li>
+                        <li>Ciudad, País</li>
+                        <li>info@pastaitalia.com</li>
+                        <li>+1 234 567 890</li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h3 class="footer-heading">Enlaces</h3>
+                    <ul class="footer-links">
+                        <li><a href="#inicio">Inicio</a></li>
+                        <li><a href="#menu">Menú</a></li>
+                        <li><a href="#nosotros">Nosotros</a></li>
+                        <li><a href="#contacto">Contacto</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2023 Pasta Italia. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
