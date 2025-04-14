@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Los sándwiches más deliciosos y frescos de Asunción. Menú, ubicación y pedidos online.">
+    <title>Tu Nombre Sandwichería - Sándwiches Increíbles en Asunción</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              primary: '#EAB308', // Example primary color (Amber 500)
+              secondary: '#374151', // Example secondary color (Gray 700)
+              accent: '#D97706', // Example accent color (Amber 600)
+            },
+            fontFamily: {
+              sans: ['Inter', 'sans-serif'], // Using Inter font
+            },
+            scrollMargin: {
+               '16': '4rem', // Adjust based on your header height
+               '20': '5rem',
+               '24': '6rem',
+            }
+          }
+        }
+      }
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* Agrega un margen superior al hacer scroll para compensar el header fijo */
+        section {
+            scroll-margin-top: 5rem; /* Ajusta este valor según la altura de tu header */
+        }
+        /* Estilo para el botón activo (requiere JS para funcionar dinámicamente al hacer scroll) */
+        .nav-link.active {
+            font-weight: bold;
+            color: #EAB308; /* Color primario */
+        }
+        /* Placeholder para imagen de fondo del Hero */
+        .hero-bg {
+            background-image: url('https://images.unsplash.com/photo-1512621776951-a57141f2eefd?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1920&q=80');
+            background-size: cover;
+            background-position: center;
+        }
+
+
+        .logo {
+            font-family: 'Inter', sans-serif;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #EAB308; /* Color primario */
+            text-decoration: none;
+        }
+        .logo span {
+            color: #374151; /* Color secundario */
+        }
+
+    </style>
+</head>
+<body class="bg-gray-50 font-sans">
+
+    <header class="bg-white shadow-md fixed top-0 left-0 right-0 z-50">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <a href="#inicio" class="logo">
+                Tu<span>Sandwichería</span>
+            </a>
+            <nav class="main-nav hidden md:flex space-x-6 items-center">
+                <a href="#inicio" class="nav-link text-gray-600 hover:text-primary transition duration-300">Inicio</a>
+                <a href="#menu" class="nav-link text-gray-600 hover:text-primary transition duration-300">Menú</a>
+                <a href="#nosotros" class="nav-link text-gray-600 hover:text-primary transition duration-300">Nosotros</a>
+                <a href="#contacto" class="nav-link text-gray-600 hover:text-primary transition duration-300">Contacto</a>
+                <a href="#pedir" class="bg-primary text-white px-4 py-2 rounded-full hover:bg-accent transition duration-300 text-sm font-medium">Pedir Online</a>
+            </nav>
+            <button id="mobile-menu-button" class="md:hidden text-gray-700 focus:outline-none">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+                </svg>
+            </button>
+        </div>
+        <div id="mobile-menu" class="md:hidden hidden bg-white border-t border-gray-200">
+            <a href="#inicio" class="block px-4 py-3 text-gray-600 hover:bg-gray-100 hover:text-primary">Inicio</a>
+            <a href="#menu" class="block px-4 py-3 text-gray-600 hover:bg-gray-100 hover:text-primary">Menú</a>
+            <a href="#nosotros" class="block px-4 py-3 text-gray-600 hover:bg-gray-100 hover:text-primary">Nosotros</a>
+            <a href="#contacto" class="block px-4 py-3 text-gray-600 hover:bg-gray-100 hover:text-primary">Contacto</a>
+            <a href="#pedir" class="block px-4 py-3 bg-primary text-white text-center hover:bg-accent">Pedir Online</a>
+        </div>
+    </header>
+
+
+
+    <main class="pt-16 md:pt-20">
+        <section id="inicio" class="hero-bg text-white min-h-[60vh] md:min-h-[70vh] flex items-center">
+            <div class="container mx-auto px-4 text-center bg-black bg-opacity-50 p-8 rounded-lg">
+                <h1 class="text-4xl md:text-6xl font-bold mb-4">El Sabor que Estabas Buscando</h1>
+                <p class="text-lg md:text-xl mb-8">Sándwiches artesanales hechos con ingredientes frescos y mucho amor.</p>
+                <div class="space-x-4">
+                    <a href="#menu" class="bg-primary text-white px-6 py-3 rounded-full hover:bg-accent transition duration-300 text-lg font-medium">Ver Nuestro Menú</a>
+                    <a href="#pedir" class="bg-white text-secondary px-6 py-3 rounded-full hover:bg-gray-200 transition duration-300 text-lg font-medium">Pedir Ahora</a>
+                </div>
+            </div>
+        </section>
+
+        <section id="intro" class="py-16 md:py-24 bg-white">
+            <div class="container mx-auto px-4 text-center max-w-3xl">
+                <h2 class="text-3xl md:text-4xl font-bold text-secondary mb-6">Bienvenido a Tu Nombre Sandwichería</h2>
+                <p class="text-gray-600 text-lg leading-relaxed">
+                    Somos apasionados por crear combinaciones únicas y deliciosas. Usamos pan recién horneado, los ingredientes más frescos y recetas que te sorprenderán. ¡Ven a descubrir tu nuevo sándwich favorito en el corazón de Asunción!
+                </p>
+            </div>
+        </section>
+
+        <section id="highlights" class="py-16 md:py-24 bg-gray-100">
+            <div class="container mx-auto px-4">
+                <h2 class="text-3xl md:text-4xl font-bold text-secondary mb-12 text-center">Nuestros Favoritos</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <article class="bg-white rounded-lg shadow-lg overflow-hidden transform hover:scale-105 transition duration-300">
+                        <img src="https://via.placeholder.com/600x400?text=Sandwich+Caprese" alt="Imagen de Sándwich Caprese Rústico" class="w-full h-48 object-cover">
+                        <div class="p-6">
+                            <h3 class="text-xl font-semibold text-secondary mb-2">El Caprese Rústico</h3>
+                            <p class="text-gray-600 text-sm">Mozzarella fresca, tomates maduros, albahaca y un toque de pesto en pan ciabatta.</p>
+                        </div>
+                    </article>
+                    <article class="bg-white rounded-lg shadow-lg overflow-hidden transform hover:scale-105 transition duration-300">
+                        <img src="https://via.placeholder.com/600x400?text=Sandwich+Club" alt="Imagen de Sándwich Club de la Casa" class="w-full h-48 object-cover">
+                        <div class="p-6">
+                            <h3 class="text-xl font-semibold text-secondary mb-2">Club de la Casa</h3>
+                            <p class="text-gray-600 text-sm">Pollo grillado, bacon crujiente, lechuga, tomate y nuestra mayonesa especial.</p>
+                        </div>
+                    </article>
+                    <article class="bg-white rounded-lg shadow-lg overflow-hidden transform hover:scale-105 transition duration-300">
+                        <img src="https://via.placeholder.com/600x400?text=Sandwich+Veggie" alt="Imagen de Sándwich Veggie Power" class="w-full h-48 object-cover">
+                        <div class="p-6">
+                            <h3 class="text-xl font-semibold text-secondary mb-2">Veggie Power</h3>
+                            <p class="text-gray-600 text-sm">Hummus, palta, vegetales asados y brotes frescos en pan integral.</p>
+                        </div>
+                    </article>
+                </div>
+                <div class="text-center mt-12">
+                     <a href="#menu" class="bg-primary text-white px-6 py-3 rounded-full hover:bg-accent transition duration-300 text-lg font-medium">Ver Menú Completo</a>
+                </div>
+            </div>
+        </section>
+
+        <section id="menu" class="py-16 md:py-24 bg-white">
+            <div class="container mx-auto px-4">
+                <h1 class="text-3xl md:text-4xl font-bold text-secondary mb-12 text-center">Nuestro Menú</h1>
+
+                <div class="mb-12">
+                    <h2 class="text-2xl font-semibold text-accent mb-6 border-b-2 border-primary pb-2 inline-block">Sándwiches Clásicos</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
+                        <article class="menu-item flex items-start space-x-4">
+                             <img src="https://via.placeholder.com/100x100?text=Clasico+1" alt="Imagen de Jamón y Queso" class="w-20 h-20 object-cover rounded-md flex-shrink-0">
+                             <div>
+                                <h3 class="text-lg font-medium text-secondary">Jamón y Queso Tradicional</h3>
+                                <p class="text-gray-600 text-sm mb-1">El clásico de siempre, con jamón de primera y queso derretido.</p>
+                                <p class="text-primary font-semibold">Gs. 20.000</p>
+                             </div>
+                        </article>
+                        <article class="menu-item flex items-start space-x-4">
+                             <img src="https://via.placeholder.com/100x100?text=Clasico+2" alt="Imagen de Pollo y Palta" class="w-20 h-20 object-cover rounded-md flex-shrink-0">
+                             <div>
+                                <h3 class="text-lg font-medium text-secondary">Pollo y Palta</h3>
+                                <p class="text-gray-600 text-sm mb-1">Pechuga de pollo grillada, palta fresca, lechuga y tomate.</p>
+                                <p class="text-primary font-semibold">Gs. 25.000</p>
+                             </div>
+                        </article>
+                        </div>
+                </div>
+
+                <div class="mb-12">
+                    <h2 class="text-2xl font-semibold text-accent mb-6 border-b-2 border-primary pb-2 inline-block">Nuestras Creaciones</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
+                         <article class="menu-item flex items-start space-x-4">
+                             <img src="https://via.placeholder.com/100x100?text=Especial+1" alt="Imagen de Sándwich Caprese" class="w-20 h-20 object-cover rounded-md flex-shrink-0">
+                             <div>
+                                <h3 class="text-lg font-medium text-secondary">El Caprese Rústico</h3>
+                                <p class="text-gray-600 text-sm mb-1">Mozzarella fresca, tomates maduros, albahaca y pesto en ciabatta.</p>
+                                <p class="text-primary font-semibold">Gs. 28.000</p>
+                             </div>
+                        </article>
+                         <article class="menu-item flex items-start space-x-4">
+                             <img src="https://via.placeholder.com/100x100?text=Especial+2" alt="Imagen de Sándwich Club" class="w-20 h-20 object-cover rounded-md flex-shrink-0">
+                             <div>
+                                <h3 class="text-lg font-medium text-secondary">Club de la Casa</h3>
+                                <p class="text-gray-600 text-sm mb-1">Pollo grillado, bacon crujiente, lechuga, tomate y mayonesa especial.</p>
+                                <p class="text-primary font-semibold">Gs. 30.000</p>
+                             </div>
+                        </article>
+                        </div>
+                </div>
+
+                 <div class="mb-12">
+                    <h2 class="text-2xl font-semibold text-accent mb-6 border-b-2 border-primary pb-2 inline-block">Opción Vegetariana</h2>
+                     <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
+                         <article class="menu-item flex items-start space-x-4">
+                             <img src="https://via.placeholder.com/100x100?text=Veggie" alt="Imagen de Sándwich Veggie" class="w-20 h-20 object-cover rounded-md flex-shrink-0">
+                             <div>
+                                <h3 class="text-lg font-medium text-secondary">Veggie Power</h3>
+                                <p class="text-gray-600 text-sm mb-1">Hummus, palta, vegetales asados y brotes frescos en pan integral.</p>
+                                <p class="text-primary font-semibold">Gs. 26.000</p>
+                             </div>
+                        </article>
+                        </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
+                    <div>
+                         <h2 class="text-2xl font-semibold text-accent mb-6 border-b-2 border-primary pb-2 inline-block">Acompañamientos</h2>
+                         <article class="menu-item mb-4">
+                            <h3 class="text-lg font-medium text-secondary inline-block mr-4">Papas Fritas Caseras</h3>
+                            <p class="text-primary font-semibold inline-block">Gs. 15.000</p>
+                        </article>
+                         <article class="menu-item mb-4">
+                            <h3 class="text-lg font-medium text-secondary inline-block mr-4">Ensalada Fresca del Día</h3>
+                            <p class="text-primary font-semibold inline-block">Gs. 12.000</p>
+                        </article>
+                         </div>
+                     <div>
+                         <h2 class="text-2xl font-semibold text-accent mb-6 border-b-2 border-primary pb-2 inline-block">Bebidas</h2>
+                          <article class="menu-item mb-4">
+                            <h3 class="text-lg font-medium text-secondary inline-block mr-4">Gaseosas (Varias)</h3>
+                            <p class="text-primary font-semibold inline-block">Gs. 8.000</p>
+                        </article>
+                         <article class="menu-item mb-4">
+                            <h3 class="text-lg font-medium text-secondary inline-block mr-4">Jugos Naturales</h3>
+                            <p class="text-primary font-semibold inline-block">Gs. 12.000</p>
+                        </article>
+                         <article class="menu-item mb-4">
+                            <h3 class="text-lg font-medium text-secondary inline-block mr-4">Agua Mineral</h3>
+                            <p class="text-primary font-semibold inline-block">Gs. 6.000</p>
+                        </article>
+                         </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="nosotros" class="py-16 md:py-24 bg-gray-100">
+            <div class="container mx-auto px-4 flex flex-col md:flex-row items-center gap-12">
+                <div class="md:w-1/2">
+                    <h1 class="text-3xl md:text-4xl font-bold text-secondary mb-6">Nuestra Historia</h1>
+                    <p class="text-gray-600 mb-4 leading-relaxed">Aquí va la historia de tu sandwichería. Cuéntanos cómo empezó todo, cuál es tu filosofía, qué te inspira.</p>
+                    <p class="text-gray-600 mb-4 leading-relaxed">Habla sobre tu compromiso con la calidad, los ingredientes frescos, si apoyas a productores locales, etc.</p>
+                    <h2 class="text-2xl font-semibold text-accent mt-6 mb-3">Nuestra Misión</h2>
+                    <p class="text-gray-600 leading-relaxed">Crear momentos deliciosos y satisfacer a nuestros clientes con sándwiches innovadores y de alta calidad, preparados con pasión y los mejores ingredientes.</p>
+                </div>
+                <div class="md:w-1/2">
+                    <img src="https://via.placeholder.com/600x450?text=Foto+Local+o+Equipo" alt="Imagen del local o del equipo" class="rounded-lg shadow-xl w-full">
+                </div>
+            </div>
+        </section>
+
+        <section id="contacto" class="py-16 md:py-24 bg-white">
+            <div class="container mx-auto px-4">
+                <h1 class="text-3xl md:text-4xl font-bold text-secondary mb-12 text-center">Visítanos o Contáctanos</h1>
+                <div class="flex flex-col md:flex-row gap-12">
+                    <div class="md:w-1/2">
+                        <h2 class="text-2xl font-semibold text-accent mb-4">Información de Contacto</h2>
+                        <p class="text-gray-700 mb-2"><strong>Dirección:</strong> Calle Falsa 123, Barrio San Roque, Asunción</p>
+                        <p class="text-gray-700 mb-2"><strong>Teléfono:</strong> <a href="tel:+595981123456" class="text-primary hover:underline">+595 981 123 456</a></p>
+                        <p class="text-gray-700 mb-4"><strong>Email:</strong> <a href="mailto:info@tusandwicheria.com.py" class="text-primary hover:underline">info@tusandwicheria.com.py</a></p>
+
+                        <h2 class="text-2xl font-semibold text-accent mb-4 mt-6">Horario de Atención</h2>
+                        <ul class="text-gray-700 list-disc list-inside mb-6">
+                            <li>Lunes a Viernes: 10:00 - 22:00</li>
+                            <li>Sábados: 11:00 - 23:00</li>
+                            <li>Domingos: Cerrado</li>
+                        </ul>
+
+                         <h2 class="text-2xl font-semibold text-accent mb-4 mt-6">Síguenos</h2>
+                         <div class="flex space-x-4 mb-8">
+                             <a href="#" target="_blank" class="text-primary hover:text-accent transition duration-300">
+                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24"><path d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z"/></svg> </a>
+                             <a href="#" target="_blank" class="text-primary hover:text-accent transition duration-300">
+                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.85s-.011 3.584-.069 4.85c-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07s-3.584-.012-4.85-.07c-3.25-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.85s.012-3.584.07-4.85c.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.85-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948s.014 3.667.072 4.947c.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072s3.667-.014 4.947-.072c4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.947s-.014-3.667-.072-4.947c-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.689-.073-4.948-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg> </a>
+                         </div>
+
+                        <h2 class="text-2xl font-semibold text-accent mb-4 mt-6">Envíanos un Mensaje</h2>
+                        <form action="#" method="post">
+                            <div class="mb-4">
+                                <label for="name" class="block text-gray-700 font-medium mb-1">Nombre:</label>
+                                <input type="text" id="name" name="name" required class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary">
+                            </div>
+                            <div class="mb-4">
+                                <label for="email" class="block text-gray-700 font-medium mb-1">Email:</label>
+                                <input type="email" id="email" name="email" required class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary">
+                            </div>
+                            <div class="mb-4">
+                                <label for="message" class="block text-gray-700 font-medium mb-1">Mensaje:</label>
+                                <textarea id="message" name="message" rows="5" required class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"></textarea>
+                            </div>
+                            <button type="submit" class="bg-secondary text-white px-6 py-3 rounded-full hover:bg-gray-800 transition duration-300 font-medium">Enviar Mensaje</button>
+                        </form>
+                    </div>
+
+                    <div class="md:w-1/2">
+                        <h2 class="text-2xl font-semibold text-accent mb-4">Encuéntranos Aquí</h2>
+                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d115444.0841019764!2d-57.65380744799911!3d-25.29909076144103!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x945da91e37179977%3A0x1967d5c2877a1a1c!2sAsunci%C3%B3n%2C%20Paraguay!5e0!3m2!1ses!2sus!4v1713103415016!5m2!1ses!2sus" width="100%" height="550" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" class="rounded-lg shadow-md"></iframe>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="pedir" class="py-16 md:py-24 bg-gray-100">
+            <div class="container mx-auto px-4 text-center max-w-3xl">
+                <h1 class="text-3xl md:text-4xl font-bold text-secondary mb-6">Pide Tus Sándwiches Favoritos</h1>
+                <p class="text-gray-600 text-lg mb-8 leading-relaxed">
+                    ¡Es fácil y rápido! Elige tus sándwiches, personalízalos y recíbelos donde estés o pásalos a buscar por nuestro local en Asunción.
+                </p>
+
+                <div class="bg-white p-6 rounded-lg shadow-md mb-6 inline-block text-left max-w-md mx-auto">
+                    <h2 class="text-xl font-semibold text-accent mb-3">Pide a través de [PedidosYa / Otra Plataforma]</h2>
+                    <p class="text-gray-600 mb-4 text-sm">Haz clic en el botón para ir a nuestra tienda en [PedidosYa] y realizar tu pedido cómodamente.</p>
+                    <a href="#" target="_blank" class="block w-full text-center bg-red-600 text-white px-6 py-3 rounded-full hover:bg-red-700 transition duration-300 font-medium">
+                        Ir a PedidosYa
+                    </a>
+                </div>
+
+                 <div class="bg-white p-6 rounded-lg shadow-md inline-block text-left max-w-md mx-auto">
+                    <h2 class="text-xl font-semibold text-accent mb-3">Pide por WhatsApp</h2>
+                    <p class="text-gray-600 mb-4 text-sm">También puedes enviarnos tu pedido directamente por WhatsApp.</p>
+                    <a href="https://wa.me/595981123456?text=Hola%2C%20quisiera%20hacer%20un%20pedido..." target="_blank" class="block w-full text-center bg-green-500 text-white px-6 py-3 rounded-full hover:bg-green-600 transition duration-300 font-medium">
+                        Pedir por WhatsApp
+                    </a>
+                    <p class="text-gray-500 text-xs mt-3">(Recuerda incluir detalles del pedido y dirección si es delivery)</p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-secondary text-gray-300 py-12">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8 text-center md:text-left">
+                <div>
+                    <h4 class="text-lg font-semibold text-white mb-3">Tu Nombre Sandwichería</h4>
+                    <p class="text-sm">Calle Falsa 123, Asunción, Paraguay</p>
+                    <p class="text-sm">Tel: <a href="tel:+595981123456" class="hover:text-primary hover:underline">+595 981 123 456</a></p>
+                    <p class="text-sm">Email: <a href="mailto:info@tusandwicheria.com.py" class="hover:text-primary hover:underline">info@tusandwicheria.com.py</a></p>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold text-white mb-3">Enlaces Rápidos</h4>
+                    <ul class="space-y-1">
+                        <li><a href="#inicio" class="hover:text-primary hover:underline text-sm">Inicio</a></li>
+                        <li><a href="#menu" class="hover:text-primary hover:underline text-sm">Menú</a></li>
+                        <li><a href="#nosotros" class="hover:text-primary hover:underline text-sm">Nosotros</a></li>
+                        <li><a href="#contacto" class="hover:text-primary hover:underline text-sm">Contacto</a></li>
+                        <li><a href="#pedir" class="hover:text-primary hover:underline text-sm">Pedir Online</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold text-white mb-3">Síguenos</h4>
+                    <div class="flex space-x-4 justify-center md:justify-start">
+                        <a href="#" target="_blank" class="text-gray-300 hover:text-primary transition duration-300">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24"><path d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z"/></svg>
+                        </a>
+                        <a href="#" target="_blank" class="text-gray-300 hover:text-primary transition duration-300">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.85s-.011 3.584-.069 4.85c-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07s-3.584-.012-4.85-.07c-3.25-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.85s.012-3.584.07-4.85c.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.85-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948s.014 3.667.072 4.947c.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072s3.667-.014 4.947-.072c4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.947s-.014-3.667-.072-4.947c-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.689-.073-4.948-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center text-sm">
+                <p>&copy; 2025 Tu Nombre Sandwichería. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const menuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        menuButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // Opcional: Cerrar menú al hacer clic en un enlace
+        const navLinks = mobileMenu.querySelectorAll('a');
+        navLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+            });
+        });
+    </script>
+
+</body>
+</html>
