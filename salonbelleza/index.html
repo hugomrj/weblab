@@ -3,635 +3,1077 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Salón de Belleza Elegancia - Inicio</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <title>Belle Époque | Salón de Belleza Femenino</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
-      @font-face {
-        font-family: 'LucideIcons';
-        src: url(https://cdn.jsdelivr.net/npm/lucide-static@latest/font/Lucide.ttf) format('truetype');
-      }
-      .lucide {
-        font-family: 'LucideIcons';
-        font-size: 1.25rem; /* Adjust size as needed */
-        line-height: 1;
-      }
-      body {
-        font-family: 'Inter', sans-serif;
-      }
-      /* Simple transition for page changes */
-      .page-section {
-        display: none; /* Hide all sections by default */
-        animation: fadeIn 0.5s ease-in-out;
-      }
-      .page-section.active {
-        display: block; /* Show active section */
-      }
-      @keyframes fadeIn {
-        from { opacity: 0; }
-        to { opacity: 1; }
-      }
-      /* Custom scrollbar (optional) */
-      ::-webkit-scrollbar {
-        width: 8px;
-      }
-      ::-webkit-scrollbar-track {
-        background: #f1f1f1;
-        border-radius: 10px;
-      }
-      ::-webkit-scrollbar-thumb {
-        background: #888;
-        border-radius: 10px;
-      }
-      ::-webkit-scrollbar-thumb:hover {
-        background: #555;
-      }
+        /* Variables de diseño */
+        :root {
+            --rose-gold: #E0BFB8;
+            --soft-pink: #F8E5E5;
+            --dusty-rose: #D4A5A5;
+            --deep-mauve: #9A7B7B;
+            --ivory: #FFF9F5;
+            --dark-brown: #3A2E2A;
+            --transition: all 0.4s ease-in-out;
+        }
+        
+        /* Reset y estilos base */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--ivory);
+            color: var(--dark-brown);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+        
+        h1, h2, h3, h4 {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+            color: var(--deep-mauve);
+        }
+        
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 14px 32px;
+            background-color: var(--rose-gold);
+            color: var(--dark-brown);
+            border: none;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+            border-radius: 30px;
+        }
+        
+        .btn:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: var(--deep-mauve);
+            transition: var(--transition);
+            z-index: -1;
+        }
+        
+        .btn:hover {
+            color: var(--ivory);
+        }
+        
+        .btn:hover:before {
+            left: 0;
+        }
+        
+        .section-title {
+            font-size: 2.8rem;
+            text-align: center;
+            margin-bottom: 60px;
+            position: relative;
+        }
+        
+        .section-title:after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 3px;
+            background: var(--rose-gold);
+            margin: 15px auto 0;
+        }
+        
+        /* Header elegante */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 25px 0;
+            z-index: 1000;
+            transition: var(--transition);
+            background: rgba(255, 249, 245, 0.9);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        header.scrolled {
+            padding: 15px 0;
+            background: rgba(255, 249, 245, 0.98);
+        }
+        
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--deep-mauve);
+            letter-spacing: 2px;
+            font-family: 'Playfair Display', serif;
+        }
+        
+        .logo span {
+            color: var(--rose-gold);
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+        
+        nav ul li {
+            margin-left: 40px;
+            position: relative;
+        }
+        
+        nav ul li a {
+            color: var(--deep-mauve);
+            font-weight: 500;
+            letter-spacing: 1px;
+            transition: var(--transition);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+        }
+        
+        nav ul li a:after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--rose-gold);
+            transition: var(--transition);
+        }
+        
+        nav ul li a:hover {
+            color: var(--rose-gold);
+        }
+        
+        nav ul li a:hover:after {
+            width: 100%;
+        }
+        
+        .menu-toggle {
+            display: none;
+            cursor: pointer;
+            color: var(--deep-mauve);
+            font-size: 1.5rem;
+        }
+        
+        /* Hero section femenino */
+        .hero {
+            height: 100vh;
+            min-height: 800px;
+            background: linear-gradient(rgba(255, 249, 245, 0.2), rgba(255, 249, 245, 0.2)), url('https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1587&q=80') no-repeat center center/cover;
+            display: flex;
+            align-items: center;
+            color: var(--dark-brown);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero-content {
+            max-width: 600px;
+        }
+        
+        .hero-subtitle {
+            font-size: 1.1rem;
+            color: var(--rose-gold);
+            margin-bottom: 20px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+        
+        .hero-title {
+            font-size: 4.5rem;
+            line-height: 1.1;
+            margin-bottom: 30px;
+            color: var(--deep-mauve);
+        }
+        
+        .hero-text {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 40px;
+            opacity: 0.9;
+        }
+        
+        .hero-btns {
+            display: flex;
+            gap: 20px;
+        }
+        
+        .hero-btns .btn-outline {
+            background: transparent;
+            border: 1px solid var(--rose-gold);
+            color: var(--rose-gold);
+        }
+        
+        .hero-btns .btn-outline:before {
+            background: var(--rose-gold);
+        }
+        
+        .hero-btns .btn-outline:hover {
+            color: var(--dark-brown);
+        }
+        
+        /* Sección de bienvenida */
+        .welcome {
+            padding: 120px 0;
+            background-color: var(--soft-pink);
+        }
+        
+        .welcome-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 50px;
+            align-items: center;
+        }
+        
+        .welcome-img {
+            position: relative;
+            height: 500px;
+        }
+        
+        .welcome-img .main-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border: 10px solid var(--ivory);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        }
+        
+        .welcome-img .decoration {
+            position: absolute;
+            width: 150px;
+            height: 150px;
+            background: var(--rose-gold);
+            z-index: -1;
+            opacity: 0.3;
+        }
+        
+        .welcome-img .decoration-1 {
+            top: -30px;
+            left: -30px;
+        }
+        
+        .welcome-img .decoration-2 {
+            bottom: -30px;
+            right: -30px;
+        }
+        
+        .welcome-content h2 {
+            font-size: 2.5rem;
+            margin-bottom: 30px;
+            color: var(--deep-mauve);
+        }
+        
+        .welcome-content h2 span {
+            color: var(--rose-gold);
+        }
+        
+        .welcome-content p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 30px;
+            opacity: 0.8;
+        }
+        
+        .signature {
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            color: var(--deep-mauve);
+            margin-top: 30px;
+            font-size: 1.2rem;
+        }
+        
+        /* Servicios femeninos */
+        .services {
+            padding: 120px 0;
+            background-color: var(--ivory);
+        }
+        
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+        }
+        
+        .service-card {
+            background: var(--soft-pink);
+            padding: 40px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.03);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+            border-radius: 5px;
+        }
+        
+        .service-card:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 5px;
+            height: 0;
+            background: var(--rose-gold);
+            transition: var(--transition);
+        }
+        
+        .service-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.08);
+        }
+        
+        .service-card:hover:before {
+            height: 100%;
+        }
+        
+        .service-icon {
+            font-size: 2.5rem;
+            color: var(--rose-gold);
+            margin-bottom: 25px;
+        }
+        
+        .service-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            position: relative;
+            padding-bottom: 15px;
+        }
+        
+        .service-card h3:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 40px;
+            height: 2px;
+            background: var(--rose-gold);
+        }
+        
+        .service-card p {
+            font-size: 1rem;
+            line-height: 1.8;
+            margin-bottom: 20px;
+            opacity: 0.8;
+        }
+        
+        .service-price {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--deep-mauve);
+        }
+        
+        /* Tratamientos especiales */
+        .treatments {
+            padding: 120px 0;
+            background: linear-gradient(rgba(255, 249, 245, 0.9), rgba(255, 249, 245, 0.9)), url('https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1580&q=80') no-repeat center center/cover;
+            background-attachment: fixed;
+        }
+        
+        .treatments-container {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        
+        .treatments-container h2 {
+            font-size: 2.8rem;
+            margin-bottom: 30px;
+        }
+        
+        .treatments-container p {
+            font-size: 1.1rem;
+            margin-bottom: 40px;
+            opacity: 0.9;
+        }
+        
+        /* Galería femenina */
+        .gallery {
+            padding: 120px 0;
+            background-color: var(--soft-pink);
+        }
+        
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-auto-rows: 250px;
+            gap: 20px;
+        }
+        
+        .gallery-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 5px;
+        }
+        
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: var(--transition);
+        }
+        
+        .gallery-item:hover img {
+            transform: scale(1.05);
+        }
+        
+        .gallery-item:nth-child(1) {
+            grid-row: span 2;
+        }
+        
+        .gallery-item:nth-child(3) {
+            grid-column: span 2;
+        }
+        
+        .gallery-item:nth-child(5) {
+            grid-column: span 2;
+        }
+        
+        .gallery-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(212, 165, 165, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: var(--transition);
+        }
+        
+        .gallery-item:hover .gallery-overlay {
+            opacity: 1;
+        }
+        
+        .gallery-overlay i {
+            color: var(--ivory);
+            font-size: 2rem;
+        }
+        
+        /* Testimonios */
+        .testimonials {
+            padding: 120px 0;
+            background-color: var(--ivory);
+        }
+        
+        .testimonials-container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        .testimonial-slide {
+            text-align: center;
+            padding: 0 50px;
+        }
+        
+        .testimonial-text {
+            font-size: 1.3rem;
+            line-height: 1.8;
+            margin-bottom: 30px;
+            font-style: italic;
+            position: relative;
+            color: var(--deep-mauve);
+        }
+        
+        .testimonial-text:before, .testimonial-text:after {
+            content: '"';
+            font-size: 3rem;
+            color: var(--rose-gold);
+            opacity: 0.5;
+            position: absolute;
+        }
+        
+        .testimonial-text:before {
+            top: -20px;
+            left: -30px;
+        }
+        
+        .testimonial-text:after {
+            bottom: -40px;
+            right: -30px;
+        }
+        
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 50px;
+        }
+        
+        .testimonial-author img {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--rose-gold);
+            margin-right: 20px;
+        }
+        
+        .author-info h4 {
+            font-size: 1.2rem;
+            margin-bottom: 5px;
+        }
+        
+        .author-info p {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            color: var(--rose-gold);
+        }
+        
+        /* CTA */
+        .cta {
+            padding: 100px 0;
+            background-color: var(--rose-gold);
+            color: var(--dark-brown);
+            text-align: center;
+        }
+        
+        .cta h2 {
+            font-size: 3rem;
+            margin-bottom: 30px;
+            color: var(--ivory);
+        }
+        
+        .cta p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto 40px;
+            line-height: 1.8;
+            color: var(--ivory);
+        }
+        
+        .cta .btn {
+            background: var(--ivory);
+            color: var(--deep-mauve);
+        }
+        
+        .cta .btn:before {
+            background: var(--deep-mauve);
+        }
+        
+        .cta .btn:hover {
+            color: var(--ivory);
+        }
+        
+        /* Footer elegante */
+        footer {
+            background-color: var(--deep-mauve);
+            color: var(--ivory);
+            padding: 80px 0 30px;
+        }
+        
+        .footer-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 50px;
+            margin-bottom: 60px;
+        }
+        
+        .footer-col h3 {
+            font-size: 1.5rem;
+            margin-bottom: 30px;
+            color: var(--ivory);
+            position: relative;
+            padding-bottom: 15px;
+        }
+        
+        .footer-col h3:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 40px;
+            height: 2px;
+            background: var(--rose-gold);
+        }
+        
+        .footer-about p {
+            margin-bottom: 20px;
+            line-height: 1.8;
+            opacity: 0.8;
+        }
+        
+        .footer-links ul {
+            list-style: none;
+        }
+        
+        .footer-links ul li {
+            margin-bottom: 15px;
+        }
+        
+        .footer-links ul li a {
+            color: var(--ivory);
+            transition: var(--transition);
+            opacity: 0.8;
+        }
+        
+        .footer-links ul li a:hover {
+            color: var(--rose-gold);
+            padding-left: 5px;
+        }
+        
+        .footer-contact p {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            opacity: 0.8;
+        }
+        
+        .footer-contact i {
+            margin-right: 10px;
+            color: var(--rose-gold);
+        }
+        
+        .footer-social {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .footer-social a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 249, 245, 0.1);
+            border-radius: 50%;
+            transition: var(--transition);
+            color: var(--ivory);
+        }
+        
+        .footer-social a:hover {
+            background: var(--rose-gold);
+            color: var(--deep-mauve);
+        }
+        
+        .footer-bottom {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 249, 245, 0.1);
+        }
+        
+        .footer-bottom p {
+            opacity: 0.7;
+            font-size: 0.9rem;
+        }
+        
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .hero-title {
+                font-size: 4rem;
+            }
+        }
+        
+        @media (max-width: 992px) {
+            .menu-toggle {
+                display: block;
+            }
+            
+            nav {
+                position: fixed;
+                top: 80px;
+                left: -100%;
+                width: 100%;
+                height: calc(100vh - 80px);
+                background: var(--ivory);
+                transition: var(--transition);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            
+            nav.active {
+                left: 0;
+            }
+            
+            nav ul {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            nav ul li {
+                margin: 15px 0;
+            }
+            
+            .hero-title {
+                font-size: 3.5rem;
+            }
+            
+            .gallery-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .hero {
+                min-height: 700px;
+            }
+            
+            .hero-title {
+                font-size: 3rem;
+            }
+            
+            .hero-btns {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .section-title {
+                font-size: 2.5rem;
+            }
+            
+            .welcome-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .welcome-img {
+                height: 400px;
+            }
+            
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .hero-title {
+                font-size: 2.5rem;
+            }
+            
+            .hero-subtitle {
+                font-size: 1rem;
+            }
+            
+            .section-title {
+                font-size: 2rem;
+            }
+            
+            .gallery-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .gallery-item {
+                grid-column: span 1 !important;
+                grid-row: span 1 !important;
+            }
+            
+            .testimonial-text {
+                font-size: 1.1rem;
+                padding: 0 20px;
+            }
+            
+            .cta h2 {
+                font-size: 2.2rem;
+            }
+        }
     </style>
 </head>
-<body class="bg-pink-50 text-gray-800">
-
-    <header class="bg-white shadow-md sticky top-0 z-50">
-        <nav class="container mx-auto px-6 py-3 flex justify-between items-center">
-            <a href="#" class="text-2xl font-bold text-pink-600" onclick="showPage('home')">Salón Elegancia</a>
-            <div class="hidden md:flex space-x-6 items-center">
-                <a href="#" class="text-gray-600 hover:text-pink-600 transition duration-300" onclick="showPage('home')">Inicio</a>
-                <a href="#" class="text-gray-600 hover:text-pink-600 transition duration-300" onclick="showPage('services')">Servicios</a>
-                <a href="#" class="text-gray-600 hover:text-pink-600 transition duration-300" onclick="showPage('booking')">Reservar Cita</a>
-                <a href="#" class="text-gray-600 hover:text-pink-600 transition duration-300" onclick="showPage('professionals')">Profesionales</a>
-                <a href="#" class="text-gray-600 hover:text-pink-600 transition duration-300" onclick="showPage('contact')">Contacto</a>
-                <a href="#" class="bg-pink-500 text-white px-4 py-2 rounded-full hover:bg-pink-600 transition duration-300" onclick="showPage('client-portal')">Portal Cliente</a>
+<body>
+    <!-- Header elegante -->
+    <header id="header">
+        <div class="container header-container">
+            <a href="#" class="logo">Belle <span>Époque</span></a>
+            
+            <div class="menu-toggle">
+                <i class="fas fa-bars"></i>
             </div>
-            <div class="md:hidden">
-                <button id="mobile-menu-button" class="text-gray-600 focus:outline-none">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
-                </button>
-            </div>
-        </nav>
-        <div id="mobile-menu" class="md:hidden hidden bg-white py-2">
-            <a href="#" class="block px-6 py-2 text-gray-600 hover:bg-pink-50" onclick="showPage('home'); toggleMenu();">Inicio</a>
-            <a href="#" class="block px-6 py-2 text-gray-600 hover:bg-pink-50" onclick="showPage('services'); toggleMenu();">Servicios</a>
-            <a href="#" class="block px-6 py-2 text-gray-600 hover:bg-pink-50" onclick="showPage('booking'); toggleMenu();">Reservar Cita</a>
-            <a href="#" class="block px-6 py-2 text-gray-600 hover:bg-pink-50" onclick="showPage('professionals'); toggleMenu();">Profesionales</a>
-            <a href="#" class="block px-6 py-2 text-gray-600 hover:bg-pink-50" onclick="showPage('contact'); toggleMenu();">Contacto</a>
-            <a href="#" class="block px-6 py-2 text-pink-500 hover:bg-pink-50" onclick="showPage('client-portal'); toggleMenu();">Portal Cliente</a>
+            
+            <nav>
+                <ul>
+                    <li><a href="#home">Inicio</a></li>
+                    <li><a href="#welcome">Bienvenida</a></li>
+                    <li><a href="#services">Servicios</a></li>
+                    <li><a href="#treatments">Tratamientos</a></li>
+                    <li><a href="#gallery">Galería</a></li>
+                    <li><a href="#contact">Contacto</a></li>
+                </ul>
+            </nav>
         </div>
     </header>
-
-    <main class="container mx-auto px-6 py-8">
-
-        <section id="home" class="page-section active">
-            <div class="bg-gradient-to-r from-pink-100 to-purple-100 rounded-lg shadow-lg p-8 md:p-12 text-center mb-12">
-                <h1 class="text-4xl md:text-5xl font-bold text-gray-800 mb-4">Bienvenida a Salón Elegancia</h1>
-                <p class="text-lg text-gray-600 mb-8">Donde tu belleza y bienestar son nuestra prioridad. Reserva tu cita hoy mismo.</p>
-                <img src="https://placehold.co/1200x400/fbcfe8/4a5568?text=Imagen+del+Salón" alt="Imagen del Salón" class="rounded-lg shadow-md mx-auto mb-8 w-full h-auto object-cover" style="max-height: 400px;">
-                <button class="bg-pink-500 text-white px-8 py-3 rounded-full text-lg font-semibold hover:bg-pink-600 transition duration-300 shadow-md" onclick="showPage('booking')">
-                    Reservar Ahora <span class="ml-2">&rarr;</span>
-                </button>
-            </div>
-
-            <h2 class="text-3xl font-bold text-center text-gray-800 mb-8">Servicios Destacados</h2>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
-                <div class="bg-white rounded-lg shadow-md p-6 text-center hover:shadow-xl transition duration-300">
-                    <img src="https://placehold.co/100x100/ffffff/e91e63?text=Corte" alt="Icono Corte de Cabello" class="w-16 h-16 mx-auto mb-4 rounded-full border-2 border-pink-200">
-                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Cortes Modernos</h3>
-                    <p class="text-gray-600">Estilos actuales para realzar tu look.</p>
+    
+    <!-- Hero Section Femenino -->
+    <section class="hero" id="home">
+        <div class="container">
+            <div class="hero-content">
+                <p class="hero-subtitle">Salón de Belleza Exclusivo</p>
+                <h1 class="hero-title">Donde tu belleza encuentra su máxima expresión</h1>
+                <p class="hero-text">En Belle Époque, creamos experiencias de belleza personalizadas que realzan tu esencia única. Deja que nuestro equipo de expertas te guíe en un viaje de transformación y auto-redescubrimiento.</p>
+                <div class="hero-btns">
+                    <a href="#services" class="btn">Descubre Más</a>
+                    <a href="#contact" class="btn btn-outline">Reserva Ahora</a>
                 </div>
-                <div class="bg-white rounded-lg shadow-md p-6 text-center hover:shadow-xl transition duration-300">
-                     <img src="https://placehold.co/100x100/ffffff/e91e63?text=Color" alt="Icono Coloración" class="w-16 h-16 mx-auto mb-4 rounded-full border-2 border-pink-200">
-                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Coloración Profesional</h3>
-                    <p class="text-gray-600">Colores vibrantes y técnicas avanzadas.</p>
-                </div>
-                <div class="bg-white rounded-lg shadow-md p-6 text-center hover:shadow-xl transition duration-300">
-                    <img src="https://placehold.co/100x100/ffffff/e91e63?text=Facial" alt="Icono Tratamiento Facial" class="w-16 h-16 mx-auto mb-4 rounded-full border-2 border-pink-200">
-                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Tratamientos Faciales</h3>
-                    <p class="text-gray-600">Relájate y rejuvenece tu piel.</p>
-                </div>
-            </div>
-
-             <div class="bg-white rounded-lg shadow-md p-8 mb-12">
-                <h2 class="text-3xl font-bold text-center text-gray-800 mb-6">Promociones Especiales</h2>
-                <div class="bg-pink-100 border-l-4 border-pink-500 text-pink-700 p-4 rounded-md" role="alert">
-                    <p class="font-bold">¡Oferta de Verano!</p>
-                    <p>20% de descuento en todos los tratamientos faciales durante el mes de Julio. ¡No te lo pierdas!</p>
-                </div>
-                </div>
-        </section>
-
-        <section id="services" class="page-section">
-            <h1 class="text-4xl font-bold text-center text-gray-800 mb-10">Nuestros Servicios</h1>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition duration-300">
-                    <img src="https://placehold.co/600x400/fbcfe8/4a5568?text=Corte+de+Cabello" alt="Imagen Corte de Cabello" class="w-full h-48 object-cover">
-                    <div class="p-6">
-                        <h3 class="text-xl font-semibold text-gray-800 mb-2">Corte de Cabello (Dama/Caballero)</h3>
-                        <p class="text-gray-600 mb-3">Incluye lavado, corte y peinado.</p>
-                        <p class="text-lg font-bold text-pink-600">Desde $25</p>
-                        <p class="text-sm text-gray-500 mt-1">Duración: 45-60 min</p>
-                    </div>
-                </div>
-                <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition duration-300">
-                    <img src="https://placehold.co/600x400/fbcfe8/4a5568?text=Coloración" alt="Imagen Coloración" class="w-full h-48 object-cover">
-                    <div class="p-6">
-                        <h3 class="text-xl font-semibold text-gray-800 mb-2">Coloración Completa</h3>
-                        <p class="text-gray-600 mb-3">Aplicación de tinte en todo el cabello.</p>
-                        <p class="text-lg font-bold text-pink-600">Desde $60</p>
-                         <p class="text-sm text-gray-500 mt-1">Duración: 90-120 min</p>
-                    </div>
-                </div>
-                <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition duration-300">
-                    <img src="https://placehold.co/600x400/fbcfe8/4a5568?text=Manicura" alt="Imagen Manicura" class="w-full h-48 object-cover">
-                    <div class="p-6">
-                        <h3 class="text-xl font-semibold text-gray-800 mb-2">Manicura Clásica</h3>
-                        <p class="text-gray-600 mb-3">Limado, cutículas, esmaltado.</p>
-                        <p class="text-lg font-bold text-pink-600">$15</p>
-                         <p class="text-sm text-gray-500 mt-1">Duración: 30 min</p>
-                    </div>
-                </div>
-                 <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition duration-300 border-2 border-pink-300">
-                    <img src="https://placehold.co/600x400/fbcfe8/4a5568?text=Paquete+Relax" alt="Imagen Paquete Relax" class="w-full h-48 object-cover">
-                    <div class="p-6">
-                        <span class="inline-block bg-pink-500 text-white text-xs px-2 py-1 rounded-full uppercase font-semibold tracking-wide mb-2">Paquete Especial</span>
-                        <h3 class="text-xl font-semibold text-gray-800 mb-2">Paquete Relax Total</h3>
-                        <p class="text-gray-600 mb-3">Corte + Tratamiento capilar + Masaje relajante.</p>
-                        <p class="text-lg font-bold text-pink-600">$90 <span class="text-sm text-gray-500 line-through ml-1">$110</span></p>
-                         <p class="text-sm text-gray-500 mt-1">Duración: 120 min</p>
-                    </div>
-                </div>
-                </div>
-        </section>
-
-        <section id="booking" class="page-section">
-            <h1 class="text-4xl font-bold text-center text-gray-800 mb-10">Reserva tu Cita</h1>
-            <div class="bg-white rounded-lg shadow-md p-8 max-w-3xl mx-auto">
-                <form id="booking-form">
-                    <div class="mb-6">
-                        <label for="service" class="block text-lg font-medium text-gray-700 mb-2">1. Selecciona el Servicio</label>
-                        <select id="service" name="service" class="w-full p-3 border border-gray-300 rounded-md focus:ring-pink-500 focus:border-pink-500">
-                            <option value="">-- Elige un servicio --</option>
-                            <option value="corte_dama">Corte de Cabello (Dama) - $30</option>
-                            <option value="corte_caballero">Corte de Cabello (Caballero) - $25</option>
-                            <option value="coloracion">Coloración Completa - $60</option>
-                            <option value="manicura">Manicura Clásica - $15</option>
-                            <option value="facial">Tratamiento Facial - $50</option>
-                            <option value="paquete_relax">Paquete Relax Total - $90</option>
-                            </select>
-                    </div>
-
-                    <div class="mb-6">
-                        <label for="professional" class="block text-lg font-medium text-gray-700 mb-2">2. Selecciona un Profesional (Opcional)</label>
-                        <select id="professional" name="professional" class="w-full p-3 border border-gray-300 rounded-md focus:ring-pink-500 focus:border-pink-500">
-                            <option value="any">Cualquier Profesional Disponible</option>
-                            <option value="ana">Ana López (Estilista Senior)</option>
-                            <option value="carlos">Carlos Gómez (Estilista)</option>
-                            <option value="maria">María Fernández (Esteticista)</option>
-                            </select>
-                    </div>
-
-                    <div class="mb-6">
-                         <label class="block text-lg font-medium text-gray-700 mb-2">3. Selecciona Fecha y Hora</label>
-                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div>
-                                <label for="date" class="block text-sm font-medium text-gray-600 mb-1">Fecha</label>
-                                <input type="date" id="date" name="date" class="w-full p-3 border border-gray-300 rounded-md focus:ring-pink-500 focus:border-pink-500" min="">
-                            </div>
-                             <div>
-                                <label for="time" class="block text-sm font-medium text-gray-600 mb-1">Hora Disponible</label>
-                                <select id="time" name="time" class="w-full p-3 border border-gray-300 rounded-md focus:ring-pink-500 focus:border-pink-500" disabled>
-                                    <option value="">-- Selecciona una fecha primero --</option>
-                                    <option value="09:00">09:00 AM</option>
-                                    <option value="10:00">10:00 AM</option>
-                                    <option value="11:00">11:00 AM</option>
-                                    <option value="14:00">02:00 PM</option>
-                                    <option value="15:00">03:00 PM</option>
-                                </select>
-                            </div>
-                         </div>
-                         <div class="mt-4 p-4 bg-gray-100 rounded-md text-center text-gray-500">
-                             (Aquí podría ir un calendario visual interactivo)
-                         </div>
-                    </div>
-
-                     <div class="mb-6">
-                        <label class="block text-lg font-medium text-gray-700 mb-2">4. Tus Datos</label>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div>
-                                <label for="name" class="block text-sm font-medium text-gray-600 mb-1">Nombre Completo</label>
-                                <input type="text" id="name" name="name" required class="w-full p-3 border border-gray-300 rounded-md focus:ring-pink-500 focus:border-pink-500">
-                            </div>
-                            <div>
-                                <label for="email" class="block text-sm font-medium text-gray-600 mb-1">Correo Electrónico</label>
-                                <input type="email" id="email" name="email" required class="w-full p-3 border border-gray-300 rounded-md focus:ring-pink-500 focus:border-pink-500">
-                            </div>
-                            <div>
-                                <label for="phone" class="block text-sm font-medium text-gray-600 mb-1">Teléfono</label>
-                                <input type="tel" id="phone" name="phone" required class="w-full p-3 border border-gray-300 rounded-md focus:ring-pink-500 focus:border-pink-500">
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="text-center">
-                        <button type="submit" class="bg-pink-500 text-white px-8 py-3 rounded-full text-lg font-semibold hover:bg-pink-600 transition duration-300 shadow-md">
-                            Confirmar Reserva
-                        </button>
-                    </div>
-                </form>
-                 <div id="booking-confirmation" class="mt-6 hidden p-4 bg-green-100 border border-green-400 text-green-700 rounded-md text-center">
-                    ¡Tu cita ha sido reservada con éxito! Recibirás un correo de confirmación pronto.
-                </div>
-                 <div id="booking-error" class="mt-6 hidden p-4 bg-red-100 border border-red-400 text-red-700 rounded-md text-center">
-                    Hubo un error al procesar tu reserva. Por favor, inténtalo de nuevo o contáctanos.
-                </div>
-            </div>
-        </section>
-
-        <section id="professionals" class="page-section">
-            <h1 class="text-4xl font-bold text-center text-gray-800 mb-10">Nuestro Equipo</h1>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <div class="bg-white rounded-lg shadow-md p-6 text-center hover:shadow-xl transition duration-300">
-                    <img src="https://placehold.co/150x150/fbcfe8/4a5568?text=Ana+L." alt="Foto Ana López" class="w-32 h-32 rounded-full mx-auto mb-4 border-4 border-pink-200">
-                    <h3 class="text-xl font-semibold text-gray-800 mb-1">Ana López</h3>
-                    <p class="text-pink-600 font-medium mb-2">Estilista Senior</p>
-                    <p class="text-gray-600 text-sm mb-3">Especialista en coloración y cortes modernos. 10 años de experiencia.</p>
-                    <div class="flex justify-center text-yellow-400 mb-3">
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star-half-alt"></i>
-                        <span class="text-gray-500 text-sm ml-2">(4.8/5)</span>
-                    </div>
-                     <p class="text-sm text-gray-500">Horario: Lunes a Viernes, 9am - 6pm</p>
-                </div>
-                <div class="bg-white rounded-lg shadow-md p-6 text-center hover:shadow-xl transition duration-300">
-                    <img src="https://placehold.co/150x150/fbcfe8/4a5568?text=Carlos+G." alt="Foto Carlos Gómez" class="w-32 h-32 rounded-full mx-auto mb-4 border-4 border-pink-200">
-                    <h3 class="text-xl font-semibold text-gray-800 mb-1">Carlos Gómez</h3>
-                    <p class="text-pink-600 font-medium mb-2">Estilista</p>
-                    <p class="text-gray-600 text-sm mb-3">Experto en cortes masculinos y peinados para eventos.</p>
-                     <div class="flex justify-center text-yellow-400 mb-3">
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="far fa-star"></i>
-                         <span class="text-gray-500 text-sm ml-2">(4.2/5)</span>
-                    </div>
-                    <p class="text-sm text-gray-500">Horario: Martes a Sábado, 10am - 7pm</p>
-                </div>
-                <div class="bg-white rounded-lg shadow-md p-6 text-center hover:shadow-xl transition duration-300">
-                    <img src="https://placehold.co/150x150/fbcfe8/4a5568?text=María+F." alt="Foto María Fernández" class="w-32 h-32 rounded-full mx-auto mb-4 border-4 border-pink-200">
-                    <h3 class="text-xl font-semibold text-gray-800 mb-1">María Fernández</h3>
-                    <p class="text-pink-600 font-medium mb-2">Esteticista</p>
-                    <p class="text-gray-600 text-sm mb-3">Especializada en tratamientos faciales, manicura y pedicura.</p>
-                     <div class="flex justify-center text-yellow-400 mb-3">
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                         <span class="text-gray-500 text-sm ml-2">(5.0/5)</span>
-                    </div>
-                    <p class="text-sm text-gray-500">Horario: Lunes a Viernes, 10am - 5pm</p>
-                </div>
-                </div>
-        </section>
-
-        <section id="contact" class="page-section">
-             <h1 class="text-4xl font-bold text-center text-gray-800 mb-10">Contacto</h1>
-             <div class="bg-white rounded-lg shadow-md p-8 grid grid-cols-1 md:grid-cols-2 gap-8">
-                 <div>
-                     <h2 class="text-2xl font-semibold text-gray-800 mb-4">Visítanos o Llámanos</h2>
-                     <p class="text-gray-600 mb-3">
-                         <strong class="lucide mr-2">map-pin</strong> Calle Falsa 123, Ciudad, País
-                     </p>
-                     <p class="text-gray-600 mb-3">
-                         <strong class="lucide mr-2">phone</strong> +123 456 7890
-                     </p>
-                     <p class="text-gray-600 mb-3">
-                         <strong class="lucide mr-2">mail</strong> info@salonelegancia.com
-                     </p>
-                     <h3 class="text-xl font-semibold text-gray-800 mt-6 mb-2">Horario de Atención</h3>
-                     <p class="text-gray-600">Lunes a Viernes: 9:00 AM - 7:00 PM</p>
-                     <p class="text-gray-600">Sábados: 10:00 AM - 5:00 PM</p>
-                     <p class="text-gray-600">Domingos: Cerrado</p>
-                     <div class="mt-6 h-64 bg-gray-200 rounded-md flex items-center justify-center text-gray-500">
-                         (Aquí iría un mapa interactivo)
-                     </div>
-                 </div>
-                 <div>
-                     <h2 class="text-2xl font-semibold text-gray-800 mb-4">Envíanos un Mensaje</h2>
-                     <form action="#" method="POST">
-                         <div class="mb-4">
-                             <label for="contact-name" class="block text-sm font-medium text-gray-700 mb-1">Nombre</label>
-                             <input type="text" id="contact-name" name="contact-name" required class="w-full p-3 border border-gray-300 rounded-md focus:ring-pink-500 focus:border-pink-500">
-                         </div>
-                         <div class="mb-4">
-                             <label for="contact-email" class="block text-sm font-medium text-gray-700 mb-1">Correo Electrónico</label>
-                             <input type="email" id="contact-email" name="contact-email" required class="w-full p-3 border border-gray-300 rounded-md focus:ring-pink-500 focus:border-pink-500">
-                         </div>
-                         <div class="mb-4">
-                             <label for="contact-message" class="block text-sm font-medium text-gray-700 mb-1">Mensaje</label>
-                             <textarea id="contact-message" name="contact-message" rows="4" required class="w-full p-3 border border-gray-300 rounded-md focus:ring-pink-500 focus:border-pink-500"></textarea>
-                         </div>
-                         <button type="submit" class="w-full bg-pink-500 text-white px-6 py-3 rounded-md text-lg font-semibold hover:bg-pink-600 transition duration-300 shadow-md">
-                             Enviar Mensaje
-                         </button>
-                     </form>
-                 </div>
-             </div>
-        </section>
-
-        <section id="client-portal" class="page-section">
-            <h1 class="text-4xl font-bold text-center text-gray-800 mb-10">Portal del Cliente</h1>
-
-            <div id="login-form-container" class="bg-white rounded-lg shadow-md p-8 max-w-md mx-auto">
-                <h2 class="text-2xl font-semibold text-center text-gray-800 mb-6">Iniciar Sesión</h2>
-                <form id="login-form">
-                    <div class="mb-4">
-                        <label for="login-email" class="block text-sm font-medium text-gray-700 mb-1">Correo Electrónico</label>
-                        <input type="email" id="login-email" name="login-email" required class="w-full p-3 border border-gray-300 rounded-md focus:ring-pink-500 focus:border-pink-500">
-                    </div>
-                    <div class="mb-6">
-                        <label for="login-password" class="block text-sm font-medium text-gray-700 mb-1">Contraseña</label>
-                        <input type="password" id="login-password" name="login-password" required class="w-full p-3 border border-gray-300 rounded-md focus:ring-pink-500 focus:border-pink-500">
-                         <a href="#" class="text-sm text-pink-600 hover:underline mt-1 block text-right">¿Olvidaste tu contraseña?</a>
-                    </div>
-                    <button type="submit" class="w-full bg-pink-500 text-white px-6 py-3 rounded-md text-lg font-semibold hover:bg-pink-600 transition duration-300 shadow-md mb-4">
-                        Ingresar
-                    </button>
-                     <p class="text-center text-gray-600 text-sm">
-                        ¿No tienes cuenta? <a href="#" class="text-pink-600 hover:underline" onclick="/* Show registration form - requires more JS */">Regístrate aquí</a>
-                    </p>
-                </form>
-                 <div id="login-error" class="mt-4 hidden p-3 bg-red-100 border border-red-400 text-red-700 rounded-md text-center text-sm">
-                    Correo o contraseña incorrectos.
-                </div>
-            </div>
-
-            <div id="client-dashboard" class="hidden bg-white rounded-lg shadow-md p-8">
-                <div class="flex justify-between items-center mb-6">
-                     <h2 class="text-3xl font-semibold text-gray-800">Bienvenida, [Nombre Cliente]</h2>
-                     <button onclick="logout()" class="text-sm text-gray-500 hover:text-pink-600">Cerrar Sesión</button>
-                </div>
-
-                <div class="mb-8">
-                    <h3 class="text-xl font-semibold text-gray-700 mb-4">Próximas Citas</h3>
-                    <div class="border border-gray-200 rounded-lg overflow-hidden">
-                        <table class="min-w-full divide-y divide-gray-200">
-                            <thead class="bg-gray-50">
-                                <tr>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Fecha</th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Hora</th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Servicio</th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Profesional</th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Acciones</th>
-                                </tr>
-                            </thead>
-                            <tbody class="bg-white divide-y divide-gray-200">
-                                <tr>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">15/08/2025</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">10:00 AM</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Corte de Cabello</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Ana López</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                        <a href="#" class="text-indigo-600 hover:text-indigo-900 mr-3">Modificar</a>
-                                        <a href="#" class="text-red-600 hover:text-red-900">Cancelar</a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td colspan="5" class="px-6 py-4 text-center text-sm text-gray-500">(No hay más citas programadas)</td>
-                                 </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-                <div>
-                    <h3 class="text-xl font-semibold text-gray-700 mb-4">Historial de Servicios</h3>
-                     <div class="border border-gray-200 rounded-lg overflow-hidden">
-                        <table class="min-w-full divide-y divide-gray-200">
-                            <thead class="bg-gray-50">
-                                <tr>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Fecha</th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Servicio</th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Profesional</th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Calificación</th>
-                                </tr>
-                            </thead>
-                            <tbody class="bg-white divide-y divide-gray-200">
-                                <tr>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">01/06/2025</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Coloración Completa</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Ana López</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-yellow-500">
-                                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
-                                        <a href="#" class="text-indigo-600 hover:text-indigo-900 ml-2 text-xs">(Editar)</a>
-                                    </td>
-                                </tr>
-                                 <tr>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">15/05/2025</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Manicura Clásica</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">María Fernández</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm ">
-                                        <a href="#" class="text-indigo-600 hover:text-indigo-900 text-xs">(Calificar Servicio)</a>
-                                    </td>
-                                </tr>
-                                </tbody>
-                        </table>
-                    </div>
-                </div>
-                 <div class="mt-8 text-center">
-                     <button class="bg-green-500 text-white px-6 py-2 rounded-full hover:bg-green-600 transition duration-300 shadow-md">
-                         Pagar Próxima Cita Online (Simulado)
-                     </button>
-                 </div>
-            </div>
-        </section>
-
-    </main>
-
-    <footer class="bg-gray-800 text-white mt-12">
-        <div class="container mx-auto px-6 py-8 grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div>
-                <h3 class="text-xl font-semibold mb-3">Salón Elegancia</h3>
-                <p class="text-gray-400 text-sm">Tu belleza, nuestra pasión. Ven y déjate consentir por nuestro equipo de expertos.</p>
-                 <div class="flex space-x-4 mt-4">
-                    <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-facebook-f"></i></a>
-                    <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-instagram"></i></a>
-                    <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-twitter"></i></a>
-                </div>
-            </div>
-            <div>
-                <h3 class="text-xl font-semibold mb-3">Enlaces Rápidos</h3>
-                <ul class="space-y-2 text-sm">
-                    <li><a href="#" class="text-gray-400 hover:text-white" onclick="showPage('home')">Inicio</a></li>
-                    <li><a href="#" class="text-gray-400 hover:text-white" onclick="showPage('services')">Servicios</a></li>
-                    <li><a href="#" class="text-gray-400 hover:text-white" onclick="showPage('booking')">Reservar Cita</a></li>
-                    <li><a href="#" class="text-gray-400 hover:text-white" onclick="showPage('professionals')">Profesionales</a></li>
-                    <li><a href="#" class="text-gray-400 hover:text-white" onclick="showPage('contact')">Contacto</a></li>
-                     <li><a href="#" class="text-gray-400 hover:text-white" onclick="showPage('client-portal')">Portal Cliente</a></li>
-                </ul>
-            </div>
-             <div>
-                <h3 class="text-xl font-semibold mb-3">Contacto</h3>
-                <p class="text-gray-400 text-sm mb-2">Calle Falsa 123, Ciudad</p>
-                <p class="text-gray-400 text-sm mb-2">info@salonelegancia.com</p>
-                <p class="text-gray-400 text-sm">+123 456 7890</p>
             </div>
         </div>
-        <div class="bg-gray-900 py-4">
-            <p class="text-center text-gray-500 text-sm">&copy; 2025 Salón Elegancia. Todos los derechos reservados.</p>
+    </section>
+    
+    <!-- Sección de Bienvenida -->
+    <section class="welcome" id="welcome">
+        <div class="container welcome-container">
+            <div class="welcome-img">
+                <img src="https://images.unsplash.com/photo-1595475884562-073c30d45670?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1580&q=80" alt="Salón Belle Époque" class="main-img">
+                <div class="decoration decoration-1"></div>
+                <div class="decoration decoration-2"></div>
+            </div>
+            
+            <div class="welcome-content">
+                <h2>Bienvenida a tu <span>santuario de belleza</span></h2>
+                <p>Desde 2012, Belle Époque ha sido el refugio de mujeres que buscan más que un simple servicio de belleza. Nos especializamos en crear experiencias que nutren tanto tu exterior como tu interior.</p>
+                <p>Nuestro salón fue diseñado para ofrecer un ambiente de tranquilidad y elegancia, donde cada detalle ha sido cuidadosamente seleccionado para tu comodidad y placer.</p>
+                <p class="signature">Isabel Martínez, Fundadora</p>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Servicios Femeninos -->
+    <section class="services" id="services">
+        <div class="container">
+            <h2 class="section-title">Nuestros <span>Servicios</span></h2>
+            
+            <div class="services-grid">
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-spa"></i>
+                    </div>
+                    <h3>Tratamientos Capilares</h3>
+                    <p>Desde cortes personalizados hasta terapias reconstructivas, nuestro equipo de estilistas certificadas creará el look perfecto para ti.</p>
+                    <p class="service-price">Desde $90</p>
+                </div>
+                
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-paint-brush"></i>
+                    </div>
+                    <h3>Coloración Avanzada</h3>
+                    <p>Técnicas de coloración sin amoníaco, balayage, mechas y corrección de color con los productos más suaves y efectivos del mercado.</p>
+                    <p class="service-price">Desde $120</p>
+                </div>
+                
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-magic"></i>
+                    </div>
+                    <h3>Maquillaje Profesional</h3>
+                    <p>Maquillaje para ocasiones especiales o para el día a día, adaptado a tu tipo de piel y estilo personal.</p>
+                    <p class="service-price">Desde $70</p>
+                </div>
+                
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-hand-holding-water"></i>
+                    </div>
+                    <h3>Manicura & Pedicura</h3>
+                    <p>Servicios de uñas con esmaltes de gel de larga duración y tratamientos hidratantes para manos y pies.</p>
+                    <p class="service-price">Desde $60</p>
+                </div>
+                
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-leaf"></i>
+                    </div>
+                    <h3>Tratamientos Faciales</h3>
+                    <p>Rejuvenecimiento facial, limpiezas profundas y terapias anti-edad con productos orgánicos y tecnología de punta.</p>
+                    <p class="service-price">Desde $110</p>
+                </div>
+                
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-fire"></i>
+                    </div>
+                    <h3>Depilación Especializada</h3>
+                    <p>Depilación con cera caliente y fría, así como tratamientos reductores para una piel suave por más tiempo.</p>
+                    <p class="service-price">Desde $50</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Tratamientos Especiales -->
+    <section class="treatments" id="treatments">
+        <div class="container treatments-container">
+            <h2>Experiencias de Belleza Únicas</h2>
+            <p>Descubre nuestros paquetes premium que combinan varios servicios para ofrecerte una transformación completa. Desde nuestro "Día de Reina" hasta el "Retiro de Belleza", diseñamos experiencias que te harán sentir renovada por dentro y por fuera.</p>
+            <a href="#contact" class="btn">Consulta Nuestros Paquetes</a>
+        </div>
+    </section>
+    
+    <!-- Galería Femenina -->
+    <section class="gallery" id="gallery">
+        <div class="container">
+            <h2 class="section-title">Nuestro <span>Espacio</span></h2>
+        </div>
+        
+        <div class="container gallery-grid">
+            <div class="gallery-item">
+                <img src="https://images.unsplash.com/photo-1519699047748-de8e457a634e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1580&q=80" alt="Salón Belle Époque">
+                <div class="gallery-overlay">
+                    <i class="fas fa-search-plus"></i>
+                </div>
+            </div>
+            
+            <div class="gallery-item">
+                <img src="https://images.unsplash.com/photo-1596704017256-9a8a576a0d38?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1587&q=80" alt="Maquillaje">
+                <div class="gallery-overlay">
+                    <i class="fas fa-search-plus"></i>
+                </div>
+            </div>
+            
+            <div class="gallery-item">
+                <img src="https://images.unsplash.com/photo-1600334129128-685c5582fd35?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1580&q=80" alt="Tratamiento facial">
+                <div class="gallery-overlay">
+                    <i class="fas fa-search-plus"></i>
+                </div>
+            </div>
+            
+            <div class="gallery-item">
+                <img src="https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1580&q=80" alt="Coloración">
+                <div class="gallery-overlay">
+                    <i class="fas fa-search-plus"></i>
+                </div>
+            </div>
+            
+            <div class="gallery-item">
+                <img src="https://images.unsplash.com/photo-1599351431202-1e0f0137899a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1587&q=80" alt="Manicura">
+                <div class="gallery-overlay">
+                    <i class="fas fa-search-plus"></i>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Testimonios -->
+    <section class="testimonials">
+        <div class="container testimonials-container">
+            <h2 class="section-title">Voces de <span>Belle Époque</span></h2>
+            
+            <div class="testimonial-slide">
+                <p class="testimonial-text">Belle Époque no es solo un salón de belleza, es una experiencia que toda mujer debería darse. Desde el momento en que entras, te sientes cuidada y especial. Mi cabello nunca había lucido tan saludable como desde que comencé a visitarlas.</p>
+                
+                <div class="testimonial-author">
+                    <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Ana S.">
+                    <div class="author-info">
+                        <h4>Ana S.</h4>
+                        <p>Clienta desde 2015</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- CTA -->
+    <section class="cta">
+        <div class="container">
+            <h2>¿Lista para tu experiencia de belleza?</h2>
+            <p>Reserva tu cita hoy mismo y descubre por qué Belle Époque es el salón preferido de mujeres que buscan calidad, elegancia y un servicio personalizado.</p>
+            <a href="#contact" class="btn">Reservar Cita</a>
+        </div>
+    </section>
+    
+    <!-- Footer Elegante -->
+    <footer id="contact">
+        <div class="container">
+            <div class="footer-container">
+                <div class="footer-col footer-about">
+                    <h3>Belle Époque</h3>
+                    <p>Un espacio creado para mujeres que valoran la excelencia en servicios de belleza, donde cada visita es una experiencia única y personalizada.</p>
+                    <div class="footer-social">
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-whatsapp"></i></a>
+                    </div>
+                </div>
+                
+                <div class="footer-col footer-links">
+                    <h3>Servicios</h3>
+                    <ul>
+                        <li><a href="#">Cortes y Peinados</a></li>
+                        <li><a href="#">Coloración</a></li>
+                        <li><a href="#">Maquillaje</a></li>
+                        <li><a href="#">Uñas</a></li>
+                        <li><a href="#">Tratamientos Faciales</a></li>
+                        <li><a href="#">Depilación</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-col footer-contact">
+                    <h3>Contacto</h3>
+                    <p><i class="fas fa-map-marker-alt"></i> Calle Elegancia 456, Colonia Jardín</p>
+                    <p><i class="fas fa-phone"></i> (555) 123-4567</p>
+                    <p><i class="fas fa-envelope"></i> hola@belleepoque.com</p>
+                    <p><i class="fas fa-clock"></i> Martes a Sábado: 9:00 - 19:00</p>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2023 Belle Époque. Todos los derechos reservados. Diseñado con <i class="fas fa-heart"></i> para mujeres extraordinarias.</p>
+            </div>
         </div>
     </footer>
-
+    
     <script>
-        // --- Basic Page Navigation ---
-        const pages = document.querySelectorAll('.page-section');
-        const navLinks = document.querySelectorAll('nav a'); // Consider refining selector if needed
-        const mobileMenuButton = document.getElementById('mobile-menu-button');
-        const mobileMenu = document.getElementById('mobile-menu');
-
-        function showPage(pageId) {
-            // Hide all pages
-            pages.forEach(page => {
-                page.classList.remove('active');
-            });
-            // Show the target page
-            const targetPage = document.getElementById(pageId);
-            if (targetPage) {
-                targetPage.classList.add('active');
-            } else {
-                // Default to home if page not found
-                document.getElementById('home').classList.add('active');
-            }
-            // Scroll to top for better UX on page change
-            window.scrollTo(0, 0);
-        }
-
-        // --- Mobile Menu Toggle ---
-        function toggleMenu() {
-             mobileMenu.classList.toggle('hidden');
-        }
-        mobileMenuButton.addEventListener('click', toggleMenu);
-
-        // --- Booking Form Logic (Simulation) ---
-        const bookingForm = document.getElementById('booking-form');
-        const dateInput = document.getElementById('date');
-        const timeSelect = document.getElementById('time');
-        const confirmationMsg = document.getElementById('booking-confirmation');
-        const errorMsg = document.getElementById('booking-error');
-
-        // Set minimum date for date input to today
-        const today = new Date().toISOString().split('T')[0];
-        if(dateInput) dateInput.setAttribute('min', today);
-
-        // Enable time select only when date is chosen (basic example)
-        if(dateInput && timeSelect) {
-            dateInput.addEventListener('change', () => {
-                if (dateInput.value) {
-                    timeSelect.disabled = false;
-                    timeSelect.innerHTML = `
-                        <option value="">-- Elige una hora --</option>
-                        <option value="09:00">09:00 AM</option>
-                        <option value="10:00">10:00 AM</option>
-                        <option value="11:00">11:00 AM</option>
-                        <option value="14:00">02:00 PM</option>
-                        <option value="15:00">03:00 PM</option>
-                        <option value="16:00">04:00 PM</option>
-                        `;
-                } else {
-                    timeSelect.disabled = true;
-                     timeSelect.innerHTML = '<option value="">-- Selecciona una fecha primero --</option>';
-                }
-            });
-        }
-
-        // Handle booking form submission (simulation)
-         if(bookingForm) {
-            bookingForm.addEventListener('submit', (e) => {
-                e.preventDefault(); // Prevent actual form submission
-                confirmationMsg.classList.add('hidden'); // Hide previous messages
-                errorMsg.classList.add('hidden');
-
-                // Simulate a successful booking
-                // In a real app, you'd send data to the server here
-                console.log('Booking submitted (simulated):', {
-                    service: document.getElementById('service').value,
-                    professional: document.getElementById('professional').value,
-                    date: dateInput.value,
-                    time: timeSelect.value,
-                    name: document.getElementById('name').value,
-                    email: document.getElementById('email').value,
-                    phone: document.getElementById('phone').value,
-                });
-
-                // Show confirmation message (simulate success)
-                confirmationMsg.classList.remove('hidden');
-                bookingForm.reset(); // Clear the form
-                timeSelect.disabled = true; // Disable time again
-                timeSelect.innerHTML = '<option value="">-- Selecciona una fecha primero --</option>';
-
-
-                // Simulate an error (uncomment to test)
-                // errorMsg.classList.remove('hidden');
-            });
-         }
-
-
-        // --- Client Portal Login/Dashboard Logic (Simulation) ---
-        const loginFormContainer = document.getElementById('login-form-container');
-        const clientDashboard = document.getElementById('client-dashboard');
-        const loginForm = document.getElementById('login-form');
-        const loginErrorMsg = document.getElementById('login-error');
-
-        if(loginForm) {
-            loginForm.addEventListener('submit', (e) => {
-                e.preventDefault();
-                loginErrorMsg.classList.add('hidden');
-                const email = document.getElementById('login-email').value;
-                const password = document.getElementById('login-password').value;
-
-                // Simulate login check (replace with actual backend call)
-                if (email === 'cliente@ejemplo.com' && password === 'password') {
-                    loginFormContainer.style.display = 'none'; // Hide login form
-                    clientDashboard.classList.remove('hidden'); // Show dashboard
-                    // Optionally update dashboard with client name
-                    clientDashboard.querySelector('h2').textContent = 'Bienvenida, Cliente Ejemplo';
-                } else {
-                    loginErrorMsg.classList.remove('hidden'); // Show login error
-                }
-            });
-        }
-
-        function logout() {
-            // Simulate logout
-            clientDashboard.classList.add('hidden'); // Hide dashboard
-            loginFormContainer.style.display = 'block'; // Show login form
-            loginForm.reset(); // Clear login form fields
-            loginErrorMsg.classList.add('hidden'); // Hide any previous error
-            // Go back to the client portal section start
-            showPage('client-portal');
-        }
-
-        // --- Initial Page Load ---
-        // Ensure the home page is shown by default if no hash is present
-        if (!window.location.hash) {
-            showPage('home');
-        } else {
-            // Optional: Allow linking directly to sections via hash, e.g., #services
-            const hash = window.location.hash.substring(1);
-            showPage(hash || 'home');
-        }
-
-        // Optional: Handle back/forward navigation
-        window.addEventListener('popstate', () => {
-            const hash = window.location.hash.substring(1);
-            showPage(hash || 'home');
+        // Menú móvil
+        const menuToggle = document.querySelector('.menu-toggle');
+        const nav = document.querySelector('nav');
+        
+        menuToggle.addEventListener('click', () => {
+            nav.classList.toggle('active');
+            menuToggle.innerHTML = nav.classList.contains('active') ? '<i class="fas fa-times"></i>' : '<i class="fas fa-bars"></i>';
         });
-
+        
+        // Header scroll
+        const header = document.getElementById('header');
+        
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 100) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+        
+        // Cerrar menú al hacer clic en enlace
+        const navLinks = document.querySelectorAll('nav ul li a');
+        
+        navLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                nav.classList.remove('active');
+                menuToggle.innerHTML = '<i class="fas fa-bars"></i>';
+            });
+        });
     </script>
-
 </body>
 </html>

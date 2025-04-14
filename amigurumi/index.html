@@ -1,0 +1,1122 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Amigurumis Artesanales | [Nombre de tu Marca] | Hechos con Amor</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+            --primary: #E8B4B8; /* Rosa suave */
+            --primary-dark: #D282A6; /* Rosa más intenso */
+            --secondary: #F9F1F0; /* Fondo claro */
+            --accent: #A49393; /* Tonos tierra */
+            --dark: #67595E; /* Texto oscuro */
+            --light: #FFFFFF; /* Blanco */
+            --transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Montserrat', sans-serif;
+            color: var(--dark);
+            background-color: var(--secondary);
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+        
+        h1, h2, h3, h4 {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+            line-height: 1.3;
+        }
+        
+        /* Header elegante con efecto parallax */
+        .main-header {
+            height: 100vh;
+            background: linear-gradient(rgba(104, 80, 85, 0.7), rgba(104, 80, 85, 0.7)), 
+                        url('https://images.unsplash.com/photo-1608549036505-ead5b1de5415?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80') no-repeat center center/cover;
+            background-attachment: fixed;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: var(--light);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .logo-container {
+            margin-bottom: 2rem;
+            animation: fadeInDown 1s ease-out;
+        }
+        
+        .logo {
+            font-size: 4rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .slogan {
+            font-size: 1.5rem;
+            font-style: italic;
+            letter-spacing: 1px;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .slogan::after {
+            content: '';
+            position: absolute;
+            width: 50%;
+            height: 2px;
+            background: var(--light);
+            bottom: -10px;
+            left: 25%;
+        }
+        
+        .header-content {
+            max-width: 800px;
+            padding: 0 2rem;
+            animation: fadeInUp 1s ease-out;
+        }
+        
+        .header-content h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .header-content p {
+            font-size: 1.3rem;
+            margin-bottom: 2.5rem;
+        }
+        
+        /* Botón premium */
+        .btn {
+            display: inline-block;
+            background: var(--primary);
+            color: var(--light);
+            padding: 1rem 2.5rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            transition: var(--transition);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border: 2px solid transparent;
+        }
+        
+        .btn:hover {
+            background: transparent;
+            color: var(--light);
+            border-color: var(--light);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+        
+        .btn-dark {
+            background: var(--dark);
+            color: var(--light);
+        }
+        
+        .btn-dark:hover {
+            background: transparent;
+            color: var(--dark);
+            border-color: var(--dark);
+        }
+        
+        /* Navegación sticky con efecto */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 1.5rem 0;
+            z-index: 1000;
+            transition: var(--transition);
+            background: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+            backdrop-filter: blur(10px);
+        }
+        
+        .navbar.scrolled {
+            padding: 1rem 0;
+            background: rgba(255, 255, 255, 0.98);
+        }
+        
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+        
+        .nav-logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            color: var(--dark);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+        
+        .nav-links li {
+            margin-left: 2.5rem;
+        }
+        
+        .nav-links a {
+            color: var(--dark);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            letter-spacing: 1px;
+            position: relative;
+            transition: var(--transition);
+        }
+        
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            background: var(--primary-dark);
+            bottom: -5px;
+            left: 0;
+            transition: var(--transition);
+        }
+        
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+        
+        .hamburger {
+            display: none;
+            cursor: pointer;
+        }
+        
+        /* Secciones con diseño premium */
+        section {
+            padding: 6rem 2rem;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 5rem;
+            position: relative;
+        }
+        
+        .section-title h2 {
+            font-size: 2.8rem;
+            color: var(--dark);
+            display: inline-block;
+            position: relative;
+        }
+        
+        .section-title h2::after {
+            content: '';
+            position: absolute;
+            width: 50%;
+            height: 3px;
+            background: var(--primary);
+            bottom: -15px;
+            left: 25%;
+        }
+        
+        .section-title p {
+            max-width: 700px;
+            margin: 1.5rem auto 0;
+            color: var(--accent);
+        }
+        
+        /* Sección de productos con grid moderno */
+        .products {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 3rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .product-card {
+            background: var(--light);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.05);
+            transition: var(--transition);
+            position: relative;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        
+        .product-badge {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: var(--primary-dark);
+            color: var(--light);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            z-index: 1;
+        }
+        
+        .product-img-container {
+            height: 350px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .product-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.8s ease;
+        }
+        
+        .product-card:hover .product-img {
+            transform: scale(1.1);
+        }
+        
+        .product-info {
+            padding: 2rem;
+            text-align: center;
+        }
+        
+        .product-title {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: var(--dark);
+        }
+        
+        .product-price {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--primary-dark);
+            margin-bottom: 1.5rem;
+        }
+        
+        .product-description {
+            color: var(--accent);
+            margin-bottom: 1.5rem;
+            font-size: 0.95rem;
+        }
+        
+        /* Sección about con diseño elegante */
+        .about-section {
+            background: var(--light);
+            position: relative;
+        }
+        
+        .about-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .about-img {
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 20px 20px 0 var(--primary);
+            height: 500px;
+        }
+        
+        .about-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .about-content h3 {
+            font-size: 2.2rem;
+            margin-bottom: 1.5rem;
+            color: var(--dark);
+        }
+        
+        .about-content p {
+            margin-bottom: 1.5rem;
+            color: var(--accent);
+        }
+        
+        .signature {
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            font-size: 1.2rem;
+            margin-top: 2rem;
+            color: var(--primary-dark);
+        }
+        
+        /* Testimonios con efecto carrusel */
+        .testimonials-section {
+            background: linear-gradient(rgba(232, 180, 184, 0.1), rgba(232, 180, 184, 0.1));
+            position: relative;
+        }
+        
+        .testimonials-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            position: relative;
+        }
+        
+        .testimonial-slide {
+            text-align: center;
+            padding: 0 2rem;
+            display: none;
+            animation: fadeIn 1s ease;
+        }
+        
+        .testimonial-slide.active {
+            display: block;
+        }
+        
+        .testimonial-text {
+            font-size: 1.3rem;
+            font-style: italic;
+            color: var(--dark);
+            margin-bottom: 2rem;
+            position: relative;
+            padding: 0 3rem;
+        }
+        
+        .testimonial-text::before,
+        .testimonial-text::after {
+            content: '"';
+            font-size: 3rem;
+            color: var(--primary);
+            opacity: 0.3;
+            position: absolute;
+        }
+        
+        .testimonial-text::before {
+            top: -20px;
+            left: 0;
+        }
+        
+        .testimonial-text::after {
+            bottom: -40px;
+            right: 0;
+        }
+        
+        .testimonial-author {
+            font-weight: 700;
+            color: var(--primary-dark);
+            margin-bottom: 0.5rem;
+        }
+        
+        .testimonial-role {
+            color: var(--accent);
+            font-size: 0.9rem;
+        }
+        
+        .testimonial-nav {
+            display: flex;
+            justify-content: center;
+            margin-top: 3rem;
+        }
+        
+        .testimonial-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--primary);
+            opacity: 0.3;
+            margin: 0 5px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .testimonial-dot.active {
+            opacity: 1;
+            transform: scale(1.2);
+        }
+        
+        /* Sección de contacto con mapa */
+        .contact-section {
+            background: var(--light);
+        }
+        
+        .contact-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .contact-info h3 {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            color: var(--dark);
+        }
+        
+        .contact-details {
+            margin-bottom: 3rem;
+        }
+        
+        .contact-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 1.5rem;
+        }
+        
+        .contact-icon {
+            color: var(--primary-dark);
+            font-size: 1.2rem;
+            margin-right: 1rem;
+            margin-top: 5px;
+        }
+        
+        .contact-text h4 {
+            font-size: 1.1rem;
+            margin-bottom: 0.3rem;
+            color: var(--dark);
+        }
+        
+        .contact-text p, 
+        .contact-text a {
+            color: var(--accent);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+        
+        .contact-text a:hover {
+            color: var(--primary-dark);
+        }
+        
+        .social-links {
+            display: flex;
+            margin-top: 2rem;
+        }
+        
+        .social-links a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: var(--light);
+            margin-right: 1rem;
+            transition: var(--transition);
+        }
+        
+        .social-links a:hover {
+            background: var(--primary-dark);
+            transform: translateY(-5px);
+        }
+        
+        .contact-form {
+            background: var(--secondary);
+            padding: 3rem;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--dark);
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 1rem;
+            border: 1px solid #e0e0e0;
+            border-radius: 5px;
+            font-family: 'Montserrat', sans-serif;
+            transition: var(--transition);
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(232, 180, 184, 0.2);
+        }
+        
+        textarea.form-control {
+            min-height: 150px;
+            resize: vertical;
+        }
+        
+        /* Footer premium */
+        .main-footer {
+            background: var(--dark);
+            color: var(--light);
+            padding: 5rem 0 2rem;
+            position: relative;
+        }
+        
+        .footer-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+        
+        .footer-col h4 {
+            font-size: 1.3rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+            padding-bottom: 10px;
+        }
+        
+        .footer-col h4::after {
+            content: '';
+            position: absolute;
+            width: 50px;
+            height: 2px;
+            background: var(--primary);
+            bottom: 0;
+            left: 0;
+        }
+        
+        .footer-col p {
+            margin-bottom: 1.5rem;
+            opacity: 0.8;
+        }
+        
+        .footer-links li {
+            margin-bottom: 1rem;
+            list-style: none;
+        }
+        
+        .footer-links a {
+            color: var(--light);
+            opacity: 0.8;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+        
+        .footer-links a:hover {
+            opacity: 1;
+            padding-left: 5px;
+        }
+        
+        .footer-bottom {
+            text-align: center;
+            padding-top: 3rem;
+            margin-top: 3rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .footer-bottom p {
+            opacity: 0.7;
+            font-size: 0.9rem;
+        }
+        
+        /* Animaciones */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes fadeInUp {
+            from { 
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to { 
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes fadeInDown {
+            from { 
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to { 
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Responsive design */
+        @media (max-width: 992px) {
+            .about-container,
+            .contact-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .about-img {
+                order: -1;
+                max-width: 500px;
+                margin: 0 auto;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .logo {
+                font-size: 3rem;
+            }
+            
+            .header-content h1 {
+                font-size: 2.5rem;
+            }
+            
+            .header-content p {
+                font-size: 1.1rem;
+            }
+            
+            .section-title h2 {
+                font-size: 2.2rem;
+            }
+            
+            .products {
+                grid-template-columns: 1fr;
+            }
+            
+            .hamburger {
+                display: block;
+                z-index: 1001;
+            }
+            
+            .nav-links {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                width: 80%;
+                height: 100vh;
+                background: var(--light);
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                transition: var(--transition);
+                box-shadow: -5px 0 20px rgba(0,0,0,0.1);
+            }
+            
+            .nav-links.active {
+                right: 0;
+            }
+            
+            .nav-links li {
+                margin: 1.5rem 0;
+            }
+            
+            .nav-links a {
+                font-size: 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navegación premium -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="#" class="nav-logo">Amigurumi<span style="color: var(--primary-dark);">Love</span></a>
+            
+            <ul class="nav-links">
+                <li><a href="#inicio">Inicio</a></li>
+                <li><a href="#productos">Productos</a></li>
+                <li><a href="#sobre-mi">Sobre Mí</a></li>
+                <li><a href="#testimonios">Testimonios</a></li>
+                <li><a href="#contacto">Contacto</a></li>
+            </ul>
+            
+            <div class="hamburger">
+                <i class="fas fa-bars"></i>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- Hero section con efecto parallax -->
+    <header class="main-header" id="inicio">
+        <div class="logo-container">
+
+            <div class="slogan">Hechos con amor</div>
+        </div>
+        
+        <div class="header-content">
+            <h1>Arte en crochet que abraza el corazón</h1>
+            <p>Cada pieza es una creación única, tejida con dedicación y cuidado para traer calidez y alegría a tu vida.</p>
+            <a href="#productos" class="btn">Explora nuestra colección</a>
+        </div>
+        
+        <div class="scroll-down">
+            <i class="fas fa-chevron-down"></i>
+        </div>
+    </header>
+    
+    <!-- Sección de productos destacados -->
+    <section id="productos">
+        <div class="section-title">
+            <h2>Nuestros Amigurumis</h2>
+            <p>Descubre nuestras creaciones artesanales, cada una con su propia personalidad y encanto</p>
+        </div>
+        
+        <div class="products">
+            <!-- Producto 1 -->
+            <div class="product-card">
+                <div class="product-badge">Más vendido</div>
+                <div class="product-img-container">
+                    <img src="https://images.unsplash.com/photo-1586446911191-6047a6dd1d9a?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Amigurumi oso premium" class="product-img">
+                </div>
+                <div class="product-info">
+                    <h3 class="product-title">Osito Dulce Premium</h3>
+                    <p class="product-price">$35.00</p>
+                    <p class="product-description">Oso de crochet tejido con hilo premium, relleno de algodón orgánico y detalles bordados a mano.</p>
+                    <a href="#contacto" class="btn btn-dark">Personalizar</a>
+                </div>
+            </div>
+            
+            <!-- Producto 2 -->
+            <div class="product-card">
+                <div class="product-badge">Novedad</div>
+                <div class="product-img-container">
+                    <img src="https://images.unsplash.com/photo-1637699371745-62e1d60d6988?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Amigurumi unicornio de lujo" class="product-img">
+                </div>
+                <div class="product-info">
+                    <h3 class="product-title">Unicornio Mágico Deluxe</h3>
+                    <p class="product-price">$45.00</p>
+                    <p class="product-description">Unicornio con crin y cola de hilo metálico, cuerno dorado y detalles de pedrería.</p>
+                    <a href="#contacto" class="btn btn-dark">Personalizar</a>
+                </div>
+            </div>
+            
+            <!-- Producto 3 -->
+            <div class="product-card">
+                <div class="product-img-container">
+                    <img src="https://images.unsplash.com/photo-1637699371745-62e1d60d6988?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Amigurumi conejito exclusivo" class="product-img">
+                </div>
+                <div class="product-info">
+                    <h3 class="product-title">Conejito Vintage</h3>
+                    <p class="product-price">$38.00</p>
+                    <p class="product-description">Conejo con estilo retro, tejido con hilo de algodón ecológico y detalles en tonos pastel.</p>
+                    <a href="#contacto" class="btn btn-dark">Personalizar</a>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Sección sobre mí con diseño elegante -->
+    <section class="about-section" id="sobre-mi">
+        <div class="about-container">
+            <div class="about-content">
+                <h3>Mi Historia</h3>
+                <p>Hola, soy [Tu Nombre]. Mi viaje con el crochet comenzó como un pasatiempo terapéutico y se convirtió en una pasión que ahora comparto con el mundo a través de AmigurumiLove.</p>
+                <p>Cada puntada en mis creaciones lleva una intención de amor y cuidado. Utilizo solo materiales de la más alta calidad, seleccionando personalmente cada hilo y accesorio para garantizar que tus amigurumis sean tan duraderos como especiales.</p>
+                <p>Especializada en piezas personalizadas, me enorgullezco de capturar personalidades y momentos especiales en forma de estos adorables compañeros tejidos.</p>
+                <div class="signature">Hecho con amor, [Tu Nombre]</div>
+            </div>
+            
+            <div class="about-img">
+                <img src="https://images.unsplash.com/photo-1604176354204-9268737828e4?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Artista trabajando en amigurumi">
+            </div>
+        </div>
+    </section>
+    
+    <!-- Sección de testimonios con carrusel -->
+    <section class="testimonials-section" id="testimonios">
+        <div class="section-title">
+            <h2>Lo que dicen nuestros clientes</h2>
+            <p>Experiencias reales de personas que han recibido nuestros amigurumis</p>
+        </div>
+        
+        <div class="testimonials-container">
+            <!-- Testimonio 1 -->
+            <div class="testimonial-slide active">
+                <p class="testimonial-text">El unicornio que encargué para mi hija superó todas mis expectativas. La atención al detalle es impresionante y la calidad del material es evidente. Mi hija no se separa de él ni para dormir.</p>
+                <h4 class="testimonial-author">María González</h4>
+                <p class="testimonial-role">Madre y cliente satisfecha</p>
+            </div>
+            
+            <!-- Testimonio 2 -->
+            <div class="testimonial-slide">
+                <p class="testimonial-text">Pedí una réplica de mi gato que falleció y quedé sin palabras al ver el resultado. Capturaron perfectamente su esencia. Es un tesoro que atesoraré siempre. Gracias por este hermoso trabajo.</p>
+                <h4 class="testimonial-author">Carlos Mendoza</h4>
+                <p class="testimonial-role">Cliente emocionado</p>
+            </div>
+            
+            <!-- Testimonio 3 -->
+            <div class="testimonial-slide">
+                <p class="testimonial-text">Como coleccionista de amigurumis, puedo decir que estas son de las piezas mejor elaboradas que he visto. El acabado es impecable y los diseños son encantadores. ¡Mi colección tiene ahora piezas estrella!</p>
+                <h4 class="testimonial-author">Laura Torres</h4>
+                <p class="testimonial-role">Coleccionista y cliente frecuente</p>
+            </div>
+            
+            <div class="testimonial-nav">
+                <div class="testimonial-dot active" data-slide="0"></div>
+                <div class="testimonial-dot" data-slide="1"></div>
+                <div class="testimonial-dot" data-slide="2"></div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Sección de contacto premium -->
+    <section class="contact-section" id="contacto">
+        <div class="section-title">
+            <h2>Contacto</h2>
+            <p>¿Listo para encargar tu amigurumi personalizado o tienes alguna pregunta?</p>
+        </div>
+        
+        <div class="contact-container">
+            <div class="contact-info">
+                <h3>Hablemos</h3>
+                
+                <div class="contact-details">
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </div>
+                        <div class="contact-text">
+                            <h4>Ubicación</h4>
+                            <p>[Tu dirección o ciudad]</p>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <div class="contact-text">
+                            <h4>Correo</h4>
+                            <a href="mailto:tucorreo@amigurumilove.com">tucorreo@amigurumilove.com</a>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-phone-alt"></i>
+                        </div>
+                        <div class="contact-text">
+                            <h4>Teléfono</h4>
+                            <a href="tel:+1234567890">+1 (234) 567-890</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <h3>Síguenos</h3>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-pinterest-p"></i></a>
+                    <a href="#"><i class="fab fa-etsy"></i></a>
+                </div>
+            </div>
+            
+            <div class="contact-form">
+                <form id="form-contacto">
+                    <div class="form-group">
+                        <label for="nombre">Nombre completo</label>
+                        <input type="text" id="nombre" class="form-control" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="email">Correo electrónico</label>
+                        <input type="email" id="email" class="form-control" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="asunto">Asunto</label>
+                        <input type="text" id="asunto" class="form-control" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="mensaje">Mensaje</label>
+                        <textarea id="mensaje" class="form-control" required></textarea>
+                    </div>
+                    
+                    <button type="submit" class="btn">Enviar mensaje</button>
+                </form>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Footer premium -->
+    <footer class="main-footer">
+        <div class="footer-container">
+            <div class="footer-col">
+                <h4>AmigurumiLove</h4>
+                <p>Creaciones artesanales tejidas con amor y dedicación. Cada pieza es única y especial, como la persona que la recibe.</p>
+                <p class="slogan">"Hechos con amor"</p>
+            </div>
+            
+            <div class="footer-col">
+                <h4>Enlaces rápidos</h4>
+                <ul class="footer-links">
+                    <li><a href="#inicio">Inicio</a></li>
+                    <li><a href="#productos">Productos</a></li>
+                    <li><a href="#sobre-mi">Sobre mí</a></li>
+                    <li><a href="#testimonios">Testimonios</a></li>
+                    <li><a href="#contacto">Contacto</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-col">
+                <h4>Políticas</h4>
+                <ul class="footer-links">
+                    <li><a href="#">Términos y condiciones</a></li>
+                    <li><a href="#">Política de privacidad</a></li>
+                    <li><a href="#">Política de devoluciones</a></li>
+                    <li><a href="#">Preguntas frecuentes</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-col">
+                <h4>Newsletter</h4>
+                <p>Suscríbete para recibir novedades, promociones y tutoriales exclusivos.</p>
+                <form class="newsletter-form">
+                    <input type="email" placeholder="Tu correo electrónico" class="form-control" style="margin-bottom: 1rem;">
+                    <button type="submit" class="btn">Suscribirse</button>
+                </form>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <p>&copy; 2023 AmigurumiLove. Todos los derechos reservados. | Diseñado con ❤ por [Tu Nombre]</p>
+        </div>
+    </footer>
+    
+    <script>
+        // Navegación sticky
+        window.addEventListener('scroll', function() {
+            const navbar = document.querySelector('.navbar');
+            navbar.classList.toggle('scrolled', window.scrollY > 100);
+            
+            // Actualizar links activos
+            document.querySelectorAll('section').forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                const id = section.getAttribute('id');
+                
+                if (window.scrollY >= sectionTop - 100 && window.scrollY < sectionTop + sectionHeight - 100) {
+                    document.querySelectorAll('.nav-links a').forEach(link => {
+                        link.classList.remove('active');
+                        if (link.getAttribute('href') === `#${id}`) {
+                            link.classList.add('active');
+                        }
+                    });
+                }
+            });
+        });
+        
+        // Menú hamburguesa
+        const hamburger = document.querySelector('.hamburger');
+        const navLinks = document.querySelector('.nav-links');
+        
+        hamburger.addEventListener('click', function() {
+            navLinks.classList.toggle('active');
+            hamburger.innerHTML = navLinks.classList.contains('active') ? 
+                '<i class="fas fa-times"></i>' : '<i class="fas fa-bars"></i>';
+        });
+        
+        // Cerrar menú al hacer clic en un link
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', function() {
+                navLinks.classList.remove('active');
+                hamburger.innerHTML = '<i class="fas fa-bars"></i>';
+            });
+        });
+        
+        // Carrusel de testimonios
+        const testimonialDots = document.querySelectorAll('.testimonial-dot');
+        const testimonialSlides = document.querySelectorAll('.testimonial-slide');
+        
+        testimonialDots.forEach(dot => {
+            dot.addEventListener('click', function() {
+                const slideIndex = this.getAttribute('data-slide');
+                
+                // Remover active de todos
+                testimonialDots.forEach(d => d.classList.remove('active'));
+                testimonialSlides.forEach(s => s.classList.remove('active'));
+                
+                // Agregar active al seleccionado
+                this.classList.add('active');
+                testimonialSlides[slideIndex].classList.add('active');
+            });
+        });
+        
+        // Auto-rotación de testimonios
+        let currentSlide = 0;
+        function rotateTestimonials() {
+            testimonialDots.forEach(d => d.classList.remove('active'));
+            testimonialSlides.forEach(s => s.classList.remove('active'));
+            
+            currentSlide = (currentSlide + 1) % testimonialSlides.length;
+            
+            testimonialDots[currentSlide].classList.add('active');
+            testimonialSlides[currentSlide].classList.add('active');
+        }
+        
+        setInterval(rotateTestimonials, 5000);
+        
+        // Smooth scrolling para todos los links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                
+                window.scrollTo({
+                    top: targetElement.offsetTop - 80,
+                    behavior: 'smooth'
+                });
+            });
+        });
+        
+        // Animaciones al hacer scroll
+        const animateOnScroll = function() {
+            const elements = document.querySelectorAll('.section-title, .product-card, .about-img, .about-content');
+            
+            elements.forEach(element => {
+                const elementPosition = element.getBoundingClientRect().top;
+                const windowHeight = window.innerHeight;
+                
+                if (elementPosition < windowHeight - 100) {
+                    element.style.opacity = '1';
+                    element.style.transform = 'translateY(0)';
+                }
+            });
+        };
+        
+        // Configurar elementos animados
+        window.addEventListener('load', function() {
+            document.querySelectorAll('.section-title, .product-card, .about-img, .about-content').forEach(el => {
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(30px)';
+                el.style.transition = 'opacity 0.6s ease-out, transform 0.6s ease-out';
+            });
+            
+            animateOnScroll();
+        });
+        
+        window.addEventListener('scroll', animateOnScroll);
+    </script>
+</body>
+</html>
