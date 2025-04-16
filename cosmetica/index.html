@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Luméne | Cosmética Elegante</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Montserrat:wght@300;400;600&display=swap">
+    <style>
+        :root {
+            --primary: #f8e1e7;
+            --secondary: #d4a5b5;
+            --accent: #9e6a7c;
+            --dark: #3a2e33;
+            --light: #fff9fb;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Montserrat', sans-serif;
+            color: var(--dark);
+            background-color: var(--light);
+            line-height: 1.6;
+        }
+        
+        h1, h2, h3, h4 {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        /* Header */
+        header {
+            background-color: white;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+            position: fixed;
+            width: 100%;
+            z-index: 1000;
+        }
+        
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 0;
+        }
+        
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+        
+        .nav-links li {
+            margin-left: 2rem;
+        }
+        
+        .nav-links a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 400;
+            transition: color 0.3s;
+        }
+        
+        .nav-links a:hover {
+            color: var(--accent);
+        }
+        
+        .cart-icon {
+            font-size: 1.2rem;
+        }
+        
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            background: linear-gradient(rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.7)), 
+                        url('https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80') no-repeat center center/cover;
+            display: flex;
+            align-items: center;
+            padding-top: 80px;
+        }
+        
+        .hero-content {
+            max-width: 600px;
+        }
+        
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--dark);
+            line-height: 1.2;
+        }
+        
+        .hero p {
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+            color: var(--dark);
+        }
+        
+        .btn {
+            display: inline-block;
+            background-color: var(--accent);
+            color: white;
+            padding: 0.8rem 2rem;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .btn:hover {
+            background-color: var(--secondary);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(158, 106, 124, 0.3);
+        }
+        
+        /* Featured Products */
+        .section {
+            padding: 5rem 0;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .section-title h2 {
+            font-size: 2.5rem;
+            color: var(--accent);
+        }
+        
+        .section-title p {
+            color: var(--dark);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+        
+        .product-card {
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+        }
+        
+        .product-img {
+            height: 300px;
+            overflow: hidden;
+        }
+        
+        .product-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+        
+        .product-card:hover .product-img img {
+            transform: scale(1.05);
+        }
+        
+        .product-info {
+            padding: 1.5rem;
+        }
+        
+        .product-info h3 {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .product-info p {
+            color: var(--secondary);
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+        
+        /* About Section */
+        .about {
+            background-color: var(--primary);
+        }
+        
+        .about-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: center;
+        }
+        
+        .about-img {
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 15px 15px 0 var(--secondary);
+        }
+        
+        .about-img img {
+            width: 100%;
+            display: block;
+        }
+        
+        .about-text h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--accent);
+        }
+        
+        .about-text p {
+            margin-bottom: 1.5rem;
+        }
+        
+        /* Newsletter */
+        .newsletter {
+            text-align: center;
+            background-color: var(--dark);
+            color: white;
+            padding: 4rem 0;
+        }
+        
+        .newsletter h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .newsletter p {
+            max-width: 600px;
+            margin: 0 auto 2rem;
+        }
+        
+        .newsletter-form {
+            display: flex;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        
+        .newsletter-form input {
+            flex: 1;
+            padding: 0.8rem 1rem;
+            border: none;
+            border-radius: 30px 0 0 30px;
+            font-family: 'Montserrat', sans-serif;
+        }
+        
+        .newsletter-form .btn {
+            border-radius: 0 30px 30px 0;
+            padding: 0.8rem 1.5rem;
+        }
+        
+        /* Footer */
+        footer {
+            background-color: var(--dark);
+            color: white;
+            padding: 4rem 0 2rem;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+        
+        .footer-column h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.3rem;
+            margin-bottom: 1.5rem;
+            color: var(--primary);
+        }
+        
+        .footer-column ul {
+            list-style: none;
+        }
+        
+        .footer-column ul li {
+            margin-bottom: 0.8rem;
+        }
+        
+        .footer-column ul li a {
+            color: #ccc;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer-column ul li a:hover {
+            color: var(--primary);
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .social-links a {
+            color: white;
+            font-size: 1.2rem;
+            transition: color 0.3s;
+        }
+        
+        .social-links a:hover {
+            color: var(--primary);
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            color: #ccc;
+            font-size: 0.9rem;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .about-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .about-img {
+                order: -1;
+                box-shadow: 0 15px 0 var(--secondary);
+            }
+            
+            .newsletter-form {
+                flex-direction: column;
+            }
+            
+            .newsletter-form input {
+                border-radius: 30px;
+                margin-bottom: 1rem;
+            }
+            
+            .newsletter-form .btn {
+                border-radius: 30px;
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <nav class="navbar">
+                <a href="#" class="logo">Luméne</a>
+                <ul class="nav-links">
+                    <li><a href="#">Inicio</a></li>
+                    <li><a href="#">Productos</a></li>
+                    <li><a href="#">Nosotros</a></li>
+                    <li><a href="#">Blog</a></li>
+                    <li><a href="#">Contacto</a></li>
+                    <li><a href="#"><i class="cart-icon">🛒</i></a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1>Belleza natural, resultados extraordinarios</h1>
+                <p>Descubre nuestra colección de cosméticos elaborados con ingredientes naturales y orgánicos para realzar tu belleza sin comprometer tu salud.</p>
+                <a href="#" class="btn">Explorar productos</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Products -->
+    <section class="section">
+        <div class="container">
+            <div class="section-title">
+                <h2>Nuestros Productos Destacados</h2>
+                <p>Selección de nuestros mejores productos formulados para cuidar tu piel mientras la embelleces.</p>
+            </div>
+            <div class="products-grid">
+                <!-- Product 1 -->
+                <div class="product-card">
+                    <div class="product-img">
+                        <img src="https://images.unsplash.com/photo-1571781926291-c477ebfd024b?ixlib=rb-1.2.1&auto=format&fit=crop&w=634&q=80" alt="Crema hidratante">
+                    </div>
+                    <div class="product-info">
+                        <h3>Crema Hidratante Intensa</h3>
+                        <p>€42.00</p>
+                        <a href="#" class="btn">Añadir al carrito</a>
+                    </div>
+                </div>
+                
+                <!-- Product 2 -->
+                <div class="product-card">
+                    <div class="product-img">
+                        <img src="https://images.unsplash.com/photo-1596755094514-f87e34085b2c?ixlib=rb-1.2.1&auto=format&fit=crop&w=634&q=80" alt="Serum facial">
+                    </div>
+                    <div class="product-info">
+                        <h3>Sérum Anti-Edad</h3>
+                        <p>€58.00</p>
+                        <a href="#" class="btn">Añadir al carrito</a>
+                    </div>
+                </div>
+                
+                <!-- Product 3 -->
+                <div class="product-card">
+                    <div class="product-img">
+                        <img src="https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?ixlib=rb-1.2.1&auto=format&fit=crop&w=634&q=80" alt="Labiales naturales">
+                    </div>
+                    <div class="product-info">
+                        <h3>Labiales Naturales</h3>
+                        <p>€24.00</p>
+                        <a href="#" class="btn">Añadir al carrito</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="section about">
+        <div class="container">
+            <div class="about-content">
+                <div class="about-text">
+                    <h2>Nuestra Filosofía</h2>
+                    <p>En Luméne creemos en la belleza consciente. Todos nuestros productos están formulados con ingredientes naturales, orgánicos y sostenibles, libres de crueldad animal y toxinas dañinas.</p>
+                    <p>Nuestro equipo de expertos en cosmética natural trabaja para crear productos que no solo te hagan ver bien, sino que también nutran y protejan tu piel a largo plazo.</p>
+                    <a href="#" class="btn">Conoce nuestra historia</a>
+                </div>
+                <div class="about-img">
+                    <img src="https://images.unsplash.com/photo-1556228578-8c89e6adf883?ixlib=rb-1.2.1&auto=format&fit=crop&w=634&q=80" alt="Ingredientes naturales">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Newsletter -->
+    <section class="newsletter">
+        <div class="container">
+            <h2>Únete a nuestra comunidad</h2>
+            <p>Suscríbete a nuestro newsletter y recibe un 15% de descuento en tu primera compra, además de consejos de belleza y novedades.</p>
+            <form class="newsletter-form">
+                <input type="email" placeholder="Tu correo electrónico" required>
+                <button type="submit" class="btn">Suscribirse</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>Luméne</h3>
+                    <p>Cosmética natural y elegante para quienes buscan lo mejor para su piel.</p>
+                    <div class="social-links">
+                        <a href="#">📱</a>
+                        <a href="#">📷</a>
+                        <a href="#">💻</a>
+                        <a href="#">📌</a>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h3>Productos</h3>
+                    <ul>
+                        <li><a href="#">Cuidado Facial</a></li>
+                        <li><a href="#">Maquillaje</a></li>
+                        <li><a href="#">Cuidado Corporal</a></li>
+                        <li><a href="#">Kits Regalo</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Empresa</h3>
+                    <ul>
+                        <li><a href="#">Sobre Nosotros</a></li>
+                        <li><a href="#">Sostenibilidad</a></li>
+                        <li><a href="#">Trabaja con Nosotros</a></li>
+                        <li><a href="#">Prensa</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Ayuda</h3>
+                    <ul>
+                        <li><a href="#">Contacto</a></li>
+                        <li><a href="#">Preguntas Frecuentes</a></li>
+                        <li><a href="#">Envíos y Devoluciones</a></li>
+                        <li><a href="#">Política de Privacidad</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2023 Luméne Cosmética. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
