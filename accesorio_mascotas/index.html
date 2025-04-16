@@ -1,0 +1,1050 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PetStyle - Accesorios para Mascotas</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&family=Fredoka+One&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #ffe8e8, #e6f7ff, #fffde8);
+            overflow-x: hidden;
+            color: #333;
+        }
+        
+        header {
+            background: linear-gradient(90deg, #ff7e5f, #feb47b, #ffcf47, #88d8c0);
+            padding: 1rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            width: 100%;
+            z-index: 1000;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        }
+        
+        .logo {
+            color: white;
+            display: flex;
+            align-items: center;
+            font-family: 'Fredoka One', cursive;
+            font-size: 2rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        
+        .logo i {
+            margin-right: 10px;
+            font-size: 2.2rem;
+            color: #ff6b6b;
+            filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.2));
+            animation: spin 5s linear infinite;
+        }
+        
+        @keyframes spin {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(10deg); }
+            75% { transform: rotate(-10deg); }
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+        
+        nav ul li {
+            margin: 0 15px;
+            position: relative;
+        }
+        
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+            padding: 5px 10px;
+            border-radius: 20px;
+        }
+        
+        nav ul li a:hover {
+            color: #5f27cd;
+            background-color: rgba(255, 255, 255, 0.8);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 0 5%;
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, #fc466b, #3f5efb);
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Cg fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Cpath d='M96 95h4v1h-4v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            z-index: 0;
+        }
+
+        .hero-content {
+            width: 50%;
+            color: white;
+            z-index: 1;
+            animation: fadeInLeft 1.2s ease-out;
+        }
+
+        .hero-content h1 {
+            font-family: 'Fredoka One', cursive;
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.2);
+            background: linear-gradient(90deg, #ffffff, #ffe8e8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-content p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+        }
+
+        .hero-content button {
+            padding: 12px 24px;
+            font-size: 1rem;
+            font-weight: 600;
+            color: #fff;
+            background-color: #ff6b6b;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .hero-content button:hover {
+            background-color: #ff4757;
+            transform: translateY(-2px);
+            box-shadow: 0 7px 20px rgba(0,0,0,0.3);
+        }
+
+        @keyframes fadeInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* Sección de Categorías */
+        .categories {
+            padding: 5rem 5%;
+            background-color: #fff;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+            font-family: 'Fredoka One', cursive;
+            font-size: 2.5rem;
+            color: #5f27cd;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 5px;
+            background: linear-gradient(90deg, #ff7e5f, #feb47b);
+            margin: 15px auto 0;
+            border-radius: 5px;
+        }
+
+        .categories-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .category-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            text-align: center;
+            padding: 2rem 1.5rem;
+            border: 1px solid #eee;
+        }
+
+        .category-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+        }
+
+        .category-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: #ff6b6b;
+            background: linear-gradient(135deg, #ffe8e8, #fff);
+            width: 80px;
+            height: 80px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+
+        .category-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #333;
+        }
+
+        .category-card p {
+            color: #666;
+            margin-bottom: 1.5rem;
+        }
+
+        .category-btn {
+            padding: 8px 20px;
+            background-color: #88d8c0;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+
+        .category-btn:hover {
+            background-color: #5f27cd;
+        }
+
+        /* Sección de Productos Destacados */
+        .featured {
+            padding: 5rem 5%;
+            background: linear-gradient(135deg, #f5f7fa, #e6f7ff);
+        }
+
+        .products-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+
+        .product-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: #ff6b6b;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            z-index: 1;
+        }
+
+        .product-image {
+            height: 200px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .product-card:hover .product-image img {
+            transform: scale(1.1);
+        }
+
+        .product-info {
+            padding: 1.5rem;
+        }
+
+        .product-info h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+            color: #333;
+        }
+
+        .product-category {
+            display: inline-block;
+            background-color: #e6f7ff;
+            color: #5f27cd;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .product-price {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #ff6b6b;
+            margin: 0.5rem 0;
+        }
+
+        .product-price .old-price {
+            font-size: 1rem;
+            color: #999;
+            text-decoration: line-through;
+            margin-left: 5px;
+        }
+
+        .product-rating {
+            color: #ffcf47;
+            margin-bottom: 1rem;
+        }
+
+        .product-btn {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #5f27cd;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+
+        .product-btn:hover {
+            background-color: #7d3aff;
+        }
+
+        /* Sección de Ofertas */
+        .offers {
+            padding: 5rem 5%;
+            background: linear-gradient(135deg, #fffde8, #ffe8e8);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .offers-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            justify-content: center;
+        }
+
+        .offer-card {
+            flex: 1 1 300px;
+            max-width: 500px;
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            display: flex;
+            transition: all 0.3s ease;
+        }
+
+        .offer-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+
+        .offer-image {
+            flex: 1;
+            min-height: 200px;
+            overflow: hidden;
+        }
+
+        .offer-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .offer-card:hover .offer-image img {
+            transform: scale(1.05);
+        }
+
+        .offer-content {
+            flex: 1;
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .offer-content h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: #333;
+        }
+
+        .offer-content p {
+            color: #666;
+            margin-bottom: 1rem;
+        }
+
+        .offer-timer {
+            background-color: #ff6b6b;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            display: inline-block;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .offer-btn {
+            align-self: flex-start;
+            padding: 8px 20px;
+            background-color: #5f27cd;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+
+        .offer-btn:hover {
+            background-color: #7d3aff;
+        }
+
+        /* Sección de Testimonios */
+        .testimonials {
+            padding: 5rem 5%;
+            background-color: #fff;
+        }
+
+        .testimonials-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .testimonial-card {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            position: relative;
+            border: 1px solid #eee;
+        }
+
+        .testimonial-card::before {
+            content: '"';
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            font-size: 5rem;
+            color: rgba(255, 107, 107, 0.1);
+            font-family: serif;
+            line-height: 1;
+        }
+
+        .testimonial-content {
+            position: relative;
+            z-index: 1;
+            margin-bottom: 1.5rem;
+            color: #666;
+            font-style: italic;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+        }
+
+        .author-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            overflow: hidden;
+            margin-right: 15px;
+        }
+
+        .author-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .author-info h4 {
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .author-info p {
+            color: #888;
+            font-size: 0.9rem;
+        }
+
+        .testimonial-rating {
+            color: #ffcf47;
+            margin-top: 5px;
+        }
+
+        /* Sección de Servicios Premium */
+        .services {
+            padding: 5rem 5%;
+            background: linear-gradient(135deg, #5f27cd, #88d8c0);
+            color: white;
+            text-align: center;
+        }
+
+        .services-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .service-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .service-card:hover {
+            transform: translateY(-10px);
+            background: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+        }
+
+        .service-icon {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+            color: #ffcf47;
+        }
+
+        .service-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .service-card p {
+            margin-bottom: 1.5rem;
+            opacity: 0.9;
+        }
+
+        .service-btn {
+            padding: 10px 25px;
+            background-color: #ff6b6b;
+            color: white;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+
+        .service-btn:hover {
+            background-color: #ff4757;
+            transform: translateY(-3px);
+        }
+
+        /* Footer */
+        footer {
+            background-color: #333;
+            color: white;
+            padding: 4rem 5% 2rem;
+        }
+
+        .footer-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-col h3 {
+            font-family: 'Fredoka One', cursive;
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            color: #88d8c0;
+        }
+
+        .footer-col ul {
+            list-style: none;
+        }
+
+        .footer-col ul li {
+            margin-bottom: 10px;
+        }
+
+        .footer-col ul li a {
+            color: #ddd;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .footer-col ul li a:hover {
+            color: #ff6b6b;
+            padding-left: 5px;
+        }
+
+        .footer-col p {
+            color: #aaa;
+            margin-bottom: 1rem;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+        }
+
+        .social-links a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background-color: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        .social-links a:hover {
+            background-color: #ff6b6b;
+            transform: translateY(-3px);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            color: #aaa;
+            font-size: 0.9rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                padding: 1rem;
+            }
+            
+            .logo {
+                margin-bottom: 1rem;
+                font-size: 1.8rem;
+            }
+            
+            nav ul {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            nav ul li {
+                margin: 5px 10px;
+            }
+            
+            .hero-content {
+                width: 100%;
+                text-align: center;
+            }
+            
+            .hero-content h1 {
+                font-size: 2.5rem;
+            }
+            
+            .offer-card {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <i class="fas fa-paw"></i>PetStyle
+        </div>
+        <nav>
+            <ul>
+                <li><a href="#">Inicio</a></li>
+                <li><a href="#categories">Categorías</a></li>
+                <li><a href="#featured">Productos</a></li>
+                <li><a href="#offers">Ofertas</a></li>
+                <li><a href="#services">Servicios</a></li>
+                <li><a href="#contact">Contacto</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Todo para tu mascota</h1>
+            <p>Encuentra los mejores accesorios, juguetes y cuidados para consentir a tu compañero peludo.</p>
+            <button>Ver productos</button>
+        </div>
+    </section>
+
+    <!-- Sección de Categorías -->
+    <section class="categories" id="categories">
+        <h2 class="section-title">Nuestras Categorías</h2>
+        <div class="categories-container">
+            <div class="category-card">
+                <div class="category-icon">
+                    <i class="fas fa-dog"></i>
+                </div>
+                <h3>Perros</h3>
+                <p>Collares, correas, juguetes y más para tu mejor amigo canino.</p>
+                <button class="category-btn">Explorar</button>
+            </div>
+            <div class="category-card">
+                <div class="category-icon">
+                    <i class="fas fa-cat"></i>
+                </div>
+                <h3>Gatos</h3>
+                <p>Rascadores, camas, juguetes y accesorios para tu felino.</p>
+                <button class="category-btn">Explorar</button>
+            </div>
+            <div class="category-card">
+                <div class="category-icon">
+                    <i class="fas fa-kiwi-bird"></i>
+                </div>
+                <h3>Aves</h3>
+                <p>Jaulas, juguetes y alimentos para tus pájaros.</p>
+                <button class="category-btn">Explorar</button>
+            </div>
+            <div class="category-card">
+                <div class="category-icon">
+                    <i class="fas fa-fish"></i>
+                </div>
+                <h3>Peces</h3>
+                <p>Acuarios, decoración y alimentos para peces.</p>
+                <button class="category-btn">Explorar</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sección de Productos Destacados -->
+    <section class="featured" id="featured">
+        <h2 class="section-title">Productos Destacados</h2>
+        <div class="products-container">
+            <div class="product-card">
+                <span class="product-badge">Nuevo</span>
+                <div class="product-image">
+                    <img src="https://images.unsplash.com/photo-1588943211346-0908a1fb0b01?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Collar para perro">
+                </div>
+                <div class="product-info">
+                    <h3>Collar Premium</h3>
+                    <span class="product-category">Perros</span>
+                    <div class="product-price">$24.99 <span class="old-price">$29.99</span></div>
+                    <div class="product-rating">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star-half-alt"></i>
+                    </div>
+                    <button class="product-btn">Añadir al carrito</button>
+                </div>
+            </div>
+            <div class="product-card">
+                <div class="product-image">
+                    <img src="https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Rascador para gato">
+                </div>
+                <div class="product-info">
+                    <h3>Rascador de Lujo</h3>
+                    <span class="product-category">Gatos</span>
+                    <div class="product-price">$59.99</div>
+                    <div class="product-rating">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="far fa-star"></i>
+                    </div>
+                    <button class="product-btn">Añadir al carrito</button>
+                </div>
+            </div>
+            <div class="product-card">
+                <span class="product-badge">Oferta</span>
+                <div class="product-image">
+                    <img src="https://images.unsplash.com/photo-1558322456-93b70a0a35da?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Juguete para perro">
+                </div>
+                <div class="product-info">
+                    <h3>Juguete Resistente</h3>
+                    <span class="product-category">Perros</span>
+                    <div class="product-price">$12.99 <span class="old-price">$15.99</span></div>
+                    <div class="product-rating">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <button class="product-btn">Añadir al carrito</button>
+                </div>
+            </div>
+            <div class="product-card">
+                <div class="product-image">
+                    <img src="https://images.unsplash.com/photo-1591768793355-74d04bb6608f?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Cama para mascota">
+                </div>
+                <div class="product-info">
+                    <h3>Cama Premium</h3>
+                    <span class="product-category">Perros/Gatos</span>
+                    <div class="product-price">$39.99</div>
+                    <div class="product-rating">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star-half-alt"></i>
+                    </div>
+                    <button class="product-btn">Añadir al carrito</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sección de Ofertas -->
+    <section class="offers" id="offers">
+        <h2 class="section-title">Ofertas Especiales</h2>
+        <div class="offers-container">
+            <div class="offer-card">
+                <div class="offer-image">
+                    <img src="https://images.unsplash.com/photo-1583337130417-3346a1be7dee?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Oferta especial">
+                </div>
+                <div class="offer-content">
+                    <h3>Pack de Bienvenida</h3>
+                    <p>Todo lo que necesitas para tu nueva mascota con un 30% de descuento.</p>
+                    <div class="offer-timer">Termina en 2 días</div>
+                    <button class="offer-btn">Ver oferta</button>
+                </div>
+            </div>
+            <div class="offer-card">
+                <div class="offer-image">
+                    <img src="https://images.unsplash.com/photo-1550256076-d020098335b5?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Oferta especial">
+                </div>
+                <div class="offer-content">
+                    <h3>Día del Gato</h3>
+                    <p>20% de descuento en todos los productos para gatos esta semana.</p>
+                    <div class="offer-timer">Termina en 5 días</div>
+                    <button class="offer-btn">Ver oferta</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sección de Testimonios -->
+    <section class="testimonials">
+        <h2 class="section-title">Lo que dicen nuestros clientes</h2>
+        <div class="testimonials-container">
+            <div class="testimonial-card">
+                <div class="testimonial-content">
+                    <p>Los productos de PetStyle son de excelente calidad. Mi perro ama su nuevo collar y la correa es muy resistente. ¡Definitivamente volveré a comprar aquí!</p>
+                </div>
+                <div class="testimonial-author">
+                    <div class="author-avatar">
+                        <img src="https://randomuser.me/api/portraits/women/43.jpg" alt="Cliente satisfecho">
+                    </div>
+                    <div class="author-info">
+                        <h4>María González</h4>
+                        <p>Dueña de Max</p>
+                        <div class="testimonial-rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="testimonial-card">
+                <div class="testimonial-content">
+                    <p>El rascador que compré para mis gatos superó todas mis expectativas. Es muy estable y a mis gatos les encanta. Excelente relación calidad-precio.</p>
+                </div>
+                <div class="testimonial-author">
+                    <div class="author-avatar">
+                        <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Cliente satisfecho">
+                    </div>
+                    <div class="author-info">
+                        <h4>Carlos Martínez</h4>
+                        <p>Dueño de Luna y Sol</p>
+                        <div class="testimonial-rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star-half-alt"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="testimonial-card">
+                <div class="testimonial-content">
+                    <p>La cama premium que compré para mi perro es increíblemente cómoda y fácil de lavar. Además, el servicio al cliente fue excepcional cuando tuve una pregunta.</p>
+                </div>
+                <div class="testimonial-author">
+                    <div class="author-avatar">
+                        <img src="https://randomuser.me/api/portraits/women/65.jpg" alt="Cliente satisfecho">
+                    </div>
+                    <div class="author-info">
+                        <h4>Ana López</h4>
+                        <p>Dueña de Rocky</p>
+                        <div class="testimonial-rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sección de Servicios Premium -->
+    <section class="services" id="services">
+        <h2 class="section-title">Nuestros Servicios Premium</h2>
+        <div class="services-container">
+            <div class="service-card">
+                <div class="service-icon">
+                    <i class="fas fa-home"></i>
+                </div>
+                <h3>Pet Hotel</h3>
+                <p>Alojamiento de lujo para cuando estés de viaje. Espacios amplios y atención personalizada.</p>
+                <button class="service-btn">Más información</button>
+            </div>
+            <div class="service-card">
+                <div class="service-icon">
+                    <i class="fas fa-cut"></i>
+                </div>
+                <h3>Estética Canina</h3>
+                <p>Servicios de peluquería profesional, baños terapéuticos y tratamientos de belleza.</p>
+                <button class="service-btn">Más información</button>
+            </div>
+            <div class="service-card">
+                <div class="service-icon">
+                    <i class="fas fa-user-md"></i>
+                </div>
+                <h3>Veterinario a Domicilio</h3>
+                <p>Servicio veterinario en la comodidad de tu hogar para chequeos y vacunaciones.</p>
+                <button class="service-btn">Más información</button>
+            </div>
+            <div class="service-card">
+                <div class="service-icon">
+                    <i class="fas fa-dog"></i>
+                </div>
+                <h3>Entrenamiento Personalizado</h3>
+                <p>Programas de entrenamiento adaptados a las necesidades de tu mascota y tu familia.</p>
+                <button class="service-btn">Más información</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="contact">
+        <div class="footer-container">
+            <div class="footer-col">
+                <h3>PetStyle</h3>
+                <p>Tu tienda favorita de accesorios para mascotas. Calidad y estilo para tus compañeros peludos.</p>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-pinterest"></i></a>
+                </div>
+            </div>
+            <div class="footer-col">
+                <h3>Enlaces rápidos</h3>
+                <ul>
+                    <li><a href="#">Inicio</a></li>
+                    <li><a href="#categories">Categorías</a></li>
+                    <li><a href="#featured">Productos</a></li>
+                    <li><a href="#offers">Ofertas</a></li>
+                    <li><a href="#services">Servicios</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h3>Información</h3>
+                <ul>
+                    <li><a href="#">Sobre nosotros</a></li>
+                    <li><a href="#">Blog</a></li>
+                    <li><a href="#">Política de privacidad</a></li>
+                    <li><a href="#">Términos y condiciones</a></li>
+                    <li><a href="#">Preguntas frecuentes</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h3>Contacto</h3>
+                <p><i class="fas fa-map-marker-alt"></i> Calle Mascotas 123, Ciudad</p>
+                <p><i class="fas fa-phone"></i> +1 234 567 890</p>
+                <p><i class="fas fa-envelope"></i> info@petstyle.com</p>
+                <p><i class="fas fa-clock"></i> Lunes a Viernes: 9am - 6pm</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2023 PetStyle. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Simple cart functionality
+        document.querySelectorAll('.product-btn, .category-btn, .offer-btn, .service-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                // In a real implementation, this would add the item to a cart
+                alert('¡Gracias por tu interés! Serás redirigido a más información sobre este producto/servicio.');
+            });
+        });
+    </script>
+</body>
+</html>

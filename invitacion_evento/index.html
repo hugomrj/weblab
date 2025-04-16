@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Invitación Especial</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      height: 100%;
+    }
+
+    #sections {
+      height: 100vh;
+      width: 100vw;
+      scroll-snap-type: y mandatory;
+      overflow-y: scroll;
+      overflow-x: hidden;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .section {
+      height: 100vh;
+      width: 100vw;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      position: relative;
+      transition: background 1s;
+      color: white;
+      scroll-snap-align: start;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+
+    .gradient-bg {
+      background: linear-gradient(-45deg, #ff6ec4, #7873f5, #42e695, #f8cdda);
+      background-size: 400% 400%;
+      animation: gradientMove 15s ease infinite;
+    }
+
+    @keyframes gradientMove {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    h1 {
+      font-size: 3rem;
+      animation: titleIn 1.5s ease-in-out forwards, pulse 3s infinite;
+      opacity: 0;
+      transform: translateY(-20px);
+      margin-bottom: 10px;
+      text-align: center;
+    }
+
+    @keyframes titleIn {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+
+    p {
+      font-size: 1.2rem;
+      max-width: 600px;
+      text-align: center;
+      animation: fadeIn 2s ease-in-out 0.5s;
+      animation-fill-mode: forwards;
+      opacity: 0;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .arrow {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 40px;
+      height: 40px;
+      cursor: pointer;
+      animation: bounce 2s infinite;
+      z-index: 10;
+    }
+
+    .arrow::before {
+      content: '';
+      display: inline-block;
+      width: 0; 
+      height: 0; 
+      border-left: 20px solid transparent;
+      border-right: 20px solid transparent;
+      border-top: 20px solid white;
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+
+    .arrow.up::before {
+      transform: rotate(180deg);
+    }
+
+    .arrow.up {
+      top: 20px;
+    }
+
+    .arrow.down {
+      bottom: 20px;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translate(-50%, 0); }
+      50% { transform: translate(-50%, 10px); }
+    }
+
+    button.confirmar {
+      padding: 15px 30px;
+      font-size: 1.2rem;
+      border: none;
+      background: white;
+      color: #333;
+      cursor: pointer;
+      border-radius: 8px;
+      margin-top: 20px;
+      transition: transform 0.2s, background 0.3s;
+    }
+
+    button.confirmar:hover {
+      background: #f0f0f0;
+      transform: scale(1.05);
+    }
+
+    @media (max-width: 600px) {
+      h1 {
+        font-size: 2rem;
+      }
+      p {
+        font-size: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="sections">
+    <section class="section gradient-bg" id="s1">
+      <h1>¡Hola!</h1>
+      <p>Queremos invitarte a un evento muy especial. Deslizá hacia abajo para conocer más.</p>
+      <div class="arrow down" onclick="scrollToSection(1)"></div>
+    </section>
+
+    <section class="section gradient-bg" id="s2">
+      <div class="arrow up" onclick="scrollToSection(0)"></div>
+      <h1>Detalles del Evento</h1>
+      <p>Nos reuniremos para celebrar juntos una ocasión muy especial, llena de sorpresas y momentos inolvidables.</p>
+      <div class="arrow down" onclick="scrollToSection(2)"></div>
+    </section>
+
+    <section class="section gradient-bg" id="s3">
+      <div class="arrow up" onclick="scrollToSection(1)"></div>
+      <h1>Preparativos</h1>
+      <p>Traé tu mejor energía, buena onda, ¡y prepárate para disfrutar como nunca!</p>
+      <div class="arrow down" onclick="scrollToSection(3)"></div>
+    </section>
+
+    <section class="section gradient-bg" id="s4">
+      <div class="arrow up" onclick="scrollToSection(2)"></div>
+      <h1>¡Te esperamos!</h1>
+      <p>No olvides confirmar tu asistencia, ¡será un gusto compartir contigo!</p>
+      <button class="confirmar" onclick="confirmarAsistencia()">Confirmar Asistencia</button>
+      <div class="arrow down" onclick="scrollToSection(0)"></div>
+    </section>
+  </div>
+
+  <script>
+    const sections = document.querySelectorAll(".section");
+
+    function scrollToSection(index) {
+      if (index >= 0 && index < sections.length) {
+        sections[index].scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+
+    function confirmarAsistencia() {
+      const nombre = prompt("¿Cuál es tu nombre?");
+      if (nombre) {
+        alert(`¡Gracias por confirmar, ${nombre}! Nos vemos pronto.`);
+      }
+    }
+  </script>
+</body>
+</html>

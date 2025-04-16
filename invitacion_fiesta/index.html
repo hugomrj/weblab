@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>¡Estás Invitado a Mi Fiesta!</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@700;800&family=Baloo+2:wght@700&display=swap');
+    
+    :root {
+      --color-primary: #FF6B6B;
+      --color-secondary: #4ECDC4;
+      --color-accent: #FFE66D;
+      --color-dark: #292F36;
+      --color-light: #FFFFFF; /* Blanco puro para mejor contraste */
+    }
+    
+    html, body {
+      margin: 0;
+      padding: 0;
+      scroll-snap-type: y mandatory;
+      overflow-y: scroll;
+      height: 100vh;
+      font-family: 'Baloo 2', cursive;
+    }
+    
+    section {
+      scroll-snap-align: start;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      text-align: center;
+      padding: 2rem;
+      position: relative;
+      overflow: hidden;
+      color: var(--color-light); /* Texto blanco en todas las secciones */
+    }
+    
+    /* Fondos más oscuros para mejor contraste */
+    .hero-bg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      overflow: hidden;
+    }
+    
+    .particle {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.3); /* Partículas más visibles */
+      animation: floatParticle linear infinite;
+    }
+    
+    /* Nuevos colores de fondo más oscuros */
+    .hero1 .hero-bg {
+      background: linear-gradient(135deg, #FF416C, #FF4B2B); /* Rojo vibrante */
+    }
+    
+    .hero2 .hero-bg {
+      background: linear-gradient(135deg, #1A2980, #26D0CE); /* Azul oscuro */
+    }
+    
+    .hero3 .hero-bg {
+      background: linear-gradient(135deg, #EB3349, #F45C43); /* Rojo oscuro */
+    }
+    
+    .hero4 .hero-bg {
+      background: linear-gradient(135deg, #614385, #516395); /* Violeta oscuro */
+    }
+    
+    /* Mantenemos todas las animaciones y sombras de texto */
+    .title-container {
+      overflow: hidden;
+      display: inline-block;
+    }
+    
+    h1, h2, p {
+      margin: 1rem 0;
+      position: relative;
+      z-index: 2;
+      color: var(--color-light);
+      text-shadow: 1px 1px 3px rgba(0,0,0,0.5); /* Sombra más pronunciada */
+    }
+    
+    h1 {
+      font-size: 4rem;
+      animation: 
+        trackingInExpand 0.7s cubic-bezier(0.215, 0.610, 0.355, 1.000) both,
+        textShadowPop 1.5s both 0.8s,
+        float 6s ease-in-out infinite 1.5s;
+      text-shadow: 3px 3px 0 rgba(0,0,0,0.3);
+    }
+    
+    h2 {
+      font-size: 2.5rem;
+      animation: 
+        focusIn 1s cubic-bezier(0.550, 0.085, 0.680, 0.530) both,
+        vibrate 0.3s linear infinite both;
+      animation-delay: 0.5s;
+    }
+    
+    p {
+      font-size: 1.5rem;
+      max-width: 600px;
+      animation: 
+        fadeIn 1.5s both,
+        bounceTop 0.9s both;
+      animation-delay: 0.8s;
+    }
+    
+    p strong {
+      display: inline-block;
+      animation: colorChange 4s infinite alternate;
+      color: var(--color-accent); /* Destacar en amarillo */
+    }
+    
+    /* Iconos SVG animados - todos blancos para contraste */
+    .icon {
+      width: 80px;
+      height: 80px;
+      margin: 20px;
+      animation: 
+        jello 1s both,
+        pulse 2s infinite 1s;
+      filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.3));
+      stroke: white;
+      fill: none;
+    }
+    
+    /* Animación especial para la carta */
+    .carta-icon {
+      animation: 
+        cartaFlotante 3s ease-in-out infinite,
+        pulse 2s infinite 1s;
+    }
+    
+    /* Animación especial para la estrella */
+    .estrella-icon {
+      animation: 
+        estrellaBrillante 2s infinite alternate,
+        jello 1s both;
+    }
+    
+    .date-icon {
+      display: inline-block;
+      animation: swing 2s infinite;
+      transform-origin: top center;
+    }
+    
+    /* Botones de navegación */
+    .nav-btn {
+      position: absolute;
+      width: 60px;
+      height: 60px;
+      background: rgba(255,255,255,0.3);
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      z-index: 10;
+      transition: all 0.3s;
+      border: none;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+    
+    .nav-btn svg {
+      width: 30px;
+      height: 30px;
+      fill: white;
+      transition: all 0.3s;
+    }
+    
+    .nav-btn:hover {
+      transform: scale(1.1);
+      background: rgba(255,255,255,0.5);
+    }
+    
+    .nav-btn:hover svg {
+      transform: scale(1.2);
+    }
+    
+    .down-btn {
+      bottom: 30px;
+      animation: bounce 2s infinite;
+    }
+    
+    .up-btn {
+      top: 30px;
+      animation: bounce 2s infinite;
+    }
+    
+    .home-btn {
+      bottom: 30px;
+      right: 30px;
+      animation: pulse 2s infinite;
+    }
+    
+    /* Botón de confirmación */
+    .boton-confirmar {
+      padding: 1rem 2rem;
+      background-color: var(--color-accent);
+      color: var(--color-dark);
+      border: none;
+      border-radius: 50px;
+      font-size: 1.5rem;
+      cursor: pointer;
+      margin-top: 2rem;
+      animation: 
+        heartbeat 1.5s ease-in-out infinite both,
+        shakeHorizontal 0.8s cubic-bezier(0.455, 0.030, 0.515, 0.955) both;
+      animation-delay: 1.5s;
+      font-family: 'Baloo 2', cursive;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+      transition: all 0.3s;
+      position: relative;
+      overflow: hidden;
+      z-index: 1;
+      font-weight: bold;
+    }
+    
+    .boton-confirmar:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 30px rgba(0,0,0,0.4);
+      background-color: #FFD700;
+    }
+    
+    .boton-confirmar::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(45deg, transparent, rgba(255,255,255,0.4), transparent);
+      transform: translateX(-100%);
+      transition: 0.5s;
+    }
+    
+    .boton-confirmar:hover::after {
+      transform: translateX(100%);
+    }
+    
+    .boton-confirmar.confirmado {
+      background-color: #4CAF50;
+      color: white;
+      animation: none;
+    }
+    
+    /* Nuevas animaciones para los iconos */
+    @keyframes cartaFlotante {
+      0%, 100% {
+        transform: translateY(0) rotate(-5deg);
+      }
+      50% {
+        transform: translateY(-15px) rotate(5deg);
+      }
+    }
+    
+    @keyframes estrellaBrillante {
+      0% {
+        opacity: 0.7;
+        transform: scale(1);
+      }
+      100% {
+        opacity: 1;
+        transform: scale(1.1);
+        filter: drop-shadow(0 0 8px gold);
+      }
+    }
+    
+    /* Resto de animaciones (se mantienen igual) */
+    @keyframes trackingInExpand {
+      0% {
+        letter-spacing: -0.5em;
+        opacity: 0;
+      }
+      40% {
+        opacity: 0.6;
+      }
+      100% {
+        opacity: 1;
+      }
+    }
+    
+    @keyframes textShadowPop {
+      0% {
+        text-shadow: 0 0 #555, 0 0 #555, 0 0 #555, 0 0 #555, 0 0 #555;
+        transform: translateY(0);
+      }
+      100% {
+        text-shadow: 1px 1px #555, 2px 2px #555, 3px 3px #555, 4px 4px #555, 5px 5px #555;
+        transform: translateY(-5px);
+      }
+    }
+    
+    @keyframes focusIn {
+      0% {
+        filter: blur(12px);
+        opacity: 0;
+      }
+      100% {
+        filter: blur(0px);
+        opacity: 1;
+      }
+    }
+    
+    @keyframes vibrate {
+      0% {
+        transform: translate(0);
+      }
+      20% {
+        transform: translate(-2px, 2px);
+      }
+      40% {
+        transform: translate(-2px, -2px);
+      }
+      60% {
+        transform: translate(2px, 2px);
+      }
+      80% {
+        transform: translate(2px, -2px);
+      }
+      100% {
+        transform: translate(0);
+      }
+    }
+    
+    @keyframes bounceTop {
+      0% {
+        transform: translateY(-45px);
+        animation-timing-function: ease-in;
+        opacity: 1;
+      }
+      24% {
+        opacity: 1;
+      }
+      40% {
+        transform: translateY(-24px);
+        animation-timing-function: ease-in;
+      }
+      65% {
+        transform: translateY(-12px);
+        animation-timing-function: ease-in;
+      }
+      82% {
+        transform: translateY(-6px);
+        animation-timing-function: ease-in;
+      }
+      93% {
+        transform: translateY(-4px);
+        animation-timing-function: ease-in;
+      }
+      25%,
+      55%,
+      75%,
+      87% {
+        transform: translateY(0px);
+        animation-timing-function: ease-out;
+      }
+      100% {
+        transform: translateY(0px);
+        animation-timing-function: ease-out;
+        opacity: 1;
+      }
+    }
+    
+    @keyframes colorChange {
+      0% {
+        color: inherit;
+      }
+      50% {
+        color: var(--color-accent);
+        transform: scale(1.1);
+      }
+      100% {
+        color: inherit;
+      }
+    }
+    
+    @keyframes floatParticle {
+      0% {
+        transform: translateY(0) translateX(0);
+        opacity: 0;
+      }
+      10% {
+        opacity: 1;
+      }
+      90% {
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(-100vh) translateX(100px);
+        opacity: 0;
+      }
+    }
+    
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+    
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+      100% { transform: scale(1); }
+    }
+    
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-20px); }
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    
+    @keyframes swing {
+      20% { transform: rotate(15deg); }
+      40% { transform: rotate(-10deg); }
+      60% { transform: rotate(5deg); }
+      80% { transform: rotate(-5deg); }
+      100% { transform: rotate(0deg); }
+    }
+    
+    @keyframes jello {
+      0% { transform: scale3d(1, 1, 1); }
+      30% { transform: scale3d(1.25, 0.75, 1); }
+      40% { transform: scale3d(0.75, 1.25, 1); }
+      50% { transform: scale3d(1.15, 0.85, 1); }
+      65% { transform: scale3d(0.95, 1.05, 1); }
+      75% { transform: scale3d(1.05, 0.95, 1); }
+      100% { transform: scale3d(1, 1, 1); }
+    }
+    
+    @keyframes heartbeat {
+      from {
+        transform: scale(1);
+        transform-origin: center center;
+        animation-timing-function: ease-out;
+      }
+      10% {
+        transform: scale(0.91);
+        animation-timing-function: ease-in;
+      }
+      17% {
+        transform: scale(0.98);
+        animation-timing-function: ease-out;
+      }
+      33% {
+        transform: scale(0.87);
+        animation-timing-function: ease-in;
+      }
+      45% {
+        transform: scale(1);
+        animation-timing-function: ease-out;
+      }
+    }
+    
+    @keyframes shakeHorizontal {
+      0%,
+      100% {
+        transform: translateX(0);
+      }
+      10%,
+      30%,
+      50%,
+      70% {
+        transform: translateX(-10px);
+      }
+      20%,
+      40%,
+      60% {
+        transform: translateX(10px);
+      }
+      80% {
+        transform: translateX(8px);
+      }
+      90% {
+        transform: translateX(-8px);
+      }
+    }
+    
+    /* Responsive */
+    @media (max-width: 768px) {
+      h1 {
+        font-size: 2.5rem;
+      }
+      h2 {
+        font-size: 1.8rem;
+      }
+      p {
+        font-size: 1.2rem;
+      }
+      .icon {
+        width: 60px;
+        height: 60px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Sección 1 - Bienvenida -->
+  <section class="hero1">
+    <div class="hero-bg" id="bg1"></div>
+    
+    <!-- Icono de carta animada -->
+    <svg class="icon carta-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+      <polyline points="22,6 12,13 2,6"></polyline>
+    </svg>
+    
+    <div class="title-container">
+      <h1>¡FIESTA DE <span id="nombre">CUMPLEAÑOS</span>!</h1>
+    </div>
+    <p>Estás cordialmente invitado a celebrar con nosotros</p>
+    
+    <button class="nav-btn down-btn" onclick="scrollToSection(1)">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+        <path d="M19 14l-7 7m0 0l-7-7m7 7V3"/>
+      </svg>
+    </button>
+  </section>
+
+  <!-- Sección 2 - Detalles del evento -->
+  <section class="hero2">
+    <div class="hero-bg" id="bg2"></div>
+    
+    <!-- Icono de estrella animada -->
+    <svg class="icon estrella-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+    </svg>
+    
+    <h2>¡Una Noche Inolvidable!</h2>
+    <p>Música, baile, <strong>barra libre</strong> y sorpresas</p>
+    <p>¡Trae tu mejor energía festiva!</p>
+    
+    <button class="nav-btn up-btn" onclick="scrollToSection(0)">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+        <path d="M5 10l7-7m0 0l7 7m-7-7v18"/>
+      </svg>
+    </button>
+    <button class="nav-btn down-btn" onclick="scrollToSection(2)">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+        <path d="M19 14l-7 7m0 0l-7-7m7 7V3"/>
+      </svg>
+    </button>
+  </section>
+
+  <!-- Sección 3 - Lugar y fecha -->
+  <section class="hero3">
+    <div class="hero-bg" id="bg3"></div>
+    
+    <div class="date-icon">
+      <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+        <line x1="16" y1="2" x2="16" y2="6"></line>
+        <line x1="8" y1="2" x2="8" y2="6"></line>
+        <line x1="3" y1="10" x2="21" y2="10"></line>
+      </svg>
+    </div>
+    
+    <h2>¡Reserva la Fecha!</h2>
+    <p><strong>Sábado 15 de Junio 2024</strong> a las <strong>21:00 hs</strong></p>
+    <h2>📍 Lugar Especial</h2>
+    <p>Salón de Fiestas "La Terraza"<br>Calle Diversión 1234</p>
+    <p>Código de vestimenta: Elegante-Casual</p>
+    
+    <button class="nav-btn up-btn" onclick="scrollToSection(1)">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+        <path d="M5 10l7-7m0 0l7 7m-7-7v18"/>
+      </svg>
+    </button>
+    <button class="nav-btn down-btn" onclick="scrollToSection(3)">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+        <path d="M19 14l-7 7m0 0l-7-7m7 7V3"/>
+      </svg>
+    </button>
+  </section>
+
+  <!-- Sección 4 - Confirmación -->
+  <section class="hero4">
+    <div class="hero-bg" id="bg4"></div>
+    
+    <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+      <polyline points="22 4 12 14.01 9 11.01"></polyline>
+    </svg>
+    
+    <h2>¿VIENES A LA FIESTA?</h2>
+    <p>Confirma tu asistencia antes del 10 de Junio</p>
+    
+    <button class="boton-confirmar" id="confirmarBtn">CONFIRMAR ASISTENCIA</button>
+    
+    <button class="nav-btn up-btn" onclick="scrollToSection(2)">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+        <path d="M5 10l7-7m0 0l7 7m-7-7v18"/>
+      </svg>
+    </button>
+    <button class="nav-btn home-btn" onclick="scrollToSection(0)">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+        <polyline points="9 22 9 12 15 12 15 22"/>
+      </svg>
+    </button>
+  </section>
+
+  <script>
+    // Obtener parámetro de nombre de la URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const nombre = urlParams.get('nombre') || 'Amigo';
+    document.getElementById('nombre').textContent = nombre.toUpperCase();
+    
+    // Función para desplazarse a secciones
+    function scrollToSection(index) {
+      const sections = document.querySelectorAll('section');
+      sections[index].scrollIntoView({ behavior: 'smooth' });
+    }
+    
+    // Crear partículas animadas
+    function createParticles(containerId, count) {
+      const container = document.getElementById(containerId);
+      for (let i = 0; i < count; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'particle';
+        
+        // Tamaño aleatorio
+        const size = Math.random() * 15 + 5;
+        particle.style.width = `${size}px`;
+        particle.style.height = `${size}px`;
+        
+        // Posición inicial aleatoria
+        particle.style.left = `${Math.random() * 100}%`;
+        particle.style.top = `${Math.random() * 100 + 100}%`;
+        
+        // Duración y delay de animación aleatorios
+        const duration = Math.random() * 15 + 10;
+        const delay = Math.random() * 5;
+        particle.style.animation = `floatParticle ${duration}s linear ${delay}s infinite`;
+        
+        // Opacidad aleatoria
+        particle.style.opacity = Math.random() * 0.5 + 0.1;
+        
+        container.appendChild(particle);
+      }
+    }
+    
+    // Evento para el botón de confirmar asistencia
+    document.getElementById('confirmarBtn').addEventListener('click', function() {
+      this.classList.add('confirmado');
+      this.textContent = '¡CONFIRMADO!';
+      
+      // Cambiar entre varios colores
+      const colors = ['#4CAF50', '#8BC34A', '#CDDC39', '#FFEB3B'];
+      let currentIndex = 0;
+      
+      const colorInterval = setInterval(() => {
+        this.style.backgroundColor = colors[currentIndex];
+        currentIndex = (currentIndex + 1) % colors.length;
+      }, 300);
+      
+      // Detener después de 3 segundos
+      setTimeout(() => {
+        clearInterval(colorInterval);
+        this.style.backgroundColor = '#4CAF50';
+      }, 3000);
+    });
+    
+    // Crear partículas para cada fondo
+    window.onload = function() {
+      createParticles('bg1', 30);
+      createParticles('bg2', 30);
+      createParticles('bg3', 30);
+      createParticles('bg4', 30);
+      
+      // Efecto de escritura para el nombre
+      const nombreElement = document.getElementById('nombre');
+      if (nombre !== 'Amigo') {
+        nombreElement.textContent = '';
+        let i = 0;
+        const typingEffect = setInterval(() => {
+          if (i < nombre.length) {
+            nombreElement.textContent += nombre[i].toUpperCase();
+            i++;
+          } else {
+            clearInterval(typingEffect);
+          }
+        }, 150);
+      }
+    };
+  </script>
+</body>
+</html>
