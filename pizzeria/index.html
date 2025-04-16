@@ -3,29 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pizzería Bella Napoli</title>
+    <title>Pizzería Napoli | Auténtica Pizza Italiana</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* Reset y estilos generales */
+        /* Estilos base y variables */
+        :root {
+            --rojo-pizza: #e74c3c;
+            --rojo-oscuro: #c0392b;
+            --amarillo-pizza: #f1c40f;
+            --naranja-pizza: #e67e22;
+            --verde-ingrediente: #2ecc71;
+            --blanco: #ffffff;
+            --negro: #2c3e50;
+            --gris-claro: #ecf0f1;
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Arial', sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
         body {
-            line-height: 1.6;
-            color: #333;
-            background-color: #f8f9fa;
-        }
-
-        a {
-            text-decoration: none;
-            color: #d62300;
-        }
-
-        ul {
-            list-style: none;
+            background-color: var(--gris-claro);
+            color: var(--negro);
+            overflow-x: hidden;
         }
 
         .container {
@@ -35,15 +38,61 @@
             padding: 0 15px;
         }
 
+        /* Animaciones */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes spinPizza {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes slideInLeft {
+            from { transform: translateX(-100px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        @keyframes slideInRight {
+            from { transform: translateX(100px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        @keyframes cheeseDrip {
+            0% { transform: translateY(-10px) scaleY(0); opacity: 0; }
+            50% { transform: translateY(0) scaleY(1); opacity: 1; }
+            100% { transform: translateY(10px) scaleY(0); opacity: 0; }
+        }
+
         /* Header */
         header {
-            background-color: #d62300;
-            color: white;
+            background: linear-gradient(135deg, var(--rojo-pizza), var(--rojo-oscuro));
+            color: var(--blanco);
             padding: 20px 0;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            position: sticky;
+            position: fixed;
+            width: 100%;
             top: 0;
-            z-index: 100;
+            z-index: 1000;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        header.scrolled {
+            padding: 15px 0;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
         }
 
         .header-container {
@@ -53,587 +102,957 @@
         }
 
         .logo {
+            font-size: 28px;
+            font-weight: bold;
             display: flex;
             align-items: center;
+            animation: slideInLeft 0.8s ease-out;
         }
 
-        .logo img {
-            height: 50px;
-            margin-right: 15px;
+        .logo i {
+            margin-right: 10px;
+            color: var(--amarillo-pizza);
+            animation: spinPizza 20s linear infinite;
         }
 
-        .logo h1 {
-            font-size: 1.8rem;
-            font-family: 'Georgia', serif;
-            font-style: italic;
-        }
-
-        /* Navegación */
         nav ul {
             display: flex;
+            list-style: none;
         }
 
         nav ul li {
-            margin-left: 20px;
+            margin-left: 25px;
+            position: relative;
         }
 
         nav ul li a {
-            color: white;
+            color: var(--blanco);
+            text-decoration: none;
             font-weight: 500;
-            transition: color 0.3s;
-            font-size: 1.1rem;
+            transition: all 0.3s;
+            display: inline-block;
         }
 
         nav ul li a:hover {
-            color: #ffcc00;
+            color: var(--amarillo-pizza);
+            transform: translateY(-3px);
         }
 
-        .mobile-menu-btn {
+        nav ul li a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            background: var(--amarillo-pizza);
+            bottom: -5px;
+            left: 0;
+            transition: width 0.3s ease;
+        }
+
+        nav ul li a:hover::after {
+            width: 100%;
+        }
+
+        .mobile-menu {
             display: none;
-            background: none;
-            border: none;
-            color: white;
-            font-size: 1.5rem;
+            font-size: 24px;
             cursor: pointer;
+            color: var(--blanco);
+            transition: transform 0.3s;
+        }
+
+        .mobile-menu:hover {
+            transform: rotate(90deg);
         }
 
         /* Hero Section */
         .hero {
-            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
+                        url('https://images.unsplash.com/photo-1513104890138-7c749659a591?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
             background-size: cover;
             background-position: center;
-            color: white;
-            padding: 150px 0;
+            background-attachment: fixed;
+            height: 100vh;
+            display: flex;
+            align-items: center;
             text-align: center;
+            color: var(--blanco);
+            position: relative;
+            overflow: hidden;
         }
 
-        .hero h2 {
-            font-size: 3rem;
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, transparent 20%, rgba(0, 0, 0, 0.7) 100%);
+            z-index: 1;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            animation: fadeIn 1s ease-out;
+        }
+
+        .hero-content h1 {
+            font-size: 3.5rem;
             margin-bottom: 20px;
-            font-family: 'Georgia', serif;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+            line-height: 1.2;
         }
 
-        .hero p {
-            font-size: 1.5rem;
+        .hero-content p {
+            font-size: 1.3rem;
+            margin-bottom: 30px;
             max-width: 700px;
-            margin: 0 auto 30px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         .btn {
             display: inline-block;
-            background-color: #ffcc00;
-            color: #333;
-            padding: 15px 40px;
+            background: linear-gradient(45deg, var(--naranja-pizza), var(--rojo-pizza));
+            color: var(--blanco);
+            padding: 15px 35px;
             border-radius: 50px;
+            text-decoration: none;
             font-weight: bold;
             transition: all 0.3s;
-            font-size: 1.1rem;
-            border: 2px solid #ffcc00;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+            border: none;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
         .btn:hover {
-            background-color: transparent;
-            color: #ffcc00;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+            background: linear-gradient(45deg, var(--rojo-pizza), var(--naranja-pizza));
         }
 
-        /* Especialidades */
-        .specialties {
-            padding: 80px 0;
-            background-color: white;
+        .btn:active {
+            transform: translateY(1px);
+        }
+
+        .btn i {
+            margin-left: 8px;
+        }
+
+        .scroll-down {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: var(--blanco);
+            font-size: 24px;
+            animation: float 2s ease-in-out infinite;
+            cursor: pointer;
+            z-index: 2;
+        }
+
+        /* Specials Section */
+        .specials {
+            padding: 100px 0;
+            background: linear-gradient(to bottom, var(--gris-claro), var(--blanco));
+            position: relative;
         }
 
         .section-title {
             text-align: center;
-            margin-bottom: 50px;
-        }
-
-        .section-title h2 {
+            margin-bottom: 60px;
             font-size: 2.5rem;
-            color: #d62300;
+            color: var(--negro);
             position: relative;
             display: inline-block;
-            padding-bottom: 15px;
-            font-family: 'Georgia', serif;
-        }
-
-        .section-title h2::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
             left: 50%;
             transform: translateX(-50%);
-            width: 100px;
-            height: 3px;
-            background-color: #ffcc00;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--rojo-pizza), var(--naranja-pizza));
+            border-radius: 2px;
         }
 
         .pizza-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 40px;
+            gap: 30px;
         }
 
         .pizza-card {
-            background-color: #fff;
-            border-radius: 10px;
+            background: var(--blanco);
+            border-radius: 15px;
             overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            transition: transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             position: relative;
+            opacity: 0;
+            transform: translateY(50px);
+        }
+
+        .pizza-card.animated {
+            opacity: 1;
+            transform: translateY(0);
         }
 
         .pizza-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
         }
 
-        .pizza-img {
-            height: 200px;
+        .pizza-image {
+            height: 220px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .pizza-image::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.3));
+            z-index: 1;
+        }
+
+        .pizza-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.8s cubic-bezier(0.165, 0.84, 0.44, 1);
+        }
+
+        .pizza-card:hover .pizza-image img {
+            transform: scale(1.1);
+        }
+
+        .pizza-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: linear-gradient(45deg, var(--amarillo-pizza), var(--naranja-pizza));
+            color: var(--blanco);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            z-index: 2;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .pizza-info {
+            padding: 25px;
+            position: relative;
+        }
+
+        .pizza-info h3 {
+            margin-bottom: 10px;
+            color: var(--negro);
+            font-size: 1.5rem;
+        }
+
+        .pizza-info .price {
+            color: var(--rojo-pizza);
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .pizza-info p {
+            color: #7f8c8d;
+            margin-bottom: 20px;
+        }
+
+        .ingredients {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .ingredient {
+            background: var(--verde-ingrediente);
+            color: var(--blanco);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        /* Cheese drip effect */
+        .cheese-drip {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            background: linear-gradient(to bottom, var(--amarillo-pizza), #e6b422);
+            border-radius: 50% 50% 0 0;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 2;
+            animation: cheeseDrip 3s infinite ease-in-out;
+        }
+
+        .cheese-drip::before {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: inherit;
+            border-radius: 50% 50% 0 0;
+            bottom: -10px;
+            left: 5px;
+        }
+
+        /* About Section */
+        .about {
+            padding: 100px 0;
+            background: linear-gradient(135deg, var(--blanco), var(--gris-claro));
+            position: relative;
             overflow: hidden;
         }
 
-        .pizza-img img {
+        .about::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('https://www.transparenttextures.com/patterns/food.png');
+            opacity: 0.05;
+            z-index: 0;
+        }
+
+        .about-content {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 40px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .about-text {
+            flex: 1;
+            min-width: 300px;
+            animation: slideInLeft 0.8s ease-out;
+        }
+
+        .about-text h2 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: var(--negro);
+            position: relative;
+            display: inline-block;
+        }
+
+        .about-text h2::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 60px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--rojo-pizza), var(--naranja-pizza));
+        }
+
+        .about-text p {
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+
+        .about-image {
+            flex: 1;
+            min-width: 300px;
+            position: relative;
+            animation: slideInRight 0.8s ease-out;
+        }
+
+        .about-image img {
+            width: 100%;
+            border-radius: 15px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+            transition: transform 0.5s, box-shadow 0.5s;
+        }
+
+        .about-image:hover img {
+            transform: scale(1.03);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Testimonials */
+        .testimonials {
+            padding: 100px 0;
+            background: linear-gradient(to bottom, var(--rojo-pizza), var(--rojo-oscuro));
+            color: var(--blanco);
+            position: relative;
+        }
+
+        .testimonials .section-title {
+            color: var(--blanco);
+        }
+
+        .testimonials .section-title::after {
+            background: linear-gradient(90deg, var(--amarillo-pizza), var(--naranja-pizza));
+        }
+
+        .testimonial-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .testimonial-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 30px;
+            transition: all 0.5s;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .testimonial-card::before {
+            content: '\201C';
+            position: absolute;
+            top: 10px;
+            left: 20px;
+            font-size: 5rem;
+            color: rgba(255, 255, 255, 0.1);
+            font-family: Georgia, serif;
+            line-height: 1;
+        }
+
+        .testimonial-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .testimonial-text {
+            font-style: italic;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+        }
+
+        .author-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            overflow: hidden;
+            margin-right: 15px;
+            border: 3px solid var(--amarillo-pizza);
+        }
+
+        .author-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .author-info h4 {
+            margin-bottom: 5px;
+        }
+
+        .author-info p {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        /* Menu Section */
+        .menu {
+            padding: 100px 0;
+            background: var(--blanco);
+        }
+
+        .menu-tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .menu-tab {
+            padding: 10px 25px;
+            background: var(--gris-claro);
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .menu-tab.active {
+            background: linear-gradient(45deg, var(--rojo-pizza), var(--naranja-pizza));
+            color: var(--blanco);
+        }
+
+        .menu-tab:hover:not(.active) {
+            background: var(--amarillo-pizza);
+            color: var(--negro);
+        }
+
+        .menu-items {
+            display: none;
+        }
+
+        .menu-items.active {
+            display: block;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .menu-item {
+            display: flex;
+            margin-bottom: 30px;
+            background: var(--gris-claro);
+            border-radius: 10px;
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+
+        .menu-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .menu-item-image {
+            width: 150px;
+            height: 150px;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        .menu-item-image img {
             width: 100%;
             height: 100%;
             object-fit: cover;
             transition: transform 0.5s;
         }
 
-        .pizza-card:hover .pizza-img img {
+        .menu-item:hover .menu-item-image img {
             transform: scale(1.1);
         }
 
-        .pizza-info {
-            padding: 20px;
-            text-align: center;
-        }
-
-        .pizza-info h3 {
-            color: #d62300;
-            margin-bottom: 10px;
-            font-size: 1.5rem;
-        }
-
-        .pizza-info p {
-            color: #666;
-            margin-bottom: 15px;
-        }
-
-        .price {
-            font-weight: bold;
-            color: #333;
-            font-size: 1.3rem;
-        }
-
-        .badge {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            background-color: #ffcc00;
-            color: #333;
-            padding: 5px 15px;
-            border-radius: 20px;
-            font-weight: bold;
-            font-size: 0.9rem;
-        }
-
-        /* Menú */
-        .menu {
-            padding: 80px 0;
-            background-color: #fff;
-        }
-
-        .menu-categories {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 40px;
-            flex-wrap: wrap;
-        }
-
-        .menu-categories button {
-            background: none;
-            border: none;
-            padding: 10px 20px;
-            margin: 0 10px;
-            font-size: 1.1rem;
-            cursor: pointer;
-            color: #666;
-            transition: all 0.3s;
-            border-bottom: 2px solid transparent;
-        }
-
-        .menu-categories button.active,
-        .menu-categories button:hover {
-            color: #d62300;
-            border-bottom: 2px solid #d62300;
-        }
-
-        .menu-items {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 30px;
-        }
-
-        .menu-item {
-            display: flex;
-            background-color: white;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
-
-        .menu-item-img {
-            width: 120px;
-            height: 120px;
-            overflow: hidden;
-            flex-shrink: 0;
-        }
-
-        .menu-item-img img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
         .menu-item-info {
-            padding: 15px;
+            padding: 20px;
             flex-grow: 1;
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
+            justify-content: center;
         }
 
         .menu-item-header {
             display: flex;
             justify-content: space-between;
             margin-bottom: 10px;
+            align-items: center;
         }
 
-        .menu-item-header h4 {
-            color: #d62300;
-            font-size: 1.2rem;
+        .menu-item-title {
+            font-size: 1.3rem;
+            color: var(--negro);
         }
 
-        .menu-item-header .price {
-            color: #333;
+        .menu-item-price {
+            font-size: 1.3rem;
             font-weight: bold;
+            color: var(--rojo-pizza);
         }
 
-        .menu-item p {
-            color: #666;
-            font-size: 0.9rem;
+        .menu-item-description {
+            color: #7f8c8d;
             margin-bottom: 10px;
         }
 
-        .add-to-cart {
-            align-self: flex-end;
-            background-color: #ffcc00;
-            color: #333;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 20px;
-            cursor: pointer;
-            transition: background-color 0.3s;
+        .menu-item-ingredients {
+            font-size: 0.9rem;
+            color: var(--naranja-pizza);
+            font-style: italic;
         }
 
-        .add-to-cart:hover {
-            background-color: #e6b800;
+        /* Contact Section */
+        .contact {
+            padding: 100px 0;
+            background: linear-gradient(135deg, var(--gris-claro), var(--blanco));
+            position: relative;
         }
 
-        /* Testimonios */
-        .testimonials {
-            padding: 80px 0;
-            background-color: #fff;
-        }
-
-        .testimonials-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-        }
-
-        .testimonial-card {
-            background-color: #f8f9fa;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
-
-        .testimonial-header {
-            display: flex;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-
-        .testimonial-img {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            overflow: hidden;
-            margin-right: 15px;
-        }
-
-        .testimonial-img img {
+        .contact::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
             width: 100%;
             height: 100%;
-            object-fit: cover;
+            background: url('https://www.transparenttextures.com/patterns/cubes.png');
+            opacity: 0.05;
         }
 
-        .testimonial-author h4 {
-            color: #d62300;
-            margin-bottom: 5px;
+        .contact-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 40px;
+            position: relative;
+            z-index: 1;
         }
 
-        .testimonial-author p {
-            color: #666;
-            font-size: 0.9rem;
+        .contact-info {
+            flex: 1;
+            min-width: 300px;
+            animation: slideInLeft 0.8s ease-out;
         }
 
-        .stars {
-            color: #ffcc00;
-            margin-bottom: 15px;
-        }
-
-        /* Pedido */
-        .order {
-            padding: 80px 0;
-            background-color: #fff;
-        }
-
-        .order-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 50px;
-        }
-
-        .order-info h3 {
-            color: #d62300;
-            margin-bottom: 20px;
+        .contact-info h3 {
+            margin-bottom: 25px;
+            color: var(--negro);
             font-size: 1.8rem;
+            position: relative;
+            display: inline-block;
         }
 
-        .order-details {
-            margin-bottom: 30px;
+        .contact-info h3::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--rojo-pizza), var(--naranja-pizza));
         }
 
-        .order-details div {
+        .contact-info p {
+            margin-bottom: 20px;
             display: flex;
             align-items: center;
-            margin-bottom: 15px;
+            gap: 10px;
+            font-size: 1.1rem;
         }
 
-        .order-details i {
-            margin-right: 15px;
-            color: #d62300;
+        .contact-info i {
+            color: var(--rojo-pizza);
+            font-size: 1.2rem;
+            width: 25px;
+            text-align: center;
+        }
+
+        .contact-hours {
+            margin-top: 30px;
+        }
+
+        .contact-hours h4 {
+            margin-bottom: 15px;
             font-size: 1.2rem;
         }
 
-        .opening-hours h4 {
-            color: #d62300;
-            margin-bottom: 15px;
-            font-size: 1.2rem;
-        }
-
-        .opening-hours ul li {
-            margin-bottom: 10px;
+        .hours-item {
             display: flex;
             justify-content: space-between;
-            max-width: 250px;
+            margin-bottom: 10px;
+            padding-bottom: 5px;
+            border-bottom: 1px dashed rgba(0, 0, 0, 0.1);
         }
 
-        .order-form .form-group {
-            margin-bottom: 20px;
+        .contact-form {
+            flex: 1;
+            min-width: 300px;
+            background: var(--blanco);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            animation: slideInRight 0.8s ease-out;
         }
 
-        .order-form label {
+        .form-group {
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+        .form-group label {
             display: block;
-            margin-bottom: 5px;
-            color: #d62300;
-            font-weight: 500;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--negro);
         }
 
-        .order-form input,
-        .order-form textarea,
-        .order-form select {
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
             width: 100%;
-            padding: 12px;
+            padding: 12px 15px;
             border: 1px solid #ddd;
-            border-radius: 5px;
+            border-radius: 8px;
             font-size: 1rem;
-            background-color: #f8f9fa;
+            transition: all 0.3s;
         }
 
-        .order-form textarea {
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            border-color: var(--rojo-pizza);
+            box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.2);
+            outline: none;
+        }
+
+        .form-group textarea {
             height: 150px;
             resize: vertical;
         }
 
-        .order-form button {
-            width: 100%;
-            padding: 15px;
-            background-color: #d62300;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            font-size: 1.1rem;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-
-        .order-form button:hover {
-            background-color: #b51d00;
-        }
-
         /* Footer */
         footer {
-            background-color: #1a1a1a;
-            color: white;
+            background: linear-gradient(135deg, var(--negro), #1a252f);
+            color: var(--blanco);
             padding: 50px 0 20px;
+            text-align: center;
+            position: relative;
         }
 
-        .footer-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 30px;
+        .footer-content {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            text-align: left;
+            margin-bottom: 40px;
+        }
+
+        .footer-column {
+            flex: 1;
+            min-width: 250px;
             margin-bottom: 30px;
         }
 
-        .footer-col h3 {
-            font-size: 1.2rem;
+        .footer-column h3 {
             margin-bottom: 20px;
+            font-size: 1.3rem;
             position: relative;
-            padding-bottom: 10px;
-            color: #ffcc00;
+            display: inline-block;
         }
 
-        .footer-col h3::after {
+        .footer-column h3::after {
             content: '';
             position: absolute;
-            bottom: 0;
+            bottom: -8px;
             left: 0;
-            width: 50px;
+            width: 40px;
             height: 2px;
-            background-color: #d62300;
+            background: var(--rojo-pizza);
         }
 
-        .footer-col ul li {
+        .footer-column ul {
+            list-style: none;
+        }
+
+        .footer-column ul li {
             margin-bottom: 10px;
         }
 
-        .footer-col ul li a {
-            color: #ccc;
-            transition: color 0.3s;
+        .footer-column ul li a {
+            color: #ecf0f1;
+            text-decoration: none;
+            transition: all 0.3s;
+            display: inline-block;
         }
 
-        .footer-col ul li a:hover {
-            color: #ffcc00;
+        .footer-column ul li a:hover {
+            color: var(--rojo-pizza);
+            transform: translateX(5px);
         }
 
         .social-links {
-            display: flex;
-            gap: 15px;
-            margin-top: 20px;
+            margin: 30px 0;
         }
 
         .social-links a {
-            display: flex;
+            display: inline-flex;
             align-items: center;
             justify-content: center;
             width: 40px;
             height: 40px;
-            background-color: #333;
-            color: white;
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--blanco);
+            margin: 0 10px;
             border-radius: 50%;
-            transition: background-color 0.3s;
+            font-size: 18px;
+            transition: all 0.3s;
         }
 
         .social-links a:hover {
-            background-color: #d62300;
+            background: var(--rojo-pizza);
+            transform: translateY(-5px);
         }
 
         .copyright {
-            text-align: center;
             padding-top: 20px;
-            border-top: 1px solid rgba(255,255,255,0.1);
-            color: #ccc;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
             font-size: 0.9rem;
+            color: #bdc3c7;
+        }
+
+        /* Back to top button */
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(45deg, var(--rojo-pizza), var(--naranja-pizza));
+            color: var(--blanco);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+            z-index: 999;
+        }
+
+        .back-to-top.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .back-to-top:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
         }
 
         /* Responsive */
+        @media (max-width: 992px) {
+            .hero-content h1 {
+                font-size: 2.8rem;
+            }
+
+            .hero-content p {
+                font-size: 1.1rem;
+            }
+        }
+
         @media (max-width: 768px) {
-            .header-container {
-                flex-direction: column;
-                text-align: center;
+            .mobile-menu {
+                display: block;
             }
 
             nav {
-                margin-top: 20px;
-                width: 100%;
+                position: fixed;
+                top: 80px;
+                left: 0;
+                right: 0;
+                background: linear-gradient(135deg, var(--rojo-oscuro), var(--rojo-pizza));
+                padding: 20px;
+                backdrop-filter: blur(10px);
+                display: none;
+                box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            }
+
+            nav.active {
+                display: block;
+                animation: fadeIn 0.5s ease-out;
             }
 
             nav ul {
                 flex-direction: column;
-                align-items: center;
             }
 
             nav ul li {
-                margin: 5px 0;
+                margin: 15px 0;
             }
 
-            .hero h2 {
+            .hero-content h1 {
+                font-size: 2.2rem;
+            }
+
+            .section-title {
                 font-size: 2rem;
-            }
-
-            .hero p {
-                font-size: 1.1rem;
-            }
-
-            .mobile-menu-btn {
-                display: block;
-                position: absolute;
-                top: 20px;
-                right: 20px;
-            }
-
-            .nav-menu {
-                display: none;
-            }
-
-            .nav-menu.active {
-                display: flex;
             }
 
             .menu-item {
                 flex-direction: column;
             }
 
-            .menu-item-img {
+            .menu-item-image {
                 width: 100%;
-                height: 150px;
+                height: 200px;
+            }
+
+            .footer-content {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+
+            .footer-column h3::after {
+                left: 50%;
+                transform: translateX(-50%);
+            }
+        }
+
+        @media (max-width: 576px) {
+            .hero-content h1 {
+                font-size: 1.8rem;
+            }
+
+            .btn {
+                padding: 12px 25px;
+            }
+
+            .back-to-top {
+                width: 40px;
+                height: 40px;
+                font-size: 16px;
+                bottom: 20px;
+                right: 20px;
             }
         }
     </style>
-    <!-- Font Awesome para iconos -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
     <!-- Header -->
-    <header>
+    <header id="header">
         <div class="container header-container">
             <div class="logo">
-                <img src="https://cdn-icons-png.flaticon.com/512/1404/1404945.png" alt="Logo Pizzería">
-                <h1>Bella Napoli</h1>
+                <i class="fas fa-pizza-slice"></i>
+                Pizzería Napoli
             </div>
-            <button class="mobile-menu-btn" id="mobileMenuBtn">
-                <i class="fas fa-bars"></i>
-            </button>
-            <nav class="nav-menu" id="navMenu">
+            <div class="mobile-menu">☰</div>
+            <nav>
                 <ul>
                     <li><a href="#inicio">Inicio</a></li>
                     <li><a href="#especialidades">Especialidades</a></li>
                     <li><a href="#menu">Menú</a></li>
-                    <li><a href="#pedido">Pedidos</a></li>
+                    <li><a href="#nosotros">Nosotros</a></li>
                     <li><a href="#contacto">Contacto</a></li>
                 </ul>
             </nav>
@@ -642,452 +1061,492 @@
 
     <!-- Hero Section -->
     <section class="hero" id="inicio">
-        <div class="container">
-            <h2>Auténtica pizza napolitana</h2>
-            <p>Elaboradas con ingredientes frescos y masa madre tradicional, horneadas en horno de leña</p>
-            <a href="#pedido" class="btn">Hacer pedido</a>
+        <div class="container hero-content">
+            <div>
+                <h1>Auténtica Pizza Italiana</h1>
+                <p>Descubre el verdadero sabor de Nápoles con nuestras pizzas artesanales hechas con ingredientes frescos y masa fermentada por 48 horas.</p>
+                <a href="#menu" class="btn">Ver Menú <i class="fas fa-utensils"></i></a>
+            </div>
+        </div>
+        <div class="scroll-down" id="scrollDown">
+            <i class="fas fa-chevron-down"></i>
         </div>
     </section>
 
-    <!-- Especialidades -->
-    <section class="specialties" id="especialidades">
+    <!-- Specials Section -->
+    <section class="specials" id="especialidades">
         <div class="container">
-            <div class="section-title">
-                <h2>Nuestras Especialidades</h2>
-            </div>
+            <h2 class="section-title">Nuestras Especialidades</h2>
             <div class="pizza-grid">
                 <div class="pizza-card">
-                    <div class="badge">Más vendida</div>
-                    <div class="pizza-img">
-                        <img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Pizza Margherita">
+                    <div class="pizza-image">
+                        <img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Pizza Margherita">
                     </div>
+                    <div class="pizza-badge">Más Popular</div>
+                    <div class="cheese-drip"></div>
                     <div class="pizza-info">
                         <h3>Margherita</h3>
-                        <p>Salsa de tomate, mozzarella fresca, albahaca y aceite de oliva virgen extra</p>
-                        <div class="price">$12.99</div>
+                        <span class="price">$12.99</span>
+                        <p>La clásica pizza napolitana con salsa de tomate, mozzarella fresca, albahaca y aceite de oliva virgen extra.</p>
+                        <div class="ingredients">
+                            <span class="ingredient">Tomate</span>
+                            <span class="ingredient">Mozzarella</span>
+                            <span class="ingredient">Albahaca</span>
+                        </div>
+                        <a href="#contacto" class="btn">Ordenar Ahora</a>
                     </div>
                 </div>
                 <div class="pizza-card">
-                    <div class="badge">Novedad</div>
-                    <div class="pizza-img">
-                        <img src="https://images.unsplash.com/photo-1541745537411-b8046dc6d66c?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Pizza Pepperoni">
+                    <div class="pizza-image">
+                        <img src="https://images.unsplash.com/photo-1574071318508-1cdbab80d002?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Pizza Pepperoni">
                     </div>
+                    <div class="pizza-badge">Nuevo</div>
+                    <div class="cheese-drip"></div>
                     <div class="pizza-info">
-                        <h3>Pepperoni</h3>
-                        <p>Salsa de tomate, mozzarella y generosas porciones de pepperoni picante</p>
-                        <div class="price">$14.99</div>
+                        <h3>Pepperoni Picante</h3>
+                        <span class="price">$14.99</span>
+                        <p>Doble pepperoni, salsa de tomate picante, mozzarella y nuestro blend secreto de especias italianas.</p>
+                        <div class="ingredients">
+                            <span class="ingredient">Pepperoni</span>
+                            <span class="ingredient">Mozzarella</span>
+                            <span class="ingredient">Especias</span>
+                        </div>
+                        <a href="#contacto" class="btn">Ordenar Ahora</a>
                     </div>
                 </div>
                 <div class="pizza-card">
-                    <div class="pizza-img">
-                        <img src="https://images.unsplash.com/photo-1595854341625-f33ee10dbf94?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Pizza Vegetariana">
+                    <div class="pizza-image">
+                        <img src="https://images.unsplash.com/photo-1595854341625-f33ee10dbf94?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Pizza Vegetariana">
                     </div>
+                    <div class="cheese-drip"></div>
                     <div class="pizza-info">
                         <h3>Vegetariana</h3>
-                        <p>Salsa de tomate, mozzarella, pimientos, champiñones, cebolla y aceitunas</p>
-                        <div class="price">$13.99</div>
+                        <span class="price">$13.99</span>
+                        <p>Pizza cargada con pimientos, champiñones, cebolla, aceitunas y espinacas frescas sobre base de pesto.</p>
+                        <div class="ingredients">
+                            <span class="ingredient">Veggies</span>
+                            <span class="ingredient">Pesto</span>
+                            <span class="ingredient">Mozzarella</span>
+                        </div>
+                        <a href="#contacto" class="btn">Ordenar Ahora</a>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Menú -->
+    <!-- About Section -->
+    <section class="about" id="nosotros">
+        <div class="container">
+            <div class="about-content">
+                <div class="about-text">
+                    <h2>Nuestra Historia</h2>
+                    <p>Fundada en 1985 por el chef napolitano Giovanni Rossi, Pizzería Napoli lleva más de 35 años llevando el auténtico sabor de Italia a tu mesa. Nuestro secreto está en la masa fermentada lentamente y los ingredientes importados directamente de Italia.</p>
+                    <p>Usamos solo los mejores ingredientes: tomates San Marzano DOP, mozzarella di bufala Campana y harina italiana tipo "00" para lograr la textura perfecta. Nuestra misión es ofrecerte una experiencia culinaria inolvidable con cada bocado.</p>
+                </div>
+                <div class="about-image">
+                    <img src="https://images.unsplash.com/photo-1574126154517-d1e0d898894f?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Pizzería Napoli">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="testimonials" id="testimonios">
+        <div class="container">
+            <h2 class="section-title">Lo que dicen nuestros clientes</h2>
+            <div class="testimonial-grid">
+                <div class="testimonial-card">
+                    <div class="testimonial-text">
+                        <p>"La mejor pizza que he probado fuera de Italia. ¡Simplemente deliciosa!"</p>
+                    </div>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">
+                            <img src="https://randomuser.me/api/portraits/men/1.jpg" alt="Cliente 1">
+                        </div>
+                        <div class="author-info">
+                            <h4>Juan Pérez</h4>
+                            <p>Cliente Satisfecho</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-text">
+                        <p>"El servicio es excelente y la pizza es increíble. ¡Volveré pronto!"</p>
+                    </div>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">
+                            <img src="https://randomuser.me/api/portraits/women/2.jpg" alt="Cliente 2">
+                        </div>
+                        <div class="author-info">
+                            <h4>María Gómez</h4>
+                            <p>Cliente Satisfecha</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-text">
+                        <p>"La pizza vegetariana es una explosión de sabores. ¡Muy recomendable!"</p>
+                    </div>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">
+                            <img src="https://randomuser.me/api/portraits/men/3.jpg" alt="Cliente 3">
+                        </div>
+                        <div class="author-info">
+                            <h4>Carlos Rodríguez</h4>
+                            <p>Cliente Satisfecho</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Menu Section -->
     <section class="menu" id="menu">
         <div class="container">
-            <div class="section-title">
-                <h2>Nuestro Menú</h2>
+            <h2 class="section-title">Nuestro Menú</h2>
+            <div class="menu-tabs">
+                <button class="menu-tab active" data-menu="pizzas">Pizzas</button>
+                <button class="menu-tab" data-menu="pastas">Pastas</button>
+                <button class="menu-tab" data-menu="ensaladas">Ensaladas</button>
+                <button class="menu-tab" data-menu="postres">Postres</button>
             </div>
-            <div class="menu-categories">
-                <button class="active" data-category="pizzas">Pizzas</button>
-                <button data-category="pastas">Pastas</button>
-                <button data-category="ensaladas">Ensaladas</button>
-                <button data-category="bebidas">Bebidas</button>
-                <button data-category="postres">Postres</button>
-            </div>
-            <div class="menu-items" id="menuItems">
-                <!-- Pizzas -->
-                <div class="menu-item" data-category="pizzas">
-                    <div class="menu-item-img">
-                        <img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Margherita">
+            <div class="menu-items active" id="pizzas">
+                <div class="menu-item">
+                    <div class="menu-item-image">
+                        <img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Pizza Margherita">
                     </div>
                     <div class="menu-item-info">
                         <div class="menu-item-header">
-                            <h4>Margherita</h4>
-                            <span class="price">$12.99</span>
+                            <h3 class="menu-item-title">Margherita</h3>
+                            <span class="menu-item-price">$12.99</span>
                         </div>
-                        <p>Salsa de tomate, mozzarella fresca, albahaca</p>
-                        <button class="add-to-cart">Añadir</button>
+                        <p class="menu-item-description">La clásica pizza napolitana con salsa de tomate, mozzarella fresca, albahaca y aceite de oliva virgen extra.</p>
+                        <p class="menu-item-ingredients">Tomate, Mozzarella, Albahaca</p>
                     </div>
                 </div>
-                <div class="menu-item" data-category="pizzas">
-                    <div class="menu-item-img">
-                        <img src="https://images.unsplash.com/photo-1541745537411-b8046dc6d66c?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Pepperoni">
+                <div class="menu-item">
+                    <div class="menu-item-image">
+                        <img src="https://images.unsplash.com/photo-1574071318508-1cdbab80d002?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Pizza Pepperoni">
                     </div>
                     <div class="menu-item-info">
                         <div class="menu-item-header">
-                            <h4>Pepperoni</h4>
-                            <span class="price">$14.99</span>
+                            <h3 class="menu-item-title">Pepperoni Picante</h3>
+                            <span class="menu-item-price">$14.99</span>
                         </div>
-                        <p>Salsa de tomate, mozzarella, pepperoni picante</p>
-                        <button class="add-to-cart">Añadir</button>
+                        <p class="menu-item-description">Doble pepperoni, salsa de tomate picante, mozzarella y nuestro blend secreto de especias italianas.</p>
+                        <p class="menu-item-ingredients">Pepperoni, Mozzarella, Especias</p>
                     </div>
                 </div>
-                <div class="menu-item" data-category="pizzas">
-                    <div class="menu-item-img">
-                        <img src="https://images.unsplash.com/photo-1595854341625-f33ee10dbf94?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Vegetariana">
+                <div class="menu-item">
+                    <div class="menu-item-image">
+                        <img src="https://images.unsplash.com/photo-1595854341625-f33ee10dbf94?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Pizza Vegetariana">
                     </div>
                     <div class="menu-item-info">
                         <div class="menu-item-header">
-                            <h4>Vegetariana</h4>
-                            <span class="price">$13.99</span>
+                            <h3 class="menu-item-title">Vegetariana</h3>
+                            <span class="menu-item-price">$13.99</span>
                         </div>
-                        <p>Verduras frescas, mozzarella, salsa de tomate</p>
-                        <button class="add-to-cart">Añadir</button>
-                    </div>
-                </div>
-                <!-- Pastas -->
-                <div class="menu-item" data-category="pastas">
-                    <div class="menu-item-img">
-                        <img src="https://images.unsplash.com/photo-1555949258-eb67b1ef0ceb?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Spaghetti Bolognese">
-                    </div>
-                    <div class="menu-item-info">
-                        <div class="menu-item-header">
-                            <h4>Spaghetti Bolognese</h4>
-                            <span class="price">$11.99</span>
-                        </div>
-                        <p>Pasta al dente con salsa bolognesa casera</p>
-                        <button class="add-to-cart">Añadir</button>
-                    </div>
-                </div>
-                <div class="menu-item" data-category="pastas">
-                    <div class="menu-item-img">
-                        <img src="https://images.unsplash.com/photo-1611270629569-8b357cb88da9?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Lasagna">
-                    </div>
-                    <div class="menu-item-info">
-                        <div class="menu-item-header">
-                            <h4>Lasagna</h4>
-                            <span class="price">$13.99</span>
-                        </div>
-                        <p>Capas de pasta, carne, bechamel y queso gratinado</p>
-                        <button class="add-to-cart">Añadir</button>
-                    </div>
-                </div>
-                <!-- Ensaladas -->
-                <div class="menu-item" data-category="ensaladas">
-                    <div class="menu-item-img">
-                        <img src="https://images.unsplash.com/photo-1546793665-c74683f339c1?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="César">
-                    </div>
-                    <div class="menu-item-info">
-                        <div class="menu-item-header">
-                            <h4>Ensalada César</h4>
-                            <span class="price">$9.99</span>
-                        </div>
-                        <p>Lechuga romana, croutons, parmesano y aderezo césar</p>
-                        <button class="add-to-cart">Añadir</button>
-                    </div>
-                </div>
-                <!-- Bebidas -->
-                <div class="menu-item" data-category="bebidas">
-                    <div class="menu-item-img">
-                        <img src="https://images.unsplash.com/photo-1513309914637-65c20a5962e1?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Refrescos">
-                    </div>
-                    <div class="menu-item-info">
-                        <div class="menu-item-header">
-                            <h4>Refrescos</h4>
-                            <span class="price">$2.50</span>
-                        </div>
-                        <p>Coca-Cola, Fanta, Sprite (330ml)</p>
-                        <button class="add-to-cart">Añadir</button>
-                    </div>
-                </div>
-                <!-- Postres -->
-                <div class="menu-item" data-category="postres">
-                    <div class="menu-item-img">
-                        <img src="https://images.unsplash.com/photo-1551024506-0bccd828d307?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Tiramisú">
-                    </div>
-                    <div class="menu-item-info">
-                        <div class="menu-item-header">
-                            <h4>Tiramisú</h4>
-                            <span class="price">$6.99</span>
-                        </div>
-                        <p>Postre italiano clásico con café y mascarpone</p>
-                        <button class="add-to-cart">Añadir</button>
+                        <p class="menu-item-description">Pizza cargada con pimientos, champiñones, cebolla, aceitunas y espinacas frescas sobre base de pesto.</p>
+                        <p class="menu-item-ingredients">Veggies, Pesto, Mozzarella</p>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
-
-    <!-- Testimonios -->
-    <section class="testimonials">
-        <div class="container">
-            <div class="section-title">
-                <h2>Lo que dicen nuestros clientes</h2>
+            <div class="menu-items" id="pastas">
+                <div class="menu-item">
+                    <div class="menu-item-image">
+                        <img src="https://images.unsplash.com/photo-1555126634-323283e090fa?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Spaghetti Carbonara">
+                    </div>
+                    <div class="menu-item-info">
+                        <div class="menu-item-header">
+                            <h3 class="menu-item-title">Spaghetti Carbonara</h3>
+                            <span class="menu-item-price">$11.99</span>
+                        </div>
+                        <p class="menu-item-description">Spaghetti con salsa cremosa de huevo, panceta, queso parmesano y pimienta negra.</p>
+                        <p class="menu-item-ingredients">Spaghetti, Huevo, Panceta, Parmesano</p>
+                    </div>
+                </div>
+                <div class="menu-item">
+                    <div class="menu-item-image">
+                        <img src="https://images.unsplash.com/photo-1585032226651-759b368d7246?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Fettuccine Alfredo">
+                    </div>
+                    <div class="menu-item-info">
+                        <div class="menu-item-header">
+                            <h3 class="menu-item-title">Fettuccine Alfredo</h3>
+                            <span class="menu-item-price">$12.99</span>
+                        </div>
+                        <p class="menu-item-description">Fettuccine con salsa cremosa de mantequilla, queso parmesano y ajo.</p>
+                        <p class="menu-item-ingredients">Fettuccine, Mantequilla, Parmesano, Ajo</p>
+                    </div>
+                </div>
+                <div class="menu-item">
+                    <div class="menu-item-image">
+                        <img src="https://images.unsplash.com/photo-1563379926891-63b3b7efa1b6?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Ravioli de Espinaca">
+                    </div>
+                    <div class="menu-item-info">
+                        <div class="menu-item-header">
+                            <h3 class="menu-item-title">Ravioli de Espinaca</h3>
+                            <span class="menu-item-price">$13.99</span>
+                        </div>
+                        <p class="menu-item-description">Ravioli rellenos de espinaca y ricota, servidos con salsa de tomate y albahaca.</p>
+                        <p class="menu-item-ingredients">Ravioli, Espinaca, Ricota, Tomate</p>
+                    </div>
+                </div>
             </div>
-            <div class="testimonials-grid">
-                <div class="testimonial-card">
-                    <div class="testimonial-header">
-                        <div class="testimonial-img">
-                            <img src="https://randomuser.me/api/portraits/women/43.jpg" alt="María González">
-                        </div>
-                        <div class="testimonial-author">
-                            <h4>María González</h4>
-                            <p>Cliente frecuente</p>
-                        </div>
+            <div class="menu-items" id="ensaladas">
+                <div class="menu-item">
+                    <div class="menu-item-image">
+                        <img src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Ensalada Caprese">
                     </div>
-                    <div class="stars">
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
+                    <div class="menu-item-info">
+                        <div class="menu-item-header">
+                            <h3 class="menu-item-title">Ensalada Caprese</h3>
+                            <span class="menu-item-price">$9.99</span>
+                        </div>
+                        <p class="menu-item-description">Tomates frescos, mozzarella, albahaca y aceite de oliva virgen extra.</p>
+                        <p class="menu-item-ingredients">Tomate, Mozzarella, Albahaca</p>
                     </div>
-                    <p>"La mejor pizza que he probado en la ciudad. La masa es perfecta, crujiente por fuera y esponjosa por dentro. Siempre que tengo visita les traigo aquí."</p>
                 </div>
-                <div class="testimonial-card">
-                    <div class="testimonial-header">
-                        <div class="testimonial-img">
-                            <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Carlos Martínez">
-                        </div>
-                        <div class="testimonial-author">
-                            <h4>Carlos Martínez</h4>
-                            <p>Primera visita</p>
-                        </div>
+                <div class="menu-item">
+                    <div class="menu-item-image">
+                        <img src="https://images.unsplash.com/photo-1546549032-9571cd6b27df?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Ensalada César">
                     </div>
-                    <div class="stars">
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star-half-alt"></i>
+                    <div class="menu-item-info">
+                        <div class="menu-item-header">
+                            <h3 class="menu-item-title">Ensalada César</h3>
+                            <span class="menu-item-price">$10.99</span>
+                        </div>
+                        <p class="menu-item-description">Lechuga romana, pollo a la parrilla, croutons, queso parmesano y aderezo César.</p>
+                        <p class="menu-item-ingredients">Lechuga, Pollo, Croutons, Parmesano</p>
                     </div>
-                    <p>"Increíble relación calidad-precio. Pedí la pepperoni y estaba espectacular. El servicio fue rápido y muy amable. Volveré seguro."</p>
                 </div>
-                <div class="testimonial-card">
-                    <div class="testimonial-header">
-                        <div class="testimonial-img">
-                            <img src="https://randomuser.me/api/portraits/women/65.jpg" alt="Ana López">
-                        </div>
-                        <div class="testimonial-author">
-                            <h4>Ana López</h4>
-                            <p>Cliente desde 2018</p>
-                        </div>
+                <div class="menu-item">
+                    <div class="menu-item-image">
+                        <img src="https://images.unsplash.com/photo-1540420773420-3366772f4999?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Ensalada Griega">
                     </div>
-                    <div class="stars">
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
+                    <div class="menu-item-info">
+                        <div class="menu-item-header">
+                            <h3 class="menu-item-title">Ensalada Griega</h3>
+                            <span class="menu-item-price">$11.99</span>
+                        </div>
+                        <p class="menu-item-description">Tomates, pepinos, cebolla roja, aceitunas Kalamata, queso feta y aderezo de aceite de oliva.</p>
+                        <p class="menu-item-ingredients">Tomate, Pepino, Cebolla, Aceitunas, Feta</p>
                     </div>
-                    <p>"Llevo años viniendo y nunca me decepcionan. Las pastas son caseras y los ingredientes siempre frescos. Mi lugar favorito para cenar en familia."</p>
+                </div>
+            </div>
+            <div class="menu-items" id="postres">
+                <div class="menu-item">
+                    <div class="menu-item-image">
+                        <img src="https://images.unsplash.com/photo-1565038477282-c8c0b217432c?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Tiramisú">
+                    </div>
+                    <div class="menu-item-info">
+                        <div class="menu-item-header">
+                            <h3 class="menu-item-title">Tiramisú</h3>
+                            <span class="menu-item-price">$7.99</span>
+                        </div>
+                        <p class="menu-item-description">Postre italiano clásico con capas de bizcocho empapado en café, mascarpone y cacao.</p>
+                        <p class="menu-item-ingredients">Bizcocho, Café, Mascarpone, Cacao</p>
+                    </div>
+                </div>
+                <div class="menu-item">
+                    <div class="menu-item-image">
+                        <img src="https://images.unsplash.com/photo-1576618148400-f01ef7e74c86?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Panna Cotta">
+                    </div>
+                    <div class="menu-item-info">
+                        <div class="menu-item-header">
+                            <h3 class="menu-item-title">Panna Cotta</h3>
+                            <span class="menu-item-price">$6.99</span>
+                        </div>
+                        <p class="menu-item-description">Crema italiana suave y cremosa con salsa de frutas del bosque.</p>
+                        <p class="menu-item-ingredients">Crema, Frutas del Bosque</p>
+                    </div>
+                </div>
+                <div class="menu-item">
+                    <div class="menu-item-image">
+                        <img src="https://images.unsplash.com/photo-1559925462-bb9ff273078b?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Gelato">
+                    </div>
+                    <div class="menu-item-info">
+                        <div class="menu-item-header">
+                            <h3 class="menu-item-title">Gelato</h3>
+                            <span class="menu-item-price">$5.99</span>
+                        </div>
+                        <p class="menu-item-description">Helado italiano artesanal en varios sabores.</p>
+                        <p class="menu-item-ingredients">Leche, Crema, Sabores Variados</p>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Pedido -->
-    <section class="order" id="pedido">
-        <div class="container">
-            <div class="section-title">
-                <h2>Haz tu pedido</h2>
-            </div>
-            <div class="order-container">
-                <div class="order-info">
-                    <h3>Información de contacto</h3>
-                    <div class="order-details">
-                        <div>
-                            <i class="fas fa-map-marker-alt"></i>
-                            <span>Calle del Sabor 45, Centro, Ciudad</span>
-                        </div>
-                        <div>
-                            <i class="fas fa-phone-alt"></i>
-                            <span>+52 55 9876 5432</span>
-                        </div>
-                        <div>
-                            <i class="fas fa-envelope"></i>
-                            <span>pedidos@bellanapoli.com</span>
-                        </div>
+    <!-- Contact Section -->
+    <section class="contact" id="contacto">
+        <div class="container contact-container">
+            <div class="contact-info">
+                <h3>Contáctanos</h3>
+                <p><i class="fas fa-map-marker-alt"></i> Dirección: Av. Italia 1234, Asunción, Paraguay</p>
+                <p><i class="fas fa-phone-alt"></i> Teléfono: (021) 123-4567</p>
+                <p><i class="fas fa-envelope"></i> Email: info@pizzerianapoli.com</p>
+                <div class="contact-hours">
+                    <h4>Horarios de Atención</h4>
+                    <div class="hours-item">
+                        <p>Lunes - Viernes</p>
+                        <p>11:00 AM - 10:00 PM</p>
                     </div>
-                    <div class="opening-hours">
-                        <h4>Horario de entrega</h4>
-                        <ul>
-                            <li><span>Lunes - Jueves:</span> <span>12:00 - 23:00</span></li>
-                            <li><span>Viernes - Sábado:</span> <span>12:00 - 00:00</span></li>
-                            <li><span>Domingo:</span> <span>12:00 - 22:00</span></li>
-                        </ul>
+                    <div class="hours-item">
+                        <p>Sábado</p>
+                        <p>12:00 PM - 11:00 PM</p>
                     </div>
-                    <div class="delivery-info">
-                        <h4>Zonas de entrega</h4>
-                        <p>Entregamos en un radio de 5km. Costo de envío: $2.50 (gratis en pedidos mayores a $25)</p>
+                    <div class="hours-item">
+                        <p>Domingo</p>
+                        <p>Cerrado</p>
                     </div>
                 </div>
-                <form class="order-form" id="orderForm">
+            </div>
+            <div class="contact-form">
+                <h3>Envíanos un Mensaje</h3>
+                <form id="contactForm">
                     <div class="form-group">
-                        <label for="name">Nombre completo</label>
+                        <label for="name">Nombre</label>
                         <input type="text" id="name" name="name" required>
                     </div>
                     <div class="form-group">
-                        <label for="phone">Teléfono</label>
-                        <input type="tel" id="phone" name="phone" required>
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" required>
                     </div>
                     <div class="form-group">
-                        <label for="address">Dirección de entrega</label>
-                        <input type="text" id="address" name="address" required>
+                        <label for="subject">Asunto</label>
+                        <input type="text" id="subject" name="subject" required>
                     </div>
                     <div class="form-group">
-                        <label for="order">Tu pedido</label>
-                        <textarea id="order" name="order" placeholder="Ej: 1 Pizza Margherita, 2 Spaghetti Bolognese..." required></textarea>
+                        <label for="message">Mensaje</label>
+                        <textarea id="message" name="message" rows="4" required></textarea>
                     </div>
-                    <div class="form-group">
-                        <label for="payment">Método de pago</label>
-                        <select id="payment" name="payment" required>
-                            <option value="">Seleccione método</option>
-                            <option value="efectivo">Efectivo</option>
-                            <option value="tarjeta">Tarjeta (al recibir)</option>
-                            <option value="online">Pago online</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="notes">Notas adicionales</label>
-                        <textarea id="notes" name="notes" placeholder="Alergias, instrucciones especiales..."></textarea>
-                    </div>
-                    <button type="submit">Realizar pedido</button>
+                    <button type="submit" class="btn">Enviar Mensaje</button>
                 </form>
             </div>
         </div>
     </section>
 
     <!-- Footer -->
-    <footer id="contacto">
-        <div class="container">
-            <div class="footer-container">
-                <div class="footer-col">
-                    <h3>Bella Napoli</h3>
-                    <p>Auténtica pizza napolitana desde 2010. Elaborada con ingredientes frescos y tradicionales recetas italianas.</p>
-                    <div class="social-links">
-                        <a href="#"><i class="fab fa-facebook-f"></i></a>
-                        <a href="#"><i class="fab fa-instagram"></i></a>
-                        <a href="#"><i class="fab fa-twitter"></i></a>
-                        <a href="#"><i class="fab fa-whatsapp"></i></a>
-                    </div>
-                </div>
-                <div class="footer-col">
-                    <h3>Enlaces rápidos</h3>
-                    <ul>
-                        <li><a href="#inicio">Inicio</a></li>
-                        <li><a href="#especialidades">Especialidades</a></li>
-                        <li><a href="#menu">Menú</a></li>
-                        <li><a href="#pedido">Pedidos</a></li>
-                    </ul>
-                </div>
-                <div class="footer-col">
-                    <h3>Horario</h3>
-                    <ul>
-                        <li>Lunes-Jueves: 12:00-23:00</li>
-                        <li>Viernes-Sábado: 12:00-00:00</li>
-                        <li>Domingo: 12:00-22:00</li>
-                    </ul>
-                </div>
-                <div class="footer-col">
-                    <h3>Contacto</h3>
-                    <ul>
-                        <li><i class="fas fa-map-marker-alt"></i> Calle del Sabor 45, Centro</li>
-                        <li><i class="fas fa-phone-alt"></i> +52 55 9876 5432</li>
-                        <li><i class="fas fa-envelope"></i> contacto@bellanapoli.com</li>
-                    </ul>
+    <footer>
+        <div class="container footer-content">
+            <div class="footer-column">
+                <h3>Pizzería Napoli</h3>
+                <p>Auténtica Pizza Italiana desde 1985.</p>
+            </div>
+            <div class="footer-column">
+                <h3>Enlaces Rápidos</h3>
+                <ul>
+                    <li><a href="#inicio">Inicio</a></li>
+                    <li><a href="#menu">Menú</a></li>
+                    <li><a href="#nosotros">Nosotros</a></li>
+                    <li><a href="#contacto">Contacto</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h3>Síguenos</h3>
+                <div class="social-links">
+                    <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                    <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
                 </div>
             </div>
-            <div class="copyright">
-                <p>&copy; 2023 Pizzería Bella Napoli. Todos los derechos reservados.</p>
-            </div>
+        </div>
+        <div class="copyright">
+            <p>&copy; 2025 Pizzería Napoli. Todos los derechos reservados.</p>
         </div>
     </footer>
 
-    <!-- JavaScript -->
+    <!-- Back to top button -->
+    <div class="back-to-top" id="backToTop">
+        <i class="fas fa-arrow-up"></i>
+    </div>
+
     <script>
-        // Menú móvil
-        document.getElementById('mobileMenuBtn').addEventListener('click', function() {
-            document.getElementById('navMenu').classList.toggle('active');
+        // JavaScript for interactive elements
+
+        // Toggle mobile menu
+        const mobileMenu = document.querySelector('.mobile-menu');
+        const nav = document.querySelector('nav');
+
+        mobileMenu.addEventListener('click', () => {
+            nav.classList.toggle('active');
         });
 
-        // Smooth scrolling para enlaces
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
+        // Scroll to top button
+        const backToTop = document.getElementById('backToTop');
 
-                document.querySelector(this.getAttribute('href')).scrollIntoView({
-                    behavior: 'smooth'
-                });
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 100) {
+                backToTop.classList.add('active');
+            } else {
+                backToTop.classList.remove('active');
+            }
+        });
 
-                // Cerrar menú móvil después de hacer clic
-                if (window.innerWidth <= 768) {
-                    document.getElementById('navMenu').classList.remove('active');
+        backToTop.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+
+        // Scroll down button in hero section
+        const scrollDown = document.getElementById('scrollDown');
+
+        scrollDown.addEventListener('click', () => {
+            const specialsSection = document.getElementById('especialidades');
+            specialsSection.scrollIntoView({ behavior: 'smooth' });
+        });
+
+        // Animate pizza cards on scroll
+        const pizzaCards = document.querySelectorAll('.pizza-card');
+
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animated');
                 }
             });
+        }, { threshold: 0.5 });
+
+        pizzaCards.forEach(card => {
+            observer.observe(card);
         });
 
-        // Filtrado de categorías del menú
-        const categoryButtons = document.querySelectorAll('.menu-categories button');
-        const menuItems = document.querySelectorAll('.menu-item');
+        // Menu tabs functionality
+        const menuTabs = document.querySelectorAll('.menu-tab');
+        const menuItems = document.querySelectorAll('.menu-items');
 
-        categoryButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                // Remover clase active de todos los botones
-                categoryButtons.forEach(btn => btn.classList.remove('active'));
-                // Añadir clase active al botón clickeado
-                button.classList.add('active');
-
-                const category = button.getAttribute('data-category');
-
-                // Mostrar/ocultar items del menú según categoría
-                menuItems.forEach(item => {
-                    if (category === 'all' || item.getAttribute('data-category') === category) {
-                        item.style.display = 'flex';
-                    } else {
-                        item.style.display = 'none';
-                    }
-                });
+        menuTabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                const target = document.getElementById(tab.dataset.menu);
+                menuTabs.forEach(t => t.classList.remove('active'));
+                menuItems.forEach(item => item.classList.remove('active'));
+                tab.classList.add('active');
+                target.classList.add('active');
             });
         });
 
-        // Funcionalidad del carrito (añadir items)
-        const addToCartButtons = document.querySelectorAll('.add-to-cart');
+        // Form submission handling
+        const contactForm = document.getElementById('contactForm');
 
-        addToCartButtons.forEach(button => {
-            button.addEventListener('click', function(e) {
-                e.preventDefault();
-                const itemName = this.parentElement.querySelector('h4').textContent;
-                const itemPrice = this.parentElement.querySelector('.price').textContent;
-
-                // Aquí puedes implementar la lógica para añadir al carrito
-                alert(`Añadido: ${itemName} - ${itemPrice} al pedido`);
-
-                // Opcional: Añadir al textarea del formulario de pedido
-                const orderTextarea = document.getElementById('order');
-                orderTextarea.value += `${itemName} - ${itemPrice}\n`;
-            });
-        });
-
-        // Formulario de pedido
-        document.getElementById('orderForm').addEventListener('submit', function(e) {
+        contactForm.addEventListener('submit', (e) => {
             e.preventDefault();
+            alert('Mensaje enviado con éxito!');
+            contactForm.reset();
+        });
 
-            // Validación básica
-            const name = document.getElementById('name').value;
-            const phone = document.getElementById('phone').value;
-            const address = document.getElementById('address').value;
-            const order = document.getElementById('order').value;
+        // Add 'scrolled' class to header on scroll
+        const header = document.getElementById('header');
 
-            if (!name || !phone || !address || !order) {
-                alert('Por favor complete todos los campos obligatorios');
-                return;
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
             }
-
-            // Simular envío del pedido
-            alert('¡Pedido realizado con éxito!\nNos pondremos en contacto para confirmar. Gracias por su preferencia.');
-            this.reset();
         });
     </script>
 </body>
