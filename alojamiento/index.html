@@ -1,0 +1,1286 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Refugio del Valle - Alojamiento Premium en la Naturaleza</title>
+    <style>
+        /* --- Nueva Paleta de Colores --- */
+        :root {
+            /* Nueva paleta inspirada en atardeceres de montaña */
+            --color-primary: #6D4C41; /* Café terroso */
+            --color-primary-light: #8D6E63; /* Café claro */
+            --color-secondary: #E65100; /* Naranja intenso */
+            --color-accent: #5D4037; /* Café oscuro */
+            --color-text: #3E2723; /* Café casi negro */
+            --color-light-text: #5f4f4a; 
+            --color-bg: #FFF3E0; /* Crema cálido */
+            --color-light-bg: #FFFFFF; 
+            --color-dark-bg: #4E342E; /* Café oscuro para footer */
+            
+            /* Gradientes */
+            --gradient-primary: linear-gradient(135deg, var(--color-primary), var(--color-dark-bg));
+            --gradient-secondary: linear-gradient(135deg, #FF9800, var(--color-secondary));
+            --gradient-card: linear-gradient(to bottom, rgba(0,0,0,0), rgba(0,0,0,0.7));
+            
+            /* Fonts */
+            --font-primary: 'Poppins', sans-serif;
+            --font-secondary: 'Lato', sans-serif;
+            --font-decorative: 'Playfair Display', serif;
+            
+            /* Espaciado */
+            --border-radius: 16px;
+            --box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+            --box-shadow-hover: 0 15px 35px rgba(0, 0, 0, 0.2);
+            --transition-speed: 0.4s;
+            --section-padding: 100px 0;
+        }
+
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Lato:wght@300;400;700&family=Playfair+Display:wght@400;600;700&display=swap');
+        @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css');
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-secondary);
+            line-height: 1.7;
+            color: var(--color-text);
+            background-color: var(--color-bg);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* --- Tipografía --- */
+        h1, h2, h3, h4, h5, h6 {
+            font-family: var(--font-primary);
+            color: var(--color-primary);
+            margin-bottom: 1.5rem;
+            line-height: 1.3;
+            font-weight: 600;
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 3rem;
+            font-size: 2.8rem;
+            color: var(--color-primary);
+            position: relative;
+            padding-bottom: 15px;
+            font-family: var(--font-decorative);
+            font-weight: 600;
+        }
+
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: var(--gradient-secondary);
+            border-radius: 2px;
+        }
+
+        h3 {
+            font-size: 2rem;
+            color: var(--color-secondary);
+            margin-bottom: 1.5rem;
+        }
+
+        p {
+            margin-bottom: 1.5rem;
+            font-size: 1.15rem;
+            color: var(--color-light-text);
+            line-height: 1.8;
+        }
+
+        a {
+            color: var(--color-secondary);
+            text-decoration: none;
+            transition: all var(--transition-speed) ease;
+        }
+
+        /* --- Botones --- */
+        .btn {
+            display: inline-block;
+            background: var(--gradient-secondary);
+            color: white;
+            padding: 16px 40px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            font-family: var(--font-primary);
+            font-weight: 600;
+            text-align: center;
+            transition: all var(--transition-speed) ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(120deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: all 0.6s ease;
+            z-index: -1;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--box-shadow-hover);
+            color: white;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn-secondary {
+            background: white;
+            color: var(--color-secondary);
+            border: 2px solid var(--color-secondary);
+        }
+
+        .btn-secondary:hover {
+            background: var(--color-secondary);
+            color: white;
+            border-color: var(--color-secondary);
+        }
+
+        .btn-small {
+            padding: 12px 28px;
+            font-size: 1rem;
+        }
+
+        /* --- Header & Navegación --- */
+        .main-header {
+            background-color: rgba(255, 243, 224, 0.98);
+            backdrop-filter: blur(8px);
+            padding: 1rem 0;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.08);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .main-header.scrolled {
+            padding: 0.5rem 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        .logo {
+            font-size: 2.2rem;
+            font-family: var(--font-decorative);
+            font-weight: 700;
+            color: var(--color-primary);
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+        }
+
+        .logo i {
+            margin-right: 10px;
+            color: var(--color-secondary);
+        }
+
+        .main-nav ul {
+            list-style: none;
+            display: flex;
+        }
+
+        .main-nav ul li {
+            margin-left: 30px;
+            position: relative;
+        }
+
+        .main-nav ul li a {
+            color: var(--color-primary);
+            padding: 10px 15px;
+            border-radius: 50px;
+            font-size: 1.05rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .main-nav ul li a::after {
+            content: '';
+            position: absolute;
+            bottom: 5px;
+            left: 50%;
+            transform: translateX(-50%) scaleX(0);
+            width: 60%;
+            height: 2px;
+            background-color: var(--color-secondary);
+            border-radius: 1px;
+            transition: transform 0.3s ease;
+        }
+
+        .main-nav ul li a:hover,
+        .main-nav ul li a.active {
+            color: var(--color-secondary);
+        }
+
+        .main-nav ul li a:hover::after,
+        .main-nav ul li a.active::after {
+            transform: translateX(-50%) scaleX(1);
+        }
+
+        /* Menú Mobile */
+        .menu-toggle {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            padding: 10px;
+            z-index: 1001;
+        }
+
+        .menu-toggle span {
+            height: 3px;
+            width: 30px;
+            background: var(--color-primary);
+            margin-bottom: 6px;
+            border-radius: 3px;
+            transition: all 0.3s ease;
+        }
+
+        .menu-toggle.active span:nth-child(1) {
+            transform: rotate(45deg) translate(7px, 7px);
+        }
+
+        .menu-toggle.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .menu-toggle.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -7px);
+        }
+
+        /* --- Contenido Principal --- */
+        main {
+            flex-grow: 1;
+            padding-top: 20px;
+        }
+
+        section {
+            padding: var(--section-padding);
+            display: none;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+
+        section:nth-child(even) {
+            background-color: rgba(255, 255, 255, 0.6);
+        }
+
+        section.active {
+            display: block;
+        }
+
+        section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* --- Sección Hero --- */
+        #home .hero {
+            position: relative;
+            height: 90vh;
+            min-height: 600px;
+            background: url('https://images.unsplash.com/photo-1517825738774-7de9363ef735?ixlib=rb-1.2.1&auto=format&fit=crop&w=1600&q=80') no-repeat center center/cover;
+            background-attachment: fixed;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+            border-radius: 0 0 var(--border-radius) var(--border-radius);
+            overflow: hidden;
+            margin: -20px auto 5rem auto;
+            width: 100%;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.7));
+            z-index: 1;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 900px;
+            padding: 50px;
+            animation: fadeInDown 1s ease-out 0.5s backwards;
+        }
+
+        .hero h1 {
+            font-size: 4.5rem;
+            margin-bottom: 1.5rem;
+            color: white;
+            text-shadow: 2px 2px 8px rgba(0,0,0,0.6);
+            font-family: var(--font-decorative);
+            font-weight: 700;
+            line-height: 1.2;
+        }
+
+        .hero p {
+            font-size: 1.5rem;
+            margin-bottom: 3rem;
+            color: rgba(255,255,255,0.9);
+            font-weight: 300;
+        }
+
+        .hero .btn {
+            margin: 0 15px;
+        }
+
+        /* Intro Home */
+        .home-intro {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+            margin-bottom: 5rem;
+        }
+
+        .home-intro img {
+            max-height: 500px;
+            object-fit: cover;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            transition: transform var(--transition-speed) ease;
+        }
+
+        .home-intro img:hover {
+            transform: scale(1.02);
+        }
+
+        .home-intro h3 {
+            color: var(--color-secondary);
+            font-size: 2.2rem;
+            margin-bottom: 1.5rem;
+            font-family: var(--font-decorative);
+        }
+
+        /* --- Sección Habitaciones --- */
+        #rooms .room-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 50px;
+        }
+
+        .room-card {
+            background-color: var(--color-light-bg);
+            border-radius: var(--border-radius);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            overflow: hidden;
+            transition: all var(--transition-speed) ease;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            transform-style: preserve-3d;
+            perspective: 1000px;
+        }
+
+        .room-card:hover {
+            transform: translateY(-10px) rotateX(5deg);
+            box-shadow: var(--box-shadow-hover);
+        }
+
+        .room-card .img-container {
+            position: relative;
+            overflow: hidden;
+            height: 280px;
+        }
+
+        .room-card .img-container::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 50%;
+            background: var(--gradient-card);
+            border-radius: 0 0 var(--border-radius) var(--border-radius);
+            opacity: 0;
+            transition: opacity var(--transition-speed) ease;
+        }
+
+        .room-card:hover .img-container::after {
+            opacity: 1;
+        }
+
+        .room-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            border-radius: var(--border-radius) var(--border-radius) 0 0;
+            transition: transform calc(var(--transition-speed) * 1.5) ease;
+        }
+
+        .room-card:hover img {
+            transform: scale(1.1) rotate(1deg);
+        }
+
+        .room-info {
+            padding: 30px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .room-info h3 {
+            margin-top: 0;
+            color: var(--color-primary);
+            margin-bottom: 1rem;
+            font-size: 1.8rem;
+            transition: color var(--transition-speed) ease;
+        }
+
+        .room-card:hover .room-info h3 {
+            color: var(--color-secondary);
+        }
+
+        .room-info p {
+            flex-grow: 1;
+            margin-bottom: 1.5rem;
+        }
+
+        .room-price {
+            font-weight: bold;
+            color: var(--color-secondary);
+            margin-top: 15px;
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            font-family: var(--font-primary);
+        }
+
+        .room-info .btn {
+            align-self: flex-start;
+            margin-top: auto;
+            transform: translateY(10px);
+            opacity: 0;
+            transition: all var(--transition-speed) ease;
+            transition-delay: 0.1s;
+        }
+
+        .room-card:hover .room-info .btn {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        /* Badge de Oferta */
+        .room-badge {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: var(--gradient-secondary);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            z-index: 2;
+            transform: translateY(-20px);
+            opacity: 0;
+            transition: all var(--transition-speed) ease;
+        }
+
+        .room-card:hover .room-badge {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        /* --- Sección Servicios --- */
+        #services ul {
+            list-style: none;
+            padding-left: 0;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 35px;
+        }
+
+        #services li {
+            background-color: var(--color-light-bg);
+            padding: 35px;
+            border-radius: var(--border-radius);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            display: flex;
+            align-items: center;
+            gap: 25px;
+            transition: all var(--transition-speed) ease;
+            border-left: 5px solid transparent;
+            transform: translateY(20px);
+            opacity: 0;
+        }
+
+        #services li.visible {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        #services li:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: var(--box-shadow);
+            border-left-color: var(--color-secondary);
+        }
+
+        #services li i {
+            font-size: 2.5rem;
+            color: var(--color-secondary);
+            min-width: 50px;
+            text-align: center;
+            transition: transform var(--transition-speed) ease;
+        }
+
+        #services li:hover i {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        #services li span {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--color-accent);
+        }
+
+        /* --- Sección Contacto --- */
+        #contact .contact-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 70px;
+            align-items: start;
+            background-color: var(--color-light-bg);
+            padding: 50px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+        }
+
+        .contact-form form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .contact-form label {
+            margin-bottom: 10px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: var(--color-accent);
+        }
+
+        .contact-form input,
+        .contact-form textarea {
+            margin-bottom: 25px;
+            padding: 18px;
+            border: 1px solid #e0e0e0;
+            border-radius: var(--border-radius);
+            font-family: inherit;
+            font-size: 1rem;
+            transition: all var(--transition-speed) ease;
+            background-color: #f9f9f9;
+        }
+
+        .contact-form input:focus,
+        .contact-form textarea:focus {
+            outline: none;
+            border-color: var(--color-secondary);
+            box-shadow: 0 0 10px rgba(255, 143, 0, 0.2);
+            background-color: #fff;
+        }
+
+        .contact-form textarea {
+            resize: vertical;
+            min-height: 180px;
+        }
+
+        .contact-form button {
+            align-self: flex-start;
+            margin-top: 10px;
+        }
+
+        .contact-info h3 {
+            margin-bottom: 2rem;
+            color: var(--color-primary);
+        }
+
+        .contact-info p {
+            margin-bottom: 1.5rem;
+            font-size: 1.15rem;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .contact-info p i {
+            color: var(--color-secondary);
+            font-size: 1.4rem;
+            min-width: 30px;
+            text-align: center;
+        }
+
+        .contact-info p strong {
+            color: var(--color-accent);
+            margin-right: 5px;
+        }
+
+        .map-container {
+            background-color: #e9e9e9;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            height: 500px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: #777;
+        }
+
+        .map-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* --- Footer --- */
+        .main-footer {
+            background: var(--gradient-primary);
+            color: white;
+            text-align: center;
+            padding: 3rem 0;
+            margin-top: auto;
+            border-radius: var(--border-radius) var(--border-radius) 0 0;
+        }
+
+        .main-footer p {
+            margin-bottom: 0;
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 400;
+        }
+
+        .main-footer p .heart {
+            color: #FF8A80;
+            display: inline-block;
+            animation: pulse 1.5s infinite ease-in-out;
+        }
+
+        .social-links {
+            margin-top: 1.5rem;
+        }
+
+        .social-links a {
+            display: inline-block;
+            margin: 0 10px;
+            color: white;
+            font-size: 1.3rem;
+            transition: transform 0.3s ease, color 0.3s ease;
+        }
+
+        .social-links a:hover {
+            transform: translateY(-3px) rotate(5deg);
+            color: var(--color-secondary);
+        }
+
+        /* --- Animaciones --- */
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(5deg); }
+            75% { transform: rotate(-5deg); }
+        }
+
+        /* --- Responsive Design --- */
+        @media (max-width: 1200px) {
+            h1 { font-size: 3.2rem; }
+            h2 { font-size: 2.5rem; }
+            h3 { font-size: 1.8rem; }
+            
+            .hero h1 { font-size: 4rem; }
+            .hero p { font-size: 1.3rem; }
+            
+            #contact .contact-container {
+                gap: 50px;
+                padding: 40px;
+            }
+        }
+
+        @media (max-width: 992px) {
+            :root {
+                --section-padding: 80px 0;
+            }
+            
+            h1 { font-size: 2.8rem; }
+            h2 { font-size: 2.2rem; }
+            h3 { font-size: 1.6rem; }
+            
+            .hero h1 { font-size: 3.5rem; }
+            .hero p { font-size: 1.2rem; }
+            
+            .home-intro {
+                gap: 40px;
+            }
+            
+            #services ul {
+                grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            }
+        }
+
+        @media (max-width: 768px) {
+            .logo {
+                font-size: 1.8rem;
+            }
+
+            .menu-toggle {
+                display: flex;
+            }
+
+            .main-nav {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100vh;
+                background-color: rgba(255, 243, 224, 0.98);
+                backdrop-filter: blur(10px);
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                transform: translateX(100%);
+                transition: transform 0.5s cubic-bezier(0.77, 0, 0.175, 1);
+                z-index: 999;
+            }
+
+            .main-nav.active {
+                transform: translateX(0);
+            }
+
+            .main-nav ul {
+                flex-direction: column;
+                align-items: center;
+                padding: 0;
+            }
+
+            .main-nav ul li {
+                margin: 25px 0;
+                width: 100%;
+                text-align: center;
+            }
+
+            .main-nav ul li a {
+                display: block;
+                padding: 15px;
+                font-size: 1.5rem;
+                color: var(--color-primary);
+            }
+
+            .main-nav ul li a::after {
+                bottom: 10px;
+                width: 50%;
+                height: 3px;
+            }
+
+            h1 { font-size: 2.5rem; }
+            h2 { font-size: 2rem; }
+            h3 { font-size: 1.5rem; }
+            
+            .hero {
+                height: 80vh;
+                min-height: 500px;
+                background-attachment: scroll;
+            }
+            
+            .hero h1 { font-size: 3rem; }
+            .hero p { font-size: 1.1rem; }
+            
+            .home-intro {
+                grid-template-columns: 1fr;
+                text-align: center;
+                gap: 30px;
+            }
+            
+            #contact .contact-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .map-container {
+                height: 400px;
+                margin-top: 2rem;
+            }
+        }
+
+        @media (max-width: 576px) {
+            :root {
+                --section-padding: 70px 0;
+                --border-radius: 12px;
+            }
+            
+            .container {
+                width: 95%;
+                padding: 0 15px;
+            }
+            
+            h1 { font-size: 2.2rem; }
+            h2 { font-size: 1.8rem; }
+            h3 { font-size: 1.4rem; }
+            
+            .hero {
+                height: 70vh;
+                min-height: 450px;
+                margin-bottom: 3rem;
+            }
+            
+            .hero h1 { font-size: 2.5rem; }
+            .hero p { font-size: 1rem; }
+            
+            .hero-content {
+                padding: 30px;
+            }
+            
+            .hero .btn {
+                margin: 5px;
+                padding: 12px 25px;
+                font-size: 1rem;
+                display: block;
+                width: 80%;
+                margin: 10px auto;
+            }
+            
+            #rooms .room-grid {
+                grid-template-columns: 1fr;
+                gap: 35px;
+            }
+            
+            #services ul {
+                grid-template-columns: 1fr;
+            }
+            
+            #contact .contact-container {
+                padding: 30px;
+            }
+            
+            .contact-form input,
+            .contact-form textarea {
+                padding: 15px;
+            }
+            
+            .map-container {
+                height: 350px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="main-header">
+        <div class="header-container">
+            <div class="logo"><i class="fas fa-mountain"></i>Refugio del Valle</div>
+            <div class="menu-toggle" id="mobile-menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <nav class="main-nav" id="main-nav">
+                <ul>
+                    <li><a href="#home" class="nav-link active">Inicio</a></li>
+                    <li><a href="#rooms" class="nav-link">Cabañas</a></li>
+                    <li><a href="#services" class="nav-link">Servicios</a></li>
+                    <li><a href="#contact" class="nav-link">Contacto</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section id="home">
+            <div class="hero">
+                <div class="hero-content">
+                    <h1>Escapa a la Naturaleza</h1>
+                    <p>Descubre el encanto de nuestras cabañas de montaña, donde el lujo se encuentra con la naturaleza</p>
+                    <a href="#rooms" class="btn">Ver Cabañas</a>
+                    <a href="#contact" class="btn btn-secondary">Reservar Ahora</a>
+                </div>
+            </div>
+            
+            <div class="container">
+                <div class="home-intro">
+                    <div class="animate-on-scroll">
+                        <h3>Tu Refugio Perfecto</h3>
+                        <p>Refugio del Valle ofrece cabañas exclusivas diseñadas para proporcionar el máximo confort mientras te rodeas de paisajes espectaculares. Cada detalle ha sido cuidadosamente seleccionado para crear una experiencia única.</p>
+                        <p>Desde amplios ventanales con vistas panorámicas hasta chimeneas de leña y terrazas privadas, nuestras cabañas son el escenario perfecto para recuerdos inolvidables.</p>
+                        <a href="#services" class="btn btn-small">Nuestros Servicios</a>
+                    </div>
+                    <div class="animate-on-scroll">
+                        <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Cabaña de lujo en el bosque">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="rooms">
+            <div class="container">
+                <h2>Nuestras Cabañas</h2>
+                <p style="text-align: center; max-width: 800px; margin: 0 auto 3rem auto;">Cada cabaña es un santuario único, diseñado para armonizar con su entorno natural.</p>
+                
+                <div class="room-grid">
+                    <div class="room-card animate-on-scroll">
+                        <div class="room-badge">Más Popular</div>
+                        <div class="img-container">
+                            <img src="https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Cabaña del Bosque">
+                        </div>
+                        <div class="room-info">
+                            <h3>Cabaña del Bosque</h3>
+                            <p>Acogedora cabaña de madera con chimenea, terraza privada y vistas al bosque. Ideal para parejas que buscan intimidad y conexión con la naturaleza.</p>
+                            <p class="room-price">$190 / noche</p>
+                            <a href="#contact" class="btn btn-small">Reservar</a>
+                        </div>
+                    </div>
+                    
+                    <div class="room-card animate-on-scroll" style="animation-delay: 0.2s;">
+                        <div class="room-badge">Nueva</div>
+                        <div class="img-container">
+                            <img src="https://images.unsplash.com/photo-1605276374104-dee2a0ed3cd6?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Cabaña Premium">
+                        </div>
+                        <div class="room-info">
+                            <h3>Cabaña Premium</h3>
+                            <p>Amplia cabaña con dos dormitorios, sala de estar con chimenea y bañera de hidromasaje. Terraza con vistas espectaculares y zona de descanso exterior.</p>
+                            <p class="room-price">$290 / noche</p>
+                            <a href="#contact" class="btn btn-small">Reservar</a>
+                        </div>
+                    </div>
+                    
+                    <div class="room-card animate-on-scroll" style="animation-delay: 0.4s;">
+                        <div class="room-badge">Familiar</div>
+                        <div class="img-container">
+                            <img src="https://images.unsplash.com/photo-1601918774946-25832a4be0d6?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Cabaña Familiar">
+                        </div>
+                        <div class="room-info">
+                            <h3>Refugio Familiar</h3>
+                            <p>Espaciosa cabaña para familias, con tres dormitorios, cocina completa y amplia terraza. Acceso directo al arroyo y zona de juegos infantiles.</p>
+                            <p class="room-price">$350 / noche</p>
+                            <a href="#contact" class="btn btn-small">Reservar</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="services">
+            <div class="container">
+                <h2>Experiencias Únicas</h2>
+                <p style="text-align: center; max-width: 800px; margin: 0 auto 3rem auto;">Más que un alojamiento, ofrecemos experiencias memorables en la naturaleza.</p>
+                
+                <ul>
+                    <li class="animate-on-scroll"><i class="fas fa-tree"></i> <span>Rutas guiadas por bosques centenarios</span></li>
+                    <li class="animate-on-scroll" style="animation-delay: 0.1s;"><i class="fas fa-hot-tub"></i> <span>Baños termales privados al aire libre</span></li>
+                    <li class="animate-on-scroll" style="animation-delay: 0.2s;"><i class="fas fa-utensils"></i> <span>Cenas con productos locales en tu cabaña</span></li>
+                    <li class="animate-on-scroll" style="animation-delay: 0.3s;"><i class="fas fa-spa"></i> <span>Masajes con vistas a las montañas</span></li>
+                    <li class="animate-on-scroll" style="animation-delay: 0.4s;"><i class="fas fa-binoculars"></i> <span>Avistamiento de fauna autóctona</span></li>
+                    <li class="animate-on-scroll" style="animation-delay: 0.5s;"><i class="fas fa-campground"></i> <span>Noches de fogata con historias locales</span></li>
+                    <li class="animate-on-scroll" style="animation-delay: 0.6s;"><i class="fas fa-bicycle"></i> <span>Alquiler de bicicletas de montaña</span></li>
+                    <li class="animate-on-scroll" style="animation-delay: 0.7s;"><i class="fas fa-snowflake"></i> <span>Actividades de invierno exclusivas</span></li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="contact">
+            <div class="container">
+                <h2>Reserva Tu Estancia</h2>
+                <p style="text-align: center; max-width: 800px; margin: 0 auto 3rem auto;">Estamos aquí para ayudarte a planificar tu escapada perfecta a la montaña.</p>
+                
+                <div class="contact-container animate-on-scroll">
+                    <div class="contact-form">
+                        <h3>Contáctanos</h3>
+                        <form id="contactForm">
+                            <label for="name">Nombre:</label>
+                            <input type="text" id="name" name="name" required placeholder="Tu nombre completo">
+                            
+                            <label for="email">Email:</label>
+                            <input type="email" id="email" name="email" required placeholder="tu@email.com">
+                            
+                            <label for="phone">Teléfono:</label>
+                            <input type="tel" id="phone" name="phone" placeholder="Número de contacto">
+                            
+                            <label for="message">Tu Mensaje:</label>
+                            <textarea id="message" name="message" required placeholder="Fechas de estancia, número de personas y cualquier solicitud especial..."></textarea>
+                            
+                            <button type="submit" class="btn">Enviar Consulta</button>
+                        </form>
+                        <p id="form-message" style="margin-top: 20px; font-weight: bold; display: none;"></p>
+                    </div>
+                    
+                    <div class="contact-info">
+                        <h3>Información</h3>
+                        <p><i class="fas fa-map-marker-alt"></i> <span>Valle Escondido, Sierra Nevada<br>18490, Granada, España</span></p>
+                        <p><i class="fas fa-phone"></i> <strong>Teléfono:</strong> <a href="tel:+34958765432">+34 958 765 432</a></p>
+                        <p><i class="fas fa-envelope"></i> <strong>Email:</strong> <a href="mailto:reservas@refugiodelvalle.com">reservas@refugiodelvalle.com</a></p>
+                        <p><i class="fas fa-clock"></i> <strong>Horario atención:</strong> 9:00 - 20:00</p>
+                        
+                        <div class="map-container" style="margin-top: 2rem;">
+                            <img src="https://images.unsplash.com/photo-1571494146906-86de15d3817b?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Ubicación en mapa">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="main-footer">
+        <div class="container">
+            <div class="social-links">
+                <a href="#"><i class="fab fa-facebook-f"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-tiktok"></i></a>
+            </div>
+            <p>&copy; 2025 Refugio del Valle. Creado con <span class="heart">❤️</span> para amantes de la naturaleza.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Navegación y cambio de secciones
+        const navLinks = document.querySelectorAll('.nav-link');
+        const sections = document.querySelectorAll('main section');
+        const mobileMenuToggle = document.getElementById('mobile-menu');
+        const mainNav = document.getElementById('main-nav');
+        const header = document.querySelector('.main-header');
+        const contactForm = document.getElementById('contactForm');
+        const formMessage = document.getElementById('form-message');
+
+        // Mostrar sección
+        function showSection(targetId, isInitialLoad = false) {
+            sections.forEach(section => {
+                if (section.id === targetId) {
+                    section.classList.add('active');
+                    if (!isInitialLoad || targetId === 'home') {
+                        setTimeout(() => {
+                            section.classList.add('visible');
+                        }, 50);
+                    }
+                } else {
+                    section.classList.remove('active', 'visible');
+                }
+            });
+        }
+
+        // Actualizar enlace activo
+        function updateActiveNavLink(targetId) {
+            navLinks.forEach(link => {
+                if (link.getAttribute('href') === `#${targetId}`) {
+                    link.classList.add('active');
+                } else {
+                    link.classList.remove('active');
+                }
+            });
+        }
+
+        // Eventos de navegación
+        navLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href').substring(1);
+                
+                updateActiveNavLink(targetId);
+                showSection(targetId);
+                
+                // Cerrar menú móvil si está abierto
+                if (mainNav.classList.contains('active')) {
+                    mainNav.classList.remove('active');
+                    mobileMenuToggle.classList.remove('active');
+                    document.body.style.overflow = '';
+                }
+                
+                // Scroll suave a la sección
+                const targetSection = document.getElementById(targetId);
+                if (targetSection) {
+                    const headerHeight = header.offsetHeight;
+                    const elementPosition = targetSection.getBoundingClientRect().top;
+                    const offsetPosition = elementPosition + window.pageYOffset - headerHeight - 20;
+                    
+                    window.scrollTo({
+                        top: offsetPosition,
+                        behavior: "smooth"
+                    });
+                }
+            });
+        });
+
+        // Menú móvil
+        mobileMenuToggle.addEventListener('click', () => {
+            mainNav.classList.toggle('active');
+            mobileMenuToggle.classList.toggle('active');
+            document.body.style.overflow = mainNav.classList.contains('active') ? 'hidden' : '';
+        });
+
+        // Formulario de contacto
+        contactForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            formMessage.textContent = 'Enviando tu mensaje...';
+            formMessage.style.color = 'var(--color-secondary)';
+            formMessage.style.display = 'block';
+            
+            // Simular envío
+            setTimeout(() => {
+                formMessage.textContent = '¡Gracias por tu mensaje! Te responderemos en breve.';
+                formMessage.style.color = 'var(--color-primary)';
+                contactForm.reset();
+                
+                setTimeout(() => {
+                    formMessage.style.display = 'none';
+                }, 5000);
+            }, 1500);
+        });
+
+        // Animaciones al hacer scroll
+        const animatedElements = document.querySelectorAll('.animate-on-scroll');
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    
+                    // Animación especial para servicios
+                    if (entry.target.parentElement.id === 'services') {
+                        setTimeout(() => {
+                            entry.target.style.transform = 'translateY(0)';
+                            entry.target.style.opacity = '1';
+                        }, 100);
+                    }
+                }
+            });
+        }, {
+            threshold: 0.1
+        });
+
+        animatedElements.forEach(el => {
+            observer.observe(el);
+        });
+
+        // Observar secciones para animación
+        sections.forEach(section => {
+            observer.observe(section);
+        });
+
+        // Efecto de scroll en el header
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+
+        // Animaciones hover para tarjetas de servicios
+        const serviceItems = document.querySelectorAll('#services li');
+        serviceItems.forEach(item => {
+            item.addEventListener('mouseenter', () => {
+                const icon = item.querySelector('i');
+                icon.style.animation = 'shake 0.5s ease';
+                
+                setTimeout(() => {
+                    icon.style.animation = '';
+                }, 500);
+            });
+        });
+
+        // Configuración inicial al cargar
+        document.addEventListener('DOMContentLoaded', () => {
+            const hash = window.location.hash.substring(1);
+            const initialSectionId = hash || 'home';
+            
+            showSection(initialSectionId, true);
+            updateActiveNavLink(initialSectionId);
+            
+            // Scroll a sección si hay hash
+            if (hash) {
+                setTimeout(() => {
+                    const targetSection = document.getElementById(initialSectionId);
+                    if (targetSection) {
+                        const headerHeight = header.offsetHeight;
+                        const elementPosition = targetSection.getBoundingClientRect().top;
+                        const offsetPosition = elementPosition + window.pageYOffset - headerHeight - 20;
+                        window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
+                    }
+                }, 100);
+            }
+            
+            // Añadir clase scrolled si no está al inicio
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            }
+            
+            // Animación flotante para el logo
+            const logoIcon = document.querySelector('.logo i');
+            setInterval(() => {
+                logoIcon.style.animation = 'float 3s ease-in-out infinite';
+            }, 2000);
+        });
+    </script>
+</body>
+</html>
