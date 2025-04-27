@@ -1,0 +1,1030 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TermoWorld - Los Mejores Termos del Mercado</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Reset básico y fuentes */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f8f9fa;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        a {
+            text-decoration: none;
+            color: #007bff;
+        }
+
+        a:hover {
+            color: #0056b3;
+        }
+
+        /* Header */
+        header {
+            background: #fff;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            width: 100%;
+        }
+
+        header .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #ff6f61;
+            display: flex;
+            align-items: center;
+        }
+
+        .logo svg {
+            height: 40px;
+            margin-right: 10px;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+        }
+
+        nav ul li {
+            margin-left: 25px;
+        }
+
+        nav ul li a {
+            color: #555;
+            font-weight: 600;
+            transition: color 0.3s ease;
+            font-size: 1rem;
+        }
+
+        nav ul li a:hover {
+            color: #ff6f61;
+        }
+
+        .cart-icon {
+            font-size: 1.3rem;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .cart-count {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #ff6f61;
+            color: white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            font-size: 0.7rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Hero Section - Más enfocado en productos */
+        .hero-section {
+            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1602143407151-7111542de6e8?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-position: center;
+            color: #fff;
+            text-align: center;
+            padding: 120px 20px;
+            min-height: 60vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .hero-section h1 {
+            font-size: 3.2rem;
+            margin-bottom: 1.5rem;
+            font-weight: 700;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .hero-section p {
+            font-size: 1.3rem;
+            margin-bottom: 2.5rem;
+            font-weight: 300;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: #ff6f61;
+            color: #fff;
+            padding: 14px 35px;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .cta-button:hover {
+            background-color: #e65a4f;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+
+        /* Product Section - Mejorada */
+        .product-section {
+            padding: 90px 0 60px;
+            text-align: center;
+            background-color: #fff;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            color: #333;
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 4px;
+            background: #ff6f61;
+            margin: 15px auto 25px;
+            border-radius: 2px;
+        }
+
+        .section-subtitle {
+            color: #666;
+            font-size: 1.1rem;
+            max-width: 700px;
+            margin: 0 auto 50px;
+        }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 35px;
+            margin-bottom: 40px;
+        }
+
+        .product-card {
+            background: #fff;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .product-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.12);
+        }
+
+        .product-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: #ff6f61;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            z-index: 1;
+        }
+
+        .product-image {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            background-color: #f5f5f5;
+            transition: transform 0.5s ease;
+        }
+
+        .product-card:hover .product-image {
+            transform: scale(1.05);
+        }
+
+        .product-info {
+            padding: 20px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .product-title {
+            font-size: 1.4rem;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .product-description {
+            font-size: 0.95rem;
+            color: #666;
+            margin-bottom: 15px;
+            flex-grow: 1;
+        }
+
+        .product-price {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .current-price {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #ff6f61;
+        }
+
+        .original-price {
+            font-size: 1rem;
+            color: #999;
+            text-decoration: line-through;
+            margin-left: 10px;
+        }
+
+        .product-rating {
+            color: #ffc107;
+            margin-bottom: 15px;
+            font-size: 0.9rem;
+        }
+
+        .add-to-cart {
+            background: #007bff;
+            color: #fff;
+            border: none;
+            padding: 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            font-weight: 600;
+            width: 100%;
+            margin-top: auto;
+        }
+
+        .add-to-cart:hover {
+            background: #0056b3;
+        }
+
+        .view-all-button {
+            margin-top: 40px;
+            background-color: #28a745;
+        }
+
+        .view-all-button:hover {
+            background-color: #218838;
+        }
+
+        /* Categorías de Productos */
+        .categories-section {
+            padding: 70px 0;
+            background-color: #f8f9fa;
+        }
+
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+        }
+
+        .category-card {
+            position: relative;
+            border-radius: 10px;
+            overflow: hidden;
+            height: 200px;
+            transition: all 0.3s ease;
+        }
+
+        .category-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+
+        .category-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .category-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Testimonios */
+        .testimonials-section {
+            padding: 80px 0;
+            background-color: #fff;
+        }
+
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .testimonial-card {
+            background: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            position: relative;
+        }
+
+        .testimonial-card::before {
+            content: '"';
+            font-size: 5rem;
+            color: #f0f0f0;
+            position: absolute;
+            top: 10px;
+            left: 20px;
+            line-height: 1;
+            z-index: 0;
+        }
+
+        .testimonial-content {
+            position: relative;
+            z-index: 1;
+            margin-bottom: 20px;
+            font-style: italic;
+            color: #555;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+        }
+
+        .author-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 15px;
+        }
+
+        .author-info h4 {
+            margin-bottom: 5px;
+            color: #333;
+        }
+
+        .author-info p {
+            color: #777;
+            font-size: 0.9rem;
+        }
+
+        .rating {
+            color: #ffc107;
+            margin-top: 5px;
+        }
+
+        /* Features Section - Más comercial */
+        .features-section {
+            padding: 80px 0;
+            background-color: #f8f9fa;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .feature-card {
+            background: #fff;
+            padding: 35px 25px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            color: #ff6f61;
+            margin-bottom: 20px;
+            display: inline-block;
+        }
+
+        .feature-title {
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .feature-description {
+            color: #666;
+            font-size: 0.95rem;
+        }
+
+        /* Newsletter */
+        .newsletter-section {
+            padding: 70px 0;
+            background: linear-gradient(135deg, #6ab1d7, #ff6f61);
+            color: white;
+            text-align: center;
+        }
+
+        .newsletter-form {
+            max-width: 500px;
+            margin: 30px auto 0;
+            display: flex;
+        }
+
+        .newsletter-input {
+            flex-grow: 1;
+            padding: 14px 20px;
+            border: none;
+            border-radius: 50px 0 0 50px;
+            font-size: 1rem;
+        }
+
+        .newsletter-button {
+            padding: 14px 25px;
+            background: #333;
+            color: white;
+            border: none;
+            border-radius: 0 50px 50px 0;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.3s ease;
+        }
+
+        .newsletter-button:hover {
+            background: #222;
+        }
+
+        /* Footer */
+        footer {
+            background: #2c3e50;
+            color: #f8f9fa;
+            padding: 60px 0 30px;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-column h3 {
+            color: #fff;
+            margin-bottom: 20px;
+            font-size: 1.2rem;
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        .footer-column h3::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 40px;
+            height: 2px;
+            background: #ff6f61;
+        }
+
+        .footer-column ul {
+            list-style: none;
+        }
+
+        .footer-column ul li {
+            margin-bottom: 10px;
+        }
+
+        .footer-column ul li a {
+            color: #ddd;
+            transition: color 0.3s ease;
+        }
+
+        .footer-column ul li a:hover {
+            color: #ff6f61;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .social-links a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        .social-links a:hover {
+            background: #ff6f61;
+            transform: translateY(-3px);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            color: #aaa;
+            font-size: 0.9rem;
+        }
+
+        /* Animaciones */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animated {
+            animation-duration: 1s;
+            animation-fill-mode: both;
+        }
+
+        .fadeIn {
+            animation-name: fadeIn;
+        }
+
+        .fadeInUp {
+            animation-name: fadeInUp;
+        }
+
+        /* Media Queries */
+        @media (max-width: 992px) {
+            .hero-section h1 {
+                font-size: 2.8rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            header .container {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            nav ul {
+                margin-top: 15px;
+                justify-content: center;
+            }
+
+            nav ul li {
+                margin: 0 10px;
+            }
+
+            .hero-section {
+                padding: 100px 20px;
+            }
+
+            .hero-section h1 {
+                font-size: 2.4rem;
+            }
+
+            .hero-section p {
+                font-size: 1.1rem;
+            }
+
+            .newsletter-form {
+                flex-direction: column;
+            }
+
+            .newsletter-input {
+                border-radius: 50px;
+                margin-bottom: 10px;
+            }
+
+            .newsletter-button {
+                border-radius: 50px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .logo {
+                font-size: 1.5rem;
+            }
+
+            .hero-section h1 {
+                font-size: 2rem;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .product-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="animated fadeInDown">
+        <div class="container">
+            <div class="logo">
+                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="50" cy="50" r="40" fill="#ff6f61" />
+                    <text x="50%" y="55%" text-anchor="middle" fill="#fff" font-size="20" font-family="Arial" dy=".3em">TW</text>
+                </svg>
+                TermoWorld
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="#inicio">Inicio</a></li>
+                    <li><a href="#productos">Productos</a></li>
+                    <li><a href="#categorias">Categorías</a></li>
+                    <li><a href="#testimonios">Opiniones</a></li>
+                    <li><a href="#contacto">Contacto</a></li>
+                </ul>
+            </nav>
+            <div class="cart-icon">
+                <i class="fas fa-shopping-cart"></i>
+                <span class="cart-count">0</span>
+            </div>
+        </div>
+    </header>
+
+    <section id="inicio" class="hero-section">
+        <div class="container animated fadeInUp">
+            <h1>Los Termos Más Vendidos del 2025</h1>
+            <p>Mantén tus bebidas a la temperatura perfecta durante horas con nuestra colección premium de termos.</p>
+            <a href="#productos" class="cta-button">Ver Productos Destacados</a>
+        </div>
+    </section>
+
+    <section id="productos" class="product-section">
+        <div class="container">
+            <h2 class="section-title">Nuestros Productos Destacados</h2>
+            <p class="section-subtitle">Selección de los termos más populares y mejor valorados por nuestros clientes</p>
+
+            <div class="product-grid">
+                <div class="product-card animated fadeInUp">
+                    <span class="product-badge">Más Vendido</span>
+                    <img src="https://images.unsplash.com/photo-1608355023740-9753f3610d3b?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" alt="Termo Deportivo Pro" class="product-image">
+                    <div class="product-info">
+                        <h3 class="product-title">Termo Deportivo Pro</h3>
+                        <p class="product-description">Tecnología avanzada para mantener tus bebidas frías por 36 horas o calientes por 24 horas. Ideal para deportistas.</p>
+                        <div class="product-rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            (128)
+                        </div>
+                        <div class="product-price">
+                            <span class="current-price">\\$29.99</span>
+                            <span class="original-price">\\$39.99</span>
+                        </div>
+                        <button class="add-to-cart">Añadir al Carrito</button>
+                    </div>
+                </div>
+
+                <div class="product-card animated fadeInUp" style="animation-delay: 0.2s;">
+                    <span class="product-badge">Nuevo</span>
+                    <img src="https://images.unsplash.com/photo-1602143407151-7111542de6e8?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" alt="Termo Elegance 2025" class="product-image">
+                    <div class="product-info">
+                        <h3 class="product-title">Termo Elegance 2025</h3>
+                        <p class="product-description">Diseño premium en acero inoxidable con doble capa de aislamiento al vacío. Capacidad 500ml.</p>
+                        <div class="product-rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star-half-alt"></i>
+                            (87)
+                        </div>
+                        <div class="product-price">
+                            <span class="current-price">\\$34.99</span>
+                        </div>
+                        <button class="add-to-cart">Añadir al Carrito</button>
+                    </div>
+                </div>
+
+                <div class="product-card animated fadeInUp" style="animation-delay: 0.4s;">
+                    <span class="product-badge">Oferta</span>
+                    <img src="https://images.unsplash.com/photo-1608355023740-9753f3610d3b?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" alt="Termo Viajero Plus" class="product-image">
+                    <div class="product-info">
+                        <h3 class="product-title">Termo Viajero Plus</h3>
+                        <p class="product-description">Perfecto para viajes. Mantiene la temperatura por 48 horas. Incluye funda protectora y 2 tazas.</p>
+                        <div class="product-rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            (156)
+                        </div>
+                        <div class="product-price">
+                            <span class="current-price">\\$45.99</span>
+                            <span class="original-price">\\$59.99</span>
+                        </div>
+                        <button class="add-to-cart">Añadir al Carrito</button>
+                    </div>
+                </div>
+
+                <div class="product-card animated fadeInUp" style="animation-delay: 0.6s;">
+                    <img src="https://images.unsplash.com/photo-1608355023740-9753f3610d3b?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" alt="Termo Kids Adventure" class="product-image">
+                    <div class="product-info">
+                        <h3 class="product-title">Termo Kids Adventure</h3>
+                        <p class="product-description">Diseñado para niños, con materiales libres de BPA y diseño divertido. Capacidad 350ml.</p>
+                        <div class="product-rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="far fa-star"></i>
+                            (64)
+                        </div>
+                        <div class="product-price">
+                            <span class="current-price">\\$22.99</span>
+                        </div>
+                        <button class="add-to-cart">Añadir al Carrito</button>
+                    </div>
+                </div>
+            </div>
+
+            <a href="#" class="cta-button view-all-button">Ver Todos los Productos</a>
+        </div>
+    </section>
+
+    <section id="categorias" class="categories-section">
+        <div class="container">
+            <h2 class="section-title">Explora por Categorías</h2>
+            <p class="section-subtitle">Encuentra el termo perfecto para cada ocasión</p>
+
+            <div class="category-grid">
+                <div class="category-card animated fadeInUp">
+                    <img src="https://images.unsplash.com/photo-1602143407151-7111542de6e8?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" alt="Termos Deportivos" class="category-image">
+                    <div class="category-overlay">Deportivos</div>
+                </div>
+
+                <div class="category-card animated fadeInUp" style="animation-delay: 0.2s;">
+                    <img src="https://images.unsplash.com/photo-1608355023740-9753f3610d3b?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" alt="Termos de Viaje" class="category-image">
+                    <div class="category-overlay">Viaje</div>
+                </div>
+
+                <div class="category-card animated fadeInUp" style="animation-delay: 0.4s;">
+                    <img src="https://images.unsplash.com/photo-1602143407151-7111542de6e8?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" alt="Termos para Café" class="category-image">
+                    <div class="category-overlay">Para Café</div>
+                </div>
+
+                <div class="category-card animated fadeInUp" style="animation-delay: 0.6s;">
+                    <img src="https://images.unsplash.com/photo-1608355023740-9753f3610d3b?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" alt="Termos Infantiles" class="category-image">
+                    <div class="category-overlay">Infantiles</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="testimonios" class="testimonials-section">
+        <div class="container">
+            <h2 class="section-title">Lo Que Dicen Nuestros Clientes</h2>
+            <p class="section-subtitle">Más de 5,000 clientes satisfechos en todo el país</p>
+
+            <div class="testimonials-grid">
+                <div class="testimonial-card animated fadeInUp">
+                    <div class="testimonial-content">
+                        "Compré el Termo Deportivo Pro para mis entrenamientos y superó todas mis expectativas. Después de 8 horas al sol, el agua seguía increíblemente fría."
+                    </div>
+                    <div class="testimonial-author">
+                        <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="María González" class="author-avatar">
+                        <div class="author-info">
+                            <h4>María González</h4>
+                            <p>Atleta profesional</p>
+                            <div class="rating">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="testimonial-card animated fadeInUp" style="animation-delay: 0.2s;">
+                    <div class="testimonial-content">
+                        "Como viajero frecuente, el Termo Viajero Plus ha sido un cambio radical. Mantiene mi café caliente durante todo el vuelo y la funda protege perfectamente el termo."
+                    </div>
+                    <div class="testimonial-author">
+                        <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Carlos Mendoza" class="author-avatar">
+                        <div class="author-info">
+                            <h4>Carlos Mendoza</h4>
+                            <p>Consultor internacional</p>
+                            <div class="rating">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="testimonial-card animated fadeInUp" style="animation-delay: 0.4s;">
+                    <div class="testimonial-content">
+                        "Compré el Termo Kids para mi hija y es perfecto. Le encanta el diseño, es fácil de usar y lo mejor: no se derrama en su mochila. ¡Totalmente recomendado!"
+                    </div>
+                    <div class="testimonial-author">
+                        <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="Laura Jiménez" class="author-avatar">
+                        <div class="author-info">
+                            <h4>Laura Jiménez</h4>
+                            <p>Madre de familia</p>
+                            <div class="rating">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star-half-alt"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="features-section">
+        <div class="container">
+            <h2 class="section-title">Por Qué Elegir TermoWorld</h2>
+            <p class="section-subtitle">Calidad y diseño en cada uno de nuestros productos</p>
+
+            <div class="features-grid">
+                <div class="feature-card animated fadeInUp">
+                    <div class="feature-icon">
+                        <i class="fas fa-temperature-low"></i>
+                    </div>
+                    <h3 class="feature-title">Tecnología Térmica</h3>
+                    <p class="feature-description">Nuestros termos mantienen las bebidas frías hasta 48 horas y calientes hasta 24 horas gracias a nuestro aislamiento al vacío de doble pared.</p>
+                </div>
+
+                <div class="feature-card animated fadeInUp" style="animation-delay: 0.2s;">
+                    <div class="feature-icon">
+                        <i class="fas fa-leaf"></i>
+                    </div>
+                    <h3 class="feature-title">Materiales Ecológicos</h3>
+                    <p class="feature-description">Utilizamos acero inoxidable 18/8 de grado alimenticio y materiales libres de BPA, seguros para ti y el medio ambiente.</p>
+                </div>
+
+                <div class="feature-card animated fadeInUp" style="animation-delay: 0.4s;">
+                    <div class="feature-icon">
+                        <i class="fas fa-award"></i>
+                    </div>
+                    <h3 class="feature-title">Garantía de 5 Años</h3>
+                    <p class="feature-description">Confiamos tanto en nuestros productos que ofrecemos una de las garantías más extensas del mercado.</p>
+                </div>
+
+                <div class="feature-card animated fadeInUp" style="animation-delay: 0.6s;">
+                    <div class="feature-icon">
+                        <i class="fas fa-truck"></i>
+                    </div>
+                    <h3 class="feature-title">Envío Rápido</h3>
+                    <p class="feature-description">Recibe tu pedido en 24-48 horas con nuestro servicio de envío express gratuito para compras superiores a \\$50.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="newsletter-section">
+        <div class="container animated fadeIn">
+            <h2>¡No Te Pierdas Nuestras Ofertas!</h2>
+            <p>Suscríbete a nuestro boletín y recibe un 10% de descuento en tu primera compra.</p>
+
+            <form class="newsletter-form">
+                <input type="email" placeholder="Tu correo electrónico" class="newsletter-input" required>
+                <button type="submit" class="newsletter-button">Suscribirse</button>
+            </form>
+        </div>
+    </section>
+
+    <footer id="contacto">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-column">
+                    <h3>TermoWorld</h3>
+                    <p>Líderes en tecnología térmica desde 2018. Ofrecemos los mejores termos del mercado con garantía de satisfacción.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-pinterest"></i></a>
+                    </div>
+                </div>
+
+                <div class="footer-column">
+                    <h3>Productos</h3>
+                    <ul>
+                        <li><a href="#">Termos Deportivos</a></li>
+                        <li><a href="#">Termos de Viaje</a></li>
+                        <li><a href="#">Termos para Café</a></li>
+                        <li><a href="#">Termos Infantiles</a></li>
+                        <li><a href="#">Accesorios</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-column">
+                    <h3>Ayuda</h3>
+                    <ul>
+                        <li><a href="#">Preguntas Frecuentes</a></li>
+                        <li><a href="#">Envíos y Devoluciones</a></li>
+                        <li><a href="#">Guía de Tallas</a></li>
+                        <li><a href="#">Garantías</a></li>
+                        <li><a href="#">Contactar Soporte</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-column">
+                    <h3>Contacto</h3>
+                    <ul>
+                        <li><i class="fas fa-map-marker-alt"></i> Av. Principal 123, Ciudad</li>
+                        <li><i class="fas fa-phone"></i> +1 234 567 890</li>
+                        <li><i class="fas fa-envelope"></i> info@termoworld.com</li>
+                        <li><i class="fas fa-clock"></i> Lunes a Viernes: 9am - 6pm</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>&copy; 2025 TermoWorld. Todos los derechos reservados. | <a href="#">Política de Privacidad</a> | <a href="#">Términos y Condiciones</a></p>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>
