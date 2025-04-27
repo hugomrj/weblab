@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sándwiches Artesanales Deliciosos - Calidad y Sabor</title>
+    <meta name="description" content="Sándwiches artesanales en San Lorenzo - Ingredientes frescos, pan recién horneado y combinaciones únicas. ¡Prueba nuestros deliciosos sándwiches!">
+    <meta name="keywords" content="sándwiches, comida rápida, San Lorenzo, Paraguay, delivery, almuerzo, comida saludable">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Custom Styles */
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .gradient-bg-hero {
+            background: linear-gradient(135deg, #3b82f6, #10b981, #f59e0b);
+        }
+        
+        .gradient-text {
+            background: linear-gradient(135deg, #1e40af, #065f46, #b45309);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .fade-in-up-section {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.7s ease-out, transform 0.7s ease-out;
+        }
+        
+        .fade-in-up-section.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        img {
+            aspect-ratio: attr(width) / attr(height);
+            height: auto;
+            background-color: #e5e7eb;
+        }
+        
+        .section-divider {
+            width: 80px;
+            height: 4px;
+            margin: 1rem auto;
+            background: linear-gradient(90deg, #047857, #B45309);
+            border-radius: 2px;
+        }
+        
+        .bg-pattern {
+            background-color: #f9fafb;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 40 40'%3E%3Cg fill-rule='evenodd'%3E%3Cg fill='%23d1fae5' fill-opacity='0.2'%3E%3Cpath d='M0 38.59l2.83-2.83 1.41 1.41L1.41 40H0v-1.41zM0 1.4l2.83 2.83 1.41-1.41L1.41 0H0v1.41zM38.59 40l-2.83-2.83 1.41-1.41L40 38.59V40h-1.41zM40 1.41l-2.83 2.83-1.41-1.41L38.59 0H40v1.41zM20 18.6l2.83-2.83 1.41 1.41L21.41 20l2.83 2.83-1.41 1.41L20 21.41l-2.83 2.83-1.41-1.41L18.59 20l-2.83-2.83 1.41-1.41L20 18.59z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+        
+        /* Animaciones adicionales */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .animate-fade-in-up {
+            animation: fadeInUp 0.5s ease-out forwards;
+        }
+        
+        @keyframes check {
+            0% {
+                transform: scale(0);
+            }
+            50% {
+                transform: scale(1.2);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+        
+        .animate-check {
+            animation: check 0.4s ease-out;
+        }
+        
+        /* Efecto hover para tarjetas de menú */
+        .menu-item:hover {
+            transform: translateY(-5px);
+        }
+        
+        .menu-item {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        /* Mejora para imágenes de la galería */
+        .gallery-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 0.5rem;
+        }
+        
+        .gallery-item img {
+            transition: transform 0.5s ease, opacity 0.3s ease;
+        }
+    </style>
+</head>
+<body class="bg-white text-gray-800 antialiased">
+
+    <!-- Navegación -->
+    <nav class="bg-white shadow-lg sticky top-0 z-50">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="#" class="text-2xl font-extrabold gradient-text tracking-tight">
+                Sándwiches Artesanales
+            </a>
+            <div class="space-x-8 text-gray-700 hidden md:flex font-semibold">
+                <a href="#inicio" class="hover:text-emerald-600 transition duration-300">Inicio</a>
+                <a href="#nosotros" class="hover:text-emerald-600 transition duration-300">Nosotros</a>
+                <a href="#menu" class="hover:text-emerald-600 transition duration-300">Menú</a>
+                <a href="#testimonios" class="hover:text-emerald-600 transition duration-300">Testimonios</a>
+                <a href="#contacto" class="hover:text-emerald-600 transition duration-300">Contacto</a>
+            </div>
+            <button id="mobile-menu-button" class="md:hidden focus:outline-none text-gray-700 hover:text-emerald-600" aria-expanded="false">
+                <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+            </button>
+        </div>
+        <div id="mobile-menu" class="md:hidden hidden bg-white border-t border-gray-200 py-2">
+            <a href="#inicio" class="block px-6 py-3 text-gray-700 hover:bg-emerald-50 hover:text-emerald-700 transition duration-300 font-medium">Inicio</a>
+            <a href="#nosotros" class="block px-6 py-3 text-gray-700 hover:bg-emerald-50 hover:text-emerald-700 transition duration-300 font-medium">Nosotros</a>
+            <a href="#menu" class="block px-6 py-3 text-gray-700 hover:bg-emerald-50 hover:text-emerald-700 transition duration-300 font-medium">Menú</a>
+            <a href="#testimonios" class="block px-6 py-3 text-gray-700 hover:bg-emerald-50 hover:text-emerald-700 transition duration-300 font-medium">Testimonios</a>
+            <a href="#contacto" class="block px-6 py-3 text-gray-700 hover:bg-emerald-50 hover:text-emerald-700 transition duration-300 font-medium">Contacto</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="inicio" class="relative text-white min-h-[80vh] flex items-center justify-center py-24 px-6 overflow-hidden bg-gray-700">
+        <img src="https://images.unsplash.com/photo-1559847844-5315695dadae?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1920&q=80" 
+             alt="Sándwiches artesanales frescos con ingredientes de calidad"
+             class="absolute inset-0 w-full h-full object-cover z-0"
+             width="1920" height="1080" loading="eager">
+        <div class="absolute inset-0 bg-black opacity-50 z-10"></div>
+        <div class="relative z-20 text-center max-w-3xl mx-auto fade-in-up-section is-visible">
+            <h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold mb-5 leading-tight tracking-tight">
+                <span class="gradient-text">Sándwiches Artesanales</span><br>
+                <span class="text-amber-300">Hechos con Pasión</span>
+            </h1>
+            <p class="text-lg md:text-xl mb-10 text-gray-200 font-light max-w-2xl mx-auto">
+                Ingredientes frescos, pan recién horneado y combinaciones únicas que despertarán tus sentidos.
+            </p>
+            <div class="flex flex-col sm:flex-row justify-center gap-4">
+                <a href="#menu" class="bg-gradient-to-r from-blue-600 to-emerald-600 text-white hover:from-blue-700 hover:to-emerald-700 font-bold py-3 px-8 rounded-full shadow-xl transition duration-300 transform hover:scale-105 text-lg">
+                    Ver Menú Completo
+                </a>
+                <a href="#contacto" class="bg-white text-gray-800 hover:bg-gray-100 font-bold py-3 px-8 rounded-full shadow-xl transition duration-300 transform hover:scale-105 text-lg">
+                    Hacer Pedido
+                </a>
+            </div>
+        </div>
+        <div class="absolute bottom-8 left-0 right-0 z-20 flex justify-center animate-bounce">
+            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+            </svg>
+        </div>
+    </section>
+
+    <!-- Especialidades -->
+    <section class="py-16 bg-amber-50">
+        <div class="container mx-auto px-6">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                <!-- Item 1 -->
+                <div class="bg-white p-6 rounded-xl shadow-md text-center hover:shadow-lg transition duration-300">
+                    <div class="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <svg class="w-8 h-8 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                        </svg>
+                    </div>
+                    <h3 class="font-bold text-gray-800 mb-2">Ingredientes Frescos</h3>
+                    <p class="text-sm text-gray-600">Seleccionados diariamente para garantizar máxima calidad</p>
+                </div>
+                
+                <!-- Item 2 -->
+                <div class="bg-white p-6 rounded-xl shadow-md text-center hover:shadow-lg transition duration-300">
+                    <div class="w-16 h-16 bg-amber-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <svg class="w-8 h-8 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="font-bold text-gray-800 mb-2">Recetas Exclusivas</h3>
+                    <p class="text-sm text-gray-600">Combinaciones únicas creadas por nuestros chefs</p>
+                </div>
+                
+                <!-- Item 3 -->
+                <div class="bg-white p-6 rounded-xl shadow-md text-center hover:shadow-lg transition duration-300">
+                    <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="font-bold text-gray-800 mb-2">Garantía de Calidad</h3>
+                    <p class="text-sm text-gray-600">Estrictos controles en cada paso de preparación</p>
+                </div>
+                
+                <!-- Item 4 -->
+                <div class="bg-white p-6 rounded-xl shadow-md text-center hover:shadow-lg transition duration-300">
+                    <div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <svg class="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="font-bold text-gray-800 mb-2">Delivery Rápido</h3>
+                    <p class="text-sm text-gray-600">Servicio express para que disfrutes en minutos</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Nosotros -->
+    <section id="nosotros" class="py-24 px-6 bg-white fade-in-up-section">
+        <div class="container mx-auto max-w-5xl text-center">
+            <h2 class="text-3xl md:text-4xl font-bold mb-4 gradient-text">Nuestra Esencia: Calidad y Pasión</h2>
+            <div class="section-divider"></div>
+            <p class="text-lg text-gray-600 mb-12 leading-relaxed max-w-3xl mx-auto">
+                En Sándwiches Artesanales, cada creación es un reflejo de nuestro amor por la buena comida. Nos alejamos de la producción masiva para centrarnos en la calidad artesanal. Seleccionamos rigurosamente cada ingrediente, desde el pan recién horneado hasta los vegetales más frescos y las carnes premium, para ofrecerte una experiencia de sabor inolvidable.
+            </p>
+            <img src="https://images.unsplash.com/photo-1606787366850-de6330128bfc?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=900&h=500&q=80" 
+                 alt="Equipo de Sándwiches Artesanales preparando comida" 
+                 class="rounded-xl shadow-lg mx-auto max-w-full h-auto border-4 border-emerald-100" 
+                 width="900" height="500" loading="lazy">
+        </div>
+    </section>
+
+    <!-- Menú -->
+    <section id="menu" class="py-24 px-6 bg-pattern fade-in-up-section">
+        <div class="container mx-auto">
+            <h2 class="text-3xl md:text-4xl font-bold text-center mb-4 gradient-text">Nuestro Menú</h2>
+            <div class="section-divider"></div>
+            <p class="text-center text-gray-600 mb-16 max-w-2xl mx-auto">Explora nuestras categorías y descubre tu próximo sándwich favorito.</p>
+            
+            <!-- Pestañas de categorías -->
+            <div class="flex flex-wrap justify-center gap-2 mb-12">
+                <button class="category-btn active px-6 py-2 rounded-full font-semibold bg-emerald-600 text-white" data-category="todos">Todos</button>
+                <button class="category-btn px-6 py-2 rounded-full font-semibold bg-white text-gray-800 border border-gray-300 hover:bg-gray-100" data-category="clasicos">Clásicos</button>
+                <button class="category-btn px-6 py-2 rounded-full font-semibold bg-white text-gray-800 border border-gray-300 hover:bg-gray-100" data-category="especiales">Especiales</button>
+                <button class="category-btn px-6 py-2 rounded-full font-semibold bg-white text-gray-800 border border-gray-300 hover:bg-gray-100" data-category="veganos">Veganos</button>
+                <button class="category-btn px-6 py-2 rounded-full font-semibold bg-white text-gray-800 border border-gray-300 hover:bg-gray-100" data-category="infantiles">Infantiles</button>
+            </div>
+            
+            <!-- Grid de productos -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="menu-grid">
+                <!-- Ítem 1 -->
+                <div class="menu-item bg-white rounded-xl shadow-lg overflow-hidden transition duration-300 hover:shadow-2xl border border-gray-100 flex flex-col clasicos">
+                    <div class="relative">
+                        <img src="https://images.unsplash.com/photo-1528735602780-2552fd46c7af?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=600&h=400&q=80" 
+                             alt="Clásico de Pavo Ahumado" 
+                             class="w-full h-52 object-cover" 
+                             width="600" height="400" loading="lazy">
+                        <span class="absolute top-4 right-4 bg-emerald-600 text-white text-xs font-bold px-3 py-1 rounded-full">MÁS VENDIDO</span>
+                    </div>
+                    <div class="p-6 flex flex-col flex-grow">
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="text-xl font-semibold text-gray-800">Clásico de Pavo Ahumado</h3>
+                            <span class="text-lg font-bold text-amber-600">$12.99</span>
+                        </div>
+                        <p class="text-gray-600 text-sm mb-4 flex-grow">Finas lonchas de pavo ahumado, queso Emmental, rúcula fresca, tomate confitado y mostaza a la miel en pan de masa madre.</p>
+                        <button class="add-to-cart mt-auto bg-emerald-100 text-emerald-800 hover:bg-emerald-200 font-medium py-2 px-4 rounded-lg transition duration-300 flex items-center justify-center gap-2">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                            </svg>
+                            Añadir al pedido
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Ítem 2 -->
+                <div class="menu-item bg-white rounded-xl shadow-lg overflow-hidden transition duration-300 hover:shadow-2xl border border-gray-100 flex flex-col veganos">
+                    <div class="relative">
+                        <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=600&h=400&q=80" 
+                             alt="Explosión Verde Vegana" 
+                             class="w-full h-52 object-cover" 
+                             width="600" height="400" loading="lazy">
+                    </div>
+                    <div class="p-6 flex flex-col flex-grow">
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="text-xl font-semibold text-gray-800">Explosión Verde Vegana</h3>
+                            <span class="text-lg font-bold text-amber-600">$10.99</span>
+                        </div>
+                        <p class="text-gray-600 text-sm mb-4 flex-grow">Hummus de remolacha, aguacate cremoso, pepino crujiente, pimientos tricolor asados, espinacas baby y germinados en pan multicereal.</p>
+                        <button class="add-to-cart mt-auto bg-emerald-100 text-emerald-800 hover:bg-emerald-200 font-medium py-2 px-4 rounded-lg transition duration-300 flex items-center justify-center gap-2">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                            </svg>
+                            Añadir al pedido
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Ítem 3 -->
+                <div class="menu-item bg-white rounded-xl shadow-lg overflow-hidden transition duration-300 hover:shadow-2xl border border-gray-100 flex flex-col especiales">
+                    <div class="relative">
+                        <img src="https://images.unsplash.com/photo-1544025162-d76694265947?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=600&h=400&q=80" 
+                             alt="Capricho Italiano" 
+                             class="w-full h-52 object-cover" 
+                             width="600" height="400" loading="lazy">
+                        <span class="absolute top-4 right-4 bg-blue-600 text-white text-xs font-bold px-3 py-1 rounded-full">NUEVO</span>
+                    </div>
+                    <div class="p-6 flex flex-col flex-grow">
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="text-xl font-semibold text-gray-800">Capricho Italiano</h3>
+                            <span class="text-lg font-bold text-amber-600">$14.99</span>
+                        </div>
+                        <p class="text-gray-600 text-sm mb-4 flex-grow">Prosciutto di Parma, salami Génova, mortadela, provolone ahumado, pimientos marinados, lechuga romana y pesto casero en focaccia.</p>
+                        <button class="add-to-cart mt-auto bg-emerald-100 text-emerald-800 hover:bg-emerald-200 font-medium py-2 px-4 rounded-lg transition duration-300 flex items-center justify-center gap-2">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                            </svg>
+                            Añadir al pedido
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center mt-16">
+                <a href="#contacto" class="bg-gradient-to-r from-emerald-600 to-blue-600 text-white hover:from-emerald-700 hover:to-blue-700 font-bold py-3 px-10 rounded-full shadow-xl transition duration-300 transform hover:scale-105 text-lg inline-flex items-center gap-2">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                    </svg>
+                    Ver Más y Ordenar
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Calidad -->
+    <section id="calidad" class="py-24 px-6 bg-white fade-in-up-section">
+        <div class="container mx-auto max-w-5xl">
+             <h2 class="text-3xl md:text-4xl font-bold text-center mb-4 gradient-text">Ingredientes que Hacen la Diferencia</h2>
+             <div class="section-divider"></div>
+             <p class="text-center text-gray-600 mb-16 max-w-2xl mx-auto">Nuestro secreto no es secreto: usamos solo lo mejor, fresco y preparado con esmero cada día.</p>
+            <div class="flex flex-col md:flex-row items-center gap-12">
+                <div class="md:w-1/2 text-left">
+                    <p class="text-lg text-gray-700 mb-6 leading-relaxed">
+                        Creemos firmemente que la calidad excepcional se nota en cada bocado. Por eso, nos asociamos con proveedores locales para obtener los productos más frescos y apoyamos a nuestra comunidad.
+                    </p>
+                    <ul class="space-y-4">
+                        <li class="flex items-start">
+                            <svg class="w-6 h-6 text-emerald-500 mr-3 flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                            <span class="text-gray-700">Panes variados horneados diariamente en casa.</span>
+                        </li>
+                        <li class="flex items-start">
+                            <svg class="w-6 h-6 text-emerald-500 mr-3 flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                            <span class="text-gray-700">Vegetales de temporada, lavados y cortados al momento.</span>
+                        </li>
+                         <li class="flex items-start">
+                            <svg class="w-6 h-6 text-emerald-500 mr-3 flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                            <span class="text-gray-700">Carnes y embutidos seleccionados por su sabor y calidad superior.</span>
+                        </li>
+                        <li class="flex items-start">
+                             <svg class="w-6 h-6 text-emerald-500 mr-3 flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                            <span class="text-gray-700">Quesos artesanales y de importación.</span>
+                        </li>
+                        <li class="flex items-start">
+                            <svg class="w-6 h-6 text-emerald-500 mr-3 flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                            <span class="text-gray-700">Salsas, pestos y aderezos preparados con nuestras recetas únicas.</span>
+                        </li>
+                    </ul>
+                </div>
+                 <div class="md:w-1/2">
+                     <img src="https://images.unsplash.com/photo-1546069901-d5bfd2cbfb1f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=700&h=500&q=80" 
+                          alt="Ingredientes frescos para sándwiches" 
+                          class="rounded-xl shadow-lg mx-auto max-w-full h-auto border-4 border-amber-100" 
+                          width="700" height="500" loading="lazy">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonios -->
+    <section id="testimonios" class="py-16 bg-gray-50 fade-in-up-section">
+        <div class="container mx-auto px-6">
+            <h2 class="text-3xl font-bold text-center mb-4 gradient-text">Lo que dicen nuestros clientes</h2>
+            <div class="section-divider"></div>
+            <p class="text-center text-gray-600 mb-12 max-w-2xl mx-auto">Descubre por qué nuestros clientes nos prefieren</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Testimonio 1 -->
+                <div class="bg-white p-8 rounded-xl shadow-md">
+                    <div class="flex items-center mb-4">
+                        <div class="flex items-center">
+                            <svg class="w-5 h-5 text-amber-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                            </svg>
+                            <svg class="w-5 h-5 text-amber-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                            </svg>
+                            <svg class="w-5 h-5 text-amber-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                            </svg>
+                            <svg class="w-5 h-5 text-amber-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                            </svg>
+                            <svg class="w-5 h-5 text-amber-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                            </svg>
+                        </div>
+                    </div>
+                    <p class="text-gray-600 mb-6">"El sándwich de pavo ahumado es simplemente increíble. Los ingredientes son tan frescos que puedes notarlo en cada bocado. Definitivamente mi lugar favorito para almorzar."</p>
+                    <div class="flex items-center">
+                        <img class="w-12 h-12 rounded-full mr-4" src="https://randomuser.me/api/portraits/women/43.jpg" alt="Cliente satisfecha">
+                        <div>
+                            <h4 class="font-semibold text-gray-800">María González</h4>
+                            <p class="text-sm text-gray-500">Cliente frecuente</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Testimonio 2 -->
+                <div class="bg-white p-8 rounded-xl shadow-md">
+                    <div class="flex items-center mb-4">
+                        <div class="flex items-center">
+                            <svg class="w-5 h-5 text-amber-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                            </svg>
+                            <svg class="w-5 h-5 text-amber-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                            </svg>
+                            <svg class="w-5 h-5 text-amber-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                            </svg>
+                            <svg class="w-5 h-5 text-amber-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                            </svg>
+                            <svg class="w-5 h-5 text-gray-300" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                            </svg>
+                        </div>
+                    </div>
+                    <p class="text-gray-600 mb-6">"Como vegana, me encanta que tengan opciones creativas y deliciosas. El sándwich de hummus de remolacha es mi favorito, siempre fresco y lleno de sabor."</p>
+                    <div class="flex items-center">
+                        <img class="w-12 h-12 rounded-full mr-4" src="https://randomuser.me/api/portraits/women/65.jpg" alt="Cliente satisfecha">
+                        <div>
+                            <h4 class="font-semibold text-gray-800">Laura Martínez</h4>
+                            <p class="text-sm text-gray-500">Cliente desde 2022</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Testimonio 3 -->
+                <div class="bg-white p-8 rounded-xl shadow-md">
+                    <div class="flex items-center mb-4">
+                        <div class="flex items-center">
+                            <svg class="w-5 h-5 text-amber-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                            </svg>
+                            <svg class="w-5 h-5 text-amber-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                            </svg>
+                            <svg class="w-5 h-5 text-amber-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                            </svg>
+                            <svg class="w-5 h-5 text-amber-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                            </svg>
+                            <svg class="w-5 h-5 text-amber-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                            </svg>
+                        </div>
+                    </div>
+                    <p class="text-gray-600 mb-6">"El servicio de delivery es rápido y los sándwiches llegan perfectamente empacados y frescos. Siempre pido para el equipo de la oficina y todos quedan encantados."</p>
+                    <div class="flex items-center">
+                        <img class="w-12 h-12 rounded-full mr-4" src="https://randomuser.me/api/portraits/men/32.jpg" alt="Cliente satisfecho">
+                        <div>
+                            <h4 class="font-semibold text-gray-800">Carlos Rodríguez</h4>
+                            <p class="text-sm text-gray-500">Cliente corporativo</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Galería -->
+    <section class="py-16 bg-white fade-in-up-section">
+        <div class="container mx-auto px-6">
+            <h2 class="text-3xl font-bold text-center mb-4 gradient-text">Nuestras Creaciones</h2>
+            <div class="section-divider"></div>
+            <p class="text-center text-gray-600 mb-12 max-w-2xl mx-auto">Una muestra visual de nuestros deliciosos sándwiches</p>
+            
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                <a href="#" class="gallery-item group">
+                    <img src="https://images.unsplash.com/photo-1559847844-5315695dadae?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=500&h=500&q=80" 
+                         alt="Sándwich clásico" 
+                         class="w-full h-48 md:h-64 object-cover rounded-lg transition duration-300 group-hover:opacity-90 group-hover:scale-95">
+                    <div class="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center opacity-0 group-hover:opacity-100 transition duration-300 rounded-lg">
+                        <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                        </svg>
+                    </div>
+                </a>
+                
+                <a href="#" class="gallery-item group">
+                    <img src="https://images.unsplash.com/photo-1528735602780-2552fd46c7af?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=500&h=500&q=80" 
+                         alt="Sándwich de pavo" 
+                         class="w-full h-48 md:h-64 object-cover rounded-lg transition duration-300 group-hover:opacity-90 group-hover:scale-95">
+                    <div class="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center opacity-0 group-hover:opacity-100 transition duration-300 rounded-lg">
+                        <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                        </svg>
+                    </div>
+                </a>
+                
+                <a href="#" class="gallery-item group">
+                    <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=500&h=500&q=80" 
+                         alt="Sándwich vegetariano" 
+                         class="w-full h-48 md:h-64 object-cover rounded-lg transition duration-300 group-hover:opacity-90 group-hover:scale-95">
+                    <div class="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center opacity-0 group-hover:opacity-100 transition duration-300 rounded-lg">
+                        <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                        </svg>
+                    </div>
+                </a>
+                
+                <a href="#" class="gallery-item group">
+                    <img src="https://images.unsplash.com/photo-1544025162-d76694265947?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=500&h=500&q=80" 
+                         alt="Sándwich italiano" 
+                         class="w-full h-48 md:h-64 object-cover rounded-lg transition duration-300 group-hover:opacity-90 group-hover:scale-95">
+                    <div class="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center opacity-0 group-hover:opacity-100 transition duration-300 rounded-lg">
+                        <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                        </svg>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contacto -->
+    <section id="contacto" class="py-24 px-6 bg-pattern fade-in-up-section">
+        <div class="container mx-auto max-w-5xl">
+            <h2 class="text-3xl md:text-4xl font-bold text-center mb-4 gradient-text">¿Antojo? ¡Visítanos!</h2>
+            <div class="section-divider"></div>
+             <p class="text-center text-gray-600 mb-16 max-w-2xl mx-auto">Encuéntranos en San Lorenzo o contáctanos. ¡Estamos listos para preparar tu próximo sándwich favorito!</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                <div class="bg-white p-8 rounded-xl shadow-lg border border-gray-100">
+                    <h3 class="text-2xl font-semibold mb-6 text-emerald-800">Información y Pedidos</h3>
+                    <div class="space-y-4 text-gray-700">
+                        <p class="flex items-start">
+                            <svg class="w-6 h-6 text-emerald-500 mr-3 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" /></svg>
+                            <span><strong>Dirección:</strong><br>Calle Principal 123, San Lorenzo, Paraguay</span>
+                        </p>
+                        <p class="flex items-center">
+                             <svg class="w-6 h-6 text-emerald-500 mr-3 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z" /></svg>
+                            <strong>Teléfono:</strong>&nbsp;<a href="tel:+595123456789" class="text-emerald-600 hover:text-emerald-800 transition duration-300 hover:underline">+595 123 456 789</a>
+                        </p>
+                        <p class="flex items-center">
+                            <svg class="w-6 h-6 text-emerald-500 mr-3 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" /></svg>
+                            <strong>Email:</strong>&nbsp;<a href="mailto:info@sandwichesartesanales.com" class="text-emerald-600 hover:text-emerald-800 transition duration-300 hover:underline">info@sandwichesartesanales.com</a>
+                        </p>
+                         <p class="flex items-start">
+                             <svg class="w-6 h-6 text-emerald-500 mr-3 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                            <span><strong>Horario:</strong><br>Lunes a Viernes: 10:00 - 20:00<br>Sábado: 10:00 - 22:00<br>Domingo: Cerrado</span>
+                        </p>
+                    </div>
+                    <div class="mt-8 pt-6 border-t border-gray-200">
+                        <p class="text-sm text-gray-500 mb-3 text-center font-medium">Síguenos en Redes:</p>
+                        <div class="flex justify-center space-x-6">
+                            <a href="#" class="text-gray-400 hover:text-emerald-600 transition duration-300" aria-label="Facebook">
+                                <svg class="w-7 h-7" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z" clip-rule="evenodd" /></svg>
+                            </a>
+                            <a href="#" class="text-gray-400 hover:text-amber-600 transition duration-300" aria-label="Instagram">
+                               <svg class="w-7 h-7" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M12.315 2c2.43 0 2.784.013 3.808.06 1.064.049 1.791.218 2.427.465a4.902 4.902 0 011.772 1.153 4.902 4.902 0 011.153 1.772c.247.636.416 1.363.465 2.427.048 1.024.06 1.378.06 3.808s-.012 2.784-.06 3.808c-.049 1.064-.218 1.791-.465 2.427a4.902 4.902 0 01-1.153 1.772 4.902 4.902 0 01-1.772 1.153c-.636.247-1.363.416-2.427.465-1.024.048-1.378.06-3.808.06s-2.784-.012-3.808-.06c-1.064-.049-1.791-.218-2.427-.465a4.902 4.902 0 01-1.772-1.153 4.902 4.902 0 01-1.153-1.772c-.247-.636-.416-1.363-.465-2.427-.048-1.024-.06-1.378-.06-3.808s.012-2.784.06-3.808c.049-1.064.218-1.791.465-2.427a4.902 4.902 0 011.153-1.772A4.902 4.902 0 015.45 2.525c.636-.247 1.363-.416 2.427-.465C8.901 2.013 9.256 2 11.685 2h.63zm-.081 1.802h-.468c-2.456 0-2.784.011-3.807.058-.975.045-1.504.207-1.857.344-.467.182-.8.398-1.15.748-.35.35-.566.683-.748 1.15-.137.353-.3.882-.344 1.857-.047 1.023-.058 1.351-.058 3.807v.468c0 2.456.011 2.784.058 3.807.045.975.207 1.504.344 1.857.182.466.398.8.748 1.15.35.35.683.566 1.15.748.353.137.882.3 1.857.344 1.023.047 1.351.058 3.807.058h.468c2.456 0 2.784-.011 3.807-.058.975-.045 1.504-.207 1.857-.344.467-.182.8-.398 1.15-.748.35-.35.566-.683.748-1.15.137-.353.3-.882.344-1.857.047-1.023.058-1.351.058-3.807v-.468c0-2.456-.011-2.784-.058-3.807-.045-.975-.207-1.504-.344-1.857-.182-.467-.398-.8-.748-1.15-.35-.35-.683-.566-1.15-.748-.353-.137-.882-.3-1.857-.344-1.023-.047-1.351-.058-3.807-.058zM12 6.865a5.135 5.135 0 110 10.27 5.135 5.135 0 010-10.27zm0 1.802a3.333 3.333 0 100 6.666 3.333 3.333 0 000-6.666zm5.338-3.205a1.2 1.2 0 11-2.4 0 1.2 1.2 0 012.4 0z" clip-rule="evenodd" /></svg>
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-8">
+                        <h3 class="text-xl font-semibold mb-4 text-emerald-800">Envíanos un mensaje</h3>
+                        <form class="space-y-4">
+                            <div>
+                                <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Nombre</label>
+                                <input type="text" id="name" name="name" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500">
+                            </div>
+                            <div>
+                                <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                                <input type="email" id="email" name="email" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500">
+                            </div>
+                            <div>
+                                <label for="message" class="block text-sm font-medium text-gray-700 mb-1">Mensaje</label>
+                                <textarea id="message" name="message" rows="4" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"></textarea>
+                            </div>
+                            <button type="submit" class="bg-emerald-600 text-white font-medium py-2 px-6 rounded-lg hover:bg-emerald-700 transition duration-300">Enviar Mensaje</button>
+                        </form>
+                    </div>
+                </div>
+                <div class="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden">
+                    <div class="w-full h-full min-h-[300px] md:min-h-full bg-gray-200 flex items-center justify-center text-gray-500">
+                        <iframe src="about:blank" 
+                                title="Mapa de ubicación" 
+                                width="100%" 
+                                height="100%" 
+                                style="border:0; min-height: 400px;" 
+                                allowfullscreen="" 
+                                loading="lazy" 
+                                referrerpolicy="no-referrer-when-downgrade"
+                                data-src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3607.480775398669!2d-57.5217606854089!3d-25.28813888385405!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x945da6f5a3f6b8c7%3A0x6f8f9c6a4e7b3e8d!2sSan%20Lorenzo%2C%20Paraguay!5e0!3m2!1ses!2spy!4v1678886400000!5m2!1ses!2spy">
+                        </iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-gray-400 py-12 px-6">
+        <div class="container mx-auto">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <!-- Columna 1 -->
+                <div>
+                    <a href="#" class="text-xl font-bold gradient-text mb-4 inline-block">
+                        Sándwiches Artesanales
+                    </a>
+                    <p class="text-sm mb-4">Deliciosos sándwiches artesanales preparados con ingredientes frescos y mucho amor.</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white transition duration-300">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z" clip-rule="evenodd" /></svg>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition duration-300">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M12.315 2c2.43 0 2.784.013 3.808.06 1.064.049 1.791.218 2.427.465a4.902 4.902 0 011.772 1.153 4.902 4.902 0 011.153 1.772c.247.636.416 1.363.465 2.427.048 1.024.06 1.378.06 3.808s-.012 2.784-.06 3.808c-.049 1.064-.218 1.791-.465 2.427a4.902 4.902 0 01-1.153 1.772 4.902 4.902 0 01-1.772 1.153c-.636.247-1.363.416-2.427.465-1.024.048-1.378.06-3.808.06s-2.784-.012-3.808-.06c-1.064-.049-1.791-.218-2.427-.465a4.902 4.902 0 01-1.772-1.153 4.902 4.902 0 01-1.153-1.772c-.247-.636-.416-1.363-.465-2.427-.048-1.024-.06-1.378-.06-3.808s.012-2.784.06-3.808c.049-1.064.218-1.791.465-2.427a4.902 4.902 0 011.153-1.772A4.902 4.902 0 015.45 2.525c.636-.247 1.363-.416 2.427-.465C8.901 2.013 9.256 2 11.685 2h.63zm-.081 1.802h-.468c-2.456 0-2.784.011-3.807.058-.975.045-1.504.207-1.857.344-.467.182-.8.398-1.15.748-.35.35-.566.683-.748 1.15-.137.353-.3.882-.344 1.857-.047 1.023-.058 1.351-.058 3.807v.468c0 2.456.011 2.784.058 3.807.045.975.207 1.504.344 1.857.182.466.398.8.748 1.15.35.35.683.566 1.15.748.353.137.882.3 1.857.344 1.023.047 1.351.058 3.807.058h.468c2.456 0 2.784-.011 3.807-.058.975-.045 1.504-.207 1.857-.344.467-.182.8-.398 1.15-.748.35-.35.566-.683.748-1.15.137-.353.3-.882.344-1.857.047-1.023.058-1.351.058-3.807v-.468c0-2.456-.011-2.784-.058-3.807-.045-.975-.207-1.504-.344-1.857-.182-.467-.398-.8-.748-1.15-.35-.35-.683-.566-1.15-.748-.353-.137-.882-.3-1.857-.344-1.023-.047-1.351-.058-3.807-.058zM12 6.865a5.135 5.135 0 110 10.27 5.135 5.135 0 010-10.27zm0 1.802a3.333 3.333 0 100 6.666 3.333 3.333 0 000-6.666zm5.338-3.205a1.2 1.2 0 11-2.4 0 1.2 1.2 0 012.4 0z" clip-rule="evenodd" /></svg>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Columna 2 - Enlaces rápidos -->
+                <div>
+                    <h3 class="text-white font-semibold mb-4 text-lg">Enlaces Rápidos</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#inicio" class="hover:text-white transition duration-300">Inicio</a></li>
+                        <li><a href="#menu" class="hover:text-white transition duration-300">Menú</a></li>
+                        <li><a href="#nosotros" class="hover:text-white transition duration-300">Sobre Nosotros</a></li>
+                        <li><a href="#testimonios" class="hover:text-white transition duration-300">Testimonios</a></li>
+                        <li><a href="#contacto" class="hover:text-white transition duration-300">Contacto</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Columna 3 - Horario -->
+                <div>
+                    <h3 class="text-white font-semibold mb-4 text-lg">Horario</h3>
+                    <ul class="space-y-2">
+                        <li class="flex justify-between">
+                            <span>Lunes - Viernes:</span>
+                            <span>10:00 - 20:00</span>
+                        </li>
+                        <li class="flex justify-between">
+                            <span>Sábado:</span>
+                            <span>10:00 - 22:00</span>
+                        </li>
+                        <li class="flex justify-between">
+                            <span>Domingo:</span>
+                            <span>Cerrado</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <!-- Columna 4 - Contacto -->
+                <div>
+                    <h3 class="text-white font-semibold mb-4 text-lg">Contacto</h3>
+                    <address class="not-italic">
+                        <p class="mb-2">Calle Principal 123, San Lorenzo, Paraguay</p>
+                        <p class="mb-2"><a href="tel:+595123456789" class="hover:text-white transition duration-300">+595 123 456 789</a></p>
+                        <p><a href="mailto:info@sandwichesartesanales.com" class="hover:text-white transition duration-300">info@sandwichesartesanales.com</a></p>
+                    </address>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-800 mt-10 pt-6 text-center">
+                <p class="text-sm">&copy; 2025 Sándwiches Artesanales. Todos los derechos reservados.</p>
+                <p class="text-xs mt-2 opacity-70">Hecho con ingredientes frescos y pasión por el sabor.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Optimización del código existente
+        document.addEventListener('DOMContentLoaded', function() {
+            // Intersection Observer mejorado
+            const fadeSections = document.querySelectorAll('.fade-in-up-section');
+            const fadeOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+            
+            const fadeObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                    }
+                });
+            }, fadeOptions);
+            
+            fadeSections.forEach(section => {
+                if (!section.classList.contains('is-visible')) {
+                    fadeObserver.observe(section);
+                }
+            });
+            
+            // Menú móvil mejorado
+            const menuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            
+            menuButton.addEventListener('click', () => {
+                const isExpanded = menuButton.getAttribute('aria-expanded') === 'true';
+                menuButton.setAttribute('aria-expanded', !isExpanded);
+                mobileMenu.classList.toggle('hidden');
+                
+                // Cambiar icono
+                menuButton.innerHTML = isExpanded 
+                    ? `<svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>`
+                    : `<svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>`;
+            });
+            
+            // Cerrar menú al hacer clic en un enlace
+            document.querySelectorAll('#mobile-menu a').forEach(link => {
+                link.addEventListener('click', () => {
+                    mobileMenu.classList.add('hidden');
+                    menuButton.setAttribute('aria-expanded', 'false');
+                    menuButton.innerHTML = `<svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>`;
+                });
+            });
+            
+            // Smooth scroll para todos los enlaces con hash
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    const targetId = this.getAttribute('href');
+                    if (targetId === '#') return;
+                    
+                    const targetElement = document.querySelector(targetId);
+                    if (targetElement) {
+                        targetElement.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
+            
+            // Filtrado del menú por categorías
+            document.querySelectorAll('.category-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    // Remover clase active de todos los botones
+                    document.querySelectorAll('.category-btn').forEach(btn => {
+                        btn.classList.remove('active', 'bg-emerald-600', 'text-white');
+                        btn.classList.add('bg-white', 'text-gray-800', 'border', 'border-gray-300');
+                    });
+                    
+                    // Añadir clase active al botón clickeado
+                    this.classList.add('active', 'bg-emerald-600', 'text-white');
+                    this.classList.remove('bg-white', 'text-gray-800', 'border', 'border-gray-300');
+                    
+                    const category = this.dataset.category;
+                    const menuItems = document.querySelectorAll('.menu-item');
+                    
+                    menuItems.forEach(item => {
+                        if (category === 'todos' || item.classList.contains(category)) {
+                            item.style.display = 'flex';
+                        } else {
+                            item.style.display = 'none';
+                        }
+                    });
+                });
+            });
+            
+            // Simulación de carrito de compras
+            document.querySelectorAll('.add-to-cart').forEach(button => {
+                button.addEventListener('click', function() {
+                    const itemName = this.closest('.menu-item').querySelector('h3').textContent;
+                    
+                    // Crear notificación
+                    const notification = document.createElement('div');
+                    notification.className = 'fixed bottom-4 right-4 bg-emerald-600 text-white px-6 py-3 rounded-lg shadow-lg flex items-center gap-2 animate-fade-in-up';
+                    notification.innerHTML = `
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                        ¡${itemName} añadido al carrito!
+                    `;
+                    
+                    document.body.appendChild(notification);
+                    
+                    // Eliminar notificación después de 3 segundos
+                    setTimeout(() => {
+                        notification.classList.add('opacity-0', 'translate-y-2', 'transition', 'duration-300');
+                        setTimeout(() => notification.remove(), 300);
+                    }, 3000);
+                    
+                    // Animación del botón
+                    this.innerHTML = `
+                        <svg class="w-5 h-5 animate-check" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                        Añadido
+                    `;
+                    this.classList.add('bg-emerald-600', 'text-white');
+                    
+                    // Restaurar botón después de 2 segundos
+                    setTimeout(() => {
+                        this.innerHTML = `
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                            </svg>
+                            Añadir al pedido
+                        `;
+                        this.classList.remove('bg-emerald-600', 'text-white');
+                        this.classList.add('bg-emerald-100', 'text-emerald-800');
+                    }, 2000);
+                });
+            });
+            
+            // Animación para la galería
+            document.querySelectorAll('.gallery-item').forEach(item => {
+                item.addEventListener('mouseenter', function() {
+                    this.querySelector('img').classList.add('transform', 'scale-105');
+                });
+                
+                item.addEventListener('mouseleave', function() {
+                    this.querySelector('img').classList.remove('transform', 'scale-105');
+                });
+            });
+            
+            // Cargar el mapa de manera diferida
+            const mapIframe = document.querySelector('iframe[title="Mapa de ubicación"]');
+            if (mapIframe) {
+                const observer = new IntersectionObserver((entries) => {
+                    if (entries[0].isIntersecting) {
+                        mapIframe.src = mapIframe.getAttribute('data-src');
+                        observer.unobserve(mapIframe);
+                    }
+                }, { rootMargin: '200px' });
+                
+                observer.observe(mapIframe);
+            }
+        });
+    </script>
+
+</body>
+</html>
