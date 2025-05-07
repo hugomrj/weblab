@@ -1,0 +1,1112 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MiOlleria - Tienda Virtual de Ollas de Calidad</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --color-primary: #e74c3c;
+            --color-secondary: #f39c12;
+            --color-dark: #2c3e50;
+            --color-light: #ecf0f1;
+            --color-accent: #3498db;
+            --transition-speed: 0.3s;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f5f5f5;
+            color: var(--color-dark);
+            line-height: 1.6;
+        }
+
+        /* Header Styles */
+        header {
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo h1 {
+            color: var(--color-primary);
+            margin-left: 10px;
+            font-size: 1.8rem;
+        }
+
+        .logo-icon {
+            font-size: 2.2rem;
+            color: var(--color-primary);
+        }
+
+        /* Navigation */
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+
+        nav ul li {
+            margin-left: 20px;
+            position: relative;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: var(--color-dark);
+            font-weight: 600;
+            font-size: 16px;
+            transition: color var(--transition-speed);
+            padding: 5px 0;
+            position: relative;
+        }
+
+        nav ul li a:hover {
+            color: var(--color-primary);
+        }
+
+        nav ul li a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            background-color: var(--color-primary);
+            bottom: 0;
+            left: 0;
+            transition: width var(--transition-speed);
+        }
+
+        nav ul li a:hover::after {
+            width: 100%;
+        }
+
+        /* Cart Icon */
+        .cart-icon {
+            position: relative;
+            margin-left: 20px;
+            cursor: pointer;
+        }
+
+        .cart-count {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            background-color: var(--color-primary);
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 12px;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(to right, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.4)), url('https://images.unsplash.com/photo-1517701550927-30cf4ba1dba5?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80') center/cover no-repeat;
+            color: white;
+            text-align: center;
+            padding: 120px 20px;
+            position: relative;
+        }
+
+        .hero h2 {
+            font-size: 2.8rem;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            max-width: 800px;
+            margin: 0 auto 30px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 14px 30px;
+            background-color: var(--color-primary);
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            font-weight: 600;
+            transition: all var(--transition-speed);
+            border: 2px solid var(--color-primary);
+            font-size: 1.1rem;
+        }
+
+        .btn:hover {
+            background-color: transparent;
+            color: var(--color-primary);
+            transform: translateY(-2px);
+        }
+
+        /* Section Title */
+        .section-title {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .section-title h2 {
+            font-size: 2.3rem;
+            color: var(--color-dark);
+            position: relative;
+            display: inline-block;
+            margin-bottom: 15px;
+        }
+
+        .section-title h2::after {
+            content: '';
+            position: absolute;
+            width: 50%;
+            height: 3px;
+            background-color: var(--color-primary);
+            bottom: -10px;
+            left: 25%;
+        }
+
+        .section-title p {
+            color: #7f8c8d;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        /* Categories Section */
+        .featured-categories {
+            padding: 80px 0;
+        }
+
+        .categories-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+        }
+
+        .category-card {
+            background-color: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: all var(--transition-speed);
+            text-align: center;
+        }
+
+        .category-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .category-img {
+            height: 220px;
+            overflow: hidden;
+        }
+
+        .category-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+
+        .category-card:hover .category-img img {
+            transform: scale(1.05);
+        }
+
+        .category-content {
+            padding: 25px;
+        }
+
+        .category-content h3 {
+            margin-bottom: 10px;
+            color: var(--color-dark);
+            font-size: 1.3rem;
+        }
+
+        .category-content p {
+            color: #7f8c8d;
+        }
+
+        /* Products Section */
+        .products {
+            padding: 80px 0;
+            background-color: var(--color-light);
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+        }
+
+        .product-card {
+            background-color: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: all var(--transition-speed);
+            position: relative;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .product-img {
+            height: 220px;
+            overflow: hidden;
+        }
+
+        .product-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+
+        .product-card:hover .product-img img {
+            transform: scale(1.05);
+        }
+
+        .product-content {
+            padding: 20px;
+        }
+
+        .product-content h3 {
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+            height: 48px;
+            overflow: hidden;
+        }
+
+        .product-price {
+            font-weight: 700;
+            color: var(--color-primary);
+            font-size: 1.4rem;
+            margin: 15px 0;
+        }
+
+        .product-action {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 15px;
+        }
+
+        .add-to-cart {
+            background-color: var(--color-primary);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all var(--transition-speed);
+            width: 100%;
+            font-size: 1rem;
+        }
+
+        .add-to-cart:hover {
+            background-color: #c0392b;
+            transform: translateY(-2px);
+        }
+
+        .product-rating {
+            color: #f1c40f;
+            margin-bottom: 10px;
+        }
+
+        /* Features Section */
+        .features {
+            padding: 80px 0;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .feature-card {
+            background-color: white;
+            padding: 40px 20px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: all var(--transition-speed);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            color: var(--color-primary);
+            margin-bottom: 20px;
+        }
+
+        .feature-card h3 {
+            margin-bottom: 15px;
+            font-size: 1.4rem;
+        }
+
+        /* Testimonials Section */
+        .testimonials {
+            padding: 80px 0;
+            background-color: var(--color-light);
+        }
+
+        .testimonial-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .testimonial-card {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            position: relative;
+        }
+
+        .testimonial-card::before {
+            content: '"';
+            font-size: 5rem;
+            color: rgba(0, 0, 0, 0.1);
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            z-index: 0;
+        }
+
+        .testimonial-content {
+            font-style: italic;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .author-img {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-color: #f1f1f1;
+            margin-right: 15px;
+            overflow: hidden;
+        }
+
+        .author-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .author-info h4 {
+            margin-bottom: 5px;
+            font-size: 1.1rem;
+        }
+
+        .author-info p {
+            color: #777;
+            font-size: 0.9rem;
+        }
+
+        /* CTA Section */
+        .cta {
+            padding: 100px 0;
+            background: linear-gradient(to right, var(--color-primary), var(--color-secondary));
+            color: white;
+            text-align: center;
+        }
+
+        .cta h2 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+
+        .cta p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto 30px;
+        }
+
+        .cta .btn {
+            background-color: white;
+            color: var(--color-primary);
+            font-weight: 700;
+        }
+
+        .cta .btn:hover {
+            background-color: rgba(255, 255, 255, 0.9);
+            color: var(--color-primary);
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--color-dark);
+            color: white;
+            padding: 60px 0 20px;
+        }
+
+        .footer-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-col h3 {
+            margin-bottom: 25px;
+            position: relative;
+            padding-bottom: 10px;
+            font-size: 1.2rem;
+        }
+
+        .footer-col h3::after {
+            content: '';
+            position: absolute;
+            width: 40px;
+            height: 2px;
+            background-color: var(--color-primary);
+            bottom: 0;
+            left: 0;
+        }
+
+        .footer-col ul {
+            list-style: none;
+        }
+
+        .footer-col ul li {
+            margin-bottom: 12px;
+        }
+
+        .footer-col ul li a {
+            color: #bdc3c7;
+            text-decoration: none;
+            transition: color var(--transition-speed);
+            display: flex;
+            align-items: center;
+        }
+
+        .footer-col ul li a:hover {
+            color: var(--color-primary);
+        }
+
+        .footer-col ul li a i {
+            margin-right: 8px;
+            width: 20px;
+            text-align: center;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .social-links a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            color: white;
+            transition: all var(--transition-speed);
+        }
+
+        .social-links a:hover {
+            background-color: var(--color-primary);
+            transform: translateY(-3px);
+        }
+
+        .copyright {
+            text-align: center;
+            border-top: 1px solid #34495e;
+            padding-top: 25px;
+            font-size: 0.9rem;
+            color: #bdc3c7;
+        }
+
+        /* Back to Top Button */
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background-color: var(--color-primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity var(--transition-speed);
+            z-index: 1000;
+        }
+
+        .back-to-top.visible {
+            opacity: 1;
+        }
+
+        .back-to-top:hover {
+            background-color: #c0392b;
+            transform: scale(1.1);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .hero h2 {
+                font-size: 2.3rem;
+            }
+
+            .hero p {
+                font-size: 1.1rem;
+            }
+
+            .section-title h2 {
+                font-size: 2rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+            }
+
+            nav ul {
+                margin-top: 20px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            nav ul li {
+                margin: 5px 10px;
+            }
+
+            .hero h2 {
+                font-size: 2rem;
+            }
+
+            .hero p {
+                font-size: 1rem;
+            }
+
+            .section-title h2 {
+                font-size: 1.8rem;
+            }
+
+            .products-grid, .categories-grid {
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            }
+        }
+
+        @media (max-width: 576px) {
+            .hero {
+                padding: 80px 20px;
+            }
+
+            .hero h2 {
+                font-size: 1.8rem;
+            }
+
+            .btn {
+                padding: 10px 20px;
+                font-size: 1rem;
+            }
+
+            .section-title h2 {
+                font-size: 1.6rem;
+            }
+
+            .products-grid, .categories-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container header-container">
+            <div class="logo">
+                <span class="logo-icon">🍳</span>
+                <h1>MiOlleria</h1>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="#">Inicio</a></li>
+                    <li><a href="#productos">Productos</a></li>
+                    <li><a href="#categorias">Categorías</a></li>
+                    <li><a href="#sobre-nosotros">Sobre Nosotros</a></li>
+                    <li><a href="#contacto">Contacto</a></li>
+                </ul>
+            </nav>
+            <div class="cart-icon">
+                <i class="fas fa-shopping-cart"></i>
+                <span class="cart-count">0</span>
+            </div>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="container">
+            <h2>Calidad y Durabilidad en tu Cocina</h2>
+            <p>Descubre nuestra selección premium de ollas y utensilios de cocina que transformarán tu experiencia culinaria. Materiales de alta calidad que duran toda la vida.</p>
+            <a href="#productos" class="btn">Ver Productos</a>
+        </div>
+    </section>
+
+    <section class="featured-categories" id="categorias">
+        <div class="container">
+            <div class="section-title">
+                <h2>Nuestras Categorías</h2>
+                <p>Explora nuestra amplia variedad de productos de cocina de alta calidad</p>
+            </div>
+            <div class="categories-grid">
+                <div class="category-card">
+                    <div class="category-img">
+                        <img src="https://images.unsplash.com/photo-1599987066626-9b89663b7b71?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="Ollas de Acero Inoxidable">
+                    </div>
+                    <div class="category-content">
+                        <h3>Ollas de Acero Inoxidable</h3>
+                        <p>Duraderas y elegantes, perfectas para todo tipo de cocinas.</p>
+                    </div>
+                </div>
+                <div class="category-card">
+                    <div class="category-img">
+                        <img src="https://images.unsplash.com/photo-1599987066626-9b89663b7b71?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="Ollas Antiadherentes">
+                    </div>
+                    <div class="category-content">
+                        <h3>Ollas Antiadherentes</h3>
+                        <p>Cocina con menos aceite y limpia con facilidad.</p>
+                    </div>
+                </div>
+                <div class="category-card">
+                    <div class="category-img">
+                        <img src="https://images.unsplash.com/photo-1599987066626-9b89663b7b71?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="Ollas a Presión">
+                    </div>
+                    <div class="category-content">
+                        <h3>Ollas a Presión</h3>
+                        <p>Ahorra tiempo y energía en tus preparaciones diarias.</p>
+                    </div>
+                </div>
+                <div class="category-card">
+                    <div class="category-img">
+                        <img src="https://images.unsplash.com/photo-1599987066626-9b89663b7b71?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="Sets de Cocina">
+                    </div>
+                    <div class="category-content">
+                        <h3>Sets Completos</h3>
+                        <p>Todo lo que necesitas para equipar tu cocina en un solo paquete.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="products" id="productos">
+        <div class="container">
+            <div class="section-title">
+                <h2>Productos Destacados</h2>
+                <p>Descubre nuestros productos más populares y mejor valorados</p>
+            </div>
+            <div class="products-grid">
+                <div class="product-card">
+                    <div class="product-img">
+                        <img src="https://images.unsplash.com/photo-1599987066626-9b89663b7b71?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="Olla de Acero Inoxidable Premium">
+                    </div>
+                    <div class="product-content">
+                        <h3>Olla de Acero Inoxidable Premium</h3>
+                        <div class="product-rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star-half-alt"></i>
+                            <span>(4.5)</span>
+                        </div>
+                        <p>Olla de 5 litros con tapa de vidrio templado y asas ergonómicas.</p>
+                        <div class="product-price">$89.99</div>
+                        <div class="product-action">
+                            <button class="add-to-cart">Añadir al Carrito</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="product-img">
+                        <img src="https://images.unsplash.com/photo-1599987066626-9b89663b7b71?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="Set de 3 Sartenes Antiadherentes">
+                    </div>
+                    <div class="product-content">
+                        <h3>Set de 3 Sartenes Antiadherentes</h3>
+                        <div class="product-rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <span>(5.0)</span>
+                        </div>
+                        <p>Tamaños variados con mangos resistentes al calor y fácil limpieza.</p>
+                        <div class="product-price">$129.99</div>
+                        <div class="product-action">
+                            <button class="add-to-cart">Añadir al Carrito</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="product-img">
+                        <img src="https://images.unsplash.com/photo-1599987066626-9b89663b7b71?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="Olla a Presión Digital">
+                    </div>
+                    <div class="product-content">
+                        <h3>Olla a Presión Digital</h3>
+                        <div class="product-rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="far fa-star"></i>
+                            <span>(4.0)</span>
+                        </div>
+                        <p>Programable con 10 funciones preestablecidas y temporizador.</p>
+                        <div class="product-price">$159.99</div>
+                        <div class="product-action">
+                            <button class="add-to-cart">Añadir al Carrito</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="product-img">
+                        <img src="https://images.unsplash.com/photo-1599987066626-9b89663b7b71?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="Cacerola de Cerámica">
+                    </div>
+                    <div class="product-content">
+                        <h3>Cacerola de Cerámica</h3>
+                        <div class="product-rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star-half-alt"></i>
+                            <span>(4.5)</span>
+                        </div>
+                        <p>Distribución uniforme del calor, ideal para guisos y estofados.</p>
+                        <div class="product-price">$75.99</div>
+                        <div class="product-action">
+                            <button class="add-to-cart">Añadir al Carrito</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="product-img">
+                        <img src="https://images.unsplash.com/photo-1599987066626-9b89663b7b71?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="Set Completo de Cocina 12 Piezas">
+                    </div>
+                    <div class="product-content">
+                        <h3>Set Completo de Cocina 12 Piezas</h3>
+                        <div class="product-rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <span>(5.0)</span>
+                        </div>
+                        <p>Incluye ollas, sartenes y accesorios en acero inoxidable de alta calidad.</p>
+                        <div class="product-price">$299.99</div>
+                        <div class="product-action">
+                            <button class="add-to-cart">Añadir al Carrito</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="product-img">
+                        <img src="https://images.unsplash.com/photo-1599987066626-9b89663b7b71?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="Wok Profesional">
+                    </div>
+                    <div class="product-content">
+                        <h3>Wok Profesional</h3>
+                        <div class="product-rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star-half-alt"></i>
+                            <span>(4.5)</span>
+                        </div>
+                        <p>Perfecto para salteados y cocina asiática con revestimiento antiadherente.</p>
+                        <div class="product-price">$69.99</div>
+                        <div class="product-action">
+                            <button class="add-to-cart">Añadir al Carrito</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="features" id="sobre-nosotros">
+        <div class="container">
+            <div class="section-title">
+                <h2>¿Por qué elegirnos?</h2>
+                <p>Descubre las razones por las que miles de clientes confían en nosotros</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-award"></i></div>
+                    <h3>Calidad Garantizada</h3>
+                    <p>Todos nuestros productos pasan por rigurosos controles de calidad antes de llegar a tu hogar.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-shipping-fast"></i></div>
+                    <h3>Envío Rápido</h3>
+                    <p>Entrega en 24-48 horas a todo el país. Envío gratis en compras superiores a $100.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-tags"></i></div>
+                    <h3>Mejor Precio</h3>
+                    <p>Garantizamos el mejor precio del mercado en todos nuestros productos.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-headset"></i></div>
+                    <h3>Soporte 24/7</h3>
+                    <p>Nuestro equipo de atención al cliente está disponible las 24 horas del día.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="testimonials">
+        <div class="container">
+            <div class="section-title">
+                <h2>Lo que dicen nuestros clientes</h2>
+                <p>Opiniones reales de clientes satisfechos con nuestros productos</p>
+            </div>
+            <div class="testimonial-grid">
+                <div class="testimonial-card">
+                    <div class="testimonial-content">
+                        <p>"Las ollas que compré son espectaculares. Excelente calidad y el servicio al cliente fue impecable. Totalmente recomendado."</p>
+                    </div>
+                    <div class="testimonial-author">
+                        <div class="author-img">
+                            <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="María González">
+                        </div>
+                        <div class="author-info">
+                            <h4>María González</h4>
+                            <p>Cliente desde 2023</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-content">
+                        <p>"El set de cocina que compré superó todas mis expectativas. La relación calidad-precio es excelente y el envío fue muy rápido."</p>
+                    </div>
+                    <div class="testimonial-author">
+                        <div class="author-img">
+                            <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Carlos Rodríguez">
+                        </div>
+                        <div class="author-info">
+                            <h4>Carlos Rodríguez</h4>
+                            <p>Cliente desde 2022</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-content">
+                        <p>"La olla a presión que compré me ha cambiado la vida. Ahorro mucho tiempo en la cocina y los resultados son siempre perfectos."</p>
+                    </div>
+                    <div class="testimonial-author">
+                        <div class="author-img">
+                            <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="Laura Martínez">
+                        </div>
+                        <div class="author-info">
+                            <h4>Laura Martínez</h4>
+                            <p>Cliente desde 2024</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta">
+        <div class="container">
+            <h2>¿Listo para renovar tu cocina?</h2>
+            <p>Aprovecha nuestras ofertas especiales y descuentos por tiempo limitado.</p>
+            <a href="#productos" class="btn">Comprar Ahora</a>
+        </div>
+    </section>
+
+    <footer id="contacto">
+        <div class="container">
+            <div class="footer-container">
+                <div class="footer-col">
+                    <h3>MiOlleria</h3>
+                    <p>Tu tienda especializada en ollas y utensilios de cocina de alta calidad.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-pinterest"></i></a>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h3>Enlaces Rápidos</h3>
+                    <ul>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i>Inicio</a></li>
+                        <li><a href="#productos"><i class="fas fa-chevron-right"></i>Productos</a></li>
+                        <li><a href="#categorias"><i class="fas fa-chevron-right"></i>Categorías</a></li>
+                        <li><a href="#sobre-nosotros"><i class="fas fa-chevron-right"></i>Sobre Nosotros</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h3>Ayuda</h3>
+                    <ul>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i>Preguntas Frecuentes</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i>Política de Envíos</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i>Política de Devoluciones</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i>Términos y Condiciones</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h3>Contacto</h3>
+                    <ul>
+                        <li><i class="fas fa-phone-alt"></i> +34 123 456 789</li>
+                        <li><i class="fas fa-envelope"></i> info@miolleria.com</li>
+                        <li><i class="fas fa-map-marker-alt"></i> Calle Principal 123, Ciudad</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2025 MiOlleria. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <div class="back-to-top">
+        <i class="fas fa-arrow-up"></i>
+    </div>
+
+    <script>
+        // Back to top button functionality
+        const backToTopButton = document.querySelector('.back-to-top');
+
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 300) {
+                backToTopButton.classList.add('visible');
+            } else {
+                backToTopButton.classList.remove('visible');
+            }
+        });
+
+        backToTopButton.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+
+        // Add to cart functionality
+        const addToCartButtons = document.querySelectorAll('.add-to-cart');
+        const cartCount = document.querySelector('.cart-count');
+
+        let cartItems = 0;
+
+        addToCartButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                cartItems++;
+                cartCount.textContent = cartItems;
+
+                // Show notification
+                const productName = button.parentElement.parentElement.querySelector('h3').textContent;
+                showNotification(`${productName} añadido al carrito`);
+
+                // Change button text temporarily
+                const originalText = button.textContent;
+                button.textContent = 'Añadido!';
+                setTimeout(() => {
+                    button.textContent = originalText;
+                }, 2000);
+            });
+        });
+
+        function showNotification(message) {
+            const notification = document.createElement('div');
+            notification.className = 'notification';
+            notification.textContent = message;
+
+            // Style the notification
+            notification.style.position = 'fixed';
+            notification.style.bottom = '30px';
+            notification.style.right = '30px';
+            notification.style.backgroundColor = 'var(--color-primary)';
+            notification.style.color = 'white';
+            notification.style.padding = '15px 25px';
+            notification.style.borderRadius = '5px';
+            notification.style.boxShadow = '0 5px 15px rgba(0, 0, 0, 0.2)';
+            notification.style.zIndex = '1000';
+            notification.style.transition = 'opacity 0.3s';
+            notification.style.opacity = '0';
+
+            document.body.appendChild(notification);
+
+            // Fade in
+            setTimeout(() => {
+                notification.style.opacity = '1';
+            }, 10);
+
+            // Fade out and remove
+            setTimeout(() => {
+                notification.style.opacity = '0';
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 300);
+            }, 3000);
+        }
+
+        // Mobile menu toggle (would need additional HTML for mobile menu)
+        // This is just a placeholder for the functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            // Mobile menu toggle would go here
+        });
+    </script>
+</body>
+</html>

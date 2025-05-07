@@ -1,0 +1,1573 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delicias Artesanales - Empanadas Gourmet</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+            --color-primary: #8e4506; /* Marrón oscuro, terroso */
+            --color-secondary: #f4a259; /* Naranja suave, cálido */
+            --color-accent: #5b8c5a; /* Verde oliva, natural */
+            --color-dark: #2c2c2c; /* Gris oscuro, para texto */
+            --color-light: #f9f5f0; /* Beige muy claro, fondo */
+            --font-primary: 'Poppins', sans-serif;
+            --font-secondary: 'Playfair Display', serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth; /* Para desplazamiento suave con anclas */
+        }
+
+        body {
+            font-family: var(--font-primary);
+            color: var(--color-dark);
+            line-height: 1.6;
+            background-color: var(--color-light);
+        }
+
+        h1, h2, h3, h4, h5 {
+            font-family: var(--font-secondary);
+            font-weight: 700;
+            color: var(--color-primary); /* Color primario para títulos */
+        }
+
+        .container {
+            width: 90%; /* Usar porcentaje para mayor fluidez */
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px; /* Reducir padding en móviles */
+        }
+
+        /* Header Styles */
+        header {
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            width: 100%;
+            top: 0; /* Asegurar que esté pegado arriba */
+            z-index: 1000;
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo-icon { /* Estilo para el emoji del logo */
+            font-size: 2.5rem; /* Tamaño del emoji */
+            margin-right: 10px;
+            color: var(--color-primary);
+        }
+
+        .logo-text h1 {
+            font-size: 1.6rem; /* Ajustar tamaño para móviles */
+            color: var(--color-primary);
+            margin: 0;
+            line-height: 1.2;
+        }
+
+        .logo-text span {
+            font-size: 0.8rem; /* Ajustar tamaño para móviles */
+            color: var(--color-secondary);
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+
+        nav ul li {
+            margin-left: 25px;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: var(--color-dark);
+            font-weight: 500;
+            padding: 5px 0;
+            position: relative;
+            transition: color 0.3s;
+        }
+
+        nav ul li a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            background-color: var(--color-primary);
+            bottom: 0;
+            left: 0;
+            transition: width 0.3s;
+        }
+
+        nav ul li a:hover,
+        nav ul li a.active-link { /* Estilo para el enlace activo */
+            color: var(--color-primary);
+        }
+
+        nav ul li a:hover::after,
+        nav ul li a.active-link::after {
+            width: 100%;
+        }
+
+        .mobile-toggle {
+            display: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--color-primary);
+        }
+
+        /* Hero Section */
+        .hero {
+            padding-top: 120px; /* Aumentar padding para compensar header fijo */
+            padding-bottom: 60px;
+            background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('https://placehold.co/1920x800/8e4506/f9f5f0?text=Empanadas+Deliciosas') center/cover no-repeat;
+            min-height: 85vh; /* Ajustar altura */
+            display: flex;
+            align-items: center;
+            color: white;
+            text-align: center;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .hero-content h2 {
+            font-size: 3rem; /* Ajustar tamaño */
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+            color: white; /* Títulos en hero blancos */
+        }
+
+        .hero-content p {
+            font-size: 1.1rem; /* Ajustar tamaño */
+            margin-bottom: 30px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 30px;
+            text-decoration: none;
+            border-radius: 30px; /* Más redondeado */
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            border: 2px solid transparent; /* Borde inicial transparente */
+        }
+
+        .btn-primary {
+            background-color: var(--color-secondary); /* Naranja para el botón primario */
+            color: var(--color-dark);
+            border-color: var(--color-secondary);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--color-primary); /* Marrón al pasar el mouse */
+            color: white;
+            border-color: var(--color-primary);
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            color: white;
+            border: 2px solid white;
+            margin-left: 15px;
+        }
+
+        .btn-secondary:hover {
+            background-color: white;
+            color: var(--color-primary);
+        }
+        
+        .hero-buttons {
+            margin-top: 20px;
+        }
+
+        /* Section general styles */
+        section {
+            padding: 80px 0;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            margin-bottom: 30px; /* Aumentar margen */
+            color: var(--color-primary);
+            position: relative;
+            text-align: center; /* Centrar títulos de sección */
+            padding-bottom: 15px; /* Espacio para la línea */
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            width: 80px; /* Línea más ancha */
+            height: 4px; /* Línea más gruesa */
+            background-color: var(--color-secondary); /* Usar color secundario */
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        /* About Section */
+        .about {
+            background-color: white;
+        }
+
+        .about-container {
+            display: flex;
+            align-items: center;
+            gap: 50px;
+        }
+
+        .about-img {
+            flex: 1;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .about-img img {
+            width: 100%;
+            height: auto;
+            display: block;
+            transition: transform 0.3s ease;
+        }
+        .about-img img:hover {
+            transform: scale(1.05);
+        }
+
+        .about-content {
+            flex: 1;
+        }
+        .about-content .section-title { /* Título de sección alineado a la izquierda para "about" */
+            text-align: left;
+        }
+        .about-content .section-title::after {
+            left: 0;
+            transform: translateX(0);
+        }
+
+
+        .about-content p {
+            margin-bottom: 20px;
+            font-size: 1.05rem; /* Ligeramente más grande */
+            color: #555; /* Color de párrafo más suave */
+        }
+
+        .about-features {
+            margin-top: 30px;
+        }
+
+        .feature {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px; /* Más espacio */
+        }
+
+        .feature-icon {
+            width: 45px; /* Icono más grande */
+            height: 45px;
+            background-color: var(--color-light);
+            border: 2px solid var(--color-secondary); /* Borde con color secundario */
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            color: var(--color-primary);
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+        .feature-text {
+            font-weight: 500;
+        }
+
+        /* Menu Section */
+        .menu {
+            background-color: var(--color-light);
+        }
+
+        .menu-header p {
+            max-width: 700px;
+            margin: 0 auto 40px auto; /* Ajustar margen */
+            text-align: center;
+            color: #555;
+        }
+
+        .menu-categories {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 40px;
+            gap: 10px; /* Espacio entre categorías */
+        }
+
+        .menu-category {
+            padding: 10px 25px; /* Más padding */
+            margin: 5px;
+            background-color: white;
+            border: 1px solid var(--color-secondary); /* Borde sutil */
+            border-radius: 30px; /* Más redondeado */
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .menu-category:hover,
+        .menu-category.active {
+            background-color: var(--color-primary);
+            color: white;
+            border-color: var(--color-primary);
+        }
+
+        .menu-items {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); /* Ajustar minmax */
+            gap: 30px;
+        }
+
+        .menu-item {
+            background-color: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08); /* Sombra más suave */
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex; /* Para alinear contenido si es necesario */
+            flex-direction: column; /* Asegurar que el contenido se apile verticalmente */
+        }
+
+        .menu-item:hover {
+            transform: translateY(-8px); /* Efecto hover sutil */
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.12);
+        }
+
+        .menu-item-img {
+            height: 200px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .menu-item-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .menu-item:hover .menu-item-img img {
+            transform: scale(1.1);
+        }
+
+        .menu-item-tag {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            padding: 6px 12px; /* Ajustar padding */
+            background-color: var(--color-primary);
+            color: white;
+            border-radius: 20px;
+            font-size: 0.75rem; /* Ajustar tamaño */
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .menu-item-content {
+            padding: 20px;
+            flex-grow: 1; /* Para que el contenido ocupe el espacio restante */
+            display: flex;
+            flex-direction: column;
+        }
+
+        .menu-item-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .menu-item-title h3 {
+            font-size: 1.25rem; /* Ajustar tamaño */
+            color: var(--color-dark); /* Título del item en color oscuro */
+        }
+
+        .menu-item-price {
+            font-weight: 700;
+            color: var(--color-primary);
+            font-size: 1.2rem;
+        }
+
+        .menu-item-desc {
+            color: #666;
+            margin-bottom: 15px;
+            font-size: 0.9rem; /* Ajustar tamaño */
+            flex-grow: 1; /* Para que la descripción ocupe espacio */
+        }
+
+        .menu-item-action {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: auto; /* Empujar al final */
+        }
+
+        .add-to-cart {
+            background-color: var(--color-secondary); /* Botón con color secundario */
+            color: var(--color-dark);
+            border: none;
+            padding: 10px 18px; /* Más padding */
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background-color 0.3s;
+            font-size: 0.9rem;
+        }
+
+        .add-to-cart:hover {
+            background-color: var(--color-primary);
+            color: white;
+        }
+
+        .menu-item-rating {
+            display: flex;
+            color: #ffc107; /* Amarillo para estrellas */
+            font-size: 0.9rem; /* Tamaño de estrellas */
+        }
+        .menu-item-rating .fa-star { margin-right: 2px; }
+
+
+        /* Special Offers Section */
+        .special-offers {
+            padding: 80px 0;
+            background-color: white;
+        }
+
+        .offers-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); /* Ajustar minmax */
+            gap: 30px;
+        }
+
+        .offer-card {
+            position: relative;
+            border-radius: 10px;
+            overflow: hidden;
+            height: 280px; /* Aumentar altura */
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .offer-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 25px rgba(0,0,0,0.15);
+        }
+
+        .offer-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.4s ease;
+        }
+        .offer-card:hover .offer-img {
+            transform: scale(1.08);
+        }
+
+        .offer-content {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 25px; /* Más padding */
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.85) 20%, transparent);
+            color: white;
+        }
+
+        .offer-title {
+            font-size: 1.6rem; /* Título más grande */
+            margin-bottom: 10px;
+            font-family: var(--font-secondary);
+            color: white; /* Color de título en oferta */
+        }
+
+        .offer-description { /* Nueva clase para descripción de oferta */
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+            color: #eee;
+        }
+
+        .offer-price {
+            display: flex;
+            align-items: baseline; /* Alinear precios */
+            margin-bottom: 10px;
+        }
+
+        .original-price {
+            text-decoration: line-through;
+            color: #ccc; /* Más claro */
+            margin-right: 10px;
+            font-size: 0.9rem;
+        }
+
+        .discount-price {
+            font-size: 1.4rem; /* Precio con descuento más prominente */
+            font-weight: 700;
+            color: var(--color-secondary); /* Color secundario para el precio */
+        }
+        .offer-cta .btn { /* Estilo para el botón en la oferta */
+            padding: 8px 20px;
+            font-size: 0.9rem;
+            background-color: var(--color-secondary);
+            color: var(--color-dark);
+        }
+        .offer-cta .btn:hover {
+            background-color: var(--color-primary);
+            color: white;
+        }
+
+
+        /* Testimonials Section */
+        .testimonials {
+            background-color: var(--color-light);
+        }
+
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .testimonial-card {
+            background-color: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            position: relative;
+            border-left: 5px solid var(--color-primary); /* Detalle de borde */
+        }
+
+        .testimonial-card::before { /* Comillas decorativas */
+            content: '\f10d'; /* Icono de comillas de Font Awesome */
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            position: absolute;
+            top: 15px;
+            left: 20px;
+            font-size: 30px; /* Tamaño ajustado */
+            color: var(--color-secondary); /* Usar color secundario */
+            opacity: 0.8;
+            z-index: 0;
+        }
+
+        .testimonial-content {
+            position: relative;
+            z-index: 1;
+            font-style: italic;
+            margin-bottom: 20px;
+            padding-left: 30px; /* Espacio para las comillas */
+            color: #555;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+        }
+
+        .author-img {
+            width: 60px; /* Imagen de autor más grande */
+            height: 60px;
+            border-radius: 50%;
+            overflow: hidden;
+            margin-right: 15px;
+            border: 2px solid var(--color-secondary);
+        }
+
+        .author-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .author-info h4 {
+            margin-bottom: 3px; /* Menos margen */
+            font-size: 1.1rem;
+            color: var(--color-dark);
+        }
+
+        .author-info span {
+            color: #777;
+            font-size: 0.9rem;
+        }
+
+        /* How it Works Section */
+        .how-it-works {
+            background-color: white;
+        }
+
+        .steps {
+            display: flex;
+            justify-content: space-around; /* Mejor distribución */
+            flex-wrap: wrap;
+            gap: 30px;
+            position: relative; /* Para los conectores */
+        }
+
+        .step {
+            flex: 1;
+            min-width: 220px; /* Ajustar ancho mínimo */
+            max-width: 280px; /* Limitar ancho máximo */
+            text-align: center;
+            padding: 30px 20px;
+            background-color: var(--color-light);
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            position: relative;
+            z-index: 1; /* Para que esté sobre los conectores */
+        }
+        
+        /* Conectores entre pasos (solo para pantallas grandes) */
+        @media (min-width: 993px) {
+            .step:not(:last-child)::after {
+                content: '';
+                position: absolute;
+                top: 50%;
+                right: -35px; /* Ajustar posición */
+                width: 30px; /* Ancho del conector */
+                height: 3px; /* Grosor del conector */
+                background-color: var(--color-secondary);
+                transform: translateY(-50%);
+                z-index: 0; /* Detrás de los pasos */
+            }
+        }
+
+
+        .step-icon {
+            width: 70px; /* Icono más pequeño */
+            height: 70px;
+            background-color: var(--color-primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px; /* Tamaño de icono */
+            margin: 0 auto 20px;
+            box-shadow: 0 4px 10px rgba(142, 69, 6, 0.4); /* Sombra para el icono */
+        }
+
+        .step h3 {
+            margin-bottom: 10px; /* Menos margen */
+            color: var(--color-primary);
+            font-size: 1.2rem;
+        }
+        .step p {
+            font-size: 0.9rem;
+            color: #555;
+        }
+
+        /* Call to Action Section */
+        .cta {
+            padding: 80px 0;
+            background: linear-gradient(rgba(142, 69, 6, 0.85), rgba(142, 69, 6, 0.85)), url('https://placehold.co/1920x600/5b8c5a/f9f5f0?text=Pide+Ahora') center/cover fixed no-repeat;
+            color: white;
+            text-align: center;
+        }
+
+        .cta h2 {
+            font-size: 2.8rem; /* Ajustar tamaño */
+            margin-bottom: 20px;
+            color: white; /* Título en CTA blanco */
+        }
+
+        .cta p {
+            font-size: 1.1rem; /* Ajustar tamaño */
+            max-width: 700px;
+            margin: 0 auto 30px;
+        }
+        .cta .btn-primary { /* Estilo específico para el botón en CTA */
+            background-color: var(--color-secondary);
+            color: var(--color-dark);
+            border-color: var(--color-secondary);
+            padding: 15px 35px; /* Botón más grande */
+            font-size: 1.1rem;
+        }
+        .cta .btn-primary:hover {
+            background-color: white;
+            color: var(--color-primary);
+            border-color: white;
+        }
+
+        /* Contact Section */
+        .contact {
+            background-color: var(--color-light);
+        }
+        .contact-container {
+            display: flex;
+            gap: 50px;
+            align-items: flex-start; /* Alinear al inicio */
+        }
+
+        .contact-info {
+            flex: 1;
+        }
+        .contact-info .section-title { /* Título de sección alineado a la izquierda para "contact-info" */
+            text-align: left;
+        }
+        .contact-info .section-title::after {
+            left: 0;
+            transform: translateX(0);
+        }
+
+
+        .contact-form {
+            flex: 1.5; /* Dar más espacio al formulario */
+            background-color: white;
+            padding: 40px; /* Más padding */
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        .contact-details {
+            margin-top: 30px;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: flex-start; /* Alinear items */
+            margin-bottom: 25px; /* Más espacio */
+        }
+
+        .contact-icon {
+            width: 45px; /* Icono más grande */
+            height: 45px;
+            background-color: var(--color-primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            margin-right: 20px; /* Más margen */
+            flex-shrink: 0;
+            font-size: 18px;
+        }
+
+        .contact-text h4 {
+            margin-bottom: 5px;
+            font-size: 1.1rem;
+            color: var(--color-dark);
+        }
+        .contact-text p {
+            color: #555;
+            font-size: 0.95rem;
+        }
+        .contact-text a {
+            color: var(--color-primary);
+            text-decoration: none;
+        }
+        .contact-text a:hover {
+            text-decoration: underline;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label { /* Estilo para etiquetas */
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--color-dark);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-family: var(--font-primary);
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+        .form-control:focus {
+            outline: none;
+            border-color: var(--color-primary);
+            box-shadow: 0 0 0 2px rgba(142, 69, 6, 0.2);
+        }
+
+        textarea.form-control {
+            height: 120px; /* Altura ajustada */
+            resize: vertical;
+        }
+
+        .form-btn {
+            background-color: var(--color-primary);
+            color: white;
+            border: none;
+            padding: 12px 30px; /* Más padding */
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: background-color 0.3s, transform 0.2s;
+            text-transform: uppercase;
+        }
+
+        .form-btn:hover {
+            background-color: var(--color-secondary);
+            color: var(--color-dark);
+            transform: translateY(-2px);
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--color-dark);
+            color: #bbb; /* Color de texto más claro para el footer */
+            padding: 70px 0 30px; /* Ajustar padding */
+        }
+
+        .footer-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); /* Ajustar minmax */
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-col h3 {
+            margin-bottom: 20px;
+            position: relative;
+            padding-bottom: 10px;
+            color: var(--color-secondary); /* Títulos de footer con color secundario */
+            font-size: 1.3rem;
+        }
+
+        .footer-col h3::after {
+            content: '';
+            position: absolute;
+            width: 50px; /* Línea más ancha */
+            height: 3px; /* Línea más gruesa */
+            background-color: var(--color-primary);
+            bottom: 0;
+            left: 0;
+        }
+
+        .footer-col p {
+            margin-bottom: 15px; /* Menos margen */
+            font-size: 0.95rem;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 10px; /* Espacio entre iconos */
+        }
+
+        .social-link {
+            width: 40px;
+            height: 40px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-decoration: none;
+            font-size: 1.1rem; /* Tamaño de icono social */
+            transition: background-color 0.3s, transform 0.2s;
+        }
+
+        .social-link:hover {
+            background-color: var(--color-primary);
+            transform: translateY(-3px); /* Efecto hover */
+        }
+
+        .footer-col ul {
+            list-style: none;
+        }
+
+        .footer-col ul li {
+            margin-bottom: 12px; /* Más espacio */
+        }
+
+        .footer-col ul li a {
+            color: #bbb;
+            text-decoration: none;
+            transition: color 0.3s, padding-left 0.3s;
+        }
+
+        .footer-col ul li a:hover {
+            color: var(--color-secondary);
+            padding-left: 5px; /* Pequeño indentado al pasar el mouse */
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 30px; /* Más padding */
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 0.9rem;
+            color: #999; /* Color de copyright más suave */
+        }
+        .copyright a {
+            color: var(--color-secondary);
+            text-decoration: none;
+        }
+        .copyright a:hover {
+            text-decoration: underline;
+        }
+
+
+        /* Responsive Styles */
+        @media (max-width: 992px) {
+            .about-container,
+            .contact-container {
+                flex-direction: column;
+                gap: 30px; /* Reducir gap en modo columna */
+            }
+            .about-img, .about-content,
+            .contact-info, .contact-form {
+                width: 100%; /* Ocupar todo el ancho */
+            }
+            .about-content .section-title,
+            .contact-info .section-title { /* Centrar títulos en móvil si están en columna */
+                text-align: center;
+            }
+            .about-content .section-title::after,
+            .contact-info .section-title::after {
+                left: 50%;
+                transform: translateX(-50%);
+            }
+
+            .steps {
+                flex-direction: column;
+                align-items: center; /* Centrar pasos en columna */
+            }
+            .step {
+                width: 80%; /* Ancho de los pasos en móvil */
+                max-width: 350px;
+            }
+            .step:not(:last-child)::after { /* Ocultar conectores en móvil */
+                display: none;
+            }
+            .hero-content h2 { font-size: 2.5rem; }
+            .hero-content p { font-size: 1rem; }
+            .section-title { font-size: 2.2rem; }
+            .cta h2 { font-size: 2.3rem; }
+        }
+
+        @media (max-width: 768px) {
+            .header-container {
+                position: relative; /* Para el menú desplegable */
+                padding: 10px 0; /* Menos padding en header */
+            }
+            .logo-text h1 { font-size: 1.4rem; }
+            .logo-text span { font-size: 0.7rem; }
+            .logo-icon { font-size: 2rem; }
+
+            .mobile-toggle {
+                display: block; /* Mostrar el botón de hamburguesa */
+            }
+
+            nav {
+                position: absolute;
+                top: 100%; /* Debajo del header */
+                left: 0;
+                right: 0;
+                background-color: white;
+                padding: 15px 0; /* Padding vertical */
+                box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+                display: none; /* Oculto por defecto */
+                border-top: 1px solid var(--color-light);
+            }
+
+            nav.active {
+                display: block; /* Mostrar cuando está activo */
+            }
+
+            nav ul {
+                flex-direction: column;
+                align-items: center; /* Centrar items del menú */
+            }
+
+            nav ul li {
+                margin: 10px 0;
+                width: 100%;
+                text-align: center;
+            }
+            nav ul li a {
+                display: block; /* Para que ocupe todo el ancho */
+                padding: 10px 0;
+            }
+            nav ul li a::after { /* Ajustar línea inferior para menú móvil */
+                left: 50%;
+                transform: translateX(-50%);
+            }
+
+
+            .hero-content h2 { font-size: 2rem; }
+            .hero-buttons {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 15px;
+            }
+            .btn {
+                display: block; /* Botones en bloque */
+                width: 80%; /* Ancho de botones */
+                max-width: 250px; /* Máximo ancho */
+                margin: 10px auto;
+                text-align: center;
+            }
+            .btn-secondary {
+                margin-left: auto; /* Resetear margen */
+            }
+            .footer-container {
+                grid-template-columns: 1fr; /* Una columna en footer */
+                text-align: center;
+            }
+            .footer-col h3::after {
+                left: 50%;
+                transform: translateX(-50%);
+            }
+            .social-links {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container header-container">
+            <a href="#home" class="logo"> <div class="logo-icon">🥟</div>
+                <div class="logo-text">
+                    <h1>Delicias Artesanales</h1>
+                    <span>Empanadas Gourmet</span>
+                </div>
+            </a>
+            <div class="mobile-toggle" id="mobile-toggle">
+                <i class="fas fa-bars"></i> </div>
+            <nav id="main-nav">
+                <ul>
+                    <li><a href="#home" class="active-link">Inicio</a></li>
+                    <li><a href="#about">Nosotros</a></li>
+                    <li><a href="#menu">Menú</a></li>
+                    <li><a href="#offers">Ofertas</a></li>
+                    <li><a href="#testimonials">Testimonios</a></li>
+                    <li><a href="#contact">Contacto</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section class="hero" id="home">
+        <div class="container">
+            <div class="hero-content">
+                <h2>Sabores que Sorprenden, Tradición que Enamora</h2>
+                <p>Descubre el arte de las empanadas gourmet, elaboradas diariamente con los ingredientes más frescos y recetas innovadoras que transformarán tu experiencia culinaria.</p>
+                <div class="hero-buttons">
+                    <a href="#menu" class="btn btn-primary">Ver Menú</a>
+                    <a href="#contact" class="btn btn-secondary">Ordenar Ahora</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="about" id="about">
+        <div class="container about-container">
+            <div class="about-img">
+                <img src="https://placehold.co/600x450/f4a259/2c2c2c?text=Nuestras+Empanadas" alt="Variedad de empanadas artesanales" onerror="this.onerror=null;this.src='https://placehold.co/600x450/cccccc/2c2c2c?text=Imagen+no+disponible';">
+            </div>
+            <div class="about-content">
+                <h2 class="section-title">Nuestra Pasión, Tu Delicia</h2>
+                <p>Desde 2015, en Delicias Artesanales hemos perfeccionado el arte de la empanada, fusionando la tradición familiar con un toque gourmet. Creemos en la calidad, el sabor auténtico y la alegría de compartir.</p>
+                <p>Cada empanada es una obra maestra, amasada y rellenada a mano por nuestros expertos cocineros, utilizando solo ingredientes frescos de origen local y especias seleccionadas que garantizan una explosión de sabor en cada bocado.</p>
+                <div class="about-features">
+                    <div class="feature">
+                        <div class="feature-icon"><i class="fas fa-leaf"></i></div>
+                        <div class="feature-text">Ingredientes 100% frescos y locales</div>
+                    </div>
+                    <div class="feature">
+                        <div class="feature-icon"><i class="fas fa-certificate"></i></div>
+                        <div class="feature-text">Recetas originales y exclusivas</div>
+                    </div>
+                    <div class="feature">
+                        <div class="feature-icon"><i class="fas fa-hand-sparkles"></i></div>
+                        <div class="feature-text">Elaboración artesanal diaria</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="menu" id="menu">
+        <div class="container">
+            <div class="menu-header">
+                <h2 class="section-title">Nuestro Exquisito Menú</h2>
+                <p>Explora nuestra variedad de empanadas gourmet, desde las clásicas de siempre hasta creaciones innovadoras. ¡Hay un sabor para cada antojo!</p>
+            </div>
+            
+            <div class="menu-categories">
+                <div class="menu-category active" data-category="all">Todas</div>
+                <div class="menu-category" data-category="carne">Carne</div>
+                <div class="menu-category" data-category="pollo">Pollo</div>
+                <div class="menu-category" data-category="mariscos">Mariscos</div>
+                <div class="menu-category" data-category="vegetarianas">Vegetarianas</div>
+                <div class="menu-category" data-category="dulces">Dulces</div>
+            </div>
+            
+            <div class="menu-items">
+                <div class="menu-item" data-category="carne">
+                    <div class="menu-item-img">
+                        <img src="https://placehold.co/300x200/8e4506/f9f5f0?text=Carne+Ahumada" alt="Empanada de Carne Ahumada" onerror="this.onerror=null;this.src='https://placehold.co/300x200/cccccc/2c2c2c?text=Imagen';">
+                        <span class="menu-item-tag">Bestseller</span>
+                    </div>
+                    <div class="menu-item-content">
+                        <div class="menu-item-title">
+                            <h3>Carne Ahumada & Provolone</h3>
+                            <div class="menu-item-price">$5.99</div>
+                        </div>
+                        <p class="menu-item-desc">Jugosa carne de res ahumada lentamente, queso provolone derretido, pimientos asados y cebolla caramelizada.</p>
+                        <div class="menu-item-action">
+                            <button class="add-to-cart">Añadir</button>
+                            <div class="menu-item-rating">
+                                <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="menu-item" data-category="pollo">
+                    <div class="menu-item-img">
+                        <img src="https://placehold.co/300x200/f4a259/2c2c2c?text=Pollo+Curry" alt="Empanada de Pollo Curry" onerror="this.onerror=null;this.src='https://placehold.co/300x200/cccccc/2c2c2c?text=Imagen';">
+                        <span class="menu-item-tag">Nuevo</span>
+                    </div>
+                    <div class="menu-item-content">
+                        <div class="menu-item-title">
+                            <h3>Pollo Thai al Curry Rojo</h3>
+                            <div class="menu-item-price">$5.49</div>
+                        </div>
+                        <p class="menu-item-desc">Trozos de pollo tierno en una cremosa salsa de curry rojo tailandés, leche de coco, bambú y un toque de albahaca fresca.</p>
+                        <div class="menu-item-action">
+                            <button class="add-to-cart">Añadir</button>
+                            <div class="menu-item-rating">
+                                <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="far fa-star"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="menu-item" data-category="mariscos">
+                    <div class="menu-item-img">
+                        <img src="https://placehold.co/300x200/5b8c5a/f9f5f0?text=Camarones" alt="Empanada de Camarones Tropical" onerror="this.onerror=null;this.src='https://placehold.co/300x200/cccccc/2c2c2c?text=Imagen';">
+                    </div>
+                    <div class="menu-item-content">
+                        <div class="menu-item-title">
+                            <h3>Camarones al Ajillo</h3>
+                            <div class="menu-item-price">$6.99</div>
+                        </div>
+                        <p class="menu-item-desc">Suculentos camarones salteados en mantequilla de ajo y perejil, con un toque de vino blanco y pimentón.</p>
+                        <div class="menu-item-action">
+                            <button class="add-to-cart">Añadir</button>
+                            <div class="menu-item-rating">
+                                <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="menu-item" data-category="vegetarianas">
+                    <div class="menu-item-img">
+                        <img src="https://placehold.co/300x200/e63946/f1faee?text=Caprese" alt="Empanada Caprese" onerror="this.onerror=null;this.src='https://placehold.co/300x200/cccccc/2c2c2c?text=Imagen';">
+                    </div>
+                    <div class="menu-item-content">
+                        <div class="menu-item-title">
+                            <h3>Caprese Clásica</h3>
+                            <div class="menu-item-price">$4.99</div>
+                        </div>
+                        <p class="menu-item-desc">Mozzarella fresca, tomates maduros, albahaca fresca y un toque de reducción balsámica.</p>
+                        <div class="menu-item-action">
+                            <button class="add-to-cart">Añadir</button>
+                            <div class="menu-item-rating">
+                                <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i><i class="far fa-star"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="menu-item" data-category="dulces">
+                    <div class="menu-item-img">
+                        <img src="https://placehold.co/300x200/d4a373/fefae0?text=Manzana+Canela" alt="Empanada de Manzana y Canela" onerror="this.onerror=null;this.src='https://placehold.co/300x200/cccccc/2c2c2c?text=Imagen';">
+                         <span class="menu-item-tag">Postre</span>
+                    </div>
+                    <div class="menu-item-content">
+                        <div class="menu-item-title">
+                            <h3>Manzana Caramelizada</h3>
+                            <div class="menu-item-price">$4.50</div>
+                        </div>
+                        <p class="menu-item-desc">Tiernos trozos de manzana caramelizada con canela, nuez moscada y un toque de crumble.</p>
+                        <div class="menu-item-action">
+                            <button class="add-to-cart">Añadir</button>
+                            <div class="menu-item-rating">
+                                <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="far fa-star"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                 <div class="menu-item" data-category="vegetarianas">
+                    <div class="menu-item-img">
+                        <img src="https://placehold.co/300x200/a5a58d/6b705c?text=Hongos+Azul" alt="Empanada de Hongos y Queso Azul" onerror="this.onerror=null;this.src='https://placehold.co/300x200/cccccc/2c2c2c?text=Imagen';">
+                    </div>
+                    <div class="menu-item-content">
+                        <div class="menu-item-title">
+                            <h3>Hongos Silvestres & Azul</h3>
+                            <div class="menu-item-price">$5.79</div>
+                        </div>
+                        <p class="menu-item-desc">Mezcla de hongos silvestres salteados con ajo y tomillo, y un toque de queso azul cremoso.</p>
+                        <div class="menu-item-action">
+                            <button class="add-to-cart">Añadir</button>
+                            <div class="menu-item-rating">
+                                <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="special-offers" id="offers">
+        <div class="container">
+            <div class="offers-header">
+                <h2 class="section-title">Ofertas Especiales</h2>
+                <p>¡No te pierdas nuestras promociones exclusivas! Sabores increíbles a precios que te encantarán.</p>
+            </div>
+            <div class="offers-grid">
+                <div class="offer-card">
+                    <img src="https://placehold.co/400x280/8e4506/f9f5f0?text=Combo+Familiar" alt="Combo Familiar" class="offer-img" onerror="this.onerror=null;this.src='https://placehold.co/400x280/cccccc/2c2c2c?text=Imagen';">
+                    <div class="offer-content">
+                        <h3 class="offer-title">Combo Familiar</h3>
+                        <p class="offer-description">12 empanadas a elección + bebida grande.</p>
+                        <div class="offer-price">
+                            <span class="original-price">$65.00</span>
+                            <span class="discount-price">$55.99</span>
+                        </div>
+                        <div class="offer-cta"><a href="#contact" class="btn">Pedir Ahora</a></div>
+                    </div>
+                </div>
+                <div class="offer-card">
+                    <img src="https://placehold.co/400x280/f4a259/2c2c2c?text=Mitad+de+Semana" alt="Oferta Mitad de Semana" class="offer-img" onerror="this.onerror=null;this.src='https://placehold.co/400x280/cccccc/2c2c2c?text=Imagen';">
+                    <div class="offer-content">
+                        <h3 class="offer-title">Miércoles de Locura</h3>
+                         <p class="offer-description">Todas las empanadas de pollo con 20% de descuento.</p>
+                        <div class="offer-price">
+                            <span class="discount-price">20% OFF</span>
+                        </div>
+                         <div class="offer-cta"><a href="#menu" class="btn">Ver Menú Pollo</a></div>
+                    </div>
+                </div>
+                 <div class="offer-card">
+                    <img src="https://placehold.co/400x280/5b8c5a/f9f5f0?text=Postre+Gratis" alt="Postre Gratis" class="offer-img" onerror="this.onerror=null;this.src='https://placehold.co/400x280/cccccc/2c2c2c?text=Imagen';">
+                    <div class="offer-content">
+                        <h3 class="offer-title">Dulce Final Feliz</h3>
+                         <p class="offer-description">Compra 6 empanadas saladas y llévate una dulce ¡GRATIS!</p>
+                        <div class="offer-price">
+                            <span class="discount-price">Postre Gratis</span>
+                        </div>
+                         <div class="offer-cta"><a href="#contact" class="btn">Aprovechar</a></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="testimonials" id="testimonials">
+        <div class="container">
+            <div class="testimonials-header">
+                <h2 class="section-title">Lo Que Dicen Nuestros Clientes</h2>
+            </div>
+            <div class="testimonials-grid">
+                <div class="testimonial-card">
+                    <p class="testimonial-content">"¡Las mejores empanadas que he probado! La de carne ahumada es simplemente espectacular. Ingredientes frescos y un sabor inigualable."</p>
+                    <div class="testimonial-author">
+                        <div class="author-img">
+                            <img src="https://placehold.co/80x80/2c2c2c/f9f5f0?text=LC" alt="Cliente Laura C." onerror="this.onerror=null;this.src='https://placehold.co/80x80/cccccc/2c2c2c?text=Foto';">
+                        </div>
+                        <div class="author-info">
+                            <h4>Laura C.</h4>
+                            <span>Cliente Frecuente</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <p class="testimonial-content">"Increíble variedad y todas deliciosas. El servicio al cliente es excelente y siempre llegan calentitas. ¡Recomendadísimo!"</p>
+                    <div class="testimonial-author">
+                        <div class="author-img">
+                            <img src="https://placehold.co/80x80/8e4506/f9f5f0?text=MP" alt="Cliente Marcos P." onerror="this.onerror=null;this.src='https://placehold.co/80x80/cccccc/2c2c2c?text=Foto';">
+                        </div>
+                        <div class="author-info">
+                            <h4>Marcos P.</h4>
+                            <span>Amante de las Empanadas</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <p class="testimonial-content">"Las opciones vegetarianas son fantásticas, especialmente la Caprese. Se nota la calidad de los ingredientes. ¡Volveré pronto!"</p>
+                    <div class="testimonial-author">
+                        <div class="author-img">
+                            <img src="https://placehold.co/80x80/f4a259/2c2c2c?text=SR" alt="Cliente Sofia R." onerror="this.onerror=null;this.src='https://placehold.co/80x80/cccccc/2c2c2c?text=Foto';">
+                        </div>
+                        <div class="author-info">
+                            <h4>Sofía R.</h4>
+                            <span>Vegetariana Feliz</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="how-it-works" id="how-it-works">
+        <div class="container">
+            <div class="how-header">
+                <h2 class="section-title">Así de Fácil es Disfrutar</h2>
+            </div>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-icon"><i class="fas fa-mouse-pointer"></i></div>
+                    <h3>1. Elige tus Favoritas</h3>
+                    <p>Explora nuestro menú y selecciona las empanadas que más te apetezcan.</p>
+                </div>
+                <div class="step">
+                    <div class="step-icon"><i class="fas fa-shopping-cart"></i></div>
+                    <h3>2. Realiza tu Pedido</h3>
+                    <p>Añade al carrito y completa tu pedido de forma rápida y segura.</p>
+                </div>
+                <div class="step">
+                    <div class="step-icon"><i class="fas fa-motorcycle"></i></div>
+                    <h3>3. Recibe y Disfruta</h3>
+                    <p>Te las llevamos calientes a tu puerta o puedes recogerlas en nuestro local.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta">
+        <div class="container">
+            <h2>¿Antojo de Algo Delicioso?</h2>
+            <p>No esperes más para probar nuestras empanadas gourmet. Realiza tu pedido ahora y déjate sorprender por un sabor artesanal incomparable.</p>
+            <a href="#contact" class="btn btn-primary">Ordenar Ahora Mismo</a>
+        </div>
+    </section>
+
+    <section class="contact" id="contact">
+        <div class="container contact-container">
+            <div class="contact-info">
+                <h2 class="section-title">Ponte en Contacto</h2>
+                <p>¿Tienes alguna pregunta, sugerencia o quieres realizar un pedido grande? ¡Estamos aquí para ayudarte! Contáctanos a través de los siguientes medios o visítanos.</p>
+                <div class="contact-details">
+                    <div class="contact-item">
+                        <div class="contact-icon"><i class="fas fa-map-marker-alt"></i></div>
+                        <div class="contact-text">
+                            <h4>Nuestra Dirección</h4>
+                            <p>Av. Siempre Viva 123, Springfield</p>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-icon"><i class="fas fa-phone-alt"></i></div>
+                        <div class="contact-text">
+                            <h4>Llámanos</h4>
+                            <p><a href="tel:+1234567890">+1 (234) 567-890</a></p>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-icon"><i class="fas fa-envelope"></i></div>
+                        <div class="contact-text">
+                            <h4>Escríbenos</h4>
+                            <p><a href="mailto:info@deliciasartesanales.com">info@deliciasartesanales.com</a></p>
+                        </div>
+                    </div>
+                     <div class="contact-item">
+                        <div class="contact-icon"><i class="fas fa-clock"></i></div>
+                        <div class="contact-text">
+                            <h4>Horario</h4>
+                            <p>Lunes a Sábado: 11:00 AM - 10:00 PM <br> Domingos: 12:00 PM - 8:00 PM</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="contact-form">
+                <h3>Envíanos un Mensaje</h3>
+                <form action="#" method="POST">
+                    <div class="form-group">
+                        <label for="name">Nombre Completo</label>
+                        <input type="text" id="name" name="name" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Correo Electrónico</label>
+                        <input type="email" id="email" name="email" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="subject">Asunto</label>
+                        <input type="text" id="subject" name="subject" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="message">Mensaje</label>
+                        <textarea id="message" name="message" class="form-control" required></textarea>
+                    </div>
+                    <button type="submit" class="form-btn">Enviar Mensaje</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container footer-container">
+            <div class="footer-col">
+                <h3>Delicias Artesanales</h3>
+                <p>Llevando la tradición y el sabor gourmet de las empanadas a tu mesa desde 2015. Calidad y pasión en cada bocado.</p>
+                <div class="social-links">
+                    <a href="#" class="social-link" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="social-link" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="social-link" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="social-link" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+                </div>
+            </div>
+            <div class="footer-col">
+                <h3>Enlaces Rápidos</h3>
+                <ul>
+                    <li><a href="#home">Inicio</a></li>
+                    <li><a href="#about">Nosotros</a></li>
+                    <li><a href="#menu">Menú</a></li>
+                    <li><a href="#offers">Ofertas</a></li>
+                    <li><a href="#contact">Contacto</a></li>
+                    <li><a href="#">Política de Privacidad</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h3>Horario de Atención</h3>
+                <p><strong>Lunes a Sábado:</strong><br>11:00 AM - 10:00 PM</p>
+                <p><strong>Domingos y Festivos:</strong><br>12:00 PM - 8:00 PM</p>
+            </div>
+            <div class="footer-col">
+                <h3>Suscríbete</h3>
+                <p>Recibe nuestras últimas ofertas y novedades directamente en tu correo.</p>
+                <form action="#" class="subscribe-form">
+                    <input type="email" placeholder="Tu correo electrónico" class="form-control" style="margin-bottom:10px; background-color: #444; border-color: #555; color:white;">
+                    <button type="submit" class="btn btn-primary" style="width:100%; background-color: var(--color-secondary); color: var(--color-dark);">Suscribirme</button>
+                </form>
+            </div>
+        </div>
+        <div class="copyright">
+            <p>&copy; <span id="currentYear"></span> Delicias Artesanales. Todos los derechos reservados. Diseñado con <i class="fas fa-heart" style="color: var(--color-secondary);"></i> por <a href="#">Tu Nombre/Empresa</a>.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Toggle mobile navigation
+        const mobileToggle = document.getElementById('mobile-toggle');
+        const mainNav = document.getElementById('main-nav');
+        const navLinks = mainNav.querySelectorAll('a');
+
+        if (mobileToggle && mainNav) {
+            mobileToggle.addEventListener('click', () => {
+                mainNav.classList.toggle('active');
+                // Cambiar icono de hamburguesa a X y viceversa
+                const icon = mobileToggle.querySelector('i');
+                if (mainNav.classList.contains('active')) {
+                    icon.classList.remove('fa-bars');
+                    icon.classList.add('fa-times');
+                } else {
+                    icon.classList.remove('fa-times');
+                    icon.classList.add('fa-bars');
+                }
+            });
+
+            // Cerrar menú al hacer clic en un enlace (para SPA-like behavior)
+            navLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    if (mainNav.classList.contains('active')) {
+                        mainNav.classList.remove('active');
+                        mobileToggle.querySelector('i').classList.remove('fa-times');
+                        mobileToggle.querySelector('i').classList.add('fa-bars');
+                    }
+                });
+            });
+        }
+
+        // Active link highlighting based on scroll
+        const sections = document.querySelectorAll('section[id]');
+        function navHighlighter() {
+            let scrollY = window.pageYOffset;
+            sections.forEach(current => {
+                const sectionHeight = current.offsetHeight;
+                const sectionTop = current.offsetTop - 100; // Ajustado por el header fijo
+                let sectionId = current.getAttribute('id');
+                
+                if (scrollY > sectionTop && scrollY <= sectionTop + sectionHeight) {
+                    document.querySelector('nav a[href*=' + sectionId + ']').classList.add('active-link');
+                } else {
+                    document.querySelector('nav a[href*=' + sectionId + ']').classList.remove('active-link');
+                }
+            });
+        }
+        window.addEventListener('scroll', navHighlighter);
+        // Llamada inicial para marcar el enlace correcto al cargar
+        navHighlighter();
+
+
+        // Menu category filtering
+        const menuCategories = document.querySelectorAll('.menu-category');
+        const menuItems = document.querySelectorAll('.menu-item');
+
+        menuCategories.forEach(category => {
+            category.addEventListener('click', () => {
+                // Remove active class from all categories
+                menuCategories.forEach(c => c.classList.remove('active'));
+                // Add active class to the clicked category
+                category.classList.add('active');
+
+                const filter = category.getAttribute('data-category');
+
+                menuItems.forEach(item => {
+                    if (filter === 'all' || item.getAttribute('data-category') === filter) {
+                        item.style.display = 'flex'; // O 'block' según tu layout de item
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+            });
+        });
+
+        // Set current year in footer
+        const currentYearSpan = document.getElementById('currentYear');
+        if (currentYearSpan) {
+            currentYearSpan.textContent = new Date().getFullYear();
+        }
+
+        // Simple fallback for placeholder images if one fails globally (alternative to individual onerrors)
+        // document.addEventListener('error', function (event) {
+        //     if (event.target.tagName.toLowerCase() === 'img' && event.target.src.includes('placehold.co')) {
+        //         const width = event.target.width || 300;
+        //         const height = event.target.height || 200;
+        //         event.target.src = `https://placehold.co/${width}x${height}/cccccc/555555?text=Error+Img`;
+        //     }
+        // }, true);
+
+    </script>
+</body>
+</html>
