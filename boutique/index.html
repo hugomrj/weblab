@@ -1,0 +1,1178 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elegance Boutique - Moda y Estilo</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #FF6B8B;
+            --secondary-color: #5E35B1;
+            --accent-color: #FF4081;
+            --light-color: #FFF5F7;
+            --dark-color: #2E2E2E;
+            --text-color: #333333;
+            --chatbot-color: #7C4DFF;
+            --footer-bg: #2E2E2E;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--light-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        header {
+            background-color: white;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 5%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--secondary-color);
+            display: flex;
+            align-items: center;
+        }
+
+        .logo span {
+            color: var(--primary-color);
+        }
+
+        .logo i {
+            margin-right: 10px;
+            color: var(--primary-color);
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+
+        .nav-links li {
+            margin-left: 2rem;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--secondary-color);
+            font-weight: 600;
+            transition: color 0.3s;
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-links a i {
+            margin-right: 5px;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary-color);
+        }
+
+        .hero {
+            height: 80vh;
+            background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('https://images.unsplash.com/photo-1483985988355-763728e1935b?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80') center/cover no-repeat;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: white;
+            margin-top: 4rem;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 8px rgba(0,0,0,0.5);
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin-bottom: 2rem;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--accent-color);
+            color: white;
+            padding: 0.8rem 1.8rem;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(255,64,129,0.3);
+        }
+
+        .btn i {
+            margin-right: 8px;
+        }
+
+        .btn:hover {
+            background-color: var(--primary-color);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(255,107,139,0.4);
+        }
+
+        section {
+            padding: 5rem 5%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+            font-size: 2.2rem;
+            color: var(--secondary-color);
+            position: relative;
+        }
+
+        .section-title span {
+            color: var(--primary-color);
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(to right, var(--primary-color), var(--accent-color));
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 2px;
+        }
+
+        .products {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .product-card {
+            background-color: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            position: relative;
+        }
+
+        .product-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+        }
+
+        .product-img {
+            height: 280px;
+            width: 100%;
+            object-fit: cover;
+        }
+
+        .product-info {
+            padding: 1.5rem;
+        }
+
+        .product-title {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            color: var(--secondary-color);
+            font-weight: 600;
+        }
+
+        .product-price {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--accent-color);
+            margin-bottom: 1rem;
+        }
+
+        .product-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background-color: var(--accent-color);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            z-index: 1;
+        }
+
+        .product-tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .tab-btn {
+            padding: 8px 20px;
+            background-color: white;
+            border: 2px solid var(--primary-color);
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+            color: var(--secondary-color);
+        }
+
+        .tab-btn.active {
+            background-color: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        .tab-btn:hover:not(.active) {
+            background-color: #FFE5EB;
+        }
+
+        .product-category {
+            display: none;
+        }
+
+        .product-category.active {
+            display: grid;
+        }
+
+        .categories {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 3rem;
+        }
+
+        .category {
+            flex: 1;
+            min-width: 200px;
+            background-color: white;
+            padding: 2rem;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .category:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+        }
+
+        .category i {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--primary-color);
+        }
+
+        .category h3 {
+            margin-bottom: 0.5rem;
+            color: var(--secondary-color);
+        }
+
+        footer {
+            background-color: var(--footer-bg);
+            color: white;
+            padding: 3rem 0;
+        }
+
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 5%;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .footer-column h3 {
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+            font-size: 1.3rem;
+        }
+
+        .footer-column p, .footer-column a {
+            color: #ddd;
+            margin-bottom: 0.8rem;
+            display: block;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-column a:hover {
+            color: var(--primary-color);
+        }
+
+        .footer-column i {
+            margin-right: 10px;
+            width: 20px;
+            text-align: center;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 1rem;
+        }
+
+        .social-link {
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            width: 40px;
+            height: 40px;
+            background-color: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s;
+            font-size: 1.1rem;
+        }
+
+        .social-link:hover {
+            background-color: var(--primary-color);
+            transform: translateY(-3px);
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 2rem;
+            margin-top: 2rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            color: #aaa;
+            font-size: 0.9rem;
+        }
+
+        .back-to-top {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: var(--accent-color);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-decoration: none;
+            box-shadow: 0 4px 15px rgba(255,64,129,0.4);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+            z-index: 999;
+        }
+
+        .back-to-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .back-to-top:hover {
+            background-color: var(--primary-color);
+            transform: translateY(-3px);
+        }
+
+        /* Chatbot simplificado */
+        .chatbot-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+
+        .chatbot-btn {
+            width: 60px;
+            height: 60px;
+            background-color: var(--chatbot-color);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(124,77,255,0.3);
+            transition: all 0.3s;
+            border: none;
+        }
+
+        .chatbot-btn:hover {
+            transform: scale(1.1);
+            background-color: #6A40C9;
+        }
+
+        .chatbot-btn i {
+            font-size: 1.5rem;
+        }
+
+        .chatbot-window {
+            position: absolute;
+            bottom: 80px;
+            right: 0;
+            width: 350px;
+            max-height: 500px;
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.2);
+            overflow: hidden;
+            display: none;
+            flex-direction: column;
+        }
+
+        .chatbot-window.active {
+            display: flex;
+        }
+
+        .chatbot-header {
+            background-color: var(--chatbot-color);
+            color: white;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chatbot-header h3 {
+            margin: 0;
+            font-size: 1.2rem;
+        }
+
+        .close-chatbot {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+        }
+
+        .chatbot-messages {
+            flex: 1;
+            padding: 15px;
+            overflow-y: auto;
+            background-color: #f9f9f9;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .message {
+            max-width: 80%;
+            padding: 10px 15px;
+            border-radius: 18px;
+            font-size: 0.9rem;
+        }
+
+        .bot-message {
+            align-self: flex-start;
+            background-color: #f1f1f1;
+            color: var(--dark-color);
+        }
+
+        .user-message {
+            align-self: flex-end;
+            background-color: var(--chatbot-color);
+            color: white;
+        }
+
+        .chatbot-input {
+            display: flex;
+            padding: 10px;
+            border-top: 1px solid #eee;
+            background-color: white;
+        }
+
+        .chatbot-input input {
+            flex: 1;
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 30px;
+            outline: none;
+        }
+
+        .chatbot-input button {
+            background-color: var(--chatbot-color);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            margin-left: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .chatbot-input button:hover {
+            background-color: #6A40C9;
+        }
+
+        @media (max-width: 1024px) {
+            .products {
+                grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .products {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            }
+
+            .categories {
+                flex-direction: column;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .navbar {
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .hero h1 {
+                font-size: 2rem;
+                padding: 0 1rem;
+            }
+
+            .hero p {
+                padding: 0 1rem;
+                font-size: 1rem;
+            }
+
+            .section-title {
+                font-size: 1.8rem;
+            }
+
+            .product-tabs {
+                justify-content: flex-start;
+                overflow-x: auto;
+                padding-bottom: 10px;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            .tab-btn {
+                flex-shrink: 0;
+            }
+
+            .chatbot-window {
+                width: 280px;
+                right: -20px;
+            }
+
+            .footer-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header y Navegación -->
+    <header>
+        <nav class="navbar">
+            <div class="logo"><i class="fas fa-store"></i>Elegance<span>Boutique</span></div>
+            <ul class="nav-links">
+                <li><a href="#inicio"><i class="fas fa-home"></i>Inicio</a></li>
+                <li><a href="#categorias"><i class="fas fa-list"></i>Categorías</a></li>
+                <li><a href="#productos"><i class="fas fa-star"></i>Productos</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Sección Hero -->
+    <section class="hero" id="inicio">
+        <h1>Elegancia y Estilo para Cada Ocasión</h1>
+        <p>Descubre nuestra colección exclusiva de prendas y accesorios diseñados para resaltar tu belleza natural</p>
+        <a href="#productos" class="btn"><i class="fas fa-arrow-down"></i>Ver Colección</a>
+    </section>
+
+    <!-- Categorías -->
+    <section id="categorias">
+        <h2 class="section-title">Nuestras <span>Categorías</span></h2>
+        <div class="categories">
+            <div class="category">
+                <i class="fas fa-tshirt"></i>
+                <h3>Vestidos</h3>
+                <p>Elegantes diseños para toda ocasión</p>
+            </div>
+            <div class="category">
+                <i class="fas fa-tshirt"></i>
+                <h3>Blusas</h3>
+                <p>Frescura y estilo para tu día a día</p>
+            </div>
+            <div class="category">
+                <i class="fas fa-shopping-bag"></i>
+                <h3>Accesorios</h3>
+                <p>El toque final perfecto</p>
+            </div>
+            <div class="category">
+                <i class="fas fa-tshirt"></i>
+                <h3>Pantalones</h3>
+                <p>Comodidad y tendencia en cada prenda</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Productos Destacados -->
+    <section id="productos">
+        <h2 class="section-title">Nuestros <span>Productos</span></h2>
+
+        <div class="product-tabs">
+            <button class="tab-btn active" data-category="todos">Todos</button>
+            <button class="tab-btn" data-category="vestidos">Vestidos</button>
+            <button class="tab-btn" data-category="blusas">Blusas</button>
+            <button class="tab-btn" data-category="accesorios">Accesorios</button>
+            <button class="tab-btn" data-category="pantalones">Pantalones</button>
+        </div>
+
+        <div class="product-category active" id="todos">
+            <div class="products">
+                <!-- Vestidos -->
+                <div class="product-card">
+                    <span class="product-badge">Nuevo</span>
+                    <img src="https://images.unsplash.com/photo-1551232864-3f0890e580d9?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Vestido Floral" class="product-img">
+                    <div class="product-info">
+                        <h3 class="product-title">Vestido Floral Primavera</h3>
+                        <p class="product-price">450.000 ₲</p>
+                        <button class="btn btn-product" data-product="Vestido Floral Primavera"><i class="fas fa-question-circle"></i>Consultar</button>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <img src="https://images.unsplash.com/photo-1585487000160-6ebcfceb0d03?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Vestido Negro" class="product-img">
+                    <div class="product-info">
+                        <h3 class="product-title">Vestido Negro Elegante</h3>
+                        <p class="product-price">520.000 ₲</p>
+                        <button class="btn btn-product" data-product="Vestido Negro Elegante"><i class="fas fa-question-circle"></i>Consultar</button>
+                    </div>
+                </div>
+
+                <!-- Blusas -->
+                <div class="product-card">
+                    <span class="product-badge">Popular</span>
+                    <img src="https://images.unsplash.com/photo-1554412933-514a83d2f3c8?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Blusa Elegante" class="product-img">
+                    <div class="product-info">
+                        <h3 class="product-title">Blusa Elegante Blanca</h3>
+                        <p class="product-price">280.000 ₲</p>
+                        <button class="btn btn-product" data-product="Blusa Elegante Blanca"><i class="fas fa-question-circle"></i>Consultar</button>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <img src="https://images.unsplash.com/photo-1551232864-3f0890e580d9?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Blusa Azul" class="product-img">
+                    <div class="product-info">
+                        <h3 class="product-title">Blusa Casual Azul</h3>
+                        <p class="product-price">240.000 ₲</p>
+                        <button class="btn btn-product" data-product="Blusa Casual Azul"><i class="fas fa-question-circle"></i>Consultar</button>
+                    </div>
+                </div>
+
+                <!-- Accesorios -->
+                <div class="product-card">
+                    <img src="https://images.unsplash.com/photo-1590874103328-eac38a683ce7?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Bolso de Cuero" class="product-img">
+                    <div class="product-info">
+                        <h3 class="product-title">Bolso de Cuero Italiano</h3>
+                        <p class="product-price">680.000 ₲</p>
+                        <button class="btn btn-product" data-product="Bolso de Cuero Italiano"><i class="fas fa-question-circle"></i>Consultar</button>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <span class="product-badge">Nuevo</span>
+                    <img src="https://images.unsplash.com/photo-1602173574767-37ac01994b2a?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Collar de Perlas" class="product-img">
+                    <div class="product-info">
+                        <h3 class="product-title">Collar Elegante de Perlas</h3>
+                        <p class="product-price">350.000 ₲</p>
+                        <button class="btn btn-product" data-product="Collar Elegante de Perlas"><i class="fas fa-question-circle"></i>Consultar</button>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <img src="https://images.unsplash.com/photo-1605100804763-247f67b3557e?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Pulsera Dorada" class="product-img">
+                    <div class="product-info">
+                        <h3 class="product-title">Pulsera Dorada Elegante</h3>
+                        <p class="product-price">300.000 ₲</p>
+                        <button class="btn btn-product" data-product="Pulsera Dorada Elegante"><i class="fas fa-question-circle"></i>Consultar</button>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <span class="product-badge">Oferta</span>
+                    <img src="https://images.unsplash.com/photo-1603974372035-96a0c5e30a5b?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Reloj de Lujo" class="product-img">
+                    <div class="product-info">
+                        <h3 class="product-title">Reloj de Lujo Dorado</h3>
+                        <p class="product-price">980.000 ₲ <small style="text-decoration: line-through; color: #999; font-size: 0.9rem;">1.200.000 ₲</small></p>
+                        <button class="btn btn-product" data-product="Reloj de Lujo Dorado"><i class="fas fa-question-circle"></i>Consultar</button>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <img src="https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Gafas de Sol" class="product-img">
+                    <div class="product-info">
+                        <h3 class="product-title">Gafas de Sol de Diseño</h3>
+                        <p class="product-price">450.000 ₲</p>
+                        <button class="btn btn-product" data-product="Gafas de Sol de Diseño"><i class="fas fa-question-circle"></i>Consultar</button>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <img src="https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Cinturón de Cuero" class="product-img">
+                    <div class="product-info">
+                        <h3 class="product-title">Cinturón de Cuero Negro</h3>
+                        <p class="product-price">260.000 ₲</p>
+                        <button class="btn btn-product" data-product="Cinturón de Cuero Negro"><i class="fas fa-question-circle"></i>Consultar</button>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <span class="product-badge">Nuevo</span>
+                    <img src="https://images.unsplash.com/photo-1605348530920-78e9147673e0?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Anillo de Plata" class="product-img">
+                    <div class="product-info">
+                        <h3 class="product-title">Anillo de Plata con Zirconia</h3>
+                        <p class="product-price">380.000 ₲</p>
+                        <button class="btn btn-product" data-product="Anillo de Plata con Zirconia"><i class="fas fa-question-circle"></i>Consultar</button>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <img src="https://images.unsplash.com/photo-1602173574767-37ac01994b2a?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Set de Pulseras" class="product-img">
+                    <div class="product-info">
+                        <h3 class="product-title">Set de Pulseras Elegantes</h3>
+                        <p class="product-price">340.000 ₲</p>
+                        <button class="btn btn-product" data-product="Set de Pulseras Elegantes"><i class="fas fa-question-circle"></i>Consultar</button>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <img src="https://images.unsplash.com/photo-1603974372035-96a0c5e30a5b?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Cartera de Cuero" class="product-img">
+                    <div class="product-info">
+                        <h3 class="product-title">Cartera de Cuero Elegante</h3>
+                        <p class="product-price">420.000 ₲</p>
+                        <button class="btn btn-product" data-product="Cartera de Cuero Elegante"><i class="fas fa-question-circle"></i>Consultar</button>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <span class="product-badge">Nuevo</span>
+                    <img src="https://images.unsplash.com/photo-1543163521-1bf539c55dd2?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Zapatos Elegantes" class="product-img">
+                    <div class="product-info">
+                        <h3 class="product-title">Zapatos Elegantes Negros</h3>
+                        <p class="product-price">520.000 ₲</p>
+                        <button class="btn btn-product" data-product="Zapatos Elegantes Negros"><i class="fas fa-question-circle"></i>Consultar</button>
+                    </div>
+                </div>
+
+                <!-- Pantalones -->
+                <div class="product-card">
+                    <span class="product-badge">Oferta</span>
+                    <img src="https://images.unsplash.com/photo-1541099649105-f69ad21f3246?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Jeans Premium" class="product-img">
+                    <div class="product-info">
+                        <h3 class="product-title">Jeans Premium Ajustados</h3>
+                        <p class="product-price">380.000 ₲ <small style="text-decoration: line-through; color: #999; font-size: 0.9rem;">520.000 ₲</small></p>
+                        <button class="btn btn-product" data-product="Jeans Premium Ajustados"><i class="fas fa-question-circle"></i>Consultar</button>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <img src="https://images.unsplash.com/photo-1473966968600-fa801b869a1a?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Pantalón Formal" class="product-img">
+                    <div class="product-info">
+                        <h3 class="product-title">Pantalón Formal Negro</h3>
+                        <p class="product-price">410.000 ₲</p>
+                        <button class="btn btn-product" data-product="Pantalón Formal Negro"><i class="fas fa-question-circle"></i>Consultar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Categoría Vestidos -->
+        <div class="product-category" id="vestidos">
+            <div class="products">
+                <div class="product-card">
+                    <span class="product-badge">Nuevo</span>
+                    <img src="https://images.unsplash.com/photo-1551232864-3f0890e580d9?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Vestido Floral" class="product-img">
+                    <div class="product-info">
+                        <h3 class="product-title">Vestido Floral Primavera</h3>
+                        <p class="product-price">450.000 ₲</p>
+                        <button class="btn btn-product" data-product="Vestido Floral Primavera"><i class="fas fa-question-circle"></i>Consultar</button>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <img src="https://images.unsplash.com/photo-1585487000160-6ebcfceb0d03?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Vestido Negro" class="product-img">
+                    <div class="product-info">
+                        <h3 class="product-title">Vestido Negro Elegante</h3>
+                        <p class="product-price">520.000 ₲</p>
+                        <button class="btn btn-product" data-product="Vestido Negro Elegante"><i class="fas fa-question-circle"></i>Consultar</button>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <span class="product-badge">Nuevo</span>
+                    <img src="https://images.unsplash.com/photo-1551232864-3f0890e580d9?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Vestido Verano" class="product-img">
+                    <div class="product-info">
+                        <h3 class="product-title">Vestido de Verano Azul</h3>
+                        <p class="product-price">380.000 ₲</p>
+                        <button class="btn btn-product" data-product="Vestido de Verano Azul"><i class="fas fa-question-circle"></i>Consultar</button>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <img src="https://images.unsplash.com/photo-1585487000160-6ebcfceb0d03?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Vestido Fiesta" class="product-img">
+                    <div class="product-info">
+                        <h3 class="product-title">Vestido de Fiesta Rojo</h3>
+                        <p class="product-price">600.000 ₲</p>
+                        <button class="btn btn-product" data-product="Vestido de Fiesta Rojo"><i class="fas fa-question-circle"></i>Consultar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Categoría Blusas -->
+        <div class="product-category" id="blusas">
+            <div class="products">
+                <div class="product-card">
+                    <span class="product-badge">Popular</span>
+                    <img src="https://images.unsplash.com/photo-1554412933-514a83d2f3c8?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Blusa Elegante" class="product-img">
+                    <div class="product-info">
+                        <h3 class="product-title">Blusa Elegante Blanca</h3>
+                        <p class="product-price">280.000 ₲</p>
+                        <button class="btn btn-product" data-product="Blusa Elegante Blanca"><i class="fas fa-question-circle"></i>Consultar</button>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <img src="https://images.unsplash.com/photo-1551232864-3f0890e580d9?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Blusa Azul" class="product-img">
+                    <div class="product-info">
+                        <h3 class="product-title">Blusa Casual Azul</h3>
+                        <p class="product-price">240.000 ₲</p>
+                        <button class="btn btn-product" data-product="Blusa Casual Azul"><i class="fas fa-question-circle"></i>Consultar</button>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <img src="https://images.unsplash.com/photo-1554412933-514a83d2f3c8?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Blusa Roja" class="product-img">
+                    <div class="product-info">
+                        <h3 class="product-title">Blusa Formal Roja</h3>
+                        <p class="product-price">320.000 ₲</p>
+                        <button class="btn btn-product" data-product="Blusa Formal Roja"><i class="fas fa-question-circle"></i>Consultar</button>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <span class="product-badge">Nuevo</span>
+                    <img src="https://images.unsplash.com/photo-1551232864-3f0890e580d9?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Blusa Verde" class="product-img">
+                    <div class="product-info">
+                        <h3 class="product-title">Blusa Veraniega Verde</h3>
+                        <p class="product-price">260.000 ₲</p>
+                        <button class="btn btn-product" data-product="Blusa Veraniega Verde"><i class="fas fa-question-circle"></i>Consultar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Categoría Accesorios -->
+        <div class="product-category" id="accesorios">
+            <div class="products">
+                <div class="product-card">
+                    <img src="https://images.unsplash.com/photo-1590874103328-eac38a683ce7?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Bolso de Cuero" class="product-img">
+                    <div class="product-info">
+                        <h3 class="product-title">Bolso de Cuero Italiano</h3>
+                        <p class="product-price">680.000 ₲</p>
+                        <button class="btn btn-product" data-product="Bolso de Cuero Italiano"><i class="fas fa-question-circle"></i>Consultar</button>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <span class="product-badge">Nuevo</span>
+                    <img src="https://images.unsplash.com/photo-1602173574767-37ac01994b2a?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Collar de Perlas" class="product-img">
+                    <div class="product-info">
+                        <h3 class="product-title">Collar Elegante de Perlas</h3>
+                        <p class="product-price">350.000 ₲</p>
+                        <button class="btn btn-product" data-product="Collar Elegante de Perlas"><i class="fas fa-question-circle"></i>Consultar</button>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <img src="https://images.unsplash.com/photo-1605100804763-247f67b3557e?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Pulsera Dorada" class="product-img">
+                    <div class="product-info">
+                        <h3 class="product-title">Pulsera Dorada Elegante</h3>
+                        <p class="product-price">300.000 ₲</p>
+                        <button class="btn btn-product" data-product="Pulsera Dorada Elegante"><i class="fas fa-question-circle"></i>Consultar</button>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <span class="product-badge">Oferta</span>
+                    <img src="https://images.unsplash.com/photo-1603974372035-96a0c5e30a5b?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Reloj de Lujo" class="product-img">
+                    <div class="product-info">
+                        <h3 class="product-title">Reloj de Lujo Dorado</h3>
+                        <p class="product-price">980.000 ₲ <small style="text-decoration: line-through; color: #999; font-size: 0.9rem;">1.200.000 ₲</small></p>
+                        <button class="btn btn-product" data-product="Reloj de Lujo Dorado"><i class="fas fa-question-circle"></i>Consultar</button>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <img src="https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Gafas de Sol" class="product-img">
+                    <div class="product-info">
+                        <h3 class="product-title">Gafas de Sol de Diseño</h3>
+                        <p class="product-price">450.000 ₲</p>
+                        <button class="btn btn-product" data-product="Gafas de Sol de Diseño"><i class="fas fa-question-circle"></i>Consultar</button>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <img src="https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Cinturón de Cuero" class="product-img">
+                    <div class="product-info">
+                        <h3 class="product-title">Cinturón de Cuero Negro</h3>
+                        <p class="product-price">260.000 ₲</p>
+                        <button class="btn btn-product" data-product="Cinturón de Cuero Negro"><i class="fas fa-question-circle"></i>Consultar</button>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <span class="product-badge">Nuevo</span>
+                    <img src="https://images.unsplash.com/photo-1605348530920-78e9147673e0?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Anillo de Plata" class="product-img">
+                    <div class="product-info">
+                        <h3 class="product-title">Anillo de Plata con Zirconia</h3>
+                        <p class="product-price">380.000 ₲</p>
+                        <button class="btn btn-product" data-product="Anillo de Plata con Zirconia"><i class="fas fa-question-circle"></i>Consultar</button>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <img src="https://images.unsplash.com/photo-1602173574767-37ac01994b2a?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Set de Pulseras" class="product-img">
+                    <div class="product-info">
+                        <h3 class="product-title">Set de Pulseras Elegantes</h3>
+                        <p class="product-price">340.000 ₲</p>
+                        <button class="btn btn-product" data-product="Set de Pulseras Elegantes"><i class="fas fa-question-circle"></i>Consultar</button>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <img src="https://images.unsplash.com/photo-1603974372035-96a0c5e30a5b?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Cartera de Cuero" class="product-img">
+                    <div class="product-info">
+                        <h3 class="product-title">Cartera de Cuero Elegante</h3>
+                        <p class="product-price">420.000 ₲</p>
+                        <button class="btn btn-product" data-product="Cartera de Cuero Elegante"><i class="fas fa-question-circle"></i>Consultar</button>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <span class="product-badge">Nuevo</span>
+                    <img src="https://images.unsplash.com/photo-1543163521-1bf539c55dd2?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Zapatos Elegantes" class="product-img">
+                    <div class="product-info">
+                        <h3 class="product-title">Zapatos Elegantes Negros</h3>
+                        <p class="product-price">520.000 ₲</p>
+                        <button class="btn btn-product" data-product="Zapatos Elegantes Negros"><i class="fas fa-question-circle"></i>Consultar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Categoría Pantalones -->
+        <div class="product-category" id="pantalones">
+            <div class="products">
+                <div class="product-card">
+                    <span class="product-badge">Oferta</span>
+                    <img src="https://images.unsplash.com/photo-1541099649105-f69ad21f3246?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Jeans Premium" class="product-img">
+                    <div class="product-info">
+                        <h3 class="product-title">Jeans Premium Ajustados</h3>
+                        <p class="product-price">380.000 ₲ <small style="text-decoration: line-through; color: #999; font-size: 0.9rem;">520.000 ₲</small></p>
+                        <button class="btn btn-product" data-product="Jeans Premium Ajustados"><i class="fas fa-question-circle"></i>Consultar</button>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <img src="https://images.unsplash.com/photo-1473966968600-fa801b869a1a?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Pantalón Formal" class="product-img">
+                    <div class="product-info">
+                        <h3 class="product-title">Pantalón Formal Negro</h3>
+                        <p class="product-price">410.000 ₲</p>
+                        <button class="btn btn-product" data-product="Pantalón Formal Negro"><i class="fas fa-question-circle"></i>Consultar</button>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <span class="product-badge">Nuevo</span>
+                    <img src="https://images.unsplash.com/photo-1541099649105-f69ad21f3246?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Pantalón Blanco" class="product-img">
+                    <div class="product-info">
+                        <h3 class="product-title">Pantalón Blanco Elegante</h3>
+                        <p class="product-price">390.000 ₲</p>
+                        <button class="btn btn-product" data-product="Pantalón Blanco Elegante"><i class="fas fa-question-circle"></i>Consultar</button>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <img src="https://images.unsplash.com/photo-1473966968600-fa801b869a1a?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Pantalón Chino" class="product-img">
+                    <div class="product-info">
+                        <h3 class="product-title">Pantalón Chino Beige</h3>
+                        <p class="product-price">360.000 ₲</p>
+                        <button class="btn btn-product" data-product="Pantalón Chino Beige"><i class="fas fa-question-circle"></i>Consultar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-column">
+                <h3>Elegance Boutique</h3>
+                <p>Tu destino de moda y estilo. Descubre las últimas tendencias en ropa y accesorios para todas las ocasiones.</p>
+                <div class="social-links">
+                    <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="social-link"><i class="fab fa-pinterest"></i></a>
+                </div>
+            </div>
+            <div class="footer-column">
+                <h3>Enlaces Rápidos</h3>
+                <a href="#inicio"><i class="fas fa-home"></i>Inicio</a>
+                <a href="#categorias"><i class="fas fa-list"></i>Categorías</a>
+                <a href="#productos"><i class="fas fa-star"></i>Productos</a>
+            </div>
+            <div class="footer-column">
+                <h3>Información</h3>
+                <a href="#"><i class="fas fa-info-circle"></i>Sobre Nosotros</a>
+                <a href="#"><i class="fas fa-truck"></i>Envíos y Devoluciones</a>
+                <a href="#"><i class="fas fa-question-circle"></i>Preguntas Frecuentes</a>
+            </div>
+            <div class="footer-column">
+                <h3>Contáctanos</h3>
+                <p><i class="fas fa-map-marker-alt"></i>Asunción, Paraguay</p>
+                <p><i class="fas fa-phone"></i>(+595) 21 123 456</p>
+                <p><i class="fas fa-envelope"></i>info@eleganceboutique.py</p>
+            </div>
+        </div>
+        <div class="copyright">
+            <p>&copy; 2025 Elegance Boutique. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <!-- Botón de Volver Arriba -->
+    <a href="#" class="back-to-top"><i class="fas fa-arrow-up"></i></a>
+
+    <!-- Chatbot -->
+    <div class="chatbot-container">
+        <button class="chatbot-btn" id="chatbotBtn"><i class="fas fa-comment-dots"></i></button>
+        <div class="chatbot-window" id="chatbotWindow">
+            <div class="chatbot-header">
+                <h3>Asistente Virtual</h3>
+                <button class="close-chatbot" id="closeChatbot">&times;</button>
+            </div>
+            <div class="chatbot-messages" id="chatbotMessages">
+                <div class="message bot-message">
+                    ¡Hola! Bienvenido a Elegance Boutique. ¿En qué puedo ayudarte hoy?
+                </div>
+            </div>
+            <div class="chatbot-input">
+                <input type="text" id="chatbotInput" placeholder="Escribe tu mensaje...">
+                <button id="chatbotSend"><i class="fas fa-paper-plane"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Funcionalidad de pestañas de productos
+        document.querySelectorAll('.tab-btn').forEach(button => {
+            button.addEventListener('click', () => {
+                document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+                document.querySelectorAll('.product-category').forEach(category => category.classList.remove('active'));
+
+                button.classList.add('active');
+                const category = button.getAttribute('data-category');
+                document.getElementById(category).classList.add('active');
+            });
+        });
+
+        // Funcionalidad del chatbot
+        const chatbotBtn = document.getElementById('chatbotBtn');
+        const chatbotWindow = document.getElementById('chatbotWindow');
+        const closeChatbot = document.getElementById('closeChatbot');
+        const chatbotSend = document.getElementById('chatbotSend');
+        const chatbotInput = document.getElementById('chatbotInput');
+        const chatbotMessages = document.getElementById('chatbotMessages');
+
+        chatbotBtn.addEventListener('click', () => {
+            chatbotWindow.classList.add('active');
+        });
+
+        closeChatbot.addEventListener('click', () => {
+            chatbotWindow.classList.remove('active');
+        });
+
+        chatbotSend.addEventListener('click', () => {
+            const message = chatbotInput.value.trim();
+            if (message) {
+                addMessage(message, 'user-message');
+                chatbotInput.value = '';
+
+                // Respuesta automática del bot
+                setTimeout(() => {
+                    addMessage('Gracias por tu mensaje. Serás atendido en breve por uno de nuestros asesores.', 'bot-message');
+                }, 1000);
+            }
+        });
+
+        chatbotInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                chatbotSend.click();
+            }
+        });
+
+        function addMessage(text, className) {
+            const messageDiv = document.createElement('div');
+            messageDiv.classList.add('message', className);
+            messageDiv.textContent = text;
+            chatbotMessages.appendChild(messageDiv);
+            chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+        }
+
+        // Botón de volver arriba
+        const backToTop = document.querySelector('.back-to-top');
+
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 300) {
+                backToTop.classList.add('visible');
+            } else {
+                backToTop.classList.remove('visible');
+            }
+        });
+
+        backToTop.addEventListener('click', (e) => {
+            e.preventDefault();
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+
+        // Botones de consultar producto
+        document.querySelectorAll('.btn-product').forEach(button => {
+            button.addEventListener('click', () => {
+                const productName = button.getAttribute('data-product');
+
+                // Abrir el chatbot
+                chatbotWindow.classList.add('active');
+
+                // Agregar mensaje al chatbot
+                setTimeout(() => {
+                    addMessage(`Estoy interesado/a en el producto: ${productName}. ¿Podrían darme más detalles?`, 'user-message');
+
+                    // Respuesta automática del bot
+                    setTimeout(() => {
+                        addMessage('Gracias por tu consulta. Un asesor se pondrá en contacto contigo pronto para darte más información sobre este producto.', 'bot-message');
+                    }, 1000);
+                }, 500);
+            });
+        });
+    </script>
+</body>
+</html>
