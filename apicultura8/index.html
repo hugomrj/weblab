@@ -1,0 +1,1095 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ecodelpa - Apicultura Ecológica del Paraguay</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Montserrat:wght@600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #5271ff; /* Azul vibrante */
+            --primary-dark: #3a5cff; /* Azul oscuro */
+            --secondary: #ff3c70; /* Magenta */
+            --dark: #121212; /* Fondo oscuro */
+            --light: #2c2c2c; /* Fondo de tarjetas */
+            --accent: #00ffc8; /* Cian neón */
+            --text: #e0e0e0; /* Texto claro */
+            --text-light: #a0a0a0; /* Texto secundario */
+            --white: #ffffff;
+            --gradient: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            --shadow: 0 5px 25px rgba(0, 0, 0, 0.4);
+            --radius: 10px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            color: var(--text);
+            line-height: 1.6;
+            background-color: var(--dark);
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4, h5 {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--white);
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 14px 32px;
+            background: var(--gradient);
+            color: var(--white);
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            box-shadow: none;
+        }
+
+        .btn-outline:hover {
+            background: var(--gradient);
+            color: var(--white);
+            border-color: var(--primary);
+        }
+
+        /* Header */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            background: rgba(18, 18, 18, 0.9);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            transition: padding 0.3s ease;
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+        }
+        
+        header.scrolled .header-container {
+            padding: 10px 0;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--gradient);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-size: 24px;
+        }
+
+        .logo-text {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--white);
+        }
+
+        .logo-text span {
+            color: var(--accent);
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: var(--text);
+            font-weight: 500;
+            transition: color 0.3s;
+            position: relative;
+            padding: 5px 0;
+        }
+
+        nav ul li a:after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 3px;
+            background: var(--gradient);
+            border-radius: 3px;
+            transition: width 0.3s ease;
+        }
+
+        nav ul li a:hover {
+            color: var(--primary);
+        }
+
+        nav ul li a:hover:after {
+            width: 100%;
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: var(--white);
+            cursor: pointer;
+            z-index: 1100;
+        }
+
+        /* Hero Section */
+        .hero {
+            padding-top: 160px;
+            padding-bottom: 100px;
+            background: linear-gradient(rgba(18, 18, 18, 0.8), rgba(18, 18, 18, 0.9)), url('https://images.unsplash.com/photo-1549445100-3f9c646b97ac?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D') no-repeat center center/cover;
+            color: var(--white);
+            position: relative;
+            overflow: hidden;
+            border-bottom: 2px solid var(--accent);
+        }
+
+        .hero-content {
+            max-width: 650px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--white);
+            line-height: 1.2;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2.5rem;
+            opacity: 0.9;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .hero-honeycomb {
+            position: absolute;
+            right: -50px;
+            bottom: -100px;
+            width: 500px;
+            height: 500px;
+            opacity: 0.1;
+            transform: rotate(25deg);
+        }
+
+        .hexagon {
+            fill: var(--accent);
+        }
+
+        /* Features */
+        .features {
+            padding: 100px 0;
+            background-color: var(--dark);
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .section-title h2 {
+            font-size: 2.5rem;
+            position: relative;
+            display: inline-block;
+            padding-bottom: 15px;
+        }
+
+        .section-title h2:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: var(--gradient);
+            border-radius: 2px;
+        }
+
+        .section-title p {
+            max-width: 700px;
+            margin: 1rem auto 0;
+            color: var(--text-light);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .feature-card {
+            background: var(--light);
+            padding: 40px 30px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border 0.3s;
+            border: 2px solid transparent;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+            border-color: var(--primary);
+        }
+
+        .feature-icon {
+            width: 80px;
+            height: 80px;
+            background: var(--dark);
+            border: 2px solid var(--accent);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 25px;
+            color: var(--accent);
+            font-size: 30px;
+        }
+
+        .feature-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+        }
+
+        /* Products */
+        .products {
+            padding: 100px 0;
+            background-color: var(--dark);
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+        }
+
+        .product-card {
+            background: var(--light);
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border 0.3s;
+            display: flex;
+            flex-direction: column;
+            border: 2px solid transparent;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+            border-color: var(--primary);
+        }
+
+        .product-image {
+            height: 200px;
+            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), var(--gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .product-image i {
+            font-size: 70px;
+            color: var(--white);
+            opacity: 0.9;
+        }
+
+        .product-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: var(--accent);
+            color: var(--dark);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .product-info {
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+        
+        .product-info p {
+            flex-grow: 1;
+        }
+
+        .product-info h3 {
+            font-size: 1.4rem;
+            margin-bottom: 10px;
+        }
+
+        .product-info p {
+            color: var(--text-light);
+            margin-bottom: 20px;
+        }
+
+        .product-price {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent);
+            margin-bottom: 20px;
+        }
+        
+        .product-info .btn {
+            align-self: flex-start;
+        }
+
+        /* Process */
+        .process {
+            padding: 100px 0;
+            background-color: var(--dark);
+        }
+
+        .process-steps {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 30px;
+            position: relative;
+        }
+
+        .process-steps:before {
+            content: '';
+            position: absolute;
+            top: 40px;
+            left: 5%;
+            right: 5%;
+            height: 3px;
+            background: var(--light);
+            z-index: 1;
+        }
+
+        .step {
+            flex: 1;
+            min-width: 250px;
+            max-width: 300px;
+            text-align: center;
+            padding: 40px 25px;
+            background: var(--light);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            position: relative;
+            z-index: 2;
+        }
+
+        .step-number {
+            width: 80px;
+            height: 80px;
+            background: var(--gradient);
+            color: var(--white);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: -80px auto 25px;
+            font-size: 1.8rem;
+            font-weight: 700;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            border: 5px solid var(--dark);
+        }
+        
+        .step h3 {
+            font-size: 1.4rem;
+            margin-bottom: 15px;
+        }
+
+        /* Testimonials */
+        .testimonials {
+            padding: 100px 0;
+            background: linear-gradient(to right, var(--primary-dark), var(--primary));
+            color: var(--white);
+        }
+
+        .testimonials .section-title h2,
+        .testimonials .section-title h2:after {
+            color: var(--white);
+            background: var(--white);
+        }
+        
+        .testimonials .section-title p {
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .testimonial-card {
+            background: rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            padding: 30px;
+            border-radius: var(--radius);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .testimonial-text {
+            margin-bottom: 20px;
+            font-style: italic;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .author-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--white);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            font-size: 20px;
+        }
+
+        .author-name {
+            font-weight: 600;
+        }
+
+        /* Contact */
+        .contact {
+            padding: 100px 0;
+            background-color: var(--dark);
+        }
+
+        .contact-content {
+            display: grid;
+            grid-template-columns: 1fr 1.2fr;
+            gap: 50px;
+            align-items: start;
+        }
+
+        .contact-info h3 {
+            font-size: 1.8rem;
+            margin-bottom: 25px;
+        }
+
+        .contact-detail {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            gap: 15px;
+        }
+
+        .contact-icon {
+            flex-shrink: 0;
+            width: 50px;
+            height: 50px;
+            background: var(--light);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            font-size: 20px;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .social-links a {
+            width: 45px;
+            height: 45px;
+            background: var(--light);
+            color: var(--text);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.3);
+        }
+
+        .social-links a:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.4);
+            color: var(--accent);
+        }
+
+        .contact-form {
+            background: var(--light);
+            padding: 40px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--text);
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 15px;
+            border: 1px solid var(--text-light);
+            border-radius: var(--radius);
+            font-family: 'Roboto', sans-serif;
+            transition: border-color 0.3s, box-shadow 0.3s;
+            background-color: var(--dark);
+            color: var(--text);
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            border-color: var(--accent);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(0, 255, 200, 0.3);
+        }
+
+        .form-group textarea {
+            height: 150px;
+            resize: vertical;
+        }
+
+        /* Footer */
+        footer {
+            background: #0d0d0d;
+            color: rgba(255, 255, 255, 0.8);
+            padding: 70px 0 30px;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 50px;
+        }
+
+        .footer-logo {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: var(--white);
+        }
+
+        .footer-logo span {
+            color: var(--accent);
+        }
+
+        .footer-section h3 {
+            color: var(--white);
+            margin-bottom: 25px;
+            font-size: 1.3rem;
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        .footer-section h3:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 40px;
+            height: 3px;
+            background: var(--primary);
+            border-radius: 3px;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 12px;
+        }
+
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            transition: color 0.3s, padding-left 0.3s;
+        }
+        
+        .footer-links a:hover {
+            color: var(--primary);
+            padding-left: 5px;
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            opacity: 0.7;
+            font-size: 0.9rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            .hero h1 {
+                font-size: 2.8rem;
+            }
+            nav ul {
+                gap: 20px;
+            }
+            .contact-content {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            body.menu-open {
+                overflow: hidden;
+            }
+            .header-container {
+                padding: 15px 0;
+            }
+            
+            nav ul {
+                display: flex;
+                position: fixed;
+                top: 0;
+                left: 100%;
+                width: 100%;
+                height: 100vh;
+                background: var(--dark);
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                gap: 25px;
+                transition: left 0.4s cubic-bezier(0.77, 0, 0.175, 1);
+            }
+            
+            nav ul.active {
+                left: 0;
+            }
+            
+            .mobile-menu-btn {
+                display: block;
+            }
+            
+            .hero h1 {
+                font-size: 2.3rem;
+            }
+            
+            .hero-buttons {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .hero-honeycomb {
+                display: none;
+            }
+            
+            .process-steps:before {
+                display: none;
+            }
+            .step {
+                padding-top: 20px;
+            }
+            .step-number {
+                margin-top: 0;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .hero {
+                padding-top: 130px;
+                padding-bottom: 80px;
+            }
+            
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .section-title h2 {
+                font-size: 2rem;
+            }
+            
+            .contact-form {
+                padding: 25px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header id="main-header">
+        <div class="container header-container">
+            <a href="#inicio" class="logo" style="text-decoration: none;">
+                <div class="logo-icon">
+                    <i class="fas fa-bee"></i>
+                </div>
+                <div class="logo-text">Eco<span>delpa</span></div>
+            </a>
+            <nav>
+                <ul id="menu">
+                    <li><a href="#inicio">Inicio</a></li>
+                    <li><a href="#nosotros">Nosotros</a></li>
+                    <li><a href="#productos">Productos</a></li>
+                    <li><a href="#proceso">Proceso</a></li>
+                    <li><a href="#testimonios">Testimonios</a></li>
+                    <li><a href="#contacto">Contacto</a></li>
+                </ul>
+                <button class="mobile-menu-btn" id="menuToggle" aria-label="Abrir menú">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <section id="inicio" class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1>Miel 100% Natural del Corazón de Paraguay</h1>
+                <p>Descubre el auténtico sabor de la miel ecológica, producida con amor y respeto por las abejas y el medio ambiente.</p>
+                <div class="hero-buttons">
+                    <a href="#productos" class="btn">Nuestros Productos</a>
+                    <a href="#contacto" class="btn btn-outline">Contactar</a>
+                </div>
+            </div>
+        </div>
+        <svg class="hero-honeycomb" viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
+            <path class="hexagon" d="M150,50 L250,50 L300,125 L250,200 L150,200 L100,125 Z" />
+            <path class="hexagon" d="M250,50 L350,50 L400,125 L350,200 L250,200 L200,125 Z" />
+            <path class="hexagon" d="M50,125 L100,125 L150,200 L100,275 L50,275 L0,200 Z" />
+            <path class="hexagon" d="M350,125 L400,125 L450,200 L400,275 L350,275 L300,200 Z" />
+            <path class="hexagon" d="M150,200 L250,200 L300,275 L250,350 L150,350 L100,275 Z" />
+            <path class="hexagon" d="M250,200 L350,200 L400,275 L350,350 L250,350 L200,275 Z" />
+        </svg>
+    </section>
+
+    <section id="nosotros" class="features">
+        <div class="container">
+            <div class="section-title">
+                <h2>¿Por qué elegirnos?</h2>
+                <p>Nuestro compromiso con la calidad y la sostenibilidad nos diferencia.</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-leaf"></i></div>
+                    <h3>100% Ecológico</h3>
+                    <p>Nuestros procesos de producción respetan el medio ambiente y garantizan productos libres de químicos.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-medal"></i></div>
+                    <h3>Alta Calidad</h3>
+                    <p>Miel pura sin pasteurizar, conservando todas sus propiedades naturales y beneficios para la salud.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-hands-helping"></i></div>
+                    <h3>Comercio Justo</h3>
+                    <p>Trabajamos directamente con apicultores locales, asegurando precios justos y desarrollo comunitario.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="productos" class="products">
+        <div class="container">
+            <div class="section-title">
+                <h2>Nuestros Productos</h2>
+                <p>Descubre nuestra variedad de productos apícolas naturales.</p>
+            </div>
+            <div class="products-grid">
+                <div class="product-card">
+                    <div class="product-image">
+                        <i class="fas fa-jar"></i>
+                        <div class="product-badge">Popular</div>
+                    </div>
+                    <div class="product-info">
+                        <h3>Miel Pura Multifloral</h3>
+                        <p>Miel 100% natural con el auténtico sabor de las flores paraguayas.</p>
+                        <div class="product-price">₲ 25.000</div>
+                        <a href="#contacto" class="btn">Consultar</a>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="product-image"><i class="fas fa-seedling"></i></div>
+                    <div class="product-info">
+                        <h3>Polen de Abejas</h3>
+                        <p>Polen natural recolectado por nuestras abejas, rico en proteínas y vitaminas.</p>
+                        <div class="product-price">₲ 35.000</div>
+                        <a href="#contacto" class="btn">Consultar</a>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="product-image"><i class="fas fa-vial"></i></div>
+                    <div class="product-info">
+                        <h3>Propóleo Natural</h3>
+                        <p>Propóleo con propiedades antibacterianas y antivirales para fortalecer tu sistema inmunológico.</p>
+                        <div class="product-price">₲ 40.000</div>
+                        <a href="#contacto" class="btn">Consultar</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="proceso" class="process">
+        <div class="container">
+            <div class="section-title">
+                <h2>Nuestro Proceso</h2>
+                <p>Así producimos nuestra miel de la manera más natural y sostenible.</p>
+            </div>
+            <div class="process-steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h3>Cría Responsable</h3>
+                    <p>Cuidamos nuestras abejas en colmenas naturales, respetando su ciclo de vida y bienestar.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h3>Recolección Sostenible</h3>
+                    <p>Extraemos la miel de manera responsable, dejando suficiente para la alimentación de las abejas.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h3>Procesamiento Natural</h3>
+                    <p>Filtramos la miel en frío para preservar todas sus propiedades naturales sin pasteurizar.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <h3>Envasado Ecológico</h3>
+                    <p>Utilizamos envases de vidrio reciclable para minimizar nuestro impacto ambiental.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="testimonios" class="testimonials">
+        <div class="container">
+            <div class="section-title">
+                <h2>Lo que dicen nuestros clientes</h2>
+                <p>La calidad de nuestros productos habla por sí misma.</p>
+            </div>
+            <div class="testimonials-grid">
+                <div class="testimonial-card">
+                    <div class="testimonial-text">"La mejor miel que he probado en mi vida. Se nota que es 100% natural y de calidad superior. ¡Recomendadísima!"</div>
+                    <div class="testimonial-author">
+                        <div class="author-avatar"><i class="fas fa-user"></i></div>
+                        <div>
+                            <div class="author-name">María González</div>
+                            <small>Cliente frecuente</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-text">"Desde que consumo la miel de Ecodelpa, mis alergias han mejorado notablemente. Producto de excelente calidad."</div>
+                    <div class="testimonial-author">
+                        <div class="author-avatar"><i class="fas fa-user"></i></div>
+                        <div>
+                            <div class="author-name">Carlos Rodríguez</div>
+                            <small>Cliente desde 2020</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-text">"No solo es deliciosa, sino que apoyas a productores locales y al cuidado del medio ambiente. ¡Perfecto!"</div>
+                    <div class="testimonial-author">
+                        <div class="author-avatar"><i class="fas fa-user"></i></div>
+                        <div>
+                            <div class="author-name">Ana Martínez</div>
+                            <small>Amante de productos ecológicos</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contacto" class="contact">
+        <div class="container">
+            <div class="section-title">
+                <h2>Contacto</h2>
+                <p>Estamos aquí para responder todas tus preguntas.</p>
+            </div>
+            <div class="contact-content">
+                <div class="contact-info">
+                    <h3>Información de Contacto</h3>
+                    <div class="contact-detail">
+                        <div class="contact-icon"><i class="fas fa-map-marker-alt"></i></div>
+                        <div>
+                            <h4>Dirección</h4>
+                            <p>Ruta 2, Km 30, Paraguarí, Paraguay</p>
+                        </div>
+                    </div>
+                    <div class="contact-detail">
+                        <div class="contact-icon"><i class="fas fa-phone"></i></div>
+                        <div>
+                            <h4>Teléfono</h4>
+                            <p>+595 981 234 567</p>
+                        </div>
+                    </div>
+                    <div class="contact-detail">
+                        <div class="contact-icon"><i class="fas fa-envelope"></i></div>
+                        <div>
+                            <h4>Email</h4>
+                            <p>info@ecodelpa.com.py</p>
+                        </div>
+                    </div>
+                    <div class="social-links">
+                        <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="#" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+                        <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                <div class="contact-form">
+                    <h3>Envíanos un mensaje</h3>
+                    <form action="https://formspree.io/f/your_form_id" method="POST">
+                        <div class="form-group">
+                            <label for="name">Nombre completo</label>
+                            <input type="text" id="name" name="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Correo electrónico</label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="message">Mensaje</label>
+                            <textarea id="message" name="message" required></textarea>
+                        </div>
+                        <button type="submit" class="btn" style="width: 100%;">Enviar Mensaje</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container footer-content">
+            <div class="footer-section about">
+                <div class="footer-logo">Eco<span>delpa</span></div>
+                <p>Apicultura ecológica y sostenible del corazón de Paraguay. Cuidamos a las abejas y la naturaleza para ofrecerte productos de la más alta calidad.</p>
+            </div>
+            <div class="footer-section links">
+                <h3>Enlaces Rápidos</h3>
+                <ul class="footer-links">
+                    <li><a href="#inicio">Inicio</a></li>
+                    <li><a href="#nosotros">Nosotros</a></li>
+                    <li><a href="#productos">Productos</a></li>
+                    <li><a href="#contacto">Contacto</a></li>
+                </ul>
+            </div>
+            <div class="footer-section contact-info-footer">
+                <h3>Contacto</h3>
+                <p><i class="fas fa-map-marker-alt"></i> Ruta 2, Km 30, Paraguarí</p>
+                <p><i class="fas fa-phone"></i> +595 981 234 567</p>
+                <p><i class="fas fa-envelope"></i> info@ecodelpa.com.py</p>
+            </div>
+        </div>
+        <div class="copyright">
+            <p>&copy; 2025 Ecodelpa. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <script>
+        // JavaScript para el menú móvil y el header con scroll
+        document.addEventListener('DOMContentLoaded', () => {
+            const menuToggle = document.getElementById('menuToggle');
+            const menu = document.getElementById('menu');
+            const header = document.getElementById('main-header');
+            const body = document.body;
+
+            menuToggle.addEventListener('click', () => {
+                menu.classList.toggle('active');
+                body.classList.toggle('menu-open');
+                menuToggle.querySelector('i').classList.toggle('fa-bars');
+                menuToggle.querySelector('i').classList.toggle('fa-times');
+            });
+
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 50) {
+                    header.classList.add('scrolled');
+                } else {
+                    header.classList.remove('scrolled');
+                }
+            });
+
+            document.querySelectorAll('nav a').forEach(link => {
+                link.addEventListener('click', () => {
+                    if (menu.classList.contains('active')) {
+                        menu.classList.remove('active');
+                        body.classList.remove('menu-open');
+                        menuToggle.querySelector('i').classList.add('fa-bars');
+                        menuToggle.querySelector('i').classList.remove('fa-times');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

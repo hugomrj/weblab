@@ -1,0 +1,1090 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ecodelpa - Ecológica del Paraguay</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-gold: #d4a574;
+            --dark-gold: #b8935a;
+            --forest-green: #2d5016;
+            --sage-green: #6b7c32;
+            --cream: #f7f5f2;
+            --dark-brown: #3c2e1e;
+            --light-brown: #8b7355;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: var(--dark-brown);
+            overflow-x: hidden;
+        }
+
+        /* Elegant Typography */
+        h1, h2, h3 {
+            font-family: 'Playfair Display', serif;
+        }
+
+        /* Navigation */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(247, 245, 242, 0.95);
+            backdrop-filter: blur(20px);
+            z-index: 1000;
+            transition: all 0.3s ease;
+            border-bottom: 1px solid rgba(212, 165, 116, 0.2);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 3rem;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--forest-green);
+            text-decoration: none;
+        }
+
+        .brand::before {
+            content: "🌿";
+            margin-right: 0.5rem;
+            font-size: 1.8rem;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2.5rem;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--forest-green);
+            font-weight: 500;
+            position: relative;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary-gold);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary-gold);
+        }
+
+        /* Hero Section - Sophisticated */
+        .hero {
+            height: 100vh;
+            background: linear-gradient(rgba(45, 80, 22, 0.4), rgba(60, 46, 30, 0.6)), 
+                        url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800"><defs><pattern id="honeycomb" width="60" height="52" patternUnits="userSpaceOnUse"><polygon fill="none" stroke="%23d4a574" stroke-width="1" stroke-opacity="0.3" points="30,0 52,15 52,37 30,52 8,37 8,15"/></pattern></defs><rect width="100%" height="100%" fill="%23f7f5f2"/><rect width="100%" height="100%" fill="url(%23honeycomb)"/><circle cx="200" cy="200" r="100" fill="%236b7c32" opacity="0.1"/><circle cx="900" cy="300" r="80" fill="%23d4a574" opacity="0.1"/><circle cx="600" cy="500" r="120" fill="%232d5016" opacity="0.1"/></svg>');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 30% 50%, rgba(212, 165, 116, 0.1) 0%, transparent 50%),
+                        radial-gradient(circle at 70% 20%, rgba(107, 124, 50, 0.1) 0%, transparent 50%);
+        }
+
+        .hero-content {
+            text-align: center;
+            max-width: 900px;
+            padding: 2rem;
+            position: relative;
+            z-index: 2;
+            animation: heroFadeIn 1.5s ease-out;
+        }
+
+        @keyframes heroFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero h1 {
+            font-size: 4.5rem;
+            font-weight: 700;
+            color: var(--cream);
+            margin-bottom: 1.5rem;
+            text-shadow: 2px 2px 10px rgba(0,0,0,0.3);
+            line-height: 1.1;
+        }
+
+        .hero-subtitle {
+            font-size: 1.5rem;
+            color: var(--cream);
+            margin-bottom: 1rem;
+            font-weight: 300;
+            opacity: 0.9;
+        }
+
+        .hero-description {
+            font-size: 1.1rem;
+            color: var(--cream);
+            margin-bottom: 3rem;
+            opacity: 0.8;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            background: var(--primary-gold);
+            color: white;
+            padding: 1rem 2.5rem;
+            text-decoration: none;
+            border-radius: 0;
+            font-weight: 600;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: var(--dark-gold);
+            transition: left 0.4s ease;
+        }
+
+        .btn-primary:hover::before {
+            left: 0;
+        }
+
+        .btn-primary span {
+            position: relative;
+            z-index: 2;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--cream);
+            padding: 1rem 2.5rem;
+            text-decoration: none;
+            border: 2px solid var(--cream);
+            font-weight: 600;
+            transition: all 0.4s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn-secondary:hover {
+            background: var(--cream);
+            color: var(--forest-green);
+        }
+
+        /* Elegant Sections */
+        section {
+            padding: 6rem 0;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 3rem;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-title {
+            font-size: 3rem;
+            color: var(--forest-green);
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .section-subtitle {
+            font-size: 1.2rem;
+            color: var(--sage-green);
+            max-width: 600px;
+            margin: 0 auto;
+            font-weight: 300;
+        }
+
+        /* About Section - Split Layout */
+        .about {
+            background: var(--cream);
+        }
+
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 5rem;
+            align-items: center;
+        }
+
+        .about-content h3 {
+            font-size: 2rem;
+            color: var(--forest-green);
+            margin-bottom: 2rem;
+            font-weight: 600;
+        }
+
+        .about-content p {
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+            color: var(--light-brown);
+            line-height: 1.8;
+        }
+
+        .about-visual {
+            position: relative;
+            height: 500px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .hexagon-container {
+            position: relative;
+            width: 300px;
+            height: 300px;
+        }
+
+        .hexagon {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--primary-gold), var(--dark-gold));
+            clip-path: polygon(25% 6.7%, 75% 6.7%, 100% 50%, 75% 93.3%, 25% 93.3%, 0% 50%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            animation: pulse 4s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .hexagon::before {
+            content: "🍯";
+            font-size: 4rem;
+            color: white;
+        }
+
+        .floating-icons {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .floating-icon {
+            position: absolute;
+            font-size: 1.5rem;
+            opacity: 0.6;
+            animation: floatIcon 6s ease-in-out infinite;
+        }
+
+        .floating-icon:nth-child(1) {
+            top: 20%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+
+        .floating-icon:nth-child(2) {
+            top: 60%;
+            right: 20%;
+            animation-delay: 2s;
+        }
+
+        .floating-icon:nth-child(3) {
+            bottom: 30%;
+            left: 30%;
+            animation-delay: 4s;
+        }
+
+        @keyframes floatIcon {
+            0%, 100% { transform: translateY(0) scale(1); opacity: 0.6; }
+            50% { transform: translateY(-20px) scale(1.1); opacity: 1; }
+        }
+
+        /* Premium Products Grid */
+        .products {
+            background: white;
+        }
+
+        .products-showcase {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 3rem;
+            margin-top: 4rem;
+        }
+
+        .product-card {
+            background: var(--cream);
+            border: 1px solid rgba(212, 165, 116, 0.2);
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .product-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-gold), var(--sage-green));
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.4s ease;
+        }
+
+        .product-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .product-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+
+        .product-header {
+            padding: 2.5rem 2rem 1rem;
+            text-align: center;
+        }
+
+        .product-icon {
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+            display: block;
+        }
+
+        .product-card h3 {
+            font-size: 1.5rem;
+            color: var(--forest-green);
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .product-description {
+            padding: 0 2rem 2.5rem;
+            color: var(--light-brown);
+            line-height: 1.7;
+        }
+
+        /* Services with Icons */
+        .services {
+            background: var(--forest-green);
+            color: white;
+        }
+
+        .services .section-title {
+            color: white;
+        }
+
+        .services .section-subtitle {
+            color: rgba(255,255,255,0.8);
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2.5rem;
+            margin-top: 4rem;
+        }
+
+        .service-card {
+            text-align: center;
+            padding: 2.5rem 1.5rem;
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: all 0.4s ease;
+        }
+
+        .service-card:hover {
+            background: rgba(255,255,255,0.1);
+            transform: translateY(-5px);
+        }
+
+        .service-icon {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+            color: var(--primary-gold);
+        }
+
+        .service-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        /* Elegant Contact Section */
+        .contact {
+            background: var(--cream);
+        }
+
+        .contact-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 5rem;
+            margin-top: 4rem;
+        }
+
+        .contact-info {
+            padding: 3rem;
+            background: white;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .contact-info h3 {
+            color: var(--forest-green);
+            font-size: 1.8rem;
+            margin-bottom: 2rem;
+        }
+
+        .info-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 2rem;
+            gap: 1rem;
+        }
+
+        .info-icon {
+            font-size: 1.2rem;
+            color: var(--primary-gold);
+            margin-top: 0.2rem;
+        }
+
+        .info-content strong {
+            color: var(--forest-green);
+            display: block;
+            margin-bottom: 0.3rem;
+        }
+
+        .contact-form {
+            padding: 3rem;
+            background: white;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            color: var(--forest-green);
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid rgba(212, 165, 116, 0.3);
+            background: var(--cream);
+            color: var(--dark-brown);
+            transition: border-color 0.3s ease;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary-gold);
+        }
+
+        textarea.form-control {
+            height: 120px;
+            resize: vertical;
+        }
+
+        /* Sophisticated Footer */
+        .footer {
+            background: var(--dark-brown);
+            color: var(--cream);
+            padding: 4rem 0 2rem;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        .footer-section h4 {
+            color: var(--primary-gold);
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+            font-family: 'Playfair Display', serif;
+        }
+
+        .footer-section p,
+        .footer-section li {
+            color: rgba(247, 245, 242, 0.8);
+            line-height: 1.8;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .footer-section a {
+            color: rgba(247, 245, 242, 0.8);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-section a:hover {
+            color: var(--primary-gold);
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .social-icon {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            background: var(--primary-gold);
+            color: white !important;
+            text-align: center;
+            line-height: 40px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+
+        .social-icon:hover {
+            background: var(--dark-gold);
+            transform: translateY(-2px);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(212, 165, 116, 0.3);
+            padding-top: 2rem;
+            text-align: center;
+            color: rgba(247, 245, 242, 0.6);
+        }
+
+        /* Mobile Responsive */
+        .mobile-menu {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--forest-green);
+            cursor: pointer;
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background: rgba(247, 245, 242, 0.98);
+                flex-direction: column;
+                align-items: center;
+                padding: 1rem 0;
+                border-bottom: 1px solid rgba(212, 165, 116, 0.2);
+            }
+            
+            .nav-links.active {
+                display: flex;
+            }
+
+            .nav-links li {
+                padding: 1rem 0;
+            }
+
+            .mobile-menu {
+                display: block;
+            }
+
+            .hero h1 {
+                font-size: 2.8rem;
+            }
+
+            .hero-subtitle {
+                font-size: 1.2rem;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .about-grid,
+            .contact-layout {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+                gap: 0; /* Reset gap as margin is on form-group */
+            }
+
+            .nav-container,
+            .container {
+                padding: 1.5rem;
+            }
+
+            section {
+                padding: 4rem 0;
+            }
+        }
+
+        /* Scroll Animations */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="#inicio" class="brand">Ecodelpa</a>
+            <ul class="nav-links">
+                <li><a href="#inicio">Inicio</a></li>
+                <li><a href="#nosotros">Nosotros</a></li>
+                <li><a href="#productos">Productos</a></li>
+                <li><a href="#servicios">Servicios</a></li>
+                <li><a href="#contacto">Contacto</a></li>
+            </ul>
+            <button class="mobile-menu" onclick="toggleMenu()">☰</button>
+        </div>
+    </nav>
+
+    <section id="inicio" class="hero">
+        <div class="hero-content">
+            <h1>Ecodelpa</h1>
+            <p class="hero-subtitle">Ecológica del Paraguay</p>
+            <p class="hero-description">
+                Miel pura y orgánica extraída con métodos tradicionales y sustentables 
+                desde las tierras vírgenes del Paraguay
+            </p>
+            <div class="hero-buttons">
+                <a href="#productos" class="btn-primary">
+                    <span>Descubrir Productos</span>
+                </a>
+                <a href="#nosotros" class="btn-secondary">Nuestra Historia</a>
+            </div>
+        </div>
+    </section>
+
+    <section id="nosotros" class="about">
+        <div class="container">
+            <div class="section-header fade-in">
+                <h2 class="section-title">Nuestra Tradición</h2>
+                <p class="section-subtitle">
+                    Más de 15 años preservando la apicultura artesanal paraguaya
+                </p>
+            </div>
+            <div class="about-grid">
+                <div class="about-content fade-in">
+                    <h3>Compromiso con la Excelencia</h3>
+                    <p>
+                        Ecodelpa nace del profundo respeto por las tradiciones apícolas paraguayas y 
+                        el compromiso inquebrantable con la sostenibilidad ambiental. Nuestras colmenas 
+                        se sitúan en reservas naturales protegidas, donde las abejas encuentran la 
+                        diversidad floral más pura del país.
+                    </p>
+                    <p>
+                        Cada gota de nuestra miel lleva consigo la esencia de la flora nativa paraguaya, 
+                        conservando propiedades nutricionales únicas que solo la naturaleza virgen puede ofrecer.
+                    </p>
+                    <p>
+                        Trabajamos con técnicas ancestrales combinadas con conocimientos científicos modernos, 
+                        asegurando que cada producto mantenga su pureza original mientras cumple con los 
+                        más altos estándares de calidad internacional.
+                    </p>
+                </div>
+                <div class="about-visual fade-in">
+                    <div class="hexagon-container">
+                        <div class="hexagon"></div>
+                        <div class="floating-icons">
+                            <span class="floating-icon">🐝</span>
+                            <span class="floating-icon">🌸</span>
+                            <span class="floating-icon">🌿</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="productos" class="products">
+        <div class="container">
+            <div class="section-header fade-in">
+                <h2 class="section-title">Productos Premium</h2>
+                <p class="section-subtitle">
+                    Tesoros naturales extraídos con dedicación artesanal
+                </p>
+            </div>
+            <div class="products-showcase">
+                <div class="product-card fade-in">
+                    <div class="product-header">
+                        <span class="product-icon">🍯</span>
+                        <h3>Miel Orgánica de Flores Silvestres</h3>
+                    </div>
+                    <div class="product-description">
+                        Nuestra miel insignia, extraída de colmenas ubicadas en reservas de bosque atlántico. 
+                        Rica en antioxidantes y minerales, con un sabor único que refleja la biodiversidad paraguaya.
+                    </div>
+                </div>
+
+                <div class="product-card fade-in">
+                    <div class="product-header">
+                        <span class="product-icon">🌺</span>
+                        <h3>Miel de Azahar</h3>
+                    </div>
+                    <div class="product-description">
+                        Delicada miel monofloral de naranjos nativos. Su aroma cítrico y textura cristalina 
+                        la convierten en una exquisitez gastronómica para paladares refinados.
+                    </div>
+                </div>
+
+                <div class="product-card fade-in">
+                    <div class="product-header">
+                        <span class="product-icon">⭐</span>
+                        <h3>Polen Fresco</h3>
+                    </div>
+                    <div class="product-description">
+                        Superalimento natural rico en proteínas, vitaminas y aminoácidos esenciales. 
+                        Recolectado diariamente y preservado mediante técnicas de secado natural.
+                    </div>
+                </div>
+
+                <div class="product-card fade-in">
+                    <div class="product-header">
+                        <span class="product-icon">💎</span>
+                        <h3>Propóleo Premium</h3>
+                    </div>
+                    <div class="product-description">
+                        Extracto concentrado con propiedades antibacterianas excepcionales. 
+                        Ideal para fortalecer el sistema inmunológico y como antiséptico natural.
+                    </div>
+                </div>
+
+                <div class="product-card fade-in">
+                    <div class="product-header">
+                        <span class="product-icon">👑</span>
+                        <h3>Jalea Real Fresca</h3>
+                    </div>
+                    <div class="product-description">
+                        El elixir real de la colmena, conservado en condiciones óptimas. 
+                        Fuente concentrada de vitalidad con beneficios rejuvenecedores comprobados.
+                    </div>
+                </div>
+
+                <div class="product-card fade-in">
+                    <div class="product-header">
+                        <span class="product-icon">🕯️</span>
+                        <h3>Cera Virgen</h3>
+                    </div>
+                    <div class="product-description">
+                        Cera pura sin procesar, perfecta para artesanías, cosméticos naturales 
+                        y productos de cuidado personal. Conserva su aroma natural característico.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="servicios" class="services">
+        <div class="container">
+            <div class="section-header fade-in">
+                <h2 class="section-title">Nuestros Servicios</h2>
+                <p class="section-subtitle">
+                    Excelencia en cada aspecto de nuestro proceso productivo
+                </p>
+            </div>
+            <div class="services-grid">
+                <div class="service-card fade-in">
+                    <div class="service-icon">🌱</div>
+                    <h3>Apicultura Orgánica Certificada</h3>
+                    <p>Procesos productivos certificados internacionalmente que garantizan productos 100% orgánicos sin químicos ni aditivos artificiales.</p>
+                </div>
+                <div class="service-card fade-in">
+                    <div class="service-icon">🚛</div>
+                    <h3>Distribución Especializada</h3>
+                    <p>Red logística especializada en productos apícolas con control de temperatura y trazabilidad completa desde el apiario hasta su mesa.</p>
+                </div>
+                <div class="service-card fade-in">
+                    <div class="service-icon">📚</div>
+                    <h3>Formación Apícola</h3>
+                    <p>Academia especializada en técnicas de apicultura sustentable para formar la próxima generación de apicultores responsables.</p>
+                </div>
+                <div class="service-card fade-in">
+                    <div class="service-icon">🔬</div>
+                    <h3>Laboratorio de Calidad</h3>
+                    <p>Análisis fisicoquímicos y microbiológicos exhaustivos que aseguran la pureza y propiedades nutricionales de cada lote producido.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contacto" class="contact">
+        <div class="container">
+            <div class="section-header fade-in">
+                <h2 class="section-title">Conecta con Nosotros</h2>
+                <p class="section-subtitle">
+                    Estamos aquí para atender todas tus consultas sobre nuestros productos
+                </p>
+            </div>
+            <div class="contact-layout">
+                <div class="contact-info fade-in">
+                    <h3>Información de Contacto</h3>
+                    
+                    <div class="info-item">
+                        <span class="info-icon">📍</span>
+                        <div class="info-content">
+                            <strong>Ubicación</strong>
+                            Ruta Transchaco Km 45<br>
+                            Villa Hayes, Central<br>
+                            Paraguay
+                        </div>
+                    </div>
+
+                    <div class="info-item">
+                        <span class="info-icon">📞</span>
+                        <div class="info-content">
+                            <strong>Teléfonos</strong>
+                            +595 21 123-456
+                        </div>
+                    </div>
+                    
+                    <div class="info-item">
+                        <span class="info-icon">📧</span>
+                        <div class="info-content">
+                            <strong>Email</strong>
+                            ventas@ecodelpa.com.py
+                        </div>
+                    </div>
+
+                    <div class="info-item">
+                        <span class="info-icon">⏰</span>
+                        <div class="info-content">
+                            <strong>Horario de Atención</strong>
+                            Lunes a Viernes: 8:00 - 17:00
+                        </div>
+                    </div>
+                </div>
+
+                <div class="contact-form fade-in">
+                    <form onsubmit="event.preventDefault(); alert('Mensaje enviado (simulación)');">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="name">Nombre</label>
+                                <input type="text" id="name" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Email</label>
+                                <input type="email" id="email" class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="subject">Asunto</label>
+                            <input type="text" id="subject" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="message">Mensaje</label>
+                            <textarea id="message" class="form-control" required></textarea>
+                        </div>
+                        <button type="submit" class="btn-primary" style="width: 100%;">
+                            <span>Enviar Mensaje</span>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-section">
+                    <h4>Sobre Ecodelpa</h4>
+                    <p>Preservando la tradición apícola paraguaya con un compromiso firme hacia la sostenibilidad y la pureza de nuestros productos.</p>
+                    <div class="social-icons">
+                        <a href="#" class="social-icon" aria-label="Instagram">IG</a>
+                        <a href="#" class="social-icon" aria-label="Facebook">FB</a>
+                        <a href="#" class="social-icon" aria-label="WhatsApp">WA</a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h4>Navegación</h4>
+                    <ul>
+                        <li><a href="#inicio">Inicio</a></li>
+                        <li><a href="#nosotros">Nosotros</a></li>
+                        <li><a href="#productos">Productos</a></li>
+                        <li><a href="#servicios">Servicios</a></li>
+                        <li><a href="#contacto">Contacto</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Contacto</h4>
+                    <p>Ruta Transchaco Km 45<br>Villa Hayes, Paraguay</p>
+                    <p><a href="mailto:ventas@ecodelpa.com.py">ventas@ecodelpa.com.py</a></p>
+                    <p><a href="tel:+59521123456">+595 21 123-456</a></p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Ecodelpa - Ecológica del Paraguay. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile Menu Toggle
+        function toggleMenu() {
+            const navLinks = document.querySelector('.nav-links');
+            navLinks.classList.toggle('active');
+        }
+
+        // Close menu when a link is clicked
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                const navLinks = document.querySelector('.nav-links');
+                if (navLinks.classList.contains('active')) {
+                    navLinks.classList.remove('active');
+                }
+            });
+        });
+
+        // Scroll Animations
+        const faders = document.querySelectorAll('.fade-in');
+        const appearOptions = {
+            threshold: 0.2,
+            rootMargin: "0px 0px -50px 0px"
+        };
+
+        const appearOnScroll = new IntersectionObserver(function(entries, appearOnScroll) {
+            entries.forEach(entry => {
+                if (!entry.isIntersecting) {
+                    return;
+                } else {
+                    entry.target.classList.add('visible');
+                    appearOnScroll.unobserve(entry.target);
+                }
+            });
+        }, appearOptions);
+
+        faders.forEach(fader => {
+            appearOnScroll.observe(fader);
+        });
+
+        // Smooth Scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetElement = document.querySelector(this.getAttribute('href'));
+                if (targetElement) {
+                    targetElement.scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // Navbar style change on scroll
+        window.addEventListener('scroll', () => {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 50) {
+                navbar.style.boxShadow = '0 2px 10px rgba(0,0,0,0.08)';
+                navbar.style.background = 'rgba(247, 245, 242, 1)';
+            } else {
+                navbar.style.boxShadow = 'none';
+                navbar.style.background = 'rgba(247, 245, 242, 0.95)';
+            }
+        });
+    </script>
+</body>
+</html>

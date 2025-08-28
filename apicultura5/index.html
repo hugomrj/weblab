@@ -1,0 +1,914 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ecodelpa | Apicultura Premium del Paraguay</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2D5A3D;       /* Verde oscuro elegante */
+            --primary-light: #4A7C59;
+            --secondary: #B8A038;    /* Dorado natural (para acentos) */
+            --dark: #1A1A1A;         /* Negro suave */
+            --light: #F8F8F8;        /* Blanco roto */
+            --white: #FFFFFF;
+            --gray: #E5E5E5;
+            --text: #333333;
+            --text-light: #666666;
+
+            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            --border-radius: 12px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.7;
+            color: var(--text);
+            background-color: var(--light);
+            overflow-x: hidden;
+        }
+
+        /* Tipografía mejorada */
+        h1, h2, h3, h4 {
+            font-family: 'Playfair Display', serif;
+            font-weight: 600;
+            line-height: 1.2;
+        }
+
+        h1 { font-size: clamp(2.5rem, 5vw, 4rem); }
+        h2 { font-size: clamp(2rem, 4vw, 3rem); }
+        h3 { font-size: 1.8rem; }
+        p { font-size: 1.1rem; }
+
+        /* Header moderno */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.05);
+            transition: var(--transition);
+        }
+
+        .header-scrolled {
+            padding: 0.5rem 2rem;
+            background: rgba(255, 255, 255, 0.98);
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--dark);
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            margin-right: 0.8rem;
+            background: var(--primary);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+            transition: var(--transition);
+            position: relative;
+            padding: 0.5rem 0;
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--secondary);
+            transition: var(--transition);
+        }
+
+        nav a:hover::after {
+            width: 100%;
+        }
+
+        .hamburger {
+            display: none;
+            cursor: pointer;
+            font-size: 1.5rem;
+        }
+
+        /* Hero Section Premium */
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 0 2rem;
+            background: linear-gradient(135deg, rgba(45, 90, 61, 0.8), rgba(184, 160, 56, 0.6)),
+                        url('https://images.unsplash.com/photo-1620121685085-d7c5b1d887a7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80') no-repeat center/cover;
+            color: var(--white);
+            text-align: left;
+        }
+
+        .hero-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .hero h1 {
+            margin-bottom: 1.5rem;
+            color: var(--white);
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin-bottom: 2rem;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.9rem 2rem;
+            background: var(--secondary);
+            color: var(--dark);
+            text-decoration: none;
+            border-radius: var(--border-radius);
+            font-weight: 600;
+            transition: var(--transition);
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background: var(--primary);
+            color: var(--white);
+            transform: translateY(-2px);
+        }
+
+        .btn::after {
+            content: '→';
+            transition: var(--transition);
+        }
+
+        .btn:hover::after {
+            transform: translateX(5px);
+        }
+
+        /* Sección About con diseño split */
+        .about {
+            padding: 6rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .about-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .about-image {
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            position: relative;
+        }
+
+        .about-image img {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+            transition: var(--transition);
+        }
+
+        .about-image::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(to bottom, transparent 60%, rgba(45, 90, 61, 0.8));
+        }
+
+        .about-text h2 {
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+        }
+
+        .about-text p {
+            margin-bottom: 1.5rem;
+            color: var(--text-light);
+        }
+
+        .highlight {
+            background: var(--primary-light);
+            color: var(--white);
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            display: inline-block;
+            margin-bottom: 1rem;
+        }
+
+        /* Sección de Productos (Grid moderno) */
+        .products {
+            padding: 6rem 2rem;
+            background: var(--white);
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .section-header h2 {
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .product-card {
+            background: var(--white);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .product-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .product-image {
+            height: 250px;
+            overflow: hidden;
+        }
+
+        .product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: var(--transition);
+        }
+
+        .product-card:hover .product-image img {
+            transform: scale(1.05);
+        }
+
+        .product-info {
+            padding: 1.5rem;
+        }
+
+        .product-info h3 {
+            margin-bottom: 0.8rem;
+            color: var(--primary);
+        }
+
+        .product-info p {
+            color: var(--text-light);
+            margin-bottom: 1rem;
+        }
+
+        .price {
+            font-weight: 700;
+            color: var(--secondary);
+            font-size: 1.3rem;
+        }
+
+        /* Proceso Stepper Moderno */
+        .process {
+            padding: 6rem 2rem;
+            background: var(--light);
+        }
+
+        .process-steps {
+            max-width: 1000px;
+            margin: 3rem auto 0;
+            position: relative;
+        }
+
+        .process-steps::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 2px;
+            height: 100%;
+            background: var(--gray);
+        }
+
+        .step {
+            display: flex;
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        .step:nth-child(even) {
+            flex-direction: row-reverse;
+        }
+
+        .step-content {
+            flex: 1;
+            padding: 1.5rem;
+            background: var(--white);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+        }
+
+        .step-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--white);
+            border: 3px solid var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            z-index: 1;
+            margin: 0 2rem;
+            flex-shrink: 0;
+        }
+
+        .step-icon.completed {
+            background: var(--primary);
+            color: var(--white);
+            border-color: var(--primary);
+        }
+
+        /* Contacto con mapa integrado */
+        .contact {
+            padding: 6rem 2rem;
+            background: var(--white);
+        }
+
+        .contact-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+        }
+
+        .contact-info h2 {
+            color: var(--primary);
+            margin-bottom: 2rem;
+        }
+
+        .contact-details {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .contact-item i {
+            color: var(--secondary);
+            font-size: 1.2rem;
+        }
+
+        .contact-form {
+            background: var(--light);
+            padding: 2rem;
+            border-radius: var(--border-radius);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--primary);
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border: 1px solid var(--gray);
+            border-radius: var(--border-radius);
+            font-family: inherit;
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(45, 90, 61, 0.1);
+        }
+
+        /* Footer minimalista */
+        footer {
+            background: var(--dark);
+            color: var(--white);
+            padding: 4rem 2rem 2rem;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 3rem;
+        }
+
+        .footer-brand h3 {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+        }
+
+        .footer-brand p {
+            color: var(--text-light);
+            margin-bottom: 2rem;
+        }
+
+        .footer-section h4 {
+            margin-bottom: 1.5rem;
+            color: var(--white);
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 0.8rem;
+        }
+
+        .footer-section ul li a {
+            color: var(--text-light);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .footer-section ul li a:hover {
+            color: var(--white);
+            transform: translateX(5px);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .social-links a {
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            transition: var(--transition);
+        }
+
+        .social-links a:hover {
+            background: var(--primary);
+            transform: translateY(-3px);
+        }
+
+        .copyright {
+            text-align: center;
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-light);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .about-content,
+            .contact-content {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .process-steps::before {
+                left: 20px;
+            }
+
+            .step {
+                flex-direction: column !important;
+            }
+
+            .step-icon {
+                margin: 0 0 1rem 20px;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            nav ul {
+                position: fixed;
+                top: 80px;
+                left: 0;
+                right: 0;
+                background: var(--white);
+                flex-direction: column;
+                align-items: center;
+                padding: 2rem 0;
+                clip-path: circle(0px at 90% -10%);
+                transition: var(--transition);
+                pointer-events: none;
+            }
+
+            nav ul.active {
+                clip-path: circle(1000px at 90% -10%);
+                pointer-events: all;
+            }
+
+            .hamburger {
+                display: block;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Header -->
+    <header id="header">
+        <div class="navbar">
+            <a href="#inicio" class="logo">
+                <div class="logo-icon">E</div>
+                ECODELPA
+            </a>
+            <div class="hamburger">
+                <i class="fas fa-bars"></i>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="#inicio">Inicio</a></li>
+                    <li><a href="#productos">Productos</a></li>
+                    <li><a href="#nosotros">Nosotros</a></li>
+                    <li><a href="#proceso">Proceso</a></li>
+                    <li><a href="#contacto">Contacto</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="inicio">
+        <div class="hero-content">
+            <h1>Miel Artesanal del Paraguay</h1>
+            <p>Descubre el oro líquido de nuestras colmenas, producido con métodos sostenibles que respetan el medio ambiente y el bienestar de las abejas. Calidad premium desde el corazón de Sudamérica.</p>
+            <a href="#productos" class="btn">Explorar Productos</a>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="about" id="nosotros">
+        <div class="about-content">
+            <div class="about-image">
+                <img src="https://images.unsplash.com/photo-1609505848912-b7c3b8b4beda?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Apicultor profesional trabajando">
+            </div>
+            <div class="about-text">
+                <span class="highlight">Desde 2010</span>
+                <h2>Apicultura con Propósito</h2>
+                <p>En Ecodelpa combinamos tradición familiar con innovación ecológica para producir miel y derivados apícolas de la más alta calidad. Nuestra misión va más allá de la producción: buscamos <strong>proteger las abejas</strong>, esenciales para nuestro ecosistema, mientras entregamos productos que nutren y sanan.</p>
+                <p>Cada frasco de nuestra miel lleva el sabor auténtico de la flora paraguaya y el compromiso con prácticas que regeneran la tierra.</p>
+                <div style="margin-top: 2rem;">
+                    <div style="display: flex; align-items: center; margin-bottom: 1rem;">
+                        <i class="fas fa-seedling" style="color: var(--primary); margin-right: 1rem;"></i>
+                        <span><strong>100% natural:</strong> Sin aditivos, pesticidas ni procesamiento industrial</span>
+                    </div>
+                    <div style="display: flex; align-items: center;">
+                        <i class="fas fa-leaf" style="color: var(--primary); margin-right: 1rem;"></i>
+                        <span><strong>Impacto positivo:</strong> Por cada frasco vendido, plantamos 1 árbol nativo</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Products Section -->
+    <section class="products" id="productos">
+        <div class="section-header">
+            <span class="highlight">Nuestros Tesoros</span>
+            <h2>Directamente de la Colmena a tu Mesa</h2>
+        </div>
+        <div class="products-grid">
+            <div class="product-card">
+                <div class="product-image">
+                    <img src="https://images.unsplash.com/photo-1586495770494-9416867c5271?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Miel multifloral premium">
+                </div>
+                <div class="product-info">
+                    <h3>Miel Multifloral Premium</h3>
+                    <p>Combinación única de flores silvestres paraguayas. Rico perfil de sabores con notas cítricas y un final suave.</p>
+                    <div class="price">Gs. 45.000 <span style="font-size: 1rem; color: var(--text-light);">/ 500g</span></div>
+                    <a href="#" class="btn" style="margin-top: 1rem; display: inline-block;">Agregar al carrito</a>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <div class="product-image">
+                    <img src="https://images.unsplash.com/photo-1603048759292-e7223a24d008?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Jalea real en frasco de vidrio">
+                </div>
+                <div class="product-info">
+                    <h3>Jalea Real Pura</h3>
+                    <p>El superalimento de las abejas reina. Rico en vitaminas B, aminoácidos esenciales y antioxidantes naturales.</p>
+                    <div class="price">Gs. 150.000 <span style="font-size: 1rem; color: var(--text-light);">/ 20g</span></div>
+                    <a href="#" class="btn" style="margin-top: 1rem; display: inline-block;">Agregar al carrito</a>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <div class="product-image">
+                    <img src="https://images.unsplash.com/photo-1603048495795-4fc3bbdee3f9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Extracto de propóleo">
+                </div>
+                <div class="product-info">
+                    <h3>Extracto de Propóleo</h3>
+                    <p>Antibiótico natural con propiedades antiinflamatorias. Ideal para fortalecer el sistema inmunológico.</p>
+                    <div class="price">Gs. 60.000 <span style="font-size: 1rem; color: var(--text-light);">/ 30ml</span></div>
+                    <a href="#" class="btn" style="margin-top: 1rem; display: inline-block;">Agregar al carrito</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Process Section -->
+    <section class="process" id="proceso">
+        <div class="section-header">
+            <span class="highlight">Nuestro Compromiso</span>
+            <h2>Del Panal a tu Hogar con Transparencia</h2>
+        </div>
+        <div class="process-steps">
+            <div class="step">
+                <div class="step-content">
+                    <h3>Colmenas Ecológicas</h3>
+                    <p>Ubicadas en reservas naturales libres de contaminación, rodeadas de flora nativa que enriquece el sabor de nuestra miel.</p>
+                </div>
+                <div class="step-icon completed">
+                    <i class="fas fa-tree"></i>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-content">
+                    <h3>Cosecha Ética</h3>
+                    <p>Extraemos solo el excedente, dejando suficiente miel para que las abejas se alimenten durante todo el año.</p>
+                </div>
+                <div class="step-icon completed">
+                    <i class="fas fa-hands-helping"></i>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-content">
+                    <h3>Procesamiento en Frío</h3>
+                    <p>Mantemos todas las enzimas y nutrientes intactos al evitar el calor excesivo en nuestro procesamiento.</p>
+                </div>
+                <div class="step-icon completed">
+                    <i class="fas fa-snowflake"></i>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-content">
+                    <h3>Envases Sostenibles</h3>
+                    <p>Utilizamos vidrio reciclable y materiales compostables para minimizar nuestro impacto ambiental.</p>
+                </div>
+                <div class="step-icon completed">
+                    <i class="fas fa-recycle"></i>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-content">
+                    <h3>Entrega con Propósito</h3>
+                    <p>Por cada pedido, donamos un porcentaje a programas de conservación de abejas nativas.</p>
+                </div>
+                <div class="step-icon completed">
+                    <i class="fas fa-truck"></i>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="contact" id="contacto">
+        <div class="section-header">
+            <span class="highlight">Hablemos</span>
+            <h2>Visítanos o Escríbenos</h2>
+        </div>
+        <div class="contact-content">
+            <div class="contact-info">
+                <h2>Estamos aquí para ayudarte</h2>
+                <div class="contact-details">
+                    <div class="contact-item">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <div>
+                            <h4>Nuestra Ubicación</h4>
+                            <p>Ruta Mcal. Estigarribia KM 21<br>Luque, Paraguay</p>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-phone-alt"></i>
+                        <div>
+                            <h4>Llámanos</h4>
+                            <p>(+595) 21 508 210<br>Lun-Vie: 8:00 AM - 5:00 PM</p>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-envelope"></i>
+                        <div>
+                            <h4>Email</h4>
+                            <p>ventas@ecodelpa.com.py<br>Respondemos en menos de 24hs</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="contact-form">
+                <form>
+                    <div class="form-group">
+                        <label for="name">Nombre Completo</label>
+                        <input type="text" id="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Correo Electrónico</label>
+                        <input type="email" id="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="subject">Asunto</label>
+                        <input type="text" id="subject" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="message">Mensaje</label>
+                        <textarea id="message" rows="5" required></textarea>
+                    </div>
+                    <button type="submit" class="btn">Enviar Mensaje</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-brand">
+                <h3>ECODELPA</h3>
+                <p>Apicultura sostenible que cuida de las abejas y del planeta. Productos premium con impacto positivo en el medio ambiente.</p>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-whatsapp"></i></a>
+                    <a href="#"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+            <div class="footer-section">
+                <h4>Enlaces Rápidos</h4>
+                <ul>
+                    <li><a href="#inicio">Inicio</a></li>
+                    <li><a href="#productos">Productos</a></li>
+                    <li><a href="#nosotros">Sobre Nosotros</a></li>
+                    <li><a href="#proceso">Nuestro Proceso</a></li>
+                    <li><a href="#contacto">Contacto</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Productos</h4>
+                <ul>
+                    <li><a href="#">Miel Multifloral</a></li>
+                    <li><a href="#">Jalea Real</a></li>
+                    <li><a href="#">Propóleo</a></li>
+                    <li><a href="#">Polen</a></li>
+                    <li><a href="#">Cera de Abeja</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Legal</h4>
+                <ul>
+                    <li><a href="#">Política de Privacidad</a></li>
+                    <li><a href="#">Términos de Servicio</a></li>
+                    <li><a href="#">Envíos y Devoluciones</a></li>
+                    <li><a href="#">Preguntas Frecuentes</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="copyright">
+            <p>&copy; 2025 Ecodelpa. Todos los derechos reservados. | Hecho en Paraguay con ♥</p>
+        </div>
+    </footer>
+
+    <script>
+        // Efecto de scroll para header
+        window.addEventListener('scroll', () => {
+            const header = document.getElementById('header');
+            if (window.scrollY > 50) {
+                header.classList.add('header-scrolled');
+            } else {
+                header.classList.remove('header-scrolled');
+            }
+        });
+
+        // Menú móvil
+        const hamburger = document.querySelector('.hamburger');
+        const nav = document.querySelector('nav ul');
+
+        hamburger.addEventListener('click', () => {
+            nav.classList.toggle('active');
+        });
+
+        // Cerrar menú al hacer clic en un enlace
+        document.querySelectorAll('nav a').forEach(link => {
+            link.addEventListener('click', () => {
+                nav.classList.remove('active');
+            });
+        });
+
+        // Animaciones al hacer scroll
+        const animateOnScroll = () => {
+            const elements = document.querySelectorAll('.product-card, .step, .contact-content');
+            elements.forEach(element => {
+                const elementPosition = element.getBoundingClientRect().top;
+                const screenPosition = window.innerHeight / 1.2;
+
+                if (elementPosition < screenPosition) {
+                    element.style.opacity = '1';
+                    element.style.transform = 'translateY(0)';
+                }
+            });
+        };
+
+        // Inicializar animaciones
+        document.querySelectorAll('.product-card, .step, .contact-content').forEach(element => {
+            element.style.opacity = '0';
+            element.style.transform = 'translateY(20px)';
+            element.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+        });
+
+        window.addEventListener('scroll', animateOnScroll);
+        window.addEventListener('load', animateOnScroll);
+    </script>
+</body>
+</html>

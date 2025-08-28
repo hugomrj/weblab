@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ecodelpa - Diseño Moderno Expandido</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Inter:wght@400;500&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-honey: #ffb300;
+            --dark-charcoal: #212121;
+            --medium-grey: #616161;
+            --light-grey-bg: #f8f9fa; /* Ligeramente más claro */
+            --white: #ffffff;
+            --success-green: #4CAF50;
+            --border-color: #e9ecef;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.7;
+            color: var(--dark-charcoal);
+            background: var(--white);
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+        
+        /* --- Navigation --- */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(15px);
+            z-index: 1000;
+            transition: all 0.3s ease;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 1.5rem;
+        }
+
+        .brand {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--dark-charcoal);
+            text-decoration: none;
+        }
+        .brand span { color: var(--primary-honey); }
+
+        .nav-links { display: flex; list-style: none; gap: 2rem; }
+        .nav-links a { text-decoration: none; color: var(--dark-charcoal); font-weight: 500; transition: color 0.3s ease; }
+        .nav-links a:hover { color: var(--primary-honey); }
+        
+        /* --- Hero Section --- */
+        .hero {
+            padding-top: 120px;
+            padding-bottom: 60px;
+            min-height: 90vh;
+            background: var(--white);
+            display: flex;
+            align-items: center;
+        }
+
+        .hero-grid { display: grid; grid-template-columns: 1fr 1fr; align-items: center; gap: 3rem; }
+        .hero-content h1 { font-size: 3.5rem; line-height: 1.2; margin-bottom: 1rem; }
+        .hero-content .subtitle { font-size: 1.2rem; color: var(--medium-grey); margin-bottom: 2rem; }
+        .hero-buttons { display: flex; gap: 1rem; }
+
+        .btn { display: inline-block; padding: 0.8rem 2rem; text-decoration: none; border-radius: 50px; font-weight: 600; transition: all 0.3s ease; border: 2px solid transparent; }
+        .btn-primary { background: var(--primary-honey); color: var(--dark-charcoal); }
+        .btn-primary:hover { background: #ffc107; transform: translateY(-3px); box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        .btn-secondary { background: transparent; color: var(--dark-charcoal); border: 2px solid var(--border-color); }
+        .btn-secondary:hover { border-color: var(--primary-honey); color: var(--primary-honey); }
+        
+        .hero-image { text-align: center; }
+        .hero-image img { max-width: 100%; height: auto; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+
+        /* --- Generic Section Styling --- */
+        section { padding: 5rem 0; }
+        .section-header { text-align: center; margin-bottom: 4rem; }
+        .section-header .tagline { color: var(--primary-honey); font-weight: 600; margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 1px; }
+        .section-header h2 { font-size: 2.5rem; }
+
+        /* --- Process Section --- */
+        .process-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; text-align: center; }
+        .process-step .icon { font-size: 3rem; line-height: 1; margin-bottom: 1rem; color: var(--primary-honey); }
+        .process-step h3 { font-size: 1.3rem; margin-bottom: 0.5rem; }
+        .process-step p { color: var(--medium-grey); }
+
+        /* --- Products Section (Improved) --- */
+        .products { background: var(--light-grey-bg); }
+        .products-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
+        .product-card { background: var(--white); border-radius: 15px; text-align: center; border: 1px solid var(--border-color); transition: all 0.3s ease; display: flex; flex-direction: column; }
+        .product-card:hover { transform: translateY(-8px); box-shadow: 0 8px 25px rgba(0,0,0,0.08); }
+        .product-content { padding: 2rem; flex-grow: 1; }
+        .product-icon { font-size: 3rem; margin-bottom: 1rem; line-height: 1; }
+        .product-card h3 { font-size: 1.3rem; margin-bottom: 0.5rem; }
+        .product-card p { color: var(--medium-grey); font-size: 0.95rem; margin-bottom: 1.5rem; }
+        .product-footer { padding: 0 2rem 2rem; }
+        .product-price { font-size: 1.5rem; font-weight: 700; color: var(--dark-charcoal); margin-bottom: 1rem; }
+        .btn-product { display: block; width: 100%; padding: 0.7rem; background: transparent; color: var(--primary-honey); border: 2px solid var(--primary-honey); border-radius: 50px; text-decoration: none; font-weight: 600; transition: all 0.3s ease; }
+        .btn-product:hover { background: var(--primary-honey); color: var(--dark-charcoal); }
+
+        /* --- Testimonials Section --- */
+        .testimonials-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2rem; }
+        .testimonial-card { background: var(--light-grey-bg); padding: 2rem; border-radius: 15px; border: 1px solid var(--border-color); }
+        .testimonial-card blockquote { border: none; margin: 0 0 1rem; font-size: 1.1rem; }
+        .testimonial-author { font-weight: 600; color: var(--dark-charcoal); }
+        .testimonial-author span { color: var(--primary-honey); }
+
+        /* --- FAQ Section --- */
+        .faq-grid { max-width: 800px; margin: 0 auto; }
+        .faq-item { border-bottom: 1px solid var(--border-color); padding: 1.5rem 0; }
+        .faq-item:last-child { border-bottom: none; }
+        .faq-question { font-weight: 600; font-size: 1.2rem; cursor: pointer; }
+        .faq-answer { color: var(--medium-grey); margin-top: 1rem; }
+
+        /* --- Contact Section --- */
+        .contact { background: var(--light-grey-bg); }
+        .contact-form { background: var(--white); padding: 3rem; border-radius: 15px; max-width: 700px; margin: 0 auto; box-shadow: 0 5px 20px rgba(0,0,0,0.05); }
+        .form-group { margin-bottom: 1.5rem; }
+        .form-control { width: 100%; padding: 1rem; border: 1px solid #ddd; border-radius: 10px; background: #fafafa; font-family: 'Inter', sans-serif; }
+        .form-control:focus { outline: none; border-color: var(--primary-honey); box-shadow: 0 0 0 3px rgba(255, 179, 0, 0.3); }
+        textarea.form-control { resize: vertical; min-height: 120px; }
+        
+        /* --- Footer --- */
+        .footer { background: var(--dark-charcoal); color: #ccc; padding: 5rem 0 2rem; }
+        .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; text-align: left; margin-bottom: 4rem; }
+        .footer-col h4 { color: var(--white); margin-bottom: 1rem; }
+        .footer-col p, .footer-col li { font-size: 0.95rem; color: #a0a0a0; }
+        .footer-col ul { list-style: none; }
+        .footer-col li { margin-bottom: 0.5rem; }
+        .footer-col a { color: #a0a0a0; text-decoration: none; transition: color 0.3s; }
+        .footer-col a:hover { color: var(--primary-honey); }
+        .footer-socials a { font-size: 1.5rem; margin-right: 1rem; }
+        .footer-bottom { text-align: center; border-top: 1px solid #444; padding-top: 2rem; }
+        .footer-bottom p { font-size: 0.9rem; color: #888; }
+        
+        /* --- Mobile Responsive --- */
+        .mobile-menu { display: none; font-size: 1.8rem; background: none; border: none; cursor: pointer; }
+        @media (max-width: 768px) {
+            h1 { font-size: 2.5rem !important; }
+            h2 { font-size: 2rem !important; }
+            
+            .nav-links { display: none; flex-direction: column; position: absolute; top: 100%; left: 0; width: 100%; background: var(--white); padding: 1rem 0; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+            .nav-links.active { display: flex; }
+            .nav-links li { padding: 0.8rem 0; text-align: center; }
+            .mobile-menu { display: block; }
+
+            .hero-grid { grid-template-columns: 1fr; text-align: center; }
+            .hero-image { order: -1; margin-bottom: 2rem; }
+            .hero-buttons { justify-content: center; }
+
+            .process-grid, .footer-grid { grid-template-columns: 1fr; text-align: center;}
+            .footer-grid .footer-col { text-align: center; }
+        }
+        
+        /* --- Animation --- */
+        .fade-in { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease-out, transform 0.6s ease-out; }
+        .fade-in.visible { opacity: 1; transform: translateY(0); }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="container nav-container">
+            <a href="#inicio" class="brand">Ecodelpa<span>.</span></a>
+            <ul class="nav-links">
+                <li><a href="#proceso">Proceso</a></li>
+                <li><a href="#productos">Productos</a></li>
+                <li><a href="#testimonios">Clientes</a></li>
+                <li><a href="#faq">FAQ</a></li>
+                <li><a href="#contacto">Contacto</a></li>
+            </ul>
+            <button class="mobile-menu" onclick="toggleMenu()">☰</button>
+        </div>
+    </nav>
+
+    <section id="inicio" class="hero">
+        <div class="container">
+            <div class="hero-grid">
+                <div class="hero-content fade-in">
+                    <h1>Miel Pura. <br>Sabor Real.</h1>
+                    <p class="subtitle">Descubre la esencia de la naturaleza paraguaya en cada gota. Cosechada de forma sostenible y con amor.</p>
+                    <div class="hero-buttons">
+                        <a href="#productos" class="btn btn-primary">Ver Productos</a>
+                        <a href="#proceso" class="btn btn-secondary">Nuestro Proceso</a>
+                    </div>
+                </div>
+                <div class="hero-image fade-in">
+                    <img src="https://images.unsplash.com/photo-1558642452-9d2a7deb7f62?ixlib=rb-4.0.3&q=85&fm=jpg&crop=entropy&cs=srgb&w=600" alt="Frasco de miel pura y panal">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="proceso" class="process">
+        <div class="container">
+            <div class="section-header fade-in">
+                <p class="tagline">CALIDAD GARANTIZADA</p>
+                <h2>De la Colmena a tu Mesa</h2>
+            </div>
+            <div class="process-grid">
+                <div class="process-step fade-in">
+                    <div class="icon">🐝</div>
+                    <h3>1. Cuidado Experto</h3>
+                    <p>Nuestras abejas prosperan en reservas naturales, lejos de pesticidas, garantizando un producto puro y saludable.</p>
+                </div>
+                <div class="process-step fade-in">
+                    <div class="icon">🍯</div>
+                    <h3>2. Cosecha Artesanal</h3>
+                    <p>Extraemos la miel con métodos que respetan el ritmo de las abejas y preservan todas sus propiedades naturales.</p>
+                </div>
+                <div class="process-step fade-in">
+                    <div class="icon">🌿</div>
+                    <h3>3. Envasado Puro</h3>
+                    <p>La miel se envasa cruda, sin pasteurizar y con un filtrado mínimo para que disfrutes de su sabor y beneficios al máximo.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="productos" class="products">
+        <div class="container">
+            <div class="section-header fade-in">
+                <p class="tagline">NUESTROS TESOROS</p>
+                <h2>Elige tu Favorito</h2>
+            </div>
+            <div class="products-grid">
+                <div class="product-card fade-in">
+                    <div class="product-content">
+                        <div class="product-icon">🍯</div>
+                        <h3>Miel de Flores Silvestres</h3>
+                        <p>Un sabor complejo y robusto que captura la diversidad de la flora nativa.</p>
+                    </div>
+                    <div class="product-footer">
+                        <div class="product-price">Gs. 45.000</div>
+                        <a href="#" class="btn-product">Añadir al Carrito</a>
+                    </div>
+                </div>
+                <div class="product-card fade-in">
+                    <div class="product-content">
+                        <div class="product-icon">🌸</div>
+                        <h3>Miel de Azahar</h3>
+                        <p>Delicada, cítrica y floral. Una miel suave ideal para infusiones y postres.</p>
+                    </div>
+                    <div class="product-footer">
+                        <div class="product-price">Gs. 55.000</div>
+                        <a href="#" class="btn-product">Añadir al Carrito</a>
+                    </div>
+                </div>
+                <div class="product-card fade-in">
+                    <div class="product-content">
+                        <div class="product-icon">⭐</div>
+                        <h3>Polen de Abeja</h3>
+                        <p>Un superalimento cargado de energía. Perfecto para tus batidos y desayunos.</p>
+                    </div>
+                    <div class="product-footer">
+                        <div class="product-price">Gs. 60.000</div>
+                        <a href="#" class="btn-product">Añadir al Carrito</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section id="testimonios" class="testimonials">
+        <div class="container">
+            <div class="section-header fade-in">
+                <p class="tagline">LO QUE DICEN DE NOSOTROS</p>
+                <h2>Clientes Satisfechos</h2>
+            </div>
+            <div class="testimonials-grid">
+                <div class="testimonial-card fade-in">
+                    <blockquote>"Sin duda, la mejor miel que he probado en Paraguay. Se siente la pureza y el sabor del campo. ¡Totalmente recomendada!"</blockquote>
+                    <p class="testimonial-author">- María G.</p>
+                </div>
+                 <div class="testimonial-card fade-in">
+                    <blockquote>"Excelente producto y atención. El polen me da muchísima energía por las mañanas. Se convirtieron en mi proveedor de confianza."</blockquote>
+                    <p class="testimonial-author">- Carlos P.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section id="faq" class="faq">
+        <div class="container">
+            <div class="section-header fade-in">
+                <p class="tagline">RESOLVEMOS TUS DUDAS</p>
+                <h2>Preguntas Frecuentes</h2>
+            </div>
+            <div class="faq-grid">
+                <div class="faq-item fade-in">
+                    <h3 class="faq-question">¿La miel de Ecodelpa es 100% pura?</h3>
+                    <p class="faq-answer">Absolutamente. Nuestra miel es cruda, sin filtrar y no contiene aditivos ni azúcares añadidos. Es miel pura, tal como las abejas la producen.</p>
+                </div>
+                <div class="faq-item fade-in">
+                    <h3 class="faq-question">¿Realizan envíos a todo el país?</h3>
+                    <p class="faq-answer">Sí, realizamos envíos a las principales ciudades de Paraguay. Tu pedido llegará de forma segura a la puerta de tu casa para que disfrutes de nuestros productos sin complicaciones.</p>
+                </div>
+                 <div class="faq-item fade-in">
+                    <h3 class="faq-question">¿Por qué la miel a veces se cristaliza?</h3>
+                    <p class="faq-answer">La cristalización es un proceso natural que solo ocurre en la miel pura y es una señal de alta calidad. Si tu miel se cristaliza, puedes devolverla a su estado líquido colocándola en un baño de agua tibia.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contacto" class="contact">
+        <div class="container">
+             <div class="section-header fade-in">
+                <p class="tagline">ESTEMOS EN CONTACTO</p>
+                <h2>Envíanos un Mensaje</h2>
+            </div>
+            <div class="contact-form fade-in">
+                <form onsubmit="event.preventDefault(); alert('Mensaje enviado (simulación)');">
+                    <div class="form-group"><input type="text" class="form-control" placeholder="Tu Nombre" required></div>
+                    <div class="form-group"><input type="email" class="form-control" placeholder="Tu Correo Electrónico" required></div>
+                    <div class="form-group"><textarea class="form-control" placeholder="Escribe tu mensaje aquí..." required></textarea></div>
+                    <button type="submit" class="btn btn-primary" style="width: 100%;">Enviar Mensaje</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <a href="#inicio" class="brand" style="color: white; margin-bottom: 1rem; display: inline-block;">Ecodelpa<span>.</span></a>
+                    <p>Miel pura y productos de la colmena, cosechados con respeto por la naturaleza en el corazón de Paraguay.</p>
+                </div>
+                <div class="footer-col">
+                    <h4>Navegación</h4>
+                    <ul>
+                        <li><a href="#proceso">Nuestro Proceso</a></li>
+                        <li><a href="#productos">Productos</a></li>
+                        <li><a href="#testimonios">Clientes</a></li>
+                        <li><a href="#faq">Preguntas</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Contacto</h4>
+                    <ul>
+                        <li><a href="mailto:ventas@ecodelpa.com.py">ventas@ecodelpa.com.py</a></li>
+                        <li><a href="tel:+595981123456">+595 981 123 456</a></li>
+                        <li>Villa Hayes, Paraguay</li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Síguenos</h4>
+                    <div class="footer-socials">
+                        <a href="#">Instagram</a>
+                        <span>·</span>
+                        <a href="#">Facebook</a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                 <p>&copy; 2025 Ecodelpa. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+
+    <script>
+        // Mobile Menu Toggle
+        function toggleMenu() {
+            const navLinks = document.querySelector('.nav-links');
+            navLinks.classList.toggle('active');
+        }
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                const navLinks = document.querySelector('.nav-links');
+                if (navLinks.classList.contains('active')) {
+                    navLinks.classList.remove('active');
+                }
+            });
+        });
+
+        // Scroll Animations
+        const faders = document.querySelectorAll('.fade-in');
+        const appearOptions = {
+            threshold: 0.1, // Animar un poco antes
+            rootMargin: "0px 0px -50px 0px"
+        };
+        const appearOnScroll = new IntersectionObserver(function(entries, appearOnScroll) {
+            entries.forEach(entry => {
+                if (!entry.isIntersecting) return;
+                entry.target.classList.add('visible');
+                appearOnScroll.unobserve(entry.target);
+            });
+        }, appearOptions);
+        faders.forEach(fader => {
+            appearOnScroll.observe(fader);
+        });
+    </script>
+</body>
+</html>

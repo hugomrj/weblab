@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ecodelpa - Apicultura Ecológica del Paraguay</title>
+    <style>
+        /* Estilos generales */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #fef9e7;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        /* Encabezado */
+        header {
+            background-color: #fff;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo h1 {
+            color: #f1c40f;
+            font-size: 1.8rem;
+            margin-left: 10px;
+        }
+        
+        .logo-img {
+            width: 50px;
+            height: 50px;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+        
+        nav ul li {
+            margin-left: 20px;
+        }
+        
+        nav ul li a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        nav ul li a:hover {
+            color: #f1c40f;
+        }
+        
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect width="100" height="100" fill="%23f1c40f"/><path d="M30,30 Q50,10 70,30 T90,50 T70,70 T30,70 T10,50 T30,30" fill="%23fef9e7"/></svg>');
+            background-size: cover;
+            background-position: center;
+            height: 80vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+        }
+        
+        .hero-content h2 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+        
+        .hero-content p {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .btn {
+            display: inline-block;
+            background-color: #f1c40f;
+            color: #333;
+            padding: 12px 30px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+        
+        .btn:hover {
+            background-color: #e2b607;
+        }
+        
+        /* Secciones */
+        section {
+            padding: 60px 0;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .section-title h2 {
+            font-size: 2.5rem;
+            color: #f1c40f;
+            position: relative;
+            display: inline-block;
+            padding-bottom: 10px;
+        }
+        
+        .section-title h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background-color: #f1c40f;
+        }
+        
+        /* Sobre Nosotros */
+        .about-content {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 30px;
+        }
+        
+        .about-text {
+            flex: 1;
+            min-width: 300px;
+        }
+        
+        .about-image {
+            flex: 1;
+            min-width: 300px;
+            text-align: center;
+        }
+        
+        .about-image img {
+            max-width: 100%;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Productos */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 30px;
+        }
+        
+        .product-card {
+            background-color: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-10px);
+        }
+        
+        .product-image {
+            height: 200px;
+            background-color: #f1c40f;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .product-info {
+            padding: 20px;
+        }
+        
+        .product-info h3 {
+            margin-bottom: 10px;
+            color: #333;
+        }
+        
+        /* Proceso */
+        .process-steps {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        
+        .step {
+            flex: 1;
+            min-width: 250px;
+            text-align: center;
+            padding: 20px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .step-number {
+            width: 50px;
+            height: 50px;
+            background-color: #f1c40f;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        
+        /* Contacto */
+        .contact-content {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+        }
+        
+        .contact-info {
+            flex: 1;
+            min-width: 300px;
+        }
+        
+        .contact-form {
+            flex: 1;
+            min-width: 300px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+        
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        
+        .form-group textarea {
+            height: 150px;
+        }
+        
+        /* Footer */
+        footer {
+            background-color: #333;
+            color: white;
+            padding: 40px 0 20px;
+        }
+        
+        .footer-content {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .footer-section {
+            flex: 1;
+            min-width: 250px;
+        }
+        
+        .footer-section h3 {
+            margin-bottom: 15px;
+            color: #f1c40f;
+        }
+        
+        .social-links a {
+            color: white;
+            margin-right: 15px;
+            font-size: 1.2rem;
+            text-decoration: none;
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+            }
+            
+            nav ul {
+                margin-top: 15px;
+            }
+            
+            .hero-content h2 {
+                font-size: 2rem;
+            }
+            
+            .hero-content p {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Encabezado -->
+    <header>
+        <div class="container header-container">
+            <div class="logo">
+                <svg class="logo-img" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="50" cy="50" r="45" fill="#f1c40f" />
+                    <path d="M30,30 Q50,10 70,30 T90,50 T70,70 T30,70 T10,50 T30,30" fill="#fff" />
+                    <circle cx="50" cy="50" r="5" fill="#333" />
+                    <path d="M50,25 L50,35 M50,65 L50,75 M35,50 L45,50 M55,50 L65,50" stroke="#333" stroke-width="2" />
+                </svg>
+                <h1>Ecodelpa</h1>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="#inicio">Inicio</a></li>
+                    <li><a href="#nosotros">Nosotros</a></li>
+                    <li><a href="#productos">Productos</a></li>
+                    <li><a href="#proceso">Proceso</a></li>
+                    <li><a href="#contacto">Contacto</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="inicio" class="hero">
+        <div class="container hero-content">
+            <div>
+                <h2>Miel Ecológica del Paraguay</h2>
+                <p>Descubre el auténtico sabor de la miel natural, producida con amor y respeto por las abejas y el medio ambiente.</p>
+                <a href="#productos" class="btn">Nuestros Productos</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sobre Nosotros -->
+    <section id="nosotros">
+        <div class="container">
+            <div class="section-title">
+                <h2>Sobre Nosotros</h2>
+            </div>
+            <div class="about-content">
+                <div class="about-text">
+                    <p>Ecodelpa es una empresa paraguaya dedicada a la apicultura ecológica desde 2005. Nuestra misión es producir miel de la más alta calidad mientras protegemos y preservamos el medio ambiente.</p>
+                    <p>Trabajamos con métodos sostenibles que respetan el ciclo natural de las abejas, sin utilizar productos químicos ni alterar el ecosistema. Nuestras colmenas están ubicadas en zonas libres de contaminación, lo que garantiza una miel pura y natural.</p>
+                    <p>Creemos en un modelo de producción que beneficie tanto a las personas como al planeta, contribuyendo a la biodiversidad y al desarrollo de comunidades locales.</p>
+                </div>
+                <div class="about-image">
+                    <svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="50" y="100" width="300" height="150" rx="10" fill="#f1c40f" stroke="#333" stroke-width="2" />
+                        <rect x="70" y="70" width="260" height="30" rx="5" fill="#8B4513" stroke="#333" stroke-width="2" />
+                        <circle cx="100" cy="140" r="5" fill="#333" />
+                        <circle cx="150" cy="140" r="5" fill="#333" />
+                        <circle cx="200" cy="140" r="5" fill="#333" />
+                        <circle cx="250" cy="140" r="5" fill="#333" />
+                        <circle cx="300" cy="140" r="5" fill="#333" />
+                        <circle cx="100" cy="180" r="5" fill="#333" />
+                        <circle cx="150" cy="180" r="5" fill="#333" />
+                        <circle cx="200" cy="180" r="5" fill="#333" />
+                        <circle cx="250" cy="180" r="5" fill="#333" />
+                        <circle cx="300" cy="180" r="5" fill="#333" />
+                        <circle cx="100" cy="220" r="5" fill="#333" />
+                        <circle cx="150" cy="220" r="5" fill="#333" />
+                        <circle cx="200" cy="220" r="5" fill="#333" />
+                        <circle cx="250" cy="220" r="5" fill="#333" />
+                        <circle cx="300" cy="220" r="5" fill="#333" />
+                        <path d="M180,50 C190,30 210,30 220,50" stroke="#333" stroke-width="2" fill="none" />
+                        <path d="M180,50 L170,70 M220,50 L230,70" stroke="#333" stroke-width="2" />
+                    </svg>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Productos -->
+    <section id="productos" style="background-color: #fff8e1;">
+        <div class="container">
+            <div class="section-title">
+                <h2>Nuestros Productos</h2>
+            </div>
+            <div class="products-grid">
+                <div class="product-card">
+                    <div class="product-image">
+                        <svg viewBox="0 0 100 100" width="80" height="80">
+                            <path d="M50,20 C70,20 80,40 80,60 C80,80 60,90 50,90 C40,90 20,80 20,60 C20,40 30,20 50,20 Z" fill="#f1c40f" stroke="#333" stroke-width="2" />
+                            <path d="M50,30 L50,70" stroke="#333" stroke-width="2" />
+                            <path d="M40,40 L60,60" stroke="#333" stroke-width="2" />
+                            <path d="M60,40 L40,60" stroke="#333" stroke-width="2" />
+                        </svg>
+                    </div>
+                    <div class="product-info">
+                        <h3>Miel Pura</h3>
+                        <p>Nuestra miel 100% natural, sin procesar ni pasteurizar, conservando todas sus propiedades y enzimas naturales.</p>
+                    </div>
+                </div>
+                
+                <div class="product-card">
+                    <div class="product-image">
+                        <svg viewBox="0 0 100 100" width="80" height="80">
+                            <circle cx="50" cy="50" r="40" fill="#f1c40f" stroke="#333" stroke-width="2" />
+                            <circle cx="50" cy="50" r="25" fill="#ffeb3b" stroke="#333" stroke-width="1" />
+                            <path d="M30,30 Q50,15 70,30 T85,50 T70,70 T30,70 T15,50 T30,30" fill="none" stroke="#333" stroke-width="1" />
+                        </svg>
+                    </div>
+                    <div class="product-info">
+                        <h3>Polen de Abejas</h3>
+                        <p>Polen natural recolectado por nuestras abejas, rico en proteínas, vitaminas y minerales esenciales.</p>
+                    </div>
+                </div>
+                
+                <div class="product-card">
+                    <div class="product-image">
+                        <svg viewBox="0 0 100 100" width="80" height="80">
+                            <rect x="30" y="40" width="40" height="30" rx="5" fill="#f1c40f" stroke="#333" stroke-width="2" />
+                            <path d="M40,20 L40,40 M60,20 L60,40" stroke="#8B4513" stroke-width="3" />
+                            <path d="M35,45 L45,55 M55,45 L65,55" stroke="#333" stroke-width="2" />
+                            <path d="M35,55 L45,65 M55,55 L65,65" stroke="#333" stroke-width="2" />
+                        </svg>
+                    </div>
+                    <div class="product-info">
+                        <h3>Propóleo</h3>
+                        <p>Propóleo natural con propiedades antibacterianas y antivirales, ideal para fortalecer el sistema inmunológico.</p>
+                    </div>
+                </div>
+                
+                <div class="product-card">
+                    <div class="product-image">
+                        <svg viewBox="0 0 100 100" width="80" height="80">
+                            <path d="M30,30 C50,10 70,10 90,30 C100,40 100,60 90,70 C70,90 50,90 30,70 C10,50 20,30 30,30 Z" fill="#f1c40f" stroke="#333" stroke-width="2" />
+                            <path d="M40,40 L60,60 M60,40 L40,60" stroke="#333" stroke-width="2" />
+                            <circle cx="50" cy="50" r="5" fill="#333" />
+                        </svg>
+                    </div>
+                    <div class="product-info">
+                        <h3>Jalea Real</h3>
+                        <p>Pura jalea real, un superalimento natural con numerosos beneficios para la salud y el bienestar.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Proceso de Producción -->
+    <section id="proceso">
+        <div class="container">
+            <div class="section-title">
+                <h2>Nuestro Proceso</h2>
+            </div>
+            <div class="process-steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h3>Cría de Abejas</h3>
+                    <p>Cuidamos nuestras abejas en colmenas naturales, respetando su ciclo de vida y bienestar.</p>
+                </div>
+                
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h3>Recolección Sostenible</h3>
+                    <p>Extraemos la miel de manera responsable, dejando suficiente para la alimentación de las abejas.</p>
+                </div>
+                
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h3>Procesamiento Natural</h3>
+                    <p>Filtramos la miel en frío para preservar todas sus propiedades naturales sin pasteurizar.</p>
+                </div>
+                
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <h3>Envasado Ecológico</h3>
+                    <p>Utilizamos envases de vidrio reciclable para minimizar nuestro impacto ambiental.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contacto -->
+    <section id="contacto" style="background-color: #fff8e1;">
+        <div class="container">
+            <div class="section-title">
+                <h2>Contacto</h2>
+            </div>
+            <div class="contact-content">
+                <div class="contact-info">
+                    <h3>Información de Contacto</h3>
+                    <p><strong>Dirección:</strong> Ruta 2, Km 30, Paraguarí, Paraguay</p>
+                    <p><strong>Teléfono:</strong> +595 981 234 567</p>
+                    <p><strong>Email:</strong> info@ecodelpa.com.py</p>
+                    <p><strong>Horario de atención:</strong> Lunes a Viernes de 8:00 a 17:00</p>
+                    
+                    <h3 style="margin-top: 30px;">Síguenos en redes sociales</h3>
+                    <div class="social-links">
+                        <a href="#">Facebook</a>
+                        <a href="#">Instagram</a>
+                        <a href="#">YouTube</a>
+                    </div>
+                </div>
+                
+                <div class="contact-form">
+                    <h3>Envíanos un mensaje</h3>
+                    <form>
+                        <div class="form-group">
+                            <label for="name">Nombre</label>
+                            <input type="text" id="name" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" id="email" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="message">Mensaje</label>
+                            <textarea id="message" required></textarea>
+                        </div>
+                        
+                        <button type="submit" class="btn">Enviar Mensaje</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Ecodelpa</h3>
+                    <p>Producción de miel ecológica y productos apícolas naturales del Paraguay.</p>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Enlaces Rápidos</h3>
+                    <ul>
+                        <li><a href="#inicio">Inicio</a></li>
+                        <li><a href="#nosotros">Nosotros</a></li>
+                        <li><a href="#productos">Productos</a></li>
+                        <li><a href="#proceso">Proceso</a></li>
+                        <li><a href="#contacto">Contacto</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Productos</h3>
+                    <ul>
+                        <li><a href="#">Miel Pura</a></li>
+                        <li><a href="#">Polen de Abejas</a></li>
+                        <li><a href="#">Propóleo</a></li>
+                        <li><a href="#">Jalea Real</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>&copy; 2023 Ecodelpa - Apicultura Ecológica del Paraguay. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
