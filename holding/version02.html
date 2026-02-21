@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nexum · grupo empresarial</title>
+  <!-- Font Awesome (iconos) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    /* ===== RESET Y VARIABLES (tonos verdes, azules, arena - sin rojo/negro) ===== */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+      background-color: #f8fbfd;
+      color: #1e3f4e; /* azul petróleo suave */
+      line-height: 1.5;
+    }
+
+    /* Tipografía Inter suave */
+    @import url('https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&display=swap');
+
+    /* HEADER MINIMALISTA */
+    header {
+      background: #ffffff;
+      padding: 1rem 6%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      box-shadow: 0 6px 18px rgba(36, 99, 110, 0.05);
+      border-bottom: 1px solid #cde3dc;
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(2px);
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 1.8rem;
+      font-weight: 450;
+      color: #19665c; /* verde azulado */
+    }
+    .logo i {
+      background: #d3f0e8;
+      padding: 12px;
+      border-radius: 50%;
+      color: #0f5e54;
+      font-size: 1.4rem;
+      width: 3rem;
+      text-align: center;
+    }
+
+    nav ul {
+      display: flex;
+      gap: 2.2rem;
+      list-style: none;
+      flex-wrap: wrap;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: #256f6b;
+      font-weight: 500;
+      padding: 0.4rem 0;
+      border-bottom: 2px solid transparent;
+      transition: 0.2s;
+      font-size: 1.05rem;
+    }
+
+    nav a:hover {
+      border-bottom-color: #389e8a;
+      color: #0c5149;
+    }
+
+    /* HERO con imagen de fondo muy sutil */
+    .hero {
+      background: linear-gradient(120deg, #eafff7 0%, #e0f2f5 100%);
+      padding: 4.5rem 6%;
+      border-radius: 0 0 3.5rem 3.5rem;
+      margin-bottom: 2rem;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .hero-texto {
+      max-width: 600px;
+    }
+    .hero-texto h1 {
+      font-size: 3rem;
+      font-weight: 380;
+      color: #165a5a;
+      line-height: 1.2;
+      margin-bottom: 1rem;
+    }
+    .hero-texto h1 span {
+      font-weight: 600;
+      background: #c6ece2;
+      padding: 0.1rem 0.5rem;
+      display: inline-block;
+    }
+    .hero-texto p {
+      font-size: 1.25rem;
+      color: #2d6b6b;
+      margin-bottom: 2rem;
+    }
+    .hero-imagen {
+      background: #ffffffb3;
+      border-radius: 3rem 3rem 3rem 0.5rem;
+      padding: 2rem 2rem 1rem 2rem;
+      box-shadow: 0 25px 30px -20px rgba(35, 110, 90, 0.3);
+      border: 1px solid #bde2d8;
+    }
+    .hero-imagen i {
+      font-size: 6rem;
+      color: #308570;
+      margin: 0 1rem;
+    }
+
+    /* TARJETAS DE SERVICIOS (HOVER ELEGANTE) */
+    .servicios-destacados {
+      padding: 2rem 6% 4rem;
+    }
+    .servicios-destacados h2 {
+      font-size: 2.2rem;
+      font-weight: 380;
+      color: #195e5e;
+      margin-bottom: 2rem;
+      border-left: 8px solid #56b5a3;
+      padding-left: 1.5rem;
+    }
+    .cards-grid-v2 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+    }
+    .card-v2 {
+      background: white;
+      border-radius: 2rem 2rem 2rem 0.5rem;
+      padding: 2.2rem 1.8rem;
+      transition: all 0.25s ease;
+      border: 1px solid #d2ebe2;
+      box-shadow: 0 8px 20px rgba(0, 70, 60, 0.03);
+    }
+    .card-v2:hover {
+      transform: translateY(-8px);
+      border-color: #7ecbb8;
+      box-shadow: 0 20px 25px -10px #6ab09d66;
+    }
+    .card-v2 i {
+      font-size: 2.8rem;
+      background: #e5f7f1;
+      padding: 0.7rem;
+      border-radius: 1.5rem;
+      color: #1f7f6e;
+      margin-bottom: 1.5rem;
+    }
+    .card-v2 h3 {
+      font-size: 2rem;
+      font-weight: 440;
+      color: #175e53;
+      margin-bottom: 0.8rem;
+    }
+    .card-v2 p {
+      color: #376f6b;
+      margin-bottom: 2rem;
+    }
+    .btn-mas {
+      background: transparent;
+      border: 1.5px solid #46ab95;
+      color: #1e6f64;
+      padding: 0.7rem 1.7rem;
+      border-radius: 40px;
+      text-decoration: none;
+      font-weight: 550;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      transition: 0.2s;
+    }
+    .btn-mas:hover {
+      background: #e2f5ef;
+      border-color: #278573;
+      color: #07493f;
+    }
+
+    /* SECCIONES DE CADA NEGOCIO (ahora con formato de panel elegant) */
+    .negocio-panel {
+      margin: 2.5rem 6%;
+      background: #fffffffa;
+      border-radius: 3rem 1rem 3rem 1rem;
+      box-shadow: 0 10px 25px #c2ddd3;
+      padding: 3rem 4%;
+      border: 1px solid #cbeee2;
+      transition: background 0.2s;
+      scroll-margin-top: 100px;
+    }
+    .negocio-panel:nth-child(even) {
+      background: #f6fefb;
+    }
+
+    .negocio-header {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+    .negocio-header i {
+      font-size: 3.3rem;
+      background: #daf2ea;
+      padding: 1rem;
+      border-radius: 3rem 0.8rem 3rem 0.8rem;
+      color: #1a7b6e;
+    }
+    .negocio-header h2 {
+      font-size: 2.8rem;
+      font-weight: 380;
+      color: #145a50;
+    }
+
+    .negocio-grid {
+      display: flex;
+      gap: 3rem;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .negocio-grid img {
+      width: 100%;
+      max-width: 360px;
+      border-radius: 2rem 0.5rem 2rem 0.5rem;
+      box-shadow: 0 25px 30px -15px #207a6b80;
+      border: 2px solid white;
+      outline: 1px solid #afe1d2;
+      object-fit: cover;
+      aspect-ratio: 4/3;
+    }
+    .negocio-desc {
+      flex: 1;
+      min-width: 260px;
+    }
+    .negocio-desc p {
+      font-size: 1.2rem;
+      color: #28695f;
+      margin-bottom: 1.5rem;
+    }
+    .feature-list {
+      list-style: none;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.8rem 1.5rem;
+      margin: 2rem 0;
+    }
+    .feature-list li {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: #215f59;
+    }
+    .feature-list i {
+      color: #299a82;
+      font-size: 1.3rem;
+    }
+
+    .back-home {
+      margin-top: 1.8rem;
+      display: inline-block;
+      background: transparent;
+      border: 2px solid #8fcbc0;
+      color: #1a6d61;
+      padding: 0.5rem 2rem;
+      border-radius: 3rem;
+      text-decoration: none;
+      font-weight: 550;
+      transition: 0.2s;
+    }
+    .back-home i {
+      margin-right: 8px;
+    }
+    .back-home:hover {
+      background: #c2efe3;
+      border-color: #358e7a;
+      color: #074a40;
+    }
+
+    /* footer */
+    footer {
+      background: #d1ece2;
+      color: #205f55;
+      padding: 2.5rem 6%;
+      text-align: center;
+      margin-top: 4rem;
+      border-top: 2px solid #9ed9cb;
+    }
+    footer i {
+      color: #257a68;
+      margin: 0 5px;
+    }
+
+    /* Responsive */
+    @media (max-width: 850px) {
+      .cards-grid-v2 {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .hero {
+        flex-direction: column;
+        text-align: center;
+        gap: 2rem;
+      }
+      .hero-texto h1 {
+        font-size: 2.5rem;
+      }
+      .negocio-grid {
+        flex-direction: column;
+      }
+      .negocio-header h2 {
+        font-size: 2.3rem;
+      }
+      .feature-list {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 600px) {
+      header {
+        flex-direction: column;
+        gap: 0.8rem;
+      }
+      nav ul {
+        gap: 1rem;
+        justify-content: center;
+      }
+      .cards-grid-v2 {
+        grid-template-columns: 1fr;
+      }
+      .hero-imagen i {
+        font-size: 4rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <i class="fas fa-seedling"></i> Nexum
+  </div>
+  <nav>
+    <ul>
+      <li><a href="#home"><i class="fas fa-chevron-circle-right"></i> Home</a></li>
+      <li><a href="#inmo"><i class="fas fa-building"></i> Inmobiliaria</a></li>
+      <li><a href="#inver"><i class="fas fa-chart-line"></i> Inversiones</a></li>
+      <li><a href="#resid"><i class="fas fa-passport"></i> Residencia</a></li>
+    </ul>
+  </nav>
+</header>
+
+<!-- HOME SECTION -->
+<section id="home" class="hero">
+  <div class="hero-texto">
+    <h1>Confianza que <span>crece</span> en tres direcciones</h1>
+    <p>Inmobiliaria · Inversiones · Asesoría migratoria<br>Un mismo grupo, tres especialistas para acompañarte.</p>
+    <a href="#servicios" class="btn-mas" style="background:#c1eadf; border:none;">Conoce nuestras áreas <i class="fas fa-arrow-down"></i></a>
+  </div>
+  <div class="hero-imagen">
+    <i class="fas fa-hand-holding-heart"></i>
+    <i class="fas fa-handshake"></i>
+    <i class="fas fa-leaf"></i>
+  </div>
+</section>
+
+<!-- TARJETAS DE SERVICIOS (HOME) -->
+<section id="servicios" class="servicios-destacados">
+  <h2>Nuestros socios, tus aliados</h2>
+  <div class="cards-grid-v2">
+    <!-- tarjeta inmobiliaria -->
+    <div class="card-v2">
+      <i class="fas fa-city"></i>
+      <h3>Inmobiliaria</h3>
+      <p>Venta, alquiler y administración de propiedades residenciales y comerciales.</p>
+      <a href="#inmo" class="btn-mas">ver más <i class="fas fa-arrow-right"></i></a>
+    </div>
+    <!-- tarjeta inversiones -->
+    <div class="card-v2">
+      <i class="fas fa-chart-simple"></i>
+      <h3>Inversiones</h3>
+      <p>Gestión patrimonial, asesoría financiera y oportunidades de crecimiento.</p>
+      <a href="#inver" class="btn-mas">ver más <i class="fas fa-arrow-right"></i></a>
+    </div>
+    <!-- tarjeta documentación extranjeros -->
+    <div class="card-v2">
+      <i class="fas fa-globe"></i>
+      <h3>Migración & Nacionalidad</h3>
+      <p>Residencia, ciudadanía y trámites para extranjeros sin complicaciones.</p>
+      <a href="#resid" class="btn-mas">ver más <i class="fas fa-arrow-right"></i></a>
+    </div>
+  </div>
+</section>
+
+<!-- NEGOCIO 1: INMOBILIARIA -->
+<article id="inmo" class="negocio-panel">
+  <div class="negocio-header">
+    <i class="fas fa-house-chimney"></i>
+    <h2>Inmobiliaria Nexum</h2>
+  </div>
+  <div class="negocio-grid">
+    <img src="https://images.unsplash.com/photo-1580587771525-78b9dba3b914?w=600&h=400&fit=crop&auto=format" alt="Casa moderna" loading="lazy">
+    <div class="negocio-desc">
+      <p>Te ayudamos a encontrar el inmueble ideal, ya sea para vivir o invertir. Asesoramiento integral y gestión inmobiliaria con ética y cercanía.</p>
+      <ul class="feature-list">
+        <li><i class="fas fa-circle-check"></i> Compra/venta</li>
+        <li><i class="fas fa-circle-check"></i> Alquileres temporarios</li>
+        <li><i class="fas fa-circle-check"></i> Tasaciones profesionales</li>
+        <li><i class="fas fa-circle-check"></i> Administración de propiedades</li>
+      </ul>
+      <a href="#home" class="back-home"><i class="fas fa-chevron-circle-left"></i> volver al inicio</a>
+    </div>
+  </div>
+</article>
+
+<!-- NEGOCIO 2: INVERSIONES -->
+<article id="inver" class="negocio-panel">
+  <div class="negocio-header">
+    <i class="fas fa-chart-pie"></i>
+    <h2>Nexum Capital</h2>
+  </div>
+  <div class="negocio-grid">
+    <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=600&h=400&fit=crop&auto=format" alt="Análisis financiero" loading="lazy">
+    <div class="negocio-desc">
+      <p>Estrategias de inversión a medida, diversificación y acompañamiento en cada etapa. Construimos patrimonio con responsabilidad.</p>
+      <ul class="feature-list">
+        <li><i class="fas fa-circle-check"></i> Planificación patrimonial</li>
+        <li><i class="fas fa-circle-check"></i> Carteras diversificadas</li>
+        <li><i class="fas fa-circle-check"></i> Inversiones inmobiliarias</li>
+        <li><i class="fas fa-circle-check"></i> Asesoría continua</li>
+      </ul>
+      <a href="#home" class="back-home"><i class="fas fa-chevron-circle-left"></i> volver al inicio</a>
+    </div>
+  </div>
+</article>
+
+<!-- NEGOCIO 3: DOCUMENTACIÓN EXTRANJEROS -->
+<article id="resid" class="negocio-panel">
+  <div class="negocio-header">
+    <i class="fas fa-passport"></i>
+    <h2>Nexum Migra</h2>
+  </div>
+  <div class="negocio-grid">
+    <img src="https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=600&h=400&fit=crop&auto=format" alt="Trámites de pasaporte y documentos" loading="lazy">
+    <div class="negocio-desc">
+      <p>Asesoría migratoria integral para extranjeros: residencias, nacionalización, renovaciones. Te acompañamos paso a paso.</p>
+      <ul class="feature-list">
+        <li><i class="fas fa-circle-check"></i> Residencia temporal/perm.</li>
+        <li><i class="fas fa-circle-check"></i> Nacionalidad / ciudadanía</li>
+        <li><i class="fas fa-circle-check"></i> Visas de trabajo/estudio</li>
+        <li><i class="fas fa-circle-check"></i> Legalización de documentos</li>
+      </ul>
+      <a href="#home" class="back-home"><i class="fas fa-chevron-circle-left"></i> volver al inicio</a>
+    </div>
+  </div>
+</article>
+
+<!-- FOOTER -->
+<footer>
+  <i class="fas fa-compass"></i> Nexum · holding de confianza <i class="fas fa-heart" style="color:#5fb09c;"></i><br>
+  <span style="opacity:0.9;">inmobiliaria · inversiones · migración</span>
+  <div style="margin-top:1.5rem; font-size:0.9rem;">© 2025 demo visual – solo muestra, sin funcionalidad</div>
+</footer>
+
+<!-- sin scripts, demo estática -->
+</body>
+</html>

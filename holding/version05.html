@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alliance Holding | Consultoría Global</title>
+    <style>
+        /* Estilo base con tus reglas de Padding 0 */
+        body {
+            margin: 0;
+            padding-top: 0px !important;
+            padding-right: 0px !important;
+            padding-left: 0px !important;
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            color: #2c3e50;
+            background-color: #ffffff;
+            scroll-behavior: smooth;
+        }
+
+        /* Navegación Minimalista */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 25px 50px;
+            background: rgba(255,255,255,0.95);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .logo {
+            font-size: 1.4rem;
+            font-weight: 300;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: #1a252f;
+        }
+
+        .logo b { font-weight: 800; color: #b59410; } /* Dorado */
+
+        .nav-menu a {
+            margin-left: 30px;
+            text-decoration: none;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 2px;
+            color: #666;
+            transition: 0.3s;
+        }
+
+        .nav-menu a:hover { color: #b59410; }
+
+        /* Hero Moderno */
+        .hero {
+            height: 80vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            background: linear-gradient(rgba(255,255,255,0.8), rgba(255,255,255,0.8)), 
+                        url('https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&q=80&w=2070');
+            background-size: cover;
+            background-position: center;
+        }
+
+        .hero-content h1 {
+            font-size: 3.5rem;
+            font-weight: 200;
+            margin: 0;
+            color: #1a252f;
+        }
+
+        .hero-content p {
+            font-size: 1.1rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: #b59410;
+            margin-top: 10px;
+        }
+
+        /* Secciones de Negocio (Alternadas) */
+        .business-section {
+            display: flex;
+            flex-wrap: wrap;
+            min-height: 60vh;
+            align-items: center;
+        }
+
+        .business-image {
+            flex: 1;
+            min-width: 50%;
+            height: 60vh;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .business-text {
+            flex: 1;
+            min-width: 400px;
+            padding: 80px;
+            box-sizing: border-box;
+        }
+
+        .business-text h2 {
+            font-size: 2.2rem;
+            font-weight: 300;
+            margin-bottom: 20px;
+        }
+
+        .business-text p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #555;
+            margin-bottom: 30px;
+        }
+
+        /* Botón Estilizado */
+        .btn-view {
+            padding: 15px 40px;
+            border: 1px solid #b59410;
+            color: #b59410;
+            text-decoration: none;
+            display: inline-block;
+            letter-spacing: 2px;
+            font-size: 0.8rem;
+            transition: 0.4s;
+        }
+
+        .btn-view:hover {
+            background: #b59410;
+            color: white;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .business-section { flex-direction: column; }
+            .business-text { padding: 40px 20px; min-width: 100%; }
+            .business-image { min-width: 100%; height: 40vh; }
+            .hero-content h1 { font-size: 2rem; }
+            nav { padding: 20px; flex-direction: column; }
+            .nav-menu { margin-top: 20px; }
+            .nav-menu a { margin: 0 10px; }
+        }
+
+        /* Footer */
+        footer {
+            padding: 60px;
+            background: #1a252f;
+            color: #fff;
+            text-align: center;
+            letter-spacing: 2px;
+            font-size: 0.7rem;
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="logo">ALLIANCE <b>HOLDING</b></div>
+        <div class="nav-menu">
+            <a href="#realestate">Inmobiliaria</a>
+            <a href="#investments">Inversiones</a>
+            <a href="#legal">Extranjería</a>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Excelencia en cada división.</h1>
+            <p>Tres pilares, un solo estándar de confianza.</p>
+        </div>
+    </section>
+
+    <section id="realestate" class="business-section">
+        <div class="business-image" style="background-image: url('https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&q=80&w=1073');"></div>
+        <div class="business-text">
+            <h2>Gestión Inmobiliaria de Alto Nivel</h2>
+            <p>Especialistas en activos residenciales y comerciales de lujo. Nuestra red global permite conectar inversores con las propiedades más exclusivas del mercado.</p>
+            <a href="version01.html" target="_blank" class="btn-view">EXPLORAR PORTAFOLIO</a>
+        </div>
+    </section>
+
+    <section id="investments" class="business-section" style="flex-direction: row-reverse;">
+        <div class="business-image" style="background-image: url('https://images.unsplash.com/photo-1551288049-bbb652167c8a?auto=format&fit=crop&q=80&w=1170');"></div>
+        <div class="business-text">
+            <h2>Estrategias de Inversión Capital</h2>
+            <p>Maximizamos su patrimonio mediante análisis de riesgo avanzado y diversificación estratégica en mercados emergentes y consolidados.</p>
+            <a href="version01.html" target="_blank" class="btn-view">PLANIFICAR INVERSIÓN</a>
+        </div>
+    </section>
+
+    <section id="legal" class="business-section">
+        <div class="business-image" style="background-image: url('https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&q=80&w=1170');"></div>
+        <div class="business-text">
+            <h2>Movilidad Global y Residencia</h2>
+            <p>Acompañamos su proceso de nacionalización y residencia con un equipo legal experto. Facilitamos su transición hacia una nueva vida sin complicaciones burocráticas.</p>
+            <a href="version01.html" target="_blank" class="btn-view">SOLICITAR CONSULTA</a>
+        </div>
+    </section>
+
+    <footer>
+        <div class="logo">ALLIANCE <b>HOLDING</b></div>
+        <p style="margin-top:20px; opacity:0.5;">&copy; 2026 GESTIÓN INTEGRAL DE ACTIVOS. TODOS LOS DERECHOS RESERVADOS.</p>
+    </footer>
+
+</body>
+</html>

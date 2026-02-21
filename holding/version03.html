@@ -1,0 +1,1094 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Grupo Horizonte — Soluciones Integrales</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #1a2b4a;
+    --navy-light: #243455;
+    --gold: #c9a96e;
+    --gold-light: #e8c99a;
+    --cream: #f5f1eb;
+    --cream-dark: #ede8e0;
+    --sage: #6b8f71;
+    --sky: #4a7fa5;
+    --warm-gray: #8a8278;
+    --white: #fefdfb;
+    --text: #2c2820;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--white);
+    color: var(--text);
+    overflow-x: hidden;
+  }
+
+  /* ─── NAV ─── */
+  nav {
+    position: fixed; top: 0; width: 100%; z-index: 100;
+    background: rgba(26, 43, 74, 0.96);
+    backdrop-filter: blur(12px);
+    padding: 0 2rem;
+    display: flex; align-items: center; justify-content: space-between;
+    height: 68px;
+    border-bottom: 1px solid rgba(201, 169, 110, 0.25);
+  }
+
+  .nav-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.5rem; font-weight: 600; letter-spacing: 0.05em;
+    color: var(--white); text-decoration: none;
+    display: flex; align-items: center; gap: 0.6rem;
+  }
+
+  .nav-logo span { color: var(--gold); }
+
+  .nav-links {
+    display: flex; gap: 2rem; list-style: none;
+  }
+
+  .nav-links a {
+    color: rgba(255,255,255,0.8); text-decoration: none;
+    font-size: 0.88rem; letter-spacing: 0.08em; text-transform: uppercase;
+    transition: color 0.3s;
+  }
+
+  .nav-links a:hover { color: var(--gold); }
+
+  .hamburger {
+    display: none; flex-direction: column; gap: 5px; cursor: pointer;
+    background: none; border: none; padding: 4px;
+  }
+
+  .hamburger span {
+    width: 24px; height: 2px; background: var(--white); transition: 0.3s;
+  }
+
+  .mobile-menu {
+    display: none; position: fixed; top: 68px; left: 0; width: 100%;
+    background: var(--navy); z-index: 99;
+    flex-direction: column; padding: 1.5rem 2rem;
+    border-bottom: 1px solid rgba(201,169,110,0.2);
+  }
+
+  .mobile-menu.open { display: flex; }
+
+  .mobile-menu a {
+    color: rgba(255,255,255,0.85); text-decoration: none;
+    padding: 0.75rem 0; font-size: 0.95rem; letter-spacing: 0.06em;
+    text-transform: uppercase; border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+
+  /* ─── HERO ─── */
+  #home {
+    min-height: 100vh;
+    background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 50%, #1e3a5f 100%);
+    display: flex; align-items: center; justify-content: center;
+    text-align: center; position: relative; overflow: hidden;
+    padding: 8rem 2rem 4rem;
+  }
+
+  #home::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23c9a96e' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  }
+
+  .hero-content { position: relative; max-width: 800px; }
+
+  .hero-eyebrow {
+    display: inline-block;
+    font-size: 0.78rem; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 1.2rem;
+    border: 1px solid rgba(201,169,110,0.4);
+    padding: 0.4rem 1.2rem; border-radius: 2rem;
+  }
+
+  .hero-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(3rem, 7vw, 5.5rem);
+    font-weight: 300; line-height: 1.1; color: var(--white);
+    margin-bottom: 1.5rem;
+  }
+
+  .hero-title em { color: var(--gold); font-style: italic; }
+
+  .hero-sub {
+    font-size: 1.05rem; color: rgba(255,255,255,0.65);
+    line-height: 1.7; max-width: 540px; margin: 0 auto 2.5rem;
+    font-weight: 300;
+  }
+
+  .hero-cta {
+    display: inline-block;
+    background: var(--gold); color: var(--navy);
+    padding: 0.9rem 2.5rem; border-radius: 4px;
+    text-decoration: none; font-weight: 500; letter-spacing: 0.06em;
+    font-size: 0.9rem; text-transform: uppercase;
+    transition: background 0.3s, transform 0.2s;
+  }
+
+  .hero-cta:hover { background: var(--gold-light); transform: translateY(-2px); }
+
+  .hero-scroll {
+    position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%);
+    display: flex; flex-direction: column; align-items: center; gap: 0.4rem;
+    color: rgba(255,255,255,0.4); font-size: 0.75rem; letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .scroll-line {
+    width: 1px; height: 40px; background: var(--gold);
+    animation: scrollLine 2s ease-in-out infinite;
+  }
+
+  @keyframes scrollLine {
+    0%, 100% { opacity: 0.3; transform: scaleY(0.5); }
+    50% { opacity: 1; transform: scaleY(1); }
+  }
+
+  /* ─── SECTION TITLE ─── */
+  .section-header {
+    text-align: center; margin-bottom: 3.5rem;
+  }
+
+  .section-label {
+    font-size: 0.75rem; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 0.8rem; display: block;
+  }
+
+  .section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 300; color: var(--navy); line-height: 1.15;
+  }
+
+  .section-line {
+    width: 60px; height: 2px; background: var(--gold);
+    margin: 1.2rem auto 0;
+  }
+
+  /* ─── SERVICIOS (HOME) ─── */
+  #servicios {
+    padding: 6rem 2rem;
+    background: var(--cream);
+  }
+
+  .cards-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem; max-width: 1100px; margin: 0 auto;
+  }
+
+  .service-card {
+    background: var(--white); border-radius: 12px;
+    overflow: hidden; box-shadow: 0 4px 24px rgba(26,43,74,0.08);
+    transition: transform 0.35s, box-shadow 0.35s;
+    cursor: pointer;
+  }
+
+  .service-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 16px 48px rgba(26,43,74,0.16);
+  }
+
+  .card-image {
+    height: 220px; overflow: hidden; position: relative;
+  }
+
+  .card-image img {
+    width: 100%; height: 100%; object-fit: cover;
+    transition: transform 0.5s;
+  }
+
+  .service-card:hover .card-image img { transform: scale(1.06); }
+
+  .card-badge {
+    position: absolute; top: 1rem; left: 1rem;
+    background: rgba(26,43,74,0.9); color: var(--gold);
+    font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase;
+    padding: 0.3rem 0.8rem; border-radius: 2rem;
+  }
+
+  .card-body { padding: 1.8rem; }
+
+  .card-icon {
+    width: 48px; height: 48px; border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.4rem; margin-bottom: 1rem;
+  }
+
+  .card-icon.immo { background: rgba(74, 127, 165, 0.12); }
+  .card-icon.invest { background: rgba(107, 143, 113, 0.12); }
+  .card-icon.docs { background: rgba(201, 169, 110, 0.15); }
+
+  .card-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.5rem; font-weight: 600; color: var(--navy);
+    margin-bottom: 0.6rem;
+  }
+
+  .card-desc {
+    font-size: 0.9rem; color: var(--warm-gray); line-height: 1.65;
+    margin-bottom: 1.4rem;
+  }
+
+  .card-link {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    color: var(--navy); font-size: 0.85rem; font-weight: 500;
+    text-decoration: none; letter-spacing: 0.05em;
+    border-bottom: 1.5px solid var(--gold); padding-bottom: 2px;
+    transition: color 0.3s, gap 0.3s;
+  }
+
+  .card-link:hover { color: var(--gold); gap: 0.9rem; }
+
+  /* ─── NOSOTROS ─── */
+  #nosotros {
+    padding: 6rem 2rem;
+    max-width: 1100px; margin: 0 auto;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center;
+  }
+
+  .about-img {
+    border-radius: 12px; overflow: hidden;
+    box-shadow: 0 8px 40px rgba(26,43,74,0.12);
+    position: relative;
+  }
+
+  .about-img img { width: 100%; display: block; }
+
+  .about-img::after {
+    content: '';
+    position: absolute; bottom: -1.5rem; right: -1.5rem;
+    width: 60%; height: 60%; border: 2px solid var(--gold);
+    border-radius: 12px; z-index: -1;
+  }
+
+  .about-text .section-header { text-align: left; }
+  .about-text .section-line { margin: 1.2rem 0 0; }
+
+  .about-text p {
+    color: var(--warm-gray); line-height: 1.75; font-size: 0.95rem;
+    margin-top: 1.4rem;
+  }
+
+  .stats-row {
+    display: flex; gap: 2rem; margin-top: 2.5rem;
+  }
+
+  .stat { text-align: center; }
+
+  .stat-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.2rem; font-weight: 600; color: var(--navy);
+  }
+
+  .stat-num span { color: var(--gold); }
+
+  .stat-label { font-size: 0.78rem; color: var(--warm-gray); letter-spacing: 0.1em; text-transform: uppercase; }
+
+  /* ─── PÁGINAS INTERNAS ─── */
+  .page { display: none; }
+  .page.active { display: block; }
+
+  /* hero interno */
+  .inner-hero {
+    min-height: 60vh;
+    display: flex; align-items: flex-end;
+    padding: 8rem 2rem 3.5rem;
+    position: relative; overflow: hidden;
+  }
+
+  .inner-hero::before {
+    content: ''; position: absolute; inset: 0;
+    background: inherit; filter: brightness(0.45);
+  }
+
+  .inner-hero::after {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 60%);
+  }
+
+  .inner-hero-content {
+    position: relative; z-index: 2; max-width: 700px;
+  }
+
+  .inner-hero-content .hero-eyebrow { margin-bottom: 0.8rem; }
+
+  .inner-hero-content h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-weight: 300; color: var(--white); line-height: 1.1;
+    margin-bottom: 1rem;
+  }
+
+  .inner-hero-content p {
+    color: rgba(255,255,255,0.75); font-size: 1rem;
+    line-height: 1.65; font-weight: 300; max-width: 520px;
+  }
+
+  /* services detail */
+  .services-detail {
+    padding: 5rem 2rem; max-width: 1100px; margin: 0 auto;
+  }
+
+  .detail-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.8rem; margin-top: 3rem;
+  }
+
+  .detail-item {
+    padding: 2rem; background: var(--cream);
+    border-radius: 10px; border-left: 3px solid var(--gold);
+    transition: background 0.3s;
+  }
+
+  .detail-item:hover { background: var(--cream-dark); }
+
+  .detail-item h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.2rem; color: var(--navy); margin-bottom: 0.5rem;
+  }
+
+  .detail-item p { font-size: 0.88rem; color: var(--warm-gray); line-height: 1.65; }
+
+  /* process */
+  .process-section {
+    background: var(--navy); padding: 5rem 2rem;
+    color: var(--white);
+  }
+
+  .process-steps {
+    display: flex; gap: 0; max-width: 1000px; margin: 3rem auto 0;
+    flex-wrap: wrap;
+  }
+
+  .step {
+    flex: 1; min-width: 200px; padding: 2rem 1.5rem;
+    text-align: center; position: relative;
+  }
+
+  .step::after {
+    content: '→';
+    position: absolute; right: -0.5rem; top: 50%; transform: translateY(-50%);
+    color: var(--gold); font-size: 1.2rem;
+  }
+
+  .step:last-child::after { display: none; }
+
+  .step-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 3rem; color: var(--gold); opacity: 0.4; line-height: 1;
+    margin-bottom: 0.8rem;
+  }
+
+  .step h4 { font-size: 1rem; margin-bottom: 0.4rem; }
+  .step p { font-size: 0.83rem; color: rgba(255,255,255,0.55); line-height: 1.55; }
+
+  /* CTA band */
+  .cta-band {
+    background: var(--cream); padding: 4rem 2rem; text-align: center;
+  }
+
+  .cta-band h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(1.8rem, 3vw, 2.6rem); font-weight: 300; color: var(--navy);
+    margin-bottom: 1rem;
+  }
+
+  .cta-band p { color: var(--warm-gray); margin-bottom: 2rem; font-size: 0.95rem; }
+
+  .btn-primary {
+    display: inline-block; background: var(--navy); color: var(--white);
+    padding: 0.9rem 2.5rem; border-radius: 4px; text-decoration: none;
+    font-size: 0.88rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase;
+    transition: background 0.3s, transform 0.2s;
+  }
+
+  .btn-primary:hover { background: var(--navy-light); transform: translateY(-2px); }
+
+  /* ─── FOOTER ─── */
+  footer {
+    background: var(--navy); color: rgba(255,255,255,0.6);
+    padding: 3.5rem 2rem 2rem;
+  }
+
+  .footer-grid {
+    display: grid; grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 2.5rem; max-width: 1100px; margin: 0 auto 2.5rem;
+  }
+
+  .footer-brand .nav-logo { font-size: 1.3rem; margin-bottom: 0.8rem; }
+
+  .footer-brand p { font-size: 0.85rem; line-height: 1.65; max-width: 260px; }
+
+  .footer-col h5 {
+    color: var(--white); font-size: 0.8rem; letter-spacing: 0.12em;
+    text-transform: uppercase; margin-bottom: 1rem;
+  }
+
+  .footer-col a, .footer-col p {
+    display: block; color: rgba(255,255,255,0.55); text-decoration: none;
+    font-size: 0.85rem; margin-bottom: 0.5rem; transition: color 0.3s;
+  }
+
+  .footer-col a:hover { color: var(--gold); }
+
+  .footer-bottom {
+    max-width: 1100px; margin: 0 auto;
+    padding-top: 1.5rem; border-top: 1px solid rgba(255,255,255,0.1);
+    display: flex; justify-content: space-between; align-items: center;
+    flex-wrap: wrap; gap: 0.5rem;
+    font-size: 0.8rem;
+  }
+
+  /* ─── BACK BTN ─── */
+  .back-btn {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    color: var(--gold); font-size: 0.85rem; cursor: pointer;
+    background: none; border: none; padding: 0;
+    letter-spacing: 0.05em; margin-bottom: 1.5rem;
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  .back-btn:hover { opacity: 0.75; }
+
+  /* ─── INMOBILIARIA specifics ─── */
+  .properties-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem; max-width: 1100px; margin: 2.5rem auto 0;
+    padding: 0 2rem;
+  }
+
+  .property-card {
+    border-radius: 10px; overflow: hidden;
+    box-shadow: 0 4px 20px rgba(26,43,74,0.09);
+    background: var(--white);
+  }
+
+  .prop-img { height: 190px; overflow: hidden; }
+  .prop-img img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s; }
+  .property-card:hover .prop-img img { transform: scale(1.06); }
+
+  .prop-info { padding: 1.2rem; }
+
+  .prop-price {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.4rem; color: var(--navy); font-weight: 600;
+  }
+
+  .prop-name { font-size: 0.95rem; color: var(--text); margin: 0.2rem 0 0.5rem; }
+  .prop-location { font-size: 0.8rem; color: var(--warm-gray); }
+
+  .prop-tags { display: flex; gap: 0.5rem; margin-top: 0.8rem; flex-wrap: wrap; }
+
+  .prop-tag {
+    background: var(--cream); border-radius: 2rem;
+    font-size: 0.73rem; padding: 0.2rem 0.6rem; color: var(--warm-gray);
+  }
+
+  /* ─── INVERSIONES specifics ─── */
+  .invest-cards {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1.5rem; margin-top: 2.5rem;
+  }
+
+  .invest-card {
+    background: var(--white); border-radius: 12px;
+    padding: 2rem; border: 1px solid var(--cream-dark);
+    transition: border-color 0.3s, box-shadow 0.3s;
+  }
+
+  .invest-card:hover { border-color: var(--gold); box-shadow: 0 4px 24px rgba(201,169,110,0.15); }
+
+  .invest-icon { font-size: 2rem; margin-bottom: 0.8rem; }
+
+  .invest-card h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.2rem; color: var(--navy); margin-bottom: 0.4rem;
+  }
+
+  .invest-card p { font-size: 0.85rem; color: var(--warm-gray); line-height: 1.6; }
+
+  .invest-return {
+    margin-top: 1rem; padding-top: 1rem;
+    border-top: 1px solid var(--cream-dark);
+    font-size: 0.8rem; color: var(--sage); font-weight: 500;
+  }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 900px) {
+    #nosotros { grid-template-columns: 1fr; gap: 2.5rem; }
+    .about-img::after { display: none; }
+    .footer-grid { grid-template-columns: 1fr 1fr; }
+  }
+
+  @media (max-width: 640px) {
+    .nav-links { display: none; }
+    .hamburger { display: flex; }
+    .hero-cta { display: block; }
+    .stats-row { gap: 1.2rem; }
+    .step::after { display: none; }
+    .footer-grid { grid-template-columns: 1fr; }
+    .footer-bottom { justify-content: center; text-align: center; }
+    .process-steps { flex-direction: column; }
+  }
+
+  /* ─── ANIMATIONS ─── */
+  .fade-in {
+    opacity: 0; transform: translateY(20px);
+    animation: fadeUp 0.7s forwards;
+  }
+
+  @keyframes fadeUp {
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .delay-1 { animation-delay: 0.15s; }
+  .delay-2 { animation-delay: 0.3s; }
+  .delay-3 { animation-delay: 0.45s; }
+
+  /* color accent per unit */
+  .accent-sky { --accent: var(--sky); }
+  .accent-sage { --accent: var(--sage); }
+  .accent-gold { --accent: var(--gold); }
+
+  .inner-hero.immo-bg {
+    background: url('https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1400&q=80') center/cover no-repeat;
+  }
+
+  .inner-hero.invest-bg {
+    background: url('https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=1400&q=80') center/cover no-repeat;
+  }
+
+  .inner-hero.docs-bg {
+    background: url('https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=1400&q=80') center/cover no-repeat;
+  }
+</style>
+</head>
+<body>
+
+<!-- ─── NAV ─── -->
+<nav>
+  <a href="#" class="nav-logo" onclick="showPage('home')">Grupo <span>Horizonte</span></a>
+  <ul class="nav-links">
+    <li><a href="#" onclick="showPage('home'); return false;">Inicio</a></li>
+    <li><a href="#" onclick="showPage('inmobiliaria'); return false;">Inmobiliaria</a></li>
+    <li><a href="#" onclick="showPage('inversiones'); return false;">Inversiones</a></li>
+    <li><a href="#" onclick="showPage('documentacion'); return false;">Documentación</a></li>
+    <li><a href="#nosotros" onclick="showPage('home'); setTimeout(()=>document.getElementById('nosotros').scrollIntoView({behavior:'smooth'}),100); return false;">Nosotros</a></li>
+  </ul>
+  <button class="hamburger" onclick="toggleMenu()" id="hamburgerBtn">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#" onclick="showPage('home'); toggleMenu(); return false;">Inicio</a>
+  <a href="#" onclick="showPage('inmobiliaria'); toggleMenu(); return false;">Inmobiliaria</a>
+  <a href="#" onclick="showPage('inversiones'); toggleMenu(); return false;">Inversiones</a>
+  <a href="#" onclick="showPage('documentacion'); toggleMenu(); return false;">Documentación</a>
+  <a href="#" onclick="showPage('home'); toggleMenu(); return false;">Nosotros</a>
+</div>
+
+<!-- ══════════════════════════════════════
+     PÁGINA HOME
+══════════════════════════════════════ -->
+<div id="page-home" class="page active">
+
+  <!-- HERO -->
+  <section id="home">
+    <div class="hero-content fade-in">
+      <div class="hero-eyebrow">Tres pilares — Una visión</div>
+      <h1 class="hero-title">Construimos tu <em>futuro</em><br>desde hoy</h1>
+      <p class="hero-sub">Grupo Horizonte reúne tres unidades especializadas para acompañarte en tus proyectos inmobiliarios, inversiones estratégicas y trámites migratorios.</p>
+      <a href="#servicios" class="hero-cta">Explorar servicios</a>
+    </div>
+    <div class="hero-scroll">
+      <div class="scroll-line"></div>
+      Scroll
+    </div>
+  </section>
+
+  <!-- SERVICIOS -->
+  <section id="servicios">
+    <div class="section-header">
+      <span class="section-label">Nuestras unidades</span>
+      <h2 class="section-title">Tres empresas.<br>Un mismo compromiso.</h2>
+      <div class="section-line"></div>
+    </div>
+
+    <div class="cards-grid">
+
+      <!-- Inmobiliaria -->
+      <div class="service-card" onclick="showPage('inmobiliaria')">
+        <div class="card-image">
+          <img src="https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=600&q=80" alt="Inmobiliaria">
+          <span class="card-badge">Inmobiliaria</span>
+        </div>
+        <div class="card-body">
+          <div class="card-icon immo">🏢</div>
+          <h3 class="card-title">Horizonte Inmuebles</h3>
+          <p class="card-desc">Compra, venta y alquiler de propiedades residenciales y comerciales. Asesoramiento personalizado para cada etapa de tu proyecto.</p>
+          <a class="card-link" href="#">Ver más <span>→</span></a>
+        </div>
+      </div>
+
+      <!-- Inversiones -->
+      <div class="service-card" onclick="showPage('inversiones')">
+        <div class="card-image">
+          <img src="https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=600&q=80" alt="Inversiones">
+          <span class="card-badge">Inversiones</span>
+        </div>
+        <div class="card-body">
+          <div class="card-icon invest">📈</div>
+          <h3 class="card-title">Horizonte Capital</h3>
+          <p class="card-desc">Portafolios de inversión diseñados a tu medida. Acceso a instrumentos financieros, fondos y oportunidades de alto rendimiento.</p>
+          <a class="card-link" href="#">Ver más <span>→</span></a>
+        </div>
+      </div>
+
+      <!-- Documentación -->
+      <div class="service-card" onclick="showPage('documentacion')">
+        <div class="card-image">
+          <img src="https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=600&q=80" alt="Documentación">
+          <span class="card-badge">Trámites</span>
+        </div>
+        <div class="card-body">
+          <div class="card-icon docs">🌐</div>
+          <h3 class="card-title">Horizonte Migratorio</h3>
+          <p class="card-desc">Asesoría integral en residencias, nacionalizaciones y habilitaciones para extranjeros. Tramitamos ante los organismos competentes.</p>
+          <a class="card-link" href="#">Ver más <span>→</span></a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- NOSOTROS -->
+  <section id="nosotros" style="padding: 6rem 2rem;">
+    <div style="max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center;" class="nosotros-inner">
+      <div class="about-img">
+        <img src="https://images.unsplash.com/photo-1560472355-536de3962603?w=700&q=80" alt="Equipo" style="width:100%;display:block;border-radius:12px;">
+      </div>
+      <div>
+        <span class="section-label">Sobre nosotros</span>
+        <h2 class="section-title" style="text-align:left;color:var(--navy)">Tres socios.<br>Un grupo sólido.</h2>
+        <div class="section-line" style="margin:1.2rem 0 0;"></div>
+        <p style="color:var(--warm-gray);line-height:1.75;font-size:0.95rem;margin-top:1.4rem">
+          Grupo Horizonte nació de la unión de tres emprendedores con visiones complementarias: el mundo del ladrillo, los mercados financieros y la gestión migratoria. Juntos ofrecemos una plataforma integral que da respuesta a los desafíos de quienes buscan crecer, invertir o instalarse en el país.
+        </p>
+        <p style="color:var(--warm-gray);line-height:1.75;font-size:0.95rem;margin-top:0.8rem">
+          Más de 10 años de experiencia combinada nos avalan. Trabajamos con transparencia, agilidad y un trato cercano que nos distingue de las grandes corporaciones.
+        </p>
+        <div class="stats-row">
+          <div class="stat">
+            <div class="stat-num">200<span>+</span></div>
+            <div class="stat-label">Clientes</div>
+          </div>
+          <div class="stat">
+            <div class="stat-num">10<span>+</span></div>
+            <div class="stat-label">Años</div>
+          </div>
+          <div class="stat">
+            <div class="stat-num">3<span></span></div>
+            <div class="stat-label">Unidades</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACTO SIMPLE -->
+  <section style="background:var(--navy);padding:5rem 2rem;text-align:center;">
+    <span class="section-label">Contacto</span>
+    <h2 class="section-title" style="color:var(--white);margin-top:0.4rem;">¿Listo para dar el próximo paso?</h2>
+    <div class="section-line"></div>
+    <p style="color:rgba(255,255,255,0.6);margin-top:1.2rem;margin-bottom:2.5rem;font-size:0.95rem;">Nuestro equipo está disponible para asesorarte sin compromiso.</p>
+    <div style="display:flex;gap:1.5rem;justify-content:center;flex-wrap:wrap;">
+      <a href="mailto:contacto@grupohorizonte.com" class="hero-cta">Enviar consulta</a>
+      <a href="tel:+59800000000" style="display:inline-block;border:1.5px solid rgba(201,169,110,0.5);color:var(--gold);padding:0.9rem 2.5rem;border-radius:4px;text-decoration:none;font-size:0.88rem;font-weight:500;letter-spacing:0.06em;text-transform:uppercase;transition:border-color 0.3s;" onmouseover="this.style.borderColor='var(--gold)'" onmouseout="this.style.borderColor='rgba(201,169,110,0.5)'">📞 Llamar</a>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="#" class="nav-logo" style="display:inline-flex;margin-bottom:0.8rem;" onclick="showPage('home')">Grupo <span style="color:var(--gold);margin-left:0.3em;">Horizonte</span></a>
+        <p>Una holding de servicios inmobiliarios, financieros y migratorios para acompañarte en cada etapa de tu vida.</p>
+      </div>
+      <div class="footer-col">
+        <h5>Inmobiliaria</h5>
+        <a href="#">Propiedades en venta</a>
+        <a href="#">Alquileres</a>
+        <a href="#">Tasaciones</a>
+      </div>
+      <div class="footer-col">
+        <h5>Inversiones</h5>
+        <a href="#">Portafolios</a>
+        <a href="#">Fondos</a>
+        <a href="#">Consultoría</a>
+      </div>
+      <div class="footer-col">
+        <h5>Migratorio</h5>
+        <a href="#">Residencia</a>
+        <a href="#">Nacionalización</a>
+        <a href="#">Habilitaciones</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2025 Grupo Horizonte. Todos los derechos reservados.</span>
+      <span>Diseñado con ♥</span>
+    </div>
+  </footer>
+
+</div><!-- /page-home -->
+
+
+<!-- ══════════════════════════════════════
+     PÁGINA INMOBILIARIA
+══════════════════════════════════════ -->
+<div id="page-inmobiliaria" class="page">
+
+  <div class="inner-hero immo-bg" style="background-image:url('https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1400&q=80');">
+    <div class="inner-hero-content">
+      <button class="back-btn" onclick="showPage('home')">← Volver al inicio</button>
+      <div class="hero-eyebrow">Horizonte Inmuebles</div>
+      <h1>Tu propiedad ideal<br>está aquí</h1>
+      <p>Compra, venta y alquiler de inmuebles residenciales y comerciales con asesoramiento experto en cada paso.</p>
+    </div>
+  </div>
+
+  <!-- Propiedades destacadas -->
+  <section style="padding:4rem 0 2rem;">
+    <div style="max-width:1100px;margin:0 auto;padding:0 2rem;">
+      <span class="section-label">Destacados</span>
+      <h2 class="section-title" style="text-align:left;">Propiedades disponibles</h2>
+      <div class="section-line" style="margin:1rem 0 0;"></div>
+    </div>
+    <div class="properties-grid">
+      <div class="property-card">
+        <div class="prop-img"><img src="https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=500&q=80" alt="Casa"></div>
+        <div class="prop-info">
+          <div class="prop-price">USD 185.000</div>
+          <div class="prop-name">Casa en Country — 4 amb.</div>
+          <div class="prop-location">📍 Zona Norte, Buenos Aires</div>
+          <div class="prop-tags">
+            <span class="prop-tag">300 m²</span>
+            <span class="prop-tag">Piscina</span>
+            <span class="prop-tag">Garage</span>
+          </div>
+        </div>
+      </div>
+      <div class="property-card">
+        <div class="prop-img"><img src="https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=500&q=80" alt="Depto"></div>
+        <div class="prop-info">
+          <div class="prop-price">USD 92.000</div>
+          <div class="prop-name">Apartamento Moderno — 2 amb.</div>
+          <div class="prop-location">📍 Palermo, CABA</div>
+          <div class="prop-tags">
+            <span class="prop-tag">65 m²</span>
+            <span class="prop-tag">Amenities</span>
+            <span class="prop-tag">Vista al parque</span>
+          </div>
+        </div>
+      </div>
+      <div class="property-card">
+        <div class="prop-img"><img src="https://images.unsplash.com/photo-1497366216548-37526070297c?w=500&q=80" alt="Oficina"></div>
+        <div class="prop-info">
+          <div class="prop-price">Alquiler — USD 1.800/mes</div>
+          <div class="prop-name">Oficina Corporativa Premium</div>
+          <div class="prop-location">📍 Microcentro, CABA</div>
+          <div class="prop-tags">
+            <span class="prop-tag">120 m²</span>
+            <span class="prop-tag">A estrenar</span>
+            <span class="prop-tag">Piso 12</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Servicios inmobiliarios -->
+  <div class="services-detail">
+    <span class="section-label">¿Qué hacemos?</span>
+    <h2 class="section-title" style="text-align:left;">Nuestros servicios</h2>
+    <div class="detail-grid">
+      <div class="detail-item"><h3>🔑 Compraventa</h3><p>Asesoramiento integral en la compra y venta de propiedades. Análisis de mercado y negociación a tu favor.</p></div>
+      <div class="detail-item"><h3>🏠 Alquileres</h3><p>Gestión de contratos de alquiler, garantías y administración de inmuebles en renta.</p></div>
+      <div class="detail-item"><h3>📊 Tasaciones</h3><p>Valuación profesional de propiedades para obtener el precio justo de mercado.</p></div>
+      <div class="detail-item"><h3>⚖️ Gestoría legal</h3><p>Escrituración, hipotecas y todo el proceso notarial acompañado de nuestro equipo legal.</p></div>
+    </div>
+  </div>
+
+  <div class="cta-band">
+    <h2>¿Buscás una propiedad o querés vender?</h2>
+    <p>Completá el formulario y un asesor se pondrá en contacto en menos de 24hs.</p>
+    <a href="#" class="btn-primary">Contactar asesor</a>
+  </div>
+
+  <footer>
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="#" class="nav-logo" style="display:inline-flex;margin-bottom:0.8rem;" onclick="showPage('home')">Grupo <span style="color:var(--gold);margin-left:0.3em;">Horizonte</span></a>
+        <p>Horizonte Inmuebles es la unidad inmobiliaria de Grupo Horizonte.</p>
+      </div>
+      <div class="footer-col"><h5>Servicios</h5><a href="#">Compraventa</a><a href="#">Alquileres</a><a href="#">Tasaciones</a></div>
+      <div class="footer-col"><h5>Grupo</h5><a href="#" onclick="showPage('home');return false;">Inicio</a><a href="#" onclick="showPage('inversiones');return false;">Inversiones</a><a href="#" onclick="showPage('documentacion');return false;">Migratorio</a></div>
+      <div class="footer-col"><h5>Contacto</h5><p>info@horizonteinmuebles.com</p><p>+54 11 0000-0000</p></div>
+    </div>
+    <div class="footer-bottom"><span>© 2025 Horizonte Inmuebles · Grupo Horizonte</span></div>
+  </footer>
+
+</div><!-- /page-inmobiliaria -->
+
+
+<!-- ══════════════════════════════════════
+     PÁGINA INVERSIONES
+══════════════════════════════════════ -->
+<div id="page-inversiones" class="page">
+
+  <div class="inner-hero invest-bg">
+    <div class="inner-hero-content">
+      <button class="back-btn" onclick="showPage('home')">← Volver al inicio</button>
+      <div class="hero-eyebrow">Horizonte Capital</div>
+      <h1>Hacé crecer<br>tu capital</h1>
+      <p>Estrategias de inversión personalizadas con foco en rentabilidad, seguridad y visión a largo plazo.</p>
+    </div>
+  </div>
+
+  <!-- Instrumentos -->
+  <section style="padding:5rem 2rem;max-width:1100px;margin:0 auto;">
+    <span class="section-label">Opciones</span>
+    <h2 class="section-title" style="text-align:left;">Instrumentos de inversión</h2>
+    <div class="section-line" style="margin:1rem 0 0;"></div>
+    <div class="invest-cards">
+      <div class="invest-card">
+        <div class="invest-icon">🏘️</div>
+        <h3>Real Estate</h3>
+        <p>Inversiones en desarrollos inmobiliarios con alta plusvalía y rendimiento por alquiler.</p>
+        <div class="invest-return">Retorno estimado: 8–12% anual</div>
+      </div>
+      <div class="invest-card">
+        <div class="invest-icon">📉</div>
+        <h3>Renta Fija</h3>
+        <p>Bonos corporativos y soberanos para perfiles conservadores que priorizan estabilidad.</p>
+        <div class="invest-return">Retorno estimado: 5–7% anual</div>
+      </div>
+      <div class="invest-card">
+        <div class="invest-icon">📊</div>
+        <h3>Acciones</h3>
+        <p>Portafolios diversificados en mercados locales e internacionales con gestión activa.</p>
+        <div class="invest-return">Retorno estimado: 12–20% anual</div>
+      </div>
+      <div class="invest-card">
+        <div class="invest-icon">🌱</div>
+        <h3>Fondos ESG</h3>
+        <p>Inversión responsable en empresas con criterios ambientales, sociales y de gobernanza.</p>
+        <div class="invest-return">Retorno estimado: 7–10% anual</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Proceso -->
+  <div class="process-section">
+    <div style="max-width:1000px;margin:0 auto;text-align:center;">
+      <span class="section-label">¿Cómo trabajamos?</span>
+      <h2 class="section-title" style="color:var(--white);">Proceso de inversión</h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="process-steps">
+      <div class="step">
+        <div class="step-num">01</div>
+        <h4>Diagnóstico</h4>
+        <p>Evaluamos tu perfil de riesgo y objetivos financieros.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">02</div>
+        <h4>Estrategia</h4>
+        <p>Diseñamos un portafolio personalizado a tu medida.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">03</div>
+        <h4>Ejecución</h4>
+        <p>Activamos las inversiones con total transparencia.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">04</div>
+        <h4>Seguimiento</h4>
+        <p>Reportes periódicos y ajustes según el mercado.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="cta-band">
+    <h2>¿Querés una consulta sin costo?</h2>
+    <p>Hablá con uno de nuestros asesores financieros y explorá las mejores opciones para vos.</p>
+    <a href="#" class="btn-primary">Agendar reunión</a>
+  </div>
+
+  <footer>
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="#" class="nav-logo" style="display:inline-flex;margin-bottom:0.8rem;" onclick="showPage('home')">Grupo <span style="color:var(--gold);margin-left:0.3em;">Horizonte</span></a>
+        <p>Horizonte Capital es la unidad de inversiones de Grupo Horizonte.</p>
+      </div>
+      <div class="footer-col"><h5>Productos</h5><a href="#">Real Estate</a><a href="#">Renta Fija</a><a href="#">Acciones</a></div>
+      <div class="footer-col"><h5>Grupo</h5><a href="#" onclick="showPage('home');return false;">Inicio</a><a href="#" onclick="showPage('inmobiliaria');return false;">Inmobiliaria</a><a href="#" onclick="showPage('documentacion');return false;">Migratorio</a></div>
+      <div class="footer-col"><h5>Contacto</h5><p>info@horizontecapital.com</p><p>+54 11 0000-0001</p></div>
+    </div>
+    <div class="footer-bottom"><span>© 2025 Horizonte Capital · Grupo Horizonte</span></div>
+  </footer>
+
+</div><!-- /page-inversiones -->
+
+
+<!-- ══════════════════════════════════════
+     PÁGINA DOCUMENTACIÓN MIGRATORIA
+══════════════════════════════════════ -->
+<div id="page-documentacion" class="page">
+
+  <div class="inner-hero docs-bg">
+    <div class="inner-hero-content">
+      <button class="back-btn" onclick="showPage('home')">← Volver al inicio</button>
+      <div class="hero-eyebrow">Horizonte Migratorio</div>
+      <h1>Tu camino hacia<br>una nueva vida</h1>
+      <p>Gestionamos tus trámites de residencia, nacionalización y habilitaciones con total acompañamiento.</p>
+    </div>
+  </div>
+
+  <!-- Servicios -->
+  <div class="services-detail">
+    <span class="section-label">Nuestros trámites</span>
+    <h2 class="section-title" style="text-align:left;">¿En qué te podemos ayudar?</h2>
+    <div class="detail-grid">
+      <div class="detail-item"><h3>🛂 Residencia temporaria</h3><p>Gestión de la documentación para residencia transitoria y habilitación para trabajar en el país.</p></div>
+      <div class="detail-item"><h3>🏡 Residencia permanente</h3><p>Acompañamiento en todo el proceso para obtener la radicación definitiva.</p></div>
+      <div class="detail-item"><h3>🌍 Nacionalización</h3><p>Asesoramiento y trámite para la obtención de la ciudadanía según corresponda.</p></div>
+      <div class="detail-item"><h3>👨‍👩‍👧 Reagrupación familiar</h3><p>Gestión de visas y permisos para reunir a tu familia en el país de destino.</p></div>
+      <div class="detail-item"><h3>🎓 Visas de estudio</h3><p>Habilitaciones para estudiantes extranjeros que deseen cursar estudios en el país.</p></div>
+      <div class="detail-item"><h3>💼 Visas de trabajo</h3><p>Permisos laborales, habilitaciones profesionales y registro ante organismos competentes.</p></div>
+    </div>
+  </div>
+
+  <!-- Proceso -->
+  <div class="process-section">
+    <div style="max-width:1000px;margin:0 auto;text-align:center;">
+      <span class="section-label">Pasos a seguir</span>
+      <h2 class="section-title" style="color:var(--white);">Así trabajamos</h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="process-steps">
+      <div class="step">
+        <div class="step-num">01</div>
+        <h4>Consulta inicial</h4>
+        <p>Analizamos tu situación y determinamos qué trámite corresponde.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">02</div>
+        <h4>Documentación</h4>
+        <p>Te indicamos exactamente qué documentos necesitás reunir.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">03</div>
+        <h4>Presentación</h4>
+        <p>Gestionamos la presentación ante los organismos correspondientes.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">04</div>
+        <h4>Seguimiento</h4>
+        <p>Monitoreamos el expediente hasta la resolución favorable.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- FAQ simple -->
+  <section style="padding:5rem 2rem;max-width:800px;margin:0 auto;">
+    <span class="section-label">Preguntas frecuentes</span>
+    <h2 class="section-title" style="text-align:left;">¿Tenés dudas?</h2>
+    <div class="section-line" style="margin:1rem 0 2rem;"></div>
+    <div style="display:flex;flex-direction:column;gap:1.2rem;">
+      <div style="border:1px solid var(--cream-dark);border-radius:8px;padding:1.4rem;">
+        <h4 style="color:var(--navy);margin-bottom:0.4rem;font-size:1rem;">¿Cuánto demora el trámite de residencia?</h4>
+        <p style="color:var(--warm-gray);font-size:0.88rem;line-height:1.65;">Los tiempos varían según el tipo de trámite y el organismo interviniente. En promedio, una residencia temporaria puede resolverse en 3 a 6 meses.</p>
+      </div>
+      <div style="border:1px solid var(--cream-dark);border-radius:8px;padding:1.4rem;">
+        <h4 style="color:var(--navy);margin-bottom:0.4rem;font-size:1rem;">¿Qué nacionalidades tienen ventajas especiales?</h4>
+        <p style="color:var(--warm-gray);font-size:0.88rem;line-height:1.65;">Los ciudadanos del MERCOSUR cuentan con acuerdos que facilitan y agilizan los trámites de residencia. Consultanos por tu caso puntual.</p>
+      </div>
+      <div style="border:1px solid var(--cream-dark);border-radius:8px;padding:1.4rem;">
+        <h4 style="color:var(--navy);margin-bottom:0.4rem;font-size:1rem;">¿Pueden tramitar desde el exterior?</h4>
+        <p style="color:var(--warm-gray);font-size:0.88rem;line-height:1.65;">Sí, muchos trámites pueden iniciarse de forma remota. Trabajamos con clientes en todo el mundo mediante plataformas digitales.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="cta-band">
+    <h2>¿Necesitás iniciar un trámite?</h2>
+    <p>Contactanos y evaluamos tu caso sin cargo para encontrar la mejor vía legal.</p>
+    <a href="#" class="btn-primary">Consulta gratuita</a>
+  </div>
+
+  <footer>
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="#" class="nav-logo" style="display:inline-flex;margin-bottom:0.8rem;" onclick="showPage('home')">Grupo <span style="color:var(--gold);margin-left:0.3em;">Horizonte</span></a>
+        <p>Horizonte Migratorio es la unidad de asesoría migratoria de Grupo Horizonte.</p>
+      </div>
+      <div class="footer-col"><h5>Trámites</h5><a href="#">Residencia</a><a href="#">Nacionalización</a><a href="#">Visas</a></div>
+      <div class="footer-col"><h5>Grupo</h5><a href="#" onclick="showPage('home');return false;">Inicio</a><a href="#" onclick="showPage('inmobiliaria');return false;">Inmobiliaria</a><a href="#" onclick="showPage('inversiones');return false;">Inversiones</a></div>
+      <div class="footer-col"><h5>Contacto</h5><p>info@horizontemigratorio.com</p><p>+54 11 0000-0002</p></div>
+    </div>
+    <div class="footer-bottom"><span>© 2025 Horizonte Migratorio · Grupo Horizonte</span></div>
+  </footer>
+
+</div><!-- /page-documentacion -->
+
+
+<script>
+  function showPage(name) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById('page-' + name).classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function toggleMenu() {
+    document.getElementById('mobileMenu').classList.toggle('open');
+  }
+
+  // Cerrar menú al hacer click fuera
+  document.addEventListener('click', function(e) {
+    const menu = document.getElementById('mobileMenu');
+    const btn = document.getElementById('hamburgerBtn');
+    if (!menu.contains(e.target) && !btn.contains(e.target)) {
+      menu.classList.remove('open');
+    }
+  });
+
+  // Responsive nosotros grid
+  function fixNosotros() {
+    const el = document.querySelector('.nosotros-inner');
+    if (!el) return;
+    if (window.innerWidth < 900) {
+      el.style.gridTemplateColumns = '1fr';
+      el.style.gap = '2.5rem';
+    } else {
+      el.style.gridTemplateColumns = '1fr 1fr';
+      el.style.gap = '4rem';
+    }
+  }
+
+  window.addEventListener('resize', fixNosotros);
+  fixNosotros();
+</script>
+
+</body>
+</html>

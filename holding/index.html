@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        /* Instrucciones del usuario: Padding 0 en Top, Right, Left */
+        body {
+            padding-top: 0px !important;
+            padding-right: 0px !important;
+            padding-left: 0px !important;
+            margin: 0;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background-color: #f0f2f5;
+        }
+
+        .top-bar {
+            background-color: #1a252f;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            font-size: 1.1em;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        /* Cuadrícula de 8 elementos */
+        .container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+            padding: 20px;
+        }
+
+        /* Card de versión */
+        .version-card {
+            background: #fff;
+            border: 1px solid #d1d5db;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.3s ease;
+        }
+
+        .version-card:hover {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            border-color: #b59410;
+        }
+
+        /* Contenedor de miniatura */
+        .thumbnail-box {
+            width: 100%;
+            height: 160px;
+            overflow: hidden;
+            position: relative;
+            background: #e5e7eb;
+            border-bottom: 1px solid #eee;
+        }
+
+        /* Miniatura escalada */
+        .thumbnail-box iframe {
+            width: 1200px; /* Resolución virtual */
+            height: 800px;
+            border: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            transform: scale(0.24); /* Ajuste para que quepa en el cuadro */
+            transform-origin: 0 0;
+            pointer-events: none;
+        }
+
+        /* Enlace de acceso */
+        .btn-link {
+            padding: 15px;
+            text-decoration: none;
+            color: #1f2937;
+            text-align: center;
+            font-weight: bold;
+            font-size: 0.85em;
+            background: #ffffff;
+            transition: background 0.2s;
+        }
+
+        .btn-link:hover {
+            background: #1a252f;
+            color: #ffffff;
+        }
+
+        .tag {
+            color: #b59410;
+            margin-right: 4px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="top-bar">
+        Historial de Versiones - Proyecto Nutrigesica
+    </div>
+
+    <div class="container">
+
+        <div class="version-card">
+            <div class="thumbnail-box"><iframe src="version01.html"></iframe></div>
+            <a href="version01.html" target="_blank" class="btn-link"><span class="tag">V01</span> ACCEDER</a>
+        </div>
+
+        <div class="version-card">
+            <div class="thumbnail-box"><iframe src="version02.html"></iframe></div>
+            <a href="version02.html" target="_blank" class="btn-link"><span class="tag">V02</span> ACCEDER</a>
+        </div>
+
+        <div class="version-card">
+            <div class="thumbnail-box"><iframe src="version03.html"></iframe></div>
+            <a href="version03.html" target="_blank" class="btn-link"><span class="tag">V03</span> ACCEDER</a>
+        </div>
+
+        <div class="version-card">
+            <div class="thumbnail-box"><iframe src="version04.html"></iframe></div>
+            <a href="version04.html" target="_blank" class="btn-link"><span class="tag">V04</span> ACCEDER</a>
+        </div>
+
+        <div class="version-card">
+            <div class="thumbnail-box"><iframe src="version05.html"></iframe></div>
+            <a href="version05.html" target="_blank" class="btn-link"><span class="tag">V05</span> ACCEDER</a>
+        </div>
+
+        <div class="version-card">
+            <div class="thumbnail-box"><iframe src="version06.html"></iframe></div>
+            <a href="version06.html" target="_blank" class="btn-link"><span class="tag">V06</span> ACCEDER</a>
+        </div>
+
+        <div class="version-card">
+            <div class="thumbnail-box"><iframe src="version07.html"></iframe></div>
+            <a href="version07.html" target="_blank" class="btn-link"><span class="tag">V07</span> ACCEDER</a>
+        </div>
+
+        <div class="version-card">
+            <div class="thumbnail-box"><iframe src="version08.html"></iframe></div>
+            <a href="version08.html" target="_blank" class="btn-link"><span class="tag">V08</span> ACCEDER</a>
+        </div>
+
+
+        <div class="version-card">
+            <div class="thumbnail-box"><iframe src="version09.html"></iframe></div>
+            <a href="version09.html" target="_blank" class="btn-link"><span class="tag">V09</span> ACCEDER</a>
+        </div>
+
+
+        <div class="version-card">
+            <div class="thumbnail-box"><iframe src="version10.html"></iframe></div>
+            <a href="version10.html" target="_blank" class="btn-link"><span class="tag">V10</span> ACCEDER</a>
+        </div>
+
+
+
+    </div>
+
+</body>
+</html>

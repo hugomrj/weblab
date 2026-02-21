@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Holding Integrado | Confianza y Excelencia</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0a5fd1;
+            --primary-dark: #003366;
+            --accent: #00c4a6;
+            --light: #fafcff;
+            --gray: #e5efff;
+            --dark: #1a2b44;
+            --text: #2c3e50;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--light);
+            color: var(--text);
+            line-height: 1.7;
+        }
+
+        header {
+            position: relative;
+            height: 90vh;
+            min-height: 700px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 30% 70%, rgba(255,255,255,0.12) 0%, transparent 60%);
+            pointer-events: none;
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 2;
+            max-width: 900px;
+            padding: 2rem;
+        }
+
+        h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 4.8rem;
+            font-weight: 700;
+            margin-bottom: 1.2rem;
+            letter-spacing: -1px;
+        }
+
+        header p {
+            font-size: 1.5rem;
+            max-width: 720px;
+            margin: 0 auto 2.5rem;
+            opacity: 0.92;
+        }
+
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            background: rgba(255,255,255,0.08);
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            transition: all 0.3s;
+        }
+
+        nav.scrolled {
+            background: rgba(255,255,255,0.95);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+
+        nav ul {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            list-style: none;
+            padding: 1.4rem 0;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 1.15rem;
+            transition: all 0.3s;
+            padding: 0.6rem 1.2rem;
+            border-radius: 50px;
+        }
+
+        nav a:hover {
+            background: rgba(255,255,255,0.15);
+            color: var(--accent);
+        }
+
+        main {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 6rem 2rem 4rem;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+            gap: 3rem;
+            margin: 5rem 0;
+        }
+
+        .card {
+            background: white;
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 12px 48px rgba(10,95,209,0.08);
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+        }
+
+        .card:hover {
+            transform: translateY(-16px) scale(1.02);
+            box-shadow: 0 32px 80px rgba(10,95,209,0.18);
+        }
+
+        .card img {
+            width: 100%;
+            height: 260px;
+            object-fit: cover;
+            transition: transform 0.7s ease;
+        }
+
+        .card:hover img {
+            transform: scale(1.12);
+        }
+
+        .card-content {
+            padding: 2.5rem 2rem;
+        }
+
+        .card h3 {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+
+        .btn {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--primary), #0077e6);
+            color: white;
+            padding: 1rem 2.2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            margin-top: 1.5rem;
+            transition: all 0.4s;
+        }
+
+        .btn:hover {
+            background: linear-gradient(135deg, #0077e6, var(--primary));
+            transform: translateY(-4px);
+            box-shadow: 0 12px 32px rgba(10,95,209,0.3);
+        }
+
+        .section-detail {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+            background: white;
+            border-radius: 24px;
+            padding: 5rem 4rem;
+            margin: 6rem 0;
+            box-shadow: 0 12px 48px rgba(0,0,0,0.06);
+        }
+
+        .section-detail.reverse {
+            grid-template-columns: 1fr 1fr;
+        }
+
+        .section-detail img {
+            width: 100%;
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+        }
+
+        .section-content h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.2rem;
+            margin-bottom: 1.5rem;
+            color: var(--primary);
+        }
+
+        footer {
+            background: var(--primary);
+            color: white;
+            text-align: center;
+            padding: 4rem 2rem;
+            margin-top: 8rem;
+        }
+
+        @media (max-width: 1024px) {
+            .section-detail, .section-detail.reverse {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+            .section-detail img {
+                max-height: 400px;
+                object-fit: cover;
+            }
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 3.5rem; }
+            nav ul { gap: 1.5rem; flex-wrap: wrap; justify-content: center; }
+            .services-grid { gap: 2.5rem; }
+            .section-detail { padding: 3rem 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <ul>
+            <li><a href="#inicio">Inicio</a></li>
+            <li><a href="#inmobiliaria">Inmobiliaria</a></li>
+            <li><a href="#inversiones">Inversiones</a></li>
+            <li><a href="#migracion">Migración</a></li>
+        </ul>
+    </nav>
+
+    <header>
+        <div class="header-content">
+            <h1>Holding Integrado</h1>
+            <p>Expertos en soluciones integrales: inmobiliaria de alto nivel, inversiones estratégicas y servicios migratorios confiables. Tres divisiones, un compromiso: tu éxito seguro.</p>
+        </div>
+    </header>
+
+    <main id="inicio">
+        <section class="services-grid">
+            <div class="card">
+                <img src="https://mbluxury1.s3.amazonaws.com/2024/02/01151752/luxury-real-estate-website-design-scaled.jpg" alt="Propiedad de lujo moderna">
+                <div class="card-content">
+                    <h3>Inmobiliaria Premium</h3>
+                    <p>Selección exclusiva de propiedades residenciales y comerciales con asesoramiento personalizado y total transparencia.</p>
+                    <a href="#inmobiliaria" class="btn">Explorar</a>
+                </div>
+            </div>
+
+            <div class="card">
+                <img src="https://www.uidux.com/uploads/components/1707768670.png" alt="Dashboard financiero moderno oscuro">
+                <div class="card-content">
+                    <h3>Inversiones Estratégicas</h3>
+                    <p>Portafolios diversificados, análisis de riesgo avanzado y oportunidades exclusivas para crecimiento sostenido.</p>
+                    <a href="#inversiones" class="btn">Explorar</a>
+                </div>
+            </div>
+
+            <div class="card">
+                <img src="https://canaccessimmigration.com/wp-content/uploads/2025/04/professional-immigration-consultant-Delhi.jpeg" alt="Consulta migratoria profesional">
+                <div class="card-content">
+                    <h3>Servicios Migratorios</h3>
+                    <p>Trámites eficientes de residencias, nacionalizaciones y documentación para extranjeros con acompañamiento experto.</p>
+                    <a href="#migracion" class="btn">Explorar</a>
+                </div>
+            </div>
+        </section>
+
+        <section id="inmobiliaria" class="section-detail">
+            <div class="section-content">
+                <h2>Inmobiliaria de Excelencia</h2>
+                <p>Especializados en propiedades de alto standing, desarrollos exclusivos y transacciones seguras. Nuestro equipo te acompaña desde la selección hasta la firma, garantizando valor y tranquilidad en cada paso.</p>
+            </div>
+            <img src="https://blueheron.com/wp-content/uploads/2026/02/Solente_Landing-Page_20260210_hero-3840x2160.jpg" alt="Casa de lujo contemporánea">
+        </section>
+
+        <section id="inversiones" class="section-detail reverse">
+            <img src="https://www.uidux.com/uploads/webpcomp/1707770706.webp" alt="Interfaz de inversiones moderna">
+            <div class="section-content">
+                <h2>Inversiones Inteligentes</h2>
+                <p>Diseñamos estrategias a tu medida: desde activos tradicionales hasta oportunidades alternativas. Monitoreo continuo, minimización de riesgos y enfoque en retornos consistentes a largo plazo.</p>
+            </div>
+        </section>
+
+        <section id="migracion" class="section-detail">
+            <div class="section-content">
+                <h2>Asesoría Migratoria Confiable</h2>
+                <p>Gestión integral de procesos migratorios: visas, residencias permanentes y nacionalizaciones. Documentación precisa, tiempos optimizados y soporte personalizado en cada etapa.</p>
+            </div>
+            <img src="https://static.wixstatic.com/media/11062b_8f69893d59ff4ccf902fd129f8913068~mv2.jpg/v1/fill/w_640,h_528,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/11062b_8f69893d59ff4ccf902fd129f8913068~mv2.jpg" alt="Reunión profesional migratoria">
+        </section>
+    </main>
+
+    <footer>
+        <p>© 2026 Holding Integrado – Profesionalismo, Seguridad y Resultados Excepcionales</p>
+    </footer>
+
+    <script>
+        // Efecto sutil en nav al hacer scroll
+        window.addEventListener('scroll', () => {
+            document.querySelector('nav').classList.toggle('scrolled', window.scrollY > 100);
+        });
+    </script>
+
+</body>
+</html>

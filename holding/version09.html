@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEXUS | Grupo Empresarial</title>
+    <!-- Fuentes Modernas -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;600;800&family=Playfair+Display:ital,wght@0,600;1,600&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --dark: #0f172a;
+            --primary: #0ea5e9; /* Azul eléctrico moderno */
+            --secondary: #10b981; /* Esmeralda */
+            --accent: #6366f1; /* Índigo */
+            --light: #f8fafc;
+            --glass: rgba(255, 255, 255, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.5);
+            --shadow-soft: 0 10px 40px -10px rgba(0,0,0,0.08);
+            --shadow-hover: 0 20px 40px -10px rgba(14, 165, 233, 0.2);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Manrope', sans-serif;
+            background-color: #f0f2f5;
+            color: var(--dark);
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(14, 165, 233, 0.1) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(16, 185, 129, 0.1) 0px, transparent 50%);
+            background-attachment: fixed;
+        }
+
+        /* Tipografía */
+        h1, h2, h3 {
+            font-family: 'Playfair Display', serif; /* Toque elegante */
+            font-weight: 600;
+        }
+
+        /* Navegación Glassmorphism */
+        nav {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            max-width: 1200px;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            border-radius: 100px;
+            padding: 1rem 2rem;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: var(--shadow-soft);
+            transition: all 0.3s ease;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--dark);
+            text-decoration: none;
+            letter-spacing: -1px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo span {
+            color: var(--primary);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--dark);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            position: relative;
+            transition: color 0.3s;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background-color: var(--primary);
+            transition: width 0.3s;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* Hero Section Moderno */
+        .hero {
+            min-height: 90vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 8rem 2rem 4rem;
+            position: relative;
+        }
+
+        .hero-content {
+            max-width: 900px;
+            z-index: 2;
+        }
+
+        .badge {
+            display: inline-block;
+            background: rgba(14, 165, 233, 0.1);
+            color: var(--primary);
+            padding: 0.5rem 1.5rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, var(--dark) 0%, #475569 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            color: #64748b;
+            margin-bottom: 3rem;
+            line-height: 1.8;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero-btn {
+            display: inline-flex;
+            align-items: center;
+            background: var(--dark);
+            color: white;
+            padding: 1rem 2.5rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 10px 20px rgba(15, 23, 42, 0.2);
+        }
+
+        .hero-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(15, 23, 42, 0.3);
+        }
+
+        /* Grid de Negocios (Bento Style) */
+        .businesses {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-header h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .business-grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            grid-template-rows: auto;
+            gap: 2rem;
+        }
+
+        .card {
+            background: white;
+            border-radius: 24px;
+            overflow: hidden;
+            position: relative;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: var(--shadow-soft);
+            border: 1px solid rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .card-img-container {
+            height: 300px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s ease;
+        }
+
+        .card:hover img {
+            transform: scale(1.1);
+        }
+
+        .card-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+            opacity: 0.6;
+        }
+
+        .card-content {
+            padding: 2.5rem;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            background: white;
+        }
+
+        .card-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .card h3 {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            color: var(--dark);
+        }
+
+        .card p {
+            color: #64748b;
+            margin-bottom: 2rem;
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+
+        .card-link {
+            color: var(--primary);
+            font-weight: 700;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Layout asimétrico */
+        .card-1 { grid-column: span 12; } /* Inmobiliaria - Ancho completo arriba */
+        .card-2 { grid-column: span 6; }  /* Inversiones - Mitad */
+        .card-3 { grid-column: span 6; }  /* Docs - Mitad */
+
+        @media (max-width: 900px) {
+            .card-1, .card-2, .card-3 { grid-column: span 12; }
+            .hero h1 { font-size: 2.5rem; }
+            .nav-links { display: none; } /* En móvil simplificado para demo */
+            nav { width: 95%; padding: 1rem; }
+        }
+
+        /* Colores específicos por tarjeta */
+        .icon-real { background: rgba(14, 165, 233, 0.1); color: var(--primary); }
+        .icon-invest { background: rgba(16, 185, 129, 0.1); color: var(--secondary); }
+        .icon-docs { background: rgba(99, 102, 241, 0.1); color: var(--accent); }
+
+        /* Modal / Detalle Moderno */
+        .detail-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 2000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.4s ease;
+            overflow-y: auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .detail-modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .detail-content {
+            max-width: 900px;
+            width: 90%;
+            background: white;
+            border-radius: 20px;
+            padding: 3rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            position: relative;
+            transform: translateY(20px);
+            transition: transform 0.4s ease;
+        }
+
+        .detail-modal.active .detail-content {
+            transform: translateY(0);
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: #f1f5f9;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.3s;
+        }
+
+        .close-btn:hover {
+            background: #e2e8f0;
+        }
+
+        .detail-header {
+            margin-bottom: 2rem;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 1rem;
+        }
+
+        .detail-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+        }
+
+        .feature-list li {
+            list-style: none;
+            padding: 0.8rem 0;
+            border-bottom: 1px solid #f1f5f9;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .feature-list li::before {
+            content: '✓';
+            color: var(--secondary);
+            font-weight: bold;
+        }
+
+        @media (max-width: 768px) {
+            .detail-grid { grid-template-columns: 1fr; }
+            .detail-content { padding: 2rem 1.5rem; }
+        }
+
+        /* Animación de entrada */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Navegación Flotante -->
+    <nav>
+        <a href="#" class="logo">NEXUS<span>.</span></a>
+        <ul class="nav-links">
+            <li><a href="#inicio">Inicio</a></li>
+            <li><a href="#servicios">Divisiones</a></li>
+            <li><a href="#nosotros">Filosofía</a></li>
+            <li><a href="#contacto">Contacto</a></li>
+        </ul>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="inicio">
+        <div class="hero-content fade-in">
+            <span class="badge">Holding Group</span>
+            <h1>Construimos el futuro<br>a través de tres pilares.</h1>
+            <p>Una alianza estratégica entre expertos en Bienes Raíces, Inversiones Financieras y Gestión Migratoria. Solidez y confianza en un solo lugar.</p>
+            <a href="#servicios" class="hero-btn">Explorar Divisiones</a>
+        </div>
+    </section>
+
+    <!-- Grid de Servicios (Bento Layout) -->
+    <section class="businesses" id="servicios">
+        <div class="section-header fade-in">
+            <h2>Nuestras Divisiones</h2>
+            <p>Excelencia especializada en cada sector.</p>
+        </div>
+
+        <div class="business-grid">
+            
+            <!-- Tarjeta 1: Inmobiliaria (Ancha) -->
+            <div class="card card-1 fade-in">
+                <div class="card-img-container">
+                    <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=2070&auto=format&fit=crop" alt="Arquitectura Moderna">
+                    <div class="card-overlay"></div>
+                </div>
+                <div class="card-content">
+                    <div>
+                        <div class="card-icon icon-real">🏢</div>
+                        <h3>Nexus Real Estate</h3>
+                        <p>Gestión integral de activos inmobiliarios. Desde la búsqueda de su hogar ideal hasta la inversión en proyectos de alta rentabilidad comercial.</p>
+                    </div>
+                    <a href="#" class="card-link" onclick="openModal('real')">Ver Detalles <span>→</span></a>
+                </div>
+            </div>
+
+            <!-- Tarjeta 2: Inversiones -->
+            <div class="card card-2 fade-in">
+                <div class="card-img-container">
+                    <img src="https://images.unsplash.com/photo-1611974765270-ca12586343bb?q=80&w=2070&auto=format&fit=crop" alt="Finanzas">
+                    <div class="card-overlay"></div>
+                </div>
+                <div class="card-content">
+                    <div>
+                        <div class="card-icon icon-invest">📈</div>
+                        <h3>Nexus Capital</h3>
+                        <p>Inteligencia financiera para maximizar tu patrimonio. Estrategias de inversión diversificadas y seguras.</p>
+                    </div>
+                    <a href="#" class="card-link" onclick="openModal('invest')">Ver Detalles <span>→</span></a>
+                </div>
+            </div>
+
+            <!-- Tarjeta 3: Documentación -->
+            <div class="card card-3 fade-in">
+                <div class="card-img-container">
+                    <img src="https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?q=80&w=2070&auto=format&fit=crop" alt="Legal">
+                    <div class="card-overlay"></div>
+                </div>
+                <div class="card-content">
+                    <div>
+                        <div class="card-icon icon-docs">🛂</div>
+                        <h3>Nexus Legal & Visa</h3>
+                        <p>Expertos en movilidad global. Regularización, residencias y nacionalizaciones con un enfoque humano y eficiente.</p>
+                    </div>
+                    <a href="#" class="card-link" onclick="openModal('docs')">Ver Detalles <span>→</span></a>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Modal de Detalles -->
+    <div class="detail-modal" id="detailModal">
+        <div class="detail-content">
+            <button class="close-btn" onclick="closeModal()">✕</button>
+            <div id="modalBody">
+                <!-- El contenido se inyecta con JS -->
+            </div>
+        </div>
+    </div>
+
+    <footer style="text-align: center; padding: 4rem 2rem; background: var(--dark); color: white; margin-top: 4rem;">
+        <h3 style="margin-bottom: 1rem;">NEXUS GROUP</h3>
+        <p style="opacity: 0.7;">© 2026 Todos los derechos reservados.</p>
+    </footer>
+
+    <script>
+        // Datos para el modal
+        const contentData = {
+            'real': `
+                <div class="detail-header">
+                    <h2 style="color: var(--primary);">Nexus Real Estate</h2>
+                    <p>Arquitectura, Valor y Futuro.</p>
+                </div>
+                <div class="detail-grid">
+                    <div>
+                        <img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?q=80&w=2053&auto=format&fit=crop" style="width:100%; border-radius:12px; margin-bottom:1rem;" alt="Interior">
+                        <p style="color:#64748b; line-height:1.6;">Nos especializamos en conectar personas con espacios que inspiran. Ya sea una residencia de lujo o un local comercial estratégico, nuestro equipo analiza el mercado para garantizar la mejor plusvalía.</p>
+                    </div>
+                    <div>
+                        <h4 style="margin-bottom:1rem;">Nuestros Servicios</h4>
+                        <ul class="feature-list">
+                            <li>Compra y Venta de Propiedades Premium</li>
+                            <li>Consultoría de Inversión Inmobiliaria</li>
+                            <li>Administración de Patrimonios</li>
+                            <li>Desarrollo de Proyectos</li>
+                            <li>Valuación Certificada</li>
+                        </ul>
+                    </div>
+                </div>
+            `,
+            'invest': `
+                <div class="detail-header">
+                    <h2 style="color: var(--secondary);">Nexus Capital</h2>
+                    <p>Haciendo que tu dinero trabaje para ti.</p>
+                </div>
+                <div class="detail-grid">
+                    <div>
+                        <img src="https://images.unsplash.com/photo-1591696205602-2f950c417cb9?q=80&w=2070&auto=format&fit=crop" style="width:100%; border-radius:12px; margin-bottom:1rem;" alt="Gráficos">
+                        <p style="color:#64748b; line-height:1.6;">La estabilidad financiera es la base de la tranquilidad. Diseñamos portafolios a medida, analizando riesgos y oportunidades en mercados locales e internacionales.</p>
+                    </div>
+                    <div>
+                        <h4 style="margin-bottom:1rem;">Estrategias</h4>
+                        <ul class="feature-list">
+                            <li>Planificación Financiera Personal</li>
+                            <li>Fondos de Inversión Mutua</li>
+                            <li>Asesoría en Bolsa y Bonos</li>
+                            <li>Retiro y Pensiones</li>
+                            <li>Gestión de Riesgos</li>
+                        </ul>
+                    </div>
+                </div>
+            `,
+            'docs': `
+                <div class="detail-header">
+                    <h2 style="color: var(--accent);">Nexus Legal & Visa</h2>
+                    <p>Tu nuevo hogar, sin barreras.</p>
+                </div>
+                <div class="detail-grid">
+                    <div>
+                        <img src="https://images.unsplash.com/photo-1589391886645-d51941baf7fb?q=80&w=2070&auto=format&fit=crop" style="width:100%; border-radius:12px; margin-bottom:1rem;" alt="Pasaporte">
+                        <p style="color:#64748b; line-height:1.6;">Entendemos que migrar es un proceso emocional. Nuestro equipo legal se encarga de toda la burocracia para que tú solo te preocupes por tu nueva vida.</p>
+                    </div>
+                    <div>
+                        <h4 style="margin-bottom:1rem;">Trámites</h4>
+                        <ul class="feature-list">
+                            <li>Residencia Temporal y Permanente</li>
+                            <li>Nacionalización y Ciudadanía</li>
+                            <li>Visas de Trabajo y Estudiante</li>
+                            <li>Reunificación Familiar</li>
+                            <li>Asesoría Legal Migratoria</li>
+                        </ul>
+                    </div>
+                </div>
+            `
+        };
+
+        function openModal(type) {
+            event.preventDefault();
+            const modal = document.getElementById('detailModal');
+            const body = document.getElementById('modalBody');
+            body.innerHTML = contentData[type];
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden'; // Evitar scroll de fondo
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('detailModal');
+            modal.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Cerrar al hacer clic fuera
+        document.getElementById('detailModal').addEventListener('click', function(e) {
+            if (e.target === this) closeModal();
+        });
+
+        // Animación al hacer Scroll (Intersection Observer)
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+    </script>
+</body>
+</html>

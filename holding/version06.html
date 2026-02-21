@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Grupo Horizonte · holding de servicios</title>
+  <!-- Inter, versátil y elegante -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300..700&display=swap" rel="stylesheet">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      font-size: 16px;
+    }
+
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background: #f2f7fb; /* fondo muy suave */
+      color: #1e2b37;
+      line-height: 1.5;
+    }
+
+    /* Paleta: azules profundos y verdes esmeralda (sin rojo ni negro) */
+    :root {
+      --deep: #123645;       /* azul petróleo profundo */
+      --teal: #1d5a6c;       /* verde azulado */
+      --emerald: #2e8b6b;    /* esmeralda */
+      --stone: #e6f0f5;      /* gris azulado clarísimo */
+      --paper: #ffffff;
+      --text: #1e3a4a;
+      --text-light: #2b4b5e;
+      --shadow: 0 15px 30px -12px rgba(18, 54, 69, 0.15);
+      --shadow-hover: 0 25px 40px -16px rgba(18, 54, 69, 0.25);
+      --border-light: 1px solid rgba(29, 90, 108, 0.1);
+    }
+
+    /* Tipografía equilibrada */
+    h1, h2, h3 {
+      font-weight: 600;
+      color: var(--deep);
+      letter-spacing: -0.02em;
+    }
+
+    h1 {
+      font-size: 3.8rem;
+      line-height: 1.1;
+    }
+
+    h2 {
+      font-size: 2.8rem;
+      margin-bottom: 1rem;
+      position: relative;
+      display: inline-block;
+    }
+    h2:after {
+      content: '';
+      display: block;
+      width: 80px;
+      height: 4px;
+      background: var(--emerald);
+      border-radius: 4px;
+      margin-top: 0.5rem;
+      transition: width 0.3s;
+    }
+    h2:hover:after {
+      width: 130px;
+    }
+
+    p {
+      color: var(--text-light);
+      font-size: 1.1rem;
+      margin-bottom: 1.5rem;
+      line-height: 1.6;
+    }
+
+    /* Header con vidrio y curvas */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: rgba(255, 255, 255, 0.75);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      padding: 1rem 5%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      border-bottom: var(--border-light);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.02);
+    }
+
+    .logo {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--deep);
+      letter-spacing: -0.02em;
+    }
+    .logo span {
+      color: var(--emerald);
+      font-weight: 400;
+      font-size: 1.7rem;
+    }
+
+    nav ul {
+      display: flex;
+      gap: 2.8rem;
+      list-style: none;
+      flex-wrap: wrap;
+    }
+
+    nav a {
+      text-decoration: none;
+      font-weight: 500;
+      color: var(--deep);
+      font-size: 1.1rem;
+      padding: 0.5rem 0;
+      border-bottom: 2px solid transparent;
+      transition: 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+    nav a i {
+      color: var(--emerald);
+      opacity: 0.8;
+      font-size: 1rem;
+    }
+    nav a:hover {
+      border-bottom-color: var(--emerald);
+    }
+
+    section {
+      scroll-margin-top: 90px;
+    }
+
+    /* Contenedor principal */
+    main {
+      max-width: 1300px;
+      margin: 0 auto;
+      padding: 0 5%;
+    }
+
+    /* Hero curvilíneo y fluido */
+    .hero {
+      min-height: 80vh;
+      display: flex;
+      align-items: center;
+      gap: 4rem;
+      padding: 3rem 0 5rem;
+      flex-wrap: wrap;
+    }
+
+    .hero-content {
+      flex: 1 1 400px;
+    }
+
+    .hero-content p {
+      font-size: 1.3rem;
+      background: rgba(46, 139, 107, 0.05);
+      padding: 1rem 2rem;
+      border-radius: 60px;
+      display: inline-block;
+      margin: 2rem 0;
+      border-left: 6px solid var(--emerald);
+      font-weight: 400;
+    }
+
+    .pill-group {
+      display: flex;
+      gap: 1.2rem;
+      flex-wrap: wrap;
+    }
+
+    .pill {
+      background: var(--paper);
+      padding: 0.8rem 2rem;
+      border-radius: 40px;
+      font-weight: 500;
+      color: var(--deep);
+      box-shadow: var(--shadow);
+      border: var(--border-light);
+      transition: 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+    .pill i {
+      color: var(--emerald);
+    }
+    .pill:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-hover);
+    }
+
+    .hero-image {
+      flex: 1 1 400px;
+      border-radius: 40px;
+      overflow: hidden;
+      box-shadow: var(--shadow-hover);
+      border: var(--border-light);
+      background: var(--paper);
+      padding: 0.8rem;
+    }
+    .hero-image img {
+      width: 100%;
+      height: auto;
+      border-radius: 30px;
+      display: block;
+    }
+
+    /* Tarjetas de servicio — suaves, redondeadas, con profundidad */
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2.5rem;
+      margin: 5rem 0;
+    }
+
+    .service-card {
+      background: var(--paper);
+      border-radius: 40px;
+      padding: 2.5rem 2rem;
+      box-shadow: var(--shadow);
+      border: var(--border-light);
+      transition: all 0.3s ease;
+      display: flex;
+      flex-direction: column;
+    }
+    .service-card:hover {
+      transform: translateY(-8px);
+      box-shadow: var(--shadow-hover);
+    }
+
+    .service-badge {
+      background: var(--stone);
+      color: var(--deep);
+      font-weight: 600;
+      padding: 0.4rem 1.2rem;
+      border-radius: 40px;
+      font-size: 0.9rem;
+      align-self: flex-start;
+      margin-bottom: 1.8rem;
+      border-left: 4px solid var(--emerald);
+    }
+
+    .service-icon {
+      font-size: 2.8rem;
+      color: var(--teal);
+      margin-bottom: 1.2rem;
+    }
+
+    .service-card h3 {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
+
+    .card-footer {
+      margin-top: 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-top: 2px dashed var(--stone);
+      padding-top: 1.5rem;
+    }
+
+    .btn-demo {
+      background: var(--deep);
+      color: white;
+      border: none;
+      padding: 0.7rem 2rem;
+      border-radius: 40px;
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: default;
+      transition: 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      box-shadow: 0 8px 14px rgba(18, 54, 69, 0.2);
+    }
+    .btn-demo i {
+      color: var(--emerald);
+    }
+    .btn-demo:hover {
+      background: var(--teal);
+      transform: scale(1.02);
+    }
+
+    /* Bloque de confanza redondeado */
+    .trust-block {
+      background: linear-gradient(135deg, var(--deep) 0%, #1a4b5e 100%);
+      color: white;
+      padding: 3rem;
+      border-radius: 60px;
+      margin: 4rem 0;
+      box-shadow: var(--shadow-hover);
+    }
+    .trust-block p {
+      color: white;
+      font-size: 1.8rem;
+      font-weight: 400;
+      margin-bottom: 0;
+    }
+    .trust-block i {
+      color: var(--emerald);
+      margin-right: 1rem;
+    }
+
+    /* Galería sutil */
+    .image-pair {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin: 3rem 0;
+    }
+    .image-pair div {
+      border-radius: 40px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      border: var(--border-light);
+    }
+    .image-pair img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* Footer elegante */
+    footer {
+      background: var(--deep);
+      color: #cbdde8;
+      padding: 3rem 5%;
+      margin-top: 5rem;
+      border-radius: 50px 50px 0 0;
+    }
+    .footer-grid {
+      max-width: 1300px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 3rem;
+    }
+    .footer-col h4 {
+      color: white;
+      font-size: 1.3rem;
+      margin-bottom: 1.5rem;
+    }
+    .footer-col p, .footer-col a {
+      color: #b3d0e0;
+      text-decoration: none;
+      margin-bottom: 0.7rem;
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+    }
+    .footer-col i {
+      color: var(--emerald);
+      width: 1.4rem;
+    }
+    .social-links {
+      display: flex;
+      gap: 1rem;
+    }
+    .social-links a {
+      background: rgba(255,255,255,0.1);
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: 0.2s;
+    }
+    .social-links a:hover {
+      background: var(--emerald);
+    }
+    .copyright {
+      text-align: center;
+      padding-top: 3rem;
+      margin-top: 3rem;
+      border-top: 1px solid rgba(255,255,255,0.1);
+    }
+
+    /* Responsive */
+    @media (max-width: 800px) {
+      h1 { font-size: 2.8rem; }
+      h2 { font-size: 2.2rem; }
+      header { flex-direction: column; }
+      nav ul { gap: 1.5rem; }
+      .hero { flex-direction: column; }
+      .image-pair { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">Grupo<span> Horizonte</span></div>
+    <nav>
+      <ul>
+        <li><a href="#inicio"><i class="fas fa-arrow-right"></i> Inicio</a></li>
+        <li><a href="#inmobiliaria"><i class="fas fa-building"></i> Inmobiliaria</a></li>
+        <li><a href="#inversiones"><i class="fas fa-chart-line"></i> Inversiones</a></li>
+        <li><a href="#documentacion"><i class="fas fa-passport"></i> Extranjería</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <!-- Hero más suave -->
+    <section id="inicio">
+      <div class="hero">
+        <div class="hero-content">
+          <h1>Tres socios,<br>un propósito</h1>
+          <p>Inmobiliaria · Inversiones · Asesoría legal</p>
+          <div class="pill-group">
+            <div class="pill"><i class="fas fa-building"></i> +15 años</div>
+            <div class="pill"><i class="fas fa-chart-pie"></i> +200 clientes</div>
+            <div class="pill"><i class="fas fa-globe"></i> Alcance internacional</div>
+          </div>
+        </div>
+        <div class="hero-image">
+          <img src="https://images.unsplash.com/photo-1557804506-669a67965ba0?w=1000&auto=format&fit=crop" alt="equipo profesional">
+        </div>
+      </div>
+    </section>
+
+    <!-- Grid de servicios (tres socios) -->
+    <section id="servicios">
+      <h2>Nuestros frentes</h2>
+      <div class="services-grid">
+        <!-- Inmobiliaria -->
+        <div class="service-card" id="inmobiliaria">
+          <span class="service-badge"><i class="fas fa-building" style="margin-right: 6px;"></i> Socio 1 · Inmobiliaria</span>
+          <div class="service-icon"><i class="fas fa-home"></i></div>
+          <h3>Bienes Raíces</h3>
+          <p>Compra, venta y alquiler de propiedades prime. Estudio de títulos y financiación a medida en cada operación.</p>
+          <div class="card-footer">
+            <span class="btn-demo"><i class="fas fa-arrow-right"></i> Ver más</span>
+            <i class="fas fa-map-pin" style="color: var(--emerald);"></i>
+          </div>
+        </div>
+        <!-- Inversiones -->
+        <div class="service-card" id="inversiones">
+          <span class="service-badge"><i class="fas fa-chart-line"></i> Socio 2 · Inversiones</span>
+          <div class="service-icon"><i class="fas fa-chart-pie"></i></div>
+          <h3>Estrategias financieras</h3>
+          <p>Planificación patrimonial, bolsa, fondos y gestión de riesgos. Carteras diversificadas con visión a largo plazo.</p>
+          <div class="card-footer">
+            <span class="btn-demo"><i class="fas fa-arrow-right"></i> Explorar</span>
+            <i class="fas fa-coins" style="color: var(--emerald);"></i>
+          </div>
+        </div>
+        <!-- Documentación -->
+        <div class="service-card" id="documentacion">
+          <span class="service-badge"><i class="fas fa-passport"></i> Socio 3 · Legal</span>
+          <div class="service-icon"><i class="fas fa-file-signature"></i></div>
+          <h3>Nacionalización & trámites</h3>
+          <p>Residencia, ciudadanía, visados y regularización. Acompañamiento bilingüe con alianza de estudios jurídicos.</p>
+          <div class="card-footer">
+            <span class="btn-demo"><i class="fas fa-arrow-right"></i> Consultar</span>
+            <i class="fas fa-language" style="color: var(--emerald);"></i>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Trust block redondeado -->
+    <div class="trust-block">
+      <p><i class="fas fa-handshake"></i> Tres especialidades, un solo equipo. Experiencia integrada para servirte mejor.</p>
+    </div>
+
+    <!-- Imágenes de apoyo (suavizadas) -->
+    <div class="image-pair">
+      <div><img src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=800&auto=format&fit=crop" alt="propiedad"></div>
+      <div><img src="https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=800&auto=format&fit=crop" alt="documentos"></div>
+    </div>
+  </main>
+
+  <footer>
+    <div class="footer-grid">
+      <div class="footer-col">
+        <h4>Grupo Horizonte</h4>
+        <p><i class="fas fa-map-marker-alt"></i> Madrid · Barcelona · Valencia</p>
+        <p><i class="fas fa-phone-alt"></i> +34 999 888 777</p>
+        <p><i class="fas fa-envelope"></i> contacto@horizonte.demo</p>
+      </div>
+      <div class="footer-col">
+        <h4>Socios</h4>
+        <p><i class="fas fa-building"></i> Inmobiliaria</p>
+        <p><i class="fas fa-chart-line"></i> Inversiones</p>
+        <p><i class="fas fa-passport"></i> Extranjería</p>
+      </div>
+      <div class="footer-col">
+        <h4>Legal</h4>
+        <p><i class="fas fa-file-contract"></i> Aviso legal</p>
+        <p><i class="fas fa-lock"></i> Privacidad</p>
+        <p><i class="fas fa-cookie"></i> Cookies</p>
+      </div>
+      <div class="footer-col">
+        <h4>Redes</h4>
+        <div class="social-links">
+          <a href="#"><i class="fab fa-linkedin-in"></i></a>
+          <a href="#"><i class="fab fa-x-twitter"></i></a>
+          <a href="#"><i class="fab fa-instagram"></i></a>
+        </div>
+      </div>
+    </div>
+    <div class="copyright">
+      <p>© 2025 Grupo Horizonte · Diseño fluido · Demo sin funcionalidad</p>
+    </div>
+  </footer>
+</body>
+</html>
