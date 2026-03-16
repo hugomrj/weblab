@@ -1,0 +1,1285 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Consultas - Tabla y Graficos</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0d1117;
+            --bg-secondary: #161b22;
+            --bg-card: #1c2128;
+            --bg-hover: #252c35;
+            --border: #30363d;
+            --text-primary: #e6edf3;
+            --text-secondary: #b1bac4;
+            --text-muted: #7d8590;
+            --accent: #2ea043;
+            --accent-hover: #3fb950;
+            --accent-muted: rgba(46, 160, 67, 0.15);
+            --danger: #f85149;
+            --warning: #d29922;
+            --info: #58a6ff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+        }
+
+        .mono { font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; }
+
+        /* Layout */
+        .app-layout {
+            display: grid;
+            grid-template-columns: 260px 1fr;
+            min-height: 100vh;
+        }
+
+        @media (max-width: 900px) {
+            .app-layout {
+                grid-template-columns: 1fr;
+            }
+            .sidebar { 
+                position: fixed;
+                left: -280px;
+                transition: left 0.3s ease;
+                z-index: 100;
+                height: 100vh;
+            }
+            .sidebar.open { left: 0; }
+            .mobile-header { display: flex !important; }
+        }
+
+        /* Sidebar */
+        .sidebar {
+            background: var(--bg-secondary);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar-brand {
+            padding: 1.25rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .sidebar-brand h1 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .sidebar-brand h1 svg { color: var(--accent); }
+
+        .sidebar-brand span {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            margin-top: 0.25rem;
+            display: block;
+        }
+
+        .sidebar-section {
+            padding: 1rem 0.75rem;
+        }
+
+        .sidebar-label {
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--text-muted);
+            padding: 0.5rem 0.75rem;
+            font-weight: 600;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            padding: 0.7rem 0.75rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            font-weight: 500;
+            margin-bottom: 0.15rem;
+        }
+
+        .nav-item:hover {
+            background: var(--bg-hover);
+            color: var(--text-primary);
+        }
+
+        .nav-item.active {
+            background: var(--accent-muted);
+            color: var(--accent);
+        }
+
+        .nav-item svg { width: 16px; height: 16px; flex-shrink: 0; }
+
+        .sidebar-footer {
+            margin-top: auto;
+            padding: 1rem;
+            border-top: 1px solid var(--border);
+        }
+
+        /* Mobile header */
+        .mobile-header {
+            display: none;
+            position: sticky;
+            top: 0;
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border);
+            padding: 0.75rem 1rem;
+            align-items: center;
+            gap: 1rem;
+            z-index: 50;
+        }
+
+        .mobile-header button {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 0.5rem;
+            color: var(--text-primary);
+            cursor: pointer;
+        }
+
+        .mobile-header span {
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        /* Main */
+        .main-content {
+            padding: 1.5rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .page-header {
+            margin-bottom: 1.5rem;
+        }
+
+        .page-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+
+        .page-subtitle {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        /* Panels */
+        .panel {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+        }
+
+        .panel-header {
+            padding: 1rem 1.25rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+        }
+
+        .panel-title {
+            font-size: 0.95rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .panel-title svg { color: var(--accent); width: 18px; height: 18px; }
+
+        .panel-body { padding: 1.25rem; }
+
+        /* Form */
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1rem;
+        }
+
+        .form-field {
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+        }
+
+        .form-field label {
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: var(--text-muted);
+        }
+
+        .form-field input,
+        .form-field select {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 0.65rem 0.85rem;
+            color: var(--text-primary);
+            font-family: inherit;
+            font-size: 0.85rem;
+            transition: border-color 0.15s ease;
+        }
+
+        .form-field input:focus,
+        .form-field select:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.65rem 1.25rem;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            border: none;
+            font-family: inherit;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: #fff;
+        }
+
+        .btn-primary:hover {
+            background: var(--accent-hover);
+        }
+
+        .btn-ghost {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text-secondary);
+        }
+
+        .btn-ghost:hover {
+            border-color: var(--text-muted);
+            color: var(--text-primary);
+        }
+
+        .btn-danger {
+            background: transparent;
+            border: 1px solid var(--danger);
+            color: var(--danger);
+        }
+
+        .btn-danger:hover {
+            background: var(--danger);
+            color: #fff;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 0.75rem;
+            margin-top: 1.25rem;
+            flex-wrap: wrap;
+        }
+
+        /* Table */
+        .table-wrapper {
+            overflow-x: auto;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+        }
+
+        .data-table th {
+            background: var(--bg-secondary);
+            padding: 0.75rem 1rem;
+            text-align: left;
+            font-weight: 600;
+            color: var(--text-secondary);
+            border-bottom: 1px solid var(--border);
+            white-space: nowrap;
+        }
+
+        .data-table td {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid var(--border);
+            color: var(--text-primary);
+        }
+
+        .data-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .data-table tr:hover td {
+            background: var(--bg-hover);
+        }
+
+        .data-table .number {
+            font-family: 'JetBrains Mono', monospace;
+            text-align: right;
+        }
+
+        .data-table .total-row td {
+            background: var(--bg-secondary);
+            font-weight: 600;
+            border-top: 2px solid var(--accent);
+        }
+
+        /* Chart container */
+        .chart-wrapper {
+            position: relative;
+            height: 320px;
+            padding: 1rem 0;
+        }
+
+        /* Result header */
+        .result-header {
+            background: var(--bg-secondary);
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+        }
+
+        .result-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .result-meta {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .result-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .result-actions button {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.4rem 0.6rem;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+
+        .result-actions button:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        /* Empty state */
+        .empty-state {
+            text-align: center;
+            padding: 3rem 1rem;
+            color: var(--text-muted);
+        }
+
+        .empty-state svg {
+            width: 48px;
+            height: 48px;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        .empty-state p { font-size: 0.9rem; }
+
+        /* Report */
+        .report-count {
+            background: var(--accent-muted);
+            color: var(--accent);
+            padding: 0.25rem 0.65rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .report-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .report-item {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .report-item-header {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .report-item-title {
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .report-item-meta {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            margin-top: 0.2rem;
+        }
+
+        .report-item-actions button {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            padding: 0.35rem;
+            border-radius: 4px;
+            transition: all 0.15s ease;
+        }
+
+        .report-item-actions button:hover {
+            background: var(--bg-card);
+            color: var(--danger);
+        }
+
+        .report-item-body {
+            padding: 1rem;
+        }
+
+        .report-item-body .mini-table {
+            width: 100%;
+            font-size: 0.75rem;
+            margin-bottom: 1rem;
+        }
+
+        .report-item-body .mini-table th,
+        .report-item-body .mini-table td {
+            padding: 0.4rem 0.6rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .report-item-body .mini-table th {
+            background: var(--bg-card);
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+
+        .report-item-body .mini-chart {
+            height: 180px;
+        }
+
+        /* Notification */
+        .toast {
+            position: fixed;
+            bottom: 1.5rem;
+            right: 1.5rem;
+            background: var(--bg-card);
+            border: 1px solid var(--accent);
+            border-radius: 10px;
+            padding: 0.85rem 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+            transform: translateY(120%);
+            opacity: 0;
+            transition: all 0.25s ease;
+            z-index: 200;
+        }
+
+        .toast.visible {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .toast svg { color: var(--accent); }
+
+        /* Animations */
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .animate { animation: slideIn 0.35s ease forwards; }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+
+        /* Tab navigation for result */
+        .tab-nav {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 0.5rem;
+        }
+
+        .tab-btn {
+            padding: 0.5rem 1rem;
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            font-weight: 500;
+            cursor: pointer;
+            border-radius: 6px;
+            transition: all 0.15s ease;
+            font-family: inherit;
+        }
+
+        .tab-btn:hover { color: var(--text-primary); }
+
+        .tab-btn.active {
+            background: var(--accent-muted);
+            color: var(--accent);
+        }
+
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+    </style>
+</head>
+<body>
+    <div class="app-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-brand">
+                <h1>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M3 3v18h18"/>
+                        <path d="M18 17V9"/>
+                        <path d="M13 17V5"/>
+                        <path d="M8 17v-3"/>
+                    </svg>
+                    QueryReport
+                </h1>
+                <span>Sistema de Consultas</span>
+            </div>
+
+            <nav class="sidebar-section">
+                <div class="sidebar-label">Consultas Disponibles</div>
+                
+                <div class="nav-item active" data-query="planilla" onclick="selectQuery('planilla')">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                        <line x1="16" y1="2" x2="16" y2="6"/>
+                        <line x1="8" y1="2" x2="8" y2="6"/>
+                        <line x1="3" y1="10" x2="21" y2="10"/>
+                    </svg>
+                    Planilla de Sueldos
+                </div>
+
+                <div class="nav-item" data-query="descuentos" onclick="selectQuery('descuentos')">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="9" cy="21" r="1"/>
+                        <circle cx="20" cy="21" r="1"/>
+                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+                    </svg>
+                    Tipos de Descuentos
+                </div>
+
+                <div class="nav-item" data-query="judiciales" onclick="selectQuery('judiciales')">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                        <polyline points="14 2 14 8 20 8"/>
+                        <line x1="9" y1="15" x2="15" y2="15"/>
+                    </svg>
+                    Descuentos Judiciales
+                </div>
+
+                <div class="nav-item" data-query="voluntarios" onclick="selectQuery('voluntarios')">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                    </svg>
+                    Descuentos Voluntarios
+                </div>
+
+                <div class="nav-item" data-query="endeudamiento" onclick="selectQuery('endeudamiento')">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="12" y1="1" x2="12" y2="23"/>
+                        <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                    </svg>
+                    Nivel de Endeudamiento
+                </div>
+
+                <div class="nav-item" data-query="categoria" onclick="selectQuery('categoria')">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21.21 15.89A10 10 0 1 1 8 2.83"/>
+                        <path d="M22 12A10 10 0 0 0 12 2v10z"/>
+                    </svg>
+                    Por Categoria de Rubro
+                </div>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="nav-item" onclick="limpiarTodo()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="3 6 5 6 21 6"/>
+                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                    </svg>
+                    Limpiar Reporte
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main>
+            <!-- Mobile Header -->
+            <div class="mobile-header">
+                <button onclick="toggleSidebar()">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="3" y1="12" x2="21" y2="12"/>
+                        <line x1="3" y1="6" x2="21" y2="6"/>
+                        <line x1="3" y1="18" x2="21" y2="18"/>
+                    </svg>
+                </button>
+                <span id="mobileTitle">Planilla de Sueldos</span>
+            </div>
+
+            <div class="main-content">
+                <!-- Header -->
+                <div class="page-header">
+                    <h2 class="page-title" id="pageTitle">Planilla de Sueldos</h2>
+                    <p class="page-subtitle" id="pageSubtitle">Configure los parametros y ejecute la consulta</p>
+                </div>
+
+                <!-- Parameters Panel -->
+                <div class="panel animate">
+                    <div class="panel-header">
+                        <div class="panel-title">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="3"/>
+                                <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+                            </svg>
+                            Parametros de Consulta
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <div class="form-row" id="paramsForm"></div>
+                        <div class="btn-group">
+                            <button class="btn btn-primary" onclick="ejecutarConsulta()">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polygon points="5 3 19 12 5 21 5 3"/>
+                                </svg>
+                                Ejecutar Consulta
+                            </button>
+                            <button class="btn btn-ghost" onclick="limpiarFormulario()">
+                                Limpiar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Results Panel -->
+                <div class="panel" id="resultsPanel" style="display: none;">
+                    <div class="panel-header">
+                        <div class="panel-title">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                                <polyline points="14 2 14 8 20 8"/>
+                                <line x1="16" y1="13" x2="8" y2="13"/>
+                                <line x1="16" y1="17" x2="8" y2="17"/>
+                            </svg>
+                            Resultados
+                        </div>
+                        <button class="btn btn-primary" onclick="agregarAlReporte()">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="12" y1="5" x2="12" y2="19"/>
+                                <line x1="5" y1="12" x2="19" y2="12"/>
+                            </svg>
+                            Agregar al Reporte
+                        </button>
+                    </div>
+                    <div class="panel-body">
+                        <!-- Tab Navigation -->
+                        <div class="tab-nav">
+                            <button class="tab-btn active" onclick="switchTab('tabla')">Tabla de Datos</button>
+                            <button class="tab-btn" onclick="switchTab('grafico')">Grafico</button>
+                        </div>
+
+                        <!-- Result Header -->
+                        <div class="result-header">
+                            <div>
+                                <div class="result-title" id="resultTitle">Titulo del Resultado</div>
+                                <div class="result-meta" id="resultMeta">Parametros aplicados</div>
+                            </div>
+                        </div>
+
+                        <!-- Tab Content: Table -->
+                        <div class="tab-content active" id="tabTabla">
+                            <div class="table-wrapper" id="tableContainer"></div>
+                        </div>
+
+                        <!-- Tab Content: Chart -->
+                        <div class="tab-content" id="tabGrafico">
+                            <div class="chart-wrapper">
+                                <canvas id="resultChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Report Panel -->
+                <div class="panel">
+                    <div class="panel-header">
+                        <div class="panel-title">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>
+                            </svg>
+                            Reporte Final
+                        </div>
+                        <span class="report-count" id="reportCount">0 elementos</span>
+                    </div>
+                    <div class="panel-body">
+                        <div class="report-list" id="reportList">
+                            <div class="empty-state" id="reportEmpty">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>
+                                </svg>
+                                <p>No hay elementos en el reporte</p>
+                                <p style="font-size: 0.8rem; margin-top: 0.5rem;">Ejecute consultas y agregue los resultados</p>
+                            </div>
+                        </div>
+                        <div class="btn-group" id="exportButtons" style="display: none;">
+                            <button class="btn btn-primary" onclick="exportarReporte()">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                                    <polyline points="7 10 12 15 17 10"/>
+                                    <line x1="12" y1="15" x2="12" y2="3"/>
+                                </svg>
+                                Exportar Reporte PDF
+                            </button>
+                            <button class="btn btn-danger" onclick="limpiarTodo()">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="3 6 5 6 21 6"/>
+                                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                                </svg>
+                                Limpiar Todo
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast" id="toast">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+            <polyline points="22 4 12 14.01 9 11.01"/>
+        </svg>
+        <span id="toastText">Operacion completada</span>
+    </div>
+
+    <script>
+        // =====================
+        // CONFIGURACION DE CONSULTAS
+        // =====================
+        const consultas = {
+            planilla: {
+                titulo: 'Planilla de Sueldos',
+                subtitulo: 'Resumen de personal y distribucion por categoria',
+                parametros: [
+                    { id: 'periodo', label: 'Periodo', tipo: 'select', opciones: ['Octubre 2025', 'Septiembre 2025', 'Agosto 2025'] },
+                    { id: 'institucion', label: 'Institucion', tipo: 'select', opciones: ['MEC', 'MSP', 'MOPT', 'Todos'] }
+                ],
+                generarDatos: (params) => ({
+                    titulo: 'PLANILLA DE SUELDOS - ' + params.periodo,
+                    columnas: ['Categoria', 'Cantidad', 'Porcentaje'],
+                    filas: [
+                        ['Docentes', 80674, '95.60%'],
+                        ['Administrativos', 2074, '2.46%'],
+                        ['Ambas categorias', 1642, '1.95%']
+                    ],
+                    totales: ['TOTAL', 84390, '100%'],
+                    chartData: {
+                        labels: ['Docentes', 'Administrativos', 'Ambas categorias'],
+                        data: [80674, 2074, 1642]
+                    },
+                    chartType: 'doughnut'
+                })
+            },
+            descuentos: {
+                titulo: 'Tipos de Descuentos',
+                subtitulo: 'Descuentos aplicados al personal',
+                parametros: [
+                    { id: 'anio', label: 'Ano', tipo: 'select', opciones: ['2025', '2024', '2023'] },
+                    { id: 'tipo', label: 'Tipo Personal', tipo: 'select', opciones: ['Todos', 'Docentes', 'Administrativos'] }
+                ],
+                generarDatos: (params) => ({
+                    titulo: 'TIPOS DE DESCUENTOS AL PERSONAL',
+                    columnas: ['Tipo de Descuento', 'Cantidad', 'Porcentaje'],
+                    filas: [
+                        ['JUBILACION', 84382, '99.99%'],
+                        ['IPS', 82314, '97.54%'],
+                        ['CAJA FISCAL', 71201, '84.37%'],
+                        ['SINDICATO', 53539, '63.43%'],
+                        ['COOPERATIVA', 32937, '39.00%']
+                    ],
+                    totales: null,
+                    chartData: {
+                        labels: ['JUBILACION', 'IPS', 'CAJA FISCAL', 'SINDICATO', 'COOPERATIVA'],
+                        data: [84382, 82314, 71201, 53539, 32937]
+                    },
+                    chartType: 'bar'
+                })
+            },
+            judiciales: {
+                titulo: 'Descuentos Judiciales',
+                subtitulo: 'Descuentos por orden judicial',
+                parametros: [
+                    { id: 'periodo', label: 'Periodo', tipo: 'select', opciones: ['Octubre 2025', 'Septiembre 2025'] },
+                    { id: 'institucion', label: 'Institucion', tipo: 'select', opciones: ['MEC', 'Todas'] }
+                ],
+                generarDatos: (params) => ({
+                    titulo: 'DESCUENTOS JUDICIALES',
+                    columnas: ['Tipo', 'Cantidad', 'Monto', 'Porcentaje'],
+                    filas: [
+                        ['Prestacion de Alimentos', 2463, '1,234,567,890', '2.92%'],
+                        ['Cobro de Garantias', 4238, '2,567,890,123', '5.02%']
+                    ],
+                    totales: ['TOTAL', 6701, '3,802,458,013', '7.94%'],
+                    chartData: {
+                        labels: ['Prestacion de Alimentos', 'Cobro de Garantias'],
+                        data: [2463, 4238]
+                    },
+                    chartType: 'bar'
+                })
+            },
+            voluntarios: {
+                titulo: 'Descuentos Voluntarios',
+                subtitulo: 'Descuentos autorizados por el funcionario',
+                parametros: [
+                    { id: 'periodo', label: 'Periodo', tipo: 'select', opciones: ['Octubre 2025', 'Septiembre 2025'] }
+                ],
+                generarDatos: (params) => ({
+                    titulo: 'DESCUENTOS VOLUNTARIOS',
+                    columnas: ['Tipo', 'Cantidad', 'Monto', 'Porcentaje'],
+                    filas: [
+                        ['Cuota Social Asociaciones', 53539, '15,234,567,890', '63.43%'],
+                        ['Prestamos Cooperativa', 32937, '12,456,789,012', '39.00%'],
+                        ['Seguros', 23012, '6,369,236,017', '27.27%']
+                    ],
+                    totales: ['TOTAL', 109488, '34,060,592,919', '100%'],
+                    chartData: {
+                        labels: ['Cuota Social', 'Prestamos', 'Seguros'],
+                        data: [53539, 32937, 23012]
+                    },
+                    chartType: 'bar'
+                })
+            },
+            endeudamiento: {
+                titulo: 'Nivel de Endeudamiento',
+                subtitulo: 'Distribucion del nivel de deuda vs sueldo',
+                parametros: [
+                    { id: 'periodo', label: 'Periodo', tipo: 'select', opciones: ['Octubre 2025', 'Septiembre 2025'] },
+                    { id: 'limite', label: 'Limite superior', tipo: 'select', opciones: ['25%', '30%', '35%', 'Sin limite'] }
+                ],
+                generarDatos: (params) => ({
+                    titulo: 'NIVEL DE ENDEUDAMIENTO VS SUELDO',
+                    columnas: ['Rango de Endeudamiento', 'Cantidad', 'Porcentaje'],
+                    filas: [
+                        ['0%', 35288, '41.8%'],
+                        ['0.1% - 5%', 24716, '29.3%'],
+                        ['5.1% - 10%', 5169, '6.1%'],
+                        ['10.1% - 15%', 3666, '4.3%'],
+                        ['15.1% - 20%', 3527, '4.2%'],
+                        ['20.1% - 25%', 11354, '13.5%']
+                    ],
+                    totales: ['TOTAL', 83720, '100%'],
+                    chartData: {
+                        labels: ['0%', '0.1-5%', '5.1-10%', '10.1-15%', '15.1-20%', '20.1-25%'],
+                        data: [35288, 24716, 5169, 3666, 3527, 11354]
+                    },
+                    chartType: 'bar'
+                })
+            },
+            categoria: {
+                titulo: 'Por Categoria de Rubro',
+                subtitulo: 'Distribucion del personal por categoria',
+                parametros: [
+                    { id: 'periodo', label: 'Periodo', tipo: 'select', opciones: ['Octubre 2025', 'Septiembre 2025'] }
+                ],
+                generarDatos: (params) => ({
+                    titulo: 'CANTIDAD DE PERSONAS POR TIPO DE CATEGORIA DE RUBRO',
+                    columnas: ['Categoria', 'Cantidad', 'Porcentaje'],
+                    filas: [
+                        ['Rubro 11 - Docentes', 80674, '95.60%'],
+                        ['Rubro 12 - Administrativos', 2074, '2.46%'],
+                        ['Rubro 11 y 12', 1642, '1.95%']
+                    ],
+                    totales: ['TOTAL', 84390, '100%'],
+                    chartData: {
+                        labels: ['Docentes', 'Administrativos', 'Ambos'],
+                        data: [80674, 2074, 1642]
+                    },
+                    chartType: 'pie'
+                })
+            }
+        };
+
+        // =====================
+        // ESTADO
+        // =====================
+        let consultaActual = 'planilla';
+        let datosActuales = null;
+        let chartInstance = null;
+        let reporte = [];
+
+        // =====================
+        // FUNCIONES
+        // =====================
+        function selectQuery(tipo) {
+            consultaActual = tipo;
+            const config = consultas[tipo];
+
+            // Actualizar menu
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.toggle('active', item.dataset.query === tipo);
+            });
+
+            // Actualizar titulos
+            document.getElementById('pageTitle').textContent = config.titulo;
+            document.getElementById('pageSubtitle').textContent = config.subtitulo;
+            document.getElementById('mobileTitle').textContent = config.titulo;
+
+            // Renderizar parametros
+            renderizarParametros(config.parametros);
+
+            // Ocultar resultados
+            document.getElementById('resultsPanel').style.display = 'none';
+            datosActuales = null;
+
+            // Cerrar sidebar mobile
+            document.getElementById('sidebar').classList.remove('open');
+        }
+
+        function renderizarParametros(parametros) {
+            const container = document.getElementById('paramsForm');
+            container.innerHTML = parametros.map(p => {
+                if (p.tipo === 'select') {
+                    return `
+                        <div class="form-field">
+                            <label for="${p.id}">${p.label}</label>
+                            <select id="${p.id}">
+                                ${p.opciones.map(o => `<option value="${o}">${o}</option>`).join('')}
+                            </select>
+                        </div>
+                    `;
+                }
+                return '';
+            }).join('');
+        }
+
+        function obtenerParametros() {
+            const config = consultas[consultaActual];
+            const params = {};
+            config.parametros.forEach(p => {
+                const el = document.getElementById(p.id);
+                if (el) params[p.id] = el.value;
+            });
+            return params;
+        }
+
+        function ejecutarConsulta() {
+            const config = consultas[consultaActual];
+            const params = obtenerParametros();
+            datosActuales = config.generarDatos(params);
+
+            // Mostrar panel de resultados
+            const panel = document.getElementById('resultsPanel');
+            panel.style.display = 'block';
+            panel.classList.add('animate');
+
+            // Actualizar header de resultados
+            document.getElementById('resultTitle').textContent = datosActuales.titulo;
+            document.getElementById('resultMeta').textContent = 'Parametros: ' + Object.values(params).join(' | ');
+
+            // Renderizar tabla
+            renderizarTabla(datosActuales);
+
+            // Renderizar grafico
+            renderizarGrafico(datosActuales);
+
+            // Scroll a resultados
+            panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        function renderizarTabla(datos) {
+            const container = document.getElementById('tableContainer');
+            
+            let html = `<table class="data-table">
+                <thead>
+                    <tr>
+                        ${datos.columnas.map(c => `<th>${c}</th>`).join('')}
+                    </tr>
+                </thead>
+                <tbody>`;
+
+            datos.filas.forEach(fila => {
+                html += `<tr>
+                    ${fila.map((celda, i) => `<td class="${i > 0 ? 'number' : ''}">${celda}</td>`).join('')}
+                </tr>`;
+            });
+
+            if (datos.totales) {
+                html += `<tr class="total-row">
+                    ${datos.totales.map((celda, i) => `<td class="${i > 0 ? 'number' : ''}">${celda}</td>`).join('')}
+                </tr>`;
+            }
+
+            html += `</tbody></table>`;
+            container.innerHTML = html;
+        }
+
+        function renderizarGrafico(datos) {
+            const ctx = document.getElementById('resultChart').getContext('2d');
+            
+            if (chartInstance) {
+                chartInstance.destroy();
+            }
+
+            const colores = ['#2ea043', '#3b82f6', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899'];
+
+            const config = {
+                type: datos.chartType,
+                data: {
+                    labels: datos.chartData.labels,
+                    datasets: [{
+                        data: datos.chartData.data,
+                        backgroundColor: colores.slice(0, datos.chartData.labels.length),
+                        borderColor: datos.chartType === 'bar' ? colores.slice(0, datos.chartData.labels.length) : '#1c2128',
+                        borderWidth: datos.chartType === 'bar' ? 0 : 2,
+                        borderRadius: datos.chartType === 'bar' ? 6 : 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: datos.chartType !== 'bar',
+                            position: 'right',
+                            labels: { color: '#7d8590', padding: 15, usePointStyle: true }
+                        }
+                    },
+                    scales: datos.chartType === 'bar' ? {
+                        y: {
+                            beginAtZero: true,
+                            grid: { color: 'rgba(48, 54, 61, 0.5)' },
+                            ticks: { color: '#7d8590' }
+                        },
+                        x: {
+                            grid: { display: false },
+                            ticks: { color: '#7d8590' }
+                        }
+                    } : {}
+                }
+            };
+
+            if (datos.chartType === 'doughnut' || datos.chartType === 'pie') {
+                config.options.cutout = datos.chartType === 'doughnut' ? '55%' : 0;
+            }
+
+            chartInstance = new Chart(ctx, config);
+        }
+
+        function switchTab(tab) {
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.textContent.toLowerCase().includes(tab));
+            });
+            document.getElementById('tabTabla').classList.toggle('active', tab === 'tabla');
+            document.getElementById('tabGrafico').classList.toggle('active', tab === 'grafico');
+        }
+
+        function agregarAlReporte() {
+            if (!datosActuales) return;
+
+            const item = {
+                id: Date.now(),
+                consulta: consultaActual,
+                titulo: datosActuales.titulo,
+                datos: JSON.parse(JSON.stringify(datosActuales)),
+                parametros: obtenerParametros(),
+                fecha: new Date().toLocaleString()
+            };
+
+            reporte.push(item);
+            actualizarReporte();
+            mostrarToast('Agregado al reporte correctamente');
+        }
+
+        function actualizarReporte() {
+            const container = document.getElementById('reportList');
+            const empty = document.getElementById('reportEmpty');
+            const count = document.getElementById('reportCount');
+            const buttons = document.getElementById('exportButtons');
+
+            count.textContent = `${reporte.length} elemento${reporte.length !== 1 ? 's' : ''}`;
+
+            if (reporte.length === 0) {
+                empty.style.display = 'block';
+                buttons.style.display = 'none';
+                container.innerHTML = '';
+                container.appendChild(empty);
+                return;
+            }
+
+            empty.style.display = 'none';
+            buttons.style.display = 'flex';
+
+            container.innerHTML = reporte.map(item => `
+                <div class="report-item animate">
+                    <div class="report-item-header">
+                        <div>
+                            <div class="report-item-title">${item.titulo}</div>
+                            <div class="report-item-meta">${item.fecha} | ${Object.values(item.parametros).join(', ')}</div>
+                        </div>
+                        <div class="report-item-actions">
+                            <button onclick="eliminarDelReporte(${item.id})" title="Eliminar">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <line x1="18" y1="6" x2="6" y2="18"/>
+                                    <line x1="6" y1="6" x2="18" y2="18"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="report-item-body">
+                        <table class="mini-table">
+                            <thead>
+                                <tr>
+                                    ${item.datos.columnas.map(c => `<th>${c}</th>`).join('')}
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${item.datos.filas.slice(0, 4).map(fila => `
+                                    <tr>
+                                        ${fila.map((celda, i) => `<td class="${i > 0 ? 'number' : ''}">${celda}</td>`).join('')}
+                                    </tr>
+                                `).join('')}
+                                ${item.datos.filas.length > 4 ? `<tr><td colspan="${item.datos.columnas.length}" style="text-align:center;color:var(--text-muted)">... ${item.datos.filas.length - 4} filas mas</td></tr>` : ''}
+                            </tbody>
+                        </table>
+                        <div class="mini-chart">
+                            <canvas id="chart-${item.id}"></canvas>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+
+            // Crear mini charts
+            reporte.forEach(item => {
+                const ctx = document.getElementById(`chart-${item.id}`);
+                if (ctx) {
+                    const colores = ['#2ea043', '#3b82f6', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899'];
+                    new Chart(ctx.getContext('2d'), {
+                        type: item.datos.chartType,
+                        data: {
+                            labels: item.datos.chartData.labels,
+                            datasets: [{
+                                data: item.datos.chartData.data,
+                                backgroundColor: colores.slice(0, item.datos.chartData.labels.length),
+                                borderWidth: 0
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: { legend: { display: false } },
+                            scales: item.datos.chartType === 'bar' ? {
+                                y: { display: false },
+                                x: { display: false }
+                            } : {}
+                        }
+                    });
+                }
+            });
+        }
+
+        function eliminarDelReporte(id) {
+            reporte = reporte.filter(item => item.id !== id);
+            actualizarReporte();
+            mostrarToast('Elemento eliminado del reporte');
+        }
+
+        function limpiarFormulario() {
+            const config = consultas[consultaActual];
+            config.parametros.forEach(p => {
+                const el = document.getElementById(p.id);
+                if (el) el.selectedIndex = 0;
+            });
+        }
+
+        function limpiarTodo() {
+            reporte = [];
+            actualizarReporte();
+            mostrarToast('Reporte limpiado');
+        }
+
+        function exportarReporte() {
+            mostrarToast(`Exportando reporte con ${reporte.length} elementos...`);
+            // Aqui iria la logica real de exportacion PDF
+        }
+
+        function mostrarToast(mensaje) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toastText').textContent = mensaje;
+            toast.classList.add('visible');
+            setTimeout(() => toast.classList.remove('visible'), 3000);
+        }
+
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('open');
+        }
+
+        // =====================
+        // INIT
+        // =====================
+        document.addEventListener('DOMContentLoaded', () => {
+            selectQuery('planilla');
+        });
+    </script>
+</body>
+</html>
