@@ -37,7 +37,6 @@
       font-family: 'JetBrains Mono', monospace;
     }
 
-    /* Background pattern */
     .bg-pattern {
       position: fixed;
       inset: 0;
@@ -59,7 +58,6 @@
       z-index: 0;
     }
 
-    /* Canvas sections */
     .canvas-section {
       background: var(--card);
       border: 1px solid var(--border);
@@ -155,7 +153,6 @@
       margin-top: 6px;
     }
 
-    /* Editable content */
     [contenteditable] {
       outline: none;
       border-radius: 6px;
@@ -175,7 +172,6 @@
       pointer-events: none;
     }
 
-    /* Value proposition - center piece */
     .value-prop {
       background: linear-gradient(135deg, var(--card) 0%, rgba(255, 107, 53, 0.08) 100%);
       border: 2px solid var(--accent);
@@ -192,7 +188,6 @@
       justify-content: center;
     }
 
-    /* Input styling */
     .item-input {
       width: 100%;
       background: transparent;
@@ -207,7 +202,6 @@
       outline: none;
     }
 
-    /* Add button */
     .add-btn {
       display: flex;
       align-items: center;
@@ -235,7 +229,6 @@
       height: 16px;
     }
 
-    /* Delete button */
     .delete-btn {
       opacity: 0;
       width: 20px;
@@ -261,7 +254,6 @@
       color: white;
     }
 
-    /* Save indicator */
     .save-indicator {
       position: fixed;
       bottom: 24px;
@@ -291,7 +283,11 @@
       color: var(--success);
     }
 
-    /* Header */
+    .save-indicator.error {
+      border-color: #ef4444;
+      color: #ef4444;
+    }
+
     header {
       position: relative;
       z-index: 10;
@@ -307,7 +303,6 @@
       color: var(--accent);
     }
 
-    /* Animations */
     @keyframes fadeInUp {
       from {
         opacity: 0;
@@ -319,29 +314,27 @@
       }
     }
 
-    @keyframes pulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.5; }
-    }
-
     .animate-in {
       animation: fadeInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
     }
 
-    /* Export button */
-    .export-btn {
+    /* Buttons styling */
+    .action-btn {
       display: flex;
       align-items: center;
       gap: 8px;
       padding: 10px 20px;
-      background: var(--accent);
-      border: none;
       border-radius: 8px;
-      color: white;
       font-weight: 500;
       font-size: 14px;
       cursor: pointer;
       transition: all 0.2s ease;
+    }
+
+    .export-btn {
+      background: var(--accent);
+      border: none;
+      color: white;
     }
 
     .export-btn:hover {
@@ -350,7 +343,18 @@
       box-shadow: 0 8px 24px rgba(255, 107, 53, 0.3);
     }
 
-    /* Responsive */
+    .import-btn {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--fg);
+    }
+
+    .import-btn:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: var(--accent-soft);
+    }
+
     @media (max-width: 1024px) {
       .canvas-grid {
         grid-template-columns: repeat(2, 1fr) !important;
@@ -369,47 +373,28 @@
       .value-prop-section {
         grid-column: span 1 !important;
       }
+      
+      .header-actions {
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+      
+      .action-btn {
+        padding: 8px 14px;
+        font-size: 13px;
+      }
     }
 
-    /* Focus visible */
     :focus-visible {
       outline: 2px solid var(--accent);
       outline-offset: 2px;
     }
 
-    /* Reduced motion */
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after {
         animation-duration: 0.01ms !important;
         transition-duration: 0.01ms !important;
       }
-    }
-
-    /* Tooltip */
-    .tooltip {
-      position: relative;
-    }
-
-    .tooltip::after {
-      content: attr(data-tip);
-      position: absolute;
-      bottom: 100%;
-      left: 50%;
-      transform: translateX(-50%) translateY(-8px);
-      padding: 6px 12px;
-      background: var(--fg);
-      color: var(--bg);
-      font-size: 12px;
-      border-radius: 6px;
-      white-space: nowrap;
-      opacity: 0;
-      pointer-events: none;
-      transition: all 0.2s ease;
-    }
-
-    .tooltip:hover::after {
-      opacity: 1;
-      transform: translateX(-50%) translateY(-4px);
     }
   </style>
 </head>
@@ -417,18 +402,29 @@
   <div class="bg-pattern"></div>
   <div class="grid-overlay"></div>
 
+  <!-- Hidden File Input for Import -->
+  <input type="file" id="importInput" accept=".json" hidden />
+
   <!-- Header -->
   <header class="relative z-10 px-6 py-6 lg:px-12">
-    <div class="max-w-7xl mx-auto flex items-center justify-between">
+    <div class="max-w-7xl mx-auto flex items-center justify-between flex-wrap gap-4">
       <div class="flex items-center gap-4">
         <div class="logo-text">Lean<span>Canvas</span></div>
-        <span class="mono text-xs text-[var(--muted)] bg-[var(--card)] px-3 py-1 rounded-full border border-[var(--border)]">v1.0</span>
+        <span class="mono text-xs text-[var(--muted)] bg-[var(--card)] px-3 py-1 rounded-full border border-[var(--border)]">v1.1</span>
       </div>
-      <div class="flex items-center gap-4">
+      <div class="header-actions flex items-center gap-3">
         <button id="clearBtn" class="px-4 py-2 text-sm text-[var(--muted)] hover:text-[var(--fg)] transition-colors" aria-label="Limpiar canvas">
           Limpiar
         </button>
-        <button id="exportBtn" class="export-btn" aria-label="Exportar canvas">
+        <button id="importBtn" class="action-btn import-btn" aria-label="Importar canvas">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+            <polyline points="17 8 12 3 7 8"/>
+            <line x1="12" y1="3" x2="12" y2="15"/>
+          </svg>
+          Importar
+        </button>
+        <button id="exportBtn" class="action-btn export-btn" aria-label="Exportar canvas">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
             <polyline points="7 10 12 15 17 10"/>
@@ -443,7 +439,6 @@
   <!-- Main Canvas -->
   <main class="relative z-10 px-6 pb-12 lg:px-12">
     <div class="max-w-7xl mx-auto">
-      <!-- Canvas Grid -->
       <div class="canvas-grid grid grid-cols-5 gap-4" id="canvasGrid">
         
         <!-- Problem -->
@@ -610,15 +605,18 @@
 
   <!-- Save Indicator -->
   <div class="save-indicator" id="saveIndicator" role="status" aria-live="polite">
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+    <svg class="icon-success" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
       <path d="M20 6L9 17l-5-5"/>
     </svg>
-    <span>Guardado</span>
+    <svg class="icon-error" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none;">
+      <circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/>
+    </svg>
+    <span id="saveMessage">Guardado</span>
   </div>
 
   <script>
-    // Data structure
-    let canvasData = {
+    // Default Data Structure
+    const defaultData = {
       problem: [],
       solution: [],
       metrics: [],
@@ -630,28 +628,60 @@
       revenue: []
     };
 
+    let canvasData = JSON.parse(JSON.stringify(defaultData));
+
     // Load from localStorage
     function loadData() {
       const saved = localStorage.getItem('leanCanvas');
       if (saved) {
-        canvasData = JSON.parse(saved);
-        renderAll();
+        try {
+          canvasData = JSON.parse(saved);
+          // Ensure structure integrity
+          Object.keys(defaultData).forEach(key => {
+            if (!canvasData.hasOwnProperty(key)) {
+              canvasData[key] = defaultData[key];
+            }
+          });
+        } catch (e) {
+          console.error("Error loading data", e);
+          canvasData = JSON.parse(JSON.stringify(defaultData));
+        }
       }
+      renderAll();
     }
 
     // Save to localStorage
     function saveData() {
       localStorage.setItem('leanCanvas', JSON.stringify(canvasData));
-      showSaveIndicator();
+      showSaveIndicator('Guardado', 'saved');
     }
 
     // Show save indicator
-    function showSaveIndicator() {
+    function showSaveIndicator(message, type = 'saved') {
       const indicator = document.getElementById('saveIndicator');
-      indicator.classList.add('visible', 'saved');
+      const msgEl = document.getElementById('saveMessage');
+      const iconSuccess = indicator.querySelector('.icon-success');
+      const iconError = indicator.querySelector('.icon-error');
+
+      msgEl.textContent = message;
+      
+      indicator.classList.remove('saved', 'error');
+      iconSuccess.style.display = 'none';
+      iconError.style.display = 'none';
+
+      if (type === 'saved') {
+        indicator.classList.add('saved');
+        iconSuccess.style.display = 'block';
+      } else if (type === 'error') {
+        indicator.classList.add('error');
+        iconError.style.display = 'block';
+      }
+
+      indicator.classList.add('visible');
+      
       setTimeout(() => {
-        indicator.classList.remove('visible', 'saved');
-      }, 2000);
+        indicator.classList.remove('visible');
+      }, 2500);
     }
 
     // Create list item
@@ -680,17 +710,17 @@
     // Escape HTML
     function escapeHtml(text) {
       const div = document.createElement('div');
-      div.textContent = text;
+      div.textContent = text || '';
       return div.innerHTML;
     }
 
     // Add item
     function addItem(section) {
+      if (!canvasData[section]) canvasData[section] = [];
       canvasData[section].push('');
       renderList(section);
       saveData();
       
-      // Focus new input
       setTimeout(() => {
         const list = document.getElementById(`${section}-list`);
         const inputs = list.querySelectorAll('.item-input');
@@ -702,15 +732,19 @@
 
     // Update item
     function updateItem(section, index, value) {
-      canvasData[section][index] = value;
-      saveData();
+      if (canvasData[section] && canvasData[section][index] !== undefined) {
+        canvasData[section][index] = value;
+        saveData();
+      }
     }
 
     // Delete item
     function deleteItem(section, index) {
-      canvasData[section].splice(index, 1);
-      renderList(section);
-      saveData();
+      if (canvasData[section]) {
+        canvasData[section].splice(index, 1);
+        renderList(section);
+        saveData();
+      }
     }
 
     // Handle key down
@@ -718,7 +752,7 @@
       if (event.key === 'Enter') {
         event.preventDefault();
         addItem(section);
-      } else if (event.key === 'Backspace' && event.target.value === '' && canvasData[section].length > 1) {
+      } else if (event.key === 'Backspace' && event.target.value === '' && canvasData[section] && canvasData[section].length > 1) {
         event.preventDefault();
         deleteItem(section, index);
       }
@@ -727,10 +761,13 @@
     // Render list
     function renderList(section) {
       const list = document.getElementById(`${section}-list`);
+      if (!list) return;
       list.innerHTML = '';
-      canvasData[section].forEach((item, index) => {
-        list.appendChild(createListItem(item, section, index));
-      });
+      if (canvasData[section]) {
+        canvasData[section].forEach((item, index) => {
+          list.appendChild(createListItem(item, section, index));
+        });
+      }
     }
 
     // Render all
@@ -739,10 +776,9 @@
         renderList(section);
       });
       
-      // Value proposition
       const valuePropEl = document.getElementById('valueProp-content');
-      if (canvasData.valueProp) {
-        valuePropEl.textContent = canvasData.valueProp;
+      if (valuePropEl) {
+        valuePropEl.textContent = canvasData.valueProp || '';
       }
     }
 
@@ -753,27 +789,52 @@
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = 'lean-canvas.json';
+      a.download = `lean-canvas-${new Date().toISOString().slice(0,10)}.json`;
       a.click();
       URL.revokeObjectURL(url);
+      showSaveIndicator('Exportado', 'saved');
+    }
+
+    // Import canvas
+    function importCanvas(file) {
+      if (!file) return;
+      
+      const reader = new FileReader();
+      
+      reader.onload = (e) => {
+        try {
+          const importedData = JSON.parse(e.target.result);
+          
+          // Basic validation
+          if (typeof importedData === 'object' && importedData !== null) {
+             // Fill missing keys with defaults to prevent errors
+            Object.keys(defaultData).forEach(key => {
+              if (!importedData.hasOwnProperty(key)) {
+                importedData[key] = defaultData[key];
+              }
+            });
+            
+            canvasData = importedData;
+            renderAll();
+            saveData();
+            showSaveIndicator('Importado correctamente', 'saved');
+          } else {
+            throw new Error("Formato invalido");
+          }
+        } catch (err) {
+          console.error("Import error:", err);
+          showSaveIndicator('Error al importar', 'error');
+        }
+      };
+      
+      reader.readAsText(file);
     }
 
     // Clear canvas
     function clearCanvas() {
-      if (confirm('Estas seguro de que quieres limpiar todo el canvas?')) {
-        canvasData = {
-          problem: [],
-          solution: [],
-          metrics: [],
-          advantage: [],
-          channels: [],
-          valueProp: '',
-          customers: [],
-          costs: [],
-          revenue: []
-        };
+      if (confirm('Estas seguro de que quieres limpiar todo el canvas? Esta accion no se puede deshacer.')) {
+        canvasData = JSON.parse(JSON.stringify(defaultData));
         renderAll();
-        document.getElementById('valueProp-content').textContent = '';
         saveData();
       }
     }
@@ -782,18 +843,40 @@
     document.addEventListener('DOMContentLoaded', () => {
       loadData();
       
-      // Value proposition change handler
       const valuePropEl = document.getElementById('valueProp-content');
-      valuePropEl.addEventListener('input', () => {
-        canvasData.valueProp = valuePropEl.textContent;
-        saveData();
-      });
+      if (valuePropEl) {
+        valuePropEl.addEventListener('input', () => {
+          canvasData.valueProp = valuePropEl.textContent;
+          saveData();
+        });
+      }
 
       // Export button
-      document.getElementById('exportBtn').addEventListener('click', exportCanvas);
+      const exportBtn = document.getElementById('exportBtn');
+      if (exportBtn) {
+        exportBtn.addEventListener('click', exportCanvas);
+      }
 
       // Clear button
-      document.getElementById('clearBtn').addEventListener('click', clearCanvas);
+      const clearBtn = document.getElementById('clearBtn');
+      if (clearBtn) {
+        clearBtn.addEventListener('click', clearCanvas);
+      }
+
+      // Import logic
+      const importInput = document.getElementById('importInput');
+      const importBtn = document.getElementById('importBtn');
+
+      if (importBtn && importInput) {
+        importBtn.addEventListener('click', () => importInput.click());
+        
+        importInput.addEventListener('change', (e) => {
+          if (e.target.files.length > 0) {
+            importCanvas(e.target.files[0]);
+            e.target.value = ''; // Reset input
+          }
+        });
+      }
 
       // Intersection observer for animations
       const observer = new IntersectionObserver((entries) => {
