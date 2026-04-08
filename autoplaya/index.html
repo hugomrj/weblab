@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AutosPlaya | Inteligencia Automotriz Py</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #fdfdfd;
+            --card-bg: #ffffff;
+            --border: #ececec;
+            
+            /* Paleta: Acento Vino / Bordeaux */
+            --accent: #630d16; 
+            --accent-hover: #4a0a10;
+            --accent-soft: #fdf2f2;
+            
+            --text-dark: #0f172a;
+            --text-soft: #64748b;
+            --radius: 24px;
+            --radius-card: 20px; /* Radio específico para las tarjetas de autos */
+            --success: #10b981;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; }
+        
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: var(--bg); 
+            color: var(--text-dark); 
+        }
+
+        .container { max-width: 1300px; margin: 0 auto; padding: 0 30px; }
+        
+        nav { padding: 40px 0; display: flex; align-items: center; justify-content: space-between; }
+        .logo { 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            font-size: 20px; 
+            font-weight: 800; 
+            letter-spacing: -1.2px; 
+            text-decoration: none; 
+            color: var(--text-dark); 
+        }
+
+        .hero-section { 
+            margin-bottom: 50px; 
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 60px;
+        }
+        .hero-section h1 { 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            font-size: 64px; 
+            line-height: 0.95; 
+            letter-spacing: -3px; 
+            margin-bottom: 24px; 
+            max-width: 850px;
+        }
+        .hero-section p { 
+            font-size: 19px; 
+            color: var(--text-soft); 
+            max-width: 600px; 
+            line-height: 1.5;
+        }
+
+        /* GRID DE FILTROS */
+        .filter-grid { 
+            display: grid; 
+            grid-template-columns: 1fr 380px; 
+            gap: 24px; 
+            margin-bottom: 50px; 
+        }
+
+        /* BENTO PRINCIPAL DESTACADO EN VINO */
+        .main-search-card { 
+            background: var(--accent); 
+            border-radius: var(--radius); 
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+            box-shadow: 0 25px 50px -12px rgba(99, 13, 22, 0.25);
+        }
+
+        .main-search-card .input-group input {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 20px 25px;
+            border-radius: 14px;
+            font-size: 16px;
+            outline: none;
+            transition: 0.2s;
+            color: white;
+        }
+        .main-search-card .input-group input::placeholder { color: rgba(255, 255, 255, 0.6); }
+        .main-search-card .input-group input:focus { background: rgba(255, 255, 255, 0.15); border-color: white; }
+
+        .selectors-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+        
+        .main-search-card select {
+            padding: 14px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            font-size: 13px;
+            font-weight: 600;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='white'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            background-size: 14px;
+        }
+
+        .main-search-card select option { background: var(--accent); color: white; }
+
+        .price-range { display: flex; gap: 10px; }
+        .price-range input {
+            width: 100%;
+            padding: 12px 15px;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            font-size: 13px;
+            outline: none;
+            color: white;
+        }
+        .price-range input::placeholder { color: rgba(255, 255, 255, 0.5); }
+
+        /* SIDEBAR */
+        .side-utility-card {
+            background: #f8fafc;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 30px;
+        }
+
+        .side-title {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 800;
+            color: var(--text-soft);
+            margin-bottom: 16px;
+        }
+
+        .capsule-container { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 35px; }
+        .pill {
+            background: white;
+            border: 1px solid var(--border);
+            padding: 8px 14px;
+            border-radius: 50px;
+            font-size: 11px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .pill.active { border-color: var(--accent); background: var(--accent-soft); color: var(--accent); }
+
+        .brand-cloud { display: flex; flex-wrap: wrap; gap: 8px; }
+        .brand-pill {
+            background: white; border: 1px solid var(--border);
+            padding: 10px 16px; border-radius: 14px;
+            font-size: 13px; font-weight: 700; cursor: pointer;
+            transition: 0.2s; display: flex; justify-content: space-between; align-items: center; gap: 8px;
+        }
+        .brand-pill:hover { border-color: var(--accent); background: var(--accent-soft); }
+
+        /* CATALOGO */
+        .catalog { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr)); 
+            gap: 40px; 
+        }
+
+        /* TARJETA DE AUTO ACTUALIZADA */
+        .car-item { 
+            text-decoration: none; 
+            color: inherit; 
+            background-color: #fcfcfc; /* Fondo sutil para destacar del fondo principal */
+            border: 1px solid #f0f0f0; /* Borde muy suave */
+            border-radius: var(--radius-card);
+            overflow: hidden;
+            display: block;
+            transition: transform 0.3s ease, box-shadow 0.3s ease; /* Animación suave para la elevación */
+            box-shadow: 0 2px 5px rgba(0,0,0,0.02); /* Sombra base casi invisible */
+        }
+
+        /* EFECTO DE ELEVACIÓN AL RECIBIR EL FOCO (HOVER/FOCUS) */
+        .car-item:hover, .car-item:focus { 
+            transform: translateY(-8px); /* Levanta la tarjeta */
+            box-shadow: 0 20px 30px rgba(0,0,0,0.06); /* Sombra más pronunciada al elevarse */
+            outline: none; /* Quita el borde de foco por defecto */
+        }
+
+        .img-wrap { 
+            width: 100%; aspect-ratio: 16/10; 
+            overflow: hidden; background: #eee;
+            /* El radio se hereda del contenedor padre .car-item gracias a overflow: hidden, pero solo arriba */
+            border-bottom: 1px solid var(--border); /* Línea divisoria suave */
+        }
+        .img-wrap img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease; }
+        .car-item:hover .img-wrap img { transform: scale(1.04); }
+
+        .item-info {
+            padding: 25px; /* Espaciado interno de la información */
+        }
+
+        .item-info .brand-label { 
+            font-size: 11px; 
+            text-transform: uppercase; 
+            letter-spacing: 1.5px; 
+            font-weight: 800; 
+            color: var(--text-soft); /* Volvemos a un tono suave para la marca */
+            margin-bottom: 6px;
+        }
+        .item-info .model-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 8px;
+        }
+        .item-info h3 { font-family: 'Plus Jakarta Sans'; font-size: 24px; font-weight: 800; color: var(--text-dark); }
+        .item-info .year-tag { font-size: 18px; color: var(--text-soft); font-weight: 500; }
+        
+        /* PRECIO DESTACADO EN COLOR ACENTO VINO */
+        .item-price { 
+            font-weight: 800; 
+            font-size: 26px; 
+            color: var(--accent); /* Usamos el color de acento vino aquí */
+            margin-bottom: 16px; 
+        }
+
+        .spec-pills { display: flex; flex-wrap: wrap; gap: 8px; }
+        .spec-pill { 
+            background: #f1f5f9; 
+            padding: 6px 12px; 
+            border-radius: 8px; 
+            font-size: 11px; 
+            font-weight: 600; 
+            color: var(--text-soft);
+            text-transform: uppercase;
+        }
+
+        /* PAGINACIÓN */
+        .pagination-container {
+            display: flex; justify-content: center; align-items: center; gap: 30px;
+            margin: 60px 0; padding: 20px; background: #f8fafc;
+            border-radius: 16px; border: 1px solid var(--border);
+        }
+
+        .pag-btn {
+            background: white; border: 1px solid var(--border);
+            padding: 10px 24px; border-radius: 12px;
+            font-size: 13px; font-weight: 700; cursor: pointer; transition: 0.2s;
+        }
+        .pag-btn:hover:not(:disabled) { background: var(--accent); color: white; border-color: var(--accent); }
+        .pag-btn:disabled { opacity: 0.3; }
+
+        /* FOOTER */
+        .bento-footer { margin-top: 80px; padding-top: 50px; border-top: 1px solid var(--border); }
+        .footer-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; margin-bottom: 50px; }
+        .footer-links { display: flex; flex-direction: column; gap: 12px; }
+        .footer-links a { text-decoration: none; color: var(--text-soft); font-size: 13px; transition: 0.2s; }
+        .footer-links a:hover { color: var(--accent); }
+        .footer-bottom { display: flex; justify-content: space-between; align-items: center; padding: 30px 0; font-size: 12px; color: var(--text-soft); border-top: 1px dashed var(--border); }
+
+        @media (max-width: 1000px) { .filter-grid, .footer-grid { grid-template-columns: 1fr; } .hero-section h1 { font-size: 42px; } }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <nav><a href="#" class="logo">AutosPlaya.</a></nav>
+
+    <header class="hero-section">
+        <h1>Tu auto <br>te está esperando.</h1>
+        <p>Encontrá el vehículo que buscás y contactá con el vendedor. <br> Todo lo esencial en un solo lugar.</p>
+    </header>
+
+    <div class="filter-grid">
+        <main class="main-search-card">
+            <div class="input-group">
+                <input type="text" id="q-search" placeholder="Busca marca o modelo..." oninput="app.filter()">
+            </div>
+            <div class="selectors-row">
+                <select id="f-trans" onchange="app.filter()"><option value="">Transmisión</option><option value="Automática">Automática</option><option value="Manual">Manual</option></select>
+                <select id="f-fuel" onchange="app.filter()"><option value="">Combustible</option><option value="Nafta">Nafta</option><option value="Diesel">Diesel</option></select>
+                <select id="f-drive" onchange="app.filter()"><option value="">Tracción</option><option value="AWD">AWD</option><option value="RWD">RWD</option></select>
+            </div>
+            <div class="price-range">
+                <input type="number" id="f-min" placeholder="Gs. Mínimo" oninput="app.filter()">
+                <input type="number" id="f-max" placeholder="Gs. Máximo" oninput="app.filter()">
+            </div>
+        </main>
+
+        <aside class="side-utility-card">
+            <h4 class="side-title">Nuevos Ingresos</h4>
+            <div class="capsule-container">
+                <div class="pill"><span class="label">Mes:</span> <span>+48</span></div>
+                <div class="pill active"><span class="label">Hoy:</span> <span>+7</span></div>
+            </div>
+            <h4 class="side-title">Top por Marcas</h4>
+            <div class="brand-cloud" id="brand-shortcuts"></div>
+        </aside>
+    </div>
+
+    <section class="catalog" id="grid"></section>
+
+    <div class="pagination-container">
+        <button class="pag-btn" id="btn-prev" onclick="app.prevPage()">← Anterior</button>
+        <div class="page-info">Página <span id="current-page">1</span> de <span id="total-pages">1</span></div>
+        <button class="pag-btn" id="btn-next" onclick="app.nextPage()">Siguiente →</button>
+    </div>
+
+    <footer class="bento-footer">
+        <div class="footer-grid">
+            <div class="footer-card">
+                <h4 class="side-title">Playas Aliadas</h4>
+                <div class="footer-links"><a href="#">Asunción Automotores</a><a href="#">San Lorenzo Cars</a></div>
+            </div>
+            <div class="footer-card">
+                <h4 class="side-title">Soporte</h4>
+                <div class="footer-links"><a href="mailto:contacto@autosplaya.com.py">contacto@autosplaya.com.py</a></div>
+            </div>
+            <div class="footer-card">
+                <h4 class="side-title">Plataforma</h4>
+                <div class="footer-links"><span>Versión 2.6.1-elevated</span></div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div>© 2026 AutosPlaya. San Lorenzo, Paraguay.</div>
+        </div>
+    </footer>
+</div>
+
+<script>
+    const inventory = [
+        { brand: 'Toyota', model: 'Hilux SRV 4x4', price: 315000000, trans: 'Automática', fuel: 'Diesel', drive: 'AWD', year: '2023', img: 'https://images.unsplash.com/photo-1583121274602-3e2820c69888?w=800' },
+        { brand: 'Mercedes-Benz', model: 'GLE 63 S AMG', price: 1250000000, trans: 'Automática', fuel: 'Nafta', drive: 'AWD', year: '2022', img: 'https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?w=800' },
+        { brand: 'BMW', model: 'M5 CS', price: 980000000, trans: 'Automática', fuel: 'Nafta', drive: 'AWD', year: '2021', img: 'https://images.unsplash.com/photo-1555215695-3004980ad54e?w=800' },
+        { brand: 'Volkswagen', model: 'Golf GTI MK8', price: 285000000, trans: 'Automática', fuel: 'Nafta', drive: 'RWD', year: '2022', img: 'https://images.unsplash.com/photo-1621335300343-b75517ef44a9?w=800' },
+        { brand: 'Toyota', model: 'Land Cruiser 300', price: 850000000, trans: 'Automática', fuel: 'Diesel', drive: 'AWD', year: '2023', img: 'https://images.unsplash.com/photo-1594568284297-7c64464062b1?w=800' },
+        { brand: 'Audi', model: 'RS6 Avant', price: 920000000, trans: 'Automática', fuel: 'Nafta', drive: 'AWD', year: '2022', img: 'https://images.unsplash.com/photo-1606148585252-e949c394416e?w=800' },
+        { brand: 'Kia', model: 'Sportage GT-Line', price: 245000000, trans: 'Automática', fuel: 'Diesel', drive: 'AWD', year: '2023', img: 'https://images.unsplash.com/photo-1644794103133-c1f03f393847?w=800' },
+        { brand: 'Nissan', model: 'Patrol Y62', price: 780000000, trans: 'Automática', fuel: 'Nafta', drive: 'AWD', year: '2021', img: 'https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?w=800' },
+        { brand: 'Ford', model: 'Ranger Raptor', price: 420000000, trans: 'Automática', fuel: 'Nafta', drive: 'AWD', year: '2024', img: 'https://images.unsplash.com/photo-1533591341132-841951555776?w=800' },
+        { brand: 'Porsche', model: '911 Carrera S', price: 1450000000, trans: 'Automática', fuel: 'Nafta', drive: 'RWD', year: '2023', img: 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=800' },
+        { brand: 'Jeep', model: 'Wrangler Rubicon', price: 580000000, trans: 'Automática', fuel: 'Nafta', drive: 'AWD', year: '2022', img: 'https://images.unsplash.com/photo-1539100609366-8367a7833534?w=800' },
+        { brand: 'Hyundai', model: 'Santa Fe Hybrid', price: 345000000, trans: 'Automática', fuel: 'Nafta', drive: 'AWD', year: '2024', img: 'https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?w=800' }
+    ];
+
+    const app = {
+        currentPage: 1, itemsPerPage: 6, filteredData: [],
+        filter(brandQuery = null) {
+            if(brandQuery) document.getElementById('q-search').value = brandQuery;
+            const q = document.getElementById('q-search').value.toLowerCase();
+            const trans = document.getElementById('f-trans').value;
+            const fuel = document.getElementById('f-fuel').value;
+            const drive = document.getElementById('f-drive').value;
+            const min = parseInt(document.getElementById('f-min').value) || 0;
+            const max = parseInt(document.getElementById('f-max').value) || Infinity;
+
+            this.filteredData = inventory.filter(c => {
+                return (c.model.toLowerCase().includes(q) || c.brand.toLowerCase().includes(q)) &&
+                        (!trans || c.trans === trans) && (!fuel || c.fuel === fuel) &&
+                        (!drive || c.drive === drive) && (c.price >= min && c.price <= max);
+            });
+            this.currentPage = 1; this.render(); this.updateStats();
+        },
+        updateStats() {
+            const counts = inventory.reduce((acc, c) => { acc[c.brand] = (acc[c.brand] || 0) + 1; return acc; }, {});
+            const sortedBrands = Object.entries(counts).sort((a,b) => b[1] - a[1]).slice(0, 5);
+            document.getElementById('brand-shortcuts').innerHTML = sortedBrands.map(([name, count]) => `
+                <div class="brand-pill" onclick="app.filter('${name}')">${name} <span>${count}</span></div>
+            `).join('');
+        },
+        nextPage() { this.currentPage++; this.render(); this.scrollUp(); },
+        prevPage() { this.currentPage--; this.render(); this.scrollUp(); },
+        scrollUp() { window.scrollTo({ top: 450, behavior: 'smooth' }); },
+        render() {
+            const start = (this.currentPage - 1) * this.itemsPerPage;
+            const pageData = this.filteredData.slice(start, start + this.itemsPerPage);
+            const totalPages = Math.ceil(this.filteredData.length / this.itemsPerPage);
+
+            document.getElementById('grid').innerHTML = pageData.map(c => `
+                <a href="#" class="car-item">
+                    <div class="img-wrap"><img src="${c.img}"></div>
+                    <div class="item-info">
+                        <div class="brand-label">${c.brand}</div>
+                        <div class="model-header"><h3>${c.model}</h3><span class="year-tag">${c.year}</span></div>
+                        <div class="item-price">Gs. ${c.price.toLocaleString('es-PY')}</div>
+                        <div class="spec-pills">
+                            <span class="spec-pill">${c.trans}</span>
+                            <span class="spec-pill">${c.fuel}</span>
+                            <span class="spec-pill">${c.drive}</span>
+                        </div>
+                    </div>
+                </a>
+            `).join('');
+            document.getElementById('current-page').innerText = this.currentPage;
+            document.getElementById('total-pages').innerText = totalPages || 1;
+            document.getElementById('btn-prev').disabled = this.currentPage === 1;
+            document.getElementById('btn-next').disabled = this.currentPage === totalPages || totalPages === 0;
+        }
+    };
+    window.onload = () => app.filter();
+</script>
+</body>
+</html>
