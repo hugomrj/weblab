@@ -10,17 +10,12 @@
             --bg: #fdfdfd;
             --card-bg: #ffffff;
             --border: #ececec;
-            
-            /* Paleta: Acento Vino / Bordeaux */
             --accent: #630d16; 
-            --accent-hover: #4a0a10;
             --accent-soft: #fdf2f2;
-            
             --text-dark: #0f172a;
             --text-soft: #64748b;
             --radius: 24px;
-            --radius-card: 20px; /* Radio específico para las tarjetas de autos */
-            --success: #10b981;
+            --radius-card: 20px;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; }
@@ -63,7 +58,6 @@
             line-height: 1.5;
         }
 
-        /* GRID DE FILTROS */
         .filter-grid { 
             display: grid; 
             grid-template-columns: 1fr 380px; 
@@ -71,7 +65,6 @@
             margin-bottom: 50px; 
         }
 
-        /* BENTO PRINCIPAL DESTACADO EN VINO */
         .main-search-card { 
             background: var(--accent); 
             border-radius: var(--radius); 
@@ -129,7 +122,6 @@
         }
         .price-range input::placeholder { color: rgba(255, 255, 255, 0.5); }
 
-        /* SIDEBAR */
         .side-utility-card {
             background: #f8fafc;
             border: 1px solid var(--border);
@@ -169,52 +161,45 @@
         }
         .brand-pill:hover { border-color: var(--accent); background: var(--accent-soft); }
 
-        /* CATALOGO */
         .catalog { 
             display: grid; 
             grid-template-columns: repeat(auto-fill, minmax(380px, 1fr)); 
             gap: 40px; 
         }
 
-        /* TARJETA DE AUTO ACTUALIZADA */
         .car-item { 
             text-decoration: none; 
             color: inherit; 
-            background-color: #fcfcfc; /* Fondo sutil para destacar del fondo principal */
-            border: 1px solid #f0f0f0; /* Borde muy suave */
+            background-color: #fcfcfc;
+            border: 1px solid #f0f0f0;
             border-radius: var(--radius-card);
             overflow: hidden;
             display: block;
-            transition: transform 0.3s ease, box-shadow 0.3s ease; /* Animación suave para la elevación */
-            box-shadow: 0 2px 5px rgba(0,0,0,0.02); /* Sombra base casi invisible */
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.02);
         }
 
-        /* EFECTO DE ELEVACIÓN AL RECIBIR EL FOCO (HOVER/FOCUS) */
         .car-item:hover, .car-item:focus { 
-            transform: translateY(-8px); /* Levanta la tarjeta */
-            box-shadow: 0 20px 30px rgba(0,0,0,0.06); /* Sombra más pronunciada al elevarse */
-            outline: none; /* Quita el borde de foco por defecto */
+            transform: translateY(-8px);
+            box-shadow: 0 20px 30px rgba(0,0,0,0.06);
+            outline: none;
         }
 
         .img-wrap { 
             width: 100%; aspect-ratio: 16/10; 
             overflow: hidden; background: #eee;
-            /* El radio se hereda del contenedor padre .car-item gracias a overflow: hidden, pero solo arriba */
-            border-bottom: 1px solid var(--border); /* Línea divisoria suave */
+            border-bottom: 1px solid var(--border);
         }
         .img-wrap img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease; }
         .car-item:hover .img-wrap img { transform: scale(1.04); }
 
-        .item-info {
-            padding: 25px; /* Espaciado interno de la información */
-        }
-
+        .item-info { padding: 25px; }
         .item-info .brand-label { 
             font-size: 11px; 
             text-transform: uppercase; 
             letter-spacing: 1.5px; 
             font-weight: 800; 
-            color: var(--text-soft); /* Volvemos a un tono suave para la marca */
+            color: var(--text-soft);
             margin-bottom: 6px;
         }
         .item-info .model-header {
@@ -226,11 +211,10 @@
         .item-info h3 { font-family: 'Plus Jakarta Sans'; font-size: 24px; font-weight: 800; color: var(--text-dark); }
         .item-info .year-tag { font-size: 18px; color: var(--text-soft); font-weight: 500; }
         
-        /* PRECIO DESTACADO EN COLOR ACENTO VINO */
         .item-price { 
             font-weight: 800; 
             font-size: 26px; 
-            color: var(--accent); /* Usamos el color de acento vino aquí */
+            color: var(--accent);
             margin-bottom: 16px; 
         }
 
@@ -245,7 +229,6 @@
             text-transform: uppercase;
         }
 
-        /* PAGINACIÓN */
         .pagination-container {
             display: flex; justify-content: center; align-items: center; gap: 30px;
             margin: 60px 0; padding: 20px; background: #f8fafc;
@@ -260,7 +243,6 @@
         .pag-btn:hover:not(:disabled) { background: var(--accent); color: white; border-color: var(--accent); }
         .pag-btn:disabled { opacity: 0.3; }
 
-        /* FOOTER */
         .bento-footer { margin-top: 80px; padding-top: 50px; border-top: 1px solid var(--border); }
         .footer-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; margin-bottom: 50px; }
         .footer-links { display: flex; flex-direction: column; gap: 12px; }
@@ -280,8 +262,6 @@
         <h1>Tu auto <br>te está esperando.</h1>
         <p>Encontrá el vehículo que queres y contactá con el vendedor. 
         <br>Todo en un solo lugar para que tu búsqueda sea más simple.</p>
-
-                
     </header>
 
     <div class="filter-grid">
@@ -303,8 +283,8 @@
         <aside class="side-utility-card">
             <h4 class="side-title">Nuevos Ingresos</h4>
             <div class="capsule-container">
-                <div class="pill"><span class="label">Mes:</span> <span>+48</span></div>
-                <div class="pill active"><span class="label">Hoy:</span> <span>+7</span></div>
+                <div class="pill"><span>Mes:</span> <span>+48</span></div>
+                <div class="pill active"><span>Hoy:</span> <span>+7</span></div>
             </div>
             <h4 class="side-title">Top por Marcas</h4>
             <div class="brand-cloud" id="brand-shortcuts"></div>
@@ -315,21 +295,21 @@
 
     <div class="pagination-container">
         <button class="pag-btn" id="btn-prev" onclick="app.prevPage()">← Anterior</button>
-        <div class="page-info">Página <span id="current-page">1</span> de <span id="total-pages">1</span></div>
+        <div>Página <span id="current-page">1</span> de <span id="total-pages">1</span></div>
         <button class="pag-btn" id="btn-next" onclick="app.nextPage()">Siguiente →</button>
     </div>
 
     <footer class="bento-footer">
         <div class="footer-grid">
-            <div class="footer-card">
+            <div>
                 <h4 class="side-title">Playas Aliadas</h4>
                 <div class="footer-links"><a href="#">Asunción Automotores</a><a href="#">San Lorenzo Cars</a></div>
             </div>
-            <div class="footer-card">
+            <div>
                 <h4 class="side-title">Soporte</h4>
                 <div class="footer-links"><a href="mailto:contacto@autosplaya.com.py">contacto@autosplaya.com.py</a></div>
             </div>
-            <div class="footer-card">
+            <div>
                 <h4 class="side-title">Plataforma</h4>
                 <div class="footer-links"><span>Versión 2.6.1-elevated</span></div>
             </div>
