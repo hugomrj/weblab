@@ -16,6 +16,11 @@
             --text-soft: #64748b;
             --radius: 24px;
             --radius-card: 20px;
+            /* Colores para etiquetas */
+            --tag-new-bg: #dcfce7;
+            --tag-new-text: #166534;
+            --tag-promo-bg: #ffedd5;
+            --tag-promo-text: #9a3412;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; }
@@ -167,6 +172,7 @@
             gap: 40px; 
         }
 
+        /* TARJETA CON EFECTO DE PROFUNDIDAD MEJORADO */
         .car-item { 
             text-decoration: none; 
             color: inherit; 
@@ -175,13 +181,18 @@
             border-radius: var(--radius-card);
             overflow: hidden;
             display: block;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
             box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+            position: relative;
         }
 
         .car-item:hover, .car-item:focus { 
             transform: translateY(-8px);
-            box-shadow: 0 20px 30px rgba(0,0,0,0.06);
+            /* Brillo interno y sombra externa más suave pero profunda */
+            border-color: rgba(99, 13, 22, 0.15);
+            box-shadow: 
+                0 20px 40px rgba(0,0,0,0.08), 
+                inset 0 0 0 1px rgba(255, 255, 255, 0.5);
             outline: none;
         }
 
@@ -189,9 +200,27 @@
             width: 100%; aspect-ratio: 16/10; 
             overflow: hidden; background: #eee;
             border-bottom: 1px solid var(--border);
+            position: relative; /* Necesario para posicionar etiquetas */
         }
         .img-wrap img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease; }
-        .car-item:hover .img-wrap img { transform: scale(1.04); }
+        .car-item:hover .img-wrap img { transform: scale(1.05); }
+
+        /* ESTILOS DE ETIQUETAS DE ESTADO */
+        .status-badge {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            padding: 6px 12px;
+            border-radius: 10px;
+            font-size: 10px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            z-index: 2;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        .status-new { background-color: var(--tag-new-bg); color: var(--tag-new-text); }
+        .status-promo { background-color: var(--tag-promo-bg); color: var(--tag-promo-text); }
 
         .item-info { padding: 25px; }
         .item-info .brand-label { 
@@ -210,7 +239,7 @@
         }
         .item-info h3 { 
             font-family: 'Plus Jakarta Sans'; 
-            font-size: 1.6rem; 
+            font-size: 1.5rem; 
             font-weight: 800; 
             color: var(--text-dark); 
         }
@@ -327,18 +356,19 @@
 </div>
 
 <script>
+    // Inventario con etiquetas de estado añadidas
     const inventory = [
-        { brand: 'Toyota', model: 'Hilux SRV 4x4', price: 315000000, trans: 'Automática', fuel: 'Diesel', drive: 'AWD', year: '2023', img: 'https://images.unsplash.com/photo-1583121274602-3e2820c69888?w=800' },
-        { brand: 'Mercedes-Benz', model: 'GLE 63 S AMG', price: 1250000000, trans: 'Automática', fuel: 'Nafta', drive: 'AWD', year: '2022', img: 'https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?w=800' },
-        { brand: 'BMW', model: 'M5 CS', price: 980000000, trans: 'Automática', fuel: 'Nafta', drive: 'AWD', year: '2021', img: 'https://images.unsplash.com/photo-1555215695-3004980ad54e?w=800' },
+        { brand: 'Toyota', model: 'Hilux SRV 4x4', price: 315000000, trans: 'Automática', fuel: 'Diesel', drive: 'AWD', year: '2023', status: 'nuevo', img: 'https://images.unsplash.com/photo-1583121274602-3e2820c69888?w=800' },
+        { brand: 'Mercedes-Benz', model: 'GLE 63 S AMG', price: 1250000000, trans: 'Automática', fuel: 'Nafta', drive: 'AWD', year: '2022', status: 'oferta', img: 'https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?w=800' },
+        { brand: 'BMW', model: 'M5 CS', price: 980000000, trans: 'Automática', fuel: 'Nafta', drive: 'AWD', year: '2021', status: 'nuevo', img: 'https://images.unsplash.com/photo-1555215695-3004980ad54e?w=800' },
         { brand: 'Volkswagen', model: 'Golf GTI MK8', price: 285000000, trans: 'Automática', fuel: 'Nafta', drive: 'RWD', year: '2022', img: 'https://images.unsplash.com/photo-1621335300343-b75517ef44a9?w=800' },
-        { brand: 'Toyota', model: 'Land Cruiser 300', price: 850000000, trans: 'Automática', fuel: 'Diesel', drive: 'AWD', year: '2023', img: 'https://images.unsplash.com/photo-1594568284297-7c64464062b1?w=800' },
+        { brand: 'Toyota', model: 'Land Cruiser 300', price: 850000000, trans: 'Automática', fuel: 'Diesel', drive: 'AWD', year: '2023', status: 'nuevo', img: 'https://images.unsplash.com/photo-1594568284297-7c64464062b1?w=800' },
         { brand: 'Audi', model: 'RS6 Avant', price: 920000000, trans: 'Automática', fuel: 'Nafta', drive: 'AWD', year: '2022', img: 'https://images.unsplash.com/photo-1606148585252-e949c394416e?w=800' },
         { brand: 'Kia', model: 'Sportage GT-Line', price: 245000000, trans: 'Automática', fuel: 'Diesel', drive: 'AWD', year: '2023', img: 'https://images.unsplash.com/photo-1644794103133-c1f03f393847?w=800' },
-        { brand: 'Nissan', model: 'Patrol Y62', price: 780000000, trans: 'Automática', fuel: 'Nafta', drive: 'AWD', year: '2021', img: 'https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?w=800' },
-        { brand: 'Ford', model: 'Ranger Raptor', price: 420000000, trans: 'Automática', fuel: 'Nafta', drive: 'AWD', year: '2024', img: 'https://images.unsplash.com/photo-1533591341132-841951555776?w=800' },
+        { brand: 'Nissan', model: 'Patrol Y62', price: 780000000, trans: 'Automática', fuel: 'Nafta', drive: 'AWD', year: '2021', status: 'oferta', img: 'https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?w=800' },
+        { brand: 'Ford', model: 'Ranger Raptor', price: 420000000, trans: 'Automática', fuel: 'Nafta', drive: 'AWD', year: '2024', status: 'nuevo', img: 'https://images.unsplash.com/photo-1533591341132-841951555776?w=800' },
         { brand: 'Porsche', model: '911 Carrera S', price: 1450000000, trans: 'Automática', fuel: 'Nafta', drive: 'RWD', year: '2023', img: 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=800' },
-        { brand: 'Jeep', model: 'Wrangler Rubicon', price: 580000000, trans: 'Automática', fuel: 'Nafta', drive: 'AWD', year: '2022', img: 'https://images.unsplash.com/photo-1539100609366-8367a7833534?w=800' },
+        { brand: 'Jeep', model: 'Wrangler Rubicon', price: 580000000, trans: 'Automática', fuel: 'Nafta', drive: 'AWD', year: '2022', status: 'oferta', img: 'https://images.unsplash.com/photo-1539100609366-8367a7833534?w=800' },
         { brand: 'Hyundai', model: 'Santa Fe Hybrid', price: 345000000, trans: 'Automática', fuel: 'Nafta', drive: 'AWD', year: '2024', img: 'https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?w=800' }
     ];
 
@@ -375,9 +405,18 @@
             const pageData = this.filteredData.slice(start, start + this.itemsPerPage);
             const totalPages = Math.ceil(this.filteredData.length / this.itemsPerPage);
 
-            document.getElementById('grid').innerHTML = pageData.map(c => `
+            document.getElementById('grid').innerHTML = pageData.map(c => {
+                // Lógica para etiquetas de estado
+                let statusTag = '';
+                if(c.status === 'nuevo') statusTag = `<span class="status-badge status-new">Recién Llegado</span>`;
+                if(c.status === 'oferta') statusTag = `<span class="status-badge status-promo">Oferta</span>`;
+
+                return `
                 <a href="#" class="car-item">
-                    <div class="img-wrap"><img src="${c.img}"></div>
+                    <div class="img-wrap">
+                        ${statusTag}
+                        <img src="${c.img}">
+                    </div>
                     <div class="item-info">
                         <div class="brand-label">${c.brand}</div>
                         <div class="model-header"><h3>${c.model}</h3><span class="year-tag">${c.year}</span></div>
@@ -389,7 +428,7 @@
                         </div>
                     </div>
                 </a>
-            `).join('');
+            `}).join('');
             document.getElementById('current-page').innerText = this.currentPage;
             document.getElementById('total-pages').innerText = totalPages || 1;
             document.getElementById('btn-prev').disabled = this.currentPage === 1;
