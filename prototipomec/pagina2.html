@@ -1,0 +1,1679 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pedidos de Bonificaciones</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* ============================================
+           SISTEMA DE VARIABLES
+           ============================================ */
+        :root {
+
+            /* --- ROJO: Solo para el Nav --- */            
+            --nav-bg: #991B1B;
+            --nav-bg-dark: #7F1D1D;    
+            --nav-bg-light: #B91C1C;
+            
+
+            /* Acento (barra activa inferior) */
+            --nav-accent: rgba(255,255,255,0.60);
+            --nav-accent-height:   0.1rem; 
+
+            /* Texto sobre el header */
+            --nav-text:            rgba(255,255,255,0.9);
+            --nav-text-muted:     rgba(255,255,255,0.55);
+            --nav-text-hover:      #FFFFFF;
+            --nav-text-active:     #FFFFFF;
+
+
+
+            /* Interacciones sobre el header */
+            --nav-hover-bg:        rgba(255,255,255,0.1);
+            --nav-active-bg:       rgba(255,255,255,0.15);
+
+            /* Elementos decorativos del header */
+            --nav-icon-bg:         rgba(255,255,255,0.15);
+            --nav-icon-border:     rgba(255,255,255,0.2);
+            --nav-avatar-bg:       rgba(255,255,255,0.18);
+            --nav-avatar-border:   rgba(255,255,255,0.25);
+            --nav-btn-bg:          rgba(255,255,255,0.08);
+            --nav-btn-border:      rgba(255,255,255,0.15);
+
+            /* Sombra del header */
+            --nav-shadow:          0 2px 16px rgba(30,58,138,0.25);
+
+            /* Separadores en menú móvil */
+            --nav-divider:         rgba(255,255,255,0.12);
+
+            /* Altura del header */
+            --nav-height:          56px;    
+
+
+            /* ==========================================
+               DROPDOWN — Color blanco (independiente)
+               Cambia estas variables para dar otro
+               aspecto al menú desplegable.
+               ========================================== */
+
+            /* Fondo y borde */
+            --dd-bg:               #FFFFFF;
+            --dd-border:           #F3F4F6;
+            --dd-radius:           10px;
+            --dd-padding:          6px;
+            --dd-shadow:           0 12px 36px rgba(0,0,0,0.12), 0 4px 12px rgba(0,0,0,0.06);
+
+            /* Texto */
+            --dd-text:             #374151;
+            --dd-text-muted:       #9CA3AF;
+            --dd-text-hover:       var(--nav-bg-light);  /* Hereda el rojo del header */
+
+            /* Items */
+            --dd-item-radius:      7px;
+            --dd-item-padding:     9px 12px;
+            --dd-item-gap:         10px;
+
+            /* Estados hover y active */
+            --dd-hover-bg:         #FEF2F2;
+            --dd-active-bg:        #FEF2F2;
+
+            /* Etiquetas (labels de sección) */
+            --dd-label-text:       #9CA3AF;
+            --dd-label-size:       10px;
+
+            /* Separadores */
+            --dd-divider:          #F3F4F6;
+
+            /* Bloque de usuario (header del dropdown) */
+            --dd-user-bg:          #F9FAFB;
+            --dd-user-name:        #111827;
+            --dd-user-email:       #9CA3AF;
+
+            /* Acción peligrosa (Cerrar sesión) */
+            --dd-danger-text:      #DC2626;
+            --dd-danger-hover-bg:  #FEF2F2;
+
+            /* Indicador nivel 3 (punto) */
+            --dd-dot-size:         5px;
+            --dd-dot-color:        #E5E7EB;
+            --dd-dot-active-size:  6px;
+            --dd-dot-active-color: var(--nav-bg-light);
+
+            /* Icono de items */
+            --dd-icon-size:        13px;
+            --dd-icon-width:       18px;
+
+            /* Flecha derecha */
+            --dd-arrow-size:       9px;
+
+            /* Offset vertical del nivel 3 */
+            --dd3-offset-top:      -6px;
+
+
+            /* ==========================================
+               PRIMARY — Verde (contenido, NO header)
+               ========================================== */
+            --primary:             #16A34A; /* Verde base */
+            --primary-hover:       #15803D; /* Verde más oscuro y serio */
+            --primary-subtle:      #F0FDF4; /* Fondo menta muy pálido */
+            --primary-on:          #FFFFFF; /* Texto blanco */
+
+
+            /* ==========================================
+               SECONDARY — Gris oscuro (contenido)
+               ========================================== */
+            --secondary:           #1F2937;    
+            --secondary-hover:     #374151;
+            --secondary-subtle:    #F3F4F6;
+            --secondary-on:        #FFFFFF;
+
+
+
+            /* ==========================================
+               CONTENIDO — Tema claro neutro
+               ========================================== */
+            --bg-page:             #F8F9FB;
+            --bg-card:             #FFFFFF;
+            --text-primary:        var(--secondary);
+            --text-secondary:      #6B7280;
+            --text-tertiary:       #9CA3AF;
+            --bg-input:            var(--bg-page);
+            --border-light:        var(--secondary-subtle);
+            --border-medium:       #E5E7EB;
+            --shadow-card:         0 1px 3px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.03);
+            --shadow-input-focus:  0 0 0 3px rgba(22,163,74,0.1);
+            --hover-row:           rgba(0,0,0,0.02);
+
+            /* Estados semánticos */
+            --success-bg:          #F0FDF4;
+            --success-text:        #166534;
+            --success-dot:         #22C55E;
+            --warning-bg:          #FFFBEB;
+            --warning-text:        #92400E;
+            --warning-dot:         #F59E0B;
+            --info-bg:             #EFF6FF;
+            --info-text:           #1E40AF;
+            --info-dot:            #3B82F6;
+        }
+
+        *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--bg-page);
+            color: var(--text-primary);
+            -webkit-font-smoothing: antialiased;
+            line-height: 1.5;
+        }
+
+        /* ============================================
+           HEADER
+           ============================================ */
+        .header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: linear-gradient(135deg, var(--nav-bg-light), var(--nav-bg), var(--nav-bg-dark));
+            background: linear-gradient(90deg, var(--nav-bg-dark) 0%, var(--nav-bg) 100%);
+
+            height: var(--nav-height);
+            display: flex;
+            align-items: center;
+            padding: 0 24px;
+            box-shadow: var(--nav-shadow);
+        }
+
+        .header-inner {
+            width: 100%;
+            max-width: 1440px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 32px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            flex-shrink: 0;
+        }
+
+        .brand-icon {
+            width: 34px;
+            height: 34px;
+            background: var(--nav-icon-bg);
+            border: 1px solid var(--nav-icon-border);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--nav-text);
+            font-size: 14px;
+            backdrop-filter: blur(4px);
+        }
+
+        .brand-text {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--nav-text);
+            letter-spacing: -0.02em;
+        }
+
+        .brand-text small {
+            display: block;
+            font-size: 10px;
+            font-weight: 400;
+            color: var(--nav-text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+        }
+
+        /* --- Nav Nivel 1 --- */
+        .nav-1 {
+            display: flex;
+            align-items: center;
+            gap: 2px;
+            height: var(--nav-height);
+        }
+
+        .nav-1-item {
+            position: relative;
+            height: 100%;
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-1-link {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 0 14px;
+            height: 100%;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--nav-text);
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.15s;
+            white-space: nowrap;
+            border: none;
+            background: none;
+            font-family: inherit;
+            border-radius: 0;
+        }
+
+        .nav-1-link i.fa-chevron-down {
+            font-size: 9px;
+            color: var(--nav-text-muted);
+            transition: transform 0.2s;
+        }
+
+        .nav-1-link:hover {
+            color: var(--nav-text-hover);
+            background: var(--nav-hover-bg);
+        }
+
+        .nav-1-item:hover .nav-1-link i.fa-chevron-down {
+            transform: rotate(180deg);
+        }
+
+        .nav-1-item.active > .nav-1-link {
+            color: var(--nav-text-active);
+            font-weight: 600;
+            background: var(--nav-active-bg);
+        }
+
+        .nav-1-item.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 14px;
+            right: 14px;
+            height: var(--nav-accent-height);
+            background: var(--nav-accent);
+            border-radius: 2px 2px 0 0;
+        }
+
+        .hdr-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 7px;
+            background: var(--nav-avatar-bg);
+            border: 1.5px solid var(--nav-avatar-border);
+            color: var(--nav-text);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-left: 4px;
+        }
+
+        .hamburger {
+            display: none;
+            width: 34px;
+            height: 34px;
+            border-radius: 7px;
+            border: 1px solid var(--nav-btn-border);
+            background: var(--nav-btn-bg);
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--nav-text);
+            font-size: 16px;
+            flex-shrink: 0;
+        }
+
+
+        /* ============================================
+           DROPDOWN NIVEL 2
+           ============================================ */
+        .dd-2 {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            min-width: 240px;
+            background: var(--dd-bg);
+            border: 1px solid var(--dd-border);
+            border-radius: var(--dd-radius);
+            box-shadow: var(--dd-shadow);
+            padding: var(--dd-padding);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(6px);
+            transition: all 0.2s ease;
+            z-index: 90;
+        }
+
+        .nav-1-item:hover > .dd-2 {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .dd-2-label {
+            font-size: var(--dd-label-size);
+            font-weight: 600;
+            color: var(--dd-label-text);
+            text-transform: uppercase;
+            letter-spacing: 0.07em;
+            padding: 8px 12px 4px;
+        }
+
+        .dd-2-sep {
+            height: 1px;
+            background: var(--dd-divider);
+            margin: 4px 8px;
+        }
+
+        .dd-2-item { position: relative; }
+
+        .dd-2-link {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            gap: var(--dd-item-gap);
+            padding: var(--dd-item-padding);
+            border-radius: var(--dd-item-radius);
+            font-size: 13px;
+            font-weight: 400;
+            color: var(--dd-text);
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.12s;
+            white-space: nowrap;
+        }
+
+        .dd-2-link i:first-child {
+            font-size: var(--dd-icon-size);
+            color: var(--dd-text-muted);
+            width: var(--dd-icon-width);
+            text-align: center;
+            flex-shrink: 0;
+        }
+
+        .dd-2-link span { flex: 0 1 auto; }
+
+        .dd-2-link .arr {
+            font-size: var(--dd-arrow-size);
+            color: var(--dd-text-muted);
+            margin-left: auto;
+            width: auto;
+        }
+
+        .dd-2-link:hover {
+            background: var(--dd-hover-bg);
+            color: var(--dd-text-hover);
+        }
+
+        .dd-2-link:hover i,
+        .dd-2-link:hover .arr {
+            color: var(--dd-text-hover);
+        }
+
+        .dd-2-item.active > .dd-2-link {
+            background: var(--dd-active-bg);
+            color: var(--dd-text-hover);
+            font-weight: 600;
+        }
+
+        .dd-2-item.active > .dd-2-link i {
+            color: var(--dd-text-hover);
+        }
+
+        /* Danger item (Cerrar Sesión) */
+        .dd-2-link.dd-danger {
+            color: var(--dd-danger-text);
+        }
+
+        .dd-2-link.dd-danger i:first-child {
+            color: var(--dd-danger-text);
+        }
+
+        .dd-2-link.dd-danger:hover {
+            background: var(--dd-danger-hover-bg);
+            color: var(--dd-danger-text);
+        }
+
+        .dd-2-link.dd-danger:hover i:first-child {
+            color: var(--dd-danger-text);
+        }
+
+        /* User header block inside dropdown */
+        .dd-user-block {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 12px;
+            background: var(--dd-user-bg);
+            border-radius: var(--dd-item-radius);
+            margin-bottom: 2px;
+        }
+
+        .dd-user-name {
+            font-size: 13.5px;
+            font-weight: 700;
+            color: var(--dd-user-name);
+            line-height: 1.2;
+        }
+
+        .dd-user-email {
+            font-size: 11.5px;
+            color: var(--dd-user-email);
+        }
+
+
+        /* ============================================
+           DROPDOWN NIVEL 3
+           ============================================ */
+        .dd-3 {
+            position: absolute;
+            top: var(--dd3-offset-top);
+            left: 100%;
+            min-width: 220px;
+            background: var(--dd-bg);
+            border: 1px solid var(--dd-border);
+            border-radius: var(--dd-radius);
+            box-shadow: var(--dd-shadow);
+            padding: var(--dd-padding);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateX(6px);
+            transition: all 0.2s ease;
+            z-index: 80;
+        }
+
+        .dd-2-item:hover > .dd-3 {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(0);
+        }
+
+        .dd-3-link {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: var(--dd-item-padding);
+            border-radius: var(--dd-item-radius);
+            font-size: 13px;
+            font-weight: 400;
+            color: var(--dd-text);
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.12s;
+            white-space: nowrap;
+        }
+
+        .dd-3-link::before {
+            content: '';
+            width: var(--dd-dot-size);
+            height: var(--dd-dot-size);
+            border-radius: 50%;
+            background: var(--dd-dot-color);
+            flex-shrink: 0;
+            transition: all 0.12s;
+        }
+
+        .dd-3-link:hover {
+            background: var(--dd-hover-bg);
+            color: var(--dd-text-hover);
+        }
+
+        .dd-3-link:hover::before {
+            background: var(--dd-text-hover);
+        }
+
+        .dd-3-item.active > .dd-3-link {
+            background: var(--dd-active-bg);
+            color: var(--dd-text-hover);
+            font-weight: 600;
+        }
+
+        .dd-3-item.active > .dd-3-link::before {
+            background: var(--dd-dot-active-color);
+            width: var(--dd-dot-active-size);
+            height: var(--dd-dot-active-size);
+        }
+
+
+        /* ============================================
+           CONTENIDO — TEMA CLARO NEUTRO
+           ============================================ */
+        .main-wrap {
+            max-width: 1440px;
+            margin: 0 auto;
+            padding: 24px;
+        }
+
+
+        .page-header {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .page-header h1 {
+            font-size: 22px;
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            line-height: 1.2;
+        }
+
+        .page-header p {
+            font-size: 13px;
+            color: var(--text-tertiary);
+            margin-top: 3px;
+        }
+
+        .page-header-actions { display: flex; gap: 8px; }
+
+        /* --- SISTEMA DE BOTONES --- */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            height: 36px;
+            padding: 0 20px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: 1px solid transparent;
+            font-family: inherit;
+        }
+
+        .btn:hover { transform: translateY(-1px); }
+        .btn:active { transform: scale(0.95); }
+
+        .btn-primary {
+            background: var(--primary);
+            color: var(--primary-on);
+            border: none;
+        }
+        .btn-primary:hover {
+            background: var(--primary-hover);
+        }           
+
+        .btn-secondary {
+            background: var(--secondary);
+            color: var(--secondary-on);
+            border: none;
+        }
+        .btn-secondary:hover {
+            background: var(--secondary-hover);
+        }          
+
+        .btn-ghost {
+            background: var(--bg-card);
+            color: var(--text-secondary);
+            border-color: var(--border-medium);
+        }
+
+        .btn-ghost:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+            background: var(--primary-subtle);
+            transform: translateY(-1px);
+        }
+
+
+        /* ============================================
+           TARJETAS
+           ============================================ */
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-light);
+            border-radius: 12px;
+            padding: 20px 24px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow-card);
+        }
+
+        .card:has(.collapsible-body.collapsed) {
+            padding-bottom: 0;
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+        }
+
+        .card:has(.collapsible-body.collapsed) .card-header {
+            margin-bottom: 0;
+            padding-bottom: 20px;
+        }
+
+        .card-header-left,
+        .card-header-right {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .card-header-right { gap: 12px; }
+
+        .card-header-left i {
+            font-size: 13px;
+            color: var(--text-tertiary);
+        }
+
+        .card-header-left span {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .card-header-right .card-toggle {
+            font-size: 12px;
+            color: var(--text-tertiary);
+            cursor: pointer;
+            background: none;
+            border: none;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            transition: color 0.15s;
+            font-family: inherit;
+        }
+
+        .card-header-right .card-toggle:hover { color: var(--primary); }
+
+        .collapsible-body {
+            display: grid;
+            grid-template-rows: 1fr;
+            transition: grid-template-rows 0.3s ease-out, opacity 0.2s ease;
+            opacity: 1;
+            overflow: hidden;
+        }
+
+        .collapsible-body.collapsed {
+            grid-template-rows: 0fr;
+            opacity: 0;
+        }
+
+        .card-content {
+            min-height: 0;
+            padding-top: 4px;
+            padding-bottom: 24px;
+        }
+
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr) auto;
+            gap: 14px;
+            align-items: end;
+        }
+
+
+        /* ============================================
+           FORMULARIOS
+           ============================================ */
+        label {
+            display: block;
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-tertiary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 6px;
+        }
+
+        select,
+        input[type="text"],
+        input[type="number"],
+        input[type="email"],
+        input[type="password"],
+        input[type="date"],
+        input[type="search"] {
+            width: 100%;
+            height: 38px;
+            padding: 0 12px;
+            border: 1px solid var(--border-medium);
+            border-radius: 8px;
+            font-size: 0.9rem !important;
+            font-family: inherit;
+            color: var(--text-primary);
+            background: var(--bg-input);
+            transition: all 0.15s;
+            appearance: none;
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            padding-right: 32px;
+        }
+
+        select:focus,
+        input[type="text"]:focus,
+        input[type="number"]:focus,
+        input[type="email"]:focus,
+        input[type="password"]:focus,
+        input[type="date"]:focus,
+        input[type="search"]:focus {
+            outline: none;
+            border-color: #374151;
+            background-color: var(--bg-input);
+            box-shadow: var(--shadow-input-focus);
+        }
+
+        .actions { display: flex; gap: 8px; padding-bottom: 1px; }
+        .actions .btn { height: 38px; padding: 0 16px; }
+
+
+        /* ============================================
+           TABLA
+           ============================================ */
+        .table-results { font-size: 13px; color: var(--text-secondary); }
+        .table-results strong { color: var(--text-primary); font-weight: 700; }
+
+        .table-view-ctrl { display: flex; gap: 4px; }
+
+        .view-btn {
+            width: 30px;
+            height: 30px;
+            border-radius: 6px;
+            border: 1px solid var(--border-medium);
+            background: var(--bg-card);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--text-tertiary);
+            font-size: 11px;
+            transition: all 0.15s;
+        }
+
+        .view-btn.active {
+            background: var(--text-primary);
+            color: white;
+            border-color: var(--text-primary);
+        }
+
+        .data-table-wrap { overflow-x: auto; }
+
+        .data-table { width: 100%; border-collapse: collapse; }
+
+        .data-table thead th {
+            padding: 11px 20px;
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-tertiary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            text-align: left;
+            background: var(--bg-input);
+            border-bottom: 1px solid var(--border-light);
+            white-space: nowrap;
+        }
+
+        .data-table tbody tr {
+            border-bottom: 1px solid var(--border-light);
+            transition: background 0.1s;
+        }
+
+        .data-table tbody tr:last-child { border-bottom: none; }
+        .data-table tbody tr:hover { background: var(--hover-row); }
+
+        .data-table tbody td {
+            padding: 13px 20px;
+            font-size: 13px;
+            color: var(--text-secondary);
+            white-space: nowrap;
+        }
+
+        .cell-id { font-weight: 600; color: var(--text-primary); font-size: 12.5px; }
+        .cell-name { font-weight: 600; color: var(--text-primary); }
+        .cell-concept { max-width: 220px; overflow: hidden; text-overflow: ellipsis; font-size: 12.5px; }
+        .cell-sub { font-size: 12px; color: var(--text-tertiary); }
+
+
+        /* Badges */
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 11.5px;
+            font-weight: 600;
+        }
+
+        .badge .dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+
+        .badge-ok { background: var(--success-bg); color: var(--success-text); }
+        .badge-ok .dot { background: var(--success-dot); }
+
+        .badge-warn { background: var(--warning-bg); color: var(--warning-text); }
+        .badge-warn .dot { background: var(--warning-dot); }
+
+        .badge-info { background: var(--info-bg); color: var(--info-text); }
+        .badge-info .dot { background: var(--info-dot); }
+
+
+        /* Acciones fila */
+        .row-acts { display: flex; gap: 2px; }
+
+        .row-act {
+            width: 30px;
+            height: 30px;
+            border-radius: 6px;
+            border: none;
+            background: transparent;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--text-tertiary);
+            font-size: 12px;
+            transition: all 0.15s;
+        }
+
+        .row-act:hover {
+            background: var(--primary-subtle);
+            color: var(--primary);
+        }
+
+        .row-act.danger:hover {
+            background: #FEF2F2;
+            color: #DC2626;
+        }
+
+
+        /* Paginación */
+        .table-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 24px;
+            border-top: 1px solid var(--border-light);
+        }
+
+        .pagination { display: flex; gap: 4px; }
+
+        .pg-btn {
+            min-width: 30px;
+            height: 30px;
+            border-radius: 6px;
+            border: 1px solid var(--border-medium);
+            background: var(--bg-card);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            font-family: inherit;
+            transition: all 0.15s;
+            padding: 0 6px;
+        }
+
+        .pg-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .pg-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .pg-btn.disabled { opacity: 0.4; pointer-events: none; }
+
+
+        /* Checkbox */
+        .ck {
+            width: 16px;
+            height: 16px;
+            border: 1.5px solid var(--border-medium);
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.15s;
+            flex-shrink: 0;
+        }
+
+        .ck:hover { border-color: var(--primary); }
+
+        .ck.on {
+            background: var(--primary);
+            border-color: var(--primary);
+        }
+
+        .ck.on::after {
+            content: '';
+            width: 4px;
+            height: 8px;
+            border: solid white;
+            border-width: 0 2px 2px 0;
+            transform: rotate(45deg) translateY(-1px);
+        }
+
+
+        /* Toast */
+        .toast-wrap {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            z-index: 200;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .toast {
+            background: var(--text-primary);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 500;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            animation: tIn 0.3s ease;
+            min-width: 260px;
+        }
+
+        .toast i { color: #4ADE80; }
+        .toast.out { animation: tOut 0.3s ease forwards; }
+
+        @keyframes tIn {
+            from { opacity: 0; transform: translateY(12px) scale(0.96); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        @keyframes tOut {
+            from { opacity: 1; transform: translateY(0) scale(1); }
+            to { opacity: 0; transform: translateY(12px) scale(0.96); }
+        }
+
+
+        /* ============================================
+           MOBILE MENU
+           ============================================ */
+        .mob-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.35);
+            z-index: 150;
+            opacity: 0;
+            transition: opacity 0.25s;
+        }
+
+        .mob-overlay.show { opacity: 1; }
+
+        .mob-menu {
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            width: 300px;
+            background: linear-gradient(180deg, var(--nav-bg-light), var(--nav-bg));
+            z-index: 160;
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+            overflow-y: auto;
+            padding: 20px 0;
+            box-shadow: 4px 0 24px rgba(0,0,0,0.2);
+        }
+
+        .mob-menu.show { transform: translateX(0); }
+
+        .mob-menu-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px 20px;
+            border-bottom: 1px solid var(--nav-divider);
+            margin-bottom: 8px;
+        }
+
+        .mob-close {
+            width: 32px;
+            height: 32px;
+            border-radius: 7px;
+            border: 1px solid var(--nav-btn-border);
+            background: var(--nav-btn-bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--nav-text);
+            font-size: 14px;
+        }
+
+        .mob-nav-section { padding: 8px 12px 0; }
+
+        .mob-nav-label {
+            font-size: 10px;
+            font-weight: 600;
+            color: var(--nav-text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.07em;
+            padding: 8px 8px 4px;
+        }
+
+        .mob-nav-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 12px;
+            border-radius: 7px;
+            font-size: 13px;
+            color: var(--nav-text);
+            cursor: pointer;
+            transition: all 0.12s;
+        }
+
+        .mob-nav-item:hover,
+        .mob-nav-item.open {
+            background: var(--nav-hover-bg);
+            color: var(--nav-text);
+        }
+
+        .mob-nav-item i.icon {
+            width: 18px;
+            text-align: center;
+            margin-right: 10px;
+            font-size: 13px;
+            color: var(--nav-text-muted);
+        }
+
+        .mob-nav-item:hover i.icon { color: var(--nav-text); }
+
+        .mob-nav-item i.chevron {
+            font-size: 10px;
+            color: var(--nav-text-muted);
+            transition: transform 0.2s;
+        }
+
+        .mob-nav-item.open i.chevron { transform: rotate(90deg); color: var(--nav-text); }
+
+        .mob-sub { display: none; padding-left: 40px; }
+        .mob-sub.show { display: block; }
+
+        .mob-sub-item {
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 12.5px;
+            color: var(--nav-text-muted);
+            cursor: pointer;
+            transition: all 0.12s;
+        }
+
+        .mob-sub-item:hover { color: var(--nav-text); background: var(--nav-hover-bg); }
+
+        .mob-sub3 { display: none; padding-left: 16px; }
+        .mob-sub3.show { display: block; }
+
+        .mob-sub3-item {
+            padding: 7px 12px;
+            border-radius: 5px;
+            font-size: 12px;
+            color: var(--nav-text-muted);
+            cursor: pointer;
+            transition: all 0.12s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .mob-sub3-item::before {
+            content: '';
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.25);
+            flex-shrink: 0;
+        }
+
+        .mob-sub3-item:hover { color: var(--nav-text); background: var(--nav-hover-bg); }
+        .mob-sub3-item:hover::before { background: var(--nav-text); }
+        .mob-sub3-item.active { color: var(--nav-text); font-weight: 600; }
+        .mob-sub3-item.active::before { background: var(--nav-accent); }
+
+
+        /* ============================================
+           RESPONSIVE
+           ============================================ */
+        @media (max-width: 1024px) {
+            .nav-1 { display: none; }
+            .hamburger { display: flex; }
+            .mob-overlay { display: block; pointer-events: none; }
+            .mob-overlay.show { pointer-events: auto; }
+            .card-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        @media (max-width: 640px) {
+            .main-wrap { padding: 16px; }
+            .card-grid { grid-template-columns: 1fr; }
+            .page-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+            }
+            .header { padding: 0 16px; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+    </style>
+</head>
+<body>
+
+
+
+<!-- ==================== HEADER ==================== -->
+<header class="header">
+    <div class="header-inner">
+        <div class="header-left">
+            <button class="hamburger" id="hamburgerBtn" aria-label="Abrir menú">
+                <i class="fas fa-bars"></i>
+            </button>
+            <a class="brand" href="#">
+                <div class="brand-icon"><i class="fas fa-building-columns"></i></div>
+                <div class="brand-text">
+                    Bonificaciones
+                    <small>Sistema de Gestión</small>
+                </div>
+            </a>
+
+            <nav class="nav-1" aria-label="Menú principal">
+
+                <div class="nav-1-item active">
+                    <button class="nav-1-link">Bonificaciones <i class="fas fa-chevron-down"></i></button>
+                    <div class="dd-2">
+                        <div class="dd-2-label">Gestión</div>
+                        <div class="dd-2-item">
+                            <a class="dd-2-link">
+                                <i class="fas fa-grip-lines"></i> Pedidos
+                                <i class="fas fa-chevron-right arr"></i>
+                            </a>
+                            <div class="dd-3">
+                                <div class="dd-3-item active"><a class="dd-3-link">Gastos de Representación</a></div>
+                                <div class="dd-3-item"><a class="dd-3-link">Viáticos Nacionales</a></div>
+                                <div class="dd-3-item"><a class="dd-3-link">Viáticos Internacionales</a></div>
+                                <div class="dd-3-item"><a class="dd-3-link">Capacitación</a></div>
+                            </div>
+                        </div>
+                        <div class="dd-2-item">
+                            <a class="dd-2-link">
+                                <i class="fas fa-grip-lines"></i> Historial
+                                <i class="fas fa-chevron-right arr"></i>
+                            </a>
+                            <div class="dd-3">
+                                <div class="dd-3-item"><a class="dd-3-link">Aprobados</a></div>
+                                <div class="dd-3-item"><a class="dd-3-link">Rechazados</a></div>
+                                <div class="dd-3-item"><a class="dd-3-link">En Observación</a></div>
+                            </div>
+                        </div>
+                        <div class="dd-2-sep"></div>
+                        <div class="dd-2-label">Procesos</div>
+                        <div class="dd-2-item"><a class="dd-2-link"><i class="fas fa-grip-lines"></i> Flujos de Aprobación</a></div>
+                        <div class="dd-2-item"><a class="dd-2-link"><i class="fas fa-grip-lines"></i> Reportes</a></div>
+                    </div>
+                </div>
+
+                <div class="nav-1-item">
+                    <button class="nav-1-link">Administración <i class="fas fa-chevron-down"></i></button>
+                    <div class="dd-2">
+                        <div class="dd-2-item">
+                            <a class="dd-2-link">
+                                <i class="fas fa-users"></i> Empleados
+                                <i class="fas fa-chevron-right arr"></i>
+                            </a>
+                            <div class="dd-3">
+                                <div class="dd-3-item"><a class="dd-3-link">Lista de Empleados</a></div>
+                                <div class="dd-3-item"><a class="dd-3-link">Carga Masiva</a></div>
+                                <div class="dd-3-item"><a class="dd-3-link">Estructura Orgánica</a></div>
+                            </div>
+                        </div>
+                        <div class="dd-2-item">
+                            <a class="dd-2-link">
+                                <i class="fas fa-tags"></i> Conceptos
+                                <i class="fas fa-chevron-right arr"></i>
+                            </a>
+                            <div class="dd-3">
+                                <div class="dd-3-item"><a class="dd-3-link">Objetos de Gasto</a></div>
+                                <div class="dd-3-item"><a class="dd-3-link">Sub Conceptos</a></div>
+                                <div class="dd-3-item"><a class="dd-3-link">Montos Límite</a></div>
+                            </div>
+                        </div>
+                        <div class="dd-2-item"><a class="dd-2-link"><i class="fas fa-building"></i> Dependencias</a></div>
+                        <div class="dd-2-sep"></div>
+                        <div class="dd-2-item"><a class="dd-2-link"><i class="fas fa-shield-halved"></i> Permisos y Roles</a></div>
+                        <div class="dd-2-item"><a class="dd-2-link"><i class="fas fa-clock"></i> Auditoría</a></div>
+                    </div>
+                </div>
+
+                <div class="nav-1-item">
+                    <button class="nav-1-link">Configuración <i class="fas fa-chevron-down"></i></button>
+                    <div class="dd-2">
+                        <div class="dd-2-item"><a class="dd-2-link"><i class="fas fa-gear"></i> General</a></div>
+                        <div class="dd-2-item"><a class="dd-2-link"><i class="fas fa-calendar"></i> Periodos</a></div>
+                        <div class="dd-2-item"><a class="dd-2-link"><i class="fas fa-bell"></i> Notificaciones</a></div>
+                        <div class="dd-2-sep"></div>
+                        <div class="dd-2-item"><a class="dd-2-link"><i class="fas fa-database"></i> Base de Datos</a></div>
+                        <div class="dd-2-item"><a class="dd-2-link"><i class="fas fa-plug"></i> Integraciones</a></div>
+                    </div>
+                </div>
+            </nav>
+        </div>
+
+        <div>
+            <div class="nav-1">
+                <div class="nav-1-item" id="userMenu">
+                    <button class="nav-1-link">
+                        <div class="hdr-avatar" title="Administrador">JP</div>
+                        <div class="user-info flex flex-col items-start">
+                            <span class="text-[12.5px] font-semibold" style="color:var(--nav-text)">Juan Pérez</span>
+                            <span class="text-[10px]" style="color:var(--nav-text-muted)">Administrador</span>
+                        </div>
+                        <i class="fas fa-chevron-down" style="font-size:10px;color:var(--nav-text-muted);transition:transform 0.2s"></i>
+                    </button>
+
+                    <div class="dd-2" style="right:0;left:auto;min-width:260px;">
+                        <!-- Bloque de usuario con variables propias -->
+                        <div class="dd-user-block">
+                            <div class="hdr-avatar" style="width:38px;height:38px;font-size:13px;flex-shrink:0">JP</div>
+                            <div>
+                                <div class="dd-user-name">Juan Pérez</div>
+                                <div class="dd-user-email">jperez@empresa.com</div>
+                            </div>
+                        </div>
+
+                        <div class="dd-2-sep"></div>
+
+                        <div class="dd-2-item">
+                            <a class="dd-2-link">
+                                <i class="fas fa-user"></i> Mi Perfil
+                            </a>
+                        </div>
+                        <div class="dd-2-item">
+                            <a class="dd-2-link">
+                                <i class="fas fa-gear"></i> Configuración
+                            </a>
+                        </div>
+
+                        <div class="dd-2-sep"></div>
+
+                        <div class="dd-2-item">
+                            <a class="dd-2-link dd-danger">
+                                <i class="fas fa-right-from-bracket"></i> Cerrar Sesión
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- ==================== CONTENIDO ==================== -->
+<main class="main-wrap">
+
+
+    <div class="page-header">
+        <div>
+            <h1>Pedidos de Bonificaciones</h1>
+            <p>Gestión de solicitudes de gastos de representación — Periodo 2026</p>
+        </div>
+        <div class="page-header-actions">
+            <button class="btn btn-ghost" onclick="showToast('Descarga iniciada')">
+                <i class="fas fa-download"></i> Exportar
+            </button>
+            <button class="btn btn-primary" onclick="showToast('Formulario de nuevo pedido abierto')">
+                <i class="fas fa-plus"></i> Nuevo Pedido
+            </button>
+        </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="flex gap-3 mb-5">
+        <div class="flex items-center gap-2.5 p-3.5 bg-white border border-gray-100 rounded-[10px] shadow-[0_1px_3px_rgba(0,0,0,.04)] flex-1 hover:shadow-[0_4px_12px_rgba(0,0,0,.06)] hover:-translate-y-px transition-all">
+            <div class="w-9 h-9 rounded-lg flex items-center justify-center text-sm shrink-0 bg-[var(--primary-subtle)] text-[var(--primary)]"><i class="fas fa-file-lines"></i></div>
+            <div><div class="text-xl font-extrabold tracking-[-.03em] leading-none">148</div><div class="text-[11px] text-gray-400 font-medium uppercase tracking-[.03em]">Total Pedidos</div></div>
+        </div>
+        <div class="flex items-center gap-2.5 p-3.5 bg-white border border-gray-100 rounded-[10px] shadow-[0_1px_3px_rgba(0,0,0,.04)] flex-1 hover:shadow-[0_4px_12px_rgba(0,0,0,.06)] hover:-translate-y-px transition-all">
+            <div class="w-9 h-9 rounded-lg flex items-center justify-center text-sm shrink-0 bg-green-50 text-green-800"><i class="fas fa-circle-check"></i></div>
+            <div><div class="text-xl font-extrabold tracking-[-.03em] leading-none">132</div><div class="text-[11px] text-gray-400 font-medium uppercase tracking-[.03em]">Habilitados</div></div>
+        </div>
+        <div class="flex items-center gap-2.5 p-3.5 bg-white border border-gray-100 rounded-[10px] shadow-[0_1px_3px_rgba(0,0,0,.04)] flex-1 hover:shadow-[0_4px_12px_rgba(0,0,0,.06)] hover:-translate-y-px transition-all">
+            <div class="w-9 h-9 rounded-lg flex items-center justify-center text-sm shrink-0 bg-amber-50 text-amber-800"><i class="fas fa-hourglass-half"></i></div>
+            <div><div class="text-xl font-extrabold tracking-[-.03em] leading-none">11</div><div class="text-[11px] text-gray-400 font-medium uppercase tracking-[.03em]">Pendientes</div></div>
+        </div>
+        <div class="flex items-center gap-2.5 p-3.5 bg-white border border-gray-100 rounded-[10px] shadow-[0_1px_3px_rgba(0,0,0,.04)] flex-1 hover:shadow-[0_4px_12px_rgba(0,0,0,.06)] hover:-translate-y-px transition-all">
+            <div class="w-9 h-9 rounded-lg flex items-center justify-center text-sm shrink-0 bg-blue-50 text-blue-800"><i class="fas fa-stamp"></i></div>
+            <div><div class="text-xl font-extrabold tracking-[-.03em] leading-none">5</div><div class="text-[11px] text-gray-400 font-medium uppercase tracking-[.03em]">Procesados</div></div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            <div class="card-header-left">
+                <i class="fas fa-sliders"></i>
+                <span>Filtros de búsqueda</span>
+            </div>
+            <div class="card-header-right">
+                <button class="card-toggle" onclick="showToast('Filtros restablecidos')">
+                    <i class="fas fa-rotate-left"></i> Limpiar
+                </button>
+                <button class="js-card-toggle w-7 h-7 rounded-md border border-gray-200 bg-white flex items-center justify-center cursor-pointer text-gray-400 hover:text-gray-600 transition-all">
+                    <i class="fas fa-chevron-up transition-transform duration-200"></i>
+                </button>
+            </div>
+        </div>
+        <div class="collapsible-body js-card-content">
+            <div class="card-content">
+                <div style="margin-bottom: 20px;">
+                    <label>Búsqueda rápida</label>
+                    <div style="position: relative;">
+                        <input type="text" placeholder="Buscar por nombre, documento o código..." style="padding-left: 40px;">
+                        <i class="fas fa-search" style="position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--text-tertiary); font-size: 14px;"></i>
+                    </div>
+                </div>
+                <div class="card-grid" style="margin-bottom: 20px;">
+                    <div class="v-group">
+                        <label>Año</label>
+                        <select><option>2026</option><option>2025</option><option>2024</option></select>
+                    </div>
+                </div>
+                <div class="actions">
+                    <button class="btn btn-secondary" onclick="showToast('Buscando...')">
+                        <i class="fas fa-search"></i> Buscar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tabla -->
+    <div class="card">
+        <div class="card-header">
+            <div class="card-header-left">
+                <div class="table-results">
+                    Mostrando <strong>1–8</strong> de <strong>148</strong> resultados
+                </div>
+            </div>
+            <div class="card-header-right">
+                <button class="view-btn active"><i class="fas fa-table-list"></i></button>
+                <button class="view-btn"><i class="fas fa-grip"></i></button>
+            </div>
+        </div>
+        <div class="data-table-wrap">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th style="width:40px;padding-left:24px;"><div class="ck" id="ckAll" onclick="toggleAll()"></div></th>
+                        <th>C.I. N°</th>
+                        <th>Nombre</th>
+                        <th>Objeto de Gasto</th>
+                        <th>Concepto</th>
+                        <th>Estado</th>
+                        <th style="width:100px;">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="tbody"></tbody>
+            </table>
+        </div>
+        <div class="table-footer">
+            <div class="table-footer-info">Página 1 de 19</div>
+            <div class="pagination">
+                <button class="pg-btn disabled"><i class="fas fa-chevron-left"></i></button>
+                <button class="pg-btn active">1</button>
+                <button class="pg-btn" onclick="showToast('Página 2')">2</button>
+                <button class="pg-btn" onclick="showToast('Página 3')">3</button>
+                <button class="pg-btn" style="pointer-events:none;">...</button>
+                <button class="pg-btn" onclick="showToast('Página 19')">19</button>
+                <button class="pg-btn" onclick="showToast('Página 2')"><i class="fas fa-chevron-right"></i></button>
+            </div>
+        </div>
+    </div>
+</main>
+
+<!-- ==================== MOBILE MENU ==================== -->
+<div class="mob-overlay" id="mobOverlay"></div>
+<div class="mob-menu" id="mobMenu">
+    <div class="mob-menu-header">
+        <a class="brand" href="#">
+            <div class="brand-icon"><i class="fas fa-building-columns"></i></div>
+            <div class="brand-text">Bonificaciones<small>Sistema de Gestión</small></div>
+        </a>
+        <button class="mob-close" id="mobClose" aria-label="Cerrar menú"><i class="fas fa-xmark"></i></button>
+    </div>
+    <div class="mob-nav-section">
+        <div class="mob-nav-label">Principal</div>
+        <div class="mob-nav-item"><i class="fas fa-house icon"></i> Inicio</div>
+        <div class="mob-nav-item open" data-toggle="mob-boni">
+            <span><i class="fas fa-file-invoice-dollar icon"></i> Bonificaciones</span>
+            <i class="fas fa-chevron-right chevron"></i>
+        </div>
+        <div class="mob-sub show" id="mob-boni">
+            <div class="mob-sub-item mob-parent" data-toggle="mob-pedidos" style="display:flex;justify-content:space-between;align-items:center;">
+                <span>Pedidos</span>
+                <i class="fas fa-chevron-right chevron" style="font-size:9px;"></i>
+            </div>
+            <div class="mob-sub3 show" id="mob-pedidos">
+                <div class="mob-sub3-item active">Gastos de Representación</div>
+                <div class="mob-sub3-item" onclick="showToast('Viáticos Nacionales')">Viáticos Nacionales</div>
+                <div class="mob-sub3-item" onclick="showToast('Viáticos Internacionales')">Viáticos Internacionales</div>
+                <div class="mob-sub3-item" onclick="showToast('Capacitación')">Capacitación</div>
+            </div>
+            <div class="mob-sub-item mob-parent" data-toggle="mob-hist" style="display:flex;justify-content:space-between;align-items:center;">
+                <span>Historial</span>
+                <i class="fas fa-chevron-right chevron" style="font-size:9px;"></i>
+            </div>
+            <div class="mob-sub3" id="mob-hist">
+                <div class="mob-sub3-item" onclick="showToast('Aprobados')">Aprobados</div>
+                <div class="mob-sub3-item" onclick="showToast('Rechazados')">Rechazados</div>
+                <div class="mob-sub3-item" onclick="showToast('En Observación')">En Observación</div>
+            </div>
+            <div class="mob-sub-item" onclick="showToast('Flujos de Aprobación')">Flujos de Aprobación</div>
+            <div class="mob-sub-item" onclick="showToast('Reportes')">Reportes</div>
+        </div>
+        <div class="mob-nav-item" data-toggle="mob-admin">
+            <span><i class="fas fa-users icon"></i> Administración</span>
+            <i class="fas fa-chevron-right chevron"></i>
+        </div>
+        <div class="mob-sub" id="mob-admin">
+            <div class="mob-sub-item mob-parent" data-toggle="mob-emp" style="display:flex;justify-content:space-between;align-items:center;">
+                <span>Empleados</span>
+                <i class="fas fa-chevron-right chevron" style="font-size:9px;"></i>
+            </div>
+            <div class="mob-sub3" id="mob-emp">
+                <div class="mob-sub3-item" onclick="showToast('Lista de Empleados')">Lista de Empleados</div>
+                <div class="mob-sub3-item" onclick="showToast('Carga Masiva')">Carga Masiva</div>
+                <div class="mob-sub3-item" onclick="showToast('Estructura Orgánica')">Estructura Orgánica</div>
+            </div>
+            <div class="mob-sub-item mob-parent" data-toggle="mob-conc" style="display:flex;justify-content:space-between;align-items:center;">
+                <span>Conceptos</span>
+                <i class="fas fa-chevron-right chevron" style="font-size:9px;"></i>
+            </div>
+            <div class="mob-sub3" id="mob-conc">
+                <div class="mob-sub3-item" onclick="showToast('Objetos de Gasto')">Objetos de Gasto</div>
+                <div class="mob-sub3-item" onclick="showToast('Sub Conceptos')">Sub Conceptos</div>
+                <div class="mob-sub3-item" onclick="showToast('Montos Límite')">Montos Límite</div>
+            </div>
+            <div class="mob-sub-item" onclick="showToast('Dependencias')">Dependencias</div>
+            <div class="mob-sub-item" onclick="showToast('Permisos y Roles')">Permisos y Roles</div>
+            <div class="mob-sub-item" onclick="showToast('Auditoría')">Auditoría</div>
+        </div>
+        <div class="mob-nav-item" data-toggle="mob-config">
+            <span><i class="fas fa-gear icon"></i> Configuración</span>
+            <i class="fas fa-chevron-right chevron"></i>
+        </div>
+        <div class="mob-sub" id="mob-config">
+            <div class="mob-sub-item" onclick="showToast('General')">General</div>
+            <div class="mob-sub-item" onclick="showToast('Periodos')">Periodos</div>
+            <div class="mob-sub-item" onclick="showToast('Notificaciones')">Notificaciones</div>
+            <div class="mob-sub-item" onclick="showToast('Base de Datos')">Base de Datos</div>
+            <div class="mob-sub-item" onclick="showToast('Integraciones')">Integraciones</div>
+        </div>
+    </div>
+</div>
+
+<!-- Toast -->
+<div class="toast-wrap" id="toastWrap"></div>
+
+<script>
+    const data = [
+        { ci:'1.234.567', nombre:'García Mendoza, Carlos A.', objeto:'113 - Gastos de representación', concepto:'1113000 - GASTO DE REPRESENTACION', estado:'habilitado' },
+        { ci:'2.345.678', nombre:'Rodríguez Pérez, María L.', objeto:'113 - Gastos de representación', concepto:'1113000 - GASTO DE REPRESENTACION', estado:'habilitado' },
+        { ci:'3.456.789', nombre:'Martínez Suárez, José R.', objeto:'113 - Gastos de representación', concepto:'1113000 - GASTO DE REPRESENTACION', estado:'pendiente' },
+        { ci:'4.567.890', nombre:'López Hernández, Ana P.', objeto:'113 - Gastos de representación', concepto:'1113000 - GASTO DE REPRESENTACION', estado:'habilitado' },
+        { ci:'5.678.901', nombre:'Fernández Torres, Luis M.', objeto:'113 - Gastos de representación', concepto:'1113000 - GASTO DE REPRESENTACION', estado:'procesado' },
+        { ci:'6.789.012', nombre:'González Ramírez, Patricia', objeto:'113 - Gastos de representación', concepto:'1113000 - GASTO DE REPRESENTACION', estado:'habilitado' },
+        { ci:'7.890.123', nombre:'Díaz Vargas, Roberto E.', objeto:'113 - Gastos de representación', concepto:'1113000 - GASTO DE REPRESENTACION', sub:'Alimentación', estado:'habilitado' },
+        { ci:'8.901.234', nombre:'Torres Castillo, Carmen G.', objeto:'113 - Gastos de representación', concepto:'1113000 - GASTO DE REPRESENTACION', estado:'pendiente' },
+    ];
+
+    const tbody = document.getElementById('tbody');
+
+    function render() {
+        tbody.innerHTML = '';
+        data.forEach((r, i) => {
+            let bc = 'badge-ok', bt = 'Habilitado';
+            if (r.estado === 'pendiente') { bc = 'badge-warn'; bt = 'Pendiente'; }
+            if (r.estado === 'procesado') { bc = 'badge-info'; bt = 'Procesado'; }
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td style="padding-left:24px;"><div class="ck" data-i="${i}" onclick="toggleCk(this)"></div></td>
+                <td class="cell-id">${r.ci}</td>
+                <td class="cell-name">${r.nombre}</td>
+                <td style="font-size:12.5px;">${r.objeto}</td>
+                <td class="cell-concept" title="${r.concepto}">${r.concepto}</td>
+                <td><span class="badge ${bc}"><span class="dot"></span>${bt}</span></td>
+                <td>
+                    <div class="row-acts">
+                        <button class="row-act" title="Ver" onclick="showToast('Detalle de ${r.nombre}')"><i class="fas fa-eye"></i></button>
+                        <button class="row-act" title="Editar" onclick="showToast('Editando ${r.nombre}')"><i class="fas fa-pen"></i></button>
+                        <button class="row-act danger" title="Eliminar" onclick="showToast('Eliminado ${r.nombre}')"><i class="fas fa-trash-can"></i></button>
+                    </div>
+                </td>`;
+            tbody.appendChild(tr);
+        });
+    }
+    render();
+
+    function toggleCk(el) { el.classList.toggle('on'); syncAll(); }
+    function toggleAll() {
+        const all = document.getElementById('ckAll');
+        const cks = tbody.querySelectorAll('.ck');
+        const isOn = all.classList.contains('on');
+        all.classList.toggle('on');
+        cks.forEach(c => { if (isOn) c.classList.remove('on'); else c.classList.add('on'); });
+    }
+    function syncAll() {
+        const cks = tbody.querySelectorAll('.ck');
+        const all = document.getElementById('ckAll');
+        if ([...cks].every(c => c.classList.contains('on'))) all.classList.add('on');
+        else all.classList.remove('on');
+    }
+
+    function showToast(msg) {
+        const wrap = document.getElementById('toastWrap');
+        const t = document.createElement('div');
+        t.className = 'toast';
+        t.innerHTML = `<i class="fas fa-circle-check"></i> ${msg}`;
+        wrap.appendChild(t);
+        setTimeout(() => { t.classList.add('out'); setTimeout(() => t.remove(), 300); }, 2500);
+    }
+
+    document.querySelectorAll('.view-btn').forEach(b => {
+        b.addEventListener('click', function() {
+            document.querySelectorAll('.view-btn').forEach(x => x.classList.remove('active'));
+            this.classList.add('active');
+        });
+    });
+
+    const overlay = document.getElementById('mobOverlay');
+    const menu = document.getElementById('mobMenu');
+
+    document.getElementById('hamburgerBtn').addEventListener('click', () => {
+        overlay.classList.add('show');
+        menu.classList.add('show');
+    });
+
+    function closeMob() {
+        overlay.classList.remove('show');
+        menu.classList.remove('show');
+    }
+
+    document.getElementById('mobClose').addEventListener('click', closeMob);
+    overlay.addEventListener('click', closeMob);
+
+    document.querySelectorAll('.mob-nav-item[data-toggle]').forEach(item => {
+        item.addEventListener('click', function() {
+            const target = document.getElementById(this.dataset.toggle);
+            if (!target) return;
+            const isOpen = this.classList.contains('open');
+            this.closest('.mob-nav-section').querySelectorAll('.mob-nav-item[data-toggle]').forEach(n => {
+                n.classList.remove('open');
+                const t = document.getElementById(n.dataset.toggle);
+                if (t) t.classList.remove('show');
+            });
+            if (!isOpen) {
+                this.classList.add('open');
+                target.classList.add('show');
+            }
+        });
+    });
+
+    document.querySelectorAll('.mob-sub-item.mob-parent[data-toggle]').forEach(item => {
+        item.addEventListener('click', function(e) {
+            e.stopPropagation();
+            const target = document.getElementById(this.dataset.toggle);
+            if (!target) return;
+            const isOpen = target.classList.contains('show');
+            this.closest('.mob-sub').querySelectorAll('.mob-sub3').forEach(s => s.classList.remove('show'));
+            if (!isOpen) target.classList.add('show');
+        });
+    });
+
+    document.querySelectorAll('.js-card-toggle').forEach(button => {
+        button.addEventListener('click', function() {
+            const card = this.closest('.card');
+            const body = card.querySelector('.js-card-content');
+            const icon = this.querySelector('i');
+            body.classList.toggle('collapsed');
+            if (body.classList.contains('collapsed')) {
+                icon.style.transform = 'rotate(180deg)';
+                this.title = "Mostrar contenido";
+            } else {
+                icon.style.transform = 'rotate(0deg)';
+                this.title = "Colapsar contenido";
+            }
+        });
+    });
+
+    window.addEventListener('resize', () => { if (window.innerWidth > 1024) closeMob(); });
+</script>
+</body>
+</html>
