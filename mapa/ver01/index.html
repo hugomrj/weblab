@@ -1,0 +1,1060 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduParaguay - Buscador de Instituciones Educativas Iniciales</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'forest': {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            200: '#bbf7d0',
+                            300: '#86efac',
+                            400: '#4ade80',
+                            500: '#22c55e',
+                            600: '#16a34a',
+                            700: '#15803d',
+                            800: '#166534',
+                            900: '#14532d',
+                            950: '#052e16'
+                        }
+                    },
+                    fontFamily: {
+                        'display': ['Space Grotesk', 'sans-serif'],
+                        'body': ['DM Sans', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- ========== CSS REUTILIZABLE ========== -->
+    <style>
+        :root {
+            --bg-primary: #f0fdf4;
+            --bg-card: #ffffff;
+            --fg-primary: #14532d;
+            --fg-secondary: #166534;
+            --fg-muted: #6b7280;
+            --accent-primary: #16a34a;
+            --accent-secondary: #22c55e;
+            --accent-light: #dcfce7;
+            --border-color: #bbf7d0;
+            --shadow-color: rgba(22, 163, 74, 0.15);
+            
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --radius-xl: 24px;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--bg-primary);
+            color: var(--fg-primary);
+        }
+
+        /* === COMPONENTES BASE REUTILIZABLES === */
+
+        /* Botones */
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-secondary) 100%);
+            color: white;
+            padding: 12px 24px;
+            border-radius: var(--radius-md);
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 14px var(--shadow-color);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px var(--shadow-color);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+
+        .btn-secondary {
+            background: var(--bg-card);
+            color: var(--accent-primary);
+            padding: 10px 20px;
+            border-radius: var(--radius-md);
+            font-weight: 600;
+            border: 2px solid var(--border-color);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--accent-primary);
+            background: var(--accent-light);
+        }
+
+        /* Cards */
+        .card {
+            background: var(--bg-card);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border-color);
+            padding: 24px;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px var(--shadow-color);
+            border-color: var(--accent-secondary);
+        }
+
+        .card-institution {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card-institution::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(180deg, var(--accent-primary), var(--accent-secondary));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .card-institution:hover::before {
+            opacity: 1;
+        }
+
+        /* Badges/Etiquetas */
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            border-radius: 50px;
+            font-size: 12px;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+
+        .badge-verified {
+            background: var(--accent-light);
+            color: var(--accent-primary);
+        }
+
+        .badge-category {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .badge-level {
+            background: #ede9fe;
+            color: #5b21b6;
+        }
+
+        /* Input/Buscar */
+        .input-search {
+            width: 100%;
+            padding: 16px 20px 16px 52px;
+            border: 2px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            font-size: 16px;
+            background: var(--bg-card);
+            transition: all 0.3s ease;
+        }
+
+        .input-search:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 4px rgba(22, 163, 74, 0.1);
+        }
+
+        /* Filtros tabs */
+        .filter-tab {
+            padding: 10px 20px;
+            border-radius: var(--radius-md);
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: transparent;
+            border: none;
+            color: var(--fg-muted);
+        }
+
+        .filter-tab:hover {
+            background: var(--accent-light);
+            color: var(--accent-primary);
+        }
+
+        .filter-tab.active {
+            background: var(--accent-primary);
+            color: white;
+        }
+
+        /* === ANIMACIONES === */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes pulse-soft {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .animate-fade-in-up {
+            animation: fadeInUp 0.6s ease forwards;
+        }
+
+        .animate-fade-in {
+            animation: fadeIn 0.5s ease forwards;
+        }
+
+        .animate-slide-left {
+            animation: slideInLeft 0.5s ease forwards;
+        }
+
+        .animate-float {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        /* Stagger children */
+        .stagger-children > * {
+            opacity: 0;
+        }
+
+        .stagger-children.visible > *:nth-child(1) { animation: fadeInUp 0.5s ease 0.1s forwards; }
+        .stagger-children.visible > *:nth-child(2) { animation: fadeInUp 0.5s ease 0.2s forwards; }
+        .stagger-children.visible > *:nth-child(3) { animation: fadeInUp 0.5s ease 0.3s forwards; }
+        .stagger-children.visible > *:nth-child(4) { animation: fadeInUp 0.5s ease 0.4s forwards; }
+        .stagger-children.visible > *:nth-child(5) { animation: fadeInUp 0.5s ease 0.5s forwards; }
+        .stagger-children.visible > *:nth-child(6) { animation: fadeInUp 0.5s ease 0.6s forwards; }
+
+        /* === BACKGROUND ELEMENTS === */
+        .bg-pattern {
+            background-image: 
+                radial-gradient(circle at 20% 80%, rgba(22, 163, 74, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(34, 197, 94, 0.06) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(187, 247, 208, 0.3) 0%, transparent 30%);
+        }
+
+        .hero-bg {
+            background: 
+                linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(240,253,244,0.9) 100%),
+                url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%2316a34a' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+
+        /* Reduced motion */
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+
+        /* === UTILIDADES === */
+        .text-gradient {
+            background: linear-gradient(135deg, var(--fg-primary) 0%, var(--accent-primary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .scrollbar-hide {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-pattern">
+
+    <!-- ========== HEADER ========== -->
+    <header class="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-lg border-b border-forest-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16 sm:h-20">
+                <!-- Logo -->
+                <a href="#" class="flex items-center gap-3 group">
+                    <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-gradient-to-br from-forest-600 to-forest-500 flex items-center justify-center shadow-lg group-hover:scale-105 transition-transform">
+                        <svg class="w-6 h-6 sm:w-7 sm:h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+                        </svg>
+                    </div>
+                    <div class="hidden sm:block">
+                        <span class="font-display font-bold text-xl text-forest-900">EduParaguay</span>
+                        <span class="block text-xs text-forest-600 font-medium -mt-0.5">Nivel Inicial</span>
+                    </div>
+                </a>
+
+                <!-- Nav Desktop -->
+                <nav class="hidden md:flex items-center gap-1">
+                    <a href="#buscar" class="filter-tab">Buscar</a>
+                    <a href="#instituciones" class="filter-tab">Instituciones</a>
+                    <a href="#categorias" class="filter-tab">Categorias</a>
+                    <a href="#contacto" class="filter-tab">Contacto</a>
+                </nav>
+
+                <!-- CTA -->
+                <div class="flex items-center gap-3">
+                    <button class="btn-secondary hidden sm:inline-flex items-center gap-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                        </svg>
+                        Registrar Institucion
+                    </button>
+                    
+                    <!-- Mobile menu button -->
+                    <button id="mobileMenuBtn" class="md:hidden p-2 rounded-lg hover:bg-forest-50 transition-colors" aria-label="Menu">
+                        <svg class="w-6 h-6 text-forest-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div id="mobileMenu" class="hidden md:hidden border-t border-forest-100 bg-white/95 backdrop-blur-lg">
+            <nav class="px-4 py-4 space-y-2">
+                <a href="#buscar" class="block px-4 py-3 rounded-lg hover:bg-forest-50 text-forest-700 font-medium transition-colors">Buscar</a>
+                <a href="#instituciones" class="block px-4 py-3 rounded-lg hover:bg-forest-50 text-forest-700 font-medium transition-colors">Instituciones</a>
+                <a href="#categorias" class="block px-4 py-3 rounded-lg hover:bg-forest-50 text-forest-700 font-medium transition-colors">Categorias</a>
+                <a href="#contacto" class="block px-4 py-3 rounded-lg hover:bg-forest-50 text-forest-700 font-medium transition-colors">Contacto</a>
+                <button class="w-full btn-primary mt-4 flex items-center justify-center gap-2">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                    </svg>
+                    Registrar Institucion
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- ========== HERO SECTION ========== -->
+    <section id="buscar" class="hero-bg pt-24 sm:pt-32 pb-16 sm:pb-24 relative overflow-hidden">
+        <!-- Decorative elements -->
+        <div class="absolute top-20 left-10 w-64 h-64 bg-forest-200/30 rounded-full blur-3xl"></div>
+        <div class="absolute bottom-0 right-0 w-96 h-96 bg-forest-300/20 rounded-full blur-3xl"></div>
+        
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+            <div class="text-center max-w-4xl mx-auto stagger-children" id="heroContent">
+                <!-- Badge -->
+                <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-forest-100 border border-forest-200 mb-6 animate-fade-in">
+                    <span class="w-2 h-2 rounded-full bg-forest-500 animate-pulse"></span>
+                    <span class="text-sm font-medium text-forest-700">Directorio educativo de Paraguay</span>
+                </div>
+
+                <!-- Title -->
+                <h1 class="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-forest-950 mb-6 leading-tight">
+                    Encuentra la mejor
+                    <span class="text-gradient">institucion educativa</span>
+                    para tu hijo
+                </h1>
+
+                <!-- Subtitle -->
+                <p class="text-lg sm:text-xl text-forest-600 mb-10 max-w-2xl mx-auto leading-relaxed">
+                    Guarderias, jardines de infancia, preescolares y escuelas verificadas en todo Paraguay. Compara servicios y toma la mejor decision.
+                </p>
+
+                <!-- Search Box -->
+                <div class="max-w-3xl mx-auto animate-fade-in-up" style="animation-delay: 0.3s;">
+                    <div class="bg-white rounded-2xl shadow-xl shadow-forest-500/10 p-3 sm:p-4 border border-forest-100">
+                        <form id="searchForm" class="flex flex-col sm:flex-row gap-3">
+                            <div class="relative flex-1">
+                                <svg class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-forest-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                                </svg>
+                                <input 
+                                    type="text" 
+                                    id="searchInput"
+                                    class="input-search pl-12" 
+                                    placeholder="Buscar por nombre, ciudad o barrio..."
+                                    aria-label="Buscar institucion"
+                                >
+                            </div>
+                            <div class="relative">
+                                <select 
+                                    id="citySelect" 
+                                    class="w-full sm:w-48 px-4 py-4 rounded-xl border-2 border-forest-100 bg-forest-50/50 text-forest-700 font-medium focus:outline-none focus:border-forest-500 appearance-none cursor-pointer"
+                                    aria-label="Seleccionar ciudad"
+                                >
+                                    <option value="">Todas las ciudades</option>
+                                    <option value="asuncion">Asuncion</option>
+                                    <option value="encarnacion">Encarnacion</option>
+                                    <option value="ciudad-del-este">Ciudad del Este</option>
+                                    <option value="concepcion">Concepcion</option>
+                                    <option value="lambare">Lambare</option>
+                                    <option value="san-lorenzo">San Lorenzo</option>
+                                    <option value="luque">Luque</option>
+                                </select>
+                                <svg class="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-forest-400 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                                </svg>
+                            </div>
+                            <button type="submit" class="btn-primary flex items-center justify-center gap-2 px-8 py-4">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                                </svg>
+                                <span>Buscar</span>
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- Quick filters -->
+                    <div class="flex flex-wrap items-center justify-center gap-2 mt-6">
+                        <span class="text-sm text-forest-500">Popular:</span>
+                        <button class="quick-filter px-3 py-1.5 text-sm rounded-full bg-white border border-forest-200 text-forest-600 hover:bg-forest-50 hover:border-forest-400 transition-all">
+                            Guarderias Asuncion
+                        </button>
+                        <button class="quick-filter px-3 py-1.5 text-sm rounded-full bg-white border border-forest-200 text-forest-600 hover:bg-forest-50 hover:border-forest-400 transition-all">
+                            Preescolar bilingue
+                        </button>
+                        <button class="quick-filter px-3 py-1.5 text-sm rounded-full bg-white border border-forest-200 text-forest-600 hover:bg-forest-50 hover:border-forest-400 transition-all">
+                            Jornada completa
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== STATS BAR ========== -->
+    <section class="bg-white border-y border-forest-100 py-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+                <div class="stat-item" data-count="156">
+                    <span class="block text-3xl sm:text-4xl font-display font-bold text-forest-600">156</span>
+                    <span class="text-sm text-forest-500 mt-1">Instituciones verificadas</span>
+                </div>
+                <div class="stat-item" data-count="17">
+                    <span class="block text-3xl sm:text-4xl font-display font-bold text-forest-600">17</span>
+                    <span class="text-sm text-forest-500 mt-1">Ciudades</span>
+                </div>
+                <div class="stat-item" data-count="8500">
+                    <span class="block text-3xl sm:text-4xl font-display font-bold text-forest-600">8,500+</span>
+                    <span class="text-sm text-forest-500 mt-1">Ninos atendidos</span>
+                </div>
+                <div class="stat-item" data-count="98">
+                    <span class="block text-3xl sm:text-4xl font-display font-bold text-forest-600">98%</span>
+                    <span class="text-sm text-forest-500 mt-1">Satisfaccion</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== CATEGORIES ========== -->
+    <section id="categorias" class="py-16 sm:py-24 bg-gradient-to-b from-white to-forest-50/50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="font-display text-3xl sm:text-4xl font-bold text-forest-900 mb-4">Categorias de instituciones</h2>
+                <p class="text-forest-600 max-w-2xl mx-auto">Encuentra el tipo de institucion que mejor se adapte a las necesidades de tu hijo</p>
+            </div>
+
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6" id="categoriesGrid">
+                <!-- Categories will be rendered by JS -->
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== INSTITUTIONS LISTING ========== -->
+    <section id="instituciones" class="py-16 sm:py-24 bg-forest-50/30">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
+                <div>
+                    <h2 class="font-display text-3xl sm:text-4xl font-bold text-forest-900">Instituciones destacadas</h2>
+                    <p class="text-forest-600 mt-2">Las mejor valoradas por los padres</p>
+                </div>
+                
+                <!-- Filters -->
+                <div class="flex items-center gap-2 overflow-x-auto scrollbar-hide pb-2 sm:pb-0">
+                    <button class="filter-tab active whitespace-nowrap" data-filter="todos">Todos</button>
+                    <button class="filter-tab whitespace-nowrap" data-filter="guarderia">Guarderias</button>
+                    <button class="filter-tab whitespace-nowrap" data-filter="preescolar">Preescolar</button>
+                    <button class="filter-tab whitespace-nowrap" data-filter="jardin">Jardin</button>
+                    <button class="filter-tab whitespace-nowrap" data-filter="maternal">Maternal</button>
+                </div>
+            </div>
+
+            <!-- Results info -->
+            <div id="resultsInfo" class="mb-6 text-forest-600 font-medium">
+                Mostrando <span id="resultsCount">6</span> instituciones
+            </div>
+
+            <!-- Institutions Grid -->
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6" id="institutionsGrid">
+                <!-- Institutions will be rendered by JS -->
+            </div>
+
+            <!-- Load more -->
+            <div class="text-center mt-12">
+                <button id="loadMoreBtn" class="btn-secondary inline-flex items-center gap-2 px-8 py-4">
+                    <span>Ver mas instituciones</span>
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== SERVICES SECTION ========== -->
+    <section class="py-16 sm:py-24 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="font-display text-3xl sm:text-4xl font-bold text-forest-900 mb-4">Servicios que ofrecen</h2>
+                <p class="text-forest-600 max-w-2xl mx-auto">Cada institucion cuenta con diferentes servicios para el desarrollo integral de tu hijo</p>
+            </div>
+
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4" id="servicesGrid">
+                <!-- Services will be rendered by JS -->
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== CTA SECTION ========== -->
+    <section id="contacto" class="py-16 sm:py-24 bg-gradient-to-br from-forest-700 via-forest-600 to-forest-500 relative overflow-hidden">
+        <!-- Decorative -->
+        <div class="absolute inset-0 opacity-10">
+            <svg class="w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
+                <defs>
+                    <pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse">
+                        <path d="M 10 0 L 0 0 0 10" fill="none" stroke="white" stroke-width="0.5"/>
+                    </pattern>
+                </defs>
+                <rect width="100" height="100" fill="url(#grid)"/>
+            </svg>
+        </div>
+        
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative">
+            <h2 class="font-display text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-6">
+                Representas una institucion educativa?
+            </h2>
+            <p class="text-xl text-forest-100 mb-10 max-w-2xl mx-auto">
+                Unete a nuestro directorio y llega a miles de familias en Paraguay buscando educacion de calidad para sus hijos.
+            </p>
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+                <button class="bg-white text-forest-700 font-semibold px-8 py-4 rounded-xl hover:bg-forest-50 transition-all shadow-lg hover:shadow-xl hover:-translate-y-1">
+                    Registrar mi institucion
+                </button>
+                <button class="text-white font-semibold px-8 py-4 rounded-xl border-2 border-white/30 hover:bg-white/10 transition-all">
+                    Conocer beneficios
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== FOOTER ========== -->
+    <footer class="bg-forest-950 text-forest-100 py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-4 gap-10 mb-12">
+                <!-- Logo & info -->
+                <div class="md:col-span-2">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-10 h-10 rounded-xl bg-forest-600 flex items-center justify-center">
+                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+                            </svg>
+                        </div>
+                        <span class="font-display font-bold text-xl text-white">EduParaguay</span>
+                    </div>
+                    <p class="text-forest-300 mb-6 max-w-md">
+                        El directorio educativo mas completo de Paraguay para instituciones de nivel inicial. Conectamos familias con educacion de calidad.
+                    </p>
+                    <div class="flex gap-4">
+                        <a href="#" class="w-10 h-10 rounded-lg bg-forest-800 hover:bg-forest-700 flex items-center justify-center transition-colors" aria-label="Facebook">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+                        </a>
+                        <a href="#" class="w-10 h-10 rounded-lg bg-forest-800 hover:bg-forest-700 flex items-center justify-center transition-colors" aria-label="Instagram">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Links -->
+                <div>
+                    <h4 class="font-semibold text-white mb-4">Enlaces</h4>
+                    <ul class="space-y-3">
+                        <li><a href="#" class="text-forest-300 hover:text-white transition-colors">Buscar instituciones</a></li>
+                        <li><a href="#" class="text-forest-300 hover:text-white transition-colors">Categorias</a></li>
+                        <li><a href="#" class="text-forest-300 hover:text-white transition-colors">Registrar institucion</a></li>
+                        <li><a href="#" class="text-forest-300 hover:text-white transition-colors">Blog educativo</a></li>
+                    </ul>
+                </div>
+
+                <!-- Contact -->
+                <div>
+                    <h4 class="font-semibold text-white mb-4">Contacto</h4>
+                    <ul class="space-y-3 text-forest-300">
+                        <li class="flex items-center gap-2">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                            </svg>
+                            info@eduparaguay.com
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
+                            </svg>
+                            +595 21 123 456
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                            </svg>
+                            Asuncion, Paraguay
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="border-t border-forest-800 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+                <p class="text-forest-400 text-sm">2024 EduParaguay. Todos los derechos reservados.</p>
+                <div class="flex gap-6 text-sm">
+                    <a href="#" class="text-forest-400 hover:text-white transition-colors">Privacidad</a>
+                    <a href="#" class="text-forest-400 hover:text-white transition-colors">Terminos</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ========== JAVASCRIPT ========== -->
+    <script>
+        // ===== DATA =====
+        const categories = [
+            {
+                id: 'guarderia',
+                name: 'Guarderias',
+                description: 'Cuidado infantil desde 0 a 3 años',
+                icon: `<svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>`,
+                count: 45
+            },
+            {
+                id: 'preescolar',
+                name: 'Preescolar',
+                description: 'Educacion inicial 4 a 6 años',
+                icon: `<svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>`,
+                count: 62
+            },
+            {
+                id: 'jardin',
+                name: 'Jardin de Infancia',
+                description: 'Primera infancia 2 a 5 años',
+                icon: `<svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/></svg>`,
+                count: 38
+            },
+            {
+                id: 'maternal',
+                name: 'Maternal',
+                description: 'Estimulacion temprana 0 a 2 años',
+                icon: `<svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>`,
+                count: 11
+            }
+        ];
+
+        const services = [
+            { name: 'Alimentacion', icon: '🍽️' },
+            { name: 'Transporte', icon: '🚌' },
+            { name: 'Bilingue', icon: '🌐' },
+            { name: 'Jornada Completa', icon: '⏰' },
+            { name: 'Psicologia', icon: '🧠' },
+            { name: 'Natacion', icon: '🏊' }
+        ];
+
+        const institutions = [
+            {
+                id: 1,
+                name: 'Jardin Mis Primeros Pasos',
+                type: 'guarderia',
+                city: 'Asuncion',
+                address: 'Av. Eusebio Ayala 1234',
+                rating: 4.9,
+                reviews: 47,
+                verified: true,
+                priceRange: '$$',
+                services: ['Alimentacion', 'Transporte', 'Jornada Completa'],
+                description: 'Guarderia con enfoque en desarrollo integral y estimulacion temprana para niños de 0 a 4 años.',
+                phone: '+595 21 123 456',
+                image: 'https://images.unsplash.com/photo-1587654780291-39c9404d746b?w=400&h=300&fit=crop'
+            },
+            {
+                id: 2,
+                name: 'Escuela Infantil Sol Naciente',
+                type: 'preescolar',
+                city: 'Encarnacion',
+                address: 'Calle Mcal. Lopez 567',
+                rating: 4.8,
+                reviews: 32,
+                verified: true,
+                priceRange: '$$$',
+                services: ['Bilingue', 'Natacion', 'Psicologia'],
+                description: 'Preescolar bilingue español-guarani con metodologia Montessori y amplias areas verdes.',
+                phone: '+595 71 234 567',
+                image: 'https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?w=400&h=300&fit=crop'
+            },
+            {
+                id: 3,
+                name: 'Centro Educativo Arcoiris',
+                type: 'jardin',
+                city: 'Ciudad del Este',
+                address: 'Av. Federico R. Moreno 890',
+                rating: 4.7,
+                reviews: 28,
+                verified: true,
+                priceRange: '$$',
+                services: ['Alimentacion', 'Transporte', 'Jornada Completa'],
+                description: 'Jardin de infancia con programas artisticos y deportivos. 25 años de experiencia.',
+                phone: '+595 61 345 678',
+                image: 'https://images.unsplash.com/photo-1544776193-352d25ca82cd?w=400&h=300&fit=crop'
+            },
+            {
+                id: 4,
+                name: 'Maternal Dulce Sueno',
+                type: 'maternal',
+                city: 'Asuncion',
+                address: 'Calle Palma 234',
+                rating: 4.9,
+                reviews: 56,
+                verified: true,
+                priceRange: '$$$',
+                services: ['Alimentacion', 'Jornada Completa', 'Psicologia'],
+                description: 'Maternal especializado en bebés de 0 a 2 años. Personal altamente capacitado.',
+                phone: '+595 21 456 789',
+                image: 'https://images.unsplash.com/photo-1581579438747-1dc8d17bbce4?w=400&h=300&fit=crop'
+            },
+            {
+                id: 5,
+                name: 'Pequenos Genios',
+                type: 'preescolar',
+                city: 'San Lorenzo',
+                address: 'Ruta 2 km 18',
+                rating: 4.6,
+                reviews: 19,
+                verified: false,
+                priceRange: '$',
+                services: ['Alimentacion', 'Transporte'],
+                description: 'Preescolar con enfoque en desarrollo cognitivo y habilidades sociales.',
+                phone: '+595 21 567 890',
+                image: 'https://images.unsplash.com/photo-1560969184-10fe8719e047?w=400&h=300&fit=crop'
+            },
+            {
+                id: 6,
+                name: 'Jardin los Pinitos',
+                type: 'guarderia',
+                city: 'Luque',
+                address: 'Av. Defensores del Chaco 456',
+                rating: 4.5,
+                reviews: 23,
+                verified: true,
+                priceRange: '$$',
+                services: ['Alimentacion', 'Natacion'],
+                description: 'Guarderia con piscina climatizada y areas de juego amplias y seguras.',
+                phone: '+595 21 678 901',
+                image: 'https://images.unsplash.com/photo-1565538810643-b5bdb714032a?w=400&h=300&fit=crop'
+            }
+        ];
+
+        // ===== DOM ELEMENTS =====
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const categoriesGrid = document.getElementById('categoriesGrid');
+        const servicesGrid = document.getElementById('servicesGrid');
+        const institutionsGrid = document.getElementById('institutionsGrid');
+        const filterTabs = document.querySelectorAll('.filter-tab[data-filter]');
+        const searchForm = document.getElementById('searchForm');
+        const searchInput = document.getElementById('searchInput');
+        const citySelect = document.getElementById('citySelect');
+        const resultsCount = document.getElementById('resultsCount');
+        const heroContent = document.getElementById('heroContent');
+
+        // ===== INITIALIZE =====
+        let currentFilter = 'todos';
+
+        function init() {
+            renderCategories();
+            renderServices();
+            renderInstitutions(institutions);
+            setupEventListeners();
+            animateOnScroll();
+            
+            // Animate hero
+            setTimeout(() => {
+                heroContent.classList.add('visible');
+            }, 100);
+        }
+
+        // ===== RENDER FUNCTIONS =====
+        function renderCategories() {
+            categoriesGrid.innerHTML = categories.map(cat => `
+                <button class="card text-left group cursor-pointer" data-category="${cat.id}">
+                    <div class="w-14 h-14 rounded-xl bg-forest-100 group-hover:bg-forest-500 flex items-center justify-center text-forest-600 group-hover:text-white transition-all duration-300 mb-4">
+                        ${cat.icon}
+                    </div>
+                    <h3 class="font-display font-bold text-lg text-forest-900 mb-1">${cat.name}</h3>
+                    <p class="text-sm text-forest-500 mb-3">${cat.description}</p>
+                    <span class="text-sm font-semibold text-forest-600">${cat.count} instituciones</span>
+                </button>
+            `).join('');
+        }
+
+        function renderServices() {
+            servicesGrid.innerHTML = services.map(service => `
+                <div class="flex flex-col items-center text-center p-4 rounded-xl bg-forest-50 hover:bg-forest-100 transition-colors cursor-default">
+                    <span class="text-2xl mb-2">${service.icon}</span>
+                    <span class="text-sm font-medium text-forest-700">${service.name}</span>
+                </div>
+            `).join('');
+        }
+
+        function renderInstitutions(data) {
+            institutionsGrid.innerHTML = data.map((inst, index) => `
+                <article class="card card-institution" style="animation-delay: ${index * 0.1}s">
+                    <div class="relative mb-4 rounded-xl overflow-hidden h-48 bg-forest-100">
+                        <img 
+                            src="${inst.image}" 
+                            alt="${inst.name}" 
+                            class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                            loading="lazy"
+                        >
+                        ${inst.verified ? `
+                            <div class="absolute top-3 right-3">
+                                <span class="badge badge-verified">
+                                    <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                                    </svg>
+                                    Verificado
+                                </span>
+                            </div>
+                        ` : ''}
+                        <div class="absolute bottom-3 left-3">
+                            <span class="badge badge-level">${getCategoryName(inst.type)}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="space-y-3">
+                        <div class="flex items-start justify-between gap-2">
+                            <h3 class="font-display font-bold text-lg text-forest-900 leading-tight">${inst.name}</h3>
+                            <span class="text-forest-500 font-semibold shrink-0">${inst.priceRange}</span>
+                        </div>
+                        
+                        <div class="flex items-center gap-2 text-sm text-forest-500">
+                            <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                            </svg>
+                            <span>${inst.city}</span>
+                        </div>
+                        
+                        <p class="text-sm text-forest-600 line-clamp-2">${inst.description}</p>
+                        
+                        <div class="flex flex-wrap gap-1.5">
+                            ${inst.services.slice(0, 3).map(s => `
+                                <span class="text-xs px-2 py-1 rounded-full bg-forest-100 text-forest-700">${s}</span>
+                            `).join('')}
+                        </div>
+                        
+                        <div class="flex items-center justify-between pt-3 border-t border-forest-100">
+                            <div class="flex items-center gap-1">
+                                <svg class="w-4 h-4 text-amber-400" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                                </svg>
+                                <span class="font-semibold text-forest-700">${inst.rating}</span>
+                                <span class="text-sm text-forest-400">(${inst.reviews})</span>
+                            </div>
+                            
+                            <button class="text-forest-600 hover:text-forest-700 font-medium text-sm flex items-center gap-1 group/btn">
+                                Ver detalles
+                                <svg class="w-4 h-4 transition-transform group-hover/btn:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </article>
+            `).join('');
+            
+            resultsCount.textContent = data.length;
+        }
+
+        function getCategoryName(type) {
+            const names = {
+                'guarderia': 'Guarderia',
+                'preescolar': 'Preescolar',
+                'jardin': 'Jardin',
+                'maternal': 'Maternal'
+            };
+            return names[type] || type;
+        }
+
+        // ===== EVENT LISTENERS =====
+        function setupEventListeners() {
+            // Mobile menu
+            mobileMenuBtn.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+
+            // Filter tabs
+            filterTabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    filterTabs.forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                    currentFilter = tab.dataset.filter;
+                    
+                    const filtered = currentFilter === 'todos' 
+                        ? institutions 
+                        : institutions.filter(i => i.type === currentFilter);
+                    
+                    renderInstitutions(filtered);
+                });
+            });
+
+            // Search form
+            searchForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                performSearch();
+            });
+
+            // Search input - live search
+            searchInput.addEventListener('input', debounce(performSearch, 300));
+
+            // City select
+            citySelect.addEventListener('change', performSearch);
+
+            // Category cards
+            categoriesGrid.addEventListener('click', (e) => {
+                const card = e.target.closest('[data-category]');
+                if (card) {
+                    const category = card.dataset.category;
+                    document.getElementById('instituciones').scrollIntoView({ behavior: 'smooth' });
+                    
+                    // Activate corresponding filter
+                    filterTabs.forEach(t => {
+                        t.classList.toggle('active', t.dataset.filter === category);
+                    });
+                    currentFilter = category;
+                    
+                    const filtered = institutions.filter(i => i.type === category);
+                    renderInstitutions(filtered);
+                }
+            });
+
+            // Quick filters
+            document.querySelectorAll('.quick-filter').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    searchInput.value = btn.textContent.trim();
+                    performSearch();
+                });
+            });
+        }
+
+        function performSearch() {
+            const query = searchInput.value.toLowerCase().trim();
+            const city = citySelect.value;
+
+            let filtered = institutions;
+
+            if (query) {
+                filtered = filtered.filter(i => 
+                    i.name.toLowerCase().includes(query) ||
+                    i.city.toLowerCase().includes(query) ||
+                    i.description.toLowerCase().includes(query) ||
+                    i.services.some(s => s.toLowerCase().includes(query))
+                );
+            }
+
+            if (city) {
+                filtered = filtered.filter(i => 
+                    i.city.toLowerCase().replace(' ', '-') === city
+                );
+            }
+
+            if (currentFilter !== 'todos') {
+                filtered = filtered.filter(i => i.type === currentFilter);
+            }
+
+            renderInstitutions(filtered);
+        }
+
+        // ===== UTILITIES =====
+        function debounce(func, wait) {
+            let timeout;
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(timeout);
+                    func(...args);
+                };
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+            };
+        }
+
+        function animateOnScroll() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('animate-fade-in-up');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            document.querySelectorAll('.card, section > div').forEach(el => {
+                observer.observe(el);
+            });
+        }
+
+        // Initialize when DOM is ready
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
