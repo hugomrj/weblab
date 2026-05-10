@@ -1,0 +1,1250 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TUKI Paraguay - Buscador de Instituciones Educativas Iniciales</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'tuki': {
+                            // Verdes vibrantes
+                            'mint': '#2DD4A8',
+                            'mint-light': '#6EE7C8',
+                            'mint-lighter': '#D1FAE8',
+                            'mint-dark': '#14B88A',
+                            // Amarillos vibrantes
+                            'sun': '#FBBF24',
+                            'sun-light': '#FCD34D',
+                            'sun-lighter': '#FEF3C7',
+                            // Naranjas vibrantes
+                            'coral': '#FB8C4A',
+                            'coral-light': '#FDAB76',
+                            'coral-lighter': '#FFEDD5',
+                            // Rosa vibrante (nuevo)
+                            'pink': '#F472B6',
+                            'pink-light': '#F9A8D4',
+                            'pink-lighter': '#FCE7F3',
+                            // Neutrales
+                            'cream': '#FFFDF8',
+                            'warm': '#F9F6F0',
+                            'text': '#1F2937',
+                            'text-light': '#6B7280',
+                        }
+                    },
+                    fontFamily: {
+                        'display': ['Quicksand', 'sans-serif'],
+                        'body': ['Nunito', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- ========== CSS REUTILIZABLE ========== -->
+    <style>
+        :root {
+            /* Colores vibrantes TUKI */
+            --mint: #2DD4A8;
+            --mint-light: #6EE7C8;
+            --mint-lighter: #D1FAE8;
+            --mint-dark: #14B88A;
+            
+            --sun: #FBBF24;
+            --sun-light: #FCD34D;
+            --sun-lighter: #FEF3C7;
+            
+            --coral: #FB8C4A;
+            --coral-light: #FDAB76;
+            --coral-lighter: #FFEDD5;
+            
+            --pink: #F472B6;
+            --pink-light: #F9A8D4;
+            --pink-lighter: #FCE7F3;
+            
+            --cream: #FFFDF8;
+            --warm: #F9F6F0;
+            --text-primary: #1F2937;
+            --text-secondary: #6B7280;
+            
+            --radius-sm: 12px;
+            --radius-md: 18px;
+            --radius-lg: 26px;
+            --radius-xl: 36px;
+            --radius-full: 9999px;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: var(--cream);
+            color: var(--text-primary);
+        }
+
+        /* === COMPONENTES BASE REUTILIZABLES === */
+
+        /* Botones */
+        .btn-primary {
+            background: linear-gradient(135deg, var(--mint) 0%, var(--mint-dark) 100%);
+            color: white;
+            padding: 14px 28px;
+            border-radius: var(--radius-full);
+            font-weight: 700;
+            font-family: 'Quicksand', sans-serif;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 6px 24px rgba(45, 212, 168, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 10px 36px rgba(45, 212, 168, 0.5);
+        }
+
+        .btn-primary:active {
+            transform: translateY(-1px) scale(1);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: var(--mint-dark);
+            padding: 12px 24px;
+            border-radius: var(--radius-full);
+            font-weight: 700;
+            font-family: 'Quicksand', sans-serif;
+            border: 3px solid var(--mint);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--mint-dark);
+            background: var(--mint-lighter);
+        }
+
+        /* Cards */
+        .card {
+            background: white;
+            border-radius: var(--radius-lg);
+            border: none;
+            padding: 24px;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+        }
+
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 50px rgba(45, 212, 168, 0.2);
+        }
+
+        .card-institution {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card-institution::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, var(--mint) 0%, var(--sun) 50%, var(--coral) 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .card-institution:hover::before {
+            opacity: 1;
+        }
+
+        /* Badges/Etiquetas */
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 7px 14px;
+            border-radius: var(--radius-full);
+            font-size: 12px;
+            font-weight: 700;
+            font-family: 'Quicksand', sans-serif;
+            transition: all 0.2s ease;
+        }
+
+        .badge-verified {
+            background: var(--mint-lighter);
+            color: var(--mint-dark);
+            border: 2px solid var(--mint-light);
+        }
+
+        .badge-category {
+            background: var(--sun-lighter);
+            color: #B45309;
+            border: 2px solid var(--sun-light);
+        }
+
+        .badge-level {
+            background: var(--coral-lighter);
+            color: #C2410C;
+            border: 2px solid var(--coral-light);
+        }
+
+        .badge-pink {
+            background: var(--pink-lighter);
+            color: #BE185D;
+            border: 2px solid var(--pink-light);
+        }
+
+        /* Input/Buscar */
+        .input-search {
+            width: 100%;
+            padding: 18px 24px 18px 56px;
+            border: 3px solid var(--mint-light);
+            border-radius: var(--radius-lg);
+            font-size: 16px;
+            font-family: 'Nunito', sans-serif;
+            background: white;
+            transition: all 0.3s ease;
+        }
+
+        .input-search:focus {
+            outline: none;
+            border-color: var(--mint);
+            box-shadow: 0 0 0 5px rgba(45, 212, 168, 0.15);
+        }
+
+        .input-search::placeholder {
+            color: #9CA3AF;
+        }
+
+        /* Filtros tabs */
+        .filter-tab {
+            padding: 10px 22px;
+            border-radius: var(--radius-full);
+            font-weight: 600;
+            font-family: 'Quicksand', sans-serif;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: transparent;
+            border: 2px solid transparent;
+            color: var(--text-secondary);
+        }
+
+        .filter-tab:hover {
+            background: var(--mint-lighter);
+            color: var(--mint-dark);
+            border-color: var(--mint-light);
+        }
+
+        .filter-tab.active {
+            background: var(--mint);
+            color: white;
+            border-color: var(--mint);
+            box-shadow: 0 4px 14px rgba(45, 212, 168, 0.3);
+        }
+
+        /* === ANIMACIONES === */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(3deg); }
+        }
+
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 20px rgba(45, 212, 168, 0.3); }
+            50% { box-shadow: 0 0 40px rgba(45, 212, 168, 0.5); }
+        }
+
+        .animate-fade-in-up {
+            animation: fadeInUp 0.6s ease forwards;
+        }
+
+        .animate-fade-in {
+            animation: fadeIn 0.5s ease forwards;
+        }
+
+        .animate-bounce-slow {
+            animation: bounce 2.5s ease-in-out infinite;
+        }
+
+        .animate-float {
+            animation: float 5s ease-in-out infinite;
+        }
+
+        .animate-pulse-glow {
+            animation: pulse-glow 2s ease-in-out infinite;
+        }
+
+        /* Stagger children */
+        .stagger-children > * {
+            opacity: 0;
+        }
+
+        .stagger-children.visible > *:nth-child(1) { animation: fadeInUp 0.5s ease 0.1s forwards; }
+        .stagger-children.visible > *:nth-child(2) { animation: fadeInUp 0.5s ease 0.2s forwards; }
+        .stagger-children.visible > *:nth-child(3) { animation: fadeInUp 0.5s ease 0.3s forwards; }
+        .stagger-children.visible > *:nth-child(4) { animation: fadeInUp 0.5s ease 0.4s forwards; }
+        .stagger-children.visible > *:nth-child(5) { animation: fadeInUp 0.5s ease 0.5s forwards; }
+        .stagger-children.visible > *:nth-child(6) { animation: fadeInUp 0.5s ease 0.6s forwards; }
+
+        /* === BACKGROUND ELEMENTS === */
+        .bg-pattern {
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(45, 212, 168, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(251, 191, 36, 0.1) 0%, transparent 40%),
+                radial-gradient(circle at 50% 50%, rgba(251, 140, 74, 0.08) 0%, transparent 50%);
+        }
+
+        .hero-bg {
+            background: linear-gradient(180deg, var(--cream) 0%, var(--mint-lighter) 100%);
+        }
+
+        /* === ESPECÍFICOS TUKI === */
+        .tuki-gradient {
+            background: linear-gradient(135deg, var(--mint) 0%, var(--sun) 50%, var(--coral) 100%);
+        }
+
+        .tuki-gradient-text {
+            background: linear-gradient(135deg, var(--mint-dark) 0%, var(--coral) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .tuki-card-icon {
+            background: linear-gradient(135deg, var(--mint-lighter) 0%, var(--sun-lighter) 100%);
+        }
+
+        /* Decorative elements */
+        .deco-circle {
+            position: absolute;
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .deco-circle-1 {
+            width: 350px;
+            height: 350px;
+            background: linear-gradient(135deg, rgba(45, 212, 168, 0.25) 0%, rgba(110, 231, 200, 0.1) 100%);
+            top: -120px;
+            right: -80px;
+        }
+
+        .deco-circle-2 {
+            width: 250px;
+            height: 250px;
+            background: linear-gradient(135deg, rgba(251, 191, 36, 0.2) 0%, rgba(252, 211, 77, 0.1) 100%);
+            bottom: 80px;
+            left: -80px;
+        }
+
+        .deco-circle-3 {
+            width: 180px;
+            height: 180px;
+            background: linear-gradient(135deg, rgba(251, 140, 74, 0.2) 0%, rgba(253, 171, 118, 0.1) 100%);
+            top: 40%;
+            right: 5%;
+        }
+
+        /* Scrollbar */
+        .scrollbar-hide {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* Reduced motion */
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+
+        /* Category color variants */
+        .cat-mint { --cat-bg: var(--mint); --cat-light: var(--mint-lighter); --cat-text: var(--mint-dark); }
+        .cat-sun { --cat-bg: var(--sun); --cat-light: var(--sun-lighter); --cat-text: #B45309; }
+        .cat-coral { --cat-bg: var(--coral); --cat-light: var(--coral-lighter); --cat-text: #C2410C; }
+        .cat-pink { --cat-bg: var(--pink); --cat-light: var(--pink-lighter); --cat-text: #BE185D; }
+    </style>
+</head>
+<body class="min-h-screen bg-pattern">
+
+    <!-- ========== HEADER ========== -->
+    <header class="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-lg border-b-2 border-tuki-mint-lighter">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-18 sm:h-22">
+                <!-- Logo TUKI -->
+                <a href="#" class="flex items-center gap-3 group">
+                    <div class="relative w-14 h-14 sm:w-16 sm:h-16">
+                        <!-- Tucán estilizado vibrante -->
+                        <svg viewBox="0 0 100 100" class="w-full h-full">
+                            <!-- Cuerpo del tucán -->
+                            <ellipse cx="50" cy="55" rx="28" ry="32" fill="#2DD4A8"/>
+                            <!-- Ala -->
+                            <ellipse cx="60" cy="55" rx="18" ry="22" fill="#14B88A"/>
+                            <!-- Pico superior -->
+                            <path d="M45 35 Q25 25 15 35 Q20 42 45 40 Z" fill="#FBBF24"/>
+                            <!-- Pico inferior -->
+                            <path d="M45 42 Q25 45 18 40 Q20 48 45 47 Z" fill="#FB8C4A"/>
+                            <!-- Línea del pico -->
+                            <path d="M30 33 Q25 35 22 38" stroke="#1F2937" stroke-width="2" fill="none"/>
+                            <!-- Ojo -->
+                            <circle cx="52" cy="38" r="7" fill="white"/>
+                            <circle cx="53" cy="38" r="3.5" fill="#1F2937"/>
+                            <circle cx="54" cy="37" r="1.5" fill="white"/>
+                            <!-- Plumas decorativas -->
+                            <ellipse cx="35" cy="80" rx="6" ry="10" fill="#6EE7C8"/>
+                            <ellipse cx="50" cy="82" rx="5" ry="12" fill="#FCD34D"/>
+                            <ellipse cx="65" cy="80" rx="6" ry="10" fill="#FDAB76"/>
+                        </svg>
+                    </div>
+                    <div class="hidden sm:block">
+                        <span class="font-display font-bold text-2xl text-tuki-text tracking-tight">TUKI</span>
+                        <span class="block text-sm text-tuki-mint-dark font-bold -mt-0.5">Paraguay</span>
+                    </div>
+                </a>
+
+                <!-- Nav Desktop -->
+                <nav class="hidden md:flex items-center gap-2">
+                    <a href="#buscar" class="filter-tab">Buscar</a>
+                    <a href="#instituciones" class="filter-tab">Instituciones</a>
+                    <a href="#categorias" class="filter-tab">Categorias</a>
+                </nav>
+
+                <!-- Mobile menu button -->
+                <button id="mobileMenuBtn" class="md:hidden p-3 rounded-xl hover:bg-tuki-mint-lighter transition-colors" aria-label="Menu">
+                    <svg class="w-6 h-6 text-tuki-text" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 6h16M4 12h16M4 18h16"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div id="mobileMenu" class="hidden md:hidden border-t-2 border-tuki-mint-lighter bg-white/98 backdrop-blur-lg">
+            <nav class="px-4 py-4 space-y-2">
+                <a href="#buscar" class="block px-5 py-3.5 rounded-xl hover:bg-tuki-mint-lighter text-tuki-text font-bold transition-colors">Buscar</a>
+                <a href="#instituciones" class="block px-5 py-3.5 rounded-xl hover:bg-tuki-mint-lighter text-tuki-text font-bold transition-colors">Instituciones</a>
+                <a href="#categorias" class="block px-5 py-3.5 rounded-xl hover:bg-tuki-mint-lighter text-tuki-text font-bold transition-colors">Categorias</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- ========== HERO SECTION ========== -->
+    <section id="buscar" class="hero-bg pt-28 sm:pt-36 pb-20 sm:pb-28 relative overflow-hidden">
+        <!-- Decorative elements -->
+        <div class="deco-circle deco-circle-1 animate-float"></div>
+        <div class="deco-circle deco-circle-2 animate-float" style="animation-delay: -2s;"></div>
+        <div class="deco-circle deco-circle-3 animate-float" style="animation-delay: -1s;"></div>
+        
+        <!-- Floating decorative shapes -->
+        <div class="absolute top-36 right-16 hidden lg:block animate-float" style="animation-delay: -0.5s;">
+            <div class="w-20 h-20 rounded-3xl bg-tuki-sun rotate-12 opacity-80"></div>
+        </div>
+        <div class="absolute bottom-28 left-16 hidden lg:block animate-float" style="animation-delay: -1.5s;">
+            <div class="w-14 h-14 rounded-2xl bg-tuki-coral rotate-45 opacity-80"></div>
+        </div>
+        <div class="absolute top-1/2 right-28 hidden lg:block animate-float" style="animation-delay: -2.5s;">
+            <div class="w-10 h-10 rounded-xl bg-tuki-pink opacity-70"></div>
+        </div>
+        
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+            <div class="text-center max-w-4xl mx-auto stagger-children" id="heroContent">
+                <!-- Badge -->
+                <div class="inline-flex items-center gap-2.5 px-6 py-3 rounded-full bg-white border-2 border-tuki-mint shadow-lg mb-10 animate-fade-in animate-pulse-glow">
+                    <span class="w-3 h-3 rounded-full bg-tuki-mint animate-pulse"></span>
+                    <span class="text-sm font-bold text-tuki-mint-dark">Directorio educativo de Paraguay</span>
+                </div>
+
+                <!-- Title -->
+                <h1 class="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-tuki-text mb-8 leading-tight">
+                    Encuentra el mejor
+                    <span class="tuki-gradient-text">jardin o guarderia</span>
+                    para tu peque
+                </h1>
+
+                <!-- Subtitle -->
+                <p class="text-lg sm:text-xl text-tuki-text-light mb-14 max-w-2xl mx-auto leading-relaxed font-medium">
+                    Guarderias, jardines de infancia, preescolares y centros maternales verificados en todo Paraguay.
+                </p>
+
+                <!-- Search Box -->
+                <div class="max-w-3xl mx-auto animate-fade-in-up" style="animation-delay: 0.3s;">
+                    <div class="bg-white rounded-[28px] shadow-2xl shadow-tuki-mint/20 p-5 sm:p-6 border-2 border-tuki-mint-lighter">
+                        <form id="searchForm" class="flex flex-col sm:flex-row gap-4">
+                            <div class="relative flex-1">
+                                <svg class="absolute left-5 top-1/2 -translate-y-1/2 w-6 h-6 text-tuki-mint" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                                </svg>
+                                <input 
+                                    type="text" 
+                                    id="searchInput"
+                                    class="input-search pl-16" 
+                                    placeholder="Buscar por nombre, ciudad o barrio..."
+                                    aria-label="Buscar institucion"
+                                >
+                            </div>
+                            <div class="relative">
+                                <select 
+                                    id="citySelect" 
+                                    class="w-full sm:w-52 px-5 py-4.5 rounded-2xl border-3 border-tuki-mint-light bg-tuki-mint-lighter/50 text-tuki-text font-bold focus:outline-none focus:border-tuki-mint appearance-none cursor-pointer"
+                                    aria-label="Seleccionar ciudad"
+                                >
+                                    <option value="">Todas las ciudades</option>
+                                    <option value="asuncion">Asuncion</option>
+                                    <option value="encarnacion">Encarnacion</option>
+                                    <option value="ciudad-del-este">Ciudad del Este</option>
+                                    <option value="concepcion">Concepcion</option>
+                                    <option value="lambare">Lambare</option>
+                                    <option value="san-lorenzo">San Lorenzo</option>
+                                    <option value="luque">Luque</option>
+                                </select>
+                                <svg class="absolute right-5 top-1/2 -translate-y-1/2 w-5 h-5 text-tuki-mint pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"/>
+                                </svg>
+                            </div>
+                            <button type="submit" class="btn-primary flex items-center justify-center gap-3 px-10 py-4">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                                </svg>
+                                <span>Buscar</span>
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- Quick filters -->
+                    <div class="flex flex-wrap items-center justify-center gap-3 mt-10">
+                        <span class="text-sm text-tuki-text-light font-bold">Busquedas populares:</span>
+                        <button class="quick-filter px-5 py-2.5 text-sm rounded-full bg-white border-2 border-tuki-mint-light text-tuki-text hover:bg-tuki-mint hover:text-white hover:border-tuki-mint transition-all font-bold">
+                            Guarderias Asuncion
+                        </button>
+                        <button class="quick-filter px-5 py-2.5 text-sm rounded-full bg-white border-2 border-tuki-sun-light text-tuki-text hover:bg-tuki-sun hover:text-white hover:border-tuki-sun transition-all font-bold">
+                            Preescolar bilingue
+                        </button>
+                        <button class="quick-filter px-5 py-2.5 text-sm rounded-full bg-white border-2 border-tuki-coral-light text-tuki-text hover:bg-tuki-coral hover:text-white hover:border-tuki-coral transition-all font-bold">
+                            Jornada completa
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== STATS BAR ========== -->
+    <section class="bg-white py-12 border-y-2 border-tuki-warm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+                <div class="stat-item">
+                    <div class="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-tuki-mint mb-4 shadow-lg shadow-tuki-mint/30">
+                        <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+                        </svg>
+                    </div>
+                    <span class="block text-3xl sm:text-4xl font-display font-bold text-tuki-text">156</span>
+                    <span class="text-sm text-tuki-text-light font-bold">Instituciones</span>
+                </div>
+                <div class="stat-item">
+                    <div class="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-tuki-sun mb-4 shadow-lg shadow-tuki-sun/30">
+                        <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                        </svg>
+                    </div>
+                    <span class="block text-3xl sm:text-4xl font-display font-bold text-tuki-text">17</span>
+                    <span class="text-sm text-tuki-text-light font-bold">Ciudades</span>
+                </div>
+                <div class="stat-item">
+                    <div class="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-tuki-coral mb-4 shadow-lg shadow-tuki-coral/30">
+                        <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
+                        </svg>
+                    </div>
+                    <span class="block text-3xl sm:text-4xl font-display font-bold text-tuki-text">8,500+</span>
+                    <span class="text-sm text-tuki-text-light font-bold">Ninos atendidos</span>
+                </div>
+                <div class="stat-item">
+                    <div class="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-tuki-pink mb-4 shadow-lg shadow-tuki-pink/30">
+                        <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                        </svg>
+                    </div>
+                    <span class="block text-3xl sm:text-4xl font-display font-bold text-tuki-text">100%</span>
+                    <span class="text-sm text-tuki-text-light font-bold">Verificadas</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== CATEGORIES ========== -->
+    <section id="categorias" class="py-20 sm:py-28 bg-gradient-to-b from-white to-tuki-warm/50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="font-display text-3xl sm:text-4xl font-bold text-tuki-text mb-5">Categorias</h2>
+                <p class="text-tuki-text-light max-w-2xl mx-auto text-lg font-medium">Encuentra el tipo de institucion que mejor se adapte a las necesidades de tu peque</p>
+            </div>
+
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-6" id="categoriesGrid">
+                <!-- Categories will be rendered by JS -->
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== INSTITUTIONS LISTING ========== -->
+    <section id="instituciones" class="py-20 sm:py-28 bg-tuki-warm/30">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-5 mb-12">
+                <div>
+                    <h2 class="font-display text-3xl sm:text-4xl font-bold text-tuki-text">Instituciones</h2>
+                    <p class="text-tuki-text-light mt-2 font-medium">Explora las instituciones disponibles</p>
+                </div>
+                
+                <!-- Filters -->
+                <div class="flex items-center gap-2 overflow-x-auto scrollbar-hide pb-2 sm:pb-0">
+                    <button class="filter-tab active whitespace-nowrap" data-filter="todos">Todos</button>
+                    <button class="filter-tab whitespace-nowrap" data-filter="guarderia">Guarderias</button>
+                    <button class="filter-tab whitespace-nowrap" data-filter="preescolar">Preescolar</button>
+                    <button class="filter-tab whitespace-nowrap" data-filter="jardin">Jardin</button>
+                    <button class="filter-tab whitespace-nowrap" data-filter="maternal">Maternal</button>
+                </div>
+            </div>
+
+            <!-- Results info -->
+            <div id="resultsInfo" class="mb-8 text-tuki-text-light font-bold">
+                Mostrando <span id="resultsCount" class="text-tuki-mint-dark">6</span> instituciones
+            </div>
+
+            <!-- Institutions Grid -->
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-7" id="institutionsGrid">
+                <!-- Institutions will be rendered by JS -->
+            </div>
+
+            <!-- Load more -->
+            <div class="text-center mt-16">
+                <button id="loadMoreBtn" class="btn-secondary inline-flex items-center gap-3 px-12 py-5">
+                    <span>Ver mas instituciones</span>
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== SERVICES SECTION ========== -->
+    <section class="py-20 sm:py-28 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="font-display text-3xl sm:text-4xl font-bold text-tuki-text mb-5">Servicios que ofrecen</h2>
+                <p class="text-tuki-text-light max-w-2xl mx-auto text-lg font-medium">Cada institucion cuenta con diferentes servicios para el desarrollo integral de tu peque</p>
+            </div>
+
+            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-5" id="servicesGrid">
+                <!-- Services will be rendered by JS -->
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== ABOUT SECTION ========== -->
+    <section class="py-20 sm:py-28 bg-gradient-to-br from-tuki-mint-lighter via-white to-tuki-sun-lighter relative overflow-hidden">
+        <!-- Decorative -->
+        <div class="absolute -top-24 -right-24 w-96 h-96 rounded-full bg-tuki-mint/15 blur-3xl"></div>
+        <div class="absolute -bottom-24 -left-24 w-72 h-72 rounded-full bg-tuki-sun/15 blur-3xl"></div>
+        
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+            <div class="text-center">
+                <!-- Tucan illustration -->
+                <div class="mb-10 animate-bounce-slow">
+                    <svg viewBox="0 0 120 100" class="w-28 h-24 mx-auto">
+                        <!-- Cuerpo del tucán -->
+                        <ellipse cx="60" cy="55" rx="35" ry="40" fill="#2DD4A8"/>
+                        <!-- Ala -->
+                        <ellipse cx="72" cy="55" rx="22" ry="28" fill="#14B88A"/>
+                        <!-- Pico superior -->
+                        <path d="M52 32 Q22 18 10 32 Q18 45 52 42 Z" fill="#FBBF24"/>
+                        <!-- Pico inferior -->
+                        <path d="M52 44 Q22 50 12 42 Q18 55 52 52 Z" fill="#FB8C4A"/>
+                        <!-- Línea del pico -->
+                        <path d="M35 28 Q25 33 18 40" stroke="#1F2937" stroke-width="2.5" fill="none"/>
+                        <!-- Ojo -->
+                        <circle cx="62" cy="40" r="9" fill="white"/>
+                        <circle cx="64" cy="40" r="4.5" fill="#1F2937"/>
+                        <circle cx="65" cy="39" r="2" fill="white"/>
+                        <!-- Plumas decorativas -->
+                        <ellipse cx="42" cy="88" rx="8" ry="12" fill="#6EE7C8"/>
+                        <ellipse cx="60" cy="90" rx="6" ry="14" fill="#FCD34D"/>
+                        <ellipse cx="78" cy="88" rx="8" ry="12" fill="#FDAB76"/>
+                    </svg>
+                </div>
+                
+                <h2 class="font-display text-3xl sm:text-4xl font-bold text-tuki-text mb-7">
+                    Sobre TUKI Paraguay
+                </h2>
+                <p class="text-lg text-tuki-text-light mb-10 max-w-2xl mx-auto leading-relaxed font-medium">
+                    Somos el directorio educativo mas completo de Paraguay para instituciones de nivel inicial. 
+                    Verificamos cada institucion para que puedas tomar la mejor decision para tu familia.
+                </p>
+                <div class="flex flex-wrap items-center justify-center gap-8">
+                    <div class="flex items-center gap-3">
+                        <div class="w-12 h-12 rounded-xl bg-tuki-mint flex items-center justify-center shadow-lg shadow-tuki-mint/30">
+                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/>
+                            </svg>
+                        </div>
+                        <span class="text-tuki-text font-bold">Instituciones verificadas</span>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <div class="w-12 h-12 rounded-xl bg-tuki-sun flex items-center justify-center shadow-lg shadow-tuki-sun/30">
+                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                        </div>
+                        <span class="text-tuki-text font-bold">Informacion actualizada</span>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <div class="w-12 h-12 rounded-xl bg-tuki-coral flex items-center justify-center shadow-lg shadow-tuki-coral/30">
+                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                            </svg>
+                        </div>
+                        <span class="text-tuki-text font-bold">Busqueda facil</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== FOOTER ========== -->
+    <footer class="bg-tuki-text py-14">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-3 gap-10 mb-10">
+                <!-- Logo & info -->
+                <div class="md:col-span-2">
+                    <div class="flex items-center gap-3 mb-5">
+                        <div class="w-12 h-12">
+                            <svg viewBox="0 0 100 100" class="w-full h-full">
+                                <ellipse cx="50" cy="55" rx="28" ry="32" fill="#2DD4A8"/>
+                                <ellipse cx="60" cy="55" rx="18" ry="22" fill="#14B88A"/>
+                                <path d="M45 35 Q25 25 15 35 Q20 42 45 40 Z" fill="#FBBF24"/>
+                                <path d="M45 42 Q25 45 18 40 Q20 48 45 47 Z" fill="#FB8C4A"/>
+                                <path d="M30 33 Q25 35 22 38" stroke="white" stroke-width="2" fill="none"/>
+                                <circle cx="52" cy="38" r="6" fill="white"/>
+                                <circle cx="53" cy="38" r="3" fill="#1F2937"/>
+                                <circle cx="54" cy="37" r="1" fill="white"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <span class="font-display font-bold text-2xl text-white">TUKI</span>
+                            <span class="block text-sm text-tuki-mint font-bold -mt-0.5">Paraguay</span>
+                        </div>
+                    </div>
+                    <p class="text-gray-400 mb-6 max-w-md leading-relaxed font-medium">
+                        El directorio educativo mas completo de Paraguay para instituciones de nivel inicial. Conectamos familias con educacion de calidad.
+                    </p>
+                    <div class="flex gap-4">
+                        <a href="#" class="w-12 h-12 rounded-xl bg-white/10 hover:bg-tuki-mint flex items-center justify-center transition-all" aria-label="Facebook">
+                            <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+                        </a>
+                        <a href="#" class="w-12 h-12 rounded-xl bg-white/10 hover:bg-tuki-sun flex items-center justify-center transition-all" aria-label="Instagram">
+                            <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Links -->
+                <div class="grid grid-cols-2 gap-8">
+                    <div>
+                        <h4 class="font-bold text-white mb-4 font-display">Enlaces</h4>
+                        <ul class="space-y-3">
+                            <li><a href="#buscar" class="text-gray-400 hover:text-tuki-mint transition-colors font-medium">Buscar</a></li>
+                            <li><a href="#instituciones" class="text-gray-400 hover:text-tuki-mint transition-colors font-medium">Instituciones</a></li>
+                            <li><a href="#categorias" class="text-gray-400 hover:text-tuki-mint transition-colors font-medium">Categorias</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-white mb-4 font-display">Contacto</h4>
+                        <ul class="space-y-3 text-gray-400">
+                            <li class="flex items-center gap-2">
+                                <svg class="w-4 h-4 text-tuki-mint" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                                </svg>
+                                <span class="text-sm font-medium">info@tuki.com.py</span>
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <svg class="w-4 h-4 text-tuki-mint" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                </svg>
+                                <span class="text-sm font-medium">Asuncion, Paraguay</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="border-t border-white/10 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+                <p class="text-gray-500 text-sm font-medium">2024 TUKI Paraguay. Todos los derechos reservados.</p>
+                <div class="flex gap-6 text-sm">
+                    <a href="#" class="text-gray-500 hover:text-tuki-mint transition-colors font-medium">Privacidad</a>
+                    <a href="#" class="text-gray-500 hover:text-tuki-mint transition-colors font-medium">Terminos</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ========== JAVASCRIPT ========== -->
+    <script>
+        // ===== DATA =====
+        const categories = [
+            {
+                id: 'guarderia',
+                name: 'Guarderias',
+                description: 'Cuidado infantil de 0 a 3 anios',
+                icon: `<svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>`,
+                count: 45,
+                color: 'mint'
+            },
+            {
+                id: 'preescolar',
+                name: 'Preescolar',
+                description: 'Educacion inicial 4 a 6 anios',
+                icon: `<svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>`,
+                count: 62,
+                color: 'sun'
+            },
+            {
+                id: 'jardin',
+                name: 'Jardin de Infancia',
+                description: 'Primera infancia 2 a 5 anios',
+                icon: `<svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/></svg>`,
+                count: 38,
+                color: 'coral'
+            },
+            {
+                id: 'maternal',
+                name: 'Maternal',
+                description: 'Estimulacion temprana 0 a 2 anios',
+                icon: `<svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>`,
+                count: 11,
+                color: 'pink'
+            }
+        ];
+
+        const services = [
+            { name: 'Alimentacion', color: 'mint' },
+            { name: 'Transporte', color: 'sun' },
+            { name: 'Bilingue', color: 'coral' },
+            { name: 'Jornada Completa', color: 'pink' },
+            { name: 'Psicologia', color: 'mint' },
+            { name: 'Natacion', color: 'sun' }
+        ];
+
+        const institutions = [
+            {
+                id: 1,
+                name: 'Jardin Mis Primeros Pasos',
+                type: 'guarderia',
+                city: 'Asuncion',
+                address: 'Av. Eusebio Ayala 1234',
+                verified: true,
+                priceRange: '$$',
+                services: ['Alimentacion', 'Transporte', 'Jornada Completa'],
+                description: 'Guarderia con enfoque en desarrollo integral y estimulacion temprana para ninos de 0 a 4 anios.',
+                phone: '+595 21 123 456',
+                image: 'https://images.unsplash.com/photo-1587654780291-39c9404d746b?w=400&h=300&fit=crop'
+            },
+            {
+                id: 2,
+                name: 'Escuela Infantil Sol Naciente',
+                type: 'preescolar',
+                city: 'Encarnacion',
+                address: 'Calle Mcal. Lopez 567',
+                verified: true,
+                priceRange: '$$$',
+                services: ['Bilingue', 'Natacion', 'Psicologia'],
+                description: 'Preescolar bilingue espanol-guarani con metodologia Montessori y amplias areas verdes.',
+                phone: '+595 71 234 567',
+                image: 'https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?w=400&h=300&fit=crop'
+            },
+            {
+                id: 3,
+                name: 'Centro Educativo Arcoiris',
+                type: 'jardin',
+                city: 'Ciudad del Este',
+                address: 'Av. Federico R. Moreno 890',
+                verified: true,
+                priceRange: '$$',
+                services: ['Alimentacion', 'Transporte', 'Jornada Completa'],
+                description: 'Jardin de infancia con programas artisticos y deportivos. 25 anios de experiencia.',
+                phone: '+595 61 345 678',
+                image: 'https://images.unsplash.com/photo-1544776193-352d25ca82cd?w=400&h=300&fit=crop'
+            },
+            {
+                id: 4,
+                name: 'Maternal Dulce Sueno',
+                type: 'maternal',
+                city: 'Asuncion',
+                address: 'Calle Palma 234',
+                verified: true,
+                priceRange: '$$$',
+                services: ['Alimentacion', 'Jornada Completa', 'Psicologia'],
+                description: 'Maternal especializado en bebes de 0 a 2 anios. Personal altamente capacitado.',
+                phone: '+595 21 456 789',
+                image: 'https://images.unsplash.com/photo-1581579438747-1dc8d17bbce4?w=400&h=300&fit=crop'
+            },
+            {
+                id: 5,
+                name: 'Pequenos Genios',
+                type: 'preescolar',
+                city: 'San Lorenzo',
+                address: 'Ruta 2 km 18',
+                verified: false,
+                priceRange: '$',
+                services: ['Alimentacion', 'Transporte'],
+                description: 'Preescolar con enfoque en desarrollo cognitivo y habilidades sociales.',
+                phone: '+595 21 567 890',
+                image: 'https://images.unsplash.com/photo-1560969184-10fe8719e047?w=400&h=300&fit=crop'
+            },
+            {
+                id: 6,
+                name: 'Jardin los Pinitos',
+                type: 'guarderia',
+                city: 'Luque',
+                address: 'Av. Defensores del Chaco 456',
+                verified: true,
+                priceRange: '$$',
+                services: ['Alimentacion', 'Natacion'],
+                description: 'Guarderia con piscina climatizada y areas de juego amplias y seguras.',
+                phone: '+595 21 678 901',
+                image: 'https://images.unsplash.com/photo-1565538810643-b5bdb714032a?w=400&h=300&fit=crop'
+            }
+        ];
+
+        // ===== DOM ELEMENTS =====
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const categoriesGrid = document.getElementById('categoriesGrid');
+        const servicesGrid = document.getElementById('servicesGrid');
+        const institutionsGrid = document.getElementById('institutionsGrid');
+        const filterTabs = document.querySelectorAll('.filter-tab[data-filter]');
+        const searchForm = document.getElementById('searchForm');
+        const searchInput = document.getElementById('searchInput');
+        const citySelect = document.getElementById('citySelect');
+        const resultsCount = document.getElementById('resultsCount');
+        const heroContent = document.getElementById('heroContent');
+
+        // ===== INITIALIZE =====
+        let currentFilter = 'todos';
+
+        function init() {
+            renderCategories();
+            renderServices();
+            renderInstitutions(institutions);
+            setupEventListeners();
+            animateOnScroll();
+            
+            // Animate hero
+            setTimeout(() => {
+                heroContent.classList.add('visible');
+            }, 100);
+        }
+
+        // ===== RENDER FUNCTIONS =====
+        function renderCategories() {
+            const colorMap = {
+                'mint': { bg: '#2DD4A8', light: '#D1FAE8', text: '#14B88A' },
+                'sun': { bg: '#FBBF24', light: '#FEF3C7', text: '#B45309' },
+                'coral': { bg: '#FB8C4A', light: '#FFEDD5', text: '#C2410C' },
+                'pink': { bg: '#F472B6', light: '#FCE7F3', text: '#BE185D' }
+            };
+
+            categoriesGrid.innerHTML = categories.map(cat => {
+                const colors = colorMap[cat.color];
+                return `
+                <button class="card text-left group cursor-pointer" data-category="${cat.id}">
+                    <div class="w-16 h-16 rounded-2xl flex items-center justify-center mb-5 transition-all duration-300" 
+                         style="background: ${colors.light}; color: ${colors.text};"
+                         onmouseover="this.style.background='${colors.bg}'; this.style.color='white';"
+                         onmouseout="this.style.background='${colors.light}'; this.style.color='${colors.text}';">
+                        ${cat.icon}
+                    </div>
+                    <h3 class="font-display font-bold text-xl text-tuki-text mb-2">${cat.name}</h3>
+                    <p class="text-sm text-tuki-text-light mb-4 leading-relaxed">${cat.description}</p>
+                    <span class="text-sm font-bold" style="color: ${colors.text};">${cat.count} instituciones</span>
+                </button>
+            `}).join('');
+        }
+
+        function renderServices() {
+            const colorMap = {
+                'mint': { bg: '#2DD4A8', light: '#D1FAE8', text: '#14B88A' },
+                'sun': { bg: '#FBBF24', light: '#FEF3C7', text: '#B45309' },
+                'coral': { bg: '#FB8C4A', light: '#FFEDD5', text: '#C2410C' },
+                'pink': { bg: '#F472B6', light: '#FCE7F3', text: '#BE185D' }
+            };
+
+            servicesGrid.innerHTML = services.map((service, idx) => {
+                const colors = colorMap[service.color];
+                return `
+                <div class="flex flex-col items-center text-center p-6 rounded-2xl transition-all cursor-default group"
+                     style="background: ${colors.light};"
+                     onmouseover="this.style.background='${colors.bg}';"
+                     onmouseout="this.style.background='${colors.light}';">
+                    <div class="w-14 h-14 rounded-xl bg-white flex items-center justify-center mb-4 shadow-sm transition-all"
+                         style="color: ${colors.text};">
+                        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                        </svg>
+                    </div>
+                    <span class="text-sm font-bold text-tuki-text">${service.name}</span>
+                </div>
+            `}).join('');
+        }
+
+        function renderInstitutions(data) {
+            const typeColors = {
+                'guarderia': { bg: '#D1FAE8', text: '#14B88A', border: '#2DD4A8' },
+                'preescolar': { bg: '#FEF3C7', text: '#B45309', border: '#FBBF24' },
+                'jardin': { bg: '#FFEDD5', text: '#C2410C', border: '#FB8C4A' },
+                'maternal': { bg: '#FCE7F3', text: '#BE185D', border: '#F472B6' }
+            };
+
+            institutionsGrid.innerHTML = data.map((inst, index) => {
+                const colors = typeColors[inst.type] || typeColors['guarderia'];
+                return `
+                <article class="card card-institution" style="animation-delay: ${index * 0.1}s">
+                    <div class="relative mb-5 rounded-2xl overflow-hidden h-52 bg-tuki-warm">
+                        <img 
+                            src="${inst.image}" 
+                            alt="${inst.name}" 
+                            class="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
+                            loading="lazy"
+                        >
+                        ${inst.verified ? `
+                            <div class="absolute top-3 right-3">
+                                <span class="badge badge-verified">
+                                    <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                                    </svg>
+                                    Verificado
+                                </span>
+                            </div>
+                        ` : ''}
+                        <div class="absolute bottom-3 left-3">
+                            <span class="badge" style="background: ${colors.bg}; color: ${colors.text}; border: 2px solid ${colors.border};">
+                                ${getCategoryName(inst.type)}
+                            </span>
+                        </div>
+                    </div>
+                    
+                    <div class="space-y-3">
+                        <div class="flex items-start justify-between gap-2">
+                            <h3 class="font-display font-bold text-lg text-tuki-text leading-tight">${inst.name}</h3>
+                            <span class="font-bold shrink-0 text-xl" style="color: #FB8C4A;">${inst.priceRange}</span>
+                        </div>
+                        
+                        <div class="flex items-center gap-2 text-sm text-tuki-text-light">
+                            <svg class="w-4 h-4 shrink-0" style="color: #2DD4A8;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                            </svg>
+                            <span class="font-medium">${inst.city}</span>
+                        </div>
+                        
+                        <p class="text-sm text-tuki-text-light line-clamp-2 leading-relaxed">${inst.description}</p>
+                        
+                        <div class="flex flex-wrap gap-2">
+                            ${inst.services.slice(0, 3).map(s => `
+                                <span class="text-xs px-3 py-1.5 rounded-full font-bold" style="background: #D1FAE8; color: #14B88A;">${s}</span>
+                            `).join('')}
+                        </div>
+                        
+                        <div class="flex items-center justify-end pt-4 border-t-2 border-tuki-warm">
+                            <button class="font-bold text-sm flex items-center gap-2 group/btn transition-colors" style="color: #2DD4A8;">
+                                Ver detalles
+                                <svg class="w-4 h-4 transition-transform group-hover/btn:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </article>
+            `}).join('');
+            
+            resultsCount.textContent = data.length;
+        }
+
+        function getCategoryName(type) {
+            const names = {
+                'guarderia': 'Guarderia',
+                'preescolar': 'Preescolar',
+                'jardin': 'Jardin',
+                'maternal': 'Maternal'
+            };
+            return names[type] || type;
+        }
+
+        // ===== EVENT LISTENERS =====
+        function setupEventListeners() {
+            // Mobile menu
+            mobileMenuBtn.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+
+            // Filter tabs
+            filterTabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    filterTabs.forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                    currentFilter = tab.dataset.filter;
+                    
+                    const filtered = currentFilter === 'todos' 
+                        ? institutions 
+                        : institutions.filter(i => i.type === currentFilter);
+                    
+                    renderInstitutions(filtered);
+                });
+            });
+
+            // Search form
+            searchForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                performSearch();
+            });
+
+            // Search input - live search
+            searchInput.addEventListener('input', debounce(performSearch, 300));
+
+            // City select
+            citySelect.addEventListener('change', performSearch);
+
+            // Category cards
+            categoriesGrid.addEventListener('click', (e) => {
+                const card = e.target.closest('[data-category]');
+                if (card) {
+                    const category = card.dataset.category;
+                    document.getElementById('instituciones').scrollIntoView({ behavior: 'smooth' });
+                    
+                    // Activate corresponding filter
+                    filterTabs.forEach(t => {
+                        t.classList.toggle('active', t.dataset.filter === category);
+                    });
+                    currentFilter = category;
+                    
+                    const filtered = institutions.filter(i => i.type === category);
+                    renderInstitutions(filtered);
+                }
+            });
+
+            // Quick filters
+            document.querySelectorAll('.quick-filter').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    searchInput.value = btn.textContent.trim();
+                    performSearch();
+                });
+            });
+
+            // Close mobile menu on link click
+            mobileMenu.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', () => {
+                    mobileMenu.classList.add('hidden');
+                });
+            });
+        }
+
+        function performSearch() {
+            const query = searchInput.value.toLowerCase().trim();
+            const city = citySelect.value;
+
+            let filtered = institutions;
+
+            if (query) {
+                filtered = filtered.filter(i => 
+                    i.name.toLowerCase().includes(query) ||
+                    i.city.toLowerCase().includes(query) ||
+                    i.description.toLowerCase().includes(query) ||
+                    i.services.some(s => s.toLowerCase().includes(query))
+                );
+            }
+
+            if (city) {
+                filtered = filtered.filter(i => 
+                    i.city.toLowerCase().replace(' ', '-') === city
+                );
+            }
+
+            if (currentFilter !== 'todos') {
+                filtered = filtered.filter(i => i.type === currentFilter);
+            }
+
+            renderInstitutions(filtered);
+        }
+
+        // ===== UTILITIES =====
+        function debounce(func, wait) {
+            let timeout;
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(timeout);
+                    func(...args);
+                };
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+            };
+        }
+
+        function animateOnScroll() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('animate-fade-in-up');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            document.querySelectorAll('.card, section > div').forEach(el => {
+                observer.observe(el);
+            });
+        }
+
+        // Initialize when DOM is ready
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
