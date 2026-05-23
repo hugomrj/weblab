@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>FOSA - Captura de Datos</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Space Grotesk', 'sans-serif'] },
+                    colors: {
+                        brand: { DEFAULT: '#E8600A', light: '#FF8A3D', dark: '#B84D08' },
+                        surface: { 900: '#0B0D12', 800: '#111420', 700: '#171B28', 600: '#1E2335', 500: '#272D42', 400: '#353C56' },
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        :root { --brand: #E8600A; }
+        * { -webkit-tap-highlight-color: transparent; box-sizing: border-box; }
+        body { background: #0B0D12; background-image: radial-gradient(circle at 1px 1px, rgba(255,255,255,0.02) 1px, transparent 0); background-size: 20px 20px; }
+        ::-webkit-scrollbar { width: 3px; }
+        ::-webkit-scrollbar-thumb { background: #353C56; border-radius: 3px; }
+
+        #camera-overlay { opacity: 0; pointer-events: none; transition: opacity 0.25s ease; }
+        #camera-overlay.open { opacity: 1; pointer-events: all; }
+        #camera-flash { opacity: 0; transition: opacity 0.1s ease; pointer-events: none; }
+        #camera-flash.fire { opacity: 0.85; }
+        #lightbox { opacity: 0; pointer-events: none; transition: opacity 0.25s ease; }
+        #lightbox.open { opacity: 1; pointer-events: all; }
+        #processing-overlay { opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
+        #processing-overlay.open { opacity: 1; pointer-events: all; }
+
+        @keyframes pulse-rec { 0%,100% { box-shadow: 0 0 0 0 rgba(239,68,68,0.5); } 50% { box-shadow: 0 0 0 10px rgba(239,68,68,0); } }
+        .rec-pulse { animation: pulse-rec 1.2s ease infinite; }
+        .btn-press:active { transform: scale(0.95); }
+        .btn-press { transition: transform 0.1s ease; }
+
+        @keyframes toast-in { from { transform: translateY(-16px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        @keyframes toast-out { from { opacity: 1; } to { opacity: 0; } }
+        .toast { animation: toast-in 0.3s ease forwards; }
+        .toast.removing { animation: toast-out 0.25s ease forwards; }
+
+        @keyframes spin-slow { to { transform: rotate(360deg); } }
+        .spin-slow { animation: spin-slow 1.5s linear infinite; }
+
+        @keyframes blink-cursor { 0%,100% { opacity: 1; } 50% { opacity: 0; } }
+        .typing-cursor::after { content: '|'; color: var(--brand); animation: blink-cursor 0.7s infinite; margin-left: 1px; }
+
+        .audio-row { animation: toast-in 0.25s ease forwards; }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+        }
+    </style>
+</head>
+<body class="font-sans text-gray-200 h-screen flex flex-col overflow-hidden select-none">
+
+    <!-- Toasts -->
+    <div id="toasts" class="fixed top-4 left-1/2 -translate-x-1/2 z-[200] flex flex-col items-center gap-2 w-[90%] max-w-sm pointer-events-none"></div>
+
+    <!-- ===== HEADER COMPACTO ===== -->
+    <header class="relative z-10 bg-surface-800/90 backdrop-blur-md border-b border-surface-500/40 px-4 py-2.5">
+        <div class="flex items-center justify-between max-w-lg mx-auto">
+            <div class="flex items-center gap-2.5">
+                <div class="w-8 h-8 rounded-lg bg-brand flex items-center justify-center">
+                    <i class="fa-solid fa-wrench text-white text-xs"></i>
+                </div>
+                <div>
+                    <h1 class="text-sm font-bold text-white leading-none">OT-2024-1847</h1>
+                    <p class="text-[10px] text-gray-500 mt-0.5">Toyota Hilux SRV 2022 · AB 123 CD</p>
+                </div>
+            </div>
+            <span class="text-[10px] bg-brand/15 text-brand-light px-2.5 py-1 rounded-full font-semibold">En proceso</span>
+        </div>
+    </header>
+
+    <!-- ===== CONTENIDO SCROLLABLE ===== -->
+    <main class="flex-1 overflow-y-auto relative z-10" id="main-content">
+        <div class="max-w-lg mx-auto px-4 py-4 flex flex-col gap-5">
+
+            <!-- FOTOS -->
+            <section>
+                <div class="flex items-center justify-between mb-2.5">
+                    <h2 class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Fotos</h2>
+                    <span id="photo-count" class="text-[10px] bg-surface-600 text-gray-400 px-2 py-0.5 rounded-full font-medium">0</span>
+                </div>
+
+                <!-- Botón cámara + Grid -->
+                <div id="photos-area" class="grid grid-cols-4 gap-2">
+                    <button onclick="openCamera()" class="btn-press aspect-square rounded-xl border-2 border-dashed border-surface-400 hover:border-brand/60 flex flex-col items-center justify-center gap-1 transition-colors focus:outline-none focus:ring-2 focus:ring-brand" aria-label="Tomar foto">
+                        <i class="fa-solid fa-camera text-surface-400 text-lg"></i>
+                        <span class="text-[9px] text-surface-400 font-medium">Agregar</span>
+                    </button>
+                </div>
+            </section>
+
+            <!-- AUDIO -->
+            <section>
+                <div class="flex items-center justify-between mb-2.5">
+                    <h2 class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Audios</h2>
+                    <span id="audio-count" class="text-[10px] bg-surface-600 text-gray-400 px-2 py-0.5 rounded-full font-medium">0</span>
+                </div>
+
+                <!-- Botón grabar -->
+                <button id="btn-record" onclick="toggleRecording()" class="btn-press w-full py-3 rounded-xl bg-surface-700 hover:bg-surface-600 border border-surface-500/50 flex items-center justify-center gap-2.5 transition-colors focus:outline-none focus:ring-2 focus:ring-brand" aria-label="Grabar audio">
+                    <i id="rec-icon" class="fa-solid fa-microphone text-brand"></i>
+                    <span id="rec-label" class="text-sm font-semibold text-gray-200">Grabar diagnostico</span>
+                </button>
+
+                <!-- Panel de grabación activa -->
+                <div id="recording-panel" class="hidden mt-2 bg-surface-700 border border-red-500/30 rounded-xl p-4 flex flex-col items-center gap-3">
+                    <div class="flex items-center gap-2">
+                        <div class="w-2.5 h-2.5 rounded-full bg-red-500 rec-pulse"></div>
+                        <span class="text-xs font-semibold text-red-400">Grabando</span>
+                    </div>
+                    <span id="rec-timer" class="text-3xl font-bold text-white tabular-nums">0:00</span>
+                    <canvas id="viz-canvas" class="w-full h-12 rounded-lg"></canvas>
+                    <button onclick="toggleRecording()" class="btn-press w-12 h-12 rounded-full bg-red-500 flex items-center justify-center" aria-label="Detener">
+                        <i class="fa-solid fa-stop text-white"></i>
+                    </button>
+                </div>
+
+                <!-- Lista de audios grabados -->
+                <div id="audio-list" class="mt-2 flex flex-col gap-2"></div>
+            </section>
+
+            <!-- Espaciador -->
+            <div class="h-2"></div>
+        </div>
+    </main>
+
+    <!-- ===== BOTÓN ENVIAR FIJO ABAJO ===== -->
+    <footer class="relative z-10 bg-surface-800/95 backdrop-blur-md border-t border-surface-500/40 px-4 py-3">
+        <div class="max-w-lg mx-auto">
+            <button id="btn-send" onclick="submitReport()" disabled class="btn-press w-full py-3.5 rounded-xl bg-brand hover:bg-brand-light disabled:bg-surface-500 disabled:text-gray-500 text-white font-bold text-sm transition-colors disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-brand">
+                <i class="fa-solid fa-paper-plane mr-2"></i>Enviar reporte
+            </button>
+        </div>
+    </footer>
+
+    <!-- ===== OVERLAY CÁMARA ===== -->
+    <div id="camera-overlay" class="fixed inset-0 z-[100] bg-black flex flex-col">
+        <div id="camera-flash" class="absolute inset-0 bg-white z-10"></div>
+        <video id="camera-video" autoplay playsinline muted class="flex-1 object-cover w-full"></video>
+        <div class="bg-black/90 px-6 py-5 flex items-center justify-between">
+            <button onclick="closeCamera()" class="btn-press w-11 h-11 rounded-full bg-white/10 flex items-center justify-center" aria-label="Cerrar">
+                <i class="fa-solid fa-xmark text-white text-lg"></i>
+            </button>
+            <button onclick="capturePhoto()" class="btn-press w-[68px] h-[68px] rounded-full border-4 border-white flex items-center justify-center" aria-label="Capturar">
+                <div class="w-[54px] h-[54px] rounded-full bg-white"></div>
+            </button>
+            <div class="w-11 text-center">
+                <span id="cam-counter" class="text-xs text-gray-400 font-semibold">0</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== LIGHTBOX ===== -->
+    <div id="lightbox" class="fixed inset-0 z-[90] bg-black/95 flex items-center justify-center p-4" onclick="closeLightbox()">
+        <img id="lightbox-img" class="max-w-full max-h-[85vh] rounded-lg object-contain" alt="Ampliada">
+        <button class="absolute top-4 right-4 w-10 h-10 rounded-full bg-white/10 flex items-center justify-center" aria-label="Cerrar">
+            <i class="fa-solid fa-xmark text-white"></i>
+        </button>
+    </div>
+
+    <!-- ===== OVERLAY PROCESAMIENTO ===== -->
+    <div id="processing-overlay" class="fixed inset-0 z-[80] bg-surface-900/95 backdrop-blur-md flex flex-col items-center justify-center p-6">
+        <!-- Estado procesando -->
+        <div id="proc-loading" class="flex flex-col items-center gap-4 text-center">
+            <div class="relative">
+                <div class="w-20 h-20 rounded-full border-4 border-surface-500 flex items-center justify-center">
+                    <i class="fa-solid fa-microchip text-brand text-2xl spin-slow"></i>
+                </div>
+                <div class="absolute inset-0 w-20 h-20 rounded-full border-4 border-transparent border-t-brand spin-slow"></div>
+            </div>
+            <div>
+                <p class="text-sm font-semibold text-white">Procesando reporte...</p>
+                <p id="proc-msg" class="text-[11px] text-gray-500 mt-1">Enviando archivos</p>
+            </div>
+            <div class="w-full max-w-xs bg-surface-600 rounded-full h-1.5 overflow-hidden">
+                <div id="proc-bar" class="h-full bg-brand rounded-full transition-all duration-700" style="width:0%"></div>
+            </div>
+        </div>
+
+        <!-- Estado resultado -->
+        <div id="proc-result" class="hidden w-full max-w-sm flex flex-col gap-4">
+            <div class="bg-emerald-500/10 border border-emerald-500/30 rounded-2xl p-5 text-center">
+                <div class="w-12 h-12 rounded-full bg-emerald-500/20 flex items-center justify-center mx-auto mb-2">
+                    <i class="fa-solid fa-check text-emerald-400 text-xl"></i>
+                </div>
+                <p class="text-sm font-bold text-emerald-300">Reporte enviado</p>
+            </div>
+
+            <div class="bg-surface-700 border border-surface-500/50 rounded-xl p-3.5 text-[11px] text-gray-400 flex items-center gap-3">
+                <i class="fa-solid fa-camera text-brand"></i>
+                <span id="res-photos">0 fotos almacenadas</span>
+            </div>
+            <div class="bg-surface-700 border border-surface-500/50 rounded-xl p-3.5 text-[11px] text-gray-400 flex items-center gap-3">
+                <i class="fa-solid fa-microphone text-brand"></i>
+                <span id="res-audios">0 audios transcritos por IA</span>
+            </div>
+
+            <div class="bg-surface-700 border border-brand/20 rounded-xl p-4">
+                <div class="flex items-center justify-between mb-2.5">
+                    <h3 class="text-[10px] font-semibold text-brand uppercase tracking-wider">Transcripcion IA</h3>
+                    <span class="text-[9px] bg-brand/15 text-brand-light px-2 py-0.5 rounded-full font-semibold">Whisper</span>
+                </div>
+                <p id="transcription-text" class="text-sm text-gray-200 leading-relaxed typing-cursor"></p>
+            </div>
+
+            <button onclick="resetApp()" class="btn-press w-full py-3.5 rounded-xl bg-brand hover:bg-brand-light text-white font-bold text-sm transition-colors">
+                Nuevo reporte
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // === ESTADO ===
+        const state = {
+            photos: [],
+            audios: [],        // { blob, url, duration, id }
+            isRecording: false,
+            cameraStream: null,
+            mediaRecorder: null,
+            audioCtx: null,
+            analyser: null,
+            recInterval: null,
+            recSeconds: 0,
+            activeAudioId: null,
+            activeAudioEl: null,
+            audioIdCounter: 0,
+        };
+
+        const $ = s => document.querySelector(s);
+
+        // === TOASTS ===
+        function toast(msg, type = 'info') {
+            const c = $('#toasts');
+            const colors = { info: 'bg-surface-600 border-surface-400 text-gray-200', success: 'bg-emerald-900/80 border-emerald-500/40 text-emerald-200', error: 'bg-red-900/80 border-red-500/40 text-red-200', warning: 'bg-amber-900/80 border-amber-500/40 text-amber-200' };
+            const icons = { info: 'fa-circle-info', success: 'fa-circle-check', error: 'fa-circle-exclamation', warning: 'fa-triangle-exclamation' };
+            const el = document.createElement('div');
+            el.className = `toast pointer-events-auto flex items-center gap-2 px-4 py-2 rounded-xl border text-xs font-medium backdrop-blur-md shadow-lg ${colors[type]}`;
+            el.innerHTML = `<i class="fa-solid ${icons[type]}"></i>${msg}`;
+            c.appendChild(el);
+            setTimeout(() => { el.classList.add('removing'); setTimeout(() => el.remove(), 250); }, 2500);
+        }
+
+        // === CÁMARA ===
+        async function openCamera() {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({
+                    video: { facingMode: 'environment', width: { ideal: 1280 }, height: { ideal: 720 } }
+                });
+                state.cameraStream = stream;
+                $('#camera-video').srcObject = stream;
+                $('#camera-overlay').classList.add('open');
+                $('#cam-counter').textContent = state.photos.length;
+            } catch (e) {
+                toast('No se pudo acceder a la camara', 'error');
+            }
+        }
+
+        function capturePhoto() {
+            const video = $('#camera-video');
+            const canvas = document.createElement('canvas');
+            canvas.width = video.videoWidth || 640;
+            canvas.height = video.videoHeight || 480;
+            canvas.getContext('2d').drawImage(video, 0, 0);
+            state.photos.push(canvas.toDataURL('image/jpeg', 0.8));
+
+            const flash = $('#camera-flash');
+            flash.classList.add('fire');
+            setTimeout(() => flash.classList.remove('fire'), 120);
+            if (navigator.vibrate) navigator.vibrate(40);
+
+            $('#cam-counter').textContent = state.photos.length;
+            renderPhotos();
+            toast(`Foto ${state.photos.length} capturada`, 'success');
+        }
+
+        function closeCamera() {
+            if (state.cameraStream) { state.cameraStream.getTracks().forEach(t => t.stop()); state.cameraStream = null; }
+            $('#camera-video').srcObject = null;
+            $('#camera-overlay').classList.remove('open');
+        }
+
+        function renderPhotos() {
+            const area = $('#photos-area');
+            // Mantener solo el botón de agregar, eliminar fotos previas
+            area.querySelectorAll('.photo-thumb').forEach(el => el.remove());
+
+            state.photos.forEach((src, i) => {
+                const div = document.createElement('div');
+                div.className = 'photo-thumb relative aspect-square rounded-xl overflow-hidden group';
+                div.innerHTML = `
+                    <img src="${src}" class="w-full h-full object-cover" alt="Evidencia ${i+1}">
+                    <button onclick="event.stopPropagation();removePhoto(${i})" class="absolute top-1 right-1 w-6 h-6 rounded-full bg-red-500/85 flex items-center justify-center shadow-lg" aria-label="Eliminar">
+                        <i class="fa-solid fa-xmark text-white text-[10px]"></i>
+                    </button>
+                `;
+                div.onclick = () => { $('#lightbox-img').src = src; $('#lightbox').classList.add('open'); };
+                // Insertar antes del botón de agregar
+                area.insertBefore(div, area.lastElementChild);
+            });
+
+            $('#photo-count').textContent = state.photos.length;
+            updateSendBtn();
+        }
+
+        function removePhoto(i) {
+            state.photos.splice(i, 1);
+            renderPhotos();
+            toast('Foto eliminada', 'info');
+        }
+
+        function closeLightbox() { $('#lightbox').classList.remove('open'); }
+
+        // === GRABACIÓN DE AUDIO ===
+        async function toggleRecording() {
+            if (state.isRecording) return stopRecording();
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                let mime = 'audio/webm';
+                if (MediaRecorder.isTypeSupported('audio/mp4')) mime = 'audio/mp4';
+                else if (!MediaRecorder.isTypeSupported('audio/webm')) mime = '';
+                state.mediaRecorder = mime ? new MediaRecorder(stream, { mimeType: mime }) : new MediaRecorder(stream);
+
+                const chunks = [];
+                state.mediaRecorder.ondataavailable = e => { if (e.data.size > 0) chunks.push(e.data); };
+                state.mediaRecorder.onstop = () => {
+                    const blob = new Blob(chunks, { type: state.mediaRecorder.mimeType || 'audio/webm' });
+                    const url = URL.createObjectURL(blob);
+                    const id = ++state.audioIdCounter;
+
+                    // Obtener duración
+                    const tmp = new Audio(url);
+                    tmp.addEventListener('loadedmetadata', () => {
+                        state.audios.push({ blob, url, duration: tmp.duration, id });
+                        renderAudios();
+                        updateSendBtn();
+                    });
+
+                    stream.getTracks().forEach(t => t.stop());
+                };
+
+                state.mediaRecorder.start(100);
+                state.isRecording = true;
+                state.recSeconds = 0;
+
+                // Audio context para visualización
+                state.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                const source = state.audioCtx.createMediaStreamSource(stream);
+                state.analyser = state.audioCtx.createAnalyser();
+                state.analyser.fftSize = 256;
+                source.connect(state.analyser);
+
+                // UI
+                $('#recording-panel').classList.remove('hidden');
+                $('#btn-record').classList.add('hidden');
+                $('#rec-timer').textContent = '0:00';
+
+                state.recInterval = setInterval(() => {
+                    state.recSeconds++;
+                    const m = Math.floor(state.recSeconds / 60);
+                    const s = state.recSeconds % 60;
+                    $('#rec-timer').textContent = `${m}:${s.toString().padStart(2, '0')}`;
+                }, 1000);
+
+                drawViz();
+                if (navigator.vibrate) navigator.vibrate(80);
+            } catch (e) {
+                toast('No se pudo acceder al microfono', 'error');
+            }
+        }
+
+        function stopRecording() {
+            if (state.mediaRecorder && state.mediaRecorder.state !== 'inactive') state.mediaRecorder.stop();
+            state.isRecording = false;
+            clearInterval(state.recInterval);
+            if (state.audioCtx) { state.audioCtx.close(); state.audioCtx = null; }
+
+            $('#recording-panel').classList.add('hidden');
+            $('#btn-record').classList.remove('hidden');
+            toast('Audio guardado', 'success');
+            if (navigator.vibrate) navigator.vibrate([40, 40, 40]);
+        }
+
+        function drawViz() {
+            if (!state.isRecording || !state.analyser) return;
+            requestAnimationFrame(drawViz);
+
+            const canvas = $('#viz-canvas');
+            const ctx = canvas.getContext('2d');
+            const dpr = window.devicePixelRatio || 1;
+            const rect = canvas.getBoundingClientRect();
+            canvas.width = rect.width * dpr;
+            canvas.height = rect.height * dpr;
+            ctx.scale(dpr, dpr);
+
+            const bufLen = state.analyser.frequencyBinCount;
+            const data = new Uint8Array(bufLen);
+            state.analyser.getByteFrequencyData(data);
+
+            ctx.clearRect(0, 0, rect.width, rect.height);
+            const bars = 40;
+            const bw = (rect.width / bars) - 2;
+            for (let i = 0; i < bars; i++) {
+                const val = data[Math.floor(i * bufLen / bars)] / 255;
+                const h = Math.max(3, val * rect.height * 0.9);
+                const x = i * (bw + 2);
+                ctx.fillStyle = `rgba(232,96,10,${0.3 + val * 0.7})`;
+                ctx.beginPath();
+                if (ctx.roundRect) { ctx.roundRect(x, rect.height - h, bw, h, 1); }
+                else { ctx.rect(x, rect.height - h, bw, h); }
+                ctx.fill();
+            }
+        }
+
+        // === LISTA DE AUDIOS ===
+        function renderAudios() {
+            const list = $('#audio-list');
+            list.innerHTML = '';
+            $('#audio-count').textContent = state.audios.length;
+
+            state.audios.forEach((a, idx) => {
+                const m = Math.floor(a.duration / 60);
+                const s = Math.floor(a.duration % 60);
+                const dur = `${m}:${s.toString().padStart(2, '0')}`;
+
+                const row = document.createElement('div');
+                row.className = 'audio-row bg-surface-700 border border-surface-500/50 rounded-xl p-3 flex items-center gap-3';
+                row.innerHTML = `
+                    <button onclick="togglePlayAudio(${a.id})" class="btn-press w-10 h-10 rounded-full bg-brand flex items-center justify-center flex-shrink-0" aria-label="Reproducir" id="play-btn-${a.id}">
+                        <i class="fa-solid fa-play text-white text-xs ml-0.5" id="play-icon-${a.id}"></i>
+                    </button>
+                    <div class="flex-1 min-w-0">
+                        <div class="flex items-center justify-between mb-1">
+                            <span class="text-xs font-medium text-gray-300">Audio ${idx + 1}</span>
+                            <span class="text-[10px] text-gray-500 tabular-nums">${dur}</span>
+                        </div>
+                        <div class="h-1.5 bg-surface-500 rounded-full overflow-hidden">
+                            <div class="h-full bg-brand/40 rounded-full" style="width:${15 + Math.random() * 70}%"></div>
+                        </div>
+                    </div>
+                    <button onclick="removeAudio(${a.id})" class="btn-press w-8 h-8 rounded-lg bg-red-500/15 flex items-center justify-center flex-shrink-0" aria-label="Eliminar audio">
+                        <i class="fa-solid fa-trash text-red-400 text-[10px]"></i>
+                    </button>
+                `;
+                list.appendChild(row);
+            });
+        }
+
+        function togglePlayAudio(id) {
+            // Si ya está reproduciendo este audio, pausar
+            if (state.activeAudioId === id && state.activeAudioEl) {
+                if (!state.activeAudioEl.paused) {
+                    state.activeAudioEl.pause();
+                    document.getElementById(`play-icon-${id}`).className = 'fa-solid fa-play text-white text-xs ml-0.5';
+                    return;
+                } else {
+                    state.activeAudioEl.play();
+                    document.getElementById(`play-icon-${id}`).className = 'fa-solid fa-pause text-white text-xs';
+                    return;
+                }
+            }
+
+            // Pausar audio anterior si hay
+            if (state.activeAudioEl) {
+                state.activeAudioEl.pause();
+                if (state.activeAudioId) {
+                    const prevIcon = document.getElementById(`play-icon-${state.activeAudioId}`);
+                    if (prevIcon) prevIcon.className = 'fa-solid fa-play text-white text-xs ml-0.5';
+                }
+            }
+
+            const audio = state.audios.find(a => a.id === id);
+            if (!audio) return;
+
+            const el = new Audio(audio.url);
+            el.play();
+            state.activeAudioEl = el;
+            state.activeAudioId = id;
+            document.getElementById(`play-icon-${id}`).className = 'fa-solid fa-pause text-white text-xs';
+
+            el.onended = () => {
+                document.getElementById(`play-icon-${id}`).className = 'fa-solid fa-play text-white text-xs ml-0.5';
+                state.activeAudioId = null;
+                state.activeAudioEl = null;
+            };
+        }
+
+        function removeAudio(id) {
+            // Pausar si se está reproduciendo
+            if (state.activeAudioId === id && state.activeAudioEl) {
+                state.activeAudioEl.pause();
+                state.activeAudioId = null;
+                state.activeAudioEl = null;
+            }
+            const idx = state.audios.findIndex(a => a.id === id);
+            if (idx > -1) {
+                URL.revokeObjectURL(state.audios[idx].url);
+                state.audios.splice(idx, 1);
+            }
+            renderAudios();
+            updateSendBtn();
+            toast('Audio eliminado', 'info');
+        }
+
+        // === BOTÓN ENVIAR ===
+        function updateSendBtn() {
+            const btn = $('#btn-send');
+            const hasData = state.photos.length > 0 || state.audios.length > 0;
+            btn.disabled = !hasData;
+
+            if (!hasData) {
+                btn.innerHTML = '<i class="fa-solid fa-paper-plane mr-2"></i>Agrega fotos o audios para enviar';
+            } else {
+                const parts = [];
+                if (state.photos.length > 0) parts.push(`${state.photos.length} foto${state.photos.length > 1 ? 's' : ''}`);
+                if (state.audios.length > 0) parts.push(`${state.audios.length} audio${state.audios.length > 1 ? 's' : ''}`);
+                btn.innerHTML = `<i class="fa-solid fa-paper-plane mr-2"></i>Enviar reporte (${parts.join(' + ')})`;
+            }
+        }
+
+        // === ENVÍO ===
+        async function submitReport() {
+            if (state.photos.length === 0 && state.audios.length === 0) return;
+
+            // Pausar audio activo
+            if (state.activeAudioEl) { state.activeAudioEl.pause(); state.activeAudioId = null; state.activeAudioEl = null; }
+
+            const overlay = $('#processing-overlay');
+            overlay.classList.add('open');
+            $('#proc-loading').classList.remove('hidden');
+            $('#proc-result').classList.add('hidden');
+            $('#proc-bar').style.width = '0%';
+
+            const steps = [
+                { pct: 20, msg: 'Enviando archivos al servidor' },
+                { pct: 40, msg: 'Comprimiendo imagenes' },
+                { pct: 60, msg: 'Procesando audios con Whisper AI' },
+                { pct: 80, msg: 'Filtrando ruido y generando texto' },
+                { pct: 100, msg: 'Completado' },
+            ];
+
+            for (const step of steps) {
+                await delay(700 + Math.random() * 500);
+                $('#proc-bar').style.width = `${step.pct}%`;
+                $('#proc-msg').textContent = step.msg;
+            }
+
+            await delay(400);
+
+            // Mostrar resultado
+            $('#proc-loading').classList.add('hidden');
+            $('#proc-result').classList.remove('hidden');
+            $('#res-photos').textContent = `${state.photos.length} foto${state.photos.length > 1 ? 's' : ''} almacenada${state.photos.length > 1 ? 's' : ''}`;
+            $('#res-audios').textContent = `${state.audios.length} audio${state.audios.length > 1 ? 's' : ''} transcrito${state.audios.length > 1 ? 's' : ''} por IA`;
+
+            await typeTranscription();
+        }
+
+        async function typeTranscription() {
+            const text = `Se reviso el vehiculo Toyota Hilux SRV 2022, patente AB 123 CD, en la fosa de trabajo. Al inspeccionar el tren delantero, se detecto que el amortiguador del lado derecho presenta perdida de fluido hidraulico visible en el cuerpo del cilindro. El buje de la barra estabilizadora correspondiente muestra desgaste excesivo con juego lateral superior a lo permitido. Se recomienda reemplazar ambos componentes de forma inmediata. Las pastillas de freno delanteras presentan un desgaste estimado del sesenta por ciento, se sugiere monitorear en el proximo service programado.`;
+
+            const el = $('#transcription-text');
+            el.textContent = '';
+            el.classList.add('typing-cursor');
+
+            for (let i = 0; i < text.length; i++) {
+                el.textContent += text[i];
+                const c = text[i];
+                await delay('.,'.includes(c) ? 50 : 16);
+            }
+            el.classList.remove('typing-cursor');
+        }
+
+        function delay(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+        // === RESET ===
+        function resetApp() {
+            state.photos.forEach(() => {});
+            state.audios.forEach(a => URL.revokeObjectURL(a.url));
+            state.photos = [];
+            state.audios = [];
+            state.activeAudioEl = null;
+            state.activeAudioId = null;
+
+            renderPhotos();
+            renderAudios();
+            updateSendBtn();
+
+            $('#processing-overlay').classList.remove('open');
+            $('#main-content').scrollTop = 0;
+            toast('Listo para un nuevo reporte', 'success');
+        }
+
+        // === INIT ===
+        updateSendBtn();
+    </script>
+</body>
+</html>
