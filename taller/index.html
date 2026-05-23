@@ -3,57 +3,55 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>FOSA - Captura de Datos</title>
+    <title>FOSA - Captura</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script>
         tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: { sans: ['Space Grotesk', 'sans-serif'] },
-                    colors: {
-                        brand: { DEFAULT: '#E8600A', light: '#FF8A3D', dark: '#B84D08' },
-                        surface: { 900: '#0B0D12', 800: '#111420', 700: '#171B28', 600: '#1E2335', 500: '#272D42', 400: '#353C56' },
-                    }
+            theme: { extend: {
+                fontFamily: { sans: ['Space Grotesk', 'sans-serif'] },
+                colors: {
+                    brand: { DEFAULT: '#E8600A', light: '#FF8A3D', dark: '#B84D08' },
+                    surface: { 900:'#0B0D12', 800:'#111420', 700:'#171B28', 600:'#1E2335', 500:'#272D42', 400:'#353C56' },
                 }
-            }
+            }}
         }
     </script>
     <style>
         :root { --brand: #E8600A; }
         * { -webkit-tap-highlight-color: transparent; box-sizing: border-box; }
-        body { background: #0B0D12; background-image: radial-gradient(circle at 1px 1px, rgba(255,255,255,0.02) 1px, transparent 0); background-size: 20px 20px; }
+        body { background: #0B0D12; }
         ::-webkit-scrollbar { width: 3px; }
         ::-webkit-scrollbar-thumb { background: #353C56; border-radius: 3px; }
 
-        /* Overlays */
-        #camera-overlay { opacity: 0; pointer-events: none; transition: opacity 0.25s ease; }
-        #camera-overlay.open { opacity: 1; pointer-events: all; }
+        #camera-overlay, #lightbox, #proc-overlay {
+            opacity: 0; pointer-events: none; transition: opacity 0.2s ease;
+        }
+        #camera-overlay.open, #lightbox.open, #proc-overlay.open {
+            opacity: 1; pointer-events: all;
+        }
         #camera-flash { opacity: 0; transition: opacity 0.1s ease; pointer-events: none; }
         #camera-flash.fire { opacity: 0.85; }
-        #lightbox { opacity: 0; pointer-events: none; transition: opacity 0.25s ease; }
-        #lightbox.open { opacity: 1; pointer-events: all; }
-        #proc-overlay { opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
-        #proc-overlay.open { opacity: 1; pointer-events: all; }
 
-        /* Animaciones */
-        @keyframes pulse-rec { 0%,100% { box-shadow: 0 0 0 0 rgba(239,68,68,0.5); } 50% { box-shadow: 0 0 0 10px rgba(239,68,68,0); } }
-        .rec-pulse { animation: pulse-rec 1.2s ease infinite; }
         .btn-press:active { transform: scale(0.95); }
         .btn-press { transition: transform 0.1s ease; }
-        @keyframes toast-in { from { transform: translateY(-16px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-        @keyframes toast-out { from { opacity: 1; } to { opacity: 0; } }
-        .toast { animation: toast-in 0.3s ease forwards; }
-        .toast.removing { animation: toast-out 0.25s ease forwards; }
-        @keyframes spin-slow { to { transform: rotate(360deg); } }
+        @keyframes pulse-rec { 0%,100%{box-shadow:0 0 0 0 rgba(239,68,68,0.5)} 50%{box-shadow:0 0 0 10px rgba(239,68,68,0)} }
+        .rec-pulse { animation: pulse-rec 1.2s ease infinite; }
+        @keyframes toast-in { from{transform:translateY(-14px);opacity:0} to{transform:translateY(0);opacity:1} }
+        @keyframes toast-out { from{opacity:1} to{opacity:0} }
+        .toast { animation: toast-in 0.25s ease forwards; }
+        .toast.removing { animation: toast-out 0.2s ease forwards; }
+        @keyframes spin-slow { to{transform:rotate(360deg)} }
         .spin-slow { animation: spin-slow 1.5s linear infinite; }
-        @keyframes blink-cursor { 0%,100% { opacity: 1; } 50% { opacity: 0; } }
-        .typing-cursor::after { content: '|'; color: var(--brand); animation: blink-cursor 0.7s infinite; margin-left: 1px; }
-        .audio-row { animation: toast-in 0.25s ease forwards; }
+        @keyframes blink-cursor { 0%,100%{opacity:1} 50%{opacity:0} }
+        .typing-cursor::after { content:'|'; color:var(--brand); animation:blink-cursor 0.7s infinite; }
+        .audio-row { animation: toast-in 0.2s ease forwards; }
+        @keyframes pop-in { from{transform:scale(0.8);opacity:0} to{transform:scale(1);opacity:1} }
+        .pop-in { animation: pop-in 0.2s ease forwards; }
 
-        @media (prefers-reduced-motion: reduce) {
-            *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+        @media (prefers-reduced-motion:reduce) {
+            *,*::before,*::after { animation-duration:0.01ms!important; transition-duration:0.01ms!important; }
         }
     </style>
 </head>
@@ -62,7 +60,7 @@
     <!-- Toasts -->
     <div id="toasts" class="fixed top-4 left-1/2 -translate-x-1/2 z-[200] flex flex-col items-center gap-2 w-[90%] max-w-sm pointer-events-none"></div>
 
-    <!-- ===== HEADER ===== -->
+    <!-- HEADER -->
     <header class="relative z-10 bg-surface-800/90 backdrop-blur-md border-b border-surface-500/40 px-4 py-2.5">
         <div class="flex items-center justify-between max-w-lg mx-auto">
             <div class="flex items-center gap-2.5">
@@ -71,77 +69,80 @@
                 </div>
                 <div>
                     <h1 class="text-sm font-bold text-white leading-none">OT-2024-1847</h1>
-                    <p class="text-[10px] text-gray-500 mt-0.5">Toyota Hilux SRV 2022 &middot; AB 123 CD</p>
+                    <p class="text-[10px] text-gray-500 mt-0.5">Hilux SRV 2022 &middot; AB 123 CD</p>
                 </div>
             </div>
             <span class="text-[10px] bg-brand/15 text-brand-light px-2.5 py-1 rounded-full font-semibold">En proceso</span>
         </div>
     </header>
 
-    <!-- ===== CONTENIDO ===== -->
+    <!-- CONTENIDO SCROLLABLE -->
     <main class="flex-1 overflow-y-auto relative z-10" id="main-scroll">
-        <div class="max-w-lg mx-auto px-4 py-4 flex flex-col gap-5 pb-28">
+        <div class="max-w-lg mx-auto px-4 pt-4 pb-32 flex flex-col gap-5">
 
-            <!-- SECCIÓN FOTOS -->
+            <!-- ===== FOTOS ===== -->
             <section>
-                <div class="flex items-center justify-between mb-2.5">
+                <div class="flex items-center justify-between mb-3">
                     <h2 class="text-xs font-semibold text-gray-400 uppercase tracking-wider">
-                        <i class="fa-solid fa-camera mr-1.5 text-brand"></i>Fotos
+                        <i class="fa-solid fa-images mr-1.5 text-brand"></i>Fotos
                     </h2>
                     <span id="photo-count" class="text-[10px] bg-surface-600 text-gray-400 px-2 py-0.5 rounded-full font-medium">0</span>
                 </div>
-                <div id="photos-grid" class="grid grid-cols-4 gap-2">
-                    <!-- Botón agregar siempre primero -->
-                    <button onclick="openCamera()" id="btn-add-photo" class="btn-press aspect-square rounded-xl border-2 border-dashed border-surface-400 hover:border-brand/60 flex flex-col items-center justify-center gap-1 transition-colors focus:outline-none focus:ring-2 focus:ring-brand" aria-label="Tomar foto">
-                        <i class="fa-solid fa-camera text-surface-400 text-lg"></i>
-                        <span class="text-[9px] text-surface-400 font-medium">Agregar</span>
-                    </button>
-                </div>
-                <p id="photos-empty" class="text-[11px] text-gray-600 mt-2">Toca el boton para abrir la camara</p>
+
+                <!-- Botón CAPTURAR grande y visible -->
+                <button onclick="openCamera()" class="btn-press w-full py-5 rounded-2xl bg-brand hover:bg-brand-light flex items-center justify-center gap-3 transition-colors focus:outline-none focus:ring-2 focus:ring-brand focus:ring-offset-2 focus:ring-offset-surface-900 shadow-lg shadow-brand/20" aria-label="Capturar foto">
+                    <i class="fa-solid fa-camera text-white text-xl"></i>
+                    <span class="text-base font-bold text-white">Capturar foto</span>
+                </button>
+
+                <!-- Grid de fotos tomadas -->
+                <div id="photos-grid" class="mt-3 grid grid-cols-3 gap-2"></div>
+                <p id="photos-hint" class="text-[11px] text-gray-600 mt-2 text-center">Las fotos aparecen aqui despues de capturarlas</p>
             </section>
 
-            <!-- SECCIÓN AUDIOS -->
+            <!-- ===== AUDIOS ===== -->
             <section>
-                <div class="flex items-center justify-between mb-2.5">
+                <div class="flex items-center justify-between mb-3">
                     <h2 class="text-xs font-semibold text-gray-400 uppercase tracking-wider">
                         <i class="fa-solid fa-microphone mr-1.5 text-brand"></i>Audios
                     </h2>
                     <span id="audio-count" class="text-[10px] bg-surface-600 text-gray-400 px-2 py-0.5 rounded-full font-medium">0</span>
                 </div>
 
-                <!-- Botón grabar -->
-                <button id="btn-record" onclick="toggleRecording()" class="btn-press w-full py-3.5 rounded-xl bg-surface-700 hover:bg-surface-600 border border-surface-500/50 flex items-center justify-center gap-2.5 transition-colors focus:outline-none focus:ring-2 focus:ring-brand" aria-label="Grabar audio">
-                    <div class="w-8 h-8 rounded-full bg-brand/15 flex items-center justify-center">
-                        <i class="fa-solid fa-microphone text-brand text-sm"></i>
+                <!-- Botón GRABAR -->
+                <button id="btn-record" onclick="toggleRecording()" class="btn-press w-full py-4 rounded-2xl bg-surface-700 hover:bg-surface-600 border border-surface-500/50 flex items-center justify-center gap-3 transition-colors focus:outline-none focus:ring-2 focus:ring-brand" aria-label="Grabar audio">
+                    <div class="w-9 h-9 rounded-full bg-brand/15 flex items-center justify-center">
+                        <i id="rec-icon" class="fa-solid fa-microphone text-brand"></i>
                     </div>
-                    <span class="text-sm font-semibold text-gray-200">Grabar diagnostico de voz</span>
+                    <span id="rec-label" class="text-sm font-semibold text-gray-200">Grabar diagnostico de voz</span>
                 </button>
 
-                <!-- Panel grabación activa -->
+                <!-- Panel de grabación activa -->
                 <div id="rec-panel" class="hidden mt-3 bg-surface-700 border border-red-500/30 rounded-2xl p-4 flex flex-col items-center gap-3">
                     <div class="flex items-center gap-2">
                         <div class="w-2.5 h-2.5 rounded-full bg-red-500 rec-pulse"></div>
                         <span class="text-xs font-semibold text-red-400">Grabando</span>
                     </div>
-                    <span id="rec-timer" class="text-4xl font-bold text-white tabular-nums tracking-tight">0:00</span>
-                    <canvas id="viz-canvas" class="w-full h-14 rounded-lg"></canvas>
-                    <button onclick="toggleRecording()" class="btn-press w-14 h-14 rounded-full bg-red-500 hover:bg-red-600 flex items-center justify-center transition-colors" aria-label="Detener grabacion">
+                    <span id="rec-timer" class="text-4xl font-bold text-white tabular-nums">0:00</span>
+                    <canvas id="viz-canvas" class="w-full h-12 rounded-lg"></canvas>
+                    <button onclick="toggleRecording()" class="btn-press w-14 h-14 rounded-full bg-red-500 flex items-center justify-center" aria-label="Detener">
                         <i class="fa-solid fa-stop text-white text-lg"></i>
                     </button>
                 </div>
 
                 <!-- Lista de audios -->
                 <div id="audio-list" class="mt-3 flex flex-col gap-2"></div>
-                <p id="audio-empty" class="text-[11px] text-gray-600 mt-2">Presiona el boton y dicta tu diagnostico</p>
+                <p id="audio-hint" class="text-[11px] text-gray-600 mt-2 text-center">Los audios aparecen aqui despues de grabarlos</p>
             </section>
         </div>
     </main>
 
-    <!-- ===== BOTÓN ENVIAR FIJO ===== -->
-    <footer class="fixed bottom-0 left-0 right-0 z-50 bg-surface-800/95 backdrop-blur-md border-t border-surface-500/40 px-4 py-3">
+    <!-- BOTÓN ENVIAR FIJO ABAJO -->
+    <footer id="send-bar" class="fixed bottom-0 left-0 right-0 z-50 bg-surface-800/95 backdrop-blur-md border-t border-surface-500/40 px-4 py-3 hidden">
         <div class="max-w-lg mx-auto">
-            <button id="btn-send" onclick="submitReport()" disabled class="btn-press w-full py-3.5 rounded-xl bg-brand hover:bg-brand-light disabled:bg-surface-500 disabled:text-gray-500 text-white font-bold text-sm transition-colors disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-brand">
-                Agrega fotos o audios para enviar
+            <button id="btn-send" onclick="submitReport()" class="btn-press w-full py-4 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-400 shadow-lg shadow-emerald-600/20">
+                <i class="fa-solid fa-paper-plane mr-2"></i>
+                <span id="send-label">Enviar reporte</span>
             </button>
         </div>
     </footer>
@@ -149,29 +150,24 @@
     <!-- ===== OVERLAY CÁMARA ===== -->
     <div id="camera-overlay" class="fixed inset-0 z-[100] bg-black flex flex-col">
         <div id="camera-flash" class="absolute inset-0 bg-white z-10"></div>
-        <!-- Contenedor video que respete aspect ratio -->
         <div class="flex-1 relative bg-black overflow-hidden">
             <video id="cam-video" autoplay playsinline muted class="absolute inset-0 w-full h-full object-cover"></video>
-            <!-- Guía visual sutil -->
-            <div class="absolute inset-4 border border-white/10 rounded-2xl pointer-events-none"></div>
+            <div class="absolute inset-6 border-2 border-white/10 rounded-2xl pointer-events-none"></div>
         </div>
-        <!-- Controles -->
         <div class="bg-black/90 backdrop-blur-sm px-6 py-5 flex items-center justify-between">
-            <button onclick="closeCamera()" class="btn-press w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition-colors" aria-label="Cerrar camara">
+            <button onclick="closeCamera()" class="btn-press w-12 h-12 rounded-full bg-white/10 flex items-center justify-center" aria-label="Cerrar">
                 <i class="fa-solid fa-xmark text-white text-lg"></i>
             </button>
-            <button onclick="capturePhoto()" class="btn-press w-[72px] h-[72px] rounded-full border-4 border-white flex items-center justify-center" aria-label="Capturar foto">
-                <div class="w-[58px] h-[58px] rounded-full bg-white hover:bg-gray-200 transition-colors"></div>
+            <button onclick="capturePhoto()" class="btn-press w-[72px] h-[72px] rounded-full border-4 border-white flex items-center justify-center" aria-label="Capturar">
+                <div class="w-[58px] h-[58px] rounded-full bg-white"></div>
             </button>
-            <div class="w-12 text-center">
-                <span id="cam-counter" class="text-sm text-gray-400 font-bold tabular-nums">0</span>
-            </div>
+            <div class="w-12"></div>
         </div>
     </div>
 
     <!-- ===== LIGHTBOX ===== -->
     <div id="lightbox" class="fixed inset-0 z-[90] bg-black/95 flex items-center justify-center p-4" onclick="closeLightbox()">
-        <img id="lb-img" class="max-w-full max-h-[85vh] rounded-lg object-contain" alt="Foto ampliada">
+        <img id="lb-img" class="max-w-full max-h-[85vh] rounded-lg object-contain" alt="Ampliada">
         <button class="absolute top-4 right-4 w-10 h-10 rounded-full bg-white/10 flex items-center justify-center" aria-label="Cerrar">
             <i class="fa-solid fa-xmark text-white"></i>
         </button>
@@ -179,7 +175,6 @@
 
     <!-- ===== OVERLAY PROCESAMIENTO ===== -->
     <div id="proc-overlay" class="fixed inset-0 z-[80] bg-surface-900/97 backdrop-blur-md flex flex-col items-center justify-center p-6">
-        <!-- Estado: procesando -->
         <div id="proc-loading" class="flex flex-col items-center gap-5 text-center">
             <div class="relative">
                 <div class="w-20 h-20 rounded-full border-4 border-surface-500 flex items-center justify-center">
@@ -195,622 +190,486 @@
                 <div id="proc-bar" class="h-full bg-brand rounded-full transition-all duration-700" style="width:0%"></div>
             </div>
         </div>
-
-        <!-- Estado: resultado -->
         <div id="proc-result" class="hidden w-full max-w-sm flex flex-col gap-4">
             <div class="bg-emerald-500/10 border border-emerald-500/30 rounded-2xl p-5 text-center">
                 <div class="w-12 h-12 rounded-full bg-emerald-500/20 flex items-center justify-center mx-auto mb-2">
                     <i class="fa-solid fa-check text-emerald-400 text-xl"></i>
                 </div>
-                <p class="text-sm font-bold text-emerald-300">Reporte enviado y procesado</p>
-                <p class="text-[10px] text-emerald-400/60 mt-1">OT-2024-1847</p>
+                <p class="text-sm font-bold text-emerald-300">Reporte enviado</p>
             </div>
-
-            <div class="bg-surface-700 border border-surface-500/50 rounded-xl p-3.5 flex items-center gap-3">
+            <div class="bg-surface-700 border border-surface-500/50 rounded-xl p-3.5 flex items-center gap-3 text-xs text-gray-300">
                 <i class="fa-solid fa-camera text-brand"></i>
-                <span id="res-photos" class="text-xs text-gray-300">0 fotos almacenadas</span>
+                <span id="res-photos">0 fotos almacenadas</span>
             </div>
-            <div class="bg-surface-700 border border-surface-500/50 rounded-xl p-3.5 flex items-center gap-3">
+            <div class="bg-surface-700 border border-surface-500/50 rounded-xl p-3.5 flex items-center gap-3 text-xs text-gray-300">
                 <i class="fa-solid fa-microphone text-brand"></i>
-                <span id="res-audios" class="text-xs text-gray-300">0 audios transcritos por IA</span>
+                <span id="res-audios">0 audios transcritos</span>
             </div>
-
             <div class="bg-surface-700 border border-brand/20 rounded-xl p-4">
                 <div class="flex items-center justify-between mb-2.5">
-                    <h3 class="text-[10px] font-semibold text-brand uppercase tracking-wider">
-                        <i class="fa-solid fa-brain mr-1"></i>Transcripcion IA
-                    </h3>
+                    <h3 class="text-[10px] font-semibold text-brand uppercase tracking-wider"><i class="fa-solid fa-brain mr-1"></i>Transcripcion IA</h3>
                     <span class="text-[9px] bg-brand/15 text-brand-light px-2 py-0.5 rounded-full font-semibold">Whisper</span>
                 </div>
                 <p id="transcription" class="text-sm text-gray-200 leading-relaxed typing-cursor"></p>
             </div>
-
-            <button onclick="resetApp()" class="btn-press w-full py-3.5 rounded-xl bg-brand hover:bg-brand-light text-white font-bold text-sm transition-colors focus:outline-none">
+            <button onclick="resetApp()" class="btn-press w-full py-3.5 rounded-xl bg-brand hover:bg-brand-light text-white font-bold text-sm transition-colors">
                 <i class="fa-solid fa-plus mr-2"></i>Nuevo reporte
             </button>
         </div>
     </div>
 
     <script>
-        // ============================================================
-        // ESTADO GLOBAL
-        // ============================================================
-        const S = {
-            photos: [],           // { dataUrl, id }
-            audios: [],           // { blob, url, duration, id }
-            isRecording: false,
-            cameraStream: null,
-            mediaRecorder: null,
-            audioChunks: [],
-            audioCtx: null,
-            analyser: null,
-            recInterval: null,
-            recSeconds: 0,
-            playingAudio: null,   // { el, id }
-            idCounter: 0,
-        };
+    // ============================================================
+    // ESTADO
+    // ============================================================
+    const S = {
+        photos: [],
+        audios: [],
+        isRecording: false,
+        cameraStream: null,
+        mediaRecorder: null,
+        audioChunks: [],
+        audioCtx: null,
+        analyser: null,
+        recInterval: null,
+        recSeconds: 0,
+        playingAudio: null,
+        idCounter: 0,
+    };
 
-        const $ = sel => document.querySelector(sel);
-        const $$ = sel => document.querySelectorAll(sel);
+    const $ = s => document.querySelector(s);
 
-        // ============================================================
-        // TOASTS
-        // ============================================================
-        function toast(msg, type = 'info') {
-            const colors = { info: 'bg-surface-600 border-surface-400 text-gray-200', success: 'bg-emerald-900/80 border-emerald-500/40 text-emerald-200', error: 'bg-red-900/80 border-red-500/40 text-red-200', warning: 'bg-amber-900/80 border-amber-500/40 text-amber-200' };
-            const icons = { info: 'fa-circle-info', success: 'fa-circle-check', error: 'fa-circle-exclamation', warning: 'fa-triangle-exclamation' };
-            const el = document.createElement('div');
-            el.className = `toast pointer-events-auto flex items-center gap-2 px-4 py-2.5 rounded-xl border text-xs font-medium backdrop-blur-md shadow-lg ${colors[type]}`;
-            el.innerHTML = `<i class="fa-solid ${icons[type]}"></i><span>${msg}</span>`;
-            $('#toasts').appendChild(el);
-            setTimeout(() => { el.classList.add('removing'); setTimeout(() => el.remove(), 250); }, 2800);
-        }
+    // ============================================================
+    // TOASTS
+    // ============================================================
+    function toast(msg, type = 'info') {
+        const colors = { info:'bg-surface-600 border-surface-400 text-gray-200', success:'bg-emerald-900/80 border-emerald-500/40 text-emerald-200', error:'bg-red-900/80 border-red-500/40 text-red-200', warning:'bg-amber-900/80 border-amber-500/40 text-amber-200' };
+        const icons = { info:'fa-circle-info', success:'fa-circle-check', error:'fa-circle-exclamation', warning:'fa-triangle-exclamation' };
+        const el = document.createElement('div');
+        el.className = `toast pointer-events-auto flex items-center gap-2 px-4 py-2.5 rounded-xl border text-xs font-medium backdrop-blur-md shadow-lg ${colors[type]}`;
+        el.innerHTML = `<i class="fa-solid ${icons[type]}"></i><span>${msg}</span>`;
+        $('#toasts').appendChild(el);
+        setTimeout(() => { el.classList.add('removing'); setTimeout(() => el.remove(), 200); }, 2200);
+    }
 
-        // ============================================================
-        // CÁMARA - Captura real con getUserMedia
-        // ============================================================
-        async function openCamera() {
-            try {
-                // Pedir cámara trasera (environment)
-                const stream = await navigator.mediaDevices.getUserMedia({
-                    video: { facingMode: 'environment', width: { ideal: 1280 }, height: { ideal: 960 } }
-                });
-                S.cameraStream = stream;
-                const video = $('#cam-video');
-                video.srcObject = stream;
-                await video.play();
-                $('#camera-overlay').classList.add('open');
-                $('#cam-counter').textContent = S.photos.length;
-            } catch (err) {
-                console.error('Error cámara:', err);
-                if (err.name === 'NotAllowedError') {
-                    toast('Permiso de camara denegado. Habilita el acceso en configuracion.', 'error');
-                } else if (err.name === 'NotFoundError') {
-                    toast('No se encontro una camara en este dispositivo.', 'error');
-                } else {
-                    toast('No se pudo acceder a la camara. Asegurate de usar HTTPS.', 'error');
-                }
-            }
-        }
-
-        function capturePhoto() {
+    // ============================================================
+    // CÁMARA - Abre, captura UNA foto, y cierra automáticamente
+    // ============================================================
+    async function openCamera() {
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia({
+                video: { facingMode: 'environment', width: { ideal: 1280 }, height: { ideal: 960 } }
+            });
+            S.cameraStream = stream;
             const video = $('#cam-video');
-            if (!video.videoWidth) return;
-
-            // Dibujar frame actual del video en canvas
-            const canvas = document.createElement('canvas');
-            canvas.width = video.videoWidth;
-            canvas.height = video.videoHeight;
-            const ctx = canvas.getContext('2d');
-            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-
-            // Guardar como JPEG
-            const dataUrl = canvas.toDataURL('image/jpeg', 0.85);
-            S.photos.push({ dataUrl, id: ++S.idCounter });
-
-            // Efecto flash visual
-            const flash = $('#camera-flash');
-            flash.classList.add('fire');
-            setTimeout(() => flash.classList.remove('fire'), 130);
-
-            // Vibración háptica
-            if (navigator.vibrate) navigator.vibrate(40);
-
-            $('#cam-counter').textContent = S.photos.length;
-            renderPhotos();
-            toast(`Foto ${S.photos.length} capturada`, 'success');
+            video.srcObject = stream;
+            await video.play();
+            $('#camera-overlay').classList.add('open');
+        } catch (err) {
+            console.error('Error cámara:', err);
+            if (err.name === 'NotAllowedError') toast('Permiso de camara denegado', 'error');
+            else if (err.name === 'NotFoundError') toast('No se encontro camara', 'error');
+            else toast('No se pudo abrir la camara. Usa HTTPS.', 'error');
         }
+    }
 
-        function closeCamera() {
-            // Detener todos los tracks del stream
-            if (S.cameraStream) {
-                S.cameraStream.getTracks().forEach(t => t.stop());
-                S.cameraStream = null;
-            }
-            $('#cam-video').srcObject = null;
-            $('#camera-overlay').classList.remove('open');
-        }
+    function capturePhoto() {
+        const video = $('#cam-video');
+        if (!video.videoWidth) return;
 
-        // ============================================================
-        // RENDERIZADO DE FOTOS
-        // ============================================================
-        function renderPhotos() {
+        const canvas = document.createElement('canvas');
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        canvas.getContext('2d').drawImage(video, 0, 0);
+
+        const dataUrl = canvas.toDataURL('image/jpeg', 0.85);
+        S.photos.push({ dataUrl, id: ++S.idCounter });
+
+        // Flash
+        const flash = $('#camera-flash');
+        flash.classList.add('fire');
+        setTimeout(() => flash.classList.remove('fire'), 120);
+
+        // Vibración
+        if (navigator.vibrate) navigator.vibrate(40);
+
+        // Cerrar cámara inmediatamente después de capturar
+        closeCamera();
+
+        // Mostrar la foto en el grid
+        renderPhotos();
+        toast(`Foto ${S.photos.length} capturada`, 'success');
+
+        // Scroll suave hasta la foto nueva
+        setTimeout(() => {
             const grid = $('#photos-grid');
+            const last = grid.lastElementChild;
+            if (last) last.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }, 100);
+    }
 
-            // Eliminar thumbnails previos (mantener solo el botón agregar)
-            grid.querySelectorAll('.photo-thumb').forEach(el => el.remove());
+    function closeCamera() {
+        if (S.cameraStream) {
+            S.cameraStream.getTracks().forEach(t => t.stop());
+            S.cameraStream = null;
+        }
+        $('#cam-video').srcObject = null;
+        $('#camera-overlay').classList.remove('open');
+    }
 
-            // Agregar cada foto como thumbnail
-            S.photos.forEach((photo, i) => {
-                const div = document.createElement('div');
-                div.className = 'photo-thumb relative aspect-square rounded-xl overflow-hidden group';
-                div.innerHTML = `
-                    <img src="${photo.dataUrl}" class="w-full h-full object-cover" alt="Evidencia ${i + 1}" loading="lazy">
-                    <div class="absolute inset-0 bg-black/0 group-active:bg-black/20 transition-colors"></div>
-                    <button onclick="event.stopPropagation(); removePhoto(${photo.id})"
-                        class="absolute top-1 right-1 w-6 h-6 rounded-full bg-red-500/90 flex items-center justify-center shadow-md hover:bg-red-400 transition-colors"
-                        aria-label="Eliminar foto ${i + 1}">
-                        <i class="fa-solid fa-xmark text-white text-[10px]"></i>
-                    </button>
-                `;
-                // Click en la imagen para ampliar
-                div.addEventListener('click', () => {
-                    $('#lb-img').src = photo.dataUrl;
-                    $('#lightbox').classList.add('open');
-                });
-                // Insertar antes del botón agregar
-                grid.insertBefore(div, $('#btn-add-photo'));
+    // ============================================================
+    // RENDERIZADO DE FOTOS
+    // ============================================================
+    function renderPhotos() {
+        const grid = $('#photos-grid');
+        grid.innerHTML = '';
+
+        S.photos.forEach((photo, i) => {
+            const div = document.createElement('div');
+            div.className = 'pop-in relative aspect-square rounded-xl overflow-hidden group';
+            div.innerHTML = `
+                <img src="${photo.dataUrl}" class="w-full h-full object-cover" alt="Evidencia ${i+1}" loading="lazy">
+                <button onclick="event.stopPropagation(); removePhoto(${photo.id})"
+                    class="absolute top-1.5 right-1.5 w-7 h-7 rounded-full bg-red-500/90 flex items-center justify-center shadow-md hover:bg-red-400 transition-colors"
+                    aria-label="Eliminar foto">
+                    <i class="fa-solid fa-trash text-white text-[10px]"></i>
+                </button>
+            `;
+            div.addEventListener('click', () => {
+                $('#lb-img').src = photo.dataUrl;
+                $('#lightbox').classList.add('open');
             });
+            grid.appendChild(div);
+        });
 
-            // Actualizar contador y visibilidad
-            $('#photo-count').textContent = S.photos.length;
-            $('#photos-empty').classList.toggle('hidden', S.photos.length > 0);
-            updateSendBtn();
-        }
+        $('#photo-count').textContent = S.photos.length;
+        $('#photos-hint').classList.toggle('hidden', S.photos.length > 0);
+        updateSendBar();
+    }
 
-        function removePhoto(id) {
-            const idx = S.photos.findIndex(p => p.id === id);
-            if (idx > -1) S.photos.splice(idx, 1);
-            renderPhotos();
-            toast('Foto eliminada', 'info');
-        }
+    function removePhoto(id) {
+        S.photos = S.photos.filter(p => p.id !== id);
+        renderPhotos();
+        toast('Foto eliminada', 'info');
+    }
 
-        function closeLightbox() {
-            $('#lightbox').classList.remove('open');
-        }
+    function closeLightbox() { $('#lightbox').classList.remove('open'); }
 
-        // ============================================================
-        // GRABACIÓN DE AUDIO - Captura real con MediaRecorder
-        // ============================================================
-        async function toggleRecording() {
-            if (S.isRecording) {
-                stopRecording();
-            } else {
-                await startRecording();
+    // ============================================================
+    // GRABACIÓN DE AUDIO
+    // ============================================================
+    async function toggleRecording() {
+        if (S.isRecording) return stopRecording();
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            let mime = '';
+            for (const fmt of ['audio/webm;codecs=opus','audio/webm','audio/mp4','audio/ogg']) {
+                if (MediaRecorder.isTypeSupported(fmt)) { mime = fmt; break; }
             }
-        }
-
-        async function startRecording() {
-            try {
-                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-
-                // Elegir el mejor formato soportado
-                let mimeType = '';
-                const formats = ['audio/webm;codecs=opus', 'audio/webm', 'audio/mp4', 'audio/ogg'];
-                for (const fmt of formats) {
-                    if (MediaRecorder.isTypeSupported(fmt)) { mimeType = fmt; break; }
-                }
-
-                S.mediaRecorder = mimeType
-                    ? new MediaRecorder(stream, { mimeType })
-                    : new MediaRecorder(stream);
-
-                S.audioChunks = [];
-
-                S.mediaRecorder.ondataavailable = (e) => {
-                    if (e.data.size > 0) S.audioChunks.push(e.data);
-                };
-
-                S.mediaRecorder.onstop = () => {
-                    // Crear blob del audio grabado
-                    const blob = new Blob(S.audioChunks, { type: S.mediaRecorder.mimeType || 'audio/webm' });
-                    const url = URL.createObjectURL(blob);
-                    const id = ++S.idCounter;
-
-                    // Obtener duración real del audio
-                    const tmpAudio = new Audio(url);
-                    tmpAudio.addEventListener('loadedmetadata', () => {
-                        // En algunos browsers duration es Infinity al principio
-                        if (tmpAudio.duration === Infinity) {
-                            tmpAudio.currentTime = 1e10;
-                            tmpAudio.addEventListener('timeupdate', function handler() {
-                                tmpAudio.removeEventListener('timeupdate', handler);
-                                const dur = tmpAudio.duration;
-                                tmpAudio.currentTime = 0;
-                                S.audios.push({ blob, url, duration: dur, id });
-                                renderAudios();
-                                updateSendBtn();
-                            });
-                        } else {
-                            S.audios.push({ blob, url, duration: tmpAudio.duration, id });
+            S.mediaRecorder = mime ? new MediaRecorder(stream, { mimeType: mime }) : new MediaRecorder(stream);
+            S.audioChunks = [];
+            S.mediaRecorder.ondataavailable = e => { if (e.data.size > 0) S.audioChunks.push(e.data); };
+            S.mediaRecorder.onstop = () => {
+                const blob = new Blob(S.audioChunks, { type: S.mediaRecorder.mimeType || 'audio/webm' });
+                const url = URL.createObjectURL(blob);
+                const id = ++S.idCounter;
+                const tmp = new Audio(url);
+                tmp.addEventListener('loadedmetadata', () => {
+                    let dur = tmp.duration;
+                    if (dur === Infinity) {
+                        tmp.currentTime = 1e10;
+                        tmp.addEventListener('timeupdate', function h() {
+                            tmp.removeEventListener('timeupdate', h);
+                            dur = tmp.duration;
+                            tmp.currentTime = 0;
+                            S.audios.push({ blob, url, duration: dur, id });
                             renderAudios();
-                            updateSendBtn();
-                        }
-                    });
-
-                    // Detener tracks del stream
-                    stream.getTracks().forEach(t => t.stop());
-                };
-
-                // Iniciar grabación con chunks cada 100ms
-                S.mediaRecorder.start(100);
-                S.isRecording = true;
-                S.recSeconds = 0;
-
-                // AudioContext para visualización en tiempo real
-                try {
-                    S.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                    const source = S.audioCtx.createMediaStreamSource(stream);
-                    S.analyser = S.audioCtx.createAnalyser();
-                    S.analyser.fftSize = 256;
-                    source.connect(S.analyser);
-                } catch (e) {
-                    console.warn('AudioContext no disponible:', e);
-                }
-
-                // UI: mostrar panel de grabación
-                $('#rec-panel').classList.remove('hidden');
-                $('#btn-record').classList.add('hidden');
-                $('#rec-timer').textContent = '0:00';
-
-                // Timer
-                S.recInterval = setInterval(() => {
-                    S.recSeconds++;
-                    const m = Math.floor(S.recSeconds / 60);
-                    const s = S.recSeconds % 60;
-                    $('#rec-timer').textContent = `${m}:${s.toString().padStart(2, '0')}`;
-                }, 1000);
-
-                // Iniciar visualización
-                drawViz();
-
-                if (navigator.vibrate) navigator.vibrate(80);
-                toast('Grabacion iniciada', 'info');
-
-            } catch (err) {
-                console.error('Error micrófono:', err);
-                if (err.name === 'NotAllowedError') {
-                    toast('Permiso de microfono denegado. Habilita el acceso en configuracion.', 'error');
-                } else {
-                    toast('No se pudo acceder al microfono. Asegurate de usar HTTPS.', 'error');
-                }
-            }
-        }
-
-        function stopRecording() {
-            if (S.mediaRecorder && S.mediaRecorder.state !== 'inactive') {
-                S.mediaRecorder.stop();
-            }
-            S.isRecording = false;
-            clearInterval(S.recInterval);
-
-            // Cerrar AudioContext
-            if (S.audioCtx) {
-                S.audioCtx.close().catch(() => {});
-                S.audioCtx = null;
-                S.analyser = null;
-            }
-
-            // UI: ocultar panel de grabación
-            $('#rec-panel').classList.add('hidden');
-            $('#btn-record').classList.remove('hidden');
-
-            if (navigator.vibrate) navigator.vibrate([40, 30, 40]);
-            toast('Audio guardado', 'success');
-        }
-
-        // Visualización de audio en tiempo real durante grabación
-        function drawViz() {
-            if (!S.isRecording || !S.analyser) return;
-            requestAnimationFrame(drawViz);
-
-            const canvas = $('#viz-canvas');
-            const ctx = canvas.getContext('2d');
-            const dpr = window.devicePixelRatio || 1;
-            const rect = canvas.getBoundingClientRect();
-            canvas.width = rect.width * dpr;
-            canvas.height = rect.height * dpr;
-            ctx.scale(dpr, dpr);
-
-            const bufLen = S.analyser.frequencyBinCount;
-            const data = new Uint8Array(bufLen);
-            S.analyser.getByteFrequencyData(data);
-
-            ctx.clearRect(0, 0, rect.width, rect.height);
-
-            const bars = 36;
-            const gap = 3;
-            const bw = (rect.width - gap * (bars - 1)) / bars;
-
-            for (let i = 0; i < bars; i++) {
-                const dataIdx = Math.floor(i * bufLen / bars);
-                const val = data[dataIdx] / 255;
-                const h = Math.max(3, val * rect.height * 0.85);
-                const x = i * (bw + gap);
-                const y = rect.height - h;
-
-                ctx.fillStyle = `rgba(232,96,10,${0.25 + val * 0.75})`;
-                ctx.beginPath();
-                const r = Math.min(2, bw / 2);
-                if (ctx.roundRect) {
-                    ctx.roundRect(x, y, bw, h, r);
-                } else {
-                    ctx.rect(x, y, bw, h);
-                }
-                ctx.fill();
-            }
-        }
-
-        // ============================================================
-        // RENDERIZADO DE AUDIOS
-        // ============================================================
-        function renderAudios() {
-            const list = $('#audio-list');
-            list.innerHTML = '';
-
-            S.audios.forEach((audio, idx) => {
-                const m = Math.floor(audio.duration / 60);
-                const s = Math.floor(audio.duration % 60);
-                const durStr = `${m}:${s.toString().padStart(2, '0')}`;
-
-                const row = document.createElement('div');
-                row.className = 'audio-row bg-surface-700 border border-surface-500/50 rounded-xl p-3 flex items-center gap-3';
-                row.id = `audio-row-${audio.id}`;
-                row.innerHTML = `
-                    <button onclick="togglePlayAudio(${audio.id})" class="btn-press w-10 h-10 rounded-full bg-brand flex items-center justify-center flex-shrink-0" aria-label="Reproducir audio ${idx + 1}">
-                        <i class="fa-solid fa-play text-white text-xs ml-0.5" id="play-icon-${audio.id}"></i>
-                    </button>
-                    <div class="flex-1 min-w-0">
-                        <div class="flex items-center justify-between mb-1.5">
-                            <span class="text-xs font-medium text-gray-300">Audio ${idx + 1}</span>
-                            <span class="text-[10px] text-gray-500 tabular-nums" id="audio-time-${audio.id}">${durStr}</span>
-                        </div>
-                        <div class="h-1.5 bg-surface-500 rounded-full overflow-hidden cursor-pointer" onclick="seekAudio(event, ${audio.id})" id="prog-track-${audio.id}">
-                            <div class="h-full bg-brand rounded-full transition-[width] duration-100" id="prog-fill-${audio.id}" style="width:0%"></div>
-                        </div>
-                    </div>
-                    <button onclick="removeAudio(${audio.id})" class="btn-press w-9 h-9 rounded-lg bg-red-500/15 flex items-center justify-center flex-shrink-0 hover:bg-red-500/25 transition-colors" aria-label="Eliminar audio ${idx + 1}">
-                        <i class="fa-solid fa-trash text-red-400 text-xs"></i>
-                    </button>
-                `;
-                list.appendChild(row);
-            });
-
-            $('#audio-count').textContent = S.audios.length;
-            $('#audio-empty').classList.toggle('hidden', S.audios.length > 0);
-            updateSendBtn();
-        }
-
-        // ============================================================
-        // REPRODUCCIÓN DE AUDIO
-        // ============================================================
-        function togglePlayAudio(id) {
-            const audio = S.audios.find(a => a.id === id);
-            if (!audio) return;
-
-            // Si ya estamos reproduciendo ESTE audio
-            if (S.playingAudio && S.playingAudio.id === id) {
-                if (S.playingAudio.el.paused) {
-                    S.playingAudio.el.play();
-                    setPlayIcon(id, false);
-                } else {
-                    S.playingAudio.el.pause();
-                    setPlayIcon(id, true);
-                }
-                return;
-            }
-
-            // Pausar audio anterior si hay
-            stopCurrentAudio();
-
-            // Crear y reproducir nuevo audio
-            const el = new Audio(audio.url);
-            S.playingAudio = { el, id };
-
-            el.addEventListener('timeupdate', () => {
-                if (el.duration) {
-                    const pct = (el.currentTime / el.duration) * 100;
-                    const fill = document.getElementById(`prog-fill-${id}`);
-                    if (fill) fill.style.width = `${pct}%`;
-                    const timeEl = document.getElementById(`audio-time-${id}`);
-                    if (timeEl) {
-                        const cm = Math.floor(el.currentTime / 60);
-                        const cs = Math.floor(el.currentTime % 60);
-                        const tm = Math.floor(el.duration / 60);
-                        const ts = Math.floor(el.duration % 60);
-                        timeEl.textContent = `${cm}:${cs.toString().padStart(2, '0')} / ${tm}:${ts.toString().padStart(2, '0')}`;
+                            updateSendBar();
+                        });
+                    } else {
+                        S.audios.push({ blob, url, duration: dur, id });
+                        renderAudios();
+                        updateSendBar();
                     }
-                }
-            });
+                });
+                stream.getTracks().forEach(t => t.stop());
+            };
 
-            el.addEventListener('ended', () => {
-                setPlayIcon(id, true);
-                const fill = document.getElementById(`prog-fill-${id}`);
-                if (fill) fill.style.width = '0%';
-                const timeEl = document.getElementById(`audio-time-${id}`);
-                if (timeEl) {
-                    const m = Math.floor(audio.duration / 60);
-                    const s = Math.floor(audio.duration % 60);
-                    timeEl.textContent = `${m}:${s.toString().padStart(2, '0')}`;
-                }
-                S.playingAudio = null;
-            });
+            S.mediaRecorder.start(100);
+            S.isRecording = true;
+            S.recSeconds = 0;
 
-            el.play().catch(() => toast('No se pudo reproducir el audio', 'error'));
-            setPlayIcon(id, false);
+            // AudioContext para visualización
+            try {
+                S.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                const source = S.audioCtx.createMediaStreamSource(stream);
+                S.analyser = S.audioCtx.createAnalyser();
+                S.analyser.fftSize = 256;
+                source.connect(S.analyser);
+            } catch(e) {}
+
+            // UI
+            $('#rec-panel').classList.remove('hidden');
+            $('#btn-record').classList.add('hidden');
+            $('#rec-timer').textContent = '0:00';
+
+            S.recInterval = setInterval(() => {
+                S.recSeconds++;
+                const m = Math.floor(S.recSeconds / 60);
+                const s = S.recSeconds % 60;
+                $('#rec-timer').textContent = `${m}:${s.toString().padStart(2, '0')}`;
+            }, 1000);
+
+            drawViz();
+            if (navigator.vibrate) navigator.vibrate(80);
+        } catch (err) {
+            console.error('Error mic:', err);
+            if (err.name === 'NotAllowedError') toast('Permiso de microfono denegado', 'error');
+            else toast('No se pudo acceder al microfono. Usa HTTPS.', 'error');
         }
+    }
 
-        function setPlayIcon(id, showPlay) {
-            const icon = document.getElementById(`play-icon-${id}`);
-            if (icon) {
-                icon.className = showPlay
-                    ? 'fa-solid fa-play text-white text-xs ml-0.5'
-                    : 'fa-solid fa-pause text-white text-xs';
-            }
+    function stopRecording() {
+        if (S.mediaRecorder && S.mediaRecorder.state !== 'inactive') S.mediaRecorder.stop();
+        S.isRecording = false;
+        clearInterval(S.recInterval);
+        if (S.audioCtx) { S.audioCtx.close().catch(()=>{}); S.audioCtx = null; S.analyser = null; }
+        $('#rec-panel').classList.add('hidden');
+        $('#btn-record').classList.remove('hidden');
+        if (navigator.vibrate) navigator.vibrate([40,30,40]);
+        toast('Audio guardado', 'success');
+    }
+
+    function drawViz() {
+        if (!S.isRecording || !S.analyser) return;
+        requestAnimationFrame(drawViz);
+        const canvas = $('#viz-canvas');
+        const ctx = canvas.getContext('2d');
+        const dpr = window.devicePixelRatio || 1;
+        const rect = canvas.getBoundingClientRect();
+        canvas.width = rect.width * dpr;
+        canvas.height = rect.height * dpr;
+        ctx.scale(dpr, dpr);
+        const bufLen = S.analyser.frequencyBinCount;
+        const data = new Uint8Array(bufLen);
+        S.analyser.getByteFrequencyData(data);
+        ctx.clearRect(0, 0, rect.width, rect.height);
+        const bars = 36;
+        const gap = 3;
+        const bw = (rect.width - gap * (bars - 1)) / bars;
+        for (let i = 0; i < bars; i++) {
+            const val = data[Math.floor(i * bufLen / bars)] / 255;
+            const h = Math.max(3, val * rect.height * 0.85);
+            ctx.fillStyle = `rgba(232,96,10,${0.25 + val * 0.75})`;
+            ctx.beginPath();
+            const x = i * (bw + gap);
+            const r = Math.min(2, bw / 2);
+            if (ctx.roundRect) ctx.roundRect(x, rect.height - h, bw, h, r);
+            else ctx.rect(x, rect.height - h, bw, h);
+            ctx.fill();
         }
+    }
 
-        function stopCurrentAudio() {
-            if (S.playingAudio) {
-                S.playingAudio.el.pause();
-                S.playingAudio.el.currentTime = 0;
-                setPlayIcon(S.playingAudio.id, true);
-                // Resetear barra de progreso
-                const fill = document.getElementById(`prog-fill-${S.playingAudio.id}`);
-                if (fill) fill.style.width = '0%';
-                S.playingAudio = null;
-            }
+    // ============================================================
+    // RENDERIZADO DE AUDIOS
+    // ============================================================
+    function renderAudios() {
+        const list = $('#audio-list');
+        list.innerHTML = '';
+
+        S.audios.forEach((audio, idx) => {
+            const m = Math.floor(audio.duration / 60);
+            const s = Math.floor(audio.duration % 60);
+            const durStr = `${m}:${s.toString().padStart(2, '0')}`;
+
+            const row = document.createElement('div');
+            row.className = 'audio-row bg-surface-700 border border-surface-500/50 rounded-xl p-3 flex items-center gap-3';
+            row.id = `audio-row-${audio.id}`;
+            row.innerHTML = `
+                <button onclick="togglePlayAudio(${audio.id})" class="btn-press w-10 h-10 rounded-full bg-brand flex items-center justify-center flex-shrink-0" aria-label="Play">
+                    <i class="fa-solid fa-play text-white text-xs ml-0.5" id="play-icon-${audio.id}"></i>
+                </button>
+                <div class="flex-1 min-w-0">
+                    <div class="flex items-center justify-between mb-1.5">
+                        <span class="text-xs font-medium text-gray-300">Audio ${idx + 1}</span>
+                        <span class="text-[10px] text-gray-500 tabular-nums" id="audio-time-${audio.id}">${durStr}</span>
+                    </div>
+                    <div class="h-1.5 bg-surface-500 rounded-full overflow-hidden cursor-pointer" onclick="seekAudio(event,${audio.id})" id="prog-track-${audio.id}">
+                        <div class="h-full bg-brand/50 rounded-full transition-[width] duration-100" id="prog-fill-${audio.id}" style="width:0%"></div>
+                    </div>
+                </div>
+                <button onclick="removeAudio(${audio.id})" class="btn-press w-9 h-9 rounded-lg bg-red-500/15 flex items-center justify-center flex-shrink-0 hover:bg-red-500/25 transition-colors" aria-label="Eliminar">
+                    <i class="fa-solid fa-trash text-red-400 text-xs"></i>
+                </button>
+            `;
+            list.appendChild(row);
+        });
+
+        $('#audio-count').textContent = S.audios.length;
+        $('#audio-hint').classList.toggle('hidden', S.audios.length > 0);
+        updateSendBar();
+    }
+
+    // ============================================================
+    // REPRODUCCIÓN
+    // ============================================================
+    function togglePlayAudio(id) {
+        const audio = S.audios.find(a => a.id === id);
+        if (!audio) return;
+        if (S.playingAudio && S.playingAudio.id === id) {
+            if (S.playingAudio.el.paused) { S.playingAudio.el.play(); setPlayIcon(id, false); }
+            else { S.playingAudio.el.pause(); setPlayIcon(id, true); }
+            return;
         }
-
-        function seekAudio(event, id) {
-            if (!S.playingAudio || S.playingAudio.id !== id) {
-                // Si no estamos reproduciendo este audio, iniciar reproducción
-                togglePlayAudio(id);
-                return;
+        stopCurrentAudio();
+        const el = new Audio(audio.url);
+        S.playingAudio = { el, id };
+        el.addEventListener('timeupdate', () => {
+            if (!el.duration) return;
+            const pct = (el.currentTime / el.duration) * 100;
+            const fill = document.getElementById(`prog-fill-${id}`);
+            if (fill) fill.style.width = `${pct}%`;
+            const te = document.getElementById(`audio-time-${id}`);
+            if (te) {
+                const cm = Math.floor(el.currentTime/60), cs = Math.floor(el.currentTime%60);
+                const tm = Math.floor(el.duration/60), ts = Math.floor(el.duration%60);
+                te.textContent = `${cm}:${cs.toString().padStart(2,'0')} / ${tm}:${ts.toString().padStart(2,'0')}`;
             }
-            const track = document.getElementById(`prog-track-${id}`);
-            if (!track) return;
-            const rect = track.getBoundingClientRect();
-            const pct = Math.max(0, Math.min(1, (event.clientX - rect.left) / rect.width));
-            S.playingAudio.el.currentTime = pct * S.playingAudio.el.duration;
-        }
-
-        function removeAudio(id) {
-            // Pausar si se está reproduciendo
-            if (S.playingAudio && S.playingAudio.id === id) {
-                S.playingAudio.el.pause();
-                S.playingAudio = null;
-            }
-
-            const idx = S.audios.findIndex(a => a.id === id);
-            if (idx > -1) {
-                URL.revokeObjectURL(S.audios[idx].url);
-                S.audios.splice(idx, 1);
-            }
-
-            renderAudios();
-            toast('Audio eliminado', 'info');
-        }
-
-        // ============================================================
-        // BOTÓN ENVIAR
-        // ============================================================
-        function updateSendBtn() {
-            const btn = $('#btn-send');
-            const total = S.photos.length + S.audios.length;
-
-            if (total === 0) {
-                btn.disabled = true;
-                btn.innerHTML = 'Agrega fotos o audios para enviar';
-            } else {
-                btn.disabled = false;
-                const parts = [];
-                if (S.photos.length > 0) parts.push(`${S.photos.length} foto${S.photos.length > 1 ? 's' : ''}`);
-                if (S.audios.length > 0) parts.push(`${S.audios.length} audio${S.audios.length > 1 ? 's' : ''}`);
-                btn.innerHTML = `<i class="fa-solid fa-paper-plane mr-2"></i>Enviar reporte (${parts.join(' + ')})`;
-            }
-        }
-
-        // ============================================================
-        // ENVÍO SIMULADO (sin backend)
-        // ============================================================
-        async function submitReport() {
-            if (S.photos.length === 0 && S.audios.length === 0) return;
-
-            // Pausar audio si se está reproduciendo
-            stopCurrentAudio();
-
-            // Abrir overlay de procesamiento
-            const overlay = $('#proc-overlay');
-            overlay.classList.add('open');
-            $('#proc-loading').classList.remove('hidden');
-            $('#proc-result').classList.add('hidden');
-            $('#proc-bar').style.width = '0%';
-
-            // Simular etapas del backend
-            const steps = [
-                { pct: 15, msg: 'Conectando con servidor...' },
-                { pct: 30, msg: 'Subiendo fotos...' },
-                { pct: 50, msg: 'Subiendo audios...' },
-                { pct: 65, msg: 'Procesando audio con Whisper AI...' },
-                { pct: 80, msg: 'Filtrando ruido del taller...' },
-                { pct: 92, msg: 'Generando transcripcion...' },
-                { pct: 100, msg: 'Completado' },
-            ];
-
-            for (const step of steps) {
-                await delay(600 + Math.random() * 500);
-                $('#proc-bar').style.width = `${step.pct}%`;
-                $('#proc-msg').textContent = step.msg;
-            }
-
-            await delay(400);
-
-            // Mostrar resultado
-            $('#proc-loading').classList.add('hidden');
-            $('#proc-result').classList.remove('hidden');
-            $('#res-photos').textContent = `${S.photos.length} foto${S.photos.length > 1 ? 's' : ''} almacenada${S.photos.length > 1 ? 's' : ''}`;
-            $('#res-audios').textContent = `${S.audios.length} audio${S.audios.length > 1 ? 's' : ''} transcrito${S.audios.length > 1 ? 's' : ''} por IA`;
-
-            // Efecto typewriter para transcripción
-            await typeTranscription();
-        }
-
-        async function typeTranscription() {
-            const text = `Se reviso el vehiculo Toyota Hilux SRV 2022, patente AB 123 CD, en la fosa de trabajo. Al inspeccionar el tren delantero, se detecto que el amortiguador del lado derecho presenta perdida de fluido hidraulico visible en el cuerpo del cilindro. El buje de la barra estabilizadora correspondiente muestra desgaste excesivo con juego lateral superior a lo permitido. Se recomienda reemplazar ambos componentes de forma inmediata. Las pastillas de freno delanteras presentan un desgaste estimado del sesenta por ciento, se sugiere monitorear en el proximo service programado.`;
-
-            const el = $('#transcription');
-            el.textContent = '';
-            el.classList.add('typing-cursor');
-
-            for (let i = 0; i < text.length; i++) {
-                el.textContent += text[i];
-                await delay('.,'.includes(text[i]) ? 45 : 14);
-            }
-            el.classList.remove('typing-cursor');
-        }
-
-        function delay(ms) { return new Promise(r => setTimeout(r, ms)); }
-
-        // ============================================================
-        // RESETEAR APP
-        // ============================================================
-        function resetApp() {
-            // Limpiar audios del memory
-            S.audios.forEach(a => URL.revokeObjectURL(a.url));
-            S.photos = [];
-            S.audios = [];
+        });
+        el.addEventListener('ended', () => {
+            setPlayIcon(id, true);
+            const fill = document.getElementById(`prog-fill-${id}`);
+            if (fill) fill.style.width = '0%';
+            const m = Math.floor(audio.duration/60), s = Math.floor(audio.duration%60);
+            const te = document.getElementById(`audio-time-${id}`);
+            if (te) te.textContent = `${m}:${s.toString().padStart(2,'0')}`;
             S.playingAudio = null;
+        });
+        el.play().catch(() => toast('No se pudo reproducir', 'error'));
+        setPlayIcon(id, false);
+    }
 
-            // Cerrar overlay
-            $('#proc-overlay').classList.remove('open');
+    function setPlayIcon(id, showPlay) {
+        const icon = document.getElementById(`play-icon-${id}`);
+        if (icon) icon.className = showPlay ? 'fa-solid fa-play text-white text-xs ml-0.5' : 'fa-solid fa-pause text-white text-xs';
+    }
 
-            // Re-renderizar
-            renderPhotos();
-            renderAudios();
-            updateSendBtn();
+    function stopCurrentAudio() {
+        if (!S.playingAudio) return;
+        S.playingAudio.el.pause();
+        S.playingAudio.el.currentTime = 0;
+        setPlayIcon(S.playingAudio.id, true);
+        const fill = document.getElementById(`prog-fill-${S.playingAudio.id}`);
+        if (fill) fill.style.width = '0%';
+        S.playingAudio = null;
+    }
 
-            // Scroll arriba
-            $('#main-scroll').scrollTop = 0;
+    function seekAudio(event, id) {
+        if (!S.playingAudio || S.playingAudio.id !== id) { togglePlayAudio(id); return; }
+        const track = document.getElementById(`prog-track-${id}`);
+        if (!track || !S.playingAudio.el.duration) return;
+        const rect = track.getBoundingClientRect();
+        const pct = Math.max(0, Math.min(1, (event.clientX - rect.left) / rect.width));
+        S.playingAudio.el.currentTime = pct * S.playingAudio.el.duration;
+    }
 
-            toast('Listo para un nuevo reporte', 'success');
+    function removeAudio(id) {
+        if (S.playingAudio && S.playingAudio.id === id) { S.playingAudio.el.pause(); S.playingAudio = null; }
+        const idx = S.audios.findIndex(a => a.id === id);
+        if (idx > -1) { URL.revokeObjectURL(S.audios[idx].url); S.audios.splice(idx, 1); }
+        renderAudios();
+        toast('Audio eliminado', 'info');
+    }
+
+    // ============================================================
+    // BOTÓN ENVIAR - Solo aparece cuando hay contenido
+    // ============================================================
+    function updateSendBar() {
+        const total = S.photos.length + S.audios.length;
+        const bar = $('#send-bar');
+
+        if (total === 0) {
+            bar.classList.add('hidden');
+            return;
         }
 
-        // ============================================================
-        // INIT
-        // ============================================================
+        bar.classList.remove('hidden');
+        const parts = [];
+        if (S.photos.length > 0) parts.push(`${S.photos.length} foto${S.photos.length > 1 ? 's' : ''}`);
+        if (S.audios.length > 0) parts.push(`${S.audios.length} audio${S.audios.length > 1 ? 's' : ''}`);
+        $('#send-label').textContent = `Enviar reporte (${parts.join(' + ')})`;
+    }
+
+    // ============================================================
+    // ENVÍO SIMULADO
+    // ============================================================
+    async function submitReport() {
+        if (S.photos.length === 0 && S.audios.length === 0) return;
+        stopCurrentAudio();
+
+        $('#proc-overlay').classList.add('open');
+        $('#proc-loading').classList.remove('hidden');
+        $('#proc-result').classList.add('hidden');
+        $('#proc-bar').style.width = '0%';
+
+        const steps = [
+            { pct: 15, msg: 'Conectando con servidor...' },
+            { pct: 30, msg: 'Subiendo fotos...' },
+            { pct: 50, msg: 'Subiendo audios...' },
+            { pct: 65, msg: 'Procesando con Whisper AI...' },
+            { pct: 82, msg: 'Filtrando ruido del taller...' },
+            { pct: 95, msg: 'Generando transcripcion...' },
+            { pct: 100, msg: 'Completado' },
+        ];
+
+        for (const step of steps) {
+            await delay(600 + Math.random() * 500);
+            $('#proc-bar').style.width = `${step.pct}%`;
+            $('#proc-msg').textContent = step.msg;
+        }
+        await delay(400);
+
+        $('#proc-loading').classList.add('hidden');
+        $('#proc-result').classList.remove('hidden');
+        $('#res-photos').textContent = `${S.photos.length} foto${S.photos.length > 1 ? 's' : ''} almacenada${S.photos.length > 1 ? 's' : ''}`;
+        $('#res-audios').textContent = `${S.audios.length} audio${S.audios.length > 1 ? 's' : ''} transcrito${S.audios.length > 1 ? 's' : ''} por IA`;
+        await typeTranscription();
+    }
+
+    async function typeTranscription() {
+        const text = `Se reviso el vehiculo Toyota Hilux SRV 2022, patente AB 123 CD. Al inspeccionar el tren delantero se detecto que el amortiguador derecho presenta perdida de fluido hidraulico visible. El buje de la barra estabilizadora muestra desgaste excesivo con juego lateral superior a lo permitido. Se recomienda reemplazar ambos componentes de forma inmediata. Las pastillas de freno delanteras presentan desgaste estimado del sesenta por ciento, se sugiere monitorear en el proximo service.`;
+        const el = $('#transcription');
+        el.textContent = '';
+        el.classList.add('typing-cursor');
+        for (let i = 0; i < text.length; i++) {
+            el.textContent += text[i];
+            await delay('.,'.includes(text[i]) ? 40 : 12);
+        }
+        el.classList.remove('typing-cursor');
+    }
+
+    function delay(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+    // ============================================================
+    // RESET
+    // ============================================================
+    function resetApp() {
+        S.audios.forEach(a => URL.revokeObjectURL(a.url));
+        S.photos = [];
+        S.audios = [];
+        S.playingAudio = null;
+        $('#proc-overlay').classList.remove('open');
         renderPhotos();
         renderAudios();
-        updateSendBtn();
+        updateSendBar();
+        $('#main-scroll').scrollTop = 0;
+        toast('Listo para un nuevo reporte', 'success');
+    }
+
+    // INIT
+    renderPhotos();
+    renderAudios();
+    updateSendBar();
     </script>
 </body>
 </html>
