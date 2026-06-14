@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CuotaGestor - Sistema de Cobranzas</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Iconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        // Nuevo Tema: Verde Esmeralda / Teal
+                        primary: '#0d9488', // Teal-600
+                        'primary-dark': '#0f766e', // Teal-700
+                        secondary: '#334155',
+                        accent: '#f59e0b', // Naranja para acentos
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        /* Transiciones suaves */
+        .section { display: none; animation: fadeIn 0.3s ease-in-out; }
+        .section.active { display: block; }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Scrollbar personalizado */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar-thumb { background: #94a3b8; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #64748b; }
+    </style>
+</head>
+<body class="bg-slate-100 font-sans">
+
+    <div class="flex h-screen overflow-hidden">
+
+        <!-- ==================== SIDEBAR (Solo visible en PC/Monitor) ==================== -->
+        <aside class="hidden md:flex md:flex-col w-64 bg-slate-800 text-white shadow-lg">
+            <!-- Logo -->
+            <div class="h-16 flex items-center px-6 border-b border-slate-700">
+                <span class="text-xl font-bold text-white flex items-center gap-2">
+                    <i class="fas fa-leaf text-teal-400"></i> CuotaGestor
+                </span>
+            </div>
+            
+            <!-- Navegación PC -->
+            <nav class="flex-1 px-4 py-6 space-y-2">
+                <button onclick="navigateTo('cobros')" class="nav-btn-pc active w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left transition-colors text-slate-300 hover:bg-slate-700">
+                    <i class="fas fa-hand-holding-dollar w-5"></i>
+                    <span class="font-medium">Cobros</span>
+                </button>
+                <button onclick="navigateTo('ventas')" class="nav-btn-pc w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left transition-colors text-slate-300 hover:bg-slate-700">
+                    <i class="fas fa-cart-plus w-5"></i>
+                    <span class="font-medium">Nueva Venta</span>
+                </button>
+                <button onclick="navigateTo('clientes')" class="nav-btn-pc w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left transition-colors text-slate-300 hover:bg-slate-700">
+                    <i class="fas fa-users w-5"></i>
+                    <span class="font-medium">Clientes</span>
+                </button>
+                <button onclick="navigateTo('link')" class="nav-btn-pc w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left transition-colors text-slate-300 hover:bg-slate-700">
+                    <i class="fas fa-link w-5"></i>
+                    <span class="font-medium">Vista Cliente</span>
+                </button>
+            </nav>
+
+            <!-- Usuario PC -->
+            <div class="p-4 border-t border-slate-700">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-full bg-teal-600 flex items-center justify-center font-bold">
+                        A
+                    </div>
+                    <div>
+                        <p class="font-semibold text-sm text-white">Admin</p>
+                        <p class="text-xs text-slate-400">Rol: Gerente</p>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- ==================== ÁREA PRINCIPAL ==================== -->
+        <div class="flex-1 flex flex-col overflow-hidden">
+            
+            <!-- HEADER MÓVIL (Arriba) -->
+            <header class="md:hidden bg-teal-700 text-white h-16 flex items-center justify-between px-4 shadow-md z-10">
+                <span class="text-xl font-bold flex items-center gap-2">
+                    <i class="fas fa-leaf"></i> CuotaGestor
+                </span>
+                <button class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center">
+                    <i class="fas fa-bell text-teal-100"></i>
+                </button>
+            </header>
+
+            <!-- CONTENIDO (Scrollable) -->
+            <main class="flex-1 overflow-y-auto pb-24 md:pb-8 bg-slate-100">
+                
+                <!-- SECCIÓN 1: GESTIÓN DE COBROS -->
+                <div id="section-cobros" class="section active p-4 md:p-8">
+                    <div class="mb-6">
+                        <h1 class="text-2xl font-bold text-slate-800">Cobranza</h1>
+                        <p class="text-slate-500">Lista de clientes con cuotas pendientes.</p>
+                    </div>
+
+                    <!-- Tarjetas de Resumen (Colores nuevos) -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
+                        <div class="bg-white p-5 rounded-xl shadow-sm border-l-4 border-teal-500">
+                            <p class="text-sm text-slate-500">Recaudado Hoy</p>
+                            <p class="text-2xl font-bold text-slate-800">₲ 1.500.000</p>
+                        </div>
+                        <div class="bg-white p-5 rounded-xl shadow-sm border-l-4 border-amber-500">
+                            <p class="text-sm text-slate-500">Pendiente Total</p>
+                            <p class="text-2xl font-bold text-slate-800">₲ 12.350.000</p>
+                        </div>
+                        <div class="bg-white p-5 rounded-xl shadow-sm border-l-4 border-red-500">
+                            <p class="text-sm text-slate-500">Clientes Morosos</p>
+                            <p class="text-2xl font-bold text-slate-800">4</p>
+                        </div>
+                    </div>
+
+                    <!-- Lista de Cobros -->
+                    <div class="bg-white rounded-xl shadow-sm overflow-hidden border border-slate-200">
+                        <div class="p-4 border-b border-slate-100 flex justify-between items-center bg-slate-50">
+                            <h2 class="font-bold text-slate-700">Clientes a Cobrar</h2>
+                            <input type="text" placeholder="Buscar..." class="text-sm border rounded-lg px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-teal-200">
+                        </div>
+                        
+                        <!-- Items -->
+                        <div class="divide-y divide-slate-100">
+                            <!-- Fila 1 -->
+                            <div class="p-4 hover:bg-teal-50 cursor-pointer flex flex-col sm:flex-row sm:items-center justify-between gap-3" onclick="openModal('paymentModal')">
+                                <div class="flex items-center gap-4">
+                                    <div class="w-12 h-12 rounded-full bg-red-100 flex items-center justify-center text-red-600 font-bold text-lg">
+                                        JP
+                                    </div>
+                                    <div>
+                                        <h3 class="font-semibold text-slate-800">Juan Pérez</h3>
+                                        <p class="text-sm text-slate-500">Celular Samsung A54 - Cuota 3/6</p>
+                                        <span class="text-xs bg-red-100 text-red-700 px-2 py-0.5 rounded mt-1 inline-block">Moroso (5 días)</span>
+                                    </div>
+                                </div>
+                                <div class="sm:text-right pl-14 sm:pl-0">
+                                    <p class="text-xl font-bold text-slate-800">₲ 150.000</p>
+                                    <button class="text-sm text-teal-600 font-semibold hover:underline">Registrar Pago</button>
+                                </div>
+                            </div>
+
+                            <!-- Fila 2 -->
+                            <div class="p-4 hover:bg-teal-50 cursor-pointer flex flex-col sm:flex-row sm:items-center justify-between gap-3" onclick="openModal('paymentModal')">
+                                <div class="flex items-center gap-4">
+                                    <div class="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center text-green-600 font-bold text-lg">
+                                        MG
+                                    </div>
+                                    <div>
+                                        <h3 class="font-semibold text-slate-800">María Gómez</h3>
+                                        <p class="text-sm text-slate-500">TV LG 50" - Cuota 1/12</p>
+                                        <span class="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded mt-1 inline-block">Al día</span>
+                                    </div>
+                                </div>
+                                <div class="sm:text-right pl-14 sm:pl-0">
+                                    <p class="text-xl font-bold text-slate-800">₲ 250.000</p>
+                                    <button class="text-sm text-teal-600 font-semibold hover:underline">Registrar Pago</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SECCIÓN 2: NUEVA VENTA -->
+                <div id="section-ventas" class="section p-4 md:p-8">
+                    <div class="mb-6">
+                        <h1 class="text-2xl font-bold text-slate-800">Registrar Venta</h1>
+                        <p class="text-slate-500">Complete los datos para generar una nueva operación.</p>
+                    </div>
+
+                    <div class="max-w-3xl mx-auto bg-white rounded-xl shadow-sm p-6 border border-slate-200">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                            <div>
+                                <label class="block text-sm font-medium text-slate-700 mb-1">Producto</label>
+                                <select id="productSelect" onchange="calculateTotal()" class="w-full border-slate-300 rounded-lg shadow-sm focus:border-teal-500 focus:ring-teal-500 bg-white">
+                                    <option value="3500000">Heladera (₲ 3.500.000)</option>
+                                    <option value="5000000">Smart TV 50" (₲ 5.000.000)</option>
+                                    <option value="2000000">Celular (₲ 2.000.000)</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-slate-700 mb-1">Cliente</label>
+                                <input type="text" placeholder="Nombre o RUC" class="w-full border-slate-300 rounded-lg shadow-sm focus:border-teal-500 focus:ring-teal-500">
+                            </div>
+                        </div>
+
+                        <div class="mb-6">
+                            <label class="block text-sm font-medium text-slate-700 mb-2">Plan de Cuotas</label>
+                            <div class="flex flex-wrap gap-3">
+                                <button onclick="setInstallments(3, 0)" class="installment-btn px-6 py-2 border rounded-lg hover:bg-teal-50 hover:border-teal-500 transition text-slate-600">3 Cuotas</button>
+                                <button onclick="setInstallments(6, 5)" class="installment-btn px-6 py-2 border-2 border-teal-600 bg-teal-50 text-teal-700 rounded-lg font-semibold transition">6 Cuotas (+5%)</button>
+                                <button onclick="setInstallments(12, 10)" class="installment-btn px-6 py-2 border rounded-lg hover:bg-teal-50 hover:border-teal-500 transition text-slate-600">12 Cuotas (+10%)</button>
+                            </div>
+                        </div>
+
+                        <div class="bg-slate-50 border border-slate-200 rounded-xl p-5 mb-6">
+                            <div class="flex justify-between mb-2">
+                                <span class="text-slate-600">Precio Base:</span>
+                                <span id="basePrice" class="font-medium text-slate-800">₲ 3.500.000</span>
+                            </div>
+                            <div class="flex justify-between mb-2">
+                                <span class="text-slate-600">Interés:</span>
+                                <span id="interest" class="font-medium text-amber-600">₲ 175.000</span>
+                            </div>
+                            <hr class="my-2 border-slate-300">
+                            <div class="flex justify-between items-end">
+                                <div>
+                                    <span class="text-slate-800 font-bold">Cuota Mensual:</span>
+                                    <p class="text-xs text-slate-500">Total a pagar: <span id="totalPrice">₲ 3.675.000</span></p>
+                                </div>
+                                <span id="monthlyPayment" class="text-3xl font-bold text-teal-700">₲ 612.500</span>
+                            </div>
+                        </div>
+
+                        <button onclick="navigateTo('clientes'); alert('✅ Venta generada exitosamente. PDF listo para enviar.')" class="w-full bg-teal-600 hover:bg-teal-700 text-white font-bold py-3 rounded-lg shadow-md transition flex items-center justify-center gap-2">
+                            <i class="fas fa-file-pdf"></i> Confirmar y Generar Contrato
+                        </button>
+                    </div>
+                </div>
+
+                <!-- SECCIÓN 3: CLIENTES (Analítica) -->
+                <div id="section-clientes" class="section p-4 md:p-8">
+                    <div class="mb-6">
+                        <h1 class="text-2xl font-bold text-slate-800">Historial y Analítica</h1>
+                        <p class="text-slate-500">Evalúa el riesgo crediticio de tus clientes.</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <!-- Tarjeta de Cliente -->
+                        <div class="bg-white rounded-xl shadow-sm overflow-hidden border border-slate-200">
+                            <div class="p-5 border-b flex items-center justify-between bg-slate-50">
+                                <div class="flex items-center gap-3">
+                                    <img src="https://ui-avatars.com/api/?name=Juan+Perez&background=0d9488&color=fff" class="w-10 h-10 rounded-full">
+                                    <div>
+                                        <h3 class="font-bold text-slate-800">Juan Pérez</h3>
+                                        <p class="text-xs text-slate-500">Cliente desde 2023</p>
+                                    </div>
+                                </div>
+                                <span class="bg-amber-100 text-amber-800 text-xs font-bold px-2 py-1 rounded">RIESGO MEDIO</span>
+                            </div>
+                            <div class="p-5">
+                                <div class="mb-4">
+                                    <div class="flex justify-between text-sm mb-1">
+                                        <span class="font-medium text-slate-700">Historial de Pago</span>
+                                        <span class="font-bold text-slate-800">75% Cumplimiento</span>
+                                    </div>
+                                    <div class="w-full bg-slate-200 rounded-full h-2.5">
+                                        <div class="bg-amber-500 h-2.5 rounded-full" style="width: 75%"></div>
+                                    </div>
+                                </div>
+                                <div class="grid grid-cols-2 gap-4 text-center mb-4">
+                                    <div class="bg-slate-50 p-3 rounded-lg border">
+                                        <p class="text-2xl font-bold text-teal-600">18</p>
+                                        <p class="text-xs text-slate-500">Cuotas Pagadas</p>
+                                    </div>
+                                    <div class="bg-slate-50 p-3 rounded-lg border">
+                                        <p class="text-2xl font-bold text-red-600">3</p>
+                                        <p class="text-xs text-slate-500">Pagos Tardíos</p>
+                                    </div>
+                                </div>
+                                <button class="w-full text-sm text-teal-600 font-semibold hover:bg-teal-50 py-2 rounded transition">Ver Detalle Completo</button>
+                            </div>
+                        </div>
+
+                        <!-- Otro Cliente -->
+                        <div class="bg-white rounded-xl shadow-sm overflow-hidden border border-slate-200">
+                            <div class="p-5 border-b flex items-center justify-between bg-slate-50">
+                                <div class="flex items-center gap-3">
+                                    <img src="https://ui-avatars.com/api/?name=Maria+Gomez&background=0d9488&color=fff" class="w-10 h-10 rounded-full">
+                                    <div>
+                                        <h3 class="font-bold text-slate-800">María Gómez</h3>
+                                        <p class="text-xs text-slate-500">Cliente desde 2022</p>
+                                    </div>
+                                </div>
+                                <span class="bg-green-100 text-green-800 text-xs font-bold px-2 py-1 rounded">EXCELENTE</span>
+                            </div>
+                            <div class="p-5">
+                                <div class="mb-4">
+                                    <div class="flex justify-between text-sm mb-1">
+                                        <span class="font-medium text-slate-700">Historial de Pago</span>
+                                        <span class="font-bold text-slate-800">98% Cumplimiento</span>
+                                    </div>
+                                    <div class="w-full bg-slate-200 rounded-full h-2.5">
+                                        <div class="bg-teal-500 h-2.5 rounded-full" style="width: 98%"></div>
+                                    </div>
+                                </div>
+                                <div class="grid grid-cols-2 gap-4 text-center mb-4">
+                                    <div class="bg-slate-50 p-3 rounded-lg border">
+                                        <p class="text-2xl font-bold text-teal-600">36</p>
+                                        <p class="text-xs text-slate-500">Cuotas Pagadas</p>
+                                    </div>
+                                    <div class="bg-slate-50 p-3 rounded-lg border">
+                                        <p class="text-2xl font-bold text-red-600">0</p>
+                                        <p class="text-xs text-slate-500">Pagos Tardíos</p>
+                                    </div>
+                                </div>
+                                <button class="w-full text-sm text-teal-600 font-semibold hover:bg-teal-50 py-2 rounded transition">Ver Detalle Completo</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SECCIÓN 4: VISTA CLIENTE (LINK) -->
+                <div id="section-link" class="section p-4 md:p-8">
+                    <div class="max-w-lg mx-auto">
+                        <div class="text-center mb-6">
+                            <span class="text-xs bg-teal-100 text-teal-800 px-2 py-1 rounded-full font-semibold">VISTA DESDE EL CELULAR DEL CLIENTE</span>
+                            <h1 class="text-2xl font-bold text-slate-800 mt-2">Mi Estado de Cuenta</h1>
+                            <p class="text-slate-500 text-sm">Enlace seguro y privado</p>
+                        </div>
+
+                        <div class="bg-white rounded-xl shadow-lg overflow-hidden border border-slate-200">
+                            <div class="bg-teal-700 p-6 text-white">
+                                <p class="text-sm opacity-90">Hola,</p>
+                                <h2 class="text-2xl font-bold">Juan Pérez</h2>
+                                <div class="mt-4 flex items-end justify-between">
+                                    <div>
+                                        <p class="text-xs opacity-80">Saldo Restante</p>
+                                        <p class="text-3xl font-bold">₲ 1.500.000</p>
+                                    </div>
+                                    <div class="text-right">
+                                        <span class="bg-white text-teal-700 font-bold text-xs px-2 py-1 rounded">Estado: Al día</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="p-6">
+                                <div class="mb-6">
+                                    <div class="flex justify-between text-sm mb-1">
+                                        <span class="font-semibold text-slate-700">Samsung A54</span>
+                                        <span class="text-slate-500">Cuota 3 de 6</span>
+                                    </div>
+                                    <div class="w-full bg-slate-200 rounded-full h-2.5 mb-2">
+                                        <div class="bg-teal-600 h-2.5 rounded-full" style="width: 50%"></div>
+                                    </div>
+                                    <div class="flex justify-between text-xs text-slate-500">
+                                        <span>Próx. vencimiento: 15 Nov</span>
+                                        <span>Valor cuota: ₲ 250.000</span>
+                                    </div>
+                                </div>
+
+                                <div class="border-t pt-4">
+                                    <p class="text-xs text-slate-500 mb-3">Historial Reciente</p>
+                                    <div class="space-y-2 text-sm">
+                                        <div class="flex justify-between text-teal-700">
+                                            <span><i class="fas fa-check-circle mr-1"></i> Pago Cuota 2</span>
+                                            <span class="font-medium">15 Oct 2023</span>
+                                        </div>
+                                        <div class="flex justify-between text-teal-700">
+                                            <span><i class="fas fa-check-circle mr-1"></i> Pago Cuota 1</span>
+                                            <span class="font-medium">15 Sep 2023</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="mt-6 grid grid-cols-2 gap-3">
+                                    <button class="bg-slate-100 hover:bg-slate-200 py-2 rounded-lg text-sm font-semibold transition text-slate-700">
+                                        <i class="fas fa-download mr-1"></i> Descargar PDF
+                                    </button>
+                                    <button class="bg-green-500 hover:bg-green-600 text-white py-2 rounded-lg text-sm font-semibold transition">
+                                        <i class="fab fa-whatsapp mr-1"></i> Contactar
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </main>
+            
+            <!-- NAV MÓVIL (Inferior) -->
+            <nav class="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-slate-200 flex justify-around items-center h-16 z-20 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
+                <button onclick="navigateTo('cobros')" class="nav-btn-mobile flex flex-col items-center text-teal-600">
+                    <i class="fas fa-hand-holding-dollar text-xl"></i>
+                    <span class="text-xs mt-1 font-medium">Cobros</span>
+                </button>
+                <button onclick="navigateTo('ventas')" class="nav-btn-mobile flex flex-col items-center text-slate-400">
+                    <i class="fas fa-cart-plus text-xl"></i>
+                    <span class="text-xs mt-1">Venta</span>
+                </button>
+                <button onclick="navigateTo('clientes')" class="nav-btn-mobile flex flex-col items-center text-slate-400">
+                    <i class="fas fa-users text-xl"></i>
+                    <span class="text-xs mt-1">Clientes</span>
+                </button>
+                <button onclick="navigateTo('link')" class="nav-btn-mobile flex flex-col items-center text-slate-400">
+                    <i class="fas fa-link text-xl"></i>
+                    <span class="text-xs mt-1">Link</span>
+                </button>
+            </nav>
+        </div>
+    </div>
+
+    <!-- MODAL DE PAGO (Pop-up) -->
+    <div id="paymentModal" class="fixed inset-0 bg-black/40 z-50 hidden items-center justify-center p-4 backdrop-blur-sm">
+        <div class="bg-white rounded-2xl w-full max-w-sm overflow-hidden transform transition-all shadow-xl">
+            <div class="p-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-xl font-bold text-slate-800">Registrar Pago</h2>
+                    <button onclick="closeModal('paymentModal')" class="text-slate-300 hover:text-slate-600 text-2xl">&times;</button>
+                </div>
+                
+                <div class="text-center mb-6 bg-teal-50 p-4 rounded-xl border border-teal-100">
+                    <p class="text-slate-500 text-sm">Monto a cobrar</p>
+                    <p class="text-4xl font-bold text-teal-700 mt-1">₲ 150.000</p>
+                    <p class="text-sm text-slate-500 mt-1">Juan Pérez - Cuota 3/6</p>
+                </div>
+
+                <div class="space-y-3">
+                    <button onclick="alert('PDF Generado y descargado'); closeModal('paymentModal');" class="w-full bg-teal-600 hover:bg-teal-700 text-white font-bold py-3 rounded-lg shadow-md transition flex items-center justify-center gap-2">
+                        <i class="fas fa-check"></i> Confirmar Cobro
+                    </button>
+                    <button onclick="alert('Link de estado enviado por WhatsApp'); closeModal('paymentModal');" class="w-full bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-3 rounded-lg transition flex items-center justify-center gap-2">
+                        <i class="fab fa-whatsapp text-green-500"></i> Enviar Estado al Cliente
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- Lógica de Navegación ---
+        
+        function navigateTo(sectionId) {
+            document.querySelectorAll('.section').forEach(el => el.classList.remove('active'));
+            document.getElementById('section-' + sectionId).classList.add('active');
+
+            // Actualizar PC
+            document.querySelectorAll('.nav-btn-pc').forEach(btn => {
+                btn.classList.remove('active', 'bg-slate-700', 'text-white', 'font-semibold');
+                btn.classList.add('text-slate-300', 'hover:bg-slate-700');
+            });
+            
+            // Actualizar Móvil
+            document.querySelectorAll('.nav-btn-mobile').forEach(btn => {
+                btn.classList.remove('text-teal-600');
+                btn.classList.add('text-slate-400');
+            });
+
+            window.scrollTo(0, 0);
+        }
+
+        // --- Lógica Negocio (Guaraníes) ---
+        
+        let currentPrice = 3500000; // Precio inicial
+        let currentInstallments = 6;
+        let currentInterest = 0.05;
+
+        // Formateador de moneda Guaraníes
+        const formatter = new Intl.NumberFormat('es-PY', {
+            style: 'decimal',
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 0
+        });
+
+        function formatGs(num) {
+            return "₲ " + formatter.format(num);
+        }
+
+        function calculateTotal() {
+            const select = document.getElementById('productSelect');
+            currentPrice = parseFloat(select.value);
+            updateUI();
+        }
+
+        function setInstallments(qty, interestPercent) {
+            currentInstallments = qty;
+            currentInterest = interestPercent / 100;
+            
+            document.querySelectorAll('.installment-btn').forEach(btn => {
+                btn.classList.remove('border-teal-600', 'bg-teal-50', 'text-teal-700', 'font-semibold', 'border-2');
+                btn.classList.add('border', 'border-slate-300', 'text-slate-600');
+            });
+            event.target.classList.remove('border', 'border-slate-300', 'text-slate-600');
+            event.target.classList.add('border-teal-600', 'bg-teal-50', 'text-teal-700', 'font-semibold', 'border-2');
+
+            updateUI();
+        }
+
+        function updateUI() {
+            const totalWithInterest = currentPrice * (1 + currentInterest);
+            const monthly = totalWithInterest / currentInstallments;
+            const interestAmount = totalWithInterest - currentPrice;
+
+            document.getElementById('basePrice').innerText = formatGs(currentPrice);
+            document.getElementById('interest').innerText = formatGs(interestAmount);
+            document.getElementById('totalPrice').innerText = formatGs(totalWithInterest);
+            document.getElementById('monthlyPayment').innerText = formatGs(monthly);
+        }
+
+        function openModal(id) {
+            const modal = document.getElementById(id);
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closeModal(id) {
+            const modal = document.getElementById(id);
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        // Init
+        updateUI();
+
+    </script>
+</body>
+</html>
