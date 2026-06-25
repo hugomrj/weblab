@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rediseño Digital del Proceso - Seguros Tradicionales S.A.</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: #1a1a2e;
+  color: #fff;
+  overflow: hidden;
+}
+.slide {
+  width: 100vw;
+  height: 100vh;
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 60px 80px;
+  position: relative;
+  animation: fadeIn 0.5s ease;
+}
+.slide.active { display: flex; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+/* Slide 1 - Portada */
+.slide-1 {
+  background: linear-gradient(135deg, #0f3460 0%, #16213e 50%, #1a1a2e 100%);
+  text-align: center;
+}
+.slide-1 .university {
+  font-size: 1.1rem;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: #e94560;
+  margin-bottom: 10px;
+}
+.slide-1 .subject {
+  font-size: 1rem;
+  color: #a0a0c0;
+  margin-bottom: 40px;
+}
+.slide-1 h1 {
+  font-size: 3.2rem;
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: 20px;
+  background: linear-gradient(90deg, #fff, #e94560);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.slide-1 .subtitle {
+  font-size: 1.4rem;
+  color: #a0a0c0;
+  margin-bottom: 50px;
+}
+.slide-1 .professor {
+  font-size: 1.1rem;
+  color: #e94560;
+  margin-bottom: 10px;
+}
+.slide-1 .group {
+  font-size: 1rem;
+  color: #a0a0c0;
+  margin-bottom: 40px;
+}
+.slide-1 .members {
+  display: flex;
+  gap: 30px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.slide-1 .member {
+  background: rgba(255,255,255,0.05);
+  padding: 15px 25px;
+  border-radius: 10px;
+  border: 1px solid rgba(233,69,96,0.3);
+  font-size: 1rem;
+}
+.slide-1 .date {
+  position: absolute;
+  bottom: 40px;
+  font-size: 0.95rem;
+  color: #666;
+}
+
+/* Slide 2 - Índice */
+.slide-2 {
+  background: linear-gradient(135deg, #16213e 0%, #0f3460 100%);
+}
+.slide-2 h2 {
+  font-size: 2.5rem;
+  margin-bottom: 50px;
+  color: #e94560;
+  border-bottom: 3px solid #e94560;
+  padding-bottom: 15px;
+}
+.slide-2 .index-list {
+  list-style: none;
+  width: 100%;
+  max-width: 900px;
+}
+.slide-2 .index-list li {
+  font-size: 1.3rem;
+  padding: 18px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+.slide-2 .index-list .num {
+  background: #e94560;
+  color: #fff;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  flex-shrink: 0;
+}
+.slide-2 .sub {
+  margin-left: 55px;
+  font-size: 1rem;
+  color: #a0a0c0;
+  margin-top: -10px;
+  margin-bottom: 10px;
+}
+
+/* Slide 3 - Diagnóstico */
+.slide-3 {
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+}
+.slide-3 h2 {
+  font-size: 2.3rem;
+  margin-bottom: 20px;
+  color: #e94560;
+}
+.slide-3 .intro {
+  font-size: 1.1rem;
+  color: #a0a0c0;
+  max-width: 1000px;
+  text-align: center;
+  margin-bottom: 40px;
+  line-height: 1.6;
+}
+.slide-3 .cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 25px;
+  width: 100%;
+  max-width: 1200px;
+}
+.slide-3 .card {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(233,69,96,0.2);
+  border-radius: 15px;
+  padding: 25px;
+}
+.slide-3 .card h3 {
+  font-size: 1.2rem;
+  color: #e94560;
+  margin-bottom: 15px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.slide-3 .card ul {
+  list-style: none;
+}
+.slide-3 .card li {
+  font-size: 0.95rem;
+  color: #ccc;
+  margin-bottom: 10px;
+  padding-left: 15px;
+  position: relative;
+  line-height: 1.5;
+}
+.slide-3 .card li::before {
+  content: "▸";
+  position: absolute;
+  left: 0;
+  color: #e94560;
+}
+
+/* Slide 4 - Cuellos de Botella */
+.slide-4 {
+  background: linear-gradient(135deg, #0f3460 0%, #1a1a2e 100%);
+}
+.slide-4 h2 {
+  font-size: 2.3rem;
+  margin-bottom: 40px;
+  color: #e94560;
+}
+.slide-4 .items {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+  width: 100%;
+  max-width: 1000px;
+}
+.slide-4 .item {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  background: rgba(255,255,255,0.03);
+  padding: 25px 30px;
+  border-radius: 12px;
+  border-left: 4px solid #e94560;
+}
+.slide-4 .item .icon {
+  font-size: 2rem;
+  flex-shrink: 0;
+}
+.slide-4 .item h3 {
+  font-size: 1.2rem;
+  margin-bottom: 8px;
+  color: #fff;
+}
+.slide-4 .item p {
+  font-size: 1rem;
+  color: #a0a0c0;
+  line-height: 1.5;
+}
+
+/* Slide 5 - Silos e Ineficiencias */
+.slide-5 {
+  background: linear-gradient(135deg, #16213e 0%, #0f3460 100%);
+}
+.slide-5 h2 {
+  font-size: 2.3rem;
+  margin-bottom: 40px;
+  color: #e94560;
+}
+.slide-5 .two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  width: 100%;
+  max-width: 1100px;
+}
+.slide-5 .col {
+  background: rgba(255,255,255,0.03);
+  border-radius: 15px;
+  padding: 30px;
+  border: 1px solid rgba(233,69,96,0.2);
+}
+.slide-5 .col h3 {
+  font-size: 1.3rem;
+  color: #e94560;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.slide-5 .col ul {
+  list-style: none;
+}
+.slide-5 .col li {
+  font-size: 1rem;
+  color: #ccc;
+  margin-bottom: 15px;
+  padding-left: 20px;
+  position: relative;
+  line-height: 1.5;
+}
+.slide-5 .col li::before {
+  content: "⚠";
+  position: absolute;
+  left: 0;
+  color: #e94560;
+}
+
+/* Slide 6 - Rediseño Digital */
+.slide-6 {
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+}
+.slide-6 h2 {
+  font-size: 2.3rem;
+  margin-bottom: 20px;
+  color: #e94560;
+}
+.slide-6 .intro {
+  font-size: 1.1rem;
+  color: #a0a0c0;
+  max-width: 1000px;
+  text-align: center;
+  margin-bottom: 35px;
+  line-height: 1.6;
+}
+.slide-6 .workflow {
+  display: flex;
+  gap: 15px;
+  width: 100%;
+  max-width: 1200px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.slide-6 .step {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(233,69,96,0.3);
+  border-radius: 12px;
+  padding: 20px;
+  width: 260px;
+  text-align: center;
+}
+.slide-6 .step .step-num {
+  background: #e94560;
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 12px;
+  font-weight: bold;
+  font-size: 0.9rem;
+}
+.slide-6 .step h4 {
+  font-size: 1rem;
+  margin-bottom: 8px;
+  color: #fff;
+}
+.slide-6 .step p {
+  font-size: 0.85rem;
+  color: #a0a0c0;
+  line-height: 1.4;
+}
+.slide-6 .arrow {
+  display: flex;
+  align-items: center;
+  color: #e94560;
+  font-size: 1.5rem;
+}
+
+/* Slide 7 - Análisis de Riesgos */
+.slide-7 {
+  background: linear-gradient(135deg, #0f3460 0%, #1a1a2e 100%);
+}
+.slide-7 h2 {
+  font-size: 2.3rem;
+  margin-bottom: 40px;
+  color: #e94560;
+}
+.slide-7 .two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  width: 100%;
+  max-width: 1100px;
+}
+.slide-7 .col {
+  background: rgba(255,255,255,0.03);
+  border-radius: 15px;
+  padding: 30px;
+}
+.slide-7 .col.pros {
+  border: 1px solid rgba(76, 175, 80, 0.3);
+}
+.slide-7 .col.risks {
+  border: 1px solid rgba(233, 69, 96, 0.3);
+}
+.slide-7 .col h3 {
+  font-size: 1.3rem;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.slide-7 .col.pros h3 { color: #4caf50; }
+.slide-7 .col.risks h3 { color: #e94560; }
+.slide-7 .col ul { list-style: none; }
+.slide-7 .col li {
+  font-size: 0.95rem;
+  color: #ccc;
+  margin-bottom: 15px;
+  padding-left: 20px;
+  position: relative;
+  line-height: 1.5;
+}
+.slide-7 .col.pros li::before { content: "✓"; position: absolute; left: 0; color: #4caf50; }
+.slide-7 .col.risks li::before { content: "⚡"; position: absolute; left: 0; color: #e94560; }
+.slide-7 .mitigation {
+  font-size: 0.85rem;
+  color: #a0a0c0;
+  margin-top: 5px;
+  display: block;
+  font-style: italic;
+}
+
+/* Navigation */
+.nav {
+  position: fixed;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 15px;
+  z-index: 100;
+  background: rgba(0,0,0,0.5);
+  padding: 12px 25px;
+  border-radius: 30px;
+  backdrop-filter: blur(10px);
+}
+.nav button {
+  background: transparent;
+  border: 1px solid #e94560;
+  color: #fff;
+  padding: 8px 20px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.3s;
+}
+.nav button:hover {
+  background: #e94560;
+}
+.nav .dots {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.nav .dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.3);
+  cursor: pointer;
+  transition: all 0.3s;
+}
+.nav .dot.active { background: #e94560; transform: scale(1.3); }
+.slide-num {
+  position: fixed;
+  top: 30px;
+  right: 40px;
+  font-size: 0.9rem;
+  color: #666;
+  z-index: 100;
+}
+
+@media print {
+  .slide { display: flex !important; page-break-after: always; height: auto; min-height: 100vh; }
+  .nav, .slide-num { display: none; }
+}
+</style>
+<base target="_blank">
+</head>
+<body>
+
+<div class="slide-num"><span id="current">1</span> / 7</div>
+
+<!-- SLIDE 1: Portada -->
+<div class="slide slide-1 active">
+  <div class="university">Universidad Comunera</div>
+  <div class="subject">Herramientas Digitales Colaborativas y de Gestión</div>
+  <h1>Rediseño Digital del Proceso</h1>
+  <div class="subtitle">De lo Analógico a lo Digital: Transformación de Seguros Tradicionales S.A.</div>
+  <div class="professor">Profesora: Eliana Tellez</div>
+  <div class="group">Grupo N°6</div>
+  <div class="members">
+    <div class="member">Claudia Guillén</div>
+    <div class="member">Carlos Aranda</div>
+    <div class="member">Hugo Romero</div>
+  </div>
+  <div class="date">Paraguay – Junio 2026</div>
+</div>
+
+<!-- SLIDE 2: Índice -->
+<div class="slide slide-2">
+  <h2>📋 Índice</h2>
+  <ul class="index-list">
+    <li><span class="num">1</span>Diagnóstico del Proceso Analógico</li>
+    <div class="sub">Cuellos de Botella · Silos de Información · Ineficiencias</div>
+    <li><span class="num">2</span>Rediseño Digital del Proceso: Hacia un Sistema Abierto</li>
+    <div class="sub">Nuevo Flujo de Trabajo · Transformación del Rol del Supervisor</div>
+    <li><span class="num">3</span>Análisis de Riesgos / Pros y Contras</li>
+    <div class="sub">Ventajas Estratégicas · Riesgos Críticos y Mitigación</div>
+  </ul>
+</div>
+
+<!-- SLIDE 3: Diagnóstico -->
+<div class="slide slide-3">
+  <h2>🔍 1. Diagnóstico del Proceso Analógico</h2>
+  <p class="intro">El proceso analógico de Seguros Tradicionales S.A. sufre de severas ineficiencias, cuellos de botella y silos de información provocados por la dependencia de la documentación física y la falta de integración entre departamentos.</p>
+  <div class="cards">
+    <div class="card">
+      <h3>🐌 1.1 Cuellos de Botella</h3>
+      <ul>
+        <li>Procesamiento y revisión manual de pólizas genera congestión operativa</li>
+        <li>Autorizaciones jerárquicas con traslado físico de expedientes</li>
+        <li>Transcripción manual de datos con alto riesgo de errores</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>🔒 1.2 Silos de Información</h3>
+      <ul>
+        <li>Departamentos incomunicados con bases de datos independientes</li>
+        <li>Visión del cliente nula: historial no accesible en tiempo real</li>
+        <li>Duplicación de esfuerzos y costos por fragmentación</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>⚠️ 1.3 Ineficiencias</h3>
+      <ul>
+        <li>Alto costo de almacenamiento físico e infraestructura</li>
+        <li>Tiempos de respuesta elevados por papeleo y aprobaciones manuales</li>
+        <li>Vulnerabilidad ante pérdida, daños o inexactitudes en documentos</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 4: Cuellos de Botella detalle -->
+<div class="slide slide-4">
+  <h2>🐌 1.1 Cuellos de Botella</h2>
+  <div class="items">
+    <div class="item">
+      <div class="icon">📄</div>
+      <div>
+        <h3>Procesamiento y Revisión Manual</h3>
+        <p>La revisión y validación de pólizas genera congestión en etapas operativas. El flujo se frena porque la capacidad de los empleados para analizar documentos físicos es superada por el volumen de solicitudes entrantes.</p>
+      </div>
+    </div>
+    <div class="item">
+      <div class="icon">✍️</div>
+      <div>
+        <h3>Autorizaciones y Aprobaciones Jerárquicas</h3>
+        <p>Al carecer de flujos automatizados, los expedientes físicos deben trasladarse de un escritorio a otro para obtener firmas, creando tiempos de espera prolongados en auditoría y pago.</p>
+      </div>
+    </div>
+    <div class="item">
+      <div class="icon">⌨️</div>
+      <div>
+        <h3>Transcripción de Datos</h3>
+        <p>El personal administrativo pierde tiempo y se expone a errores al introducir manualmente información desde formularios de papel hacia sistemas heredados o bases de datos no conectadas.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 5: Silos e Ineficiencias -->
+<div class="slide slide-5">
+  <h2>🔒 Silos de Información & ⚠️ Ineficiencias</h2>
+  <div class="two-col">
+    <div class="col">
+      <h3>🔒 1.2 Silos de Información</h3>
+      <ul>
+        <li><strong>Departamentos incomunicados:</strong> Cada área (Ventas, Riesgo, Atención al Cliente) almacena expedientes en bases independientes o archivadores físicos.</li>
+        <li><strong>Visión del cliente nula:</strong> El aislamiento impide un panorama completo del historial del asegurado. El analista de riesgos no puede verificar el historial de forma instantánea.</li>
+        <li><strong>Duplicación de esfuerzos:</strong> Diferentes equipos almacenan y procesan la misma información por duplicado, desperdiciando espacio y tiempo en conciliación.</li>
+      </ul>
+    </div>
+    <div class="col">
+      <h3>⚠️ 1.3 Ineficiencias del Proceso</h3>
+      <ul>
+        <li><strong>Alto costo de almacenamiento:</strong> Archivos físicos conllevan gastos de espacio e infraestructura, dificultando el acceso rápido a información histórica.</li>
+        <li><strong>Tiempos de respuesta elevados:</strong> Papeleo, aprobaciones manuales y falta de comunicación departamental alargan el ciclo de vida del trámite.</li>
+        <li><strong>Vulnerabilidad:</strong> Los procesos manuales son susceptibles a pérdidas, daños o inexactitudes, disminuyendo la fiabilidad de informes estratégicos.</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 6: Rediseño Digital -->
+<div class="slide slide-6">
+  <h2>🚀 2. Rediseño Digital del Proceso</h2>
+  <p class="intro">Reingeniería basada en horizontalidad de la información e interconectividad. Se abandona el modelo lineal y fragmentado para adoptar un sistema abierto donde los datos fluyen de forma transparente entre departamentos.</p>
+  <div class="workflow">
+    <div class="step">
+      <div class="step-num">1</div>
+      <h4>📋 Captura Digital</h4>
+      <p>Google Forms con validaciones automáticas. Elimina formularios físicos por triplicado y garantiza integridad de datos desde el inicio.</p>
+    </div>
+    <div class="arrow">→</div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <h4>☁️ Centralización</h4>
+      <p>Google Sheets como fuente única de verdad. El Departamento de Riesgos accede al historial del cliente instantáneamente.</p>
+    </div>
+    <div class="arrow">→</div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <h4>💬 Comunicación Horizontal</h4>
+      <p>Slack/Teams con canales por póliza. Dudas consultadas directamente en el hilo, con trazabilidad digital completa.</p>
+    </div>
+    <div class="arrow">→</div>
+    <div class="step">
+      <div class="step-num">4</div>
+      <h4>⚡ Aprobación Automatizada</h4>
+      <p>Zapier/Power Automate notifica al Gerente. Firma digital con DocuSign. Ciclo de 5 días a pocas horas.</p>
+    </div>
+  </div>
+  <div style="margin-top:35px; width:100%; max-width:1000px; background:rgba(255,255,255,0.03); border-radius:12px; padding:25px; border:1px solid rgba(233,69,96,0.2);">
+    <h3 style="color:#e94560; margin-bottom:15px; font-size:1.2rem;">👔 2.2 Transformación del Rol del Supervisor</h3>
+    <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:20px;">
+      <div>
+        <strong style="color:#fff;">De vigilancia a monitoreo</strong>
+        <p style="color:#a0a0c0; font-size:0.9rem; margin-top:5px;">Deja el control visual de bandejas físicas para gestionar el flujo digital e identificar anomalías.</p>
+      </div>
+      <div>
+        <strong style="color:#fff;">Gestión por Objetivos (MBO)</strong>
+        <p style="color:#a0a0c0; font-size:0.9rem; margin-top:5px;">Dashboards en Looker Studio con KPIs en tiempo real: tiempo de respuesta, tasa de rechazo, carga por departamento.</p>
+      </div>
+      <div>
+        <strong style="color:#fff;">Facilitador del sistema</strong>
+        <p style="color:#a0a0c0; font-size:0.9rem; margin-top:5px;">Interviene solo para eliminar cuellos de botella detectados por software. Cultura basada en resultados medibles.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 7: Análisis de Riesgos -->
+<div class="slide slide-7">
+  <h2>⚖️ 3. Análisis de Riesgos / Pros y Contras</h2>
+  <div class="two-col">
+    <div class="col pros">
+      <h3>✅ 3.1 Ventajas Estratégicas</h3>
+      <ul>
+        <li><strong>Agilidad Comercial y Ventaja Competitiva Radical</strong><br>Reducción del ciclo de póliza de 5 días a pocas horas. La velocidad de respuesta es factor crítico de decisión para el cliente.</li>
+        <li><strong>Cultura Data-Driven y Escalabilidad</strong><br>Tableros en Looker Studio centralizan información auditable. El negocio absorbe aumento masivo de solicitudes sin duplicar personal operativo.</li>
+      </ul>
+    </div>
+    <div class="col risks">
+      <h3>⚡ 3.2 Riesgos Críticos y Mitigación</h3>
+      <ul>
+        <li><strong>Resistencia al Cambio y Brecha Digital</strong>
+          <span class="mitigation">→ Programa de "Campeones Digitales", diseño UX co-creado (piloto) e incentivos de adopción.</span>
+        </li>
+        <li><strong>Vulnerabilidad en Seguridad de Datos y Shadow IT</strong>
+          <span class="mitigation">→ Gobernanza estricta (mínimo privilegio), 2FA y automatización de limpieza de datos sensibles post-aprobación.</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- Navigation -->
+<div class="nav">
+  <button onclick="prevSlide()">◀ Anterior</button>
+  <div class="dots">
+    <div class="dot active" onclick="goTo(0)"></div>
+    <div class="dot" onclick="goTo(1)"></div>
+    <div class="dot" onclick="goTo(2)"></div>
+    <div class="dot" onclick="goTo(3)"></div>
+    <div class="dot" onclick="goTo(4)"></div>
+    <div class="dot" onclick="goTo(5)"></div>
+    <div class="dot" onclick="goTo(6)"></div>
+  </div>
+  <button onclick="nextSlide()">Siguiente ▶</button>
+</div>
+
+<script>
+let current = 0;
+const slides = document.querySelectorAll('.slide');
+const dots = document.querySelectorAll('.dot');
+const currentNum = document.getElementById('current');
+
+function showSlide(n) {
+  slides.forEach(s => s.classList.remove('active'));
+  dots.forEach(d => d.classList.remove('active'));
+  slides[n].classList.add('active');
+  dots[n].classList.add('active');
+  currentNum.textContent = n + 1;
+}
+
+function nextSlide() {
+  if (current < slides.length - 1) { current++; showSlide(current); }
+}
+
+function prevSlide() {
+  if (current > 0) { current--; showSlide(current); }
+}
+
+function goTo(n) {
+  current = n;
+  showSlide(current);
+}
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'ArrowRight' || e.key === ' ') nextSlide();
+  if (e.key === 'ArrowLeft') prevSlide();
+});
+</script>
+
+</body>
+</html>
