@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NexusDoc — Cerebro Empresarial</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root{
+            --bg-body:#0b0d13;--bg-side:#0f1119;--bg-surf:#151821;--bg-el:#1c2030;
+            --bg-hover:#242940;--bg-active:#2d3352;--border:#252a3e;--border-l:#323852;
+            --t1:#e2e4ef;--t2:#8a8faa;--t3:#4d5170;
+            --accent:#5b7fff;--accent-d:rgba(91,127,255,.12);--accent-g:rgba(91,127,255,.22);
+            --green:#34d399;--green-d:rgba(52,211,153,.12);
+            --amber:#fbbf24;--amber-d:rgba(251,191,36,.12);
+            --red:#f87171;--red-d:rgba(248,113,113,.12);
+            --pink:#f472b6;--pink-d:rgba(244,114,182,.12);
+            --purple:#a78bfa;--orange:#fb923c;--orange-d:rgba(251,146,60,.12);
+            --side-w:230px;--top-h:50px;--stat-h:24px;
+        }
+        *{box-sizing:border-box;margin:0;padding:0}
+        body{background:var(--bg-body);color:var(--t1);font-family:'Inter',-apple-system,sans-serif;height:100vh;overflow:hidden;display:flex;flex-direction:column}
+        ::selection{background:var(--accent);color:#fff}
+        ::-webkit-scrollbar{width:4px;height:4px}
+        ::-webkit-scrollbar-track{background:transparent}
+        ::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+
+        .app{display:flex;flex:1;overflow:hidden}
+
+        /* SIDEBAR */
+        .side{width:var(--side-w);min-width:var(--side-w);background:var(--bg-side);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden}
+        .side-head{padding:14px 14px 10px;display:flex;align-items:center;justify-content:space-between}
+        .logo{font-size:16px;font-weight:800;letter-spacing:-.4px}.logo span{color:var(--accent)}
+        .ib{width:28px;height:28px;border-radius:6px;border:1px solid var(--border);background:transparent;color:var(--t2);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;transition:all .12s}
+        .ib:hover{background:var(--bg-hover);color:var(--t1);border-color:var(--border-l)}
+        .ib.acc{background:var(--accent-d);color:var(--accent);border-color:rgba(91,127,255,.3)}.ib.acc:hover{background:var(--accent);color:#fff}
+
+        .side-nav{padding:6px 8px;display:flex;flex-direction:column;gap:1px}
+        .sn{display:flex;align-items:center;gap:8px;padding:7px 10px;border-radius:7px;cursor:pointer;font-size:12.5px;font-weight:500;color:var(--t2);transition:all .12s;border:none;background:transparent;width:100%;text-align:left;font-family:inherit}
+        .sn:hover{background:var(--bg-hover);color:var(--t1)}
+        .sn.act{background:var(--accent-d);color:var(--accent)}
+        .sn svg{width:15px;height:15px;flex-shrink:0;opacity:.6}
+        .sn.act svg{opacity:1}
+
+        .side-divider{height:1px;background:var(--border);margin:8px 14px}
+        .side-label{padding:4px 16px 4px;font-size:10px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.6px}
+        .side-tags{flex:1;overflow-y:auto;padding:0 8px 8px}
+        .st-item{display:inline-block;padding:3px 10px;border-radius:12px;font-size:11px;color:var(--t2);background:var(--bg-surf);border:1px solid var(--border);cursor:pointer;transition:all .12s;margin:2px}
+        .st-item:hover{background:var(--bg-hover);color:var(--t1);border-color:var(--border-l)}
+        .st-item.act{background:var(--accent-d);color:var(--accent);border-color:rgba(91,127,255,.3)}
+        .side-stat{padding:8px 14px;border-top:1px solid var(--border);font-size:10px;color:var(--t3);display:flex;align-items:center;gap:5px}
+        .dot-g{width:5px;height:5px;border-radius:50%;background:var(--green)}
+
+        /* MAIN */
+        .main{flex:1;display:flex;flex-direction:column;overflow:hidden}
+        .topbar{height:var(--top-h);min-height:var(--top-h);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 20px;background:var(--bg-surf);gap:12px}
+        .tb-crumb{font-size:12px;color:var(--t3);display:flex;align-items:center;gap:5px}
+        .tb-crumb .cur{color:var(--t1);font-weight:500}
+        .tb-spacer{flex:1}
+        .kbd{font-size:9.5px;font-family:'JetBrains Mono',monospace;background:var(--bg-body);border:1px solid var(--border);padding:1px 5px;border-radius:3px;color:var(--t3)}
+
+        .content{flex:1;overflow:hidden;position:relative}
+        .view{position:absolute;inset:0;overflow:hidden;display:none;flex-direction:column}.view.act{display:flex}
+
+        /* DASHBOARD ADMINISTRATIVO */
+        .dash{padding:28px 32px;overflow-y:auto;flex:1}
+        .dash-head{margin-bottom:24px}
+        .dash-head h2{font-size:22px;font-weight:800;letter-spacing:-.4px;margin-bottom:4px}
+        .dash-head p{font-size:13px;color:var(--t3)}
+        .dash-stats{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;margin-bottom:24px}
+        .ds{background:var(--bg-surf);border:1px solid var(--border);border-radius:10px;padding:16px 18px;position:relative;overflow:hidden;transition:border-color .15s}
+        .ds:hover{border-color:var(--border-l)}
+        .ds-label{font-size:10.5px;font-weight:600;color:var(--t3);text-transform:uppercase;letter-spacing:.3px;margin-bottom:6px}
+        .ds-val{font-size:24px;font-weight:800;letter-spacing:-.5px}
+        .ds-sub{font-size:10.5px;color:var(--t3);margin-top:4px}
+        .ds-bar{position:absolute;bottom:0;left:0;right:0;height:3px}
+        .dash-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+        .dash-card{background:var(--bg-surf);border:1px solid var(--border);border-radius:10px;overflow:hidden}
+        .dc-head{padding:12px 16px;border-bottom:1px solid var(--border);font-size:12.5px;font-weight:700;display:flex;justify-content:space-between;align-items:center}
+        .dc-badge{font-size:10px;padding:2px 8px;border-radius:10px;font-weight:600}
+        .dc-body{padding:12px 16px}
+        .dc-empty{color:var(--t3);font-size:12px;font-style:italic;text-align:center;padding:12px 0}
+
+        .rec-item{display:flex;gap:10px;padding:8px 0;border-bottom:1px solid var(--border);align-items:center}
+        .rec-item:last-child{border-bottom:none}
+        .rec-icon{width:30px;height:30px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;font-family:'JetBrains Mono',monospace;flex-shrink:0}
+        .rec-body{flex:1;min-width:0}
+        .rec-name{font-size:12px;font-weight:600;cursor:pointer;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+        .rec-name:hover{color:var(--accent)}
+        .rec-meta{font-size:10.5px;color:var(--t3);display:flex;gap:8px}
+
+        .att-item{display:flex;gap:10px;padding:9px 0;border-bottom:1px solid var(--border);align-items:flex-start}
+        .att-item:last-child{border-bottom:none}
+        .att-dot{width:7px;height:7px;border-radius:50%;margin-top:5px;flex-shrink:0}
+        .att-dot.red{background:var(--red)}.att-dot.amber{background:var(--amber)}.att-dot.green{background:var(--green)}
+        .att-text{font-size:12px;line-height:1.5;color:var(--t2)}
+        .att-text strong{color:var(--t1);font-weight:600}
+        .att-link{font-size:10.5px;color:var(--accent);cursor:pointer;margin-top:2px;display:inline-block}
+        .att-link:hover{text-decoration:underline}
+
+        .tag-rank{display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid var(--border)}
+        .tag-rank:last-child{border-bottom:none}
+        .tag-rank-name{font-size:12px;color:var(--t2);cursor:pointer;flex:1}
+        .tag-rank-name:hover{color:var(--accent)}
+        .tag-rank-cnt{font-size:11px;font-weight:700;font-family:'JetBrains Mono',monospace;color:var(--t3);background:var(--bg-body);padding:1px 7px;border-radius:8px}
+        .tag-rank-bar{width:60px;height:4px;background:var(--bg-body);border-radius:2px;overflow:hidden}
+        .tag-rank-fill{height:100%;border-radius:2px;background:var(--accent)}
+
+        .type-row{display:flex;align-items:center;gap:10px;padding:6px 0;border-bottom:1px solid var(--border)}
+        .type-row:last-child{border-bottom:none}
+        .type-label{font-size:11px;font-weight:600;padding:2px 8px;border-radius:5px;font-family:'JetBrains Mono',monospace;min-width:42px;text-align:center}
+        .type-name{font-size:12px;color:var(--t2);flex:1}
+        .type-bar{width:80px;height:5px;background:var(--bg-body);border-radius:3px;overflow:hidden}
+        .type-fill{height:100%;border-radius:3px}
+        .type-cnt{font-size:11px;font-weight:600;color:var(--t3);width:24px;text-align:right}
+
+        .dash-quick{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+        .dq{padding:7px 14px;border-radius:8px;font-size:12px;font-weight:500;cursor:pointer;border:1px solid var(--border);background:var(--bg-surf);color:var(--t2);transition:all .12s;font-family:inherit}
+        .dq:hover{background:var(--bg-hover);color:var(--t1);border-color:var(--border-l)}
+
+        /* SEARCH */
+        .search-view{flex:1;display:flex;flex-direction:column;overflow:hidden;padding:24px 28px}
+        .sv-head{margin-bottom:18px}
+        .sv-head h2{font-size:20px;font-weight:800;margin-bottom:12px;letter-spacing:-.3px}
+        .sv-bar{display:flex;gap:10px;align-items:center;max-width:600px}
+        .sv-bar-wrap{position:relative;flex:1}
+        .sv-bar-wrap svg{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--t3);pointer-events:none}
+        .sv-bar input{width:100%;background:var(--bg-surf);border:2px solid var(--border);border-radius:10px;padding:12px 16px 12px 42px;color:var(--t1);font-size:14px;outline:none;transition:all .2s;font-family:inherit}
+        .sv-bar input:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-d)}
+        .sv-bar input::placeholder{color:var(--t3)}
+        .sv-filters{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px;align-items:center}
+        .sv-flabel{font-size:10px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.4px;margin-right:4px}
+        .chip{padding:4px 11px;border-radius:16px;font-size:11.5px;font-weight:500;cursor:pointer;border:1px solid var(--border);background:transparent;color:var(--t2);transition:all .12s;font-family:inherit}
+        .chip:hover{background:var(--bg-hover);color:var(--t1)}
+        .chip.act{background:var(--accent);color:#fff;border-color:var(--accent)}
+        .chip .cd{width:6px;height:6px;border-radius:50%;display:inline-block;margin-right:4px}
+        .sv-recent{margin-bottom:18px}
+        .sv-rtags{display:flex;gap:6px;flex-wrap:wrap}
+        .sv-rtag{padding:5px 13px;border-radius:7px;font-size:12px;cursor:pointer;border:1px solid var(--border);background:var(--bg-surf);color:var(--t2);transition:all .12s;font-family:inherit}
+        .sv-rtag:hover{background:var(--bg-hover);color:var(--t1)}
+        .sv-body{flex:1;display:flex;gap:16px;overflow:hidden;min-height:0}
+        .sv-results{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:4px}
+        .sr{display:flex;gap:10px;padding:10px 12px;border-radius:8px;cursor:pointer;transition:all .1s;border:1px solid transparent}
+        .sr:hover{background:var(--bg-hover);border-color:var(--border)}
+        .sr.act{background:var(--accent);border-color:var(--accent);color:#fff}
+        .sr.act .sr-folder,.sr.act .sr-snippet,.sr.act .sr-meta{color:rgba(255,255,255,.7)}
+        .sr-icon{width:30px;height:30px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;font-family:'JetBrains Mono',monospace;flex-shrink:0;margin-top:2px}
+        .sr-body{flex:1;min-width:0}
+        .sr-top{display:flex;align-items:center;gap:6px;margin-bottom:2px}
+        .sr-name{font-size:13px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+        .sr-folder{font-size:10.5px;color:var(--t3);flex-shrink:0}
+        .sr-snippet{font-size:11.5px;color:var(--t2);line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+        .sr-snippet mark{background:var(--amber-d);color:var(--amber);border-radius:2px;padding:0 1px}
+        .sr-meta{display:flex;gap:8px;margin-top:4px;font-size:10px;color:var(--t3)}
+        .sv-preview{width:340px;min-width:340px;background:var(--bg-surf);border:1px solid var(--border);border-radius:10px;overflow:hidden;display:flex;flex-direction:column}
+        .sp-head{padding:10px 14px;border-bottom:1px solid var(--border);font-size:11px;font-weight:600;color:var(--t2);display:flex;justify-content:space-between}
+        .sp-body{flex:1;overflow-y:auto;padding:14px 16px;font-size:12px;line-height:1.65;color:var(--t2)}
+        .sp-empty{display:flex;align-items:center;justify-content:center;height:100%;color:var(--t3);font-size:12px;text-align:center;padding:20px}
+        .sp-foot{padding:8px 14px;border-top:1px solid var(--border);display:flex;gap:6px}
+        .sp-btn{flex:1;padding:6px 0;border-radius:6px;font-size:11px;font-weight:600;cursor:pointer;border:none;font-family:inherit;transition:all .12s;text-align:center}
+        .sp-btn.p{background:var(--accent);color:#fff}.sp-btn.p:hover{box-shadow:0 2px 8px var(--accent-g)}
+        .sp-btn.s{background:var(--bg-el);color:var(--t2);border:1px solid var(--border)}.sp-btn.s:hover{color:var(--t1)}
+        .sv-status{padding:8px 0 0;font-size:10.5px;color:var(--t3);display:flex;justify-content:space-between;flex-shrink:0}
+
+        /* CHAT */
+        .chat-wrap{flex:1;display:flex;flex-direction:column;max-width:820px;width:100%;margin:0 auto;padding:0 24px}
+        .chat-header{padding:20px 0 16px;border-bottom:1px solid var(--border);margin-bottom:16px;flex-shrink:0}
+        .chat-header h2{font-size:20px;font-weight:800;letter-spacing:-.3px;margin-bottom:4px}
+        .chat-header p{font-size:13px;color:var(--t3)}
+        .chat-messages{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:14px;padding-bottom:8px}
+        .cb{max-width:80%;padding:13px 16px;border-radius:13px;font-size:13px;line-height:1.65}
+        .cb.user{align-self:flex-end;background:var(--accent);color:#fff;border-bottom-right-radius:4px}
+        .cb.ia{align-self:flex-start;background:var(--bg-el);border:1px solid var(--border);border-bottom-left-radius:4px}
+        .cb strong{color:var(--accent)}.cb.user strong{color:#fff}
+        .csrc{display:inline-flex;align-items:center;gap:4px;margin-top:8px;font-size:10.5px;color:var(--green);background:var(--green-d);padding:3px 9px;border-radius:5px;cursor:pointer;transition:background .12s}
+        .csrc:hover{background:rgba(52,211,153,.2)}
+        .chat-suggestions{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px;flex-shrink:0}
+        .chat-sug{padding:7px 14px;border-radius:8px;font-size:12px;cursor:pointer;border:1px solid var(--border);background:var(--bg-surf);color:var(--t2);transition:all .12s;font-family:inherit}
+        .chat-sug:hover{background:var(--bg-hover);color:var(--t1);border-color:var(--border-l)}
+        .chat-input-row{padding:14px 0;border-top:1px solid var(--border);display:flex;gap:10px;flex-shrink:0}
+        .chat-input-row input{flex:1;background:var(--bg-surf);border:1px solid var(--border);padding:12px 16px;border-radius:10px;color:var(--t1);font-size:13px;outline:none;transition:border .2s;font-family:inherit}
+        .chat-input-row input:focus{border-color:var(--accent)}
+        .chat-input-row input::placeholder{color:var(--t3)}
+        .chat-send{background:var(--accent);color:#fff;border:none;padding:0 24px;border-radius:10px;font-weight:600;font-size:13px;cursor:pointer;font-family:inherit;transition:all .12s}
+        .chat-send:hover{box-shadow:0 3px 12px var(--accent-g)}
+        .chat-welcome{text-align:center;color:var(--t3);margin:auto;font-size:13.5px;line-height:1.6}
+
+        /* NOTE OVERLAY */
+        .note-overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);backdrop-filter:blur(3px);z-index:100;display:none;align-items:stretch;justify-content:center}
+        .note-overlay.open{display:flex}
+        .note-panel{width:92%;max-width:1100px;height:88%;background:var(--bg-surf);border:1px solid var(--border);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 24px 60px rgba(0,0,0,.5);animation:noteIn .15s ease}
+        @keyframes noteIn{from{opacity:0;transform:scale(.97)}to{opacity:1;transform:scale(1)}}
+        .note-head{display:flex;align-items:center;justify-content:space-between;padding:12px 20px;border-bottom:1px solid var(--border);min-height:46px}
+        .note-bc{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--t3)}
+        .note-bc .cur{color:var(--t1);font-weight:600}
+        .note-tabs{display:flex;gap:2px;background:var(--bg-body);padding:2px;border-radius:6px}
+        .ntab{padding:4px 14px;border-radius:5px;font-size:11px;font-weight:500;cursor:pointer;border:none;background:transparent;color:var(--t2);font-family:inherit;transition:all .1s}
+        .ntab:hover{color:var(--t1)}
+        .ntab.act{background:var(--bg-el);color:var(--t1)}
+        .note-close{width:28px;height:28px;border-radius:6px;border:1px solid var(--border);background:transparent;color:var(--t2);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;transition:all .12s}
+        .note-close:hover{background:var(--red-d);color:var(--red);border-color:rgba(248,113,113,.3)}
+        .note-body{flex:1;display:flex;overflow:hidden}
+        .note-md{flex:1;overflow-y:auto;padding:28px 36px}
+        .note-orig{flex:1;overflow-y:auto;padding:28px 36px;display:none;border-left:1px solid var(--border)}
+        .note-sidebar{width:280px;min-width:280px;border-left:1px solid var(--border);overflow-y:auto;padding:16px;background:var(--bg-body)}
+        .ns-section{margin-bottom:20px}
+        .ns-label{font-size:10px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px}
+        .ns-meta{font-size:11.5px;color:var(--t2);line-height:1.7}
+        .ns-meta strong{color:var(--t1);font-weight:600}
+        .ns-tags{display:flex;flex-wrap:wrap;gap:4px}
+        .ns-tag{font-size:10px;padding:2px 8px;border-radius:8px;background:var(--bg-surf);color:var(--t2);border:1px solid var(--border);cursor:pointer;transition:all .1s}
+        .ns-tag:hover{color:var(--accent);border-color:rgba(91,127,255,.3)}
+        .ns-link{display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:6px;cursor:pointer;font-size:11.5px;color:var(--t2);transition:all .1s;margin-bottom:2px}
+        .ns-link:hover{background:var(--bg-hover);color:var(--t1)}
+        .ns-link .nl-dot{width:5px;height:5px;border-radius:50%;flex-shrink:0}
+        .ns-link .nl-name{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+        .ns-link .nl-folder{font-size:9.5px;color:var(--t3)}
+        .ns-empty{font-size:11.5px;color:var(--t3);font-style:italic}
+
+        .md{font-size:13.5px;line-height:1.75;max-width:700px}
+        .md h1{font-size:24px;font-weight:800;margin-bottom:14px;padding-bottom:12px;border-bottom:2px solid var(--border);letter-spacing:-.3px}
+        .md h2{font-size:17px;font-weight:700;margin:24px 0 8px;color:var(--accent)}
+        .md h3{font-size:14px;font-weight:600;margin:18px 0 6px}
+        .md p{margin-bottom:8px}
+        .md strong{color:var(--accent);font-weight:600}
+        .md em{color:var(--pink);font-style:italic}
+        .md ul,.md ol{margin:4px 0 12px 16px}.md li{margin-bottom:2px}
+        .md blockquote{border-left:3px solid var(--accent);padding:6px 12px;margin:8px 0;background:var(--accent-d);border-radius:0 6px 6px 0;font-style:italic;color:var(--t2);font-size:12.5px}
+        .md hr{border:none;border-top:1px solid var(--border);margin:18px 0}
+        .md code{font-family:'JetBrains Mono',monospace;font-size:11.5px;background:var(--bg-body);padding:1px 4px;border-radius:3px;color:var(--green)}
+        .md table{width:100%;border-collapse:collapse;margin:8px 0;font-size:12px}
+        .md th{padding:6px 8px;text-align:left;border-bottom:2px solid var(--border);color:var(--t2);font-weight:600;font-size:10px;text-transform:uppercase;letter-spacing:.3px}
+        .md td{padding:6px 8px;border-bottom:1px solid var(--border)}
+        .md .tags{display:flex;flex-wrap:wrap;gap:4px;margin-top:12px}
+        .md .tag{font-size:10px;padding:2px 8px;border-radius:16px;background:var(--bg-body);border:1px solid var(--border);color:var(--t2);cursor:pointer;transition:all .1s}
+        .md .tag:hover{color:var(--accent);border-color:rgba(91,127,255,.3)}
+        .orig-ph{background:var(--bg-body);border:1px solid var(--border);border-radius:10px;padding:40px;text-align:center;color:var(--t3);margin-top:20px}
+        .orig-ph svg{margin-bottom:12px;opacity:.3}
+        .orig-ph .ofn{font-size:13px;font-weight:600;color:var(--t2);margin-bottom:4px}
+        .orig-ph p{font-size:12px;line-height:1.5}
+
+        .statbar{height:var(--stat-h);min-height:var(--stat-h);background:var(--bg-side);border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 14px;font-size:10px;color:var(--t3)}
+        @keyframes fadeUp{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+        .fu{animation:fadeUp .15s ease}
+        @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}.typing{animation:pulse 1s infinite}
+    </style>
+</head>
+<body>
+
+<div id="uploadModal" style="position:fixed;inset:0;background:rgba(0,0,0,.55);backdrop-filter:blur(3px);z-index:200;display:none;align-items:center;justify-content:center;">
+    <div style="width:440px;background:var(--bg-surf);border:1px solid var(--border);border-radius:14px;overflow:hidden;box-shadow:0 20px 50px rgba(0,0,0,.5);animation:noteIn .12s ease;">
+        <div style="padding:16px 20px 0;display:flex;justify-content:space-between;align-items:center;"><h3 style="font-size:14px;font-weight:700;">Cargar Documento</h3><button class="note-close" onclick="closeUpload()" style="width:24px;height:24px;font-size:12px;">✕</button></div>
+        <div id="upZone" style="margin:12px 20px;border:2px dashed var(--border);border-radius:10px;padding:36px 16px;text-align:center;cursor:pointer;transition:all .2s;" onclick="simUpload()" onmouseover="this.style.borderColor='var(--accent)';this.style.background='var(--accent-d)'" onmouseout="this.style.borderColor='var(--border)';this.style.background='transparent'">
+            <div style="font-size:28px;margin-bottom:8px;opacity:.4;">☁️</div>
+            <p style="font-size:12.5px;color:var(--t2);">Arrastra archivos o haz clic</p>
+            <p style="font-size:11px;color:var(--t3);margin-top:3px;">PDF, Word, Excel, Imagenes</p>
+            <p style="margin-top:12px;font-size:11px;color:var(--accent);font-weight:600;">[ Clic para simular carga ]</p>
+        </div>
+        <div id="upProg" style="padding:0 20px 16px;display:none;">
+            <div style="display:flex;justify-content:space-between;font-size:11.5px;margin-bottom:5px;"><span id="upN">Procesando...</span><span id="upP">0%</span></div>
+            <div style="height:4px;background:var(--bg-body);border-radius:2px;overflow:hidden;"><div id="upF" style="height:100%;background:linear-gradient(90deg,var(--accent),var(--purple));width:0%;transition:width .2s;border-radius:2px;"></div></div>
+        </div>
+    </div>
+</div>
+
+<div class="note-overlay" id="noteOverlay">
+    <div class="note-panel">
+        <div class="note-head">
+            <div class="note-bc" id="noteBc"></div>
+            <div class="note-tabs" id="noteTabs"></div>
+            <button class="note-close" onclick="closeNote()">✕</button>
+        </div>
+        <div class="note-body">
+            <div class="note-md" id="noteMd"></div>
+            <div class="note-orig" id="noteOrig"></div>
+            <div class="note-sidebar" id="noteSide"></div>
+        </div>
+    </div>
+</div>
+
+<div class="app">
+    <aside class="side">
+        <div class="side-head">
+            <div class="logo">Nexus<span>Doc</span></div>
+            <button class="ib acc" onclick="openUpload()" title="Subir">+</button>
+        </div>
+        <div class="side-nav">
+            <button class="sn act" data-v="dashboard" onclick="switchView('dashboard')">
+                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+                Inicio
+            </button>
+            <button class="sn" data-v="search" onclick="switchView('search')">
+                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                Busqueda
+            </button>
+            <button class="sn" data-v="chat" onclick="switchView('chat')">
+                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                Asistente
+            </button>
+        </div>
+        <div class="side-divider"></div>
+        <div class="side-label">Etiquetas</div>
+        <div class="side-tags" id="sideTags"></div>
+        <div class="side-stat"><span class="dot-g"></span> <span id="sideCnt">10 documentos</span></div>
+    </aside>
+
+    <div class="main">
+        <div class="topbar">
+            <div class="tb-crumb" id="tbCrumb"><span class="cur">Inicio</span></div>
+            <div class="tb-spacer"></div>
+            <span style="font-size:11px;color:var(--t3);">Busqueda rapida</span>
+            <span class="kbd">Ctrl+K</span>
+        </div>
+        <div class="content">
+            <div class="view act" id="v-dashboard"><div class="dash" id="dashContent"></div></div>
+            <div class="view" id="v-search"><div class="search-view" id="searchContent"></div></div>
+            <div class="view" id="v-chat">
+                <div class="chat-wrap">
+                    <div class="chat-header"><h2>Asistente de documentos</h2><p>Pregunta sobre tus archivos cargados. Busca en todo el contenido .md sincronizado.</p></div>
+                    <div class="chat-messages" id="chatMessages"><div class="chat-welcome">Escribe una pregunta o usa una sugerencia para empezar.</div></div>
+                    <div class="chat-suggestions" id="chatSuggestions">
+                        <button class="chat-sug" onclick="askSug('Que se decidio sobre TechCorp?')">TechCorp</button>
+                        <button class="chat-sug" onclick="askSug('Cual es el presupuesto Q4?')">Presupuesto Q4</button>
+                        <button class="chat-sug" onclick="askSug('Como esta el equipo de empleados?')">Empleados</button>
+                        <button class="chat-sug" onclick="askSug('Quienes son nuestros competidores?')">Competencia</button>
+                        <button class="chat-sug" onclick="askSug('Cual es el plan estrategico 2024?')">Estrategia</button>
+                        <button class="chat-sug" onclick="askSug('Que contratos tenemos vigentes?')">Contratos</button>
+                    </div>
+                    <div class="chat-input-row">
+                        <input type="text" id="chatInput" placeholder="Escribe tu pregunta sobre los documentos..." onkeydown="if(event.key==='Enter')sendChat()">
+                        <button class="chat-send" onclick="sendChat()">Enviar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="statbar">
+    <div style="display:flex;gap:14px;align-items:center;"><span class="dot-g"></span> Local</div>
+    <div style="display:flex;gap:14px;"><span id="statInfo">10 documentos</span><span>Markdown + Original</span></div>
+</div>
+
+<script>
+const FS=[
+{id:1,name:'Acta_Directorio_15_Oct',ext:'md',folder:'Actas del Directorio',hasOrig:true,origExt:'pdf',size:'4.2 KB',mod:'2024-10-15',tags:['directorio','q4','techcorp','presupuesto'],
+content:`# Acta de Sesion de Directorio\n\n**Fecha:** 15 de Octubre de 2024\n**Hora:** 10:00 AM\n**Lugar:** Sala de Juntas Principal\n\n## Asistentes\n\n- Juan Perez — CEO\n- Maria Lopez — CFO\n- Carlos Gomez — CTO\n- Ana Ruiz — Directora Legal\n\n## Orden del Dia\n\n1. Revision de resultados Q3 2024\n2. Aprobacion de presupuesto Q4\n3. Renovacion de contrato con TechCorp\n\n## Decisiones\n\n### Presupuesto Q4\nSe aprobo presupuesto de **$50,000** para operaciones del cuarto trimestre. Distribucion:\n- Operaciones: $25,000\n- Software y tecnologia: $15,000\n- Marketing: $10,000\n\n### Contrato TechCorp\nSe decidio **NO renovar** el contrato de licencias con TechCorp. Motivos:\n- Costo elevado: **$12,000/ano**\n- Soporte deficiente reportado por el equipo tecnico\n- Falta de actualizaciones significativas en el ultimo ano\n\n> "Necesitamos una solucion propia que se adapte a nuestros procesos." — Carlos Gomez, CTO\n\nCarlos Gomez fue asignado responsable de buscar y proponer una alternativa de software interno.\n\n**Plazo maximo:** 30 de noviembre de 2024\n\n### Proxima sesion\n22 de Noviembre de 2024. Se revisara la propuesta de software interno.`},
+{id:2,name:'Acta_Directorio_28_Sep',ext:'md',folder:'Actas del Directorio',hasOrig:true,origExt:'pdf',size:'3.8 KB',mod:'2024-09-28',tags:['directorio','q3','techcorp','resultados'],
+content:`# Acta de Sesion de Directorio\n\n**Fecha:** 28 de Septiembre 2024\n**Lugar:** Sala de Juntas Principal\n\n## Asistentes\n\n- Juan Perez — CEO\n- Maria Lopez — CFO\n- Carlos Gomez — CTO\n- Ana Ruiz — Directora Legal\n- Roberto Diaz — VP Ventas\n\n## Resultados Q3 2024\n\n### Ingresos\n- Total Q3: **$180,000**\n- Crecimiento vs Q2: **+12%**\n- Meta anual: 78% completada\n\n### Problemas identificados\n- El costo de licencias de TechCorp (**$12,000/ano**) esta impactando el presupuesto de tecnologia.\n- El equipo de desarrollo reporta *limitaciones severas* en la plataforma de TechCorp.\n- Se requiere evaluar alternativas antes de renovar en diciembre.\n\n## Acuerdos\n\n1. Maria Lopez preparara analisis de costo-beneficio de TechCorp vs alternativas.\n2. Carlos Gomez evaluara opciones de desarrollo interno.\n3. Decision final sobre TechCorp en la sesion del 15 de octubre.\n\n> "Si vamos a pagar $12K al ano, mejor los invertimos en algo nuestro." — Juan Perez`},
+{id:3,name:'Presupuesto_Q4_2024',ext:'md',folder:'Finanzas',hasOrig:true,origExt:'xlsx',size:'6.1 KB',mod:'2024-10-20',tags:['presupuesto','q4','gastos','tecnologia'],
+content:`# Presupuesto Q4 2024\n\n**Elaborado por:** Maria Lopez, CFO\n**Aprobado:** 15 de Octubre de 2024\n**Total aprobado:** $50,000\n\n## Desglose por Area\n\n### Operaciones — $25,000\n| Concepto | Monto |\n|----------|-------|\n| Nomina extra | $15,000 |\n| Insumos | $5,000 |\n| Mantenimiento | $5,000 |\n\n### Software y Tecnologia — $15,000\n| Concepto | Monto |\n|----------|-------|\n| Desarrollo interno (reemplazo TechCorp) | $8,000 |\n| Hosting y cloud | $4,000 |\n| Herramientas varias | $3,000 |\n\n> Nota: Los $8,000 de desarrollo interno reemplazan el costo de $12,000/ano de TechCorp. Ahorro neto proyectado: **$4,000/ano** a partir de 2025.\n\n### Marketing — $10,000\n| Concepto | Monto |\n|----------|-------|\n| Digital ads | $6,000 |\n| Eventos | $2,500 |\n| Contenido | $1,500 |\n\n## Observaciones\n\n- Este presupuesto **no incluye** renovacion de TechCorp (cancelada por directorio).\n- Se contempla un fondo de contingencia de $3,000 no asignado aun.`},
+{id:4,name:'Balance_General_Sep',ext:'md',folder:'Finanzas',hasOrig:false,size:'5.4 KB',mod:'2024-10-01',tags:['balance','septiembre','activos','pasivos'],
+content:`# Balance General — Septiembre 2024\n\n**Fecha de corte:** 30 de Septiembre de 2024\n\n## Activos\n\n### Corrientes\n- Efectivo y equivalentes: **$120,000**\n- Cuentas por cobrar: $45,000\n- Inventario: $18,000\n- **Subtotal corrientes:** $183,000\n\n### No corrientes\n- Equipo de oficina: $35,000\n- Software (amortizado): $12,000\n- **Subtotal no corrientes:** $47,000\n\n**TOTAL ACTIVOS: $230,000**\n\n## Pasivos\n\n### Corrientes\n- Proveedores: $28,000\n- Impuestos por pagar: $8,000\n- **Subtotal corrientes:** $36,000\n\n### No corrientes\n- Prestamo bancario: $50,000\n- **Subtotal no corrientes:** $50,000\n\n**TOTAL PASIVOS: $86,000**\n\n## Capital\n\n**Capital contable: $144,000**\n\n---\n\n*Este balance refleja la posicion financiera antes de la aprobacion del presupuesto Q4.*`},
+{id:5,name:'Contrato_TechCorp_2023',ext:'md',folder:'Contratos',hasOrig:true,origExt:'pdf',size:'8.3 KB',mod:'2023-01-15',tags:['techcorp','licencia','software','contrato'],
+content:`# Contrato de Licencia — TechCorp Solutions\n\n**Numero de contrato:** TC-2023-0042\n**Fecha de firma:** 15 de Enero de 2023\n**Vigencia:** 1 ano (renovable automaticamente)\n**Proxima renovacion:** 15 de Diciembre de 2024\n\n## Partes\n\n- **Licenciante:** TechCorp Solutions S.A.\n- **Licenciatario:** NexusCorp S. de R.L.\n\n## Terminos de Licencia\n\n### Producto\nPlataforma TechCorp Enterprise v3.2 — Gestion de proyectos y colaboracion.\n\n### Costo\n- **Licencia anual:** $12,000 USD\n- **Soporte tecnico:** Incluido (nivel estandar)\n- **Actualizaciones:** Incluidas durante la vigencia\n\n### Condiciones de Renovacion\n- Aviso de no renovacion con **60 dias** de anticipacion\n- Incremento anual maximo del **8%** sobre tarifa base\n\n## Clausulas de Terminacion\n\nCualquiera de las partes puede terminar con:\n- 60 dias de aviso previo por escrito\n- Causa inmediata por incumplimiento\n\n## Observaciones\n\n> El contrato se renovo automaticamente en Enero 2024 al no recibir aviso de cancelacion. Para cancelar la renovacion de Diciembre 2024, se debe notificar **antes del 15 de Octubre de 2024**.`},
+{id:6,name:'Propuesta_Software_Interno',ext:'md',folder:'Contratos',hasOrig:false,size:'7.2 KB',mod:'2024-10-25',tags:['software','interno','desarrollo','techcorp'],
+content:`# Propuesta: Desarrollo de Software Interno\n\n**Autor:** Carlos Gomez, CTO\n**Fecha:** 25 de Octubre de 2024\n**Estado:** Borrador — Para revision del Directorio\n\n## Antecedentes\n\nTras la decision del Directorio (Acta 15/Oct/2024) de no renovar el contrato con TechCorp, se presenta esta propuesta para desarrollar una solucion interna que reemplace la funcionalidad actual.\n\n## Alcance\n\n### Modulo 1: Gestion de Proyectos\n- Creacion y seguimiento de tareas\n- Asignacion de responsables\n- Timeline visual (Gantt simplificado)\n\n### Modulo 2: Colaboracion\n- Documentos compartidos en tiempo real\n- Comentarios y menciones\n- Historial de cambios\n\n### Modulo 3: Reportes\n- Dashboards configurables\n- Exportacion a PDF y Excel\n- Integracion con datos financieros\n\n## Presupuesto de Desarrollo\n\n| Concepto | Costo |\n|----------|-------|\n| Desarrollo (3 meses) | $6,000 |\n| Infraestructura cloud | $1,200/ano |\n| Mantenimiento estimado | $800/ano |\n| **Total primer ano** | **$8,000** |\n\n## Comparativa con TechCorp\n\n| | TechCorp | Interno |\n|---|---------|--------|\n| Costo anual | $12,000 | $2,000 (despues de desarrollo) |\n| Personalizacion | Baja | Total |\n| Soporte | Externo | Interno |\n| Propiedad del codigo | No | **Si** |\n\n## Timeline\n\n- **Nov 2024:** Diseno y arquitectura\n- **Dic 2024 - Ene 2025:** Desarrollo Modulo 1\n- **Feb 2025:** Desarrollo Modulos 2 y 3\n- **Mar 2025:** Pruebas y lanzamiento\n\n## Conclusion\n\nLa inversion inicial de **$8,000** se recupera en el primer ano operativo, generando un ahorro de **$4,000 anuales** respecto a TechCorp, ademas de obtener control total sobre la herramienta.`},
+{id:7,name:'Organigrama_Empresa',ext:'md',folder:'Recursos Humanos',hasOrig:true,origExt:'pdf',size:'2.1 KB',mod:'2024-08-10',tags:['organigrama','estructura','equipo','departamentos'],
+content:`# Organigrama de NexusCorp\n\n**Actualizado:** 10 de Agosto de 2024\n**Total de empleados:** 45\n\n## Direccion General\n\n**Juan Perez** — CEO\n\n## Departamentos\n\n### Finanzas (8 personas)\n- **Maria Lopez** — CFO\n  - Contabilidad (4)\n  - Tesoreria (3)\n\n### Tecnologia (12 personas)\n- **Carlos Gomez** — CTO\n  - Desarrollo (7)\n  - Infraestructura (3)\n  - Soporte tecnico (2)\n\n### Ventas (10 personas)\n- **Roberto Diaz** — VP Ventas\n  - Ventas directas (6)\n  - Ventas digitales (4)\n\n### Recursos Humanos (5 personas)\n- **Laura Martinez** — HR Director\n  - Reclutamiento (2)\n  - Nomina y beneficios (2)\n\n### Legal (3 personas)\n- **Ana Ruiz** — Directora Legal\n  - Contratos (1)\n  - Cumplimiento (2)\n\n### Marketing (7 personas)\n- **Sofia Hernandez** — Marketing Director\n  - Digital (3)\n  - Contenido (2)\n  - Eventos (2)\n\n---\n\n*Estructura aprobada en sesion de directorio de enero 2024.*`},
+{id:8,name:'Evaluacion_Q3_Empleados',ext:'md',folder:'Recursos Humanos',hasOrig:false,size:'9.5 KB',mod:'2024-10-05',tags:['evaluacion','q3','personal','desempeno'],
+content:`# Evaluacion de Desempeno Q3 2024\n\n**Periodo:** Julio - Septiembre 2024\n**Elaborado por:** Laura Martinez, HR Director\n\n## Resumen General\n\n| Nivel | Empleados | Promedio |\n|-------|-----------|----------|\n| Excede expectativas | 8 | 4.5/5 |\n| Cumple expectativas | 29 | 3.6/5 |\n| Requiere mejora | 6 | 2.4/5 |\n| En prueba | 2 | 2.0/5 |\n\n## Destacados del Departamento de Tecnologia\n\n### Equipo de Desarrollo\n- **Andres Vega** — Calificacion: 4.8/5 — Lider tecnico del proyecto de migracion\n- **Patricia Solis** — Calificacion: 4.6/5 — Mejora significativa en code review\n- **Diego Mora** — Calificacion: 4.5/5 — Propuestas de optimizacion de infraestructura\n\n### Observaciones del CTO\n\n> "El equipo de desarrollo esta listo para asumir el proyecto de software interno. Los 3 destacados serian los leads naturales." — Carlos Gomez\n\n## Areas de Mejora Detectadas\n\n1. **Comunicacion inter-departamental:** 40% de empleados senalan mejoras necesarias\n2. **Procesos de onboarding:** 3 de las 6 personas en "requiere mejora" tienen menos de 6 meses\n3. **Herramientas tecnologicas:** Se mencionan limitaciones de la plataforma actual (TechCorp) como factor de productividad\n\n## Acciones\n\n- Programa de mentoring para empleados nuevos (iniciar Nov 2024)\n- Revision de herramientas tecnologicas (alineado con propuesta de software interno)`},
+{id:9,name:'Plan_Estrategico_2024',ext:'md',folder:'Estrategia',hasOrig:true,origExt:'pptx',size:'12.4 KB',mod:'2024-01-20',tags:['estrategia','2024','metas','digital'],
+content:`# Plan Estrategico 2024 — NexusCorp\n\n**Aprobado:** Enero 2024, Sesion de Directorio\n**Horizonte:** Enero - Diciembre 2024\n\n## Vision 2024\n\n"Transformar NexusCorp en una empresa *digital-first* con procesos internos optimizados y herramientas propias."\n\n## Objetivos Estrategicos\n\n### OE1: Crecimiento de Ingresos\n- Meta: **$750,000** en ingresos anuales (+20% vs 2023)\n- Q3 avance: 78% — En trayectoria\n\n### OE2: Transformacion Digital\n- Migrar a herramientas internas para finales de 2024\n- Reducir dependencia de proveedores externos de software\n- **Estado:** En progreso — Decision de cancelar TechCorp tomada en Octubre\n\n### OE3: Optimizacion de Costos\n- Reducir gastos operativos en un 10%\n- Renegociar contratos de servicios\n- **Estado:** Presupuesto Q4 refleja optimizacion en tecnologia\n\n### OE4: Desarrollo de Talento\n- Implementar programa de formacion tecnica\n- Reducir rotacion por debajo del 12%\n- **Estado:** Evaluaciones Q3 muestran mejora en satisfaccion\n\n## KPIs Principales\n\n| Indicador | Meta | Q3 Actual |\n|-----------|------|-----------|\n| Ingresos acumulados | $750K | $560K |\n| Costo de tecnologia | <$20K/ano | $12K (TechCorp) |\n| Rotacion de personal | <12% | 8.9% |\n| Satisfaccion equipo | >4.0/5 | 3.8/5 |\n\n## Proximos Pasos Q4\n\n1. Ejecutar transicion de TechCorp a solucion interna\n2. Cerrar ano con $190K en ingresos de Q4\n3. Presentar plan estrategico 2025 en sesion de diciembre`},
+{id:10,name:'Analisis_Competencia',ext:'md',folder:'Estrategia',hasOrig:false,size:'5.8 KB',mod:'2024-09-15',tags:['competencia','mercado','analisis','tendencias'],
+content:`# Analisis de Competencia — Septiembre 2024\n\n**Autor:** Roberto Diaz, VP Ventas\n**Clasificacion:** Confidencial\n\n## Competidores Principales\n\n### 1. Vertex Solutions\n- **Ingresos estimados:** $1.2M/ano\n- **Fortalezas:** Marca establecida, equipo grande (80+ personas)\n- **Debilidades:** Procesos lentos, alta rotacion\n- **Amenaza:** Alta — Compiten en nuestros segmentos principales\n\n### 2. NovaTech\n- **Ingresos estimados:** $600K/ano\n- **Fortalezas:** Producto tecnologico superior, precios competitivos\n- **Debilidades:** Servicio al cliente deficiente, soporte limitado\n- **Amenaza:** Media — Enfoque diferente pero ganan contratos por precio\n\n### 3. Atlas Group\n- **Ingresos estimados:** $400K/ano\n- **Fortalezas:** Relaciones gubernamentales\n- **Debilidades:** Dependencia de un solo mercado\n- **Amenaza:** Baja — Segmento diferente\n\n## Tendencias del Mercado\n\n- **Digitalizacion acelerada:** 67% de clientes demandan herramientas digitales\n- **Precios competitivos:** Presion bajista del 5-8% anual\n- **Software propio como ventaja:** Empresas con herramientas propias generan *15% mas confianza* en clientes enterprise\n\n## Recomendaciones\n\n1. Acelerar desarrollo de software interno (alineado con Plan Estrategico OE2)\n2. Posicionar la autonomia tecnologica como diferenciador ante clientes\n3. Monitorear movimientos de NovaTech en segmento medio`}
+];
+
+let S={view:'dashboard',tagFilter:null,searchPreview:null,searchFocus:-1,searchFolder:null,noteId:null,noteMode:'md'};
+const FC={'Actas del Directorio':'#f9a8d4','Finanzas':'#fbbf24','Contratos':'#818cf8','Recursos Humanos':'#34d399','Estrategia':'#fb923c'};
+const RECENTS=['TechCorp','presupuesto','empleados','contrato','competencia','estrategia'];
+
+const esc=s=>s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+const il=s=>s.replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/\*(.+?)\*/g,'<em>$1</em>').replace(/`(.+?)`/g,'<code>$1</code>');
+function hl(t,q){if(!q)return esc(t);return esc(t).replace(new RegExp(`(${esc(q).replace(/[.*+?^${}()|[\]\\]/g,'\\$&')})`,'gi'),'<mark>$1</mark>');}
+function extCls(f){return f.ext==='md'?'ext-md':f.origExt==='pdf'?'ext-pdf':f.origExt==='xlsx'?'ext-xlsx':'ext-pptx';}
+function extBg(f){return f.ext==='md'?'var(--green-d)':f.origExt==='pdf'?'var(--red-d)':f.origExt==='xlsx'?'var(--amber-d)':'var(--pink-d)';}
+function extColor(f){return f.ext==='md'?'var(--green)':f.origExt==='pdf'?'var(--red)':f.origExt==='xlsx'?'var(--amber)':'var(--pink)';}
+function getAllTags(){const m={};FS.forEach(f=>f.tags.forEach(t=>{m[t]=(m[t]||0)+1;}));return m;}
+function getBacklinks(file){return FS.filter(o=>{if(o.id===file.id)return false;if(o.tags.filter(t=>file.tags.includes(t)).length>=2)return true;if(o.content.toLowerCase().includes(file.name.toLowerCase().replace(/_/g,' ')))return true;return false;});}
+
+/* SIDEBAR */
+function renderSideTags(){const el=document.getElementById('sideTags');const tags=getAllTags();let h='';Object.keys(tags).sort((a,b)=>tags[b]-tags[a]).forEach(t=>{h+=`<span class="st-item ${S.tagFilter===t?'act':''}" onclick="sideTagClick('${t}')">#${t}</span>`;});el.innerHTML=h;}
+function sideTagClick(tag){S.tagFilter=S.tagFilter===tag?null:tag;renderSidebar();openSearchWithTag(tag);}
+function renderSidebar(){renderSideTags();document.getElementById('sideCnt').textContent=FS.length+' documentos';document.getElementById('statInfo').textContent=FS.length+' documentos';}
+function setCrumb(text){document.getElementById('tbCrumb').innerHTML=`<span class="cur">${text}</span>`;}
+function openSearchWithTag(tag){switchView('search');setTimeout(()=>{const i=document.getElementById('sInput');if(i){i.value=tag;onSI(tag);}},60);}
+
+function switchView(v){S.view=v;document.querySelectorAll('.view').forEach(el=>el.classList.remove('act'));document.getElementById('v-'+v).classList.add('act');document.querySelectorAll('.sn').forEach(el=>el.classList.toggle('act',el.dataset.v===v));if(v==='dashboard')renderDashboard();if(v==='search')renderSearchView();const l={dashboard:'Inicio',search:'Busqueda',chat:'Asistente'};setCrumb(l[v]||v);}
+
+/* =============================================
+   DASHBOARD ADMINISTRATIVO
+   ============================================= */
+function renderDashboard(){
+    const el=document.getElementById('dashContent');const tags=getAllTags();
+
+    // Calcular estadísticas
+    const withOrig=FS.filter(f=>f.hasOrig).length;
+    const withoutOrig=FS.length-withOrig;
+    const origTypes={};FS.filter(f=>f.hasOrig).forEach(f=>{const e=f.origExt.toUpperCase();origTypes[e]=(origTypes[e]||0)+1;});
+    const topTags=Object.entries(tags).sort((a,b)=>b[1]-a[1]).slice(0,7);
+    const maxTagCnt=topTags.length?topTags[0][1]:1;
+
+    // Documentos que necesitan atención (derivados del contenido)
+    const attention=[];
+    FS.forEach(f=>{
+        const cl=f.content.toLowerCase();
+        if(cl.includes('borrador')||cl.includes('pendiente'))attention.push({level:'amber',text:`<strong>${f.name}</strong> esta marcado como borrador o pendiente en su contenido.`,fileId:f.id,link:'Revisar documento'});
+        if(cl.includes('30 de noviembre')||cl.includes('22 de noviembre'))attention.push({level:'red',text:`<strong>${f.name}</strong> contiene una fecha proxima de plazo o sesion.`,fileId:f.id,link:'Ver detalle'});
+    });
+
+    // Si no hay atención derivada, mostrar genéricas
+    if(!attention.length){
+        attention.push({level:'green',text:`<strong>${FS.length} documentos</strong> procesados y sincronizados correctamente.`,fileId:null,link:null});
+        attention.push({level:'amber',text:`<strong>${withoutOrig} documento${withoutOrig!==1?'s':''}</strong> sin archivo original adjunto.`,fileId:null,link:null});
+    }
+
+    // Stats
+    const stats=[
+        {label:'Documentos',value:FS.length,sub:withOrig+' con original adjunto',color:'var(--accent)'},
+        {label:'Sin original',value:withoutOrig,sub:'Solo version Markdown',color:'var(--amber)'},
+        {label:'Etiquetas',value:Object.keys(tags).length,sub:'Usadas en los documentos',color:'var(--green)'},
+        {label:'Tipos de original',value:Object.keys(origTypes).length,sub:Object.keys(origTypes).join(', '),color:'var(--purple)'}
+    ];
+    let statsH='';stats.forEach(s=>{statsH+=`<div class="ds"><div class="ds-label">${s.label}</div><div class="ds-val" style="color:${s.color};">${s.value}</div><div class="ds-sub">${s.sub}</div><div class="ds-bar" style="background:${s.color};"></div></div>`;});
+
+    // Tipos de original
+    let typesH='';const maxType=Math.max(...Object.values(origTypes),1);
+    Object.entries(origTypes).sort((a,b)=>b[1]-a[1]).forEach(([ext,cnt])=>{
+        const colors={PDF:'var(--red)',XLSX:'var(--amber)',PPTX:'var(--pink)'};
+        const c=colors[ext]||'var(--t3)';const pct=Math.round(cnt/maxType*100);
+        typesH+=`<div class="type-row"><span class="type-label" style="background:${c}22;color:${c};">${ext}</span><span class="type-name">${ext==='PDF'?'Documentos escaneados':ext==='XLSX'?'Hojas de calculo':'Presentaciones'}</span><div class="type-bar"><div class="type-fill" style="width:${pct}%;background:${c};"></div></div><span class="type-cnt">${cnt}</span></div>`;
+    });
+
+    // Etiquetas ranking
+    let tagsH='';topTags.forEach(([tag,cnt])=>{const pct=Math.round(cnt/maxTagCnt*100);tagsH+=`<div class="tag-rank"><span class="tag-rank-name" onclick="sideTagClick('${tag}')">#${tag}</span><div class="tag-rank-bar"><div class="tag-rank-fill" style="width:${pct}%;"></div></div><span class="tag-rank-cnt">${cnt}</span></div>`;});
+
+    // Documentos recientes
+    const recent=[...FS].sort((a,b)=>b.mod.localeCompare(a.mod)).slice(0,5);
+    let recH='';recent.forEach(f=>{const c=FC[f.folder]||'#8b8fa8';recH+=`<div class="rec-item"><div class="rec-icon ${extCls(f)}" style="background:${extBg(f)};color:${extColor(f)};">${f.ext.toUpperCase()}</div><div class="rec-body"><div class="rec-name" onclick="openNote(${f.id})">${f.name}</div><div class="rec-meta"><span style="color:${c};">${f.folder}</span><span>${f.mod}</span>${f.hasOrig?'<span>'+f.origExt.toUpperCase()+' adjunto</span>':'<span style="color:var(--amber);">Sin original</span>'}</div></div></div>`;});
+
+    // Atención
+    let attH='';attention.forEach(a=>{attH+=`<div class="att-item"><div class="att-dot ${a.level}"></div><div><div class="att-text">${a.text}</div>${a.link?`<span class="att-link" onclick="${a.fileId?'openNote('+a.fileId+')':''}">${a.link} →</span>`:''}</div></div>`;});
+
+    // Quick access
+    const quicks=[{l:'Subir documento',a:"openUpload()"},{l:'Buscar documento',a:"switchView('search')"},{l:'Preguntar al asistente',a:"switchView('chat')"}];
+    let quickH='';quicks.forEach(q=>{quickH+=`<button class="dq" onclick="${q.a}">${q.l}</button>`;});
+
+    el.innerHTML=`
+        <div class="dash-head"><h2>Inicio</h2><p>Resumen de tu repositorio de documentos.</p></div>
+        <div class="dash-stats">${statsH}</div>
+        <div class="dash-row">
+            <div class="dash-card"><div class="dc-head">Documentos recientes</div><div class="dc-body">${recH}</div></div>
+            <div class="dash-card"><div class="dc-head">Atencion requerida <span class="dc-badge" style="background:var(--amber-d);color:var(--amber);">${attention.length}</span></div><div class="dc-body">${attH}</div></div>
+        </div>
+        <div class="dash-row">
+            <div class="dash-card"><div class="dc-head">Tipos de archivo original</div><div class="dc-body">${typesH}</div></div>
+            <div class="dash-card"><div class="dc-head">Etiquetas mas usadas</div><div class="dc-body">${tagsH}</div></div>
+        </div>
+        <div class="dash-quick">${quickH}</div>`;
+}
+
+/* =============================================
+   SEARCH
+   ============================================= */
+function renderSearchView(){
+    const el=document.getElementById('searchContent');const folders={};FS.forEach(f=>{if(!folders[f.folder])folders[f.folder]=[];folders[f.folder].push(f);});
+    let fH='<span class="sv-flabel">Carpeta:</span><button class="chip '+(!S.searchFolder?'act':'')+'" onclick="setSF(this,null)">Todas</button>';
+    Object.keys(folders).forEach(fo=>{const c=FC[fo]||'#8b8fa8';fH+=`<button class="chip ${S.searchFolder===fo?'act':''}" onclick="setSF(this,'${fo}')"><span class="cd" style="background:${c};"></span>${fo}</button>`;});
+    let rH='';RECENTS.forEach(r=>{rH+=`<button class="sv-rtag" onclick="doSearch('${r}')">${r}</button>`;});
+    el.innerHTML=`<div class="sv-head"><h2>Buscar en documentos</h2><div class="sv-bar"><div class="sv-bar-wrap"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><input type="text" id="sInput" placeholder="Buscar por texto, etiqueta, palabra clave..." oninput="onSI(this.value)"></div></div></div><div class="sv-filters" id="sFilters">${fH}</div><div class="sv-recent" id="sRecent"><span class="sv-flabel" style="display:block;margin-bottom:6px;">Busquedas frecuentes</span><div class="sv-rtags">${rH}</div></div><div class="sv-body" id="sBody" style="display:none;"><div class="sv-results" id="sResults"></div><div class="sv-preview" id="sPreview"><div class="sp-head"><span>Vista previa</span><span id="spName">—</span></div><div class="sp-body" id="spBody"><div class="sp-empty">Selecciona un resultado</div></div><div class="sp-foot"><button class="sp-btn p" onclick="openFromSearch()">Abrir</button><button class="sp-btn s" id="spOrigBtn" onclick="openOrigFromSearch()" style="display:none;">Ver original</button></div></div></div><div class="sv-status" id="sStatus" style="display:none;"></div>`;
+    setTimeout(()=>{const i=document.getElementById('sInput');if(i)i.focus();},60);
+}
+function setSF(btn,fo){S.searchFolder=fo;document.querySelectorAll('#sFilters .chip').forEach(c=>c.classList.remove('act'));btn.classList.add('act');const q=document.getElementById('sInput')?.value||'';if(q)doSearch(q);else if(fo)doSearch('');}
+function onSI(q){if(q){document.getElementById('sRecent').style.display='none';document.getElementById('sBody').style.display='flex';document.getElementById('sStatus').style.display='flex';renderSR(q);}else if(S.searchFolder){renderSR('');}else{document.getElementById('sRecent').style.display='';document.getElementById('sBody').style.display='none';document.getElementById('sStatus').style.display='none';}}
+function doSearch(q){const i=document.getElementById('sInput');if(i)i.value=q;document.getElementById('sRecent').style.display='none';document.getElementById('sBody').style.display='flex';document.getElementById('sStatus').style.display='flex';S.searchFocus=-1;S.searchPreview=null;renderSR(q);}
+function renderSR(query){
+    const q=query.toLowerCase(),folder=S.searchFolder,results=[];
+    FS.forEach(f=>{if(folder&&f.folder!==folder)return;if(!q&&!folder)return;let mt=null,snip='';
+        if(q&&f.name.toLowerCase().includes(q))mt='nombre';else if(q&&f.tags.some(t=>t.includes(q)))mt='etiqueta';
+        else if(q){const idx=f.content.toLowerCase().indexOf(q);if(idx>=0){mt='contenido';const s=Math.max(0,idx-55),e=Math.min(f.content.length,idx+q.length+55);snip=(s>0?'...':'')+f.content.substring(s,e)+(e<f.content.length?'...':'');}}else if(folder)mt='carpeta';
+        if(mt)results.push({file:f,mt,snip});});
+    const list=document.getElementById('sResults'),status=document.getElementById('sStatus');
+    if(!results.length){list.innerHTML=`<div style="text-align:center;color:var(--t3);padding:50px;font-size:13px;">${q?'Sin resultados para "'+esc(query)+'"':'Selecciona una carpeta'}</div>`;status.innerHTML='<span>0 resultados</span><span></span>';return;}
+    let h='';results.forEach((r,i)=>{const f=r.file,c=FC[f.folder]||'#8b8fa8';const sn=r.snip?hl(r.snip,query):`<span style="color:var(--t3);font-size:11px;">Coincidencia en ${r.mt}</span>`;
+        h+=`<div class="sr ${i===S.searchFocus?'act':''}" data-id="${f.id}" onclick="prevR(${f.id})" ondblclick="openNote(${f.id})"><div class="sr-icon ${extCls(f)}" style="background:${extBg(f)};color:${extColor(f)};">${f.ext.toUpperCase()}</div><div class="sr-body"><div class="sr-top"><span class="sr-name">${hl(f.name,query)}</span><span class="sr-folder" style="color:${c};">${f.folder}</span></div><div class="sr-snippet">${sn}</div><div class="sr-meta"><span>${f.size}</span><span>${f.mod}</span>${f.hasOrig?'<span>'+f.origExt.toUpperCase()+'</span>':'<span style="color:var(--amber);">Sin original</span>'}</div></div></div>`;});
+    list.innerHTML=h;status.innerHTML=`<span><strong>${results.length}</strong> resultado${results.length>1?'s':''}</span><span>Doble clic para abrir</span>`;
+    if(!S.searchPreview&&results.length)prevR(results[0].file.id);
+}
+function prevR(id){S.searchPreview=id;const f=FS.find(x=>x.id===id);if(!f)return;document.querySelectorAll('.sr').forEach(el=>el.classList.toggle('act',parseInt(el.dataset.id)===id));document.getElementById('spName').textContent=f.name+'.'+f.ext;document.getElementById('spOrigBtn').style.display=f.hasOrig?'':'none';
+    const lines=f.content.split('\n').filter(l=>l.trim()&&!l.startsWith('|')&&!l.startsWith('---'));let p='';
+    lines.slice(0,18).forEach(l=>{if(l.startsWith('# '))p+=`<div style="font-size:14px;font-weight:700;margin:10px 0 4px;color:var(--accent);">${il(l.slice(2))}</div>`;else if(l.startsWith('## '))p+=`<div style="font-size:13px;font-weight:700;margin:8px 0 3px;color:var(--accent);">${il(l.slice(3))}</div>`;else if(l.startsWith('> '))p+=`<div style="border-left:2px solid var(--accent);padding:3px 8px;margin:4px 0;color:var(--t2);font-style:italic;font-size:11px;">${il(l.slice(2))}</div>`;else if(l.startsWith('- ')||/^\d+\. /.test(l))p+=`<div style="padding:1px 0 1px 12px;font-size:11.5px;color:var(--t2);">${il(l.replace(/^\d+\. /,''))}</div>`;else p+=`<div style="font-size:11.5px;line-height:1.5;color:var(--t2);margin-bottom:3px;">${il(l)}</div>`;});
+    if(lines.length>18)p+='<div style="margin-top:6px;font-size:10px;color:var(--t3);">... mas contenido</div>';document.getElementById('spBody').innerHTML=p||'<div class="sp-empty">Sin contenido</div>';}
+function openFromSearch(){if(S.searchPreview)openNote(S.searchPreview);}
+function openOrigFromSearch(){if(!S.searchPreview)return;const f=FS.find(x=>x.id===S.searchPreview);if(f&&f.hasOrig){openNote(f.id);setTimeout(()=>setNoteMode('orig'),30);}}
+
+/* CHAT */
+function askSug(q){document.getElementById('chatInput').value=q;sendChat();}
+function sendChat(){const input=document.getElementById('chatInput');const text=input.value.trim();if(!text)return;const msgs=document.getElementById('chatMessages');const w=msgs.querySelector('.chat-welcome');if(w)w.remove();addBubble('user',text);input.value='';const sug=document.getElementById('chatSuggestions');if(sug)sug.style.display='none';const tid='t'+Date.now();setTimeout(()=>{const td=document.createElement('div');td.className='cb ia';td.id=tid;td.innerHTML='<span class="typing">Buscando en documentos...</span>';msgs.appendChild(td);msgs.scrollTop=msgs.scrollHeight;setTimeout(()=>{td.remove();addBubble('ia',chatReply(text));},700+Math.random()*500);},200);}
+function addBubble(type,html){const msgs=document.getElementById('chatMessages');const d=document.createElement('div');d.className=`cb ${type} fu`;d.innerHTML=html;msgs.appendChild(d);msgs.scrollTop=msgs.scrollHeight;}
+function chatReply(q){const ql=q.toLowerCase();let best=null,bestScore=0,sources=[];FS.forEach(f=>{let score=0;const cl=f.content.toLowerCase();ql.split(/\s+/).filter(w=>w.length>3).forEach(w=>{if(f.name.toLowerCase().includes(w))score+=5;if(f.tags.some(t=>t.includes(w)))score+=4;if(cl.includes(w))score+=2;const m=cl.match(new RegExp(w,'gi'));if(m)score+=Math.min(m.length,5);});if(score>bestScore){bestScore=score;best=f;}if(score>3)sources.push({file:f,score});});sources.sort((a,b)=>b.score-a.score);const top=sources.slice(0,3);
+    if(ql.includes('techcorp'))return`Se decidio <strong>NO renovar</strong> el contrato con TechCorp. Costo de <strong>$12,000/ano</strong> considerado elevado. Ya existe una <strong>Propuesta de Software Interno</strong> por $8,000 con ahorro de <strong>$4,000 anuales</strong>.${srcT(top)}`;
+    if(ql.includes('presupuesto')||ql.includes('q4'))return`El <strong>Presupuesto Q4 2024</strong> es de <strong>$50,000</strong>: Operaciones $25K, Software $15K, Marketing $10K. No incluye renovacion de TechCorp. Ahorro proyectado de <strong>$4,000/ano</strong>.${srcT(top)}`;
+    if(ql.includes('empleado')||ql.includes('equipo')||ql.includes('personal'))return`NexusCorp tiene <strong>45 empleados</strong> en 6 departamentos. Destacados Q3: <strong>Andres Vega</strong> (4.8/5), <strong>Patricia Solis</strong> (4.6/5), <strong>Diego Mora</strong> (4.5/5).${srcT(top)}`;
+    if(ql.includes('competencia')||ql.includes('competidor'))return`Competidores: <strong>Vertex Solutions</strong> ($1.2M, amenaza alta), <strong>NovaTech</strong> ($600K, amenaza media), <strong>Atlas Group</strong> ($400K, amenaza baja).${srcT(top)}`;
+    if(ql.includes('estrategia')||ql.includes('plan')||ql.includes('meta'))return`Plan 2024: OE1 Crecimiento $750K (78%), OE2 Digital (en progreso), OE3 Costos -10%, OE4 Talento rotacion <12% (actual 8.9%).${srcT(top)}`;
+    if(ql.includes('contrato'))return`<strong>Contrato_TechCorp_2023</strong> ($12K/ano, cancelada) y <strong>Propuesta_Software_Interno</strong> ($8K desarrollo, $2K/ano operacion).${srcT(top)}`;
+    if(ql.includes('balance')||ql.includes('finanzas'))return`Activos <strong>$230,000</strong>, Pasivos $86,000, Capital <strong>$144,000</strong>. Efectivo: $120K.${srcT(top)}`;
+    if(ql.includes('organigrama')||ql.includes('estructura'))return`Juan Perez (CEO) lidera 6 departamentos: Finanzas, Tecnologia, Ventas, RRHH, Legal, Marketing.${srcT(top)}`;
+    if(ql.includes('software')||ql.includes('desarrollo')||ql.includes('interno'))return`Propuesta: 3 modulos (Proyectos, Colaboracion, Reportes). Inversion <strong>$8,000</strong>, ahorro <strong>$4,000/ano</strong>. Timeline: Nov 2024 → Mar 2025.${srcT(top)}`;
+    if(best&&bestScore>0){const lines=best.content.split('\n').filter(l=>l.trim()&&!l.startsWith('#')&&!l.startsWith('|')&&!l.startsWith('-'));const rel=lines.filter(l=>ql.split(/\s+/).filter(w=>w.length>3).some(w=>l.toLowerCase().includes(w)));return`Informacion en <strong>${best.name}</strong>:\n\n${(rel.length?rel:lines).slice(0,4).join('\n\n')}${srcT(top)}`;}
+    return`No encontre informacion. Prueba: <strong>TechCorp</strong>, <strong>presupuesto</strong>, <strong>empleados</strong>, <strong>competencia</strong>, <strong>estrategia</strong>, <strong>contratos</strong>, <strong>balance</strong>, <strong>organigrama</strong>, <strong>software interno</strong>.`;}
+function srcT(s){if(!s.length)return'';return'\n\n'+s.map(x=>`<span class="csrc" onclick="openNote(${x.file.id})">📄 ${x.file.name}.${x.file.ext}</span> `).join('');}
+
+/* NOTE OVERLAY */
+function openNote(id){S.noteId=id;S.noteMode='md';const f=FS.find(x=>x.id===id);if(!f)return;document.getElementById('noteOverlay').classList.add('open');document.getElementById('noteBc').innerHTML=`<span>${f.folder}</span><span style="opacity:.35;">/</span><span class="cur">${f.name}.${f.ext}</span>`;let tabs=`<button class="ntab act" onclick="setNoteMode('md')">Markdown</button>`;if(f.hasOrig)tabs+=`<button class="ntab" onclick="setNoteMode('orig')">Original (${f.origExt.toUpperCase()})</button>`;document.getElementById('noteTabs').innerHTML=tabs;renderNoteMd(f);renderNoteSide(f);document.getElementById('noteMd').style.display='block';document.getElementById('noteOrig').style.display='none';}
+function setNoteMode(mode){S.noteMode=mode;document.querySelectorAll('.ntab').forEach(t=>t.classList.remove('act'));document.querySelectorAll('.ntab').forEach(t=>{if(mode==='md'&&t.textContent.startsWith('Markdown'))t.classList.add('act');if(mode==='orig'&&t.textContent.startsWith('Original'))t.classList.add('act');});document.getElementById('noteMd').style.display=mode==='md'?'block':'none';document.getElementById('noteOrig').style.display=mode==='orig'?'block':'none';if(mode==='orig'){const f=FS.find(x=>x.id===S.noteId);if(f)renderNoteOrig(f);}}
+function renderNoteMd(f){const lines=f.content.split('\n');let html='',inL=false,lt='',inT=false,tR=[];const cL=()=>{if(inL){html+=lt==='ul'?'</ul>':'</ol>';inL=false;}};const cT=()=>{if(inT&&tR.length){html+='<table>';tR.forEach((r,i)=>{html+='<tr>';r.forEach(c=>{html+=`<${i===0?'th':'td'}>${il(c.trim())}</${i===0?'th':'td'}>`;});html+='</tr>';});html+='</table>';tR=[];inT=false;}};
+    for(const line of lines){if(line.includes('|')&&line.trim().startsWith('|')){if(/^\|[\s-|]+\|$/.test(line.trim()))continue;cL();inT=true;tR.push(line.split('|').slice(1,-1));continue;}else if(inT)cT();if(line.startsWith('### ')){cL();cT();html+=`<h3>${il(line.slice(4))}</h3>`;continue;}if(line.startsWith('## ')){cL();cT();html+=`<h2>${il(line.slice(3))}</h2>`;continue;}if(line.startsWith('# ')){cL();cT();html+=`<h1>${il(line.slice(2))}</h1>`;continue;}if(/^---+$/.test(line)){cL();cT();html+='<hr>';continue;}if(line.startsWith('> ')){cL();cT();html+=`<blockquote>${il(line.slice(2))}</blockquote>`;continue;}if(/^- /.test(line)){cT();if(!inL||lt!=='ul'){cL();html+='<ul>';inL=true;lt='ul';}html+=`<li>${il(line.slice(2))}</li>`;continue;}if(/^\d+\. /.test(line)){cT();if(!inL||lt!=='ol'){cL();html+='<ol>';inL=true;lt='ol';}html+=`<li>${il(line.replace(/^\d+\. /,''))}</li>`;continue;}if(line.trim()){cL();cT();html+=`<p>${il(line)}</p>`;}else cL();}
+    cL();cT();if(f.tags.length){html+='<div class="tags">';f.tags.forEach(t=>{html+=`<span class="tag" onclick="closeNote();sideTagClick('${t}')">#${t}</span>`;});html+='</div>';}document.getElementById('noteMd').innerHTML=`<div class="md">${html}</div>`;}
+function renderNoteOrig(f){const ext=f.origExt.toUpperCase();const svgs={PDF:'<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/>',XLSX:'<rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/>',PPTX:'<rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/>'};document.getElementById('noteOrig').innerHTML=`<div class="orig-ph"><svg width="48" height="48" fill="none" stroke="currentColor" stroke-width="1.2" viewBox="0 0 24 24">${svgs[ext]||svgs.PDF}</svg><p class="ofn">${f.name}.${f.origExt}</p><p>Version original preservada para referencia legal</p></div>`;}
+function renderNoteSide(f){const bl=getBacklinks(f);let h=`<div class="ns-section"><div class="ns-label">Informacion</div><div class="ns-meta"><strong> Carpeta:</strong> ${f.folder}<br><strong> Tamaño:</strong> ${f.size}<br><strong> Modificado:</strong> ${f.mod}<br>${f.hasOrig?'<strong> Original:</strong> '+f.origExt.toUpperCase()+'<br>':'<strong> Original:</strong> No adjunto<br>'}</div></div>`;h+=`<div class="ns-section"><div class="ns-label">Etiquetas</div><div class="ns-tags">`;f.tags.forEach(t=>{h+=`<span class="ns-tag" onclick="closeNote();sideTagClick('${t}')">#${t}</span>`;});h+=`</div></div>`;h+=`<div class="ns-section"><div class="ns-label">Enlaces entrantes (${bl.length})</div>`;if(bl.length){bl.forEach(b=>{const c=FC[b.folder]||'#8b8fa8';h+=`<div class="ns-link" onclick="openNote(${b.id})"><span class="nl-dot" style="background:${c};"></span><span class="nl-name">${b.name}</span><span class="nl-folder">${b.folder}</span></div>`;});}else h+=`<div class="ns-empty">Ningun documento enlaza aqui</div>`;h+=`</div>`;document.getElementById('noteSide').innerHTML=h;}
+function closeNote(){document.getElementById('noteOverlay').classList.remove('open');}
+
+/* UPLOAD */
+function openUpload(){document.getElementById('uploadModal').style.display='flex';document.getElementById('upZone').style.display='';document.getElementById('upProg').style.display='none';}
+function closeUpload(){document.getElementById('uploadModal').style.display='none';}
+function simUpload(){document.getElementById('upZone').style.display='none';const prog=document.getElementById('upProg');prog.style.display='block';const fill=document.getElementById('upF'),pct=document.getElementById('upP'),nm=document.getElementById('upN');nm.textContent='Procesando documento...';let w=0;const iv=setInterval(()=>{w+=Math.random()*14+4;if(w>=100){w=100;clearInterval(iv);fill.style.width='100%';pct.textContent='100%';nm.textContent='Estructurado a .md';setTimeout(()=>{FS.push({id:Date.now(),name:'Contrato_Nuevo_Proveedor',ext:'md',folder:'Contratos',hasOrig:true,origExt:'pdf',size:'3.1 KB',mod:new Date().toISOString().split('T')[0],tags:['contrato','nuevo','servicios'],content:`# Contrato de Servicios — Proveedor Nuevo\n\n**Numero:** PN-2024-0078\n**Fecha:** ${new Date().toLocaleDateString('es-MX')}\n**Estado:** Recien cargado — Pendiente revision legal\n\n## Partes\n\n- **Proveedor:** [Nombre del proveedor]\n- **Contratante:** NexusCorp S. de R.L.\n\n## Objeto\n\nPrestacion de servicios profesionales para el area de operaciones.\n\n## Monto\n\n**$8,500 USD** — 3 parcialidades\n\n## Vigencia\n\n6 meses desde la firma\n\n---\n\n> *Procesado automaticamente desde PDF. Requiere revision de Ana Ruiz.*`});renderSidebar();closeUpload();openNote(FS[FS.length-1].id);},600);}fill.style.width=w+'%';pct.textContent=Math.floor(w)+'%';},130);}
+
+/* EVENTOS */
+document.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key==='k'){e.preventDefault();switchView('search');const i=document.getElementById('sInput');if(i){i.focus();i.select();}}if(e.key==='Escape'){closeNote();closeUpload();}});
+document.addEventListener('keydown',e=>{if(S.view!=='search')return;const r=document.querySelectorAll('.sr');if(!r.length)return;if(e.key==='ArrowDown'){e.preventDefault();S.searchFocus=Math.min(S.searchFocus+1,r.length-1);uSF(r);r[S.searchFocus].scrollIntoView({block:'nearest'});}if(e.key==='ArrowUp'){e.preventDefault();S.searchFocus=Math.max(S.searchFocus-1,0);uSF(r);r[S.searchFocus].scrollIntoView({block:'nearest'});}if(e.key==='Enter'&&S.searchFocus>=0){e.preventDefault();openNote(parseInt(r[S.searchFocus].dataset.id));}});
+function uSF(r){r.forEach((el,i)=>el.classList.toggle('act',i===S.searchFocus));if(S.searchFocus>=0)prevR(parseInt(r[S.searchFocus].dataset.id));}
+document.getElementById('noteOverlay').addEventListener('click',e=>{if(e.target===e.currentTarget)closeNote();});
+document.getElementById('uploadModal').addEventListener('click',e=>{if(e.target===e.currentTarget)closeUpload();});
+
+renderSidebar();renderDashboard();
+</script>
+</body>
+</html>
