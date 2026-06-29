@@ -1,0 +1,1773 @@
+<!DOCTYPE html>
+<html lang="es" data-bs-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MySQL Audit Pro — Monitoreo y Auditoría</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+<style>
+:root {
+  --bg-body: #060a13;
+  --bg-sidebar: #0a0f1e;
+  --bg-topbar: #0a0f1e;
+  --bg-card: #0f1629;
+  --bg-card-hover: #141d33;
+  --bg-input: #0c1222;
+  --border: #1a2540;
+  --border-light: #243352;
+  --text-primary: #eef2f7;
+  --text-secondary: #8b9dc3;
+  --text-muted: #5a6e8a;
+  --accent: #00d4aa;
+  --accent-dim: rgba(0,212,170,0.12);
+  --accent-glow: rgba(0,212,170,0.25);
+  --info: #38bdf8;
+  --warning: #f59e0b;
+  --danger: #ef4444;
+  --success: #22c55e;
+  --purple: #a78bfa;
+}
+*, *::before, *::after { box-sizing: border-box; }
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg-body);
+  color: var(--text-primary);
+  margin: 0;
+  overflow: hidden;
+  height: 100vh;
+}
+h1,h2,h3,h4,h5,h6,.font-display { font-family: 'Space Grotesk', sans-serif; }
+
+/* Scrollbar personalizado */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border-light); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+
+/* ===== LOADING ===== */
+#loading-overlay {
+  position: fixed; inset: 0; z-index: 9999;
+  background: var(--bg-body);
+  display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 20px;
+  transition: opacity 0.6s ease, visibility 0.6s ease;
+}
+#loading-overlay.hidden { opacity: 0; visibility: hidden; }
+.loader-ring {
+  width: 50px; height: 50px; border-radius: 50%;
+  border: 3px solid var(--border);
+  border-top-color: var(--accent);
+  animation: spin 0.8s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ===== SIDEBAR ===== */
+.sidebar {
+  position: fixed; left: 0; top: 0; bottom: 0;
+  width: 260px; background: var(--bg-sidebar);
+  border-right: 1px solid var(--border);
+  display: flex; flex-direction: column;
+  z-index: 1000; transition: transform 0.3s ease;
+}
+.sidebar-brand {
+  padding: 20px 22px; display: flex; align-items: center; gap: 12px;
+  border-bottom: 1px solid var(--border);
+}
+.sidebar-brand .brand-icon {
+  width: 38px; height: 38px; border-radius: 10px;
+  background: linear-gradient(135deg, var(--accent), #00a88a);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; color: #060a13; font-weight: 700;
+  box-shadow: 0 0 20px var(--accent-glow);
+}
+.sidebar-brand h5 { margin: 0; font-size: 16px; font-weight: 700; letter-spacing: -0.3px; }
+.sidebar-brand small { color: var(--text-muted); font-size: 11px; }
+.sidebar-nav { flex: 1; overflow-y: auto; padding: 16px 0; }
+.nav-group-label {
+  padding: 8px 22px 6px; font-size: 10px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 1.5px; color: var(--text-muted);
+}
+.nav-item-link {
+  display: flex; align-items: center; gap: 12px;
+  padding: 10px 22px; margin: 2px 10px; border-radius: 8px;
+  color: var(--text-secondary); text-decoration: none;
+  font-size: 13.5px; font-weight: 500;
+  transition: all 0.2s ease; cursor: pointer; position: relative;
+}
+.nav-item-link:hover { background: var(--accent-dim); color: var(--text-primary); }
+.nav-item-link.active {
+  background: var(--accent-dim); color: var(--accent);
+}
+.nav-item-link.active::before {
+  content: ''; position: absolute; left: -10px; top: 50%; transform: translateY(-50%);
+  width: 3px; height: 24px; border-radius: 0 3px 3px 0;
+  background: var(--accent);
+}
+.nav-item-link i { font-size: 17px; width: 20px; text-align: center; }
+.sidebar-footer {
+  padding: 16px 22px; border-top: 1px solid var(--border);
+  font-size: 11px; color: var(--text-muted);
+}
+.sidebar-footer .server-status { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+.status-dot {
+  width: 8px; height: 8px; border-radius: 50%; background: var(--success);
+  animation: pulse-dot 2s ease-in-out infinite;
+}
+@keyframes pulse-dot {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(34,197,94,0.4); }
+  50% { box-shadow: 0 0 0 6px rgba(34,197,94,0); }
+}
+
+/* ===== TOPBAR ===== */
+.topbar {
+  position: fixed; top: 0; left: 260px; right: 0; height: 60px;
+  background: var(--bg-topbar); border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 24px; z-index: 999;
+}
+.topbar-left { display: flex; align-items: center; gap: 16px; }
+.topbar-left .breadcrumb { margin: 0; font-size: 13px; }
+.topbar-left .breadcrumb-item a { color: var(--text-muted); text-decoration: none; }
+.topbar-left .breadcrumb-item.active { color: var(--text-primary); }
+.topbar-left .page-title { font-family: 'Space Grotesk', sans-serif; font-size: 18px; font-weight: 700; }
+.btn-hamburger {
+  display: none; background: none; border: 1px solid var(--border);
+  color: var(--text-secondary); border-radius: 8px; padding: 6px 10px;
+  cursor: pointer; font-size: 18px;
+}
+.topbar-right { display: flex; align-items: center; gap: 12px; }
+.topbar-search {
+  position: relative;
+}
+.topbar-search input {
+  background: var(--bg-input); border: 1px solid var(--border);
+  border-radius: 8px; padding: 7px 14px 7px 36px;
+  color: var(--text-primary); font-size: 13px; width: 240px;
+  transition: border-color 0.2s;
+}
+.topbar-search input:focus { outline: none; border-color: var(--accent); }
+.topbar-search i { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-size: 14px; }
+.topbar-icon-btn {
+  background: none; border: 1px solid var(--border); color: var(--text-secondary);
+  width: 38px; height: 38px; border-radius: 8px; display: flex;
+  align-items: center; justify-content: center; cursor: pointer;
+  position: relative; transition: all 0.2s;
+}
+.topbar-icon-btn:hover { border-color: var(--accent); color: var(--accent); }
+.topbar-icon-btn .badge-dot {
+  position: absolute; top: 6px; right: 6px; width: 8px; height: 8px;
+  background: var(--danger); border-radius: 50%; border: 2px solid var(--bg-topbar);
+}
+.topbar-user {
+  display: flex; align-items: center; gap: 10px; cursor: pointer;
+  padding: 4px 10px 4px 4px; border-radius: 8px; transition: background 0.2s;
+}
+.topbar-user:hover { background: var(--accent-dim); }
+.topbar-user .avatar {
+  width: 34px; height: 34px; border-radius: 8px;
+  background: linear-gradient(135deg, var(--accent), #00a88a);
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 14px; color: #060a13;
+}
+.topbar-user .user-info { line-height: 1.2; }
+.topbar-user .user-info span { display: block; font-size: 13px; font-weight: 600; }
+.topbar-user .user-info small { font-size: 11px; color: var(--text-muted); }
+
+/* ===== MAIN CONTENT ===== */
+.main-content {
+  margin-left: 260px; margin-top: 60px;
+  height: calc(100vh - 60px); overflow-y: auto;
+  padding: 24px; background: var(--bg-body);
+}
+.page-section { display: none; animation: fadeUp 0.35s ease; }
+.page-section.active { display: block; }
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ===== CARDS ===== */
+.stat-card {
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: 12px; padding: 20px; position: relative;
+  overflow: hidden; transition: all 0.25s ease;
+}
+.stat-card:hover { border-color: var(--border-light); transform: translateY(-2px); box-shadow: 0 8px 30px rgba(0,0,0,0.3); }
+.stat-card .card-icon {
+  width: 42px; height: 42px; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; margin-bottom: 14px;
+}
+.stat-card .card-value { font-family: 'Space Grotesk', sans-serif; font-size: 28px; font-weight: 700; line-height: 1.1; }
+.stat-card .card-label { font-size: 12.5px; color: var(--text-secondary); margin-top: 4px; }
+.stat-card .card-trend { font-size: 12px; margin-top: 8px; display: flex; align-items: center; gap: 4px; }
+.stat-card::after {
+  content: ''; position: absolute; top: 0; right: 0;
+  width: 120px; height: 120px; border-radius: 50%;
+  filter: blur(60px); opacity: 0.07; pointer-events: none;
+}
+.card-accent::after { background: var(--accent); }
+.card-info::after { background: var(--info); }
+.card-warning::after { background: var(--warning); }
+.card-danger::after { background: var(--danger); }
+.card-purple::after { background: var(--purple); }
+
+.chart-card {
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: 12px; padding: 20px;
+}
+.chart-card .chart-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 16px;
+}
+.chart-card .chart-title { font-family: 'Space Grotesk', sans-serif; font-size: 15px; font-weight: 600; }
+
+/* ===== TABLES ===== */
+.table-dark-custom {
+  --bs-table-bg: transparent;
+  --bs-table-border-color: var(--border);
+  --bs-table-hover-bg: var(--accent-dim);
+  --bs-table-striped-bg: rgba(255,255,255,0.02);
+  font-size: 13px;
+}
+.table-dark-custom thead th {
+  background: rgba(255,255,255,0.03); color: var(--text-secondary);
+  font-weight: 600; font-size: 11.5px; text-transform: uppercase;
+  letter-spacing: 0.8px; padding: 12px 16px; border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+}
+.table-dark-custom tbody td {
+  padding: 12px 16px; vertical-align: middle;
+  border-bottom: 1px solid var(--border); color: var(--text-primary);
+}
+.table-dark-custom tbody tr { transition: background 0.15s; }
+
+.sql-cell {
+  font-family: 'Space Grotesk', monospace; font-size: 12.5px;
+  max-width: 380px; white-space: nowrap; overflow: hidden;
+  text-overflow: ellipsis; color: var(--accent);
+}
+
+/* ===== BADGES ===== */
+.badge-status {
+  padding: 4px 10px; border-radius: 6px; font-size: 11px;
+  font-weight: 600; display: inline-flex; align-items: center; gap: 5px;
+}
+.badge-success { background: rgba(34,197,94,0.12); color: var(--success); }
+.badge-danger { background: rgba(239,68,68,0.12); color: var(--danger); }
+.badge-warning { background: rgba(245,158,11,0.12); color: var(--warning); }
+.badge-info { background: rgba(56,189,248,0.12); color: var(--info); }
+.badge-purple { background: rgba(167,139,250,0.12); color: var(--purple); }
+.badge-muted { background: rgba(138,155,195,0.12); color: var(--text-secondary); }
+
+/* ===== FILTERS ===== */
+.filter-bar {
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: 12px; padding: 16px 20px; margin-bottom: 20px;
+}
+.filter-bar .form-select, .filter-bar .form-control {
+  background: var(--bg-input); border: 1px solid var(--border);
+  color: var(--text-primary); font-size: 13px; border-radius: 8px;
+  padding: 8px 12px;
+}
+.filter-bar .form-select:focus, .filter-bar .form-control:focus {
+  border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent-dim);
+}
+.filter-bar label { font-size: 11.5px; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+
+.btn-accent {
+  background: var(--accent); color: #060a13; border: none;
+  font-weight: 600; font-size: 13px; padding: 8px 18px;
+  border-radius: 8px; transition: all 0.2s;
+}
+.btn-accent:hover { background: #00eabb; color: #060a13; transform: translateY(-1px); box-shadow: 0 4px 15px var(--accent-glow); }
+.btn-outline-custom {
+  background: transparent; color: var(--text-secondary); border: 1px solid var(--border);
+  font-size: 13px; padding: 8px 18px; border-radius: 8px; transition: all 0.2s;
+}
+.btn-outline-custom:hover { border-color: var(--text-secondary); color: var(--text-primary); }
+.btn-sm-action {
+  background: var(--accent-dim); color: var(--accent); border: none;
+  font-size: 12px; padding: 5px 12px; border-radius: 6px; font-weight: 600;
+  transition: all 0.2s; cursor: pointer;
+}
+.btn-sm-action:hover { background: var(--accent); color: #060a13; }
+
+/* ===== ALERT CARDS ===== */
+.alert-card {
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: 12px; padding: 18px 20px; position: relative;
+  overflow: hidden; transition: all 0.25s;
+}
+.alert-card:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(0,0,0,0.3); }
+.alert-card::before {
+  content: ''; position: absolute; left: 0; top: 0; bottom: 0;
+  width: 4px;
+}
+.alert-card.alert-critical::before { background: var(--danger); }
+.alert-card.alert-warning::before { background: var(--warning); }
+.alert-card.alert-info::before { background: var(--info); }
+.alert-card .alert-icon {
+  width: 40px; height: 40px; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center; font-size: 18px;
+}
+.alert-card.alert-critical .alert-icon { background: rgba(239,68,68,0.12); color: var(--danger); }
+.alert-card.alert-warning .alert-icon { background: rgba(245,158,11,0.12); color: var(--warning); }
+.alert-card.alert-info .alert-icon { background: rgba(56,189,248,0.12); color: var(--info); }
+
+/* ===== CONFIGURACIÓN ===== */
+.config-section {
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: 12px; padding: 24px; margin-bottom: 20px;
+}
+.config-section h6 { font-family: 'Space Grotesk', sans-serif; font-size: 16px; font-weight: 600; margin-bottom: 20px; }
+.toggle-switch {
+  position: relative; width: 44px; height: 24px; cursor: pointer;
+}
+.toggle-switch input { display: none; }
+.toggle-switch .slider {
+  position: absolute; inset: 0; background: var(--border-light);
+  border-radius: 12px; transition: 0.3s;
+}
+.toggle-switch .slider::before {
+  content: ''; position: absolute; left: 3px; top: 3px;
+  width: 18px; height: 18px; border-radius: 50%;
+  background: var(--text-secondary); transition: 0.3s;
+}
+.toggle-switch input:checked + .slider { background: var(--accent); }
+.toggle-switch input:checked + .slider::before { transform: translateX(20px); background: #fff; }
+
+/* ===== GAUGE ===== */
+.gauge-container { text-align: center; }
+.gauge-value {
+  font-family: 'Space Grotesk', sans-serif; font-size: 32px; font-weight: 700;
+  margin-top: -10px;
+}
+.gauge-label { font-size: 12px; color: var(--text-secondary); margin-top: 2px; }
+
+/* ===== MODAL ===== */
+.modal-content {
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: 14px; color: var(--text-primary);
+}
+.modal-header { border-bottom: 1px solid var(--border); }
+.modal-footer { border-top: 1px solid var(--border); }
+.btn-close { filter: invert(1) grayscale(100%) brightness(200%); }
+.code-block {
+  background: var(--bg-body); border: 1px solid var(--border);
+  border-radius: 8px; padding: 16px; font-family: 'Space Grotesk', monospace;
+  font-size: 13px; color: var(--accent); overflow-x: auto; white-space: pre-wrap;
+  line-height: 1.6;
+}
+
+/* ===== DB CLICKABLE ROW ===== */
+.db-row { cursor: pointer; }
+.db-row:hover td:first-child { color: var(--accent); }
+
+/* ===== SIDEBAR OVERLAY ===== */
+.sidebar-overlay {
+  display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6);
+  z-index: 999;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 991px) {
+  .sidebar { transform: translateX(-100%); }
+  .sidebar.open { transform: translateX(0); }
+  .sidebar-overlay.show { display: block; }
+  .topbar { left: 0; }
+  .main-content { margin-left: 0; }
+  .btn-hamburger { display: flex; }
+  .topbar-search { display: none; }
+}
+@media (max-width: 575px) {
+  .main-content { padding: 16px; }
+  .stat-card .card-value { font-size: 22px; }
+}
+
+/* ===== UTILIDADES ===== */
+.text-accent { color: var(--accent) !important; }
+.text-info-custom { color: var(--info) !important; }
+.text-warning-custom { color: var(--warning) !important; }
+.text-danger-custom { color: var(--danger) !important; }
+.bg-card { background: var(--bg-card) !important; }
+.progress-custom { background: var(--border); height: 6px; border-radius: 3px; }
+.progress-custom .progress-bar { border-radius: 3px; }
+.table-responsive { border-radius: 10px; border: 1px solid var(--border); overflow: hidden; }
+
+/* Animación de entrada para stat cards */
+.stat-card { opacity: 0; transform: translateY(16px); animation: cardIn 0.5s ease forwards; }
+.stat-card:nth-child(1) { animation-delay: 0.05s; }
+.stat-card:nth-child(2) { animation-delay: 0.1s; }
+.stat-card:nth-child(3) { animation-delay: 0.15s; }
+.stat-card:nth-child(4) { animation-delay: 0.2s; }
+.stat-card:nth-child(5) { animation-delay: 0.25s; }
+.stat-card:nth-child(6) { animation-delay: 0.3s; }
+@keyframes cardIn {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Subtle background pattern */
+.main-content::before {
+  content: ''; position: fixed; top: 60px; left: 260px; right: 0; bottom: 0;
+  background: radial-gradient(ellipse 600px 400px at 80% 10%, var(--accent-dim), transparent),
+              radial-gradient(ellipse 500px 300px at 20% 80%, rgba(56,189,248,0.04), transparent);
+  pointer-events: none; z-index: 0;
+}
+.main-content > * { position: relative; z-index: 1; }
+@media (max-width: 991px) {
+  .main-content::before { left: 0; }
+}
+</style>
+</head>
+<body>
+
+<!-- ===== LOADING ===== -->
+<div id="loading-overlay">
+  <div class="loader-ring"></div>
+  <div class="font-display" style="color:var(--accent);font-size:14px;font-weight:600;letter-spacing:1px;">CARGANDO SISTEMA</div>
+</div>
+
+<!-- ===== SIDEBAR OVERLAY ===== -->
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+<!-- ===== SIDEBAR ===== -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-brand">
+    <div class="brand-icon"><i class="bi bi-database-gear"></i></div>
+    <div>
+      <h5>MySQL Audit Pro</h5>
+      <small>v2.4.1</small>
+    </div>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="nav-group-label">Monitoreo</div>
+    <a class="nav-item-link active" data-page="dashboard"><i class="bi bi-grid-1x2-fill"></i>Dashboard</a>
+    <a class="nav-item-link" data-page="resources"><i class="bi bi-cpu-fill"></i>Recursos del Servidor</a>
+
+    <div class="nav-group-label mt-2">Consultas</div>
+    <a class="nav-item-link" data-page="queries"><i class="bi bi-code-slash"></i>Consultas</a>
+    <a class="nav-item-link" data-page="slow-queries"><i class="bi bi-hourglass-split"></i>Consultas Lentas</a>
+
+    <div class="nav-group-label mt-2">Auditoría</div>
+    <a class="nav-item-link" data-page="audit"><i class="bi bi-journal-text"></i>Auditoría</a>
+    <a class="nav-item-link" data-page="alerts"><i class="bi bi-bell-fill"></i>Alertas <span class="badge badge-danger ms-auto" style="font-size:10px;padding:2px 7px;">5</span></a>
+
+    <div class="nav-group-label mt-2">Gestión</div>
+    <a class="nav-item-link" data-page="databases"><i class="bi bi-database-fill"></i>Bases de Datos</a>
+    <a class="nav-item-link" data-page="tables"><i class="bi bi-table"></i>Tablas</a>
+    <a class="nav-item-link" data-page="users"><i class="bi bi-people-fill"></i>Usuarios</a>
+
+    <div class="nav-group-label mt-2">Sistema</div>
+    <a class="nav-item-link" data-page="config"><i class="bi bi-gear-fill"></i>Configuración</a>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="server-status"><span class="status-dot"></span> <span>MySQL 8.0.35 — Online</span></div>
+    <div>Host: prod-db-01.internal</div>
+  </div>
+</aside>
+
+<!-- ===== TOPBAR ===== -->
+<header class="topbar">
+  <div class="topbar-left">
+    <button class="btn-hamburger" id="btnHamburger"><i class="bi bi-list"></i></button>
+    <div>
+      <div class="page-title" id="topbarTitle">Dashboard</div>
+    </div>
+  </div>
+  <div class="topbar-right">
+    <div class="topbar-search">
+      <i class="bi bi-search"></i>
+      <input type="text" placeholder="Buscar consultas, tablas...">
+    </div>
+    <button class="topbar-icon-btn" title="Notificaciones">
+      <i class="bi bi-bell"></i>
+      <span class="badge-dot"></span>
+    </button>
+    <button class="topbar-icon-btn" title="Actualizar datos" onclick="location.reload()">
+      <i class="bi bi-arrow-clockwise"></i>
+    </button>
+    <div class="topbar-user">
+      <div class="avatar">DB</div>
+      <div class="user-info">
+        <span>DB Admin</span>
+        <small>Superusuario</small>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ===== MAIN CONTENT ===== -->
+<main class="main-content" id="mainContent">
+
+  <!-- ==================== DASHBOARD ==================== -->
+  <section class="page-section active" id="page-dashboard">
+    <!-- Tarjetas de estado -->
+    <div class="row g-3 mb-4">
+      <div class="col-xl-2 col-md-4 col-6">
+        <div class="stat-card card-accent">
+          <div class="card-icon" style="background:var(--accent-dim);color:var(--accent);"><i class="bi bi-hdd-rack"></i></div>
+          <div class="card-value text-accent" style="font-size:18px;"><span class="status-dot me-2" style="display:inline-block;vertical-align:middle;"></span>Online</div>
+          <div class="card-label">Estado del Servidor</div>
+        </div>
+      </div>
+      <div class="col-xl-2 col-md-4 col-6">
+        <div class="stat-card card-info">
+          <div class="card-icon" style="background:rgba(56,189,248,0.12);color:var(--info);"><i class="bi bi-cpu"></i></div>
+          <div class="card-value" id="cpuValue">42%</div>
+          <div class="card-label">CPU</div>
+          <div class="card-trend text-success"><i class="bi bi-arrow-down-short"></i> -3.2%</div>
+        </div>
+      </div>
+      <div class="col-xl-2 col-md-4 col-6">
+        <div class="stat-card card-purple">
+          <div class="card-icon" style="background:rgba(167,139,250,0.12);color:var(--purple);"><i class="bi bi-memory"></i></div>
+          <div class="card-value" id="ramValue">67%</div>
+          <div class="card-label">RAM</div>
+          <div class="card-trend text-warning-custom"><i class="bi bi-arrow-up-short"></i> +2.1%</div>
+        </div>
+      </div>
+      <div class="col-xl-2 col-md-4 col-6">
+        <div class="stat-card card-warning">
+          <div class="card-icon" style="background:rgba(245,158,11,0.12);color:var(--warning);"><i class="bi bi-plug"></i></div>
+          <div class="card-value" id="connValue">184</div>
+          <div class="card-label">Conexiones Activas</div>
+          <div class="card-trend text-success"><i class="bi bi-arrow-down-short"></i> -12</div>
+        </div>
+      </div>
+      <div class="col-xl-2 col-md-4 col-6">
+        <div class="stat-card card-accent">
+          <div class="card-icon" style="background:var(--accent-dim);color:var(--accent);"><i class="bi bi-lightning-charge-fill"></i></div>
+          <div class="card-value" id="qpsValue">1,247</div>
+          <div class="card-label">Consultas / Segundo</div>
+          <div class="card-trend text-success"><i class="bi bi-arrow-up-short"></i> +8.5%</div>
+        </div>
+      </div>
+      <div class="col-xl-2 col-md-4 col-6">
+        <div class="stat-card card-info">
+          <div class="card-icon" style="background:rgba(56,189,248,0.12);color:var(--info);"><i class="bi bi-clock-history"></i></div>
+          <div class="card-value" style="font-size:20px;">45d 12h</div>
+          <div class="card-label">Uptime</div>
+          <div class="card-trend" style="color:var(--text-muted);"><i class="bi bi-check-circle"></i> Estable</div>
+        </div>
+      </div>
+    </div>
+    <!-- Gráficos -->
+    <div class="row g-3 mb-4">
+      <div class="col-lg-8">
+        <div class="chart-card" style="height:320px;">
+          <div class="chart-header">
+            <span class="chart-title"><i class="bi bi-activity me-2 text-accent"></i>Consultas por Minuto</span>
+            <div class="d-flex gap-2">
+              <span class="badge badge-success"><i class="bi bi-circle-fill me-1" style="font-size:6px;"></i>QPM</span>
+            </div>
+          </div>
+          <canvas id="chartQPM"></canvas>
+        </div>
+      </div>
+      <div class="col-lg-4">
+        <div class="chart-card" style="height:320px;">
+          <div class="chart-header">
+            <span class="chart-title"><i class="bi bi-pie-chart-fill me-2 text-info-custom"></i>Tamaño por Base</span>
+          </div>
+          <canvas id="chartDBSize"></canvas>
+        </div>
+      </div>
+    </div>
+    <div class="row g-3">
+      <div class="col-12">
+        <div class="chart-card" style="height:280px;">
+          <div class="chart-header">
+            <span class="chart-title"><i class="bi bi-graph-up me-2 text-warning-custom"></i>Uso de CPU y Memoria (24h)</span>
+            <div class="d-flex gap-2">
+              <span class="badge badge-info"><i class="bi bi-circle-fill me-1" style="font-size:6px;"></i>CPU</span>
+              <span class="badge badge-purple"><i class="bi bi-circle-fill me-1" style="font-size:6px;"></i>RAM</span>
+            </div>
+          </div>
+          <canvas id="chartCPURAM"></canvas>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== CONSULTAS ==================== -->
+  <section class="page-section" id="page-queries">
+    <div class="filter-bar">
+      <div class="row g-3 align-items-end">
+        <div class="col-md-2">
+          <label>Usuario</label>
+          <select class="form-select"><option value="">Todos</option><option>root</option><option>app_user</option><option>admin</option><option>readonly</option><option>report_gen</option></select>
+        </div>
+        <div class="col-md-2">
+          <label>Base de Datos</label>
+          <select class="form-select"><option value="">Todas</option><option>ecommerce</option><option>analytics</option><option>users_db</option><option>logging</option><option>inventory</option></select>
+        </div>
+        <div class="col-md-2">
+          <label>Fecha</label>
+          <input type="date" class="form-control" value="2025-01-15">
+        </div>
+        <div class="col-md-2">
+          <label>Duración mínima (ms)</label>
+          <input type="number" class="form-control" placeholder="Ej: 100">
+        </div>
+        <div class="col-md-2">
+          <label>Duración máxima (ms)</label>
+          <input type="number" class="form-control" placeholder="Ej: 5000">
+        </div>
+        <div class="col-md-2 d-flex gap-2">
+          <button class="btn btn-accent flex-fill"><i class="bi bi-funnel me-1"></i>Filtrar</button>
+          <button class="btn btn-outline-custom"><i class="bi bi-x-lg"></i></button>
+        </div>
+      </div>
+    </div>
+    <div class="table-responsive">
+      <table class="table table-dark-custom table-hover mb-0" id="tableQueries">
+        <thead><tr>
+          <th>#</th><th>Consulta SQL</th><th>Tiempo</th><th>Usuario</th><th>Base de Datos</th><th>Fecha</th><th>Estado</th><th>Acción</th>
+        </tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+    <div class="d-flex justify-content-between align-items-center mt-3">
+      <small class="text-muted">Mostrando 1-15 de 2,847 resultados</small>
+      <nav><ul class="pagination pagination-sm mb-0">
+        <li class="page-item disabled"><a class="page-link" href="#">Anterior</a></li>
+        <li class="page-item active"><a class="page-link" href="#" style="background:var(--accent);border-color:var(--accent);color:#060a13;">1</a></li>
+        <li class="page-item"><a class="page-link" href="#">2</a></li>
+        <li class="page-item"><a class="page-link" href="#">3</a></li>
+        <li class="page-item"><a class="page-link" href="#">...</a></li>
+        <li class="page-item"><a class="page-link" href="#">190</a></li>
+        <li class="page-item"><a class="page-link" href="#">Siguiente</a></li>
+      </ul></nav>
+    </div>
+  </section>
+
+  <!-- ==================== CONSULTAS LENTAS ==================== -->
+  <section class="page-section" id="page-slow-queries">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <div>
+        <span class="badge badge-warning me-2"><i class="bi bi-exclamation-triangle me-1"></i>23 consultas lentas detectadas hoy</span>
+      </div>
+      <button class="btn btn-outline-custom btn-sm"><i class="bi bi-download me-1"></i>Exportar CSV</button>
+    </div>
+    <div class="table-responsive">
+      <table class="table table-dark-custom table-hover mb-0" id="tableSlowQueries">
+        <thead><tr>
+          <th>#</th><th>Consulta SQL</th><th>Tiempo</th><th>Veces Ejecutada</th><th>Filas Examinadas</th><th>Filas Devueltas</th><th>Ratio</th>
+        </tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ==================== AUDITORÍA ==================== -->
+  <section class="page-section" id="page-audit">
+    <div class="filter-bar">
+      <div class="row g-3 align-items-end">
+        <div class="col-md-2">
+          <label>Usuario</label>
+          <select class="form-select"><option value="">Todos</option><option>root</option><option>app_user</option><option>admin</option></select>
+        </div>
+        <div class="col-md-2">
+          <label>Operación</label>
+          <select class="form-select"><option value="">Todas</option><option>SELECT</option><option>INSERT</option><option>UPDATE</option><option>DELETE</option></select>
+        </div>
+        <div class="col-md-2">
+          <label>Estado</label>
+          <select class="form-select"><option value="">Todos</option><option>Éxito</option><option>Error</option></select>
+        </div>
+        <div class="col-md-2">
+          <label>Fecha Desde</label>
+          <input type="date" class="form-control" value="2025-01-15">
+        </div>
+        <div class="col-md-2">
+          <label>Fecha Hasta</label>
+          <input type="date" class="form-control" value="2025-01-15">
+        </div>
+        <div class="col-md-2 d-flex gap-2">
+          <button class="btn btn-accent flex-fill"><i class="bi bi-funnel me-1"></i>Filtrar</button>
+          <button class="btn btn-outline-custom"><i class="bi bi-x-lg"></i></button>
+        </div>
+      </div>
+    </div>
+    <div class="table-responsive">
+      <table class="table table-dark-custom table-hover mb-0" id="tableAudit">
+        <thead><tr>
+          <th>#</th><th>Usuario</th><th>Operación</th><th>Tabla</th><th>Fecha y Hora</th><th>IP</th><th>Estado</th><th>Acción</th>
+        </tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+    <div class="d-flex justify-content-between align-items-center mt-3">
+      <small class="text-muted">Mostrando 1-15 de 14,231 registros</small>
+      <nav><ul class="pagination pagination-sm mb-0">
+        <li class="page-item disabled"><a class="page-link" href="#">Anterior</a></li>
+        <li class="page-item active"><a class="page-link" href="#" style="background:var(--accent);border-color:var(--accent);color:#060a13;">1</a></li>
+        <li class="page-item"><a class="page-link" href="#">2</a></li>
+        <li class="page-item"><a class="page-link" href="#">3</a></li>
+        <li class="page-item"><a class="page-link" href="#">...</a></li>
+        <li class="page-item"><a class="page-link" href="#">949</a></li>
+        <li class="page-item"><a class="page-link" href="#">Siguiente</a></li>
+      </ul></nav>
+    </div>
+  </section>
+
+  <!-- ==================== BASES DE DATOS ==================== -->
+  <section class="page-section" id="page-databases">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <span class="text-secondary" style="font-size:13px;"><i class="bi bi-info-circle me-1"></i>Haz clic en una fila para ver sus tablas</span>
+    </div>
+    <div class="table-responsive">
+      <table class="table table-dark-custom table-hover mb-0" id="tableDatabases">
+        <thead><tr>
+          <th>Nombre</th><th>Tamaño</th><th>Tablas</th><th>Registros Totales</th><th>Última Modificación</th><th>Estado</th>
+        </tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ==================== TABLAS ==================== -->
+  <section class="page-section" id="page-tables">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <div class="d-flex align-items-center gap-2">
+        <span class="font-display" style="font-size:15px;font-weight:600;" id="tablesDbLabel">Tablas de: ecommerce</span>
+        <span class="badge badge-info">6 tablas</span>
+      </div>
+      <button class="btn btn-outline-custom btn-sm" onclick="navigateTo('databases')"><i class="bi bi-arrow-left me-1"></i>Volver a Bases de Datos</button>
+    </div>
+    <div class="table-responsive">
+      <table class="table table-dark-custom table-hover mb-0" id="tableTables">
+        <thead><tr>
+          <th>Nombre</th><th>Tamaño</th><th>Índices</th><th>Registros</th><th>Espacio Utilizado</th><th>Fragmentación</th>
+        </tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ==================== USUARIOS ==================== -->
+  <section class="page-section" id="page-users">
+    <div class="row g-3 mb-4">
+      <div class="col-md-3">
+        <div class="stat-card card-accent">
+          <div class="card-value text-accent">8</div>
+          <div class="card-label">Usuarios Conectados</div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="stat-card card-info">
+          <div class="card-value text-info-custom">24</div>
+          <div class="card-label">Conexiones Totales Hoy</div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="stat-card card-warning">
+          <div class="card-value text-warning-custom">3</div>
+          <div class="card-label">Conexiones Idle &gt; 5min</div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="stat-card card-danger">
+          <div class="card-value text-danger-custom">0</div>
+          <div class="card-label">Conexiones Bloqueadas</div>
+        </div>
+      </div>
+    </div>
+    <div class="table-responsive">
+      <table class="table table-dark-custom table-hover mb-0" id="tableUsers">
+        <thead><tr>
+          <th>Usuario</th><th>Host</th><th>Base de Datos</th><th>Tiempo Conexión</th><th>Estado</th><th>Consulta Actual</th>
+        </tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ==================== RECURSOS DEL SERVIDOR ==================== -->
+  <section class="page-section" id="page-resources">
+    <div class="row g-3 mb-4">
+      <div class="col-lg-4 col-md-6">
+        <div class="chart-card text-center" style="height:220px;">
+          <div class="chart-title mb-2"><i class="bi bi-cpu me-2 text-info-custom"></i>CPU</div>
+          <canvas id="gaugeCPU" style="max-height:150px;"></canvas>
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-6">
+        <div class="chart-card text-center" style="height:220px;">
+          <div class="chart-title mb-2"><i class="bi bi-memory me-2" style="color:var(--purple);"></i>RAM</div>
+          <canvas id="gaugeRAM" style="max-height:150px;"></canvas>
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-6">
+        <div class="chart-card text-center" style="height:220px;">
+          <div class="chart-title mb-2"><i class="bi bi-hdd me-2 text-warning-custom"></i>Disco</div>
+          <canvas id="gaugeDisk" style="max-height:150px;"></canvas>
+        </div>
+      </div>
+    </div>
+    <div class="row g-3 mb-4">
+      <div class="col-md-4">
+        <div class="stat-card">
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <span class="card-label mb-0">Espacio Total</span>
+            <span class="font-display" style="font-weight:700;">500 GB</span>
+          </div>
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <span class="card-label mb-0">Espacio Usado</span>
+            <span class="font-display" style="font-weight:700;color:var(--warning);">347 GB</span>
+          </div>
+          <div class="d-flex justify-content-between align-items-center">
+            <span class="card-label mb-0">Espacio Libre</span>
+            <span class="font-display" style="font-weight:700;color:var(--accent);">153 GB</span>
+          </div>
+          <div class="progress-custom mt-3"><div class="progress-bar" style="width:69.4%;background:var(--warning);"></div></div>
+          <small class="text-muted mt-1 d-block">69.4% utilizado</small>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="stat-card">
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <span class="card-label mb-0">RAM Total</span>
+            <span class="font-display" style="font-weight:700;">32 GB</span>
+          </div>
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <span class="card-label mb-0">RAM Usada</span>
+            <span class="font-display" style="font-weight:700;color:var(--purple);">21.4 GB</span>
+          </div>
+          <div class="d-flex justify-content-between align-items-center">
+            <span class="card-label mb-0">RAM Libre</span>
+            <span class="font-display" style="font-weight:700;color:var(--accent);">10.6 GB</span>
+          </div>
+          <div class="progress-custom mt-3"><div class="progress-bar" style="width:67%;background:var(--purple);"></div></div>
+          <small class="text-muted mt-1 d-block">67% utilizado</small>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="stat-card">
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <span class="card-label mb-0">CPU Cores</span>
+            <span class="font-display" style="font-weight:700;">16</span>
+          </div>
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <span class="card-label mb-0">Load Average (1m)</span>
+            <span class="font-display" style="font-weight:700;color:var(--info);">6.72</span>
+          </div>
+          <div class="d-flex justify-content-between align-items-center">
+            <span class="card-label mb-0">Load Average (5m)</span>
+            <span class="font-display" style="font-weight:700;color:var(--info);">5.41</span>
+          </div>
+          <div class="progress-custom mt-3"><div class="progress-bar" style="width:42%;background:var(--info);"></div></div>
+          <small class="text-muted mt-1 d-block">42% utilización promedio</small>
+        </div>
+      </div>
+    </div>
+    <div class="row g-3">
+      <div class="col-lg-6">
+        <div class="chart-card" style="height:300px;">
+          <div class="chart-header">
+            <span class="chart-title"><i class="bi bi-database me-2 text-accent"></i>Espacio por Base de Datos</span>
+          </div>
+          <canvas id="chartUsageByDB"></canvas>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <div class="chart-card" style="height:300px;">
+          <div class="chart-header">
+            <span class="chart-title"><i class="bi bi-table me-2 text-warning-custom"></i>Espacio por Tabla (Top 10)</span>
+          </div>
+          <canvas id="chartUsageByTable"></canvas>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== ALERTAS ==================== -->
+  <section class="page-section" id="page-alerts">
+    <div class="row g-3 mb-4">
+      <div class="col-md-3">
+        <div class="stat-card card-danger">
+          <div class="card-value text-danger-custom">2</div>
+          <div class="card-label">Críticas</div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="stat-card card-warning">
+          <div class="card-value text-warning-custom">2</div>
+          <div class="card-label">Advertencias</div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="stat-card card-info">
+          <div class="card-value text-info-custom">1</div>
+          <div class="card-label">Informativas</div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="stat-card card-accent">
+          <div class="card-value text-accent">5</div>
+          <div class="card-label">Total Activas</div>
+        </div>
+      </div>
+    </div>
+    <div class="row g-3" id="alertCards"></div>
+  </section>
+
+  <!-- ==================== CONFIGURACIÓN ==================== -->
+  <section class="page-section" id="page-config">
+    <div class="row g-4">
+      <div class="col-lg-8">
+        <!-- Auditoría -->
+        <div class="config-section">
+          <h6><i class="bi bi-shield-check me-2 text-accent"></i>Auditoría</h6>
+          <div class="d-flex justify-content-between align-items-center py-3 border-bottom" style="border-color:var(--border) !important;">
+            <div>
+              <div style="font-size:14px;font-weight:600;">Activar auditoría de consultas</div>
+              <small class="text-muted">Registra todas las consultas ejecutadas en el servidor</small>
+            </div>
+            <label class="toggle-switch"><input type="checkbox" checked><span class="slider"></span></label>
+          </div>
+          <div class="d-flex justify-content-between align-items-center py-3 border-bottom" style="border-color:var(--border) !important;">
+            <div>
+              <div style="font-size:14px;font-weight:600;">Activar auditoría de conexiones</div>
+              <small class="text-muted">Registra intentos de conexión y desconexión</small>
+            </div>
+            <label class="toggle-switch"><input type="checkbox" checked><span class="slider"></span></label>
+          </div>
+          <div class="d-flex justify-content-between align-items-center py-3">
+            <div>
+              <div style="font-size:14px;font-weight:600;">Auditar operaciones DDL</div>
+              <small class="text-muted">Registra CREATE, ALTER, DROP sobre tablas</small>
+            </div>
+            <label class="toggle-switch"><input type="checkbox"><span class="slider"></span></label>
+          </div>
+        </div>
+        <!-- Slow Query Log -->
+        <div class="config-section">
+          <h6><i class="bi bi-hourglass-split me-2 text-warning-custom"></i>Slow Query Log</h6>
+          <div class="d-flex justify-content-between align-items-center py-3 border-bottom" style="border-color:var(--border) !important;">
+            <div>
+              <div style="font-size:14px;font-weight:600;">Activar Slow Query Log</div>
+              <small class="text-muted">Registra consultas que excedan el umbral de tiempo</small>
+            </div>
+            <label class="toggle-switch"><input type="checkbox" checked><span class="slider"></span></label>
+          </div>
+          <div class="py-3">
+            <label class="form-label" style="font-size:12px;font-weight:600;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.5px;">Umbral de consulta lenta (segundos)</label>
+            <input type="number" class="form-control" value="2" style="background:var(--bg-input);border-color:var(--border);color:var(--text-primary);border-radius:8px;max-width:200px;">
+          </div>
+          <div class="d-flex justify-content-between align-items-center py-3 border-top" style="border-color:var(--border) !important;">
+            <div>
+              <div style="font-size:14px;font-weight:600;">Log de consultas sin índice</div>
+              <small class="text-muted">Registra consultas que no utilizan ningún índice</small>
+            </div>
+            <label class="toggle-switch"><input type="checkbox" checked><span class="slider"></span></label>
+          </div>
+        </div>
+        <!-- Retención -->
+        <div class="config-section">
+          <h6><i class="bi bi-calendar-range me-2 text-info-custom"></i>Retención de Datos</h6>
+          <div class="row g-3">
+            <div class="col-md-4">
+              <label class="form-label" style="font-size:12px;font-weight:600;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.5px;">Auditoría</label>
+              <select class="form-select" style="background:var(--bg-input);border-color:var(--border);color:var(--text-primary);">
+                <option>7 días</option><option>30 días</option><option selected>90 días</option><option>180 días</option><option>365 días</option>
+              </select>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label" style="font-size:12px;font-weight:600;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.5px;">Slow Queries</label>
+              <select class="form-select" style="background:var(--bg-input);border-color:var(--border);color:var(--text-primary);">
+                <option>7 días</option><option selected>30 días</option><option>90 días</option><option>180 días</option>
+              </select>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label" style="font-size:12px;font-weight:600;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.5px;">Métricas</label>
+              <select class="form-select" style="background:var(--bg-input);border-color:var(--border);color:var(--text-primary);">
+                <option>7 días</option><option>30 días</option><option>90 días</option><option selected>180 días</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4">
+        <!-- Exportar -->
+        <div class="config-section">
+          <h6><i class="bi bi-download me-2 text-accent"></i>Exportar Reportes</h6>
+          <div class="d-flex flex-column gap-2">
+            <button class="btn btn-outline-custom w-100 text-start"><i class="bi bi-file-earmark-pdf me-2 text-danger-custom"></i>Exportar PDF — Auditoría</button>
+            <button class="btn btn-outline-custom w-100 text-start"><i class="bi bi-file-earmark-spreadsheet me-2 text-success"></i>Exportar CSV — Consultas Lentas</button>
+            <button class="btn btn-outline-custom w-100 text-start"><i class="bi bi-file-earmark-pdf me-2 text-danger-custom"></i>Exportar PDF — Recursos</button>
+            <button class="btn btn-outline-custom w-100 text-start"><i class="bi bi-file-earmark-spreadsheet me-2 text-success"></i>Exportar CSV — Alertas</button>
+            <button class="btn btn-outline-custom w-100 text-start"><i class="bi bi-file-earmark-code me-2 text-info-custom"></i>Exportar JSON — Todo</button>
+          </div>
+        </div>
+        <!-- Notificaciones -->
+        <div class="config-section">
+          <h6><i class="bi bi-bell me-2 text-warning-custom"></i>Notificaciones</h6>
+          <div class="d-flex justify-content-between align-items-center py-2">
+            <span style="font-size:13px;">Consulta lenta</span>
+            <label class="toggle-switch"><input type="checkbox" checked><span class="slider"></span></label>
+          </div>
+          <div class="d-flex justify-content-between align-items-center py-2">
+            <span style="font-size:13px;">Disco bajo</span>
+            <label class="toggle-switch"><input type="checkbox" checked><span class="slider"></span></label>
+          </div>
+          <div class="d-flex justify-content-between align-items-center py-2">
+            <span style="font-size:13px;">Conexiones altas</span>
+            <label class="toggle-switch"><input type="checkbox" checked><span class="slider"></span></label>
+          </div>
+          <div class="d-flex justify-content-between align-items-center py-2">
+            <span style="font-size:13px;">Deadlock</span>
+            <label class="toggle-switch"><input type="checkbox" checked><span class="slider"></span></label>
+          </div>
+          <div class="d-flex justify-content-between align-items-center py-2">
+            <span style="font-size:13px;">Error autenticación</span>
+            <label class="toggle-switch"><input type="checkbox"><span class="slider"></span></label>
+          </div>
+        </div>
+        <!-- Usuarios -->
+        <div class="config-section">
+          <h6><i class="bi bi-people me-2" style="color:var(--purple);"></i>Gestión de Usuarios</h6>
+          <div class="table-responsive" style="border:none;">
+            <table class="table table-dark-custom table-sm mb-0">
+              <thead><tr><th>Usuario</th><th>Rol</th></tr></thead>
+              <tbody>
+                <tr><td>root</td><td><span class="badge badge-danger">Superadmin</span></td></tr>
+                <tr><td>db_admin</td><td><span class="badge badge-warning">Admin</span></td></tr>
+                <tr><td>app_user</td><td><span class="badge badge-info">Lectura/Escritura</span></td></tr>
+                <tr><td>readonly</td><td><span class="badge badge-muted">Solo Lectura</span></td></tr>
+                <tr><td>report_gen</td><td><span class="badge badge-purple">Reportes</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <button class="btn btn-accent w-100 py-2 mt-2"><i class="bi bi-check-lg me-2"></i>Guardar Configuración</button>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ===== MODAL DETALLE ===== -->
+<div class="modal fade" id="detailModal" tabindex="-1">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title font-display" id="modalTitle">Detalle de Consulta</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body" id="modalBody"></div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-custom" data-bs-dismiss="modal">Cerrar</button>
+        <button type="button" class="btn btn-accent"><i class="bi bi-clipboard me-1"></i>Copiar SQL</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== TOAST ===== -->
+<div class="position-fixed bottom-0 end-0 p-3" style="z-index:1100;">
+  <div id="toastNotify" class="toast align-items-center border-0" role="alert" style="background:var(--bg-card);border:1px solid var(--border) !important;border-radius:10px;">
+    <div class="d-flex">
+      <div class="toast-body" id="toastBody" style="font-size:13px;color:var(--text-primary);"></div>
+      <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" style="filter:invert(1) brightness(200%);"></button>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+/* =========================================================
+   DATOS SIMULADOS (MOCK)
+   ========================================================= */
+
+const mockQueries = [
+  { id:1, sql:"SELECT o.id, o.total, c.nombre FROM orders o JOIN customers c ON o.customer_id = c.id WHERE o.fecha >= '2025-01-01' ORDER BY o.total DESC LIMIT 100", time:245, user:"app_user", db:"ecommerce", date:"2025-01-15 14:32:11", status:"Completada" },
+  { id:2, sql:"INSERT INTO logs (nivel, mensaje, timestamp) VALUES ('ERROR', 'Connection timeout to payment gateway', NOW())", time:12, user:"app_user", db:"logging", date:"2025-01-15 14:31:58", status:"Completada" },
+  { id:3, sql:"UPDATE products SET stock = stock - 1, updated_at = NOW() WHERE id = 4521 AND stock > 0", time:8, user:"app_user", db:"inventory", date:"2025-01-15 14:31:45", status:"Completada" },
+  { id:4, sql:"SELECT u.id, u.email, COUNT(o.id) as total_orders FROM users u LEFT JOIN orders o ON u.id = o.user_id GROUP BY u.id HAVING total_orders > 50", time:1820, user:"report_gen", db:"ecommerce", date:"2025-01-15 14:30:22", status:"Completada" },
+  { id:5, sql:"DELETE FROM sessions WHERE last_activity < DATE_SUB(NOW(), INTERVAL 30 DAY)", time:3400, user:"admin", db:"users_db", date:"2025-01-15 14:29:10", status:"Completada" },
+  { id:6, sql:"SELECT * FROM analytics_events WHERE event_type = 'pageview' AND timestamp BETWEEN '2025-01-14 00:00:00' AND '2025-01-15 00:00:00'", time:4520, user:"report_gen", db:"analytics", date:"2025-01-15 14:28:01", status:"Timeout" },
+  { id:7, sql:"SELECT COUNT(*) FROM orders WHERE status = 'pending' AND created_at > NOW() - INTERVAL 1 HOUR", time:3, user:"readonly", db:"ecommerce", date:"2025-01-15 14:27:55", status:"Completada" },
+  { id:8, sql:"INSERT INTO audit_log (user_id, action, table_name, record_id, ip) VALUES (12, 'UPDATE', 'products', 4521, '192.168.1.105')", time:5, user:"admin", db:"users_db", date:"2025-01-15 14:27:40", status:"Completada" },
+  { id:9, sql:"SELECT p.nombre, SUM(dp.cantidad) as vendido FROM detalle_pedido dp JOIN products p ON dp.product_id = p.id GROUP BY p.id ORDER BY vendido DESC LIMIT 20", time:890, user:"report_gen", db:"ecommerce", date:"2025-01-15 14:26:30", status:"Completada" },
+  { id:10, sql:"SELECT * FROM nonexistent_table WHERE id = 1", time:2, user:"app_user", db:"ecommerce", date:"2025-01-15 14:25:18", status:"Error" },
+  { id:11, sql:"UPDATE users SET last_login = NOW() WHERE id = 1042", time:4, user:"app_user", db:"users_db", date:"2025-01-15 14:24:50", status:"Completada" },
+  { id:12, sql:"SELECT DATE(created_at) as dia, COUNT(*) as total, SUM(total) as ingresos FROM orders GROUP BY dia ORDER BY dia DESC LIMIT 30", time:560, user:"report_gen", db:"ecommerce", date:"2025-01-15 14:23:11", status:"Completada" },
+  { id:13, sql:"INSERT INTO notifications (user_id, tipo, mensaje, leida) VALUES (1042, 'order', 'Tu pedido #8834 ha sido enviado', 0)", time:6, user:"app_user", db:"users_db", date:"2025-01-15 14:22:05", status:"Completada" },
+  { id:14, sql:"SELECT c.nombre, c.email, COUNT(DISTINCT o.id) as pedidos, SUM(o.total) as gastado FROM customers c JOIN orders o ON c.id = o.customer_id WHERE o.status = 'completed' GROUP BY c.id", time:2340, user:"report_gen", db:"ecommerce", date:"2025-01-15 14:20:33", status:"Completada" },
+  { id:15, sql:"DELETE FROM cache_entries WHERE expires_at < NOW()", time:150, user:"admin", db:"logging", date:"2025-01-15 14:19:20", status:"Completada" }
+];
+
+const mockSlowQueries = [
+  { id:1, sql:"SELECT e.*, u.email FROM analytics_events e JOIN users u ON e.user_id = u.id WHERE e.timestamp BETWEEN '2025-01-01' AND '2025-01-15' ORDER BY e.timestamp DESC", time:45.2, exec:12, examined:4850000, returned:230000 },
+  { id:2, sql:"SELECT p.*, c.nombre as categoria, SUM(dp.cantidad) as total_vendido FROM products p LEFT JOIN categories c ON p.cat_id = c.id LEFT JOIN detalle_pedido dp ON p.id = dp.product_id GROUP BY p.id ORDER BY total_vendido DESC", time:32.8, exec:45, examined:2120000, returned:8500 },
+  { id:3, sql:"SELECT o.*, c.nombre, c.email FROM orders o JOIN customers c ON o.customer_id = c.id WHERE o.status IN ('pending','processing') AND o.created_at > '2024-12-01' ORDER BY o.created_at", time:18.5, exec:120, examined:980000, returned:4200 },
+  { id:4, sql:"UPDATE inventory SET reserved = reserved - 1 WHERE product_id IN (SELECT id FROM products WHERE category_id = 5 AND active = 1)", time:15.3, exec:8, examined:340000, returned:1200 },
+  { id:5, sql:"SELECT u.*, COUNT(l.id) as logins, MAX(l.timestamp) as last_login FROM users u LEFT JOIN login_logs l ON u.id = l.user_id GROUP BY u.id HAVING logins > 100", time:12.7, exec:3, examined:1560000, returned:340 },
+  { id:6, sql:"SELECT DATE_FORMAT(timestamp, '%Y-%m-%d %H:00') as hora, event_type, COUNT(*) as total FROM analytics_events GROUP BY hora, event_type ORDER BY hora DESC", time:28.1, exec:22, examined:3200000, returned:1440 },
+  { id:7, sql:"SELECT * FROM orders WHERE customer_id IN (SELECT customer_id FROM orders GROUP BY customer_id HAVING COUNT(*) > 20) ORDER BY created_at DESC", time:8.9, exec:67, examined:540000, returned:8900 },
+  { id:8, sql:"INSERT INTO analytics_archive SELECT * FROM analytics_events WHERE timestamp < DATE_SUB(NOW(), INTERVAL 90 DAY)", time:52.4, exec:1, examined:12000000, returned:4500000 }
+];
+
+const mockAudit = [
+  { id:1, user:"app_user", op:"SELECT", table:"orders", date:"2025-01-15 14:32:11", ip:"192.168.1.105", status:"Éxito" },
+  { id:2, user:"app_user", op:"INSERT", table:"logs", date:"2025-01-15 14:31:58", ip:"192.168.1.105", status:"Éxito" },
+  { id:3, user:"app_user", op:"UPDATE", table:"products", date:"2025-01-15 14:31:45", ip:"192.168.1.105", status:"Éxito" },
+  { id:4, user:"report_gen", op:"SELECT", table:"users", date:"2025-01-15 14:30:22", ip:"10.0.1.50", status:"Éxito" },
+  { id:5, user:"admin", op:"DELETE", table:"sessions", date:"2025-01-15 14:29:10", ip:"10.0.1.1", status:"Éxito" },
+  { id:6, user:"report_gen", op:"SELECT", table:"analytics_events", date:"2025-01-15 14:28:01", ip:"10.0.1.50", status:"Éxito" },
+  { id:7, user:"unknown", op:"SELECT", table:"nonexistent_table", date:"2025-01-15 14:25:18", ip:"203.0.113.42", status:"Error" },
+  { id:8, user:"admin", op:"INSERT", table:"audit_log", date:"2025-01-15 14:27:40", ip:"10.0.1.1", status:"Éxito" },
+  { id:9, user:"app_user", op:"UPDATE", table:"users", date:"2025-01-15 14:24:50", ip:"192.168.1.108", status:"Éxito" },
+  { id:10, user:"report_gen", op:"SELECT", table:"orders", date:"2025-01-15 14:23:11", ip:"10.0.1.50", status:"Éxito" },
+  { id:11, user:"app_user", op:"INSERT", table:"notifications", date:"2025-01-15 14:22:05", ip:"192.168.1.105", status:"Éxito" },
+  { id:12, user:"report_gen", op:"SELECT", table:"customers", date:"2025-01-15 14:20:33", ip:"10.0.1.50", status:"Éxito" },
+  { id:13, user:"admin", op:"DELETE", table:"cache_entries", date:"2025-01-15 14:19:20", ip:"10.0.1.1", status:"Éxito" },
+  { id:14, user:"malicious", op:"SELECT", table:"users", date:"2025-01-15 14:15:00", ip:"198.51.100.77", status:"Error" },
+  { id:15, user:"app_user", op:"INSERT", table:"orders", date:"2025-01-15 14:10:30", ip:"192.168.1.112", status:"Éxito" }
+];
+
+const mockDatabases = [
+  { name:"ecommerce", size:"142.3 GB", tables:24, records:8540000, modified:"2025-01-15 14:32:11", status:"Activa" },
+  { name:"analytics", size:"89.7 GB", tables:12, records:42000000, modified:"2025-01-15 14:28:01", status:"Activa" },
+  { name:"users_db", size:"34.2 GB", tables:8, records:2150000, modified:"2025-01-15 14:27:40", status:"Activa" },
+  { name:"logging", size:"56.8 GB", tables:6, records:125000000, modified:"2025-01-15 14:31:58", status:"Activa" },
+  { name:"inventory", size:"18.5 GB", tables:10, records:320000, modified:"2025-01-15 14:31:45", status:"Activa" },
+  { name:"reporting", size:"5.5 GB", tables:4, records:890000, modified:"2025-01-15 12:00:00", status:"Inactiva" }
+];
+
+const mockTablesByDB = {
+  ecommerce: [
+    { name:"orders", size:"48.2 GB", indexes:5, records:3200000, used:"42.1 GB", frag:"12%" },
+    { name:"products", size:"28.5 GB", indexes:8, records:85000, used:"24.3 GB", frag:"8%" },
+    { name:"customers", size:"18.1 GB", indexes:4, records:1200000, used:"15.8 GB", frag:"5%" },
+    { name:"detalle_pedido", size:"32.4 GB", indexes:3, records:18500000, used:"29.1 GB", frag:"22%" },
+    { name:"payments", size:"9.8 GB", indexes:6, records:3100000, used:"8.4 GB", frag:"3%" },
+    { name:"categories", size:"0.3 GB", indexes:2, records:450, used:"0.2 GB", frag:"0%" }
+  ],
+  analytics: [
+    { name:"analytics_events", size:"72.1 GB", indexes:4, records:38000000, used:"68.5 GB", frag:"18%" },
+    { name:"event_metadata", size:"8.4 GB", indexes:3, records:2400000, used:"7.2 GB", frag:"6%" },
+    { name:"sessions_analytics", size:"5.8 GB", indexes:2, records:1600000, used:"5.1 GB", frag:"4%" },
+    { name:"funnel_steps", size:"0.8 GB", indexes:1, records:12000, used:"0.6 GB", frag:"1%" }
+  ],
+  users_db: [
+    { name:"users", size:"12.4 GB", indexes:6, records:1500000, used:"10.8 GB", frag:"7%" },
+    { name:"sessions", size:"8.2 GB", indexes:3, records:420000, used:"7.1 GB", frag:"15%" },
+    { name:"user_preferences", size:"3.1 GB", indexes:2, records:980000, used:"2.6 GB", frag:"3%" },
+    { name:"notifications", size:"5.8 GB", indexes:4, records:8900000, used:"5.2 GB", frag:"11%" },
+    { name:"login_logs", size:"4.2 GB", indexes:2, records:6200000, used:"3.8 GB", frag:"9%" }
+  ],
+  logging: [
+    { name:"logs", size:"38.5 GB", indexes:3, records:95000000, used:"35.2 GB", frag:"25%" },
+    { name:"error_logs", size:"8.2 GB", indexes:2, records:12000000, used:"7.4 GB", frag:"14%" },
+    { name:"audit_log", size:"6.8 GB", indexes:4, records:18000000, used:"6.1 GB", frag:"8%" },
+    { name:"cache_entries", size:"2.1 GB", indexes:2, records:500000, used:"1.8 GB", frag:"5%" },
+    { name:"api_calls", size:"1.2 GB", indexes:1, records:3200000, used:"1.0 GB", frag:"2%" }
+  ],
+  inventory: [
+    { name:"products_inv", size:"8.4 GB", indexes:5, records:120000, used:"7.2 GB", frag:"6%" },
+    { name:"warehouses", size:"0.5 GB", indexes:2, records:45, used:"0.3 GB", frag:"0%" },
+    { name:"stock_movements", size:"6.8 GB", indexes:3, records:8500000, used:"6.1 GB", frag:"19%" },
+    { name:"suppliers", size:"0.8 GB", indexes:2, records:320, used:"0.6 GB", frag:"1%" },
+    { name:"purchase_orders", size:"2.0 GB", indexes:4, records:180000, used:"1.7 GB", frag:"4%" }
+  ],
+  reporting: [
+    { name:"daily_summary", size:"1.8 GB", indexes:2, records:540000, used:"1.5 GB", frag:"3%" },
+    { name:"monthly_report", size:"0.9 GB", indexes:1, records:18000, used:"0.7 GB", frag:"1%" },
+    { name:"kpi_metrics", size:"1.2 GB", indexes:3, records:280000, used:"1.0 GB", frag:"5%" },
+    { name:"report_templates", size:"0.01 GB", indexes:1, records:24, used:"0.005 GB", frag:"0%" }
+  ]
+};
+
+const mockUsers = [
+  { user:"app_user", host:"192.168.1.105", db:"ecommerce", time:"2h 14m", status:"Activo", query:"SELECT o.id, o.total FROM orders o WHERE o.status = 'pending' LIMIT 50" },
+  { user:"app_user", host:"192.168.1.108", db:"users_db", time:"0h 45m", status:"Activo", query:"UPDATE users SET last_login = NOW() WHERE id = 1042" },
+  { user:"app_user", host:"192.168.1.112", db:"ecommerce", time:"1h 02m", status:"Activo", query:"INSERT INTO orders (customer_id, total, status) VALUES (567, 89.99, 'pending')" },
+  { user:"report_gen", host:"10.0.1.50", db:"analytics", time:"3h 38m", status:"Activo", query:"SELECT event_type, COUNT(*) FROM analytics_events GROUP BY event_type" },
+  { user:"admin", host:"10.0.1.1", db:"users_db", time:"5h 12m", status:"Idle", query:"—" },
+  { user:"readonly", host:"10.0.1.30", db:"ecommerce", time:"0h 08m", status:"Activo", query:"SELECT COUNT(*) FROM orders WHERE status = 'pending'" },
+  { user:"app_user", host:"192.168.1.120", db:"inventory", time:"0h 33m", status:"Idle", query:"—" },
+  { user:"report_gen", host:"10.0.1.51", db:"ecommerce", time:"1h 55m", status:"Activo", query:"SELECT p.nombre, SUM(dp.cantidad) as vendido FROM detalle_pedido dp JOIN products p ON dp.product_id = p.id GROUP BY p.id" }
+];
+
+const mockAlerts = [
+  { id:1, type:"critical", icon:"bi-exclamation-octagon-fill", title:"Deadlock detectado", desc:"Se detectó un deadlock entre las tablas orders y inventory en la transacción TX-88421. Dos sesiones bloqueadas mutuamente.", time:"Hace 3 minutos", db:"ecommerce" },
+  { id:2, type:"critical", icon:"bi-database-x-fill", title:"Error de autenticación múltiple", desc:"Se detectaron 47 intentos fallidos de autenticación desde la IP 198.51.100.77 en los últimos 10 minutos.", time:"Hace 8 minutos", db:"—" },
+  { id:3, type:"warning", icon:"bi-hdd-fill", title:"Espacio en disco bajo", desc:"El disco principal está al 69.4% de capacidad (347 GB / 500 GB). Se estima que se llenará en 18 días al ritmo actual.", time:"Hace 22 minutos", db:"—" },
+  { id:4, type:"warning", icon:"bi-people-fill", title:"Muchas conexiones activas", desc:"Las conexiones activas (184) superan el umbral configurado (150). Considere aumentar max_connections o revisar conexiones idle.", time:"Hace 35 minutos", db:"—" },
+  { id:5, type:"info", icon:"bi-hourglass-split", title:"Consulta lenta recurrente", desc:"La consulta sobre analytics_events se ha ejecutado 12 veces con un tiempo promedio de 45.2s. Se recomienda agregar índices compuestos.", time:"Hace 1 hora", db:"analytics" }
+];
+
+/* =========================================================
+   NAVEGACIÓN
+   ========================================================= */
+const pageTitles = {
+  dashboard: 'Dashboard',
+  queries: 'Consultas',
+  'slow-queries': 'Consultas Lentas',
+  audit: 'Auditoría',
+  databases: 'Bases de Datos',
+  tables: 'Tablas',
+  users: 'Usuarios Conectados',
+  resources: 'Recursos del Servidor',
+  alerts: 'Alertas',
+  config: 'Configuración'
+};
+
+let currentPage = 'dashboard';
+let selectedDB = 'ecommerce';
+const chartInstances = {};
+
+function navigateTo(pageId) {
+  /* Ocultar página actual */
+  document.querySelectorAll('.page-section').forEach(p => p.classList.remove('active'));
+  const target = document.getElementById('page-' + pageId);
+  if (target) {
+    target.classList.add('active');
+    /* Forzar re-animación */
+    target.style.animation = 'none';
+    target.offsetHeight;
+    target.style.animation = '';
+  }
+
+  /* Actualizar sidebar */
+  document.querySelectorAll('.nav-item-link').forEach(l => l.classList.remove('active'));
+  const link = document.querySelector(`.nav-item-link[data-page="${pageId}"]`);
+  if (link) link.classList.add('active');
+
+  /* Actualizar título */
+  document.getElementById('topbarTitle').textContent = pageTitles[pageId] || pageId;
+
+  /* Cerrar sidebar en móvil */
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('sidebarOverlay').classList.remove('show');
+
+  currentPage = pageId;
+
+  /* Inicializar gráficos si es necesario */
+  requestAnimationFrame(() => {
+    switch(pageId) {
+      case 'dashboard': initDashboardCharts(); break;
+      case 'resources': initResourceCharts(); break;
+    }
+  });
+
+  /* Scroll al inicio */
+  document.getElementById('mainContent').scrollTop = 0;
+}
+
+/* Event listeners de navegación */
+document.querySelectorAll('.nav-item-link').forEach(link => {
+  link.addEventListener('click', () => navigateTo(link.dataset.page));
+});
+
+/* Hamburger */
+document.getElementById('btnHamburger').addEventListener('click', () => {
+  document.getElementById('sidebar').classList.toggle('open');
+  document.getElementById('sidebarOverlay').classList.toggle('show');
+});
+document.getElementById('sidebarOverlay').addEventListener('click', () => {
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('sidebarOverlay').classList.remove('show');
+});
+
+/* =========================================================
+   RENDERIZADO DE TABLAS
+   ========================================================= */
+function renderQueries() {
+  const tbody = document.querySelector('#tableQueries tbody');
+  tbody.innerHTML = mockQueries.map(q => `
+    <tr>
+      <td class="text-muted">${q.id}</td>
+      <td class="sql-cell" title="${q.sql.replace(/"/g, '&quot;')}">${q.sql}</td>
+      <td><span class="font-display" style="font-weight:600;${q.time > 1000 ? 'color:var(--danger)' : q.time > 500 ? 'color:var(--warning)' : ''}">${q.time} ms</span></td>
+      <td>${q.user}</td>
+      <td><span class="badge badge-muted">${q.db}</span></td>
+      <td class="text-muted" style="font-size:12px;">${q.date}</td>
+      <td><span class="badge badge-status ${q.status === 'Completada' ? 'badge-success' : q.status === 'Error' ? 'badge-danger' : 'badge-warning'}">${q.status}</span></td>
+      <td><button class="btn-sm-action" onclick="showQueryDetail(${q.id})"><i class="bi bi-eye me-1"></i>Ver detalle</button></td>
+    </tr>
+  `).join('');
+}
+
+function renderSlowQueries() {
+  const tbody = document.querySelector('#tableSlowQueries tbody');
+  tbody.innerHTML = mockSlowQueries.map(q => {
+    const ratio = q.examined > 0 ? (q.examined / Math.max(1, q.returned)).toFixed(0) : '—';
+    return `
+    <tr>
+      <td class="text-muted">${q.id}</td>
+      <td class="sql-cell" title="${q.sql.replace(/"/g, '&quot;')}">${q.sql}</td>
+      <td><span class="font-display" style="font-weight:700;color:var(--danger);">${q.time}s</span></td>
+      <td class="text-center"><span class="badge badge-warning">${q.exec}x</span></td>
+      <td class="text-muted">${(q.examined / 1000000).toFixed(1)}M</td>
+      <td class="text-muted">${(q.returned / 1000).toFixed(0)}K</td>
+      <td><span class="font-display" style="font-weight:600;color:${parseInt(ratio) > 1000 ? 'var(--danger)' : 'var(--warning)'};">${ratio}:1</span></td>
+    </tr>`;
+  }).join('');
+}
+
+function renderAudit() {
+  const tbody = document.querySelector('#tableAudit tbody');
+  const opColors = { SELECT:'badge-info', INSERT:'badge-success', UPDATE:'badge-warning', DELETE:'badge-danger' };
+  tbody.innerHTML = mockAudit.map(a => `
+    <tr>
+      <td class="text-muted">${a.id}</td>
+      <td><span class="font-display" style="font-weight:600;">${a.user}</span></td>
+      <td><span class="badge badge-status ${opColors[a.op] || 'badge-muted'}">${a.op}</span></td>
+      <td><code style="font-size:12px;color:var(--text-primary);">${a.table}</code></td>
+      <td class="text-muted" style="font-size:12px;">${a.date}</td>
+      <td><code style="font-size:12px;color:var(--text-secondary);">${a.ip}</code></td>
+      <td><span class="badge badge-status ${a.status === 'Éxito' ? 'badge-success' : 'badge-danger'}">${a.status}</span></td>
+      <td><button class="btn-sm-action" onclick="showAuditDetail(${a.id})"><i class="bi bi-eye me-1"></i>Ver detalle</button></td>
+    </tr>
+  `).join('');
+}
+
+function renderDatabases() {
+  const tbody = document.querySelector('#tableDatabases tbody');
+  tbody.innerHTML = mockDatabases.map(db => `
+    <tr class="db-row" onclick="selectDatabase('${db.name}')">
+      <td><i class="bi bi-database-fill me-2 text-accent"></i><span class="font-display" style="font-weight:600;">${db.name}</span></td>
+      <td class="font-display" style="font-weight:600;">${db.size}</td>
+      <td>${db.tables}</td>
+      <td>${(db.records / 1000000).toFixed(1)}M</td>
+      <td class="text-muted" style="font-size:12px;">${db.modified}</td>
+      <td><span class="badge badge-status ${db.status === 'Activa' ? 'badge-success' : 'badge-muted'}">${db.status}</span></td>
+    </tr>
+  `).join('');
+}
+
+function selectDatabase(dbName) {
+  selectedDB = dbName;
+  document.getElementById('tablesDbLabel').textContent = 'Tablas de: ' + dbName;
+  renderTables();
+  navigateTo('tables');
+}
+
+function renderTables() {
+  const tables = mockTablesByDB[selectedDB] || [];
+  const badge = document.querySelector('#page-tables .badge');
+  if (badge) badge.textContent = tables.length + ' tablas';
+  const tbody = document.querySelector('#tableTables tbody');
+  tbody.innerHTML = tables.map(t => `
+    <tr>
+      <td><i class="bi bi-table me-2 text-warning-custom"></i><span class="font-display" style="font-weight:600;">${t.name}</span></td>
+      <td class="font-display" style="font-weight:600;">${t.size}</td>
+      <td>${t.indexes}</td>
+      <td>${(t.records / 1000).toFixed(0)}K</td>
+      <td>${t.used}</td>
+      <td>
+        <div class="d-flex align-items-center gap-2">
+          <div class="progress-custom flex-grow-1"><div class="progress-bar" style="width:${t.frag};background:${parseInt(t.frag) > 15 ? 'var(--danger)' : parseInt(t.frag) > 8 ? 'var(--warning)' : 'var(--accent)'};"></div></div>
+          <small class="text-muted" style="min-width:32px;">${t.frag}</small>
+        </div>
+      </td>
+    </tr>
+  `).join('');
+}
+
+function renderUsers() {
+  const tbody = document.querySelector('#tableUsers tbody');
+  tbody.innerHTML = mockUsers.map(u => `
+    <tr>
+      <td><span class="font-display" style="font-weight:600;">${u.user}</span></td>
+      <td><code style="font-size:12px;color:var(--text-secondary);">${u.host}</code></td>
+      <td><span class="badge badge-muted">${u.db}</span></td>
+      <td>${u.time}</td>
+      <td><span class="badge badge-status ${u.status === 'Activo' ? 'badge-success' : 'badge-warning'}">${u.status}</span></td>
+      <td class="sql-cell" title="${u.query.replace(/"/g,'&quot;')}">${u.query}</td>
+    </tr>
+  `).join('');
+}
+
+function renderAlerts() {
+  const container = document.getElementById('alertCards');
+  container.innerHTML = mockAlerts.map(a => `
+    <div class="col-md-6 col-xl-4">
+      <div class="alert-card alert-${a.type}">
+        <div class="d-flex gap-3">
+          <div class="alert-icon"><i class="bi ${a.icon}"></i></div>
+          <div class="flex-grow-1">
+            <div class="d-flex justify-content-between align-items-start mb-1">
+              <span class="font-display" style="font-weight:700;font-size:14px;">${a.title}</span>
+              <span class="badge badge-status ${a.type === 'critical' ? 'badge-danger' : a.type === 'warning' ? 'badge-warning' : 'badge-info'}" style="font-size:10px;">${a.type === 'critical' ? 'CRÍTICO' : a.type === 'warning' ? 'ADVERTENCIA' : 'INFO'}</span>
+            </div>
+            <p style="font-size:12.5px;color:var(--text-secondary);margin:0 0 10px 0;line-height:1.5;">${a.desc}</p>
+            <div class="d-flex justify-content-between align-items-center">
+              <small class="text-muted"><i class="bi bi-clock me-1"></i>${a.time}</small>
+              <div class="d-flex gap-2">
+                ${a.db !== '—' ? `<span class="badge badge-muted" style="font-size:10px;">${a.db}</span>` : ''}
+                <button class="btn-sm-action" onclick="showToast('Alerta acknowledged: ${a.title}')"><i class="bi bi-check-lg"></i></button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+/* =========================================================
+   MODALES
+   ========================================================= */
+function showQueryDetail(id) {
+  const q = mockQueries.find(x => x.id === id);
+  if (!q) return;
+  document.getElementById('modalTitle').textContent = 'Detalle de Consulta #' + q.id;
+  document.getElementById('modalBody').innerHTML = `
+    <div class="mb-3">
+      <label style="font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;">Consulta SQL</label>
+      <div class="code-block mt-1">${q.sql}</div>
+    </div>
+    <div class="row g-3 mb-3">
+      <div class="col-4"><small class="text-muted d-block" style="font-size:11px;text-transform:uppercase;font-weight:600;">Tiempo</small><span class="font-display" style="font-weight:700;font-size:18px;${q.time > 1000 ? 'color:var(--danger)' : ''}">${q.time} ms</span></div>
+      <div class="col-4"><small class="text-muted d-block" style="font-size:11px;text-transform:uppercase;font-weight:600;">Usuario</small><span class="font-display" style="font-weight:600;">${q.user}</span></div>
+      <div class="col-4"><small class="text-muted d-block" style="font-size:11px;text-transform:uppercase;font-weight:600;">Base de Datos</small><span class="badge badge-muted">${q.db}</span></div>
+    </div>
+    <div class="row g-3 mb-3">
+      <div class="col-6"><small class="text-muted d-block" style="font-size:11px;text-transform:uppercase;font-weight:600;">Fecha</small><span style="font-size:13px;">${q.date}</span></div>
+      <div class="col-6"><small class="text-muted d-block" style="font-size:11px;text-transform:uppercase;font-weight:600;">Estado</small><span class="badge badge-status ${q.status === 'Completada' ? 'badge-success' : q.status === 'Error' ? 'badge-danger' : 'badge-warning'}">${q.status}</span></div>
+    </div>
+    <div>
+      <label style="font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;">Plan de Ejecución (Simulado)</label>
+      <div class="code-block mt-1" style="font-size:12px;color:var(--text-secondary);">id | select_type | table       | type  | key          | rows   | filtered | Extra
+----+-------------+-------------+-------+--------------+--------+----------+-------
+ 1  | SIMPLE      | o           | ref   | idx_status   | 12450  | 100.00   | Using where
+ 2  | SIMPLE      | c           | eq_ref| PRIMARY      | 1      | 100.00   | NULL</div>
+    </div>
+  `;
+  new bootstrap.Modal(document.getElementById('detailModal')).show();
+}
+
+function showAuditDetail(id) {
+  const a = mockAudit.find(x => x.id === id);
+  if (!a) return;
+  const opColors = { SELECT:'badge-info', INSERT:'badge-success', UPDATE:'badge-warning', DELETE:'badge-danger' };
+  document.getElementById('modalTitle').textContent = 'Detalle de Auditoría #' + a.id;
+  document.getElementById('modalBody').innerHTML = `
+    <div class="row g-3 mb-3">
+      <div class="col-6"><small class="text-muted d-block" style="font-size:11px;text-transform:uppercase;font-weight:600;">Usuario</small><span class="font-display" style="font-weight:700;font-size:18px;">${a.user}</span></div>
+      <div class="col-6"><small class="text-muted d-block" style="font-size:11px;text-transform:uppercase;font-weight:600;">Operación</small><span class="badge badge-status ${opColors[a.op]}">${a.op}</span></div>
+    </div>
+    <div class="row g-3 mb-3">
+      <div class="col-6"><small class="text-muted d-block" style="font-size:11px;text-transform:uppercase;font-weight:600;">Tabla</small><code style="font-size:15px;">${a.table}</code></div>
+      <div class="col-6"><small class="text-muted d-block" style="font-size:11px;text-transform:uppercase;font-weight:600;">Estado</small><span class="badge badge-status ${a.status === 'Éxito' ? 'badge-success' : 'badge-danger'}">${a.status}</span></div>
+    </div>
+    <div class="row g-3 mb-3">
+      <div class="col-6"><small class="text-muted d-block" style="font-size:11px;text-transform:uppercase;font-weight:600;">Fecha y Hora</small><span style="font-size:13px;">${a.date}</span></div>
+      <div class="col-6"><small class="text-muted d-block" style="font-size:11px;text-transform:uppercase;font-weight:600;">Dirección IP</small><code style="font-size:13px;">${a.ip}</code></div>
+    </div>
+    <div>
+      <label style="font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;">Contexto Adicional</label>
+      <div class="code-block mt-1" style="font-size:12px;color:var(--text-secondary);">Thread ID: ${Math.floor(Math.random() * 90000 + 10000)}
+Schema: ${a.table.includes('_') ? a.table.split('_')[0] : 'ecommerce'}
+Query Time: ${Math.floor(Math.random() * 500 + 1)} ms
+Rows Affected: ${a.op === 'SELECT' ? Math.floor(Math.random() * 1000) : Math.floor(Math.random() * 10)}
+Lock Time: ${Math.floor(Math.random() * 50)} ms
+Rows Sent: ${Math.floor(Math.random() * 500)}</div>
+    </div>
+  `;
+  new bootstrap.Modal(document.getElementById('detailModal')).show();
+}
+
+/* =========================================================
+   TOAST
+   ========================================================= */
+function showToast(msg) {
+  const body = document.getElementById('toastBody');
+  body.innerHTML = '<i class="bi bi-check-circle-fill text-accent me-2"></i>' + msg;
+  const toast = new bootstrap.Toast(document.getElementById('toastNotify'), { delay: 3000 });
+  toast.show();
+}
+
+/* =========================================================
+   GRÁFICOS — DASHBOARD
+   ========================================================= */
+function generateTimeLabels(count, intervalMin) {
+  const labels = [];
+  const now = new Date();
+  for (let i = count - 1; i >= 0; i--) {
+    const d = new Date(now.getTime() - i * intervalMin * 60000);
+    labels.push(d.getHours().toString().padStart(2,'0') + ':' + d.getMinutes().toString().padStart(2,'0'));
+  }
+  return labels;
+}
+
+function generateData(count, min, max) {
+  const data = [];
+  let val = (min + max) / 2;
+  for (let i = 0; i < count; i++) {
+    val += (Math.random() - 0.48) * (max - min) * 0.15;
+    val = Math.max(min, Math.min(max, val));
+    data.push(Math.round(val));
+  }
+  return data;
+}
+
+function initDashboardCharts() {
+  if (chartInstances.qpm) return;
+
+  const qpmLabels = generateTimeLabels(30, 1);
+  const qpmData = generateData(30, 800, 1800);
+
+  chartInstances.qpm = new Chart(document.getElementById('chartQPM'), {
+    type: 'line',
+    data: {
+      labels: qpmLabels,
+      datasets: [{
+        label: 'QPM',
+        data: qpmData,
+        borderColor: '#00d4aa',
+        backgroundColor: 'rgba(0,212,170,0.08)',
+        borderWidth: 2,
+        fill: true,
+        tension: 0.4,
+        pointRadius: 0,
+        pointHoverRadius: 5,
+        pointHoverBackgroundColor: '#00d4aa',
+        pointHoverBorderColor: '#fff',
+        pointHoverBorderWidth: 2
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false }, tooltip: { backgroundColor: '#0f1629', borderColor: '#1a2540', borderWidth: 1, titleColor: '#eef2f7', bodyColor: '#8b9dc3', padding: 12, cornerRadius: 8, displayColors: false } },
+      scales: {
+        x: { grid: { color: 'rgba(255,255,255,0.04)' }, ticks: { color: '#5a6e8a', font: { size: 11 }, maxTicksLimit: 10 } },
+        y: { grid: { color: 'rgba(255,255,255,0.04)' }, ticks: { color: '#5a6e8a', font: { size: 11 } }, beginAtZero: false }
+      },
+      interaction: { intersect: false, mode: 'index' }
+    }
+  });
+
+  /* CPU y RAM */
+  const cpuLabels = generateTimeLabels(48, 30);
+  const cpuData = generateData(48, 25, 75);
+  const ramData = generateData(48, 50, 85);
+
+  chartInstances.cpuRam = new Chart(document.getElementById('chartCPURAM'), {
+    type: 'line',
+    data: {
+      labels: cpuLabels,
+      datasets: [
+        { label: 'CPU', data: cpuData, borderColor: '#38bdf8', backgroundColor: 'rgba(56,189,248,0.06)', borderWidth: 2, fill: true, tension: 0.4, pointRadius: 0, pointHoverRadius: 4 },
+        { label: 'RAM', data: ramData, borderColor: '#a78bfa', backgroundColor: 'rgba(167,139,250,0.06)', borderWidth: 2, fill: true, tension: 0.4, pointRadius: 0, pointHoverRadius: 4 }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false }, tooltip: { backgroundColor: '#0f1629', borderColor: '#1a2540', borderWidth: 1, titleColor: '#eef2f7', bodyColor: '#8b9dc3', padding: 12, cornerRadius: 8 } },
+      scales: {
+        x: { grid: { color: 'rgba(255,255,255,0.04)' }, ticks: { color: '#5a6e8a', font: { size: 11 }, maxTicksLimit: 12 } },
+        y: { grid: { color: 'rgba(255,255,255,0.04)' }, ticks: { color: '#5a6e8a', font: { size: 11 }, callback: v => v + '%' }, min: 0, max: 100 }
+      },
+      interaction: { intersect: false, mode: 'index' }
+    }
+  });
+
+  /* Tamaño por base */
+  chartInstances.dbSize = new Chart(document.getElementById('chartDBSize'), {
+    type: 'doughnut',
+    data: {
+      labels: ['ecommerce', 'analytics', 'logging', 'users_db', 'inventory', 'reporting'],
+      datasets: [{
+        data: [142.3, 89.7, 56.8, 34.2, 18.5, 5.5],
+        backgroundColor: ['#00d4aa', '#38bdf8', '#f59e0b', '#a78bfa', '#ef4444', '#64748b'],
+        borderColor: '#0f1629', borderWidth: 3, hoverOffset: 8
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false, cutout: '65%',
+      plugins: {
+        legend: { position: 'bottom', labels: { color: '#8b9dc3', font: { size: 11 }, padding: 12, usePointStyle: true, pointStyleWidth: 10 } },
+        tooltip: { backgroundColor: '#0f1629', borderColor: '#1a2540', borderWidth: 1, titleColor: '#eef2f7', bodyColor: '#8b9dc3', padding: 12, cornerRadius: 8, callbacks: { label: ctx => ` ${ctx.label}: ${ctx.parsed} GB` } }
+      }
+    }
+  });
+
+  /* Actualización en tiempo real del gráfico QPM */
+  setInterval(() => {
+    if (currentPage !== 'dashboard' || !chartInstances.qpm) return;
+    const chart = chartInstances.qpm;
+    const now = new Date();
+    chart.data.labels.push(now.getHours().toString().padStart(2,'0') + ':' + now.getMinutes().toString().padStart(2,'0'));
+    chart.data.labels.shift();
+    const lastVal = chart.data.datasets[0].data[chart.data.datasets[0].data.length - 1];
+    let newVal = lastVal + (Math.random() - 0.48) * 200;
+    newVal = Math.max(600, Math.min(2000, Math.round(newVal)));
+    chart.data.datasets[0].data.push(newVal);
+    chart.data.datasets[0].data.shift();
+    chart.update('none');
+  }, 3000);
+}
+
+/* =========================================================
+   GRÁFICOS — RECURSOS
+   ========================================================= */
+function createGauge(canvasId, value, color, maxVal) {
+  maxVal = maxVal || 100;
+  const remaining = maxVal - value;
+  return new Chart(document.getElementById(canvasId), {
+    type: 'doughnut',
+    data: {
+      labels: ['Usado', 'Libre'],
+      datasets: [{
+        data: [value, remaining],
+        backgroundColor: [color, 'rgba(255,255,255,0.05)'],
+        borderWidth: 0, borderRadius: 6
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false, cutout: '78%',
+      plugins: { legend: { display: false }, tooltip: { enabled: false } },
+      rotation: -90, circumference: 180
+    },
+    plugins: [{
+      id: 'gaugeText',
+      afterDraw(chart) {
+        const { ctx, chartArea } = chart;
+        const cx = (chartArea.left + chartArea.right) / 2;
+        const cy = chartArea.bottom - 10;
+        ctx.save();
+        ctx.font = "700 28px 'Space Grotesk'";
+        ctx.fillStyle = color;
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'bottom';
+        ctx.fillText(value + '%', cx, cy);
+        ctx.restore();
+      }
+    }]
+  });
+}
+
+function initResourceCharts() {
+  if (chartInstances.gaugeCPU) return;
+  chartInstances.gaugeCPU = createGauge('gaugeCPU', 42, '#38bdf8');
+  chartInstances.gaugeRAM = createGauge('gaugeRAM', 67, '#a78bfa');
+  chartInstances.gaugeDisk = createGauge('gaugeDisk', 69, '#f59e0b');
+
+  /* Espacio por base de datos */
+  chartInstances.usageByDB = new Chart(document.getElementById('chartUsageByDB'), {
+    type: 'bar',
+    data: {
+      labels: ['ecommerce', 'analytics', 'logging', 'users_db', 'inventory', 'reporting'],
+      datasets: [{
+        label: 'GB',
+        data: [142.3, 89.7, 56.8, 34.2, 18.5, 5.5],
+        backgroundColor: ['rgba(0,212,170,0.7)', 'rgba(56,189,248,0.7)', 'rgba(245,158,11,0.7)', 'rgba(167,139,250,0.7)', 'rgba(239,68,68,0.7)', 'rgba(100,116,139,0.7)'],
+        borderRadius: 6, borderSkipped: false, barThickness: 28
+      }]
+    },
+    options: {
+      indexAxis: 'y', responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false }, tooltip: { backgroundColor: '#0f1629', borderColor: '#1a2540', borderWidth: 1, titleColor: '#eef2f7', bodyColor: '#8b9dc3', padding: 12, cornerRadius: 8, callbacks: { label: ctx => ` ${ctx.parsed.x} GB` } } },
+      scales: {
+        x: { grid: { color: 'rgba(255,255,255,0.04)' }, ticks: { color: '#5a6e8a', font: { size: 11 }, callback: v => v + ' GB' } },
+        y: { grid: { display: false }, ticks: { color: '#8b9dc3', font: { size: 12, weight: 500 } } }
+      }
+    }
+  });
+
+  /* Espacio por tabla (Top 10) */
+  const topTables = [
+    { name: 'analytics_events', size: 72.1 },
+    { name: 'detalle_pedido', size: 32.4 },
+    { name: 'orders', size: 48.2 },
+    { name: 'products (ecom)', size: 28.5 },
+    { name: 'logs', size: 38.5 },
+    { name: 'customers', size: 18.1 },
+    { name: 'error_logs', size: 8.2 },
+    { name: 'sessions (user)', size: 8.2 },
+    { name: 'payments', size: 9.8 },
+    { name: 'stock_movements', size: 6.8 }
+  ].sort((a, b) => b.size - a.size);
+
+  chartInstances.usageByTable = new Chart(document.getElementById('chartUsageByTable'), {
+    type: 'bar',
+    data: {
+      labels: topTables.map(t => t.name),
+      datasets: [{
+        label: 'GB',
+        data: topTables.map(t => t.size),
+        backgroundColor: 'rgba(245,158,11,0.6)',
+        hoverBackgroundColor: 'rgba(245,158,11,0.85)',
+        borderRadius: 6, borderSkipped: false, barThickness: 18
+      }]
+    },
+    options: {
+      indexAxis: 'y', responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false }, tooltip: { backgroundColor: '#0f1629', borderColor: '#1a2540', borderWidth: 1, titleColor: '#eef2f7', bodyColor: '#8b9dc3', padding: 12, cornerRadius: 8, callbacks: { label: ctx => ` ${ctx.parsed.x} GB` } } },
+      scales: {
+        x: { grid: { color: 'rgba(255,255,255,0.04)' }, ticks: { color: '#5a6e8a', font: { size: 11 }, callback: v => v + ' GB' } },
+        y: { grid: { display: false }, ticks: { color: '#8b9dc3', font: { size: 11 } } }
+      }
+    }
+  });
+}
+
+/* =========================================================
+   SIMULACIÓN EN TIEMPO REAL (Dashboard)
+   ========================================================= */
+function simulateRealtime() {
+  setInterval(() => {
+    if (currentPage !== 'dashboard') return;
+    /* CPU */
+    let cpu = parseInt(document.getElementById('cpuValue').textContent);
+    cpu += Math.round((Math.random() - 0.5) * 4);
+    cpu = Math.max(15, Math.min(80, cpu));
+    document.getElementById('cpuValue').textContent = cpu + '%';
+
+    /* RAM */
+    let ram = parseInt(document.getElementById('ramValue').textContent);
+    ram += Math.round((Math.random() - 0.5) * 2);
+    ram = Math.max(40, Math.min(90, ram));
+    document.getElementById('ramValue').textContent = ram + '%';
+
+    /* Conexiones */
+    let conn = parseInt(document.getElementById('connValue').textContent.replace(',',''));
+    conn += Math.round((Math.random() - 0.48) * 8);
+    conn = Math.max(100, Math.min(250, conn));
+    document.getElementById('connValue').textContent = conn.toLocaleString();
+
+    /* QPS */
+    let qps = parseInt(document.getElementById('qpsValue').textContent.replace(',',''));
+    qps += Math.round((Math.random() - 0.45) * 80);
+    qps = Math.max(800, Math.min(1800, qps));
+    document.getElementById('qpsValue').textContent = qps.toLocaleString();
+  }, 4000);
+}
+
+/* =========================================================
+   INICIALIZACIÓN
+   ========================================================= */
+function init() {
+  /* Renderizar todas las tablas */
+  renderQueries();
+  renderSlowQueries();
+  renderAudit();
+  renderDatabases();
+  renderTables();
+  renderUsers();
+  renderAlerts();
+
+  /* Inicializar gráficos del dashboard */
+  initDashboardCharts();
+
+  /* Iniciar simulación en tiempo real */
+  simulateRealtime();
+
+  /* Ocultar loading */
+  setTimeout(() => {
+    document.getElementById('loading-overlay').classList.add('hidden');
+  }, 800);
+}
+
+document.addEventListener('DOMContentLoaded', init);
+</script>
+</body>
+</html>
