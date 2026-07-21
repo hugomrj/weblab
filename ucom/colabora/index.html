@@ -1,1 +1,841 @@
-col
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Innova Constructora S.A. — Demo Colaborativo</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, 'Segoe UI', sans-serif;
+    background: #f9fafb;
+    color: #111827;
+    font-size: 14px;
+  }
+
+  /* ── HEADER ── */
+  header {
+    background: white;
+    border-bottom: 1px solid #e5e7eb;
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+  .logo-area { display: flex; align-items: center; gap: 1rem; }
+  .logo { font-weight: 600; font-size: 1.1rem; }
+  .company-info {
+    font-size: 0.75rem;
+    color: #6b7280;
+    border-left: 1px solid #e5e7eb;
+    padding-left: 1rem;
+  }
+  
+  /* ── USER SELECTOR ── */
+  .user-selector {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+  }
+  .user-select {
+    padding: 0.5rem 0.8rem;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    background: white;
+    cursor: pointer;
+  }
+  .current-user {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.4rem 0.8rem;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    transition: all 0.3s;
+  }
+  .user-avatar {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 0.7rem;
+    font-weight: 600;
+  }
+  .role-badge {
+    font-size: 0.68rem;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-weight: 600;
+    margin-left: 0.3rem;
+  }
+
+  /* ── LAYOUT ── */
+  .container {
+    max-width: 1400px;
+    margin: 1.5rem auto;
+    padding: 0 1.5rem;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr) 280px;
+    gap: 1rem;
+  }
+
+  .panel {
+    background: white;
+    border-radius: 8px;
+    border: 1px solid #e5e7eb;
+    padding: 1.2rem;
+    display: flex;
+    flex-direction: column;
+  }
+  .panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+    padding-bottom: 0.8rem;
+    border-bottom: 1px solid #f3f4f6;
+  }
+  .panel-header-left {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .panel-icon {
+    width: 32px; height: 32px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+  }
+  .panel-title {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #111827;
+  }
+  .panel-subtitle {
+    font-size: 0.72rem;
+    color: #6b7280;
+  }
+
+  /* ── ITEMS ── */
+  .items-list {
+    flex: 1;
+    margin-bottom: 1rem;
+    min-height: 200px;
+  }
+  .item {
+    padding: 0.7rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    margin-bottom: 0.5rem;
+    transition: all 0.2s;
+  }
+  .item:hover { border-color: #9ca3af; }
+  .item-title {
+    font-size: 0.85rem;
+    font-weight: 500;
+    margin-bottom: 0.3rem;
+  }
+  .item-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 0.72rem;
+    color: #6b7280;
+    margin-bottom: 0.4rem;
+  }
+  .mini-avatar {
+    width: 20px; height: 20px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 0.6rem;
+    font-weight: 600;
+  }
+  .assignee {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+  }
+  .item-actions {
+    display: flex;
+    gap: 0.3rem;
+  }
+  .item-created-by {
+    font-size: 0.68rem;
+    color: #9ca3af;
+    margin-top: 0.3rem;
+    font-style: italic;
+  }
+
+  /* ── BOTONES ── */
+  .btn {
+    background: #111827;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    width: 100%;
+    font-weight: 500;
+  }
+  .btn:hover { background: #1f2937; }
+  .btn:disabled {
+    background: #d1d5db;
+    cursor: not-allowed;
+  }
+  .btn-sm {
+    font-size: 0.7rem;
+    padding: 0.3rem 0.6rem;
+    background: #e5e7eb;
+    color: #374151;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 500;
+  }
+  .btn-sm:hover { background: #d1d5db; }
+  .btn-progress { background: #3b82f6; color: white; }
+  .btn-progress:hover { background: #2563eb; }
+  .btn-done { background: #10b981; color: white; }
+  .btn-done:hover { background: #059669; }
+
+  /* ── BADGES ── */
+  .badge {
+    display: inline-block;
+    font-size: 0.65rem;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-weight: 600;
+  }
+  .badge-pending { background: #fef3c7; color: #92400e; }
+  .badge-progress { background: #dbeafe; color: #1e40af; }
+  .badge-done { background: #d1fae5; color: #065f46; }
+
+  /* ── MODAL ── */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 100;
+    align-items: center;
+    justify-content: center;
+  }
+  .modal-overlay.show { display: flex; }
+  .modal {
+    background: white;
+    border-radius: 8px;
+    max-width: 500px;
+    width: 90%;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+  .modal-header {
+    padding: 1.2rem;
+    border-bottom: 1px solid #e5e7eb;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .modal-title { font-size: 1.1rem; font-weight: 600; }
+  .modal-close {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #6b7280;
+  }
+  .modal-body { padding: 1.2rem; }
+  .form-group { margin-bottom: 1rem; }
+  .form-label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 500;
+    margin-bottom: 0.4rem;
+    color: #374151;
+  }
+  .form-select {
+    width: 100%;
+    padding: 0.6rem;
+    border: 1px solid #d1d5db;
+    border-radius: 5px;
+    font-size: 0.85rem;
+  }
+  .modal-footer {
+    padding: 1rem 1.2rem;
+    border-top: 1px solid #e5e7eb;
+    display: flex;
+    gap: 0.5rem;
+    justify-content: flex-end;
+  }
+  .modal-footer .btn { width: auto; }
+
+  /* ── ACTIVIDAD ── */
+  .activity-list {
+    list-style: none;
+    flex: 1;
+    overflow-y: auto;
+  }
+  .activity-item {
+    padding: 0.6rem 0;
+    border-bottom: 1px solid #f3f4f6;
+    font-size: 0.8rem;
+    animation: slideIn 0.3s ease;
+  }
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateY(-5px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .activity-item:last-child { border: none; }
+  .activity-user { font-weight: 600; font-size: 0.78rem; }
+  .activity-time {
+    font-size: 0.68rem;
+    color: #9ca3af;
+    margin-top: 0.15rem;
+  }
+
+  /* ── EMPTY STATE ── */
+  .empty-state {
+    text-align: center;
+    padding: 2rem 1rem;
+    color: #9ca3af;
+    font-size: 0.85rem;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo-area">
+    <div class="logo">🏗️ Innova Constructora S.A.</div>
+    <div class="company-info">
+      Construcción y Reformas · 145 empleados
+    </div>
+  </div>
+  <div class="user-selector">
+    <label style="font-size:0.8rem;color:#6b7280">Conectado como:</label>
+    <select class="user-select" id="user-select" onchange="changeUser()">
+      <option value="0">👷 Roberto López — Ing. Obra</option>
+      <option value="1">💼 Carlos Méndez — Director</option>
+      <option value="2">📐 Laura Ríos — Arquitecta</option>
+    </select>
+    <div class="current-user" id="current-user-box">
+      <div class="user-avatar" id="current-avatar" style="background:#10b981">RL</div>
+      <span id="current-name">Roberto López</span>
+      <span class="role-badge" id="current-role" style="background:#d1fae5;color:#065f46">Obra</span>
+    </div>
+  </div>
+</header>
+
+<div class="container">
+
+  <!-- ═══ PROCESO 1: REPORTE DIARIO ═══ -->
+  <div class="panel">
+    <div class="panel-header">
+      <div class="panel-header-left">
+        <div class="panel-icon" style="background:#dbeafe">📋</div>
+        <div>
+          <div class="panel-title">1. Reporte Diario</div>
+          <div class="panel-subtitle">Obra envía → Director valida</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="items-list" id="list-reportes">
+      <div class="item" data-id="r1" data-status="progress" data-creator="0">
+        <div class="item-title">Torre A — Piso 6</div>
+        <div class="item-meta">
+          <div class="assignee">
+            <div class="mini-avatar" style="background:#10b981">RL</div>
+            <span>Ing. López</span>
+          </div>
+          <span class="badge badge-progress">En revisión</span>
+        </div>
+        <div class="item-actions" id="actions-r1">
+          <!-- Se llena dinámicamente según usuario -->
+        </div>
+        <div class="item-created-by">Creado por Ing. López (Obra)</div>
+      </div>
+    </div>
+
+    <button class="btn action-btn" data-role="obra" onclick="openModal('modal-reporte')">
+      📸 Enviar reporte desde obra
+    </button>
+  </div>
+
+  <!-- ═══ PROCESO 2: COMPRAS ═══ -->
+  <div class="panel">
+    <div class="panel-header">
+      <div class="panel-header-left">
+        <div class="panel-icon" style="background:#fef3c7">🛒</div>
+        <div>
+          <div class="panel-title">2. Compras</div>
+          <div class="panel-subtitle">Obra solicita → Director aprueba</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="items-list" id="list-compras">
+      <div class="item" data-id="c1" data-status="pending" data-creator="0">
+        <div class="item-title">50 bultos de cemento</div>
+        <div class="item-meta">
+          <div class="assignee">
+            <div class="mini-avatar" style="background:#10b981">RL</div>
+            <span>Solicitado por Obra</span>
+          </div>
+          <span class="badge badge-pending">Pendiente</span>
+        </div>
+        <div class="item-actions" id="actions-c1"></div>
+        <div class="item-created-by">Creado por Ing. López (Obra)</div>
+      </div>
+      <div class="item" data-id="c2" data-status="progress" data-creator="0">
+        <div class="item-title">200 varillas 3/8"</div>
+        <div class="item-meta">
+          <div class="assignee">
+            <div class="mini-avatar" style="background:#10b981">RL</div>
+            <span>Solicitado por Obra</span>
+          </div>
+          <span class="badge badge-progress">En revisión</span>
+        </div>
+        <div class="item-actions" id="actions-c2"></div>
+        <div class="item-created-by">Creado por Ing. López (Obra)</div>
+      </div>
+    </div>
+
+    <button class="btn action-btn" data-role="obra" onclick="openModal('modal-compra')">
+      + Capataz solicita material
+    </button>
+  </div>
+
+  <!-- ═══ PROCESO 3: INCIDENCIAS ═══ -->
+  <div class="panel">
+    <div class="panel-header">
+      <div class="panel-header-left">
+        <div class="panel-icon" style="background:#fee2e2">⚠️</div>
+        <div>
+          <div class="panel-title">3. Incidencias</div>
+          <div class="panel-subtitle">Arq. registra → Obra resuelve</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="items-list" id="list-incidencias">
+      <div class="item" data-id="i1" data-status="pending" data-creator="2">
+        <div class="item-title">Cambio de piso — Cliente García</div>
+        <div class="item-meta">
+          <div class="assignee">
+            <div class="mini-avatar" style="background:#8b5cf6">LR</div>
+            <span>Arq. Ríos</span>
+          </div>
+          <span class="badge badge-pending">Pendiente</span>
+        </div>
+        <div class="item-actions" id="actions-i1"></div>
+        <div class="item-created-by">Creado por Arq. Ríos (Oficina)</div>
+      </div>
+    </div>
+
+    <button class="btn action-btn" data-role="arquitecta" onclick="openModal('modal-incidencia')">
+      + Registrar cambio de cliente
+    </button>
+  </div>
+
+  <!-- ═══ ACTIVIDAD EN VIVO ═══ -->
+  <div class="panel">
+    <div class="panel-header">
+      <div class="panel-header-left">
+        <div class="panel-icon" style="background:#d1fae5">🔔</div>
+        <div>
+          <div class="panel-title">Actividad</div>
+          <div class="panel-subtitle">Colaboración en vivo</div>
+        </div>
+      </div>
+    </div>
+
+    <ul class="activity-list" id="activity-list">
+      <li class="activity-item">
+        <div class="activity-user" style="color:#10b981">Roberto López (Obra)</div>
+        <div>Solicitó 50 bultos de cemento</div>
+        <div class="activity-time">hace 5 min</div>
+      </li>
+      <li class="activity-item">
+        <div class="activity-user" style="color:#8b5cf6">Laura Ríos (Arq.)</div>
+        <div>Registró cambio de piso — Cliente García</div>
+        <div class="activity-time">hace 12 min</div>
+      </li>
+    </ul>
+  </div>
+
+</div>
+
+<!-- ═══ MODAL: REPORTE ═══ -->
+<div class="modal-overlay" id="modal-reporte">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">📋 Nuevo Reporte Diario</div>
+      <button class="modal-close" onclick="closeModal('modal-reporte')">&times;</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="form-label">Proyecto</label>
+        <select class="form-select" id="rpt-proyecto">
+          <option>Torre A — Las Palmas</option>
+          <option>Villa Serena — Fase 2</option>
+          <option>Plaza Norte</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Actividad principal</label>
+        <select class="form-select" id="rpt-avance">
+          <option>Colado de losa</option>
+          <option>Instalación eléctrica</option>
+          <option>Acabados interiores</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">% Avance</label>
+        <select class="form-select" id="rpt-porcentaje">
+          <option>25%</option>
+          <option selected>50%</option>
+          <option>75%</option>
+        </select>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" style="background:#6b7280" onclick="closeModal('modal-reporte')">Cancelar</button>
+      <button class="btn" onclick="submitReporte()">Enviar a Director</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ MODAL: COMPRA ═══ -->
+<div class="modal-overlay" id="modal-compra">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">🛒 Solicitar Material</div>
+      <button class="modal-close" onclick="closeModal('modal-compra')">&times;</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="form-label">Material</label>
+        <select class="form-select" id="compra-material">
+          <option>Cemento Portland</option>
+          <option>Varilla 3/8"</option>
+          <option>Block de concreto</option>
+          <option>Cable THW</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Cantidad</label>
+        <select class="form-select" id="compra-cantidad">
+          <option>25 unidades</option>
+          <option selected>50 unidades</option>
+          <option>100 unidades</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Proyecto</label>
+        <select class="form-select" id="compra-proyecto">
+          <option>Torre A — Las Palmas</option>
+          <option>Villa Serena — Fase 2</option>
+        </select>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" style="background:#6b7280" onclick="closeModal('modal-compra')">Cancelar</button>
+      <button class="btn" onclick="submitCompra()">Enviar a Director</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ MODAL: INCIDENCIA ═══ -->
+<div class="modal-overlay" id="modal-incidencia">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">⚠️ Registrar Cambio de Cliente</div>
+      <button class="modal-close" onclick="closeModal('modal-incidencia')">&times;</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="form-label">Cliente</label>
+        <select class="form-select" id="inc-cliente">
+          <option>Cliente García</option>
+          <option>Cliente Martínez</option>
+          <option>Cliente Rodríguez</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Tipo de cambio</label>
+        <select class="form-select" id="inc-desc">
+          <option>Cambio de piso</option>
+          <option>Cambio de color</option>
+          <option>Ventanal más grande</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Proyecto</label>
+        <select class="form-select" id="inc-proyecto">
+          <option>Torre A — Las Palmas</option>
+          <option>Casa García</option>
+        </select>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" style="background:#6b7280" onclick="closeModal('modal-incidencia')">Cancelar</button>
+      <button class="btn" onclick="submitIncidencia()">Enviar a Obra</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // ═══ USUARIOS (3 roles colaborativos) ═══
+  const users = [
+    { name: 'Roberto López', initials: 'RL', color: '#10b981', role: 'obra', roleLabel: 'Obra', roleColor: '#d1fae5', roleTextColor: '#065f46' },
+    { name: 'Carlos Méndez', initials: 'CM', color: '#3b82f6', role: 'director', roleLabel: 'Director', roleColor: '#dbeafe', roleTextColor: '#1e40af' },
+    { name: 'Laura Ríos', initials: 'LR', color: '#8b5cf6', role: 'arquitecta', roleLabel: 'Arq.', roleColor: '#ede9fe', roleTextColor: '#5b21b6' }
+  ];
+  let currentUser = 0;
+
+  // ═══ CAMBIAR USUARIO ═══
+  function changeUser() {
+    currentUser = parseInt(document.getElementById('user-select').value);
+    const user = users[currentUser];
+    
+    // Actualizar header
+    document.getElementById('current-avatar').style.background = user.color;
+    document.getElementById('current-avatar').textContent = user.initials;
+    document.getElementById('current-name').textContent = user.name;
+    const roleBadge = document.getElementById('current-role');
+    roleBadge.textContent = user.roleLabel;
+    roleBadge.style.background = user.roleColor;
+    roleBadge.style.color = user.roleTextColor;
+    
+    // Actualizar caja del usuario
+    const box = document.getElementById('current-user-box');
+    box.style.background = user.roleColor;
+    
+    // Actualizar botones de acción según rol
+    document.querySelectorAll('.action-btn').forEach(btn => {
+      const btnRole = btn.dataset.role;
+      if (btnRole === user.role) {
+        btn.style.display = 'block';
+      } else {
+        btn.style.display = 'none';
+      }
+    });
+    
+    // Actualizar acciones de cada item
+    updateAllItemActions();
+  }
+
+  // ═══ ACTUALIZAR ACCIONES SEGÚN ROL ═══
+  function updateAllItemActions() {
+    const user = users[currentUser];
+    
+    document.querySelectorAll('.item').forEach(item => {
+      const id = item.dataset.id;
+      const status = item.dataset.status;
+      const creator = parseInt(item.dataset.creator);
+      const actionsDiv = document.getElementById('actions-' + id);
+      if (!actionsDiv) return;
+      
+      const panel = item.closest('.panel');
+      const isReporte = panel.querySelector('.panel-title').textContent.includes('Reporte');
+      const isCompra = panel.querySelector('.panel-title').textContent.includes('Compras');
+      const isIncidencia = panel.querySelector('.panel-title').textContent.includes('Incidencias');
+      
+      let html = '';
+      
+      // LÓGICA COLABORATIVA: cada rol ve acciones diferentes
+      if (user.role === 'director') {
+        // Director: puede APROBAR/VALIDAR lo que envió Obra
+        if ((isReporte || isCompra) && creator === 0) {
+          if (status === 'pending') {
+            html = `
+              <button class="btn-sm btn-progress" onclick="changeStatus('${id}','progress')">→ Revisar</button>
+              <button class="btn-sm btn-done" onclick="changeStatus('${id}','done')">✓ Aprobar</button>
+            `;
+          } else if (status === 'progress') {
+            html = `<button class="btn-sm btn-done" onclick="changeStatus('${id}','done')">✓ Aprobar</button>`;
+          }
+        }
+      } else if (user.role === 'obra') {
+        // Obra: puede RESOLVER incidencias que registró la Arquitecta
+        if (isIncidencia && creator === 2) {
+          if (status === 'pending') {
+            html = `
+              <button class="btn-sm btn-progress" onclick="changeStatus('${id}','progress')">→ En trabajo</button>
+              <button class="btn-sm btn-done" onclick="changeStatus('${id}','done')">✓ Resolver</button>
+            `;
+          } else if (status === 'progress') {
+            html = `<button class="btn-sm btn-done" onclick="changeStatus('${id}','done')">✓ Resolver</button>`;
+          }
+        }
+      } else if (user.role === 'arquitecta') {
+        // Arquitecta: puede VALIDAR que Obra resolvió bien
+        if (isIncidencia && status === 'progress') {
+          html = `<button class="btn-sm btn-done" onclick="changeStatus('${id}','done')">✓ Validar resolución</button>`;
+        }
+      }
+      
+      actionsDiv.innerHTML = html;
+    });
+  }
+
+  // ═══ MODALES ═══
+  function openModal(id) {
+    document.getElementById(id).classList.add('show');
+  }
+  function closeModal(id) {
+    document.getElementById(id).classList.remove('show');
+  }
+
+  // ═══ CAMBIAR ESTADO ═══
+  function changeStatus(id, newStatus) {
+    const item = document.querySelector(`[data-id="${id}"]`);
+    item.dataset.status = newStatus;
+    
+    const badge = item.querySelector('.badge');
+    
+    if (newStatus === 'pending') {
+      badge.className = 'badge badge-pending';
+      badge.textContent = 'Pendiente';
+    } else if (newStatus === 'progress') {
+      badge.className = 'badge badge-progress';
+      badge.textContent = 'En revisión';
+    } else if (newStatus === 'done') {
+      badge.className = 'badge badge-done';
+      badge.textContent = '✓ Aprobado';
+    }
+    
+    const title = item.querySelector('.item-title').textContent;
+    const user = users[currentUser];
+    addActivity(user.name, user.roleLabel, `cambió "${title}" a ${badge.textContent}`, user.color);
+    
+    updateAllItemActions();
+  }
+
+  // ═══ ENVIAR REPORTE ═══
+  function submitReporte() {
+    const proyecto = document.getElementById('rpt-proyecto').value;
+    const user = users[currentUser];
+    
+    const list = document.getElementById('list-reportes');
+    const id = 'r' + Date.now();
+    const item = document.createElement('div');
+    item.className = 'item';
+    item.dataset.id = id;
+    item.dataset.status = 'progress';
+    item.dataset.creator = currentUser;
+    item.innerHTML = `
+      <div class="item-title">${proyecto}</div>
+      <div class="item-meta">
+        <div class="assignee">
+          <div class="mini-avatar" style="background:${user.color}">${user.initials}</div>
+          <span>${user.name}</span>
+        </div>
+        <span class="badge badge-progress">En revisión</span>
+      </div>
+      <div class="item-actions" id="actions-${id}"></div>
+      <div class="item-created-by">Creado por ${user.name} (${user.roleLabel})</div>
+    `;
+    list.appendChild(item);
+    
+    addActivity(user.name, user.roleLabel, `envió reporte de ${proyecto}`, user.color);
+    closeModal('modal-reporte');
+    updateAllItemActions();
+  }
+
+  // ═══ SOLICITAR COMPRA ═══
+  function submitCompra() {
+    const material = document.getElementById('compra-material').value;
+    const cantidad = document.getElementById('compra-cantidad').value;
+    const user = users[currentUser];
+    
+    const list = document.getElementById('list-compras');
+    const id = 'c' + Date.now();
+    const item = document.createElement('div');
+    item.className = 'item';
+    item.dataset.id = id;
+    item.dataset.status = 'pending';
+    item.dataset.creator = currentUser;
+    item.innerHTML = `
+      <div class="item-title">${cantidad} de ${material}</div>
+      <div class="item-meta">
+        <div class="assignee">
+          <div class="mini-avatar" style="background:${user.color}">${user.initials}</div>
+          <span>${user.name}</span>
+        </div>
+        <span class="badge badge-pending">Pendiente</span>
+      </div>
+      <div class="item-actions" id="actions-${id}"></div>
+      <div class="item-created-by">Creado por ${user.name} (${user.roleLabel})</div>
+    `;
+    list.appendChild(item);
+    
+    addActivity(user.name, user.roleLabel, `solicitó ${cantidad} de ${material}`, user.color);
+    closeModal('modal-compra');
+    updateAllItemActions();
+  }
+
+  // ═══ REPORTAR INCIDENCIA ═══
+  function submitIncidencia() {
+    const cliente = document.getElementById('inc-cliente').value;
+    const desc = document.getElementById('inc-desc').value;
+    const user = users[currentUser];
+    
+    const list = document.getElementById('list-incidencias');
+    const id = 'i' + Date.now();
+    const item = document.createElement('div');
+    item.className = 'item';
+    item.dataset.id = id;
+    item.dataset.status = 'pending';
+    item.dataset.creator = currentUser;
+    item.innerHTML = `
+      <div class="item-title">${desc} — ${cliente}</div>
+      <div class="item-meta">
+        <div class="assignee">
+          <div class="mini-avatar" style="background:${user.color}">${user.initials}</div>
+          <span>${user.name}</span>
+        </div>
+        <span class="badge badge-pending">Pendiente</span>
+      </div>
+      <div class="item-actions" id="actions-${id}"></div>
+      <div class="item-created-by">Creado por ${user.name} (${user.roleLabel})</div>
+    `;
+    list.appendChild(item);
+    
+    addActivity(user.name, user.roleLabel, `registró "${desc}" de ${cliente}`, user.color);
+    closeModal('modal-incidencia');
+    updateAllItemActions();
+  }
+
+  // ═══ ACTIVIDAD ═══
+  function addActivity(userName, role, action, color) {
+    const list = document.getElementById('activity-list');
+    const item = document.createElement('li');
+    item.className = 'activity-item';
+    item.innerHTML = `
+      <div class="activity-user" style="color:${color}">${userName} (${role})</div>
+      <div>${action}</div>
+      <div class="activity-time">ahora</div>
+    `;
+    list.insertBefore(item, list.firstChild);
+    if (list.children.length > 10) list.removeChild(list.lastChild);
+  }
+
+  // ═══ INICIALIZAR ═══
+  changeUser();
+</script>
+
+</body>
+</html>
