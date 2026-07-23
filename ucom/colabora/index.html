@@ -2,494 +2,478 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>Innova Constructora S.A. — Demo Colaborativo</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Innova Constructora S.A. - Demo Colaborativo</title>
 <style>
+  :root {
+    --bg: #f5f6f8;
+    --surface: #ffffff;
+    --border: #e2e4e9;
+    --text: #1a1d23;
+    --text-secondary: #5a6270;
+    --text-muted: #9ba3b2;
+    --accent: #2563eb;
+    --accent-light: #dbeafe;
+    --success: #059669;
+    --success-light: #d1fae5;
+    --warning: #d97706;
+    --warning-light: #fef3c7;
+    --danger: #dc2626;
+    --danger-light: #fee2e2;
+    --radius-sm: 6px;
+    --radius-md: 10px;
+    --radius-lg: 14px;
+  }
+
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
-    font-family: -apple-system, 'Segoe UI', sans-serif;
-    background: #f9fafb;
-    color: #111827;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+    background: var(--bg);
+    color: var(--text);
     font-size: 14px;
+    height: 100vh;
+    overflow: hidden;
   }
 
-  /* ── HEADER ── */
-  header {
-    background: white;
-    border-bottom: 1px solid #e5e7eb;
-    padding: 1rem 2rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 1rem;
+  /* ═══ LOGIN ═══ */
+  .login-screen {
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    height: 100vh; gap: 2.5rem; padding: 2rem;
   }
-  .logo-area { display: flex; align-items: center; gap: 1rem; }
-  .logo { font-weight: 600; font-size: 1.1rem; }
-  .company-info {
-    font-size: 0.75rem;
-    color: #6b7280;
-    border-left: 1px solid #e5e7eb;
-    padding-left: 1rem;
+  .login-brand { text-align: center; }
+  .login-brand .logo-icon {
+    width: 56px; height: 56px; border-radius: var(--radius-md);
+    background: var(--text); color: #fff;
+    display: inline-flex; align-items: center; justify-content: center;
+    font-size: 1.6rem; margin-bottom: 1rem;
   }
-  
-  /* ── USER SELECTOR ── */
-  .user-selector {
-    display: flex;
-    align-items: center;
-    gap: 0.8rem;
+  .login-brand h1 { font-size: 1.6rem; font-weight: 700; margin-bottom: 0.3rem; }
+  .login-brand p { font-size: 0.88rem; color: var(--text-secondary); }
+  .login-users { display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; }
+  .user-card {
+    background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg);
+    padding: 1.6rem 2rem; min-width: 220px; text-align: center;
+    cursor: pointer; transition: all 0.2s ease;
+    display: flex; flex-direction: column; align-items: center; gap: 0.6rem;
   }
-  .user-select {
-    padding: 0.5rem 0.8rem;
-    border: 1px solid #d1d5db;
-    border-radius: 6px;
-    font-size: 0.85rem;
-    background: white;
+  .user-card:hover {
+    border-color: var(--text); transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+  }
+  .user-card-avatar {
+    width: 52px; height: 52px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    color: white; font-weight: 700; font-size: 1rem;
+  }
+  .user-card-name { font-weight: 600; font-size: 1rem; }
+  .user-card-role {
+    font-size: 0.72rem; padding: 3px 12px; border-radius: 20px;
+    font-weight: 600;
+  }
+  .user-card-desc { font-size: 0.75rem; color: var(--text-muted); }
+  .login-hint { font-size: 0.78rem; color: var(--text-muted); }
+
+  /* ═══ APP LAYOUT ═══ */
+  .app-layout { display: flex; height: 100vh; overflow: hidden; }
+  .sidebar {
+    width: 250px; border-right: 1px solid var(--border);
+    display: flex; flex-direction: column; background: var(--surface); flex-shrink: 0;
+    position: relative;
+  }
+  .sidebar::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 4px;
+    background: var(--user-color, #111827);
+    z-index: 10;
+  }
+  .sidebar-header {
+    padding: 1.2rem 1rem; border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; gap: 0.7rem;
+    margin-top: 4px;
+  }
+  .sidebar-logo {
+    width: 32px; height: 32px; border-radius: var(--radius-sm);
+    background: var(--text); color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1rem; flex-shrink: 0;
+  }
+  .sidebar-brand { font-weight: 700; font-size: 0.88rem; line-height: 1.2; }
+  .sidebar-brand span { font-size: 0.68rem; font-weight: 400; color: var(--text-secondary); display: block; }
+  .sidebar-nav {
+    flex: 1; padding: 0.6rem; display: flex; flex-direction: column; gap: 0.2rem;
+  }
+  .nav-item {
+    display: flex; align-items: center; gap: 0.7rem;
+    padding: 0.65rem 0.9rem; border-radius: var(--radius-sm);
+    font-size: 0.84rem; font-weight: 500;
+    color: var(--text-secondary); cursor: pointer; border: none; background: none;
+    width: 100%; text-align: left; transition: all 0.15s;
+  }
+  .nav-item:hover { background: var(--bg); color: var(--text); }
+  .nav-item.active { background: var(--text); color: #fff; }
+  .nav-icon { font-size: 0.95rem; width: 18px; text-align: center; opacity: 0.7; }
+  .nav-item.active .nav-icon { opacity: 1; }
+  .sidebar-user {
+    padding: 0.8rem; border-top: 1px solid var(--border);
+    display: flex; align-items: center; gap: 0.6rem;
+  }
+  .sidebar-user-avatar {
+    width: 30px; height: 30px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    color: white; font-size: 0.65rem; font-weight: 700; flex-shrink: 0;
+  }
+  .sidebar-user-info { flex: 1; min-width: 0; }
+  .sidebar-user-name { font-size: 0.78rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .sidebar-user-role { font-size: 0.7rem; color: var(--text-secondary); }
+  .sidebar-logout {
+    font-size: 0.7rem; color: var(--text-muted); cursor: pointer;
+    padding: 0.25rem 0.5rem; border-radius: var(--radius-sm);
+  }
+  .sidebar-logout:hover { color: var(--danger); background: var(--danger-light); }
+
+  /* ═══ MAIN AREA ═══ */
+  .main-area { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+  .main-header {
+    padding: 1rem 1.5rem; border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between; background: var(--surface);
+  }
+  .main-header-left h2 { font-size: 1.1rem; font-weight: 700; }
+  .main-header-sub { font-size: 0.78rem; color: var(--text-secondary); }
+  .main-header-right { display: flex; align-items: center; gap: 0.8rem; }
+  .main-content { flex: 1; overflow-y: auto; padding: 1.2rem 1.5rem; }
+
+  /* ═══ ALERT BELL ═══ */
+  .alert-bell {
+    position: relative; cursor: pointer;
+    width: 36px; height: 36px; border-radius: var(--radius-sm);
+    display: flex; align-items: center; justify-content: center;
+    background: var(--bg); border: 1px solid var(--border);
+    transition: all 0.15s; font-size: 1rem;
+  }
+  .alert-bell:hover { background: var(--surface); border-color: var(--text); }
+  .alert-badge {
+    position: absolute; top: -4px; right: -4px;
+    background: var(--danger); color: #fff;
+    font-size: 0.65rem; font-weight: 700;
+    min-width: 18px; height: 18px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    border: 2px solid var(--surface);
+  }
+
+  /* ═══ TOASTS SUCCESS ═══ */
+  .toast-container {
+    position: fixed; top: 1rem; right: 1rem;
+    display: flex; flex-direction: column; gap: 0.5rem;
+    z-index: 200; pointer-events: none;
+  }
+  .toast {
+    background: var(--success-light); border: 1px solid #a7f3d0;
+    border-radius: var(--radius-md); padding: 0.8rem 1rem;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+    display: flex; align-items: center; gap: 0.7rem;
+    min-width: 280px; max-width: 360px;
+    animation: toastIn 0.3s ease, toastOut 0.3s ease 2.7s forwards;
+    pointer-events: auto;
     cursor: pointer;
   }
-  .current-user {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.4rem 0.8rem;
-    border-radius: 6px;
-    font-size: 0.85rem;
-    font-weight: 500;
-    transition: all 0.3s;
+  .toast-icon { font-size: 1.1rem; flex-shrink: 0; color: var(--success); }
+  .toast-body { flex: 1; }
+  .toast-title { font-weight: 600; font-size: 0.82rem; color: #065f46; }
+  .toast-msg { font-size: 0.75rem; color: #047857; }
+  @keyframes toastIn {
+    from { opacity: 0; transform: translateX(20px); }
+    to { opacity: 1; transform: translateX(0); }
   }
-  .user-avatar {
-    width: 28px; height: 28px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    font-size: 0.7rem;
-    font-weight: 600;
-  }
-  .role-badge {
-    font-size: 0.68rem;
-    padding: 2px 8px;
-    border-radius: 10px;
-    font-weight: 600;
-    margin-left: 0.3rem;
+  @keyframes toastOut {
+    from { opacity: 1; transform: translateX(0); }
+    to { opacity: 0; transform: translateX(20px); }
   }
 
-  /* ── LAYOUT ── */
-  .container {
-    max-width: 1400px;
-    margin: 1.5rem auto;
-    padding: 0 1.5rem;
-    display: grid;
-    grid-template-columns: repeat(3, 1fr) 280px;
-    gap: 1rem;
+  /* ═══ DASHBOARD ═══ */
+  .dash-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;
+  }
+  .dash-card {
+    background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-md);
+    padding: 1.2rem; display: flex; flex-direction: column; gap: 0.6rem;
+    transition: all 0.2s; cursor: pointer;
+  }
+  .dash-card:hover { border-color: var(--text); }
+  .dash-card-header { display: flex; align-items: center; justify-content: space-between; }
+  .dash-card-title { font-weight: 600; font-size: 0.85rem; color: var(--text-secondary); }
+  .dash-card-count { font-size: 1.8rem; font-weight: 700; font-variant-numeric: tabular-nums; }
+  .dash-card-footer { font-size: 0.75rem; color: var(--text-muted); }
+  .dash-icon {
+    width: 32px; height: 32px; border-radius: var(--radius-sm);
+    display: flex; align-items: center; justify-content: center; font-size: 1rem;
+    background: var(--bg); color: var(--text);
   }
 
-  .panel {
-    background: white;
-    border-radius: 8px;
-    border: 1px solid #e5e7eb;
-    padding: 1.2rem;
-    display: flex;
-    flex-direction: column;
+  /* ═══ SECTION LAYOUT ═══ */
+  .section-layout { display: grid; grid-template-columns: 1fr 280px; gap: 1.2rem; }
+  @media (max-width: 950px) {
+    .section-layout { grid-template-columns: 1fr; }
+    .sidebar { width: 56px; }
+    .sidebar-brand, .sidebar-user-info, .nav-item span { display: none; }
+    .sidebar-header { justify-content: center; padding: 1rem 0.3rem; }
+    .sidebar-user { justify-content: center; padding: 0.6rem 0.2rem; }
+    .sidebar-logout { display: none; }
   }
-  .panel-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+
+  /* ═══ NOTIFICACIONES FEED ═══ */
+  .feed-layout { max-width: 700px; margin: 0 auto; }
+  .feed-header {
+    display: flex; align-items: center; justify-content: space-between;
     margin-bottom: 1rem;
-    padding-bottom: 0.8rem;
-    border-bottom: 1px solid #f3f4f6;
   }
-  .panel-header-left {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
+  .feed-header h3 { font-size: 1rem; font-weight: 600; }
+  .feed-list { display: flex; flex-direction: column; gap: 0.6rem; }
+  .feed-item {
+    background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-md);
+    padding: 1rem; display: flex; gap: 0.8rem;
+    transition: all 0.15s; cursor: pointer;
   }
-  .panel-icon {
-    width: 32px; height: 32px;
-    border-radius: 6px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1rem;
+  .feed-item:hover { border-color: #9ba3b2; }
+  .feed-item.unread { border-left: 3px solid var(--accent); }
+  .feed-avatar {
+    width: 36px; height: 36px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    color: white; font-size: 0.7rem; font-weight: 700; flex-shrink: 0;
   }
-  .panel-title {
-    font-size: 0.95rem;
-    font-weight: 600;
-    color: #111827;
+  .feed-body { flex: 1; }
+  .feed-title { font-weight: 500; font-size: 0.85rem; margin-bottom: 0.2rem; }
+  .feed-meta { font-size: 0.75rem; color: var(--text-secondary); }
+  .feed-time { font-size: 0.7rem; color: var(--text-muted); margin-top: 0.3rem; }
+  .feed-dot {
+    width: 8px; height: 8px; border-radius: 50%; background: var(--accent);
+    flex-shrink: 0; margin-top: 0.4rem;
   }
-  .panel-subtitle {
-    font-size: 0.72rem;
-    color: #6b7280;
-  }
+  .feed-item.read .feed-dot { background: var(--border); }
 
-  /* ── ITEMS ── */
-  .items-list {
-    flex: 1;
-    margin-bottom: 1rem;
-    min-height: 200px;
+  /* ═══ ITEMS ═══ */
+  .items-list { display: flex; flex-direction: column; gap: 0.5rem; }
+  .item-card {
+    background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-md);
+    padding: 1rem; display: flex; flex-direction: column; gap: 0.4rem;
+    transition: all 0.15s;
   }
-  .item {
-    padding: 0.7rem;
-    border: 1px solid #e5e7eb;
-    border-radius: 6px;
-    margin-bottom: 0.5rem;
-    transition: all 0.2s;
+  .item-card:hover { border-color: #9ba3b2; }
+  .item-title { font-weight: 600; font-size: 0.88rem; }
+  .item-meta-row {
+    display: flex; align-items: center; justify-content: space-between;
+    flex-wrap: wrap; gap: 0.4rem;
   }
-  .item:hover { border-color: #9ca3af; }
-  .item-title {
-    font-size: 0.85rem;
-    font-weight: 500;
-    margin-bottom: 0.3rem;
-  }
-  .item-meta {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    font-size: 0.72rem;
-    color: #6b7280;
-    margin-bottom: 0.4rem;
+  .item-assignee {
+    display: flex; align-items: center; gap: 0.4rem;
+    font-size: 0.78rem; color: var(--text-secondary);
   }
   .mini-avatar {
-    width: 20px; height: 20px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    font-size: 0.6rem;
-    font-weight: 600;
+    width: 22px; height: 22px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    color: white; font-size: 0.6rem; font-weight: 700;
   }
-  .assignee {
-    display: flex;
-    align-items: center;
-    gap: 0.3rem;
+  .item-actions { display: flex; gap: 0.4rem; flex-wrap: wrap; align-items: center; }
+  .item-created { font-size: 0.7rem; color: var(--text-muted); font-style: italic; }
+  .btn-delete {
+    font-size: 0.7rem; padding: 0.25rem 0.5rem; border-radius: var(--radius-sm);
+    border: 1px solid var(--danger-light); background: transparent;
+    color: var(--danger); cursor: pointer; font-weight: 500;
+    transition: all 0.15s; margin-left: auto;
   }
-  .item-actions {
-    display: flex;
-    gap: 0.3rem;
-  }
-  .item-created-by {
-    font-size: 0.68rem;
-    color: #9ca3af;
-    margin-top: 0.3rem;
-    font-style: italic;
-  }
+  .btn-delete:hover { background: var(--danger-light); }
 
-  /* ── BOTONES ── */
-  .btn {
-    background: #111827;
-    color: white;
-    border: none;
-    padding: 0.5rem 1rem;
-    border-radius: 5px;
-    font-size: 0.8rem;
-    cursor: pointer;
-    width: 100%;
-    font-weight: 500;
-  }
-  .btn:hover { background: #1f2937; }
-  .btn:disabled {
-    background: #d1d5db;
-    cursor: not-allowed;
-  }
-  .btn-sm {
-    font-size: 0.7rem;
-    padding: 0.3rem 0.6rem;
-    background: #e5e7eb;
-    color: #374151;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-weight: 500;
-  }
-  .btn-sm:hover { background: #d1d5db; }
-  .btn-progress { background: #3b82f6; color: white; }
-  .btn-progress:hover { background: #2563eb; }
-  .btn-done { background: #10b981; color: white; }
-  .btn-done:hover { background: #059669; }
-
-  /* ── BADGES ── */
+  /* ═══ BADGES ═══ */
   .badge {
-    display: inline-block;
-    font-size: 0.65rem;
-    padding: 2px 8px;
-    border-radius: 4px;
-    font-weight: 600;
+    font-size: 0.68rem; padding: 2px 8px; border-radius: 4px; font-weight: 600;
   }
-  .badge-pending { background: #fef3c7; color: #92400e; }
-  .badge-progress { background: #dbeafe; color: #1e40af; }
-  .badge-done { background: #d1fae5; color: #065f46; }
+  .badge-pending { background: var(--warning-light); color: var(--warning); }
+  .badge-progress { background: var(--accent-light); color: var(--accent); }
+  .badge-done { background: var(--success-light); color: var(--success); }
 
-  /* ── MODAL ── */
-  .modal-overlay {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.5);
-    z-index: 100;
-    align-items: center;
-    justify-content: center;
+  /* ═══ BUTTONS ═══ */
+  .btn {
+    background: var(--text); color: #fff; border: none;
+    padding: 0.55rem 1rem; border-radius: var(--radius-sm);
+    font-size: 0.82rem; font-weight: 500; cursor: pointer; transition: all 0.15s;
+    display: inline-flex; align-items: center; gap: 0.4rem;
   }
-  .modal-overlay.show { display: flex; }
-  .modal {
-    background: white;
-    border-radius: 8px;
-    max-width: 500px;
-    width: 90%;
-    max-height: 90vh;
-    overflow-y: auto;
+  .btn:hover { background: #374151; }
+  .btn:disabled { background: var(--border); cursor: not-allowed; color: var(--text-muted); }
+  .btn-sm {
+    font-size: 0.72rem; padding: 0.3rem 0.6rem; border-radius: var(--radius-sm);
+    border: none; cursor: pointer; font-weight: 500; transition: all 0.15s;
   }
-  .modal-header {
-    padding: 1.2rem;
-    border-bottom: 1px solid #e5e7eb;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  .modal-title { font-size: 1.1rem; font-weight: 600; }
-  .modal-close {
-    background: none;
-    border: none;
-    font-size: 1.5rem;
-    cursor: pointer;
-    color: #6b7280;
-  }
-  .modal-body { padding: 1.2rem; }
-  .form-group { margin-bottom: 1rem; }
-  .form-label {
-    display: block;
-    font-size: 0.85rem;
-    font-weight: 500;
-    margin-bottom: 0.4rem;
-    color: #374151;
-  }
-  .form-select {
-    width: 100%;
-    padding: 0.6rem;
-    border: 1px solid #d1d5db;
-    border-radius: 5px;
-    font-size: 0.85rem;
-  }
-  .modal-footer {
-    padding: 1rem 1.2rem;
-    border-top: 1px solid #e5e7eb;
-    display: flex;
-    gap: 0.5rem;
-    justify-content: flex-end;
-  }
-  .modal-footer .btn { width: auto; }
+  .btn-outline { background: transparent; color: var(--text); border: 1px solid var(--border); }
+  .btn-outline:hover { background: var(--bg); }
+  .btn-accent { background: var(--accent); color: #fff; }
+  .btn-accent:hover { background: #1d4ed8; }
+  .btn-positive { background: var(--success); color: #fff; }
+  .btn-positive:hover { background: #047857; }
+  .btn-warning { background: var(--warning); color: #fff; }
+  .btn-warning:hover { background: #b45309; }
 
-  /* ── ACTIVIDAD ── */
+  /* ═══ ACTIVITY ═══ */
+  .activity-panel {
+    background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-md);
+    padding: 1rem; display: flex; flex-direction: column; gap: 0.5rem;
+  }
+  .activity-panel h3 { font-size: 0.85rem; font-weight: 600; margin-bottom: 0.2rem; }
   .activity-list {
-    list-style: none;
-    flex: 1;
-    overflow-y: auto;
+    list-style: none; display: flex; flex-direction: column; gap: 0.4rem;
+    max-height: 340px; overflow-y: auto;
   }
   .activity-item {
-    padding: 0.6rem 0;
-    border-bottom: 1px solid #f3f4f6;
-    font-size: 0.8rem;
-    animation: slideIn 0.3s ease;
-  }
-  @keyframes slideIn {
-    from { opacity: 0; transform: translateY(-5px); }
-    to { opacity: 1; transform: translateY(0); }
+    padding: 0.5rem 0; border-bottom: 1px solid var(--border);
+    font-size: 0.78rem; animation: slideIn 0.3s ease;
   }
   .activity-item:last-child { border: none; }
-  .activity-user { font-weight: 600; font-size: 0.78rem; }
-  .activity-time {
-    font-size: 0.68rem;
-    color: #9ca3af;
-    margin-top: 0.15rem;
+  .activity-user { font-weight: 600; font-size: 0.76rem; }
+  .activity-time { font-size: 0.68rem; color: var(--text-muted); margin-top: 0.1rem; }
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateY(-4px); }
+    to { opacity: 1; transform: translateY(0); }
   }
 
-  /* ── EMPTY STATE ── */
+  /* ═══ MODAL ═══ */
+  .modal-overlay {
+    display: none; position: fixed; inset: 0;
+    background: rgba(0,0,0,0.4); z-index: 100;
+    align-items: center; justify-content: center; padding: 1rem;
+  }
+  .modal-overlay.show { display: flex; }
+  .modal-box {
+    background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg);
+    max-width: 480px; width: 100%; max-height: 90vh; overflow-y: auto;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.12);
+  }
+  .modal-header {
+    padding: 1.2rem; border-bottom: 1px solid var(--border);
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .modal-title { font-size: 1rem; font-weight: 600; }
+  .modal-close {
+    background: none; border: none; font-size: 1.4rem; cursor: pointer;
+    color: var(--text-secondary); line-height: 1;
+  }
+  .modal-body { padding: 1.2rem; display: flex; flex-direction: column; gap: 1rem; }
+  .form-group { display: flex; flex-direction: column; gap: 0.35rem; }
+  .form-label { font-size: 0.8rem; font-weight: 500; color: var(--text-secondary); }
+  .form-select {
+    width: 100%; padding: 0.55rem 0.7rem;
+    border: 1px solid var(--border); border-radius: var(--radius-sm);
+    font-size: 0.85rem; background: var(--surface); color: var(--text); cursor: pointer;
+  }
+  .form-select:focus { outline: none; border-color: var(--text); }
+  .modal-footer {
+    padding: 1rem 1.2rem; border-top: 1px solid var(--border);
+    display: flex; gap: 0.5rem; justify-content: flex-end;
+  }
+
+  /* ═══ TOOLBAR ═══ */
+  .toolbar {
+    display: flex; align-items: center; justify-content: space-between;
+    flex-wrap: wrap; gap: 0.6rem; margin-bottom: 0.5rem;
+  }
+  .toolbar-left { display: flex; align-items: center; gap: 0.5rem; }
+  .filter-chip {
+    font-size: 0.72rem; padding: 0.25rem 0.7rem; border-radius: 20px;
+    border: 1px solid var(--border); background: transparent; cursor: pointer;
+    color: var(--text-secondary); transition: all 0.15s;
+  }
+  .filter-chip:hover { border-color: #9ba3b2; }
+  .filter-chip.active { background: var(--text); color: #fff; border-color: var(--text); }
+
+  /* ═══ EMPTY STATE ═══ */
   .empty-state {
-    text-align: center;
-    padding: 2rem 1rem;
-    color: #9ca3af;
-    font-size: 0.85rem;
+    text-align: center; padding: 2.5rem 1rem;
+    color: var(--text-muted); font-size: 0.85rem;
   }
 </style>
+<base target="_blank">
 </head>
 <body>
 
-<header>
-  <div class="logo-area">
-    <div class="logo">🏗️ Innova Constructora S.A.</div>
-    <div class="company-info">
-      Construcción y Reformas · 145 empleados
-    </div>
+<!-- ═══ TOAST CONTAINER ═══ -->
+<div class="toast-container" id="toast-container"></div>
+
+<!-- ═══ LOGIN SCREEN ═══ -->
+<div id="login-screen" class="login-screen">
+  <div class="login-brand">
+    <div class="logo-icon">&#9874;</div>
+    <h1>Innova Constructora S.A.</h1>
+    <p>Demo colaborativo - Selecciona tu perfil para entrar</p>
   </div>
-  <div class="user-selector">
-    <label style="font-size:0.8rem;color:#6b7280">Conectado como:</label>
-    <select class="user-select" id="user-select" onchange="changeUser()">
-      <option value="0">👷 Roberto López — Ing. Obra</option>
-      <option value="1">💼 Carlos Méndez — Director</option>
-      <option value="2">📐 Laura Ríos — Arquitecta</option>
-    </select>
-    <div class="current-user" id="current-user-box">
-      <div class="user-avatar" id="current-avatar" style="background:#10b981">RL</div>
-      <span id="current-name">Roberto López</span>
-      <span class="role-badge" id="current-role" style="background:#d1fae5;color:#065f46">Obra</span>
-    </div>
-  </div>
-</header>
-
-<div class="container">
-
-  <!-- ═══ PROCESO 1: REPORTE DIARIO ═══ -->
-  <div class="panel">
-    <div class="panel-header">
-      <div class="panel-header-left">
-        <div class="panel-icon" style="background:#dbeafe">📋</div>
-        <div>
-          <div class="panel-title">1. Reporte Diario</div>
-          <div class="panel-subtitle">Obra envía → Director valida</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="items-list" id="list-reportes">
-      <div class="item" data-id="r1" data-status="progress" data-creator="0">
-        <div class="item-title">Torre A — Piso 6</div>
-        <div class="item-meta">
-          <div class="assignee">
-            <div class="mini-avatar" style="background:#10b981">RL</div>
-            <span>Ing. López</span>
-          </div>
-          <span class="badge badge-progress">En revisión</span>
-        </div>
-        <div class="item-actions" id="actions-r1">
-          <!-- Se llena dinámicamente según usuario -->
-        </div>
-        <div class="item-created-by">Creado por Ing. López (Obra)</div>
-      </div>
-    </div>
-
-    <button class="btn action-btn" data-role="obra" onclick="openModal('modal-reporte')">
-      📸 Enviar reporte desde obra
-    </button>
-  </div>
-
-  <!-- ═══ PROCESO 2: COMPRAS ═══ -->
-  <div class="panel">
-    <div class="panel-header">
-      <div class="panel-header-left">
-        <div class="panel-icon" style="background:#fef3c7">🛒</div>
-        <div>
-          <div class="panel-title">2. Compras</div>
-          <div class="panel-subtitle">Obra solicita → Director aprueba</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="items-list" id="list-compras">
-      <div class="item" data-id="c1" data-status="pending" data-creator="0">
-        <div class="item-title">50 bultos de cemento</div>
-        <div class="item-meta">
-          <div class="assignee">
-            <div class="mini-avatar" style="background:#10b981">RL</div>
-            <span>Solicitado por Obra</span>
-          </div>
-          <span class="badge badge-pending">Pendiente</span>
-        </div>
-        <div class="item-actions" id="actions-c1"></div>
-        <div class="item-created-by">Creado por Ing. López (Obra)</div>
-      </div>
-      <div class="item" data-id="c2" data-status="progress" data-creator="0">
-        <div class="item-title">200 varillas 3/8"</div>
-        <div class="item-meta">
-          <div class="assignee">
-            <div class="mini-avatar" style="background:#10b981">RL</div>
-            <span>Solicitado por Obra</span>
-          </div>
-          <span class="badge badge-progress">En revisión</span>
-        </div>
-        <div class="item-actions" id="actions-c2"></div>
-        <div class="item-created-by">Creado por Ing. López (Obra)</div>
-      </div>
-    </div>
-
-    <button class="btn action-btn" data-role="obra" onclick="openModal('modal-compra')">
-      + Capataz solicita material
-    </button>
-  </div>
-
-  <!-- ═══ PROCESO 3: INCIDENCIAS ═══ -->
-  <div class="panel">
-    <div class="panel-header">
-      <div class="panel-header-left">
-        <div class="panel-icon" style="background:#fee2e2">⚠️</div>
-        <div>
-          <div class="panel-title">3. Incidencias</div>
-          <div class="panel-subtitle">Arq. registra → Obra resuelve</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="items-list" id="list-incidencias">
-      <div class="item" data-id="i1" data-status="pending" data-creator="2">
-        <div class="item-title">Cambio de piso — Cliente García</div>
-        <div class="item-meta">
-          <div class="assignee">
-            <div class="mini-avatar" style="background:#8b5cf6">LR</div>
-            <span>Arq. Ríos</span>
-          </div>
-          <span class="badge badge-pending">Pendiente</span>
-        </div>
-        <div class="item-actions" id="actions-i1"></div>
-        <div class="item-created-by">Creado por Arq. Ríos (Oficina)</div>
-      </div>
-    </div>
-
-    <button class="btn action-btn" data-role="arquitecta" onclick="openModal('modal-incidencia')">
-      + Registrar cambio de cliente
-    </button>
-  </div>
-
-  <!-- ═══ ACTIVIDAD EN VIVO ═══ -->
-  <div class="panel">
-    <div class="panel-header">
-      <div class="panel-header-left">
-        <div class="panel-icon" style="background:#d1fae5">🔔</div>
-        <div>
-          <div class="panel-title">Actividad</div>
-          <div class="panel-subtitle">Colaboración en vivo</div>
-        </div>
-      </div>
-    </div>
-
-    <ul class="activity-list" id="activity-list">
-      <li class="activity-item">
-        <div class="activity-user" style="color:#10b981">Roberto López (Obra)</div>
-        <div>Solicitó 50 bultos de cemento</div>
-        <div class="activity-time">hace 5 min</div>
-      </li>
-      <li class="activity-item">
-        <div class="activity-user" style="color:#8b5cf6">Laura Ríos (Arq.)</div>
-        <div>Registró cambio de piso — Cliente García</div>
-        <div class="activity-time">hace 12 min</div>
-      </li>
-    </ul>
-  </div>
-
+  <div class="login-users" id="login-users"></div>
+  <div class="login-hint">Sin contrasena - Solo haz click en tu perfil</div>
 </div>
 
-<!-- ═══ MODAL: REPORTE ═══ -->
+<!-- ═══ APP LAYOUT ═══ -->
+<div id="app-layout" class="app-layout" style="display:none;">
+  <!-- Sidebar -->
+  <div class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-logo">&#9874;</div>
+      <div class="sidebar-brand">Innova Constructora<span>Demo colaborativo</span></div>
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav">
+      <button class="nav-item active" data-section="dashboard" onclick="navigate('dashboard')">
+        <span class="nav-icon">&#9638;</span><span>Dashboard</span>
+      </button>
+      <button class="nav-item" data-section="reportes" onclick="navigate('reportes')">
+        <span class="nav-icon">&#128203;</span><span>Reportes Diarios</span>
+      </button>
+      <button class="nav-item" data-section="compras" onclick="navigate('compras')">
+        <span class="nav-icon">&#128722;</span><span>Compras</span>
+      </button>
+      <button class="nav-item" data-section="incidencias" onclick="navigate('incidencias')">
+        <span class="nav-icon">&#9888;</span><span>Incidencias</span>
+      </button>
+      <button class="nav-item" data-section="notificaciones" onclick="navigate('notificaciones')">
+        <span class="nav-icon">&#128276;</span><span>Notificaciones</span>
+      </button>
+    </nav>
+    <div class="sidebar-user">
+      <div class="sidebar-user-avatar" id="sb-avatar">RL</div>
+      <div class="sidebar-user-info">
+        <div class="sidebar-user-name" id="sb-name">Roberto Lopez</div>
+        <div class="sidebar-user-role" id="sb-role">Ing. Obra</div>
+      </div>
+      <div class="sidebar-logout" onclick="logout()">Salir</div>
+    </div>
+  </div>
+
+  <!-- Main -->
+  <div class="main-area">
+    <div class="main-header">
+      <div class="main-header-left">
+        <h2 id="page-title">Dashboard</h2>
+        <div class="main-header-sub" id="page-subtitle">Vista general del proyecto</div>
+      </div>
+      <div class="main-header-right">
+        <div class="alert-bell" onclick="navigate('notificaciones')">
+          <span>&#128276;</span>
+          <span class="alert-badge" id="alert-badge" style="display:none;">0</span>
+        </div>
+        <div id="page-action"></div>
+      </div>
+    </div>
+    <div class="main-content" id="main-content"></div>
+  </div>
+</div>
+
+<!-- ═══ MODALS ═══ -->
 <div class="modal-overlay" id="modal-reporte">
-  <div class="modal">
+  <div class="modal-box">
     <div class="modal-header">
-      <div class="modal-title">📋 Nuevo Reporte Diario</div>
+      <div class="modal-title">Nuevo Reporte Diario</div>
       <button class="modal-close" onclick="closeModal('modal-reporte')">&times;</button>
     </div>
     <div class="modal-body">
       <div class="form-group">
         <label class="form-label">Proyecto</label>
         <select class="form-select" id="rpt-proyecto">
-          <option>Torre A — Las Palmas</option>
-          <option>Villa Serena — Fase 2</option>
+          <option>Torre A - Las Palmas</option>
+          <option>Villa Serena - Fase 2</option>
           <option>Plaza Norte</option>
         </select>
       </div>
@@ -497,31 +481,31 @@
         <label class="form-label">Actividad principal</label>
         <select class="form-select" id="rpt-avance">
           <option>Colado de losa</option>
-          <option>Instalación eléctrica</option>
+          <option>Instalacion electrica</option>
           <option>Acabados interiores</option>
+          <option>Cimentacion</option>
+          <option>Tabiqueria</option>
         </select>
       </div>
       <div class="form-group">
         <label class="form-label">% Avance</label>
         <select class="form-select" id="rpt-porcentaje">
-          <option>25%</option>
-          <option selected>50%</option>
-          <option>75%</option>
+          <option>10%</option><option>25%</option><option selected>50%</option>
+          <option>75%</option><option>90%</option><option>100%</option>
         </select>
       </div>
     </div>
     <div class="modal-footer">
-      <button class="btn" style="background:#6b7280" onclick="closeModal('modal-reporte')">Cancelar</button>
+      <button class="btn btn-outline" onclick="closeModal('modal-reporte')">Cancelar</button>
       <button class="btn" onclick="submitReporte()">Enviar a Director</button>
     </div>
   </div>
 </div>
 
-<!-- ═══ MODAL: COMPRA ═══ -->
 <div class="modal-overlay" id="modal-compra">
-  <div class="modal">
+  <div class="modal-box">
     <div class="modal-header">
-      <div class="modal-title">🛒 Solicitar Material</div>
+      <div class="modal-title">Solicitar Material</div>
       <button class="modal-close" onclick="closeModal('modal-compra')">&times;</button>
     </div>
     <div class="modal-body">
@@ -532,6 +516,8 @@
           <option>Varilla 3/8"</option>
           <option>Block de concreto</option>
           <option>Cable THW</option>
+          <option>Pintura acrilica</option>
+          <option>Azulejo ceramico</option>
         </select>
       </div>
       <div class="form-group">
@@ -540,302 +526,519 @@
           <option>25 unidades</option>
           <option selected>50 unidades</option>
           <option>100 unidades</option>
+          <option>200 unidades</option>
+          <option>500 unidades</option>
         </select>
       </div>
       <div class="form-group">
         <label class="form-label">Proyecto</label>
         <select class="form-select" id="compra-proyecto">
-          <option>Torre A — Las Palmas</option>
-          <option>Villa Serena — Fase 2</option>
+          <option>Torre A - Las Palmas</option>
+          <option>Villa Serena - Fase 2</option>
         </select>
       </div>
     </div>
     <div class="modal-footer">
-      <button class="btn" style="background:#6b7280" onclick="closeModal('modal-compra')">Cancelar</button>
+      <button class="btn btn-outline" onclick="closeModal('modal-compra')">Cancelar</button>
       <button class="btn" onclick="submitCompra()">Enviar a Director</button>
     </div>
   </div>
 </div>
 
-<!-- ═══ MODAL: INCIDENCIA ═══ -->
 <div class="modal-overlay" id="modal-incidencia">
-  <div class="modal">
+  <div class="modal-box">
     <div class="modal-header">
-      <div class="modal-title">⚠️ Registrar Cambio de Cliente</div>
+      <div class="modal-title">Registrar Incidencia</div>
       <button class="modal-close" onclick="closeModal('modal-incidencia')">&times;</button>
     </div>
     <div class="modal-body">
       <div class="form-group">
-        <label class="form-label">Cliente</label>
-        <select class="form-select" id="inc-cliente">
-          <option>Cliente García</option>
-          <option>Cliente Martínez</option>
-          <option>Cliente Rodríguez</option>
+        <label class="form-label">Tipo de incidencia</label>
+        <select class="form-select" id="inc-tipo">
+          <option>Cambio de piso solicitado por cliente</option>
+          <option>Cambio de color de acabados</option>
+          <option>Ampliacion de ventanal</option>
+          <option>Ampliacion de bano</option>
+          <option>Modificacion de cocina</option>
+          <option>Cancelacion parcial de obra</option>
+          <option>Retraso en entrega de material</option>
+          <option>Defecto en estructura detectado</option>
+          <option>Reclamo por ruido / vecinos</option>
+          <option>Permiso municipal pendiente</option>
+          <option>Fuga de agua / drenaje</option>
+          <option>Fallo electrico en obra</option>
         </select>
       </div>
       <div class="form-group">
-        <label class="form-label">Tipo de cambio</label>
-        <select class="form-select" id="inc-desc">
-          <option>Cambio de piso</option>
-          <option>Cambio de color</option>
-          <option>Ventanal más grande</option>
+        <label class="form-label">Cliente</label>
+        <select class="form-select" id="inc-cliente">
+          <option>Cliente Garcia</option>
+          <option>Cliente Martinez</option>
+          <option>Cliente Rodriguez</option>
+          <option>Cliente Lopez</option>
+          <option>Sin cliente asociado</option>
         </select>
       </div>
       <div class="form-group">
         <label class="form-label">Proyecto</label>
         <select class="form-select" id="inc-proyecto">
-          <option>Torre A — Las Palmas</option>
-          <option>Casa García</option>
+          <option>Torre A - Las Palmas</option>
+          <option>Casa Garcia</option>
+          <option>Villa Serena - Fase 2</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Prioridad</label>
+        <select class="form-select" id="inc-prioridad">
+          <option>Baja</option>
+          <option selected>Media</option>
+          <option>Alta</option>
+          <option>Urgente</option>
         </select>
       </div>
     </div>
     <div class="modal-footer">
-      <button class="btn" style="background:#6b7280" onclick="closeModal('modal-incidencia')">Cancelar</button>
-      <button class="btn" onclick="submitIncidencia()">Enviar a Obra</button>
+      <button class="btn btn-outline" onclick="closeModal('modal-incidencia')">Cancelar</button>
+      <button class="btn btn-warning" onclick="submitIncidencia()">Enviar a Obra</button>
     </div>
   </div>
 </div>
 
 <script>
-  // ═══ USUARIOS (3 roles colaborativos) ═══
+  // ═══ DATA ═══
   const users = [
-    { name: 'Roberto López', initials: 'RL', color: '#10b981', role: 'obra', roleLabel: 'Obra', roleColor: '#d1fae5', roleTextColor: '#065f46' },
-    { name: 'Carlos Méndez', initials: 'CM', color: '#3b82f6', role: 'director', roleLabel: 'Director', roleColor: '#dbeafe', roleTextColor: '#1e40af' },
-    { name: 'Laura Ríos', initials: 'LR', color: '#8b5cf6', role: 'arquitecta', roleLabel: 'Arq.', roleColor: '#ede9fe', roleTextColor: '#5b21b6' }
+    { name: 'Roberto Lopez', initials: 'RL', color: '#10b981', role: 'obra', roleLabel: 'Ing. Obra', roleColor: '#d1fae5', roleTextColor: '#065f46', desc: 'Envia reportes y solicita materiales' },
+    { name: 'Carlos Mendez', initials: 'CM', color: '#3b82f6', role: 'director', roleLabel: 'Director', roleColor: '#dbeafe', roleTextColor: '#1e40af', desc: 'Aprueba reportes y compras' },
+    { name: 'Laura Rios', initials: 'LR', color: '#8b5cf6', role: 'arquitecta', roleLabel: 'Arquitecta', roleColor: '#ede9fe', roleTextColor: '#5b21b6', desc: 'Registra incidencias de clientes' }
   ];
   let currentUser = 0;
+  let currentSection = 'dashboard';
 
-  // ═══ CAMBIAR USUARIO ═══
-  function changeUser() {
-    currentUser = parseInt(document.getElementById('user-select').value);
-    const user = users[currentUser];
-    
-    // Actualizar header
-    document.getElementById('current-avatar').style.background = user.color;
-    document.getElementById('current-avatar').textContent = user.initials;
-    document.getElementById('current-name').textContent = user.name;
-    const roleBadge = document.getElementById('current-role');
-    roleBadge.textContent = user.roleLabel;
-    roleBadge.style.background = user.roleColor;
-    roleBadge.style.color = user.roleTextColor;
-    
-    // Actualizar caja del usuario
-    const box = document.getElementById('current-user-box');
-    box.style.background = user.roleColor;
-    
-    // Actualizar botones de acción según rol
-    document.querySelectorAll('.action-btn').forEach(btn => {
-      const btnRole = btn.dataset.role;
-      if (btnRole === user.role) {
-        btn.style.display = 'block';
-      } else {
-        btn.style.display = 'none';
-      }
-    });
-    
-    // Actualizar acciones de cada item
-    updateAllItemActions();
+  const items = {
+    reportes: [
+      { id: 'r1', title: 'Torre A - Piso 6', status: 'progress', creator: 0, assignee: 1, type: 'reporte', detail: 'Colado de losa - 50%', pct: 50 },
+      { id: 'r2', title: 'Villa Serena - Fase 2', status: 'done', creator: 0, assignee: 1, type: 'reporte', detail: 'Instalacion electrica - 100%', pct: 100 },
+      { id: 'r3', title: 'Plaza Norte', status: 'pending', creator: 0, assignee: 1, type: 'reporte', detail: 'Cimentacion - 25%', pct: 25 }
+    ],
+    compras: [
+      { id: 'c1', title: '50 bultos de cemento', status: 'pending', creator: 0, assignee: 1, type: 'compra', detail: 'Cemento Portland - Torre A' },
+      { id: 'c2', title: '200 varillas 3/8"', status: 'progress', creator: 0, assignee: 1, type: 'compra', detail: 'Varilla 3/8" - Villa Serena' },
+      { id: 'c3', title: '100 blocks de concreto', status: 'done', creator: 0, assignee: 1, type: 'compra', detail: 'Block de concreto - Torre A' }
+    ],
+    incidencias: [
+      { id: 'i1', title: 'Cambio de piso - Cliente Garcia', status: 'pending', creator: 2, assignee: 0, type: 'incidencia', detail: 'Torre A - Prioridad: Media' },
+      { id: 'i2', title: 'Ventanal mas grande - Cliente Martinez', status: 'progress', creator: 2, assignee: 0, type: 'incidencia', detail: 'Casa Garcia - Prioridad: Alta' },
+      { id: 'i3', title: 'Retraso en entrega de material', status: 'pending', creator: 2, assignee: 0, type: 'incidencia', detail: 'Plaza Norte - Prioridad: Urgente' }
+    ]
+  };
+
+  const activityLog = [
+    { user: 0, roleLabel: 'Obra', action: 'Solicito 50 bultos de cemento', time: 'hace 5 min' },
+    { user: 2, roleLabel: 'Arq.', action: 'Registro retraso en entrega de material', time: 'hace 8 min' },
+    { user: 2, roleLabel: 'Arq.', action: 'Registro cambio de piso - Cliente Garcia', time: 'hace 12 min' },
+    { user: 1, roleLabel: 'Director', action: 'Aprobo reporte Villa Serena Fase 2', time: 'hace 25 min' },
+    { user: 0, roleLabel: 'Obra', action: 'Envio reporte Torre A Piso 6', time: 'hace 40 min' }
+  ];
+
+  let alerts = [
+    { id: 1, title: 'Nueva compra pendiente', meta: '50 bultos de cemento - Roberto Lopez', read: false, user: 0, time: 'hace 5 min' },
+    { id: 2, title: 'Incidencia urgente', meta: 'Retraso en entrega de material - Plaza Norte', read: false, user: 2, time: 'hace 8 min' },
+    { id: 3, title: 'Reporte en revision', meta: 'Torre A Piso 6 - Colado de losa', read: false, user: 0, time: 'hace 12 min' }
+  ];
+
+  // ═══ LOGIN ═══
+  function renderLogin() {
+    const container = document.getElementById('login-users');
+    container.innerHTML = users.map((u, i) => `
+      <div class="user-card" onclick="login(${i})" style="border-top: 4px solid ${u.color};">
+        <div class="user-card-avatar" style="background:${u.color}">${u.initials}</div>
+        <div class="user-card-name">${u.name}</div>
+        <div class="user-card-role" style="background:${u.roleColor};color:${u.roleTextColor}">${u.roleLabel}</div>
+        <div class="user-card-desc">${u.desc}</div>
+      </div>
+    `).join('');
   }
 
-  // ═══ ACTUALIZAR ACCIONES SEGÚN ROL ═══
-  function updateAllItemActions() {
-    const user = users[currentUser];
-    
-    document.querySelectorAll('.item').forEach(item => {
-      const id = item.dataset.id;
-      const status = item.dataset.status;
-      const creator = parseInt(item.dataset.creator);
-      const actionsDiv = document.getElementById('actions-' + id);
-      if (!actionsDiv) return;
-      
-      const panel = item.closest('.panel');
-      const isReporte = panel.querySelector('.panel-title').textContent.includes('Reporte');
-      const isCompra = panel.querySelector('.panel-title').textContent.includes('Compras');
-      const isIncidencia = panel.querySelector('.panel-title').textContent.includes('Incidencias');
-      
-      let html = '';
-      
-      // LÓGICA COLABORATIVA: cada rol ve acciones diferentes
-      if (user.role === 'director') {
-        // Director: puede APROBAR/VALIDAR lo que envió Obra
-        if ((isReporte || isCompra) && creator === 0) {
-          if (status === 'pending') {
-            html = `
-              <button class="btn-sm btn-progress" onclick="changeStatus('${id}','progress')">→ Revisar</button>
-              <button class="btn-sm btn-done" onclick="changeStatus('${id}','done')">✓ Aprobar</button>
-            `;
-          } else if (status === 'progress') {
-            html = `<button class="btn-sm btn-done" onclick="changeStatus('${id}','done')">✓ Aprobar</button>`;
-          }
-        }
-      } else if (user.role === 'obra') {
-        // Obra: puede RESOLVER incidencias que registró la Arquitecta
-        if (isIncidencia && creator === 2) {
-          if (status === 'pending') {
-            html = `
-              <button class="btn-sm btn-progress" onclick="changeStatus('${id}','progress')">→ En trabajo</button>
-              <button class="btn-sm btn-done" onclick="changeStatus('${id}','done')">✓ Resolver</button>
-            `;
-          } else if (status === 'progress') {
-            html = `<button class="btn-sm btn-done" onclick="changeStatus('${id}','done')">✓ Resolver</button>`;
-          }
-        }
-      } else if (user.role === 'arquitecta') {
-        // Arquitecta: puede VALIDAR que Obra resolvió bien
-        if (isIncidencia && status === 'progress') {
-          html = `<button class="btn-sm btn-done" onclick="changeStatus('${id}','done')">✓ Validar resolución</button>`;
-        }
-      }
-      
-      actionsDiv.innerHTML = html;
-    });
+  function login(idx) {
+    currentUser = idx;
+    const u = users[idx];
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('app-layout').style.display = 'flex';
+    document.getElementById('sb-avatar').textContent = u.initials;
+    document.getElementById('sb-avatar').style.background = u.color;
+    document.getElementById('sb-name').textContent = u.name;
+    document.getElementById('sb-role').textContent = u.roleLabel;
+    document.getElementById('sidebar').style.setProperty('--user-color', u.color);
+    updateAlertBadge();
+    navigate('dashboard');
+    addActivity(currentUser, 'inicio sesion en el sistema');
   }
 
-  // ═══ MODALES ═══
-  function openModal(id) {
-    document.getElementById(id).classList.add('show');
-  }
-  function closeModal(id) {
-    document.getElementById(id).classList.remove('show');
+  function logout() {
+    document.getElementById('app-layout').style.display = 'none';
+    document.getElementById('login-screen').style.display = 'flex';
+    currentSection = 'dashboard';
   }
 
-  // ═══ CAMBIAR ESTADO ═══
-  function changeStatus(id, newStatus) {
-    const item = document.querySelector(`[data-id="${id}"]`);
-    item.dataset.status = newStatus;
-    
-    const badge = item.querySelector('.badge');
-    
-    if (newStatus === 'pending') {
-      badge.className = 'badge badge-pending';
-      badge.textContent = 'Pendiente';
-    } else if (newStatus === 'progress') {
-      badge.className = 'badge badge-progress';
-      badge.textContent = 'En revisión';
-    } else if (newStatus === 'done') {
-      badge.className = 'badge badge-done';
-      badge.textContent = '✓ Aprobado';
+  // ═══ ALERT BADGE ═══
+  function updateAlertBadge() {
+    const unread = alerts.filter(a => !a.read).length;
+    const badge = document.getElementById('alert-badge');
+    badge.textContent = unread;
+    badge.style.display = unread > 0 ? 'flex' : 'none';
+  }
+
+  // ═══ TOASTS ═══
+  function showToast(title, msg, icon) {
+    const container = document.getElementById('toast-container');
+    const toast = document.createElement('div');
+    toast.className = 'toast';
+    toast.innerHTML = `
+      <div class="toast-icon">${icon}</div>
+      <div class="toast-body">
+        <div class="toast-title">${title}</div>
+        <div class="toast-msg">${msg}</div>
+      </div>
+    `;
+    container.appendChild(toast);
+    setTimeout(() => toast.remove(), 3000);
+  }
+
+  // ═══ NAVIGATION ═══
+  function navigate(section) {
+    currentSection = section;
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    document.querySelector(`.nav-item[data-section="${section}"]`)?.classList.add('active');
+
+    const titles = {
+      dashboard: ['Dashboard', 'Vista general del proyecto'],
+      reportes: ['Reportes Diarios', 'Obra envia - Director valida'],
+      compras: ['Compras', 'Obra solicita - Director aprueba'],
+      incidencias: ['Incidencias', 'Arq. registra - Obra resuelve'],
+      notificaciones: ['Notificaciones', 'Todas las actualizaciones del sistema']
+    };
+    document.getElementById('page-title').textContent = titles[section][0];
+    document.getElementById('page-subtitle').textContent = titles[section][1];
+
+    const actionBtn = document.getElementById('page-action');
+    const u = users[currentUser];
+    if (section === 'reportes' && u.role === 'obra') {
+      actionBtn.innerHTML = `<button class="btn" onclick="openModal('modal-reporte')">Nuevo reporte</button>`;
+    } else if (section === 'compras' && u.role === 'obra') {
+      actionBtn.innerHTML = `<button class="btn" onclick="openModal('modal-compra')">Solicitar material</button>`;
+    } else if (section === 'incidencias' && u.role === 'arquitecta') {
+      actionBtn.innerHTML = `<button class="btn btn-warning" onclick="openModal('modal-incidencia')">Nueva incidencia</button>`;
+    } else {
+      actionBtn.innerHTML = '';
     }
-    
-    const title = item.querySelector('.item-title').textContent;
-    const user = users[currentUser];
-    addActivity(user.name, user.roleLabel, `cambió "${title}" a ${badge.textContent}`, user.color);
-    
-    updateAllItemActions();
+
+    renderContent();
   }
 
-  // ═══ ENVIAR REPORTE ═══
+  // ═══ RENDER ═══
+  function renderContent() {
+    const container = document.getElementById('main-content');
+    if (currentSection === 'dashboard') renderDashboard(container);
+    else if (currentSection === 'notificaciones') renderNotifications(container);
+    else renderSection(container, currentSection);
+  }
+
+  function renderDashboard(container) {
+    const counts = {
+      reportes: items.reportes.length,
+      comprasPendientes: items.compras.filter(i => i.status !== 'done').length,
+      incidencias: items.incidencias.filter(i => i.status !== 'done').length,
+      aprobados: [...items.reportes, ...items.compras, ...items.incidencias].filter(i => i.status === 'done').length
+    };
+
+    container.innerHTML = `
+      <div class="dash-grid">
+        <div class="dash-card" onclick="navigate('reportes')">
+          <div class="dash-card-header">
+            <div class="dash-card-title">Reportes enviados</div>
+            <div class="dash-icon">&#128203;</div>
+          </div>
+          <div class="dash-card-count">${counts.reportes}</div>
+          <div class="dash-card-footer">${items.reportes.filter(i=>i.status==='progress').length} en revision</div>
+        </div>
+        <div class="dash-card" onclick="navigate('compras')">
+          <div class="dash-card-header">
+            <div class="dash-card-title">Compras pendientes</div>
+            <div class="dash-icon">&#128722;</div>
+          </div>
+          <div class="dash-card-count">${counts.comprasPendientes}</div>
+          <div class="dash-card-footer">${items.compras.filter(i=>i.status==='pending').length} por revisar</div>
+        </div>
+        <div class="dash-card" onclick="navigate('incidencias')">
+          <div class="dash-card-header">
+            <div class="dash-card-title">Incidencias activas</div>
+            <div class="dash-icon">&#9888;</div>
+          </div>
+          <div class="dash-card-count">${counts.incidencias}</div>
+          <div class="dash-card-footer">${items.incidencias.filter(i=>i.status==='progress').length} en resolucion</div>
+        </div>
+        <div class="dash-card">
+          <div class="dash-card-header">
+            <div class="dash-card-title">Aprobados totales</div>
+            <div class="dash-icon">&#10003;</div>
+          </div>
+          <div class="dash-card-count">${counts.aprobados}</div>
+          <div class="dash-card-footer">Este mes</div>
+        </div>
+      </div>
+      <div style="margin-top:1.2rem;">
+        <div style="font-size:0.85rem;font-weight:600;margin-bottom:0.6rem;">Ultima actividad</div>
+        ${renderActivityList(5)}
+      </div>
+    `;
+  }
+
+  function renderNotifications(container) {
+    const unread = alerts.filter(a => !a.read).length;
+    container.innerHTML = `
+      <div class="feed-layout">
+        <div class="feed-header">
+          <h3>Todas las notificaciones</h3>
+          ${unread > 0 ? `<button class="btn btn-sm btn-outline" onclick="markAllRead()">Marcar todas leidas</button>` : ''}
+        </div>
+        <div class="feed-list">
+          ${alerts.length ? alerts.map(a => renderFeedItem(a)).join('') : '<div class="empty-state">Sin notificaciones</div>'}
+        </div>
+      </div>
+    `;
+  }
+
+  function renderFeedItem(a) {
+    const u = users[a.user] || users[0];
+    return `
+      <div class="feed-item ${a.read ? 'read' : 'unread'}" onclick="readAlert(${a.id})">
+        <div class="feed-avatar" style="background:${u.color}">${u.initials}</div>
+        <div class="feed-body">
+          <div class="feed-title">${a.title}</div>
+          <div class="feed-meta">${a.meta}</div>
+          <div class="feed-time">${a.time}</div>
+        </div>
+        <div class="feed-dot"></div>
+      </div>
+    `;
+  }
+
+  function renderSection(container, section) {
+    const list = items[section];
+    container.innerHTML = `
+      <div class="section-layout">
+        <div class="section-main">
+          <div class="toolbar">
+            <div class="toolbar-left">
+              <button class="filter-chip active" onclick="filterItems(this,'all')">Todos</button>
+              <button class="filter-chip" onclick="filterItems(this,'pending')">Pendientes</button>
+              <button class="filter-chip" onclick="filterItems(this,'progress')">En revision</button>
+              <button class="filter-chip" onclick="filterItems(this,'done')">Aprobados</button>
+            </div>
+          </div>
+          <div class="items-list" id="section-items">
+            ${list.length ? list.map(item => renderItemCard(item)).join('') : '<div class="empty-state">No hay elementos en esta seccion</div>'}
+          </div>
+        </div>
+        <div class="section-side">
+          <div class="activity-panel">
+            <h3>Actividad reciente</h3>
+            ${renderActivityList(6)}
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  function renderItemCard(item) {
+    const creator = users[item.creator];
+    const statusLabels = { pending: 'Pendiente', progress: 'En revision', done: 'Aprobado' };
+    const statusClasses = { pending: 'badge-pending', progress: 'badge-progress', done: 'badge-done' };
+    const u = users[currentUser];
+    let actions = '';
+
+    // Botones de estado segun rol
+    if (u.role === 'director' && (item.type === 'reporte' || item.type === 'compra') && item.creator !== currentUser) {
+      if (item.status === 'pending') actions = `<button class="btn-sm btn-accent" onclick="changeStatus('${item.id}','progress')">Revisar</button><button class="btn-sm btn-positive" onclick="changeStatus('${item.id}','done')">Aprobar</button>`;
+      else if (item.status === 'progress') actions = `<button class="btn-sm btn-positive" onclick="changeStatus('${item.id}','done')">Aprobar</button>`;
+    } else if (u.role === 'obra' && item.type === 'incidencia' && item.creator !== currentUser) {
+      if (item.status === 'pending') actions = `<button class="btn-sm btn-accent" onclick="changeStatus('${item.id}','progress')">En trabajo</button><button class="btn-sm btn-positive" onclick="changeStatus('${item.id}','done')">Resolver</button>`;
+      else if (item.status === 'progress') actions = `<button class="btn-sm btn-positive" onclick="changeStatus('${item.id}','done')">Resolver</button>`;
+    } else if (u.role === 'arquitecta' && item.type === 'incidencia' && item.status === 'progress') {
+      actions = `<button class="btn-sm btn-positive" onclick="changeStatus('${item.id}','done')">Validar resolucion</button>`;
+    }
+
+    // Boton eliminar: solo el creador y solo si NO esta aprobado
+    let deleteBtn = '';
+    if (item.creator === currentUser && item.status !== 'done') {
+      deleteBtn = `<button class="btn-delete" onclick="deleteItem('${item.id}', event)">Eliminar</button>`;
+    }
+
+    return `
+      <div class="item-card" data-id="${item.id}" data-status="${item.status}">
+        <div class="item-title">${item.title}</div>
+        <div style="font-size:0.78rem;color:var(--text-secondary);">${item.detail}</div>
+        <div class="item-meta-row">
+          <div class="item-assignee">
+            <div class="mini-avatar" style="background:${creator.color}">${creator.initials}</div>
+            <span>${creator.name}</span>
+          </div>
+          <span class="badge ${statusClasses[item.status]}">${statusLabels[item.status]}</span>
+        </div>
+        <div class="item-actions">${actions}${deleteBtn}</div>
+        <div class="item-created">Creado por ${creator.name} (${creator.roleLabel})</div>
+      </div>
+    `;
+  }
+
+  function filterItems(btn, filter) {
+    document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.item-card').forEach(card => {
+      card.style.display = (filter === 'all' || card.dataset.status === filter) ? 'flex' : 'none';
+    });
+  }
+
+  function renderActivityList(limit) {
+    if (!activityLog.length) return '<div class="empty-state">Sin actividad reciente</div>';
+    return `<ul class="activity-list">${activityLog.slice(0, limit).map(a => `
+      <li class="activity-item">
+        <div class="activity-user" style="color:${users[a.user].color}">${users[a.user].name} (${a.roleLabel})</div>
+        <div>${a.action}</div>
+        <div class="activity-time">${a.time}</div>
+      </li>
+    `).join('')}</ul>`;
+  }
+
+  // ═══ ACTIONS ═══
+  function changeStatus(id, newStatus) {
+    const allItems = [...items.reportes, ...items.compras, ...items.incidencias];
+    const item = allItems.find(i => i.id === id);
+    if (!item) return;
+    item.status = newStatus;
+    const statusLabels = { pending: 'Pendiente', progress: 'En revision', done: 'Aprobado' };
+    addActivity(currentUser, `cambio "${item.title}" a ${statusLabels[newStatus]}`);
+    alerts.unshift({
+      id: Date.now(), title: `Estado actualizado: ${item.title}`,
+      meta: `Nuevo estado: ${statusLabels[newStatus]}`, read: false, user: currentUser, time: 'ahora'
+    });
+    if (alerts.length > 20) alerts.pop();
+    updateAlertBadge();
+    showToast('Estado actualizado', `"${item.title}" ahora es ${statusLabels[newStatus]}`, '&#9989;');
+    renderContent();
+  }
+
+  function deleteItem(id, event) {
+    event.stopPropagation();
+    const allItems = [...items.reportes, ...items.compras, ...items.incidencias];
+    const item = allItems.find(i => i.id === id);
+    if (!item) return;
+    if (item.creator !== currentUser) {
+      showToast('No permitido', 'Solo el creador puede eliminar este elemento', '&#128683;');
+      return;
+    }
+    if (item.status === 'done') {
+      showToast('No permitido', 'No se puede eliminar un elemento ya aprobado', '&#128683;');
+      return;
+    }
+    // Remove from correct array
+    for (const key of ['reportes', 'compras', 'incidencias']) {
+      const idx = items[key].findIndex(i => i.id === id);
+      if (idx !== -1) {
+        items[key].splice(idx, 1);
+        break;
+      }
+    }
+    addActivity(currentUser, `elimino "${item.title}"`);
+    alerts.unshift({
+      id: Date.now(), title: `Elemento eliminado`,
+      meta: `"${item.title}" fue eliminado`, read: false, user: currentUser, time: 'ahora'
+    });
+    if (alerts.length > 20) alerts.pop();
+    updateAlertBadge();
+    showToast('Eliminado', `"${item.title}" fue eliminado correctamente`, '&#128465;');
+    renderContent();
+  }
+
+  function addActivity(userIdx, action) {
+    const u = users[userIdx];
+    activityLog.unshift({ user: userIdx, roleLabel: u.roleLabel, action, time: 'ahora' });
+    if (activityLog.length > 20) activityLog.pop();
+  }
+
+  function readAlert(id) {
+    const a = alerts.find(x => x.id === id);
+    if (a) a.read = true;
+    updateAlertBadge();
+    if (currentSection === 'notificaciones') renderContent();
+  }
+
+  function markAllRead() {
+    alerts.forEach(a => a.read = true);
+    updateAlertBadge();
+    if (currentSection === 'notificaciones') renderContent();
+    showToast('Notificaciones', 'Todas marcadas como leidas', '&#128276;');
+  }
+
+  // ═══ MODALS ═══
+  function openModal(id) { document.getElementById(id).classList.add('show'); }
+  function closeModal(id) { document.getElementById(id).classList.remove('show'); }
+
   function submitReporte() {
     const proyecto = document.getElementById('rpt-proyecto').value;
-    const user = users[currentUser];
-    
-    const list = document.getElementById('list-reportes');
+    const avance = document.getElementById('rpt-avance').value;
+    const pct = parseInt(document.getElementById('rpt-porcentaje').value);
     const id = 'r' + Date.now();
-    const item = document.createElement('div');
-    item.className = 'item';
-    item.dataset.id = id;
-    item.dataset.status = 'progress';
-    item.dataset.creator = currentUser;
-    item.innerHTML = `
-      <div class="item-title">${proyecto}</div>
-      <div class="item-meta">
-        <div class="assignee">
-          <div class="mini-avatar" style="background:${user.color}">${user.initials}</div>
-          <span>${user.name}</span>
-        </div>
-        <span class="badge badge-progress">En revisión</span>
-      </div>
-      <div class="item-actions" id="actions-${id}"></div>
-      <div class="item-created-by">Creado por ${user.name} (${user.roleLabel})</div>
-    `;
-    list.appendChild(item);
-    
-    addActivity(user.name, user.roleLabel, `envió reporte de ${proyecto}`, user.color);
+    items.reportes.unshift({
+      id, title: proyecto, status: 'progress', creator: currentUser, assignee: 1,
+      type: 'reporte', detail: `${avance} - ${pct}%`, pct
+    });
+    addActivity(currentUser, `envio reporte de ${proyecto}`);
+    alerts.unshift({ id: Date.now() + 1, title: 'Nuevo reporte enviado', meta: `${proyecto} - ${users[currentUser].name}`, read: false, user: currentUser, time: 'ahora' });
+    updateAlertBadge();
+    showToast('Reporte enviado', `${proyecto} fue enviado al Director`, '&#128203;');
     closeModal('modal-reporte');
-    updateAllItemActions();
+    navigate('reportes');
   }
 
-  // ═══ SOLICITAR COMPRA ═══
   function submitCompra() {
     const material = document.getElementById('compra-material').value;
     const cantidad = document.getElementById('compra-cantidad').value;
-    const user = users[currentUser];
-    
-    const list = document.getElementById('list-compras');
+    const proyecto = document.getElementById('compra-proyecto').value;
     const id = 'c' + Date.now();
-    const item = document.createElement('div');
-    item.className = 'item';
-    item.dataset.id = id;
-    item.dataset.status = 'pending';
-    item.dataset.creator = currentUser;
-    item.innerHTML = `
-      <div class="item-title">${cantidad} de ${material}</div>
-      <div class="item-meta">
-        <div class="assignee">
-          <div class="mini-avatar" style="background:${user.color}">${user.initials}</div>
-          <span>${user.name}</span>
-        </div>
-        <span class="badge badge-pending">Pendiente</span>
-      </div>
-      <div class="item-actions" id="actions-${id}"></div>
-      <div class="item-created-by">Creado por ${user.name} (${user.roleLabel})</div>
-    `;
-    list.appendChild(item);
-    
-    addActivity(user.name, user.roleLabel, `solicitó ${cantidad} de ${material}`, user.color);
+    items.compras.unshift({
+      id, title: `${cantidad} de ${material}`, status: 'pending', creator: currentUser, assignee: 1,
+      type: 'compra', detail: `${material} - ${proyecto}`
+    });
+    addActivity(currentUser, `solicito ${cantidad} de ${material}`);
+    alerts.unshift({ id: Date.now() + 1, title: 'Nueva compra solicitada', meta: `${cantidad} de ${material}`, read: false, user: currentUser, time: 'ahora' });
+    updateAlertBadge();
+    showToast('Compra solicitada', `${cantidad} de ${material} enviado al Director`, '&#128722;');
     closeModal('modal-compra');
-    updateAllItemActions();
+    navigate('compras');
   }
 
-  // ═══ REPORTAR INCIDENCIA ═══
   function submitIncidencia() {
+    const tipo = document.getElementById('inc-tipo').value;
     const cliente = document.getElementById('inc-cliente').value;
-    const desc = document.getElementById('inc-desc').value;
-    const user = users[currentUser];
-    
-    const list = document.getElementById('list-incidencias');
+    const proyecto = document.getElementById('inc-proyecto').value;
+    const prioridad = document.getElementById('inc-prioridad').value;
     const id = 'i' + Date.now();
-    const item = document.createElement('div');
-    item.className = 'item';
-    item.dataset.id = id;
-    item.dataset.status = 'pending';
-    item.dataset.creator = currentUser;
-    item.innerHTML = `
-      <div class="item-title">${desc} — ${cliente}</div>
-      <div class="item-meta">
-        <div class="assignee">
-          <div class="mini-avatar" style="background:${user.color}">${user.initials}</div>
-          <span>${user.name}</span>
-        </div>
-        <span class="badge badge-pending">Pendiente</span>
-      </div>
-      <div class="item-actions" id="actions-${id}"></div>
-      <div class="item-created-by">Creado por ${user.name} (${user.roleLabel})</div>
-    `;
-    list.appendChild(item);
-    
-    addActivity(user.name, user.roleLabel, `registró "${desc}" de ${cliente}`, user.color);
+    const title = cliente === 'Sin cliente asociado' ? tipo : `${tipo} - ${cliente}`;
+    items.incidencias.unshift({
+      id, title, status: 'pending', creator: currentUser, assignee: 0,
+      type: 'incidencia', detail: `${proyecto} - Prioridad: ${prioridad}`
+    });
+    addActivity(currentUser, `registro "${tipo}"`);
+    alerts.unshift({ id: Date.now() + 1, title: 'Nueva incidencia registrada', meta: `${tipo} - ${proyecto}`, read: false, user: currentUser, time: 'ahora' });
+    updateAlertBadge();
+    showToast('Incidencia registrada', `${tipo} fue enviado a Obra`, '&#9888;');
     closeModal('modal-incidencia');
-    updateAllItemActions();
+    navigate('incidencias');
   }
 
-  // ═══ ACTIVIDAD ═══
-  function addActivity(userName, role, action, color) {
-    const list = document.getElementById('activity-list');
-    const item = document.createElement('li');
-    item.className = 'activity-item';
-    item.innerHTML = `
-      <div class="activity-user" style="color:${color}">${userName} (${role})</div>
-      <div>${action}</div>
-      <div class="activity-time">ahora</div>
-    `;
-    list.insertBefore(item, list.firstChild);
-    if (list.children.length > 10) list.removeChild(list.lastChild);
-  }
-
-  // ═══ INICIALIZAR ═══
-  changeUser();
+  // ═══ INIT ═══
+  renderLogin();
 </script>
-
 </body>
 </html>
