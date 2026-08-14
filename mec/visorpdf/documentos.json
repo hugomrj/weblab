@@ -1,0 +1,359 @@
+{
+  "documentos": [
+    {
+      "id": 1,
+      "nombre": "Factura 001-001-000001",
+      "tipo": "factura",
+      "fecha": "2026-08-01",
+      "cliente": "Juan Pérez",
+      "ruc": "4567890-1",
+      "contenido": {
+        "productos": [
+          {
+            "descripcion": "Notebook empresarial",
+            "cantidad": 1,
+            "precio": 4200000
+          },
+          {
+            "descripcion": "Mouse inalámbrico",
+            "cantidad": 2,
+            "precio": 180000
+          }
+        ],
+        "subtotal": 4560000,
+        "iva": 456000,
+        "total": 5016000
+      }
+    },
+    {
+      "id": 2,
+      "nombre": "Factura 001-001-000002",
+      "tipo": "factura",
+      "fecha": "2026-08-02",
+      "cliente": "María González",
+      "ruc": "3214567-8",
+      "contenido": {
+        "productos": [
+          {
+            "descripcion": "Monitor 24 pulgadas",
+            "cantidad": 2,
+            "precio": 1250000
+          },
+          {
+            "descripcion": "Teclado mecánico",
+            "cantidad": 1,
+            "precio": 480000
+          }
+        ],
+        "subtotal": 2980000,
+        "iva": 298000,
+        "total": 3278000
+      }
+    },
+    {
+      "id": 3,
+      "nombre": "Nota de crédito 001-002-000001",
+      "tipo": "nota_credito",
+      "fecha": "2026-08-03",
+      "cliente": "Comercial Norte S.A.",
+      "ruc": "80012345-6",
+      "contenido": {
+        "productos": [
+          {
+            "descripcion": "Devolución Monitor 24 pulgadas",
+            "cantidad": 1,
+            "precio": 1250000
+          }
+        ],
+        "subtotal": 1250000,
+        "iva": 125000,
+        "total": 1375000
+      }
+    },
+    {
+      "id": 4,
+      "nombre": "Presupuesto PR-0001",
+      "tipo": "presupuesto",
+      "fecha": "2026-08-04",
+      "cliente": "Carlos Ramírez",
+      "ruc": "5123789-4",
+      "contenido": {
+        "productos": [
+          {
+            "descripcion": "Servidor rack",
+            "cantidad": 1,
+            "precio": 9800000
+          },
+          {
+            "descripcion": "UPS 1500VA",
+            "cantidad": 1,
+            "precio": 2100000
+          }
+        ],
+        "subtotal": 11900000,
+        "iva": 1190000,
+        "total": 13090000
+      }
+    },
+    {
+      "id": 5,
+      "nombre": "Recibo RC-0001",
+      "tipo": "recibo",
+      "fecha": "2026-08-05",
+      "cliente": "Ana Benítez",
+      "ruc": "3678901-2",
+      "contenido": {
+        "productos": [
+          {
+            "descripcion": "Servicio de mantenimiento",
+            "cantidad": 1,
+            "precio": 650000
+          }
+        ],
+        "subtotal": 650000,
+        "iva": 65000,
+        "total": 715000
+      }
+    },
+    {
+      "id": 6,
+      "nombre": "Orden de compra OC-0001",
+      "tipo": "orden_compra",
+      "fecha": "2026-08-06",
+      "cliente": "Distribuidora Central",
+      "ruc": "80045678-9",
+      "contenido": {
+        "productos": [
+          {
+            "descripcion": "Resma de papel A4",
+            "cantidad": 20,
+            "precio": 28000
+          },
+          {
+            "descripcion": "Toner láser",
+            "cantidad": 5,
+            "precio": 320000
+          }
+        ],
+        "subtotal": 2160000,
+        "iva": 216000,
+        "total": 2376000
+      }
+    },
+    {
+      "id": 7,
+      "nombre": "Factura 001-001-000003",
+      "tipo": "factura",
+      "fecha": "2026-08-07",
+      "cliente": "Servicios del Sur S.R.L.",
+      "ruc": "80123456-7",
+      "contenido": {
+        "productos": [
+          {
+            "descripcion": "Licencia de software",
+            "cantidad": 3,
+            "precio": 750000
+          },
+          {
+            "descripcion": "Soporte técnico",
+            "cantidad": 1,
+            "precio": 900000
+          }
+        ],
+        "subtotal": 3150000,
+        "iva": 315000,
+        "total": 3465000
+      }
+    },
+    {
+      "id": 8,
+      "nombre": "Presupuesto PR-0002",
+      "tipo": "presupuesto",
+      "fecha": "2026-08-08",
+      "cliente": "Roberto Duarte",
+      "ruc": "2987654-3",
+      "contenido": {
+        "productos": [
+          {
+            "descripcion": "PC de escritorio",
+            "cantidad": 4,
+            "precio": 3200000
+          },
+          {
+            "descripcion": "Monitor 27 pulgadas",
+            "cantidad": 4,
+            "precio": 1650000
+          }
+        ],
+        "subtotal": 19400000,
+        "iva": 1940000,
+        "total": 21340000
+      }
+    },
+    {
+      "id": 9,
+      "nombre": "Factura 001-001-000004",
+      "tipo": "factura",
+      "fecha": "2026-08-09",
+      "cliente": "Tecnología Guaraní S.A.",
+      "ruc": "80098765-4",
+      "contenido": {
+        "productos": [
+          {
+            "descripcion": "Router empresarial",
+            "cantidad": 2,
+            "precio": 890000
+          },
+          {
+            "descripcion": "Switch 24 puertos",
+            "cantidad": 1,
+            "precio": 1750000
+          }
+        ],
+        "subtotal": 3530000,
+        "iva": 353000,
+        "total": 3883000
+      }
+    },
+    {
+      "id": 10,
+      "nombre": "Recibo RC-0002",
+      "tipo": "recibo",
+      "fecha": "2026-08-10",
+      "cliente": "Lucía Ferreira",
+      "ruc": "4123456-0",
+      "contenido": {
+        "productos": [
+          {
+            "descripcion": "Consultoría informática",
+            "cantidad": 1,
+            "precio": 1200000
+          }
+        ],
+        "subtotal": 1200000,
+        "iva": 120000,
+        "total": 1320000
+      }
+    },
+    {
+      "id": 11,
+      "nombre": "Orden de compra OC-0002",
+      "tipo": "orden_compra",
+      "fecha": "2026-08-11",
+      "cliente": "Importadora Paraguay S.A.",
+      "ruc": "80076543-2",
+      "contenido": {
+        "productos": [
+          {
+            "descripcion": "Cable de red Cat6",
+            "cantidad": 100,
+            "precio": 12000
+          },
+          {
+            "descripcion": "Conector RJ45",
+            "cantidad": 200,
+            "precio": 1800
+          }
+        ],
+        "subtotal": 1560000,
+        "iva": 156000,
+        "total": 1716000
+      }
+    },
+    {
+      "id": 12,
+      "nombre": "Nota de crédito 001-002-000002",
+      "tipo": "nota_credito",
+      "fecha": "2026-08-12",
+      "cliente": "Tecnología Guaraní S.A.",
+      "ruc": "80098765-4",
+      "contenido": {
+        "productos": [
+          {
+            "descripcion": "Devolución Router empresarial",
+            "cantidad": 1,
+            "precio": 890000
+          }
+        ],
+        "subtotal": 890000,
+        "iva": 89000,
+        "total": 979000
+      }
+    },
+    {
+      "id": 13,
+      "nombre": "Factura 001-001-000005",
+      "tipo": "factura",
+      "fecha": "2026-08-13",
+      "cliente": "Inversiones del Este",
+      "ruc": "80111222-3",
+      "contenido": {
+        "productos": [
+          {
+            "descripcion": "Impresora multifunción",
+            "cantidad": 2,
+            "precio": 1850000
+          },
+          {
+            "descripcion": "Toner adicional",
+            "cantidad": 4,
+            "precio": 290000
+          }
+        ],
+        "subtotal": 4860000,
+        "iva": 486000,
+        "total": 5346000
+      }
+    },
+    {
+      "id": 14,
+      "nombre": "Presupuesto PR-0003",
+      "tipo": "presupuesto",
+      "fecha": "2026-08-14",
+      "cliente": "Hugo Comercial S.A.",
+      "ruc": "80033445-1",
+      "contenido": {
+        "productos": [
+          {
+            "descripcion": "Sistema de cámaras IP",
+            "cantidad": 1,
+            "precio": 7200000
+          },
+          {
+            "descripcion": "Instalación y configuración",
+            "cantidad": 1,
+            "precio": 1800000
+          }
+        ],
+        "subtotal": 9000000,
+        "iva": 900000,
+        "total": 9900000
+      }
+    },
+    {
+      "id": 15,
+      "nombre": "Factura 001-001-000006",
+      "tipo": "factura",
+      "fecha": "2026-08-14",
+      "cliente": "Constructora Central S.R.L.",
+      "ruc": "80155667-8",
+      "contenido": {
+        "productos": [
+          {
+            "descripcion": "Tablet industrial",
+            "cantidad": 3,
+            "precio": 2200000
+          },
+          {
+            "descripcion": "Funda protectora",
+            "cantidad": 3,
+            "precio": 180000
+          }
+        ],
+        "subtotal": 7140000,
+        "iva": 714000,
+        "total": 7854000
+      }
+    }
+  ]
+}

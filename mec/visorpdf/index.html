@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Visor de documentos</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div>
+        <h1>Documentos</h1>
+        <span id="contador"></span>
+      </div>
+      <button class="mobile-close" id="closeSidebar" aria-label="Cerrar">×</button>
+    </div>
+    <div class="search-box">
+      <span>⌕</span>
+      <input id="buscador" type="search" placeholder="Buscar documentos..." autocomplete="off">
+    </div>
+    <div class="lista" id="listaDocumentos"></div>
+  </aside>
+
+  <main class="viewer">
+    <header class="toolbar">
+      <button class="mobile-menu" id="openSidebar">☰</button>
+      <div class="toolbar-title">
+        <strong id="tituloDocumento">Cargando...</strong>
+        <span id="posicionDocumento"></span>
+      </div>
+      <div class="toolbar-actions">
+        <button id="anterior" title="Documento anterior">‹</button>
+        <button id="siguiente" title="Documento siguiente">›</button>
+        <button class="print-btn" id="imprimir">🖨 Imprimir / PDF</button>
+      </div>
+    </header>
+    <section class="canvas" id="canvas">
+      <div class="loading">Cargando documentos...</div>
+    </section>
+  </main>
+</div>
+<script src="app.js"></script>
+</body>
+</html>
