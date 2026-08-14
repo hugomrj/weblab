@@ -1,0 +1,302 @@
+{
+  "documentos": [
+    {
+      "id": 1,
+      "numero": "001-001-0000456",
+      "nombre": "Factura 001-001-0000456",
+      "tipo": "factura",
+      "fecha": "2026-01-15",
+      "cliente": "Juan Carlos Benítez",
+      "ruc": "3456789-1",
+      "contenido": {
+        "condicion_pago": "Contado",
+        "productos": [
+          { "descripcion": "Notebook Lenovo ThinkPad E14", "cantidad": 1, "precio": 6800000 },
+          { "descripcion": "Mouse inalámbrico Logitech", "cantidad": 2, "precio": 150000 }
+        ],
+        "subtotal": 7100000,
+        "iva": 710000,
+        "total": 7810000
+      }
+    },
+    {
+      "id": 2,
+      "numero": "001-001-0000457",
+      "nombre": "Factura 001-001-0000457",
+      "tipo": "factura",
+      "fecha": "2026-02-03",
+      "cliente": "Distribuidora Ñandutí S.A.",
+      "ruc": "80019876-3",
+      "contenido": {
+        "condicion_pago": "Crédito 30 días",
+        "productos": [
+          { "descripcion": "Resma de papel A4 (caja x10)", "cantidad": 5, "precio": 285000 },
+          { "descripcion": "Cartuchos de tinta HP 664", "cantidad": 10, "precio": 95000 }
+        ],
+        "subtotal": 2375000,
+        "iva": 237500,
+        "total": 2612500
+      }
+    },
+    {
+      "id": 3,
+      "numero": "001-002-0000045",
+      "nombre": "Nota de Crédito 001-002-0000045",
+      "tipo": "nota_credito",
+      "fecha": "2026-02-10",
+      "cliente": "Juan Carlos Benítez",
+      "ruc": "3456789-1",
+      "contenido": {
+        "factura_referencia": "001-001-0000456",
+        "motivo": "Devolución de mercadería por falla técnica",
+        "productos": [
+          { "descripcion": "Mouse inalámbrico Logitech", "cantidad": 1, "precio": 150000 }
+        ],
+        "subtotal": 150000,
+        "iva": 15000,
+        "total": 165000
+      }
+    },
+    {
+      "id": 4,
+      "numero": "001-003-0000112",
+      "nombre": "Presupuesto 001-003-0000112",
+      "tipo": "presupuesto",
+      "fecha": "2026-02-20",
+      "cliente": "Constructora del Este S.R.L.",
+      "ruc": "80045678-2",
+      "contenido": {
+        "validez_dias": 15,
+        "productos": [
+          { "descripcion": "Provisión e instalación de cielorraso de yeso", "cantidad": 120, "precio": 85000 },
+          { "descripcion": "Pintura interior látex acrílico (mano de obra + material)", "cantidad": 1, "precio": 4500000 }
+        ],
+        "subtotal": 14700000,
+        "descuento": 500000,
+        "iva": 1420000,
+        "total": 15620000,
+        "condiciones": "Precio válido por 15 días. No incluye materiales adicionales no especificados. Forma de pago: 50% anticipo, 50% contra entrega."
+      }
+    },
+    {
+      "id": 5,
+      "numero": "001-004-0000089",
+      "nombre": "Recibo 001-004-0000089",
+      "tipo": "recibo",
+      "fecha": "2026-03-01",
+      "cliente": "María Fernanda López",
+      "ruc": "2345678-0",
+      "contenido": {
+        "concepto": "Pago de honorarios por servicios de consultoría en marketing digital — mes de febrero 2026",
+        "monto": 3500000,
+        "forma_pago": "Transferencia bancaria"
+      }
+    },
+    {
+      "id": 6,
+      "numero": "001-005-0000034",
+      "nombre": "Orden de Compra 001-005-0000034",
+      "tipo": "orden_compra",
+      "fecha": "2026-03-05",
+      "cliente": "Insumos Industriales Paraguay S.A.",
+      "ruc": "80056789-4",
+      "contenido": {
+        "plazo_entrega": "10 días hábiles",
+        "items": [
+          { "descripcion": "Guantes de seguridad industrial (caja x50)", "cantidad": 20, "precio_unitario": 45000 },
+          { "descripcion": "Cascos de protección clase B", "cantidad": 30, "precio_unitario": 68000 },
+          { "descripcion": "Chalecos reflectivos", "cantidad": 50, "precio_unitario": 32000 }
+        ],
+        "subtotal": 4540000,
+        "iva": 454000,
+        "total": 4994000,
+        "condiciones": "Entrega en depósito central. Facturar a nombre de Comercial del Sur S.A."
+      }
+    },
+    {
+      "id": 7,
+      "numero": "001-001-0000458",
+      "nombre": "Factura 001-001-0000458",
+      "tipo": "factura",
+      "fecha": "2026-03-12",
+      "cliente": "Panificadora San José",
+      "ruc": "80067890-5",
+      "contenido": {
+        "condicion_pago": "Contado",
+        "productos": [
+          { "descripcion": "Harina 000 (bolsa 25kg)", "cantidad": 40, "precio": 165000 },
+          { "descripcion": "Levadura fresca (caja x20)", "cantidad": 5, "precio": 210000 }
+        ],
+        "subtotal": 7650000,
+        "iva": 765000,
+        "total": 8415000
+      }
+    },
+    {
+      "id": 8,
+      "numero": "001-001-0000459",
+      "nombre": "Factura 001-001-0000459",
+      "tipo": "factura",
+      "fecha": "2026-03-28",
+      "cliente": "Rodrigo Ariel Cáceres",
+      "ruc": "4567890-1",
+      "contenido": {
+        "condicion_pago": "Crédito 15 días",
+        "productos": [
+          { "descripcion": "Servicio de mantenimiento de aire acondicionado", "cantidad": 3, "precio": 280000 },
+          { "descripcion": "Filtro de aire repuesto", "cantidad": 3, "precio": 95000 }
+        ],
+        "subtotal": 1125000,
+        "iva": 112500,
+        "total": 1237500
+      }
+    },
+    {
+      "id": 9,
+      "numero": "001-003-0000113",
+      "nombre": "Presupuesto 001-003-0000113",
+      "tipo": "presupuesto",
+      "fecha": "2026-04-02",
+      "cliente": "Hotel Guaraní Plaza",
+      "ruc": "80078901-6",
+      "contenido": {
+        "validez_dias": 30,
+        "productos": [
+          { "descripcion": "Renovación de mobiliario — habitaciones estándar (25 unidades)", "cantidad": 25, "precio": 1850000 },
+          { "descripcion": "Instalación de cortinas blackout", "cantidad": 25, "precio": 320000 }
+        ],
+        "subtotal": 54250000,
+        "descuento": 2000000,
+        "iva": 5225000,
+        "total": 57475000,
+        "condiciones": "Incluye instalación y garantía de 12 meses sobre mobiliario. Traslado sin costo dentro de Asunción."
+      }
+    },
+    {
+      "id": 10,
+      "numero": "001-002-0000046",
+      "nombre": "Nota de Crédito 001-002-0000046",
+      "tipo": "nota_credito",
+      "fecha": "2026-04-08",
+      "cliente": "Panificadora San José",
+      "ruc": "80067890-5",
+      "contenido": {
+        "factura_referencia": "001-001-0000458",
+        "motivo": "Corrección por error en cantidad facturada",
+        "productos": [
+          { "descripcion": "Harina 000 (bolsa 25kg)", "cantidad": 5, "precio": 165000 }
+        ],
+        "subtotal": 825000,
+        "iva": 82500,
+        "total": 907500
+      }
+    },
+    {
+      "id": 11,
+      "numero": "001-004-0000090",
+      "nombre": "Recibo 001-004-0000090",
+      "tipo": "recibo",
+      "fecha": "2026-04-15",
+      "cliente": "Transportes del Paraná S.A.",
+      "ruc": "80089012-7",
+      "contenido": {
+        "concepto": "Pago de flete por transporte de mercadería — ruta Asunción-Ciudad del Este",
+        "monto": 2150000,
+        "forma_pago": "Efectivo"
+      }
+    },
+    {
+      "id": 12,
+      "numero": "001-005-0000035",
+      "nombre": "Orden de Compra 001-005-0000035",
+      "tipo": "orden_compra",
+      "fecha": "2026-04-20",
+      "cliente": "Ferretería Central",
+      "ruc": "80090123-8",
+      "contenido": {
+        "plazo_entrega": "5 días hábiles",
+        "items": [
+          { "descripcion": "Tornillos autorroscantes (caja x500)", "cantidad": 10, "precio_unitario": 38000 },
+          { "descripcion": "Taladro percutor Bosch 650W", "cantidad": 2, "precio_unitario": 890000 }
+        ],
+        "subtotal": 2160000,
+        "iva": 216000,
+        "total": 2376000,
+        "condiciones": "Entrega en obra — Barrio Villa Morra."
+      }
+    },
+    {
+      "id": 13,
+      "numero": "001-001-0000460",
+      "nombre": "Factura 001-001-0000460",
+      "tipo": "factura",
+      "fecha": "2026-05-02",
+      "cliente": "Clínica Santa Rita",
+      "ruc": "80001234-9",
+      "contenido": {
+        "condicion_pago": "Crédito 30 días",
+        "productos": [
+          { "descripcion": "Insumos médicos descartables (kit x100)", "cantidad": 8, "precio": 320000 },
+          { "descripcion": "Servicio de esterilización mensual", "cantidad": 1, "precio": 950000 }
+        ],
+        "subtotal": 3510000,
+        "iva": 351000,
+        "total": 3861000
+      }
+    },
+    {
+      "id": 14,
+      "numero": "001-001-0000461",
+      "nombre": "Factura 001-001-0000461",
+      "tipo": "factura",
+      "fecha": "2026-05-18",
+      "cliente": "Verónica Duarte Ortiz",
+      "ruc": "5678901-2",
+      "contenido": {
+        "condicion_pago": "Contado",
+        "productos": [
+          { "descripcion": "Diseño e impresión de tarjetas de presentación (x500)", "cantidad": 1, "precio": 380000 },
+          { "descripcion": "Diseño de logotipo corporativo", "cantidad": 1, "precio": 1200000 }
+        ],
+        "subtotal": 1580000,
+        "iva": 158000,
+        "total": 1738000
+      }
+    },
+    {
+      "id": 15,
+      "numero": "001-003-0000114",
+      "nombre": "Presupuesto 001-003-0000114",
+      "tipo": "presupuesto",
+      "fecha": "2026-06-01",
+      "cliente": "Cooperativa Yguazú Ltda.",
+      "ruc": "80012345-0",
+      "contenido": {
+        "validez_dias": 20,
+        "productos": [
+          { "descripcion": "Desarrollo de sistema de gestión de socios (módulo básico)", "cantidad": 1, "precio": 18500000 },
+          { "descripcion": "Capacitación al personal (20 horas)", "cantidad": 20, "precio": 150000 }
+        ],
+        "subtotal": 21500000,
+        "descuento": 1000000,
+        "iva": 2050000,
+        "total": 22550000,
+        "condiciones": "Incluye soporte técnico por 3 meses posteriores a la entrega. Pago en 3 cuotas."
+      }
+    },
+    {
+      "id": 16,
+      "numero": "001-004-0000091",
+      "nombre": "Recibo 001-004-0000091",
+      "tipo": "recibo",
+      "fecha": "2026-06-10",
+      "cliente": "Editorial Ñemity",
+      "ruc": "80023456-1",
+      "contenido": {
+        "concepto": "Pago por corrección de estilo y maquetación de libro — 'Cuentos del Paraná'",
+        "monto": 1450000,
+        "forma_pago": "Transferencia bancaria"
+      }
+    }
+  ]
+}

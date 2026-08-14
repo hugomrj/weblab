@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Archivo — Gestor Documental</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="app">
+
+  <!-- ===== PANEL IZQUIERDO: ÍNDICE ===== -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="brand">
+        <span class="brand-mark">CS</span>
+        <div class="brand-text">
+          <h1>Documentos</h1>
+          <p>Comercial del Sur S.A.</p>
+        </div>
+      </div>
+      <button class="sidebar-close" id="sidebarClose" aria-label="Cerrar listado">✕</button>
+    </div>
+
+    <div class="search-wrap">
+      <svg class="search-icon" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <circle cx="9" cy="9" r="6.25" stroke="currentColor" stroke-width="1.6"/>
+        <path d="M13.6 13.6L17.5 17.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+      </svg>
+      <input type="text" id="searchInput" placeholder="Buscar por nombre, cliente, RUC, tipo o fecha…" autocomplete="off" aria-label="Buscar documentos">
+    </div>
+
+    <div class="list-meta">
+      <span id="docCount">0 documentos</span>
+    </div>
+
+    <ul class="doc-list" id="docList" role="listbox" aria-label="Listado de documentos"></ul>
+
+    <p class="empty-state" id="emptyState" hidden>
+      <span class="empty-icon">🗂️</span>
+      No se encontraron documentos.
+    </p>
+  </aside>
+
+  <div class="sidebar-scrim" id="sidebarScrim"></div>
+
+  <!-- ===== PANEL DERECHO: VISOR ===== -->
+  <main class="viewer">
+
+    <header class="viewer-toolbar">
+      <button class="sidebar-toggle" id="sidebarToggle" aria-label="Mostrar listado de documentos">
+        <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M3 5.5H17M3 10H17M3 14.5H17" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+        </svg>
+        <span>Documentos</span>
+      </button>
+
+      <div class="nav-controls">
+        <button id="prevBtn" class="btn-icon" aria-label="Documento anterior">
+          <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M12 4.5L6.5 10L12 15.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <span class="doc-indicator" id="docIndicator">Documento — de —</span>
+        <button id="nextBtn" class="btn-icon" aria-label="Documento siguiente">
+          <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M8 4.5L13.5 10L8 15.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
+
+      <button id="printBtn" class="btn-print">
+        <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M5.5 7V3.5H14.5V7" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+          <rect x="3.5" y="7" width="13" height="6.5" rx="1" stroke="currentColor" stroke-width="1.5"/>
+          <rect x="5.5" y="11" width="9" height="5.5" rx="0.5" stroke="currentColor" stroke-width="1.5"/>
+        </svg>
+        <span>Imprimir / Guardar PDF</span>
+      </button>
+    </header>
+
+    <div class="viewer-canvas" id="viewerCanvas">
+      <article class="sheet-a4" id="sheet" aria-live="polite">
+        <p class="sheet-loading">Cargando documentos…</p>
+      </article>
+    </div>
+
+  </main>
+
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
