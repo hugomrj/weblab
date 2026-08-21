@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nexus ERP · Bento Grid</title>
+
+<!-- Iconos -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+<!-- Tipografías -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+/* ============================================================
+   1. VARIABLES Y TEMAS (Dark / Light)
+   ============================================================ */
+:root {
+  --accent: #6366f1;
+  --accent-hover: #4f46e5;
+  --accent-soft: rgba(99, 102, 241, 0.15);
+  --success: #10b981;
+  --warning: #f59e0b;
+  --danger: #ef4444;
+  --info: #0ea5e9;
+  --pink: #ec4899;
+  --orange: #f97316;
+
+  --sidebar-w: 80px;
+  --radius: 24px;
+  --radius-sm: 12px;
+  --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --font-ui: 'Space Grotesk', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+
+[data-theme="dark"] {
+  --bg-app: #09090b;
+  --bg-surface: #18181b;
+  --bg-elevated: #27272a;
+  --bg-hover: rgba(255, 255, 255, 0.05);
+  --border: rgba(255, 255, 255, 0.08);
+  --text-1: #fafafa;
+  --text-2: #a1a1aa;
+  --text-3: #71717a;
+  --shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
+}
+
+[data-theme="light"] {
+  --bg-app: #f4f4f5;
+  --bg-surface: #ffffff;
+  --bg-elevated: #f4f4f5;
+  --bg-hover: rgba(0, 0, 0, 0.03);
+  --border: #e4e4e7;
+  --text-1: #18181b;
+  --text-2: #52525b;
+  --text-3: #a1a1aa;
+  --shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+}
+
+/* ============================================================
+   2. RESET Y BASE
+   ============================================================ */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { font-size: 15px; }
+body {
+  font-family: var(--font-ui);
+  background: var(--bg-app);
+  color: var(--text-1);
+  min-height: 100vh;
+  transition: background var(--transition), color var(--transition);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ============================================================
+   3. LAYOUT PRINCIPAL
+   ============================================================ */
+.app {
+  display: grid;
+  grid-template-columns: var(--sidebar-w) 1fr;
+  min-height: 100vh;
+}
+
+/* ============================================================
+   4. SIDEBAR (SLIM Y FUNCIONAL)
+   ============================================================ */
+.sidebar {
+  background: var(--bg-surface);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  z-index: 100;
+}
+
+.logo {
+  width: 42px; height: 42px;
+  border-radius: 12px;
+  background: var(--accent);
+  display: grid; place-items: center;
+  color: white; font-weight: 700; font-size: 20px;
+  margin-bottom: 32px;
+  box-shadow: 0 8px 20px var(--accent-soft);
+}
+
+.nav-item {
+  width: 44px; height: 44px;
+  border-radius: 12px;
+  display: grid; place-items: center;
+  color: var(--text-2);
+  margin-bottom: 12px;
+  cursor: pointer;
+  transition: all var(--transition);
+  font-size: 16px;
+  position: relative;
+  border: none;
+  background: transparent;
+}
+.nav-item:hover { background: var(--bg-hover); color: var(--text-1); }
+.nav-item.active { background: var(--accent); color: white; }
+.nav-item.active::after {
+  content: '';
+  position: absolute;
+  right: -16px;
+  width: 4px; height: 24px;
+  background: var(--accent);
+  border-radius: 4px 0 0 4px;
+}
+
+.sidebar-footer { margin-top: auto; }
+
+/* ============================================================
+   5. CONTENIDO PRINCIPAL
+   ============================================================ */
+.main { padding: 24px 32px; overflow-x: hidden; }
+
+.topbar {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 32px;
+}
+.title-group h1 { font-size: 28px; font-weight: 700; letter-spacing: -0.02em; }
+.title-group p { color: var(--text-2); font-size: 14px; margin-top: 4px; }
+.topbar-actions { display: flex; align-items: center; gap: 8px; margin-left: auto; }
+
+.search-bar {
+  position: relative;
+  margin-left: 24px;
+  flex: 1;
+  max-width: 400px;
+}
+.search-bar input {
+  width: 100%;
+  height: 42px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 0 16px 0 42px;
+  color: var(--text-1);
+  font-family: var(--font-ui);
+  font-size: 14px;
+  transition: all var(--transition);
+}
+.search-bar input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+.search-bar i { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--text-3); }
+
+.icon-btn {
+  width: 42px; height: 42px;
+  border-radius: 12px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  color: var(--text-2);
+  cursor: pointer;
+  display: grid; place-items: center;
+  transition: all var(--transition);
+  font-size: 15px;
+}
+.icon-btn:hover { color: var(--text-1); border-color: var(--accent); }
+
+.user-avatar {
+  width: 42px; height: 42px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, var(--pink), var(--orange));
+  display: grid; place-items: center;
+  color: white; font-weight: 600;
+  cursor: pointer;
+}
+
+/* ============================================================
+   6. SISTEMA DE PÁGINAS (Para que el sidebar funcione)
+   ============================================================ */
+.page { display: none; animation: fadeIn 0.3s ease; }
+.page.active { display: block; }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ============================================================
+   7. BENTO GRID SYSTEM
+   ============================================================ */
+.bento-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  grid-auto-rows: minmax(140px, auto);
+}
+
+.span-2 { grid-column: span 2; }
+.span-4 { grid-column: span 4; }
+.row-2 { grid-row: span 2; }
+
+.bento-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  transition: all var(--transition);
+  position: relative;
+  overflow: hidden;
+}
+.bento-card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+.card-title {
+  font-size: 12px;
+  color: var(--text-2);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+.card-icon {
+  width: 32px; height: 32px;
+  border-radius: 10px;
+  display: grid; place-items: center;
+  font-size: 14px;
+}
+
+.kpi-value {
+  font-size: 36px;
+  font-weight: 700;
+  font-family: var(--font-mono);
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  margin-bottom: 8px;
+}
+.kpi-sub { font-size: 13px; color: var(--text-2); display: flex; align-items: center; gap: 6px; }
+.badge {
+  padding: 3px 8px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  display: inline-flex; align-items: center; gap: 4px;
+}
+.badge.up { background: rgba(16,185,129,0.15); color: var(--success); }
+.badge.down { background: rgba(239,68,68,0.15); color: var(--danger); }
+.badge.info { background: rgba(14,165,233,0.15); color: var(--info); }
+
+.welcome-card h2 { font-size: 22px; font-weight: 700; margin-bottom: 8px; }
+.welcome-card p { color: var(--text-2); font-size: 14px; max-width: 400px; line-height: 1.5; }
+.welcome-btn {
+  margin-top: 20px;
+  background: var(--accent);
+  color: white;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  width: fit-content;
+  transition: var(--transition);
+  font-family: var(--font-ui);
+}
+.welcome-btn:hover { background: var(--accent-hover); transform: scale(1.02); }
+
+.mini-list { display: flex; flex-direction: column; gap: 12px; margin-top: 10px; }
+.mini-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+}
+.mini-item:last-child { border-bottom: none; }
+.mini-avatar {
+  width: 32px; height: 32px; border-radius: 8px;
+  display: grid; place-items: center;
+  color: white; font-weight: 600; font-size: 12px;
+  flex-shrink: 0;
+}
+.mini-info { flex: 1; min-width: 0; }
+.mini-info strong { display: block; font-size: 14px; font-weight: 600; }
+.mini-info span { font-size: 12px; color: var(--text-3); font-family: var(--font-mono); }
+.mini-value { font-family: var(--font-mono); font-weight: 600; }
+
+.css-chart { display: flex; align-items: flex-end; gap: 10px; height: 120px; padding-top: 20px; }
+.bar-container { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 8px; height: 100%; justify-content: flex-end; }
+.bar {
+  width: 100%;
+  background: var(--accent);
+  border-radius: 6px 6px 0 0;
+  transition: height 1s ease-out;
+  opacity: 0.8;
+}
+.bar:hover { opacity: 1; }
+.bar-label { font-size: 11px; color: var(--text-3); }
+
+.stock-progress { margin-bottom: 12px; }
+.stock-progress:last-child { margin-bottom: 0; }
+.stock-head { display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 6px; }
+.stock-bar { height: 6px; background: var(--bg-elevated); border-radius: 6px; overflow: hidden; }
+.stock-fill { height: 100%; border-radius: 6px; }
+
+.donut-chart {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: conic-gradient(var(--accent) 0% 60%, var(--pink) 60% 85%, var(--orange) 85% 100%);
+  margin: 10px auto;
+  position: relative;
+  display: grid;
+  place-items: center;
+}
+.donut-center {
+  width: 70px;
+  height: 70px;
+  background: var(--bg-surface);
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  text-align: center;
+}
+.donut-center strong { font-size: 18px; font-family: var(--font-mono); }
+.donut-center span { font-size: 10px; color: var(--text-3); }
+.donut-legend { display: flex; justify-content: center; gap: 12px; margin-top: 12px; font-size: 12px; color: var(--text-2); }
+.legend-item { display: flex; align-items: center; gap: 4px; }
+.legend-dot { width: 8px; height: 8px; border-radius: 50%; }
+
+/* ============================================================
+   8. TABLAS (Para la página de Ventas)
+   ============================================================ */
+.table-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px;
+}
+.table-wrapper { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: 14px; }
+th { text-align: left; font-weight: 600; color: var(--text-2); font-size: 12px; text-transform: uppercase; padding: 12px 16px; border-bottom: 1px solid var(--border); }
+td { padding: 14px 16px; border-bottom: 1px solid var(--border); color: var(--text-1); }
+tbody tr:last-child td { border-bottom: none; }
+
+/* ============================================================
+   9. RESPONSIVE
+   ============================================================ */
+@media (max-width: 1024px) {
+  .bento-grid { grid-template-columns: repeat(2, 1fr); }
+  .span-4 { grid-column: span 2; }
+}
+@media (max-width: 768px) {
+  .app { grid-template-columns: 1fr; }
+  .sidebar {
+    position: fixed; bottom: 16px; left: 50%; transform: translateX(-50%);
+    flex-direction: row; height: auto; padding: 8px;
+    border-radius: 16px; width: calc(100% - 32px); max-width: 360px;
+    z-index: 1000; justify-content: space-around; box-shadow: var(--shadow);
+  }
+  .logo, .sidebar-footer { display: none; }
+  .nav-item { margin: 0; width: 40px; height: 40px; }
+  .nav-item.active::after { display: none; }
+  .main { padding: 16px; padding-bottom: 80px; }
+  .search-bar { display: none; }
+  .bento-grid { grid-template-columns: 1fr; }
+  .span-2, .span-4 { grid-column: span 1; }
+  .row-2 { grid-row: span 1; }
+}
+</style>
+</head>
+<body>
+
+<div class="app">
+  <!-- ==================== SIDEBAR ==================== -->
+  <aside class="sidebar">
+    <div class="logo">N</div>
+    <!-- data-page indica qué página mostrar al hacer clic -->
+    <button class="nav-item active" data-page="dashboard" title="Dashboard"><i class="fa-solid fa-grip"></i></button>
+    <button class="nav-item" data-page="ventas" title="Ventas"><i class="fa-solid fa-bag-shopping"></i></button>
+    <button class="nav-item" data-page="inventario" title="Inventario"><i class="fa-solid fa-box"></i></button>
+    <button class="nav-item" data-page="clientes" title="Clientes"><i class="fa-solid fa-users"></i></button>
+    <div class="sidebar-footer">
+      <button class="nav-item" title="Configuración"><i class="fa-solid fa-gear"></i></button>
+    </div>
+  </aside>
+
+  <!-- ==================== MAIN ==================== -->
+  <main class="main">
+    <!-- TOPBAR -->
+    <header class="topbar">
+      <div class="title-group">
+        <h1 id="page-title">Dashboard</h1>
+        <p id="page-subtitle">Bienvenida de vuelta, María. Aquí está el resumen de hoy.</p>
+      </div>
+      <div class="search-bar">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input type="text" placeholder="Buscar órdenes, clientes...">
+      </div>
+      <div class="topbar-actions">
+        <button class="icon-btn" onclick="toggleTheme()" id="themeBtn">
+          <i class="fa-solid fa-moon"></i>
+        </button>
+        <button class="icon-btn"><i class="fa-regular fa-bell"></i></button>
+        <div class="user-avatar">MA</div>
+      </div>
+    </header>
+
+    <!-- ==================== PÁGINA: DASHBOARD ==================== -->
+    <div class="page active" id="dashboard">
+      <div class="bento-grid">
+        
+        <!-- Tarjeta Bienvenida -->
+        <div class="bento-card welcome-card span-2 row-2">
+          <div class="card-header">
+            <span class="card-title">Resumen General</span>
+            <div class="card-icon" style="background:var(--accent-soft); color:var(--accent);">
+              <i class="fa-solid fa-bolt"></i>
+            </div>
+          </div>
+          <h2>Operaciones funcionando con normalidad</h2>
+          <p>Tienes 12 nuevas órdenes esperando revisión y 3 alertas de inventario bajo. No hay retrasos en los envíos programados para hoy.</p>
+          <button class="welcome-btn" onclick="navigateTo('ventas')"><i class="fa-solid fa-eye"></i> Revisar ventas</button>
+          <div class="css-chart" style="margin-top:auto;">
+            <div class="bar-container"><div class="bar" style="height: 40%; background:var(--info);"></div><span class="bar-label">Lun</span></div>
+            <div class="bar-container"><div class="bar" style="height: 65%; background:var(--info);"></div><span class="bar-label">Mar</span></div>
+            <div class="bar-container"><div class="bar" style="height: 50%; background:var(--info);"></div><span class="bar-label">Mié</span></div>
+            <div class="bar-container"><div class="bar" style="height: 80%; background:var(--accent);"></div><span class="bar-label">Jue</span></div>
+            <div class="bar-container"><div class="bar" style="height: 95%; background:var(--accent);"></div><span class="bar-label">Vie</span></div>
+            <div class="bar-container"><div class="bar" style="height: 70%; background:var(--info);"></div><span class="bar-label">Sáb</span></div>
+          </div>
+        </div>
+
+        <!-- KPI Ingresos -->
+        <div class="bento-card">
+          <div class="card-header">
+            <span class="card-title">Ingresos</span>
+            <div class="card-icon" style="background:rgba(16,185,129,0.15); color:var(--success);">
+              <i class="fa-solid fa-dollar-sign"></i>
+            </div>
+          </div>
+          <div class="kpi-value">$84,521</div>
+          <div class="kpi-sub">
+            <span class="badge up"><i class="fa-solid fa-arrow-up"></i> 12.5%</span>
+            <span>vs mes anterior</span>
+          </div>
+        </div>
+
+        <!-- KPI Órdenes -->
+        <div class="bento-card">
+          <div class="card-header">
+            <span class="card-title">Nuevas Órdenes</span>
+            <div class="card-icon" style="background:rgba(14,165,233,0.15); color:var(--info);">
+              <i class="fa-solid fa-cart-shopping"></i>
+            </div>
+          </div>
+          <div class="kpi-value">1,847</div>
+          <div class="kpi-sub">
+            <span class="badge up"><i class="fa-solid fa-arrow-up"></i> 8.2%</span>
+            <span>vs semana anterior</span>
+          </div>
+        </div>
+
+        <!-- Órdenes Recientes -->
+        <div class="bento-card span-2">
+          <div class="card-header">
+            <span class="card-title">Órdenes Recientes</span>
+            <div class="card-icon" style="background:var(--bg-hover); color:var(--text-1);">
+              <i class="fa-solid fa-list"></i>
+            </div>
+          </div>
+          <div class="mini-list">
+            <div class="mini-item">
+              <div class="mini-avatar" style="background:linear-gradient(135deg,#6366f1,#a855f7)">JC</div>
+              <div class="mini-info"><strong>Juan Carrasco</strong><span>#ORD-2841</span></div>
+              <div class="mini-value">$1,245</div>
+            </div>
+            <div class="mini-item">
+              <div class="mini-avatar" style="background:linear-gradient(135deg,#0ea5e9,#10b981)">LR</div>
+              <div class="mini-info"><strong>Lucía Ramírez</strong><span>#ORD-2840</span></div>
+              <div class="mini-value">$842</div>
+            </div>
+            <div class="mini-item">
+              <div class="mini-avatar" style="background:linear-gradient(135deg,#f59e0b,#ef4444)">PM</div>
+              <div class="mini-info"><strong>Pedro Medina</strong><span>#ORD-2839</span></div>
+              <div class="mini-value">$2,189</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Donut CSS -->
+        <div class="bento-card">
+          <div class="card-header">
+            <span class="card-title">Por Categoría</span>
+            <div class="card-icon" style="background:rgba(236,72,153,0.15); color:var(--pink);">
+              <i class="fa-solid fa-chart-pie"></i>
+            </div>
+          </div>
+          <div class="donut-chart">
+            <div class="donut-center">
+              <strong>60%</strong>
+              <span>Tech</span>
+            </div>
+          </div>
+          <div class="donut-legend">
+            <div class="legend-item"><div class="legend-dot" style="background:var(--accent);"></div> Tech</div>
+            <div class="legend-item"><div class="legend-dot" style="background:var(--pink);"></div> Ropa</div>
+            <div class="legend-item"><div class="legend-dot" style="background:var(--orange);"></div> Hogar</div>
+          </div>
+        </div>
+
+        <!-- Stock -->
+        <div class="bento-card">
+          <div class="card-header">
+            <span class="card-title">Inventario Bajo</span>
+            <div class="card-icon" style="background:rgba(245,158,11,0.15); color:var(--warning);">
+              <i class="fa-solid fa-triangle-exclamation"></i>
+            </div>
+          </div>
+          <div style="margin-top:8px;">
+            <div class="stock-progress">
+              <div class="stock-head"><span>Monitor LG 27"</span><span style="color:var(--danger); font-weight:600;">4</span></div>
+              <div class="stock-bar"><div class="stock-fill" style="width:10%; background:var(--danger);"></div></div>
+            </div>
+            <div class="stock-progress">
+              <div class="stock-head"><span>Teclado Mec.</span><span style="color:var(--warning); font-weight:600;">12</span></div>
+              <div class="stock-bar"><div class="stock-fill" style="width:25%; background:var(--warning);"></div></div>
+            </div>
+            <div class="stock-progress">
+              <div class="stock-head"><span>Mouse Inal.</span><span style="color:var(--text-2);">45</span></div>
+              <div class="stock-bar"><div class="stock-fill" style="width:60%; background:var(--info);"></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== PÁGINA: VENTAS ==================== -->
+    <div class="page" id="ventas">
+      <div class="bento-grid">
+        <div class="bento-card">
+          <div class="card-header">
+            <span class="card-title">Ingresos Totales</span>
+            <div class="card-icon" style="background:rgba(16,185,129,0.15); color:var(--success);"><i class="fa-solid fa-dollar-sign"></i></div>
+          </div>
+          <div class="kpi-value">$284,521</div>
+          <div class="kpi-sub"><span class="badge up"><i class="fa-solid fa-arrow-up"></i> 12.5%</span><span>vs mes anterior</span></div>
+        </div>
+        <div class="bento-card">
+          <div class="card-header">
+            <span class="card-title">Órdenes Completadas</span>
+            <div class="card-icon" style="background:rgba(14,165,233,0.15); color:var(--info);"><i class="fa-solid fa-check-circle"></i></div>
+          </div>
+          <div class="kpi-value">1,752</div>
+          <div class="kpi-sub"><span class="badge up"><i class="fa-solid fa-arrow-up"></i> 4.1%</span><span>vs mes anterior</span></div>
+        </div>
+        <div class="bento-card">
+          <div class="card-header">
+            <span class="card-title">Órdenes Pendientes</span>
+            <div class="card-icon" style="background:rgba(245,158,11,0.15); color:var(--warning);"><i class="fa-solid fa-clock"></i></div>
+          </div>
+          <div class="kpi-value">95</div>
+          <div class="kpi-sub"><span class="badge down"><i class="fa-solid fa-arrow-down"></i> 2.0%</span><span>vs mes anterior</span></div>
+        </div>
+        <div class="bento-card">
+          <div class="card-header">
+            <span class="card-title">Devoluciones</span>
+            <div class="card-icon" style="background:rgba(239,68,68,0.15); color:var(--danger);"><i class="fa-solid fa-rotate-left"></i></div>
+          </div>
+          <div class="kpi-value">28</div>
+          <div class="kpi-sub"><span class="badge up"><i class="fa-solid fa-arrow-up"></i> 1.2%</span><span>vs mes anterior</span></div>
+        </div>
+      </div>
+
+      <div class="table-card" style="margin-top: 20px;">
+        <div class="card-header" style="margin-bottom: 0;">
+          <span class="card-title" style="font-size: 16px; text-transform: none; letter-spacing: normal; color: var(--text-1);">Historial de Ventas</span>
+          <button class="icon-btn"><i class="fa-solid fa-filter"></i></button>
+        </div>
+        <div class="table-wrapper" style="margin-top: 16px;">
+          <table>
+            <thead>
+              <tr>
+                <th>ID Orden</th>
+                <th>Cliente</th>
+                <th>Fecha</th>
+                <th>Total</th>
+                <th>Estado</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="font-family: var(--font-mono); color: var(--text-2);">#ORD-2841</td>
+                <td><div style="display:flex; align-items:center; gap:10px;"><div class="mini-avatar" style="background:linear-gradient(135deg,#6366f1,#a855f7)">JC</div> Juan Carrasco</div></td>
+                <td style="color: var(--text-2);">12 Oct, 2023</td>
+                <td style="font-family: var(--font-mono); font-weight: 600;">$1,245.00</td>
+                <td><span class="badge up">Completado</span></td>
+              </tr>
+              <tr>
+                <td style="font-family: var(--font-mono); color: var(--text-2);">#ORD-2840</td>
+                <td><div style="display:flex; align-items:center; gap:10px;"><div class="mini-avatar" style="background:linear-gradient(135deg,#0ea5e9,#10b981)">LR</div> Lucía Ramírez</div></td>
+                <td style="color: var(--text-2);">12 Oct, 2023</td>
+                <td style="font-family: var(--font-mono); font-weight: 600;">$842.50</td>
+                <td><span class="badge info">Pendiente</span></td>
+              </tr>
+              <tr>
+                <td style="font-family: var(--font-mono); color: var(--text-2);">#ORD-2839</td>
+                <td><div style="display:flex; align-items:center; gap:10px;"><div class="mini-avatar" style="background:linear-gradient(135deg,#f59e0b,#ef4444)">PM</div> Pedro Medina</div></td>
+                <td style="color: var(--text-2);">11 Oct, 2023</td>
+                <td style="font-family: var(--font-mono); font-weight: 600;">$2,189.00</td>
+                <td><span class="badge up">Completado</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== PÁGINA: INVENTARIO ==================== -->
+    <div class="page" id="inventario">
+      <div class="bento-grid">
+        <div class="bento-card span-4">
+          <div class="card-header">
+            <span class="card-title">Estado de Almacén</span>
+            <div class="card-icon" style="background:var(--bg-hover); color:var(--text-1);"><i class="fa-solid fa-warehouse"></i></div>
+          </div>
+          <div class="css-chart" style="height: 200px;">
+            <div class="bar-container"><div class="bar" style="height: 80%; background:var(--success);"></div><span class="bar-label">Zona A</span></div>
+            <div class="bar-container"><div class="bar" style="height: 65%; background:var(--success);"></div><span class="bar-label">Zona B</span></div>
+            <div class="bar-container"><div class="bar" style="height: 40%; background:var(--warning);"></div><span class="bar-label">Zona C</span></div>
+            <div class="bar-container"><div class="bar" style="height: 20%; background:var(--danger);"></div><span class="bar-label">Zona D</span></div>
+            <div class="bar-container"><div class="bar" style="height: 90%; background:var(--success);"></div><span class="bar-label">Zona E</span></div>
+          </div>
+        </div>
+        <div class="bento-card span-2">
+          <div class="card-header">
+            <span class="card-title">Productos Críticos</span>
+            <div class="card-icon" style="background:rgba(239,68,68,0.15); color:var(--danger);"><i class="fa-solid fa-triangle-exclamation"></i></div>
+          </div>
+          <div class="mini-list">
+            <div class="mini-item">
+              <div class="mini-avatar" style="background:var(--danger); color:white;"><i class="fa-solid fa-box"></i></div>
+              <div class="mini-info"><strong>Monitor LG 27"</strong><span>Quedan 4 unidades</span></div>
+              <div class="badge down">Crítico</div>
+            </div>
+            <div class="mini-item">
+              <div class="mini-avatar" style="background:var(--warning); color:white;"><i class="fa-solid fa-box"></i></div>
+              <div class="mini-info"><strong>Teclado Mecánico</strong><span>Quedan 12 unidades</span></div>
+              <div class="badge info">Bajo</div>
+            </div>
+          </div>
+        </div>
+        <div class="bento-card span-2">
+          <div class="card-header">
+            <span class="card-title">Valor de Inventario</span>
+            <div class="card-icon" style="background:rgba(16,185,129,0.15); color:var(--success);"><i class="fa-solid fa-sack-dollar"></i></div>
+          </div>
+          <div class="kpi-value">$124,300</div>
+          <p style="color: var(--text-2); font-size: 14px; margin-top: 8px;">847 productos distintos en almacén.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== PÁGINA: CLIENTES ==================== -->
+    <div class="page" id="clientes">
+      <div class="table-card">
+        <div class="card-header" style="margin-bottom: 0;">
+          <span class="card-title" style="font-size: 16px; text-transform: none; letter-spacing: normal; color: var(--text-1);">Lista de Clientes</span>
+          <button class="icon-btn"><i class="fa-solid fa-user-plus"></i></button>
+        </div>
+        <div class="table-wrapper" style="margin-top: 16px;">
+          <table>
+            <thead>
+              <tr>
+                <th>Cliente</th>
+                <th>Email</th>
+                <th>Teléfono</th>
+                <th>Órdenes Totales</th>
+                <th>Gastado</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><div style="display:flex; align-items:center; gap:10px;"><div class="mini-avatar" style="background:linear-gradient(135deg,#6366f1,#a855f7)">JC</div> Juan Carrasco</div></td>
+                <td style="color: var(--text-2);">juan.c@email.com</td>
+                <td style="color: var(--text-2);">+34 600 123 456</td>
+                <td style="font-family: var(--font-mono);">14</td>
+                <td style="font-family: var(--font-mono); font-weight: 600; color: var(--success);">$8,420</td>
+              </tr>
+              <tr>
+                <td><div style="display:flex; align-items:center; gap:10px;"><div class="mini-avatar" style="background:linear-gradient(135deg,#0ea5e9,#10b981)">LR</div> Lucía Ramírez</div></td>
+                <td style="color: var(--text-2);">lucia.r@email.com</td>
+                <td style="color: var(--text-2);">+34 600 234 567</td>
+                <td style="font-family: var(--font-mono);">8</td>
+                <td style="font-family: var(--font-mono); font-weight: 600; color: var(--success);">$3,890</td>
+              </tr>
+              <tr>
+                <td><div style="display:flex; align-items:center; gap:10px;"><div class="mini-avatar" style="background:linear-gradient(135deg,#f59e0b,#ef4444)">PM</div> Pedro Medina</div></td>
+                <td style="color: var(--text-2);">pedro.m@email.com</td>
+                <td style="color: var(--text-2);">+34 600 345 678</td>
+                <td style="font-family: var(--font-mono);">22</td>
+                <td style="font-family: var(--font-mono); font-weight: 600; color: var(--success);">$14,250</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script>
+  // ============================================================
+  // LÓGICA DE NAVEGACIÓN DEL SIDEBAR
+  // ============================================================
+  const navItems = document.querySelectorAll('.nav-item[data-page]');
+  const pages = document.querySelectorAll('.page');
+  const pageTitle = document.getElementById('page-title');
+  const pageSubtitle = document.getElementById('page-subtitle');
+
+  // Información para los títulos de cada página
+  const pageMeta = {
+    dashboard: { title: "Dashboard", subtitle: "Bienvenida de vuelta, María. Aquí está el resumen de hoy." },
+    ventas: { title: "Ventas", subtitle: "Revisa el estado de tus transacciones y órdenes." },
+    inventario: { title: "Inventario", subtitle: "Controla tu stock y almacenes en tiempo real." },
+    clientes: { title: "Clientes", subtitle: "Gestiona tu base de datos de usuarios." }
+  };
+
+  function navigateTo(pageId) {
+    // Quitar active de todos los botones
+    navItems.forEach(btn => btn.classList.remove('active'));
+    // Poner active al botón clickeado
+    const activeBtn = document.querySelector(`.nav-item[data-page="${pageId}"]`);
+    if (activeBtn) activeBtn.classList.add('active');
+
+    // Ocultar todas las páginas
+    pages.forEach(p => p.classList.remove('active'));
+    // Mostrar la página seleccionada
+    const activePage = document.getElementById(pageId);
+    if (activePage) activePage.classList.add('active');
+
+    // Actualizar títulos de la topbar
+    if (pageMeta[pageId]) {
+      pageTitle.textContent = pageMeta[pageId].title;
+      pageSubtitle.textContent = pageMeta[pageId].subtitle;
+    }
+  }
+
+  // Asignar el evento click a cada botón del sidebar
+  navItems.forEach(btn => {
+    btn.addEventListener('click', () => {
+      navigateTo(btn.dataset.page);
+    });
+  });
+
+  // ============================================================
+  // LÓGICA DE TEMA (DARK/LIGHT)
+  // ============================================================
+  const html = document.documentElement;
+  const themeBtn = document.getElementById('themeBtn');
+
+  function toggleTheme() {
+    const current = html.getAttribute('data-theme');
+    const next = current === 'dark' ? 'light' : 'dark';
+    html.setAttribute('data-theme', next);
+    themeBtn.querySelector('i').className = next === 'dark' ? 'fa-solid fa-moon' : 'fa-solid fa-sun';
+    localStorage.setItem('bento-theme', next);
+  }
+
+  (function initTheme() {
+    const saved = localStorage.getItem('bento-theme') || 'dark';
+    html.setAttribute('data-theme', saved);
+    themeBtn.querySelector('i').className = saved === 'dark' ? 'fa-solid fa-moon' : 'fa-solid fa-sun';
+  })();
+</script>
+
+</body>
+</html>

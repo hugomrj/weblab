@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nexus ERP · Sistema Completo</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+/* ============================================================
+   1. VARIABLES Y TEMAS (SOFT BRUTALISM)
+   ============================================================ */
+:root {
+  --accent: #4f46e5;
+  --accent-hover: #4338ca;
+  --accent-soft: #eef2ff;
+  --success: #059669;
+  --warning: #d97706;
+  --danger: #dc2626;
+  --info: #0284c7;
+  --purple: #7c3aed;
+
+  --border-width: 2px;
+  --shadow-offset: 4px;
+  --transition: 0.15s ease-out;
+  --font-ui: 'Space Grotesk', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+
+[data-theme="light"] {
+  --bg-app: #f4f4f5;
+  --bg-surface: #ffffff;
+  --bg-sidebar: #ffffff;
+  --text-1: #18181b;
+  --text-2: #71717a;
+  --border: #d4d4d8;
+  --border-strong: #3f3f46;
+  --shadow-color: #d4d4d8;
+}
+
+[data-theme="dark"] {
+  --bg-app: #09090b;
+  --bg-surface: #18181b;
+  --bg-sidebar: #09090b;
+  --text-1: #fafafa;
+  --text-2: #a1a1aa;
+  --border: #27272a;
+  --border-strong: #fafafa;
+  --shadow-color: #000000;
+  --accent-soft: rgba(79, 70, 229, 0.15);
+}
+
+/* ============================================================
+   2. RESET Y BASE
+   ============================================================ */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { font-size: 15px; }
+body {
+  font-family: var(--font-ui);
+  background: var(--bg-app);
+  color: var(--text-1);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+/* ============================================================
+   3. LAYOUT Y SIDEBAR
+   ============================================================ */
+.app {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  min-height: 100vh;
+}
+
+.sidebar {
+  background: var(--bg-sidebar);
+  border-right: var(--border-width) solid var(--border);
+  display: flex;
+  flex-direction: column;
+  padding: 24px 16px;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  z-index: 100;
+}
+
+.logo {
+  font-weight: 700; font-size: 22px;
+  margin-bottom: 32px; padding-left: 12px;
+  display: flex; align-items: center; gap: 10px;
+}
+.logo-icon {
+  width: 32px; height: 32px;
+  background: var(--accent);
+  border: var(--border-width) solid var(--border-strong);
+  border-radius: 8px;
+  display: grid; place-items: center;
+  color: white; font-size: 14px;
+  box-shadow: 2px 2px 0px var(--border-strong);
+}
+.logo-text span { color: var(--accent); }
+
+.nav-item {
+  display: flex; align-items: center; gap: 12px;
+  padding: 10px 16px;
+  border: var(--border-width) solid transparent;
+  background: transparent;
+  color: var(--text-2);
+  font-family: var(--font-ui); font-size: 14px; font-weight: 600;
+  cursor: pointer; margin-bottom: 8px;
+  transition: all var(--transition);
+  text-align: left; border-radius: 8px;
+}
+.nav-item:hover { background: var(--bg-app); border-color: var(--border); }
+.nav-item.active {
+  background: var(--accent-soft); color: var(--accent);
+  border-color: var(--accent);
+  box-shadow: 3px 3px 0px var(--border-strong);
+  transform: translate(-1px, -1px);
+}
+.nav-item i { width: 20px; text-align: center; font-size: 15px; }
+
+.sidebar-footer { margin-top: auto; }
+
+/* ============================================================
+   4. CONTENIDO PRINCIPAL
+   ============================================================ */
+.main { padding: 24px 32px; width: 100%; }
+
+.topbar {
+  display: flex; align-items: center; gap: 16px;
+  margin-bottom: 24px;
+}
+.title-group h1 { font-size: 26px; font-weight: 700; line-height: 1; }
+.title-group p { font-size: 13px; margin-top: 6px; color: var(--text-2); }
+.topbar-actions { display: flex; align-items: center; gap: 12px; margin-left: auto; }
+
+.search-bar { position: relative; flex: 1; max-width: 400px; }
+.search-bar input {
+  width: 100%; height: 42px;
+  padding: 0 16px;
+  border: var(--border-width) solid var(--border-strong);
+  background: var(--bg-surface);
+  color: var(--text-1);
+  font-family: var(--font-ui); font-size: 14px; font-weight: 500;
+  border-radius: 8px; outline: none;
+  transition: all var(--transition);
+}
+.search-bar input:focus {
+  box-shadow: 3px 3px 0px var(--accent);
+  transform: translate(-1px, -1px);
+}
+.search-bar i { position: absolute; right: 16px; top: 50%; transform: translateY(-50%); color: var(--text-2); }
+
+.btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 10px 18px;
+  border: var(--border-width) solid var(--border-strong);
+  background: var(--bg-surface);
+  color: var(--text-1);
+  font-family: var(--font-ui); font-size: 13px; font-weight: 700;
+  cursor: pointer; border-radius: 8px;
+  transition: all var(--transition);
+}
+.btn:hover { transform: translate(-2px, -2px); box-shadow: 4px 4px 0px var(--border-strong); }
+.btn:active { transform: translate(0, 0); box-shadow: 1px 1px 0px var(--border-strong); }
+.btn-accent { background: var(--accent); color: white; }
+
+.icon-btn {
+  width: 42px; height: 42px;
+  display: grid; place-items: center;
+  border: var(--border-width) solid var(--border-strong);
+  background: var(--bg-surface);
+  cursor: pointer; border-radius: 8px;
+  transition: all var(--transition);
+  font-size: 15px; color: var(--text-1);
+}
+.icon-btn:hover { transform: translate(-2px, -2px); box-shadow: 4px 4px 0px var(--border-strong); }
+
+/* ============================================================
+   5. SISTEMA DE PÁGINAS Y GRID
+   ============================================================ */
+.page { display: none; }
+.page.active { display: block; animation: slideIn 0.3s ease; }
+@keyframes slideIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+.bento-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  grid-auto-rows: minmax(120px, auto);
+  margin-bottom: 24px;
+}
+.span-2 { grid-column: span 2; }
+.span-4 { grid-column: span 4; }
+
+.card {
+  background: var(--bg-surface);
+  border: var(--border-width) solid var(--border-strong);
+  box-shadow: var(--shadow-offset) var(--shadow-offset) 0px var(--border-strong);
+  padding: 24px;
+  border-radius: 12px;
+  display: flex; flex-direction: column;
+  transition: all var(--transition);
+}
+.card:hover { transform: translate(-2px, -2px); box-shadow: 6px 6px 0px var(--border-strong); }
+
+.card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+.card-title { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-2); }
+.card-icon { width: 36px; height: 36px; display: grid; place-items: center; border: 2px solid var(--border-strong); border-radius: 8px; font-size: 14px; }
+
+.kpi-val { font-size: 30px; font-weight: 700; font-family: var(--font-mono); line-height: 1; margin-bottom: 8px; }
+.kpi-sub { font-size: 12px; font-weight: 600; display: flex; align-items: center; gap: 8px; color: var(--text-2); }
+.badge { padding: 3px 8px; border: 1.5px solid var(--border-strong); font-size: 11px; font-weight: 700; border-radius: 6px; }
+.badge.up { background: #d1fae5; color: var(--success); }
+.badge.down { background: #fee2e2; color: var(--danger); }
+
+/* ============================================================
+   6. TABLAS Y FILTROS (ERD DENSOS)
+   ============================================================ */
+.filter-bar {
+  display: flex; gap: 12px; margin-bottom: 20px; flex-wrap: wrap;
+}
+.filter-btn {
+  padding: 8px 14px;
+  border: 2px solid var(--border-strong);
+  background: var(--bg-surface);
+  border-radius: 8px;
+  font-family: var(--font-ui); font-size: 12px; font-weight: 600;
+  cursor: pointer; transition: all var(--transition);
+  color: var(--text-2);
+}
+.filter-btn.active { background: var(--text-1); color: var(--bg-surface); }
+.filter-btn:hover { transform: translate(-1px,-1px); box-shadow: 2px 2px 0px var(--border-strong); }
+
+.data-table { width: 100%; border-collapse: collapse; }
+.data-table th { text-align: left; padding: 12px 16px; border-bottom: 2px solid var(--border-strong); font-size: 11px; text-transform: uppercase; color: var(--text-2); }
+.data-table td { padding: 14px 16px; border-bottom: 2px solid var(--border); font-weight: 600; font-size: 13px; }
+.data-table tr:last-child td { border-bottom: none; }
+.data-table tbody tr { transition: background 0.1s; }
+.data-table tbody tr:hover { background: var(--bg-app); }
+
+.user-cell { display: flex; align-items: center; gap: 10px; }
+.user-avatar { width: 28px; height: 28px; border-radius: 6px; border: 1.5px solid var(--border-strong); display: grid; place-items: center; font-size: 11px; font-weight: 700; color: white; }
+
+.status-pill { padding: 4px 10px; border: 1.5px solid var(--border-strong); font-size: 11px; font-weight: 700; text-transform: uppercase; display: inline-block; border-radius: 6px; }
+.status-success { background: #d1fae5; color: var(--success); }
+.status-pending { background: #fef3c7; color: var(--warning); }
+.status-error { background: #fee2e2; color: var(--danger); }
+.status-info { background: #dbeafe; color: var(--info); }
+
+/* Barra de progreso para inventario */
+.stock-bar-container { width: 100px; height: 8px; background: var(--bg-app); border: 1px solid var(--border-strong); border-radius: 4px; overflow: hidden; }
+.stock-bar-fill { height: 100%; border-radius: 3px; }
+
+/* CSS Chart para Dashboard */
+.css-chart { display: flex; align-items: flex-end; gap: 16px; height: 180px; padding-top: 20px; }
+.bar-container { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 8px; height: 100%; justify-content: flex-end; }
+.bar { width: 100%; border: 2px solid var(--border-strong); transition: height 0.5s ease; border-radius: 4px 4px 0 0; }
+.bar-label { font-size: 11px; font-weight: 600; opacity: 0.6; }
+
+/* ============================================================
+   7. RESPONSIVE
+   ============================================================ */
+.menu-toggle { display: none; }
+
+@media (max-width: 1024px) {
+  .bento-grid { grid-template-columns: repeat(2, 1fr); }
+  .span-4 { grid-column: span 2; }
+}
+
+@media (max-width: 768px) {
+  .app { grid-template-columns: 1fr; }
+  .sidebar {
+    position: fixed; top: 0; left: 0;
+    height: 100vh; width: 280px;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+    z-index: 1000;
+  }
+  .app.sidebar-open .sidebar { transform: translateX(0); }
+  .menu-toggle { display: grid; place-items: center; width: 42px; height: 42px; border: 2px solid var(--border-strong); background: var(--bg-surface); cursor: pointer; border-radius: 8px; font-size: 16px; }
+  .main { padding: 20px; }
+  .title-group h1 { font-size: 22px; }
+  .search-bar { display: none; }
+  .bento-grid { grid-template-columns: 1fr; }
+  .span-2, .span-4 { grid-column: span 1; }
+  
+  .table-wrapper { overflow-x: auto; }
+  .data-table { min-width: 600px; }
+}
+
+.overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 900; }
+.app.sidebar-open .overlay { display: block; }
+</style>
+</head>
+<body>
+
+<div class="app" id="app">
+  <div class="overlay" onclick="toggleSidebar()"></div>
+
+  <!-- ==================== SIDEBAR ==================== -->
+  <aside class="sidebar">
+    <div class="logo">
+      <div class="logo-icon">N</div>
+      <div class="logo-text">Nexus<span>ERP</span></div>
+    </div>
+    <button class="nav-item active" data-page="dashboard"><i class="fa-solid fa-grip"></i> Dashboard</button>
+    <button class="nav-item" data-page="ventas"><i class="fa-solid fa-bag-shopping"></i> Ventas</button>
+    <button class="nav-item" data-page="inventario"><i class="fa-solid fa-box"></i> Inventario</button>
+    <button class="nav-item" data-page="clientes"><i class="fa-solid fa-users"></i> Clientes</button>
+    <div class="sidebar-footer">
+      <button class="nav-item" onclick="toggleTheme()"><i class="fa-solid fa-circle-half-stroke"></i> Cambiar Tema</button>
+    </div>
+  </aside>
+
+  <!-- ==================== MAIN ==================== -->
+  <main class="main">
+    <header class="topbar">
+      <button class="menu-toggle" onclick="toggleSidebar()"><i class="fa-solid fa-bars"></i></button>
+      <div class="title-group">
+        <h1 id="page-title">Dashboard</h1>
+        <p id="page-subtitle">Resumen operativo y financiero del día.</p>
+      </div>
+      <div class="search-bar">
+        <input type="text" placeholder="Buscar en todo el sistema...">
+        <i class="fa-solid fa-magnifying-glass"></i>
+      </div>
+      <div class="topbar-actions">
+        <button class="btn btn-accent"><i class="fa-solid fa-plus"></i> Nueva Orden</button>
+        <button class="icon-btn"><i class="fa-regular fa-bell"></i></button>
+      </div>
+    </header>
+
+    <!-- ==================== PÁGINA: DASHBOARD ==================== -->
+    <div class="page active" id="dashboard">
+      <div class="bento-grid">
+        <div class="card">
+          <div class="card-header"><span class="card-title">Ingresos</span><div class="card-icon" style="background:#d1fae5; color:var(--success);"><i class="fa-solid fa-dollar-sign"></i></div></div>
+          <div class="kpi-val">$284,521</div>
+          <div class="kpi-sub"><span class="badge up">+12.5%</span> vs mes anterior</div>
+        </div>
+        <div class="card">
+          <div class="card-header"><span class="card-title">Órdenes</span><div class="card-icon" style="background:#e0e7ff; color:var(--accent);"><i class="fa-solid fa-cart-shopping"></i></div></div>
+          <div class="kpi-val">1,847</div>
+          <div class="kpi-sub"><span class="badge up">+8.2%</span> vs semana ant.</div>
+        </div>
+        <div class="card">
+          <div class="card-header"><span class="card-title">Clientes</span><div class="card-icon" style="background:#dbeafe; color:var(--info);"><i class="fa-solid fa-users"></i></div></div>
+          <div class="kpi-val">12,453</div>
+          <div class="kpi-sub"><span class="badge up">+5.0%</span> vs ayer</div>
+        </div>
+        <div class="card">
+          <div class="card-header"><span class="card-title">Devoluciones</span><div class="card-icon" style="background:#fee2e2; color:var(--danger);"><i class="fa-solid fa-rotate-left"></i></div></div>
+          <div class="kpi-val">42</div>
+          <div class="kpi-sub"><span class="badge down">+2.1%</span> requiere atención</div>
+        </div>
+
+        <div class="card span-2">
+          <div class="card-header"><span class="card-title">Ventas Semanales</span></div>
+          <div class="css-chart">
+            <div class="bar-container"><div class="bar" style="height: 40%; background: var(--accent-soft);"></div><span class="bar-label">Lun</span></div>
+            <div class="bar-container"><div class="bar" style="height: 65%; background: var(--accent-soft);"></div><span class="bar-label">Mar</span></div>
+            <div class="bar-container"><div class="bar" style="height: 50%; background: var(--accent-soft);"></div><span class="bar-label">Mié</span></div>
+            <div class="bar-container"><div class="bar" style="height: 80%; background: var(--accent);"></div><span class="bar-label">Jue</span></div>
+            <div class="bar-container"><div class="bar" style="height: 95%; background: var(--accent);"></div><span class="bar-label">Vie</span></div>
+            <div class="bar-container"><div class="bar" style="height: 70%; background: var(--accent-soft);"></div><span class="bar-label">Sáb</span></div>
+            <div class="bar-container"><div class="bar" style="height: 30%; background: var(--accent-soft);"></div><span class="bar-label">Dom</span></div>
+          </div>
+        </div>
+
+        <div class="card span-2">
+          <div class="card-header"><span class="card-title">Alertas de Sistema</span><div class="card-icon"><i class="fa-solid fa-bell"></i></div></div>
+          <div style="display:flex; flex-direction:column; gap:12px;">
+            <div style="display:flex; align-items:center; gap:10px; font-size:13px;"><span class="status-pill status-error">Stock</span> Monitor LG 27" agotado.</div>
+            <div style="display:flex; align-items:center; gap:10px; font-size:13px;"><span class="status-pill status-pending">Pago</span> Orden #2840 pendiente de verificación.</div>
+            <div style="display:flex; align-items:center; gap:10px; font-size:13px;"><span class="status-pill status-info">Server</span> Backup completado a las 03:00 AM.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card span-4">
+        <div class="card-header">
+          <span class="card-title">Órdenes Recientes</span>
+          <button class="btn" style="padding: 8px 14px; font-size: 12px;">Ver todas</button>
+        </div>
+        <div class="table-wrapper">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>ID Orden</th><th>Cliente</th><th>Fecha</th><th>Método Pago</th><th>Total</th><th>Estado</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td style="font-family:var(--font-mono); color:var(--text-2);">#ORD-2841</td><td><div class="user-cell"><div class="user-avatar" style="background:var(--accent)">JC</div> Juan Carrasco</div></td><td style="color:var(--text-2);">12 Oct, 2023</td><td>Tarjeta</td><td style="font-family:var(--font-mono);">$1,245.00</td><td><span class="status-pill status-success">Completado</span></td></tr>
+              <tr><td style="font-family:var(--font-mono); color:var(--text-2);">#ORD-2840</td><td><div class="user-cell"><div class="user-avatar" style="background:var(--info)">LR</div> Lucía Ramírez</div></td><td style="color:var(--text-2);">12 Oct, 2023</td><td>PayPal</td><td style="font-family:var(--font-mono);">$842.50</td><td><span class="status-pill status-pending">Procesando</span></td></tr>
+              <tr><td style="font-family:var(--font-mono); color:var(--text-2);">#ORD-2839</td><td><div class="user-cell"><div class="user-avatar" style="background:var(--success)">PM</div> Pedro Medina</div></td><td style="color:var(--text-2);">11 Oct, 2023</td><td>Transferencia</td><td style="font-family:var(--font-mono);">$2,189.00</td><td><span class="status-pill status-success">Completado</span></td></tr>
+              <tr><td style="font-family:var(--font-mono); color:var(--text-2);">#ORD-2838</td><td><div class="user-cell"><div class="user-avatar" style="background:var(--danger)">AS</div> Ana Soto</div></td><td style="color:var(--text-2);">11 Oct, 2023</td><td>Tarjeta</td><td style="font-family:var(--font-mono);">$567.75</td><td><span class="status-pill status-error">Fallido</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== PÁGINA: VENTAS ==================== -->
+    <div class="page" id="ventas">
+      <div class="bento-grid">
+        <div class="card"><div class="card-header"><span class="card-title">Ingresos Totales</span><div class="card-icon" style="background:#d1fae5; color:var(--success);"><i class="fa-solid fa-dollar-sign"></i></div></div><div class="kpi-val">$284,521</div><div class="kpi-sub"><span class="badge up">+12.5%</span> vs mes anterior</div></div>
+        <div class="card"><div class="card-header"><span class="card-title">Órdenes Completadas</span><div class="card-icon" style="background:#dbeafe; color:var(--info);"><i class="fa-solid fa-check-circle"></i></div></div><div class="kpi-val">1,752</div><div class="kpi-sub"><span class="badge up">+4.1%</span> vs mes anterior</div></div>
+        <div class="card"><div class="card-header"><span class="card-title">Pendientes</span><div class="card-icon" style="background:#fef3c7; color:var(--warning);"><i class="fa-solid fa-clock"></i></div></div><div class="kpi-val">95</div><div class="kpi-sub"><span class="badge down">-2.0%</span> vs mes anterior</div></div>
+        <div class="card"><div class="card-header"><span class="card-title">Devoluciones</span><div class="card-icon" style="background:#fee2e2; color:var(--danger);"><i class="fa-solid fa-rotate-left"></i></div></div><div class="kpi-val">28</div><div class="kpi-sub"><span class="badge up">+1.2%</span> vs mes anterior</div></div>
+      </div>
+
+      <div class="card span-4">
+        <div class="card-header">
+          <span class="card-title">Historial de Ventas</span>
+          <div class="filter-bar" style="margin:0;">
+            <button class="filter-btn active">Todas</button>
+            <button class="filter-btn">Completadas</button>
+            <button class="filter-btn">Pendientes</button>
+          </div>
+        </div>
+        <div class="table-wrapper">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>ID</th><th>Cliente</th><th>Fecha</th><th>Método</th><th>Total</th><th>Estado</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td style="font-family:var(--font-mono); color:var(--text-2);">#ORD-2841</td><td><div class="user-cell"><div class="user-avatar" style="background:var(--accent)">JC</div> Juan Carrasco</div></td><td style="color:var(--text-2);">12 Oct, 2023</td><td>Tarjeta</td><td style="font-family:var(--font-mono);">$1,245.00</td><td><span class="status-pill status-success">Completado</span></td></tr>
+              <tr><td style="font-family:var(--font-mono); color:var(--text-2);">#ORD-2840</td><td><div class="user-cell"><div class="user-avatar" style="background:var(--info)">LR</div> Lucía Ramírez</div></td><td style="color:var(--text-2);">12 Oct, 2023</td><td>PayPal</td><td style="font-family:var(--font-mono);">$842.50</td><td><span class="status-pill status-pending">Procesando</span></td></tr>
+              <tr><td style="font-family:var(--font-mono); color:var(--text-2);">#ORD-2839</td><td><div class="user-cell"><div class="user-avatar" style="background:var(--success)">PM</div> Pedro Medina</div></td><td style="color:var(--text-2);">11 Oct, 2023</td><td>Transferencia</td><td style="font-family:var(--font-mono);">$2,189.00</td><td><span class="status-pill status-success">Completado</span></td></tr>
+              <tr><td style="font-family:var(--font-mono); color:var(--text-2);">#ORD-2838</td><td><div class="user-cell"><div class="user-avatar" style="background:var(--danger)">AS</div> Ana Soto</div></td><td style="color:var(--text-2);">11 Oct, 2023</td><td>Tarjeta</td><td style="font-family:var(--font-mono);">$567.75</td><td><span class="status-pill status-error">Fallido</span></td></tr>
+              <tr><td style="font-family:var(--font-mono); color:var(--text-2);">#ORD-2837</td><td><div class="user-cell"><div class="user-avatar" style="background:var(--purple)">RG</div> Roberto Gómez</div></td><td style="color:var(--text-2);">10 Oct, 2023</td><td>Tarjeta</td><td style="font-family:var(--font-mono);">$3,420.00</td><td><span class="status-pill status-success">Completado</span></td></tr>
+              <tr><td style="font-family:var(--font-mono); color:var(--text-2);">#ORD-2836</td><td><div class="user-cell"><div class="user-avatar" style="background:var(--warning)">MV</div> Marta Vidal</div></td><td style="color:var(--text-2);">09 Oct, 2023</td><td>PayPal</td><td style="font-family:var(--font-mono);">$398.00</td><td><span class="status-pill status-pending">Procesando</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== PÁGINA: INVENTARIO ==================== -->
+    <div class="page" id="inventario">
+      <div class="bento-grid">
+        <div class="card"><div class="card-header"><span class="card-title">Total Productos</span><div class="card-icon" style="background:#e0e7ff; color:var(--accent);"><i class="fa-solid fa-box"></i></div></div><div class="kpi-val">847</div><div class="kpi-sub"><span class="badge up">+24</span> nuevos este mes</div></div>
+        <div class="card"><div class="card-header"><span class="card-title">Valor Inventario</span><div class="card-icon" style="background:#d1fae5; color:var(--success);"><i class="fa-solid fa-sack-dollar"></i></div></div><div class="kpi-val">$842K</div><div class="kpi-sub"><span class="badge up">+4.2%</span> valorizado</div></div>
+        <div class="card"><div class="card-header"><span class="card-title">Stock Bajo</span><div class="card-icon" style="background:#fef3c7; color:var(--warning);"><i class="fa-solid fa-triangle-exclamation"></i></div></div><div class="kpi-val">23</div><div class="kpi-sub"><span class="badge down">-5</span> vs semana ant.</div></div>
+        <div class="card"><div class="card-header"><span class="card-title">Agotados</span><div class="card-icon" style="background:#fee2e2; color:var(--danger);"><i class="fa-solid fa-xmark"></i></div></div><div class="kpi-val">8</div><div class="kpi-sub"><span class="badge down">-2</span> vs semana ant.</div></div>
+      </div>
+
+      <div class="card span-4">
+        <div class="card-header">
+          <span class="card-title">Catálogo de Productos</span>
+          <button class="btn btn-accent" style="padding: 8px 14px; font-size: 12px;"><i class="fa-solid fa-plus"></i> Nuevo Producto</button>
+        </div>
+        <div class="table-wrapper">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>SKU</th><th>Producto</th><th>Categoría</th><th>Precio</th><th>Stock</th><th>Estado</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td style="font-family:var(--font-mono); color:var(--text-2);">SKU-LP-2025</td><td>Laptop Pro 15"</td><td>Electrónica</td><td style="font-family:var(--font-mono);">$1,899</td><td><div class="user-cell" style="gap:8px;"><div class="stock-bar-container"><div class="stock-bar-fill" style="width:75%; background:var(--success);"></div></div>42</div></td><td><span class="status-pill status-success">Disponible</span></td></tr>
+              <tr><td style="font-family:var(--font-mono); color:var(--text-2);">SKU-SM-X20</td><td>Smartphone X20</td><td>Electrónica</td><td style="font-family:var(--font-mono);">$899</td><td><div class="user-cell" style="gap:8px;"><div class="stock-bar-container"><div class="stock-bar-fill" style="width:25%; background:var(--warning);"></div></div>12</div></td><td><span class="status-pill status-pending">Bajo</span></td></tr>
+              <tr><td style="font-family:var(--font-mono); color:var(--text-2);">SKU-AU-ANC</td><td>Auriculares ANC</td><td>Accesorios</td><td style="font-family:var(--font-mono);">$249</td><td><div class="user-cell" style="gap:8px;"><div class="stock-bar-container"><div class="stock-bar-fill" style="width:90%; background:var(--success);"></div></div>86</div></td><td><span class="status-pill status-success">Disponible</span></td></tr>
+              <tr><td style="font-family:var(--font-mono); color:var(--text-2);">SKU-MN-LG27</td><td>Monitor LG 27"</td><td>Electrónica</td><td style="font-family:var(--font-mono);">$399</td><td><div class="user-cell" style="gap:8px;"><div class="stock-bar-container"><div class="stock-bar-fill" style="width:5%; background:var(--danger);"></div></div>4</div></td><td><span class="status-pill status-error">Crítico</span></td></tr>
+              <tr><td style="font-family:var(--font-mono); color:var(--text-2);">SKU-IM-LSR</td><td>Impresora Láser</td><td>Oficina</td><td style="font-family:var(--font-mono);">$349</td><td><div class="user-cell" style="gap:8px;"><div class="stock-bar-container"><div class="stock-bar-fill" style="width:0%; background:var(--danger);"></div></div>0</div></td><td><span class="status-pill status-error">Agotado</span></td></tr>
+              <tr><td style="font-family:var(--font-mono); color:var(--text-2);">SKU-TC-MEC</td><td>Teclado Mecánico</td><td>Accesorios</td><td style="font-family:var(--font-mono);">$129</td><td><div class="user-cell" style="gap:8px;"><div class="stock-bar-container"><div class="stock-bar-fill" style="width:40%; background:var(--warning);"></div></div>18</div></td><td><span class="status-pill status-pending">Bajo</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== PÁGINA: CLIENTES ==================== -->
+    <div class="page" id="clientes">
+      <div class="bento-grid">
+        <div class="card"><div class="card-header"><span class="card-title">Clientes Totales</span><div class="card-icon" style="background:#e0e7ff; color:var(--accent);"><i class="fa-solid fa-users"></i></div></div><div class="kpi-val">12,453</div><div class="kpi-sub"><span class="badge up">+5.1%</span> crecimiento</div></div>
+        <div class="card"><div class="card-header"><span class="card-title">Nuevos (Mes)</span><div class="card-icon" style="background:#d1fae5; color:var(--success);"><i class="fa-solid fa-user-plus"></i></div></div><div class="kpi-val">328</div><div class="kpi-sub"><span class="badge up">+14.2%</span> vs mes ant.</div></div>
+        <div class="card"><div class="card-header"><span class="card-title">Activos</span><div class="card-icon" style="background:#dbeafe; color:var(--info);"><i class="fa-solid fa-user-check"></i></div></div><div class="kpi-val">8,947</div><div class="kpi-sub"><span class="badge up">+3.8%</span> uso diario</div></div>
+        <div class="card"><div class="card-header"><span class="card-title">Inactivos</span><div class="card-icon" style="background:#fee2e2; color:var(--danger);"><i class="fa-solid fa-user-slash"></i></div></div><div class="kpi-val">3,506</div><div class="kpi-sub"><span class="badge down">-1.2%</span> churn rate</div></div>
+      </div>
+
+      <div class="card span-4">
+        <div class="card-header">
+          <span class="card-title">Listado de Clientes</span>
+          <button class="btn btn-accent" style="padding: 8px 14px; font-size: 12px;"><i class="fa-solid fa-user-plus"></i> Nuevo Cliente</button>
+        </div>
+        <div class="table-wrapper">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Cliente</th><th>Email</th><th>Teléfono</th><th>Órdenes</th><th>Gastado</th><th>Estado</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td><div class="user-cell"><div class="user-avatar" style="background:var(--accent)">JC</div> Juan Carrasco</div></td><td style="color:var(--text-2);">juan.c@email.com</td><td style="color:var(--text-2);">+34 600 123 456</td><td style="font-family:var(--font-mono);">14</td><td style="font-family:var(--font-mono); color:var(--success);">$8,420</td><td><span class="status-pill status-success">Activo</span></td></tr>
+              <tr><td><div class="user-cell"><div class="user-avatar" style="background:var(--info)">LR</div> Lucía Ramírez</div></td><td style="color:var(--text-2);">lucia.r@email.com</td><td style="color:var(--text-2);">+34 600 234 567</td><td style="font-family:var(--font-mono);">8</td><td style="font-family:var(--font-mono); color:var(--success);">$3,890</td><td><span class="status-pill status-success">Activo</span></td></tr>
+              <tr><td><div class="user-cell"><div class="user-avatar" style="background:var(--success)">PM</div> Pedro Medina</div></td><td style="color:var(--text-2);">pedro.m@email.com</td><td style="color:var(--text-2);">+34 600 345 678</td><td style="font-family:var(--font-mono);">22</td><td style="font-family:var(--font-mono); color:var(--success);">$14,250</td><td><span class="status-pill status-success">VIP</span></td></tr>
+              <tr><td><div class="user-cell"><div class="user-avatar" style="background:var(--danger)">AS</div> Ana Soto</div></td><td style="color:var(--text-2);">ana.s@email.com</td><td style="color:var(--text-2);">+34 600 456 789</td><td style="font-family:var(--font-mono);">3</td><td style="font-family:var(--font-mono); color:var(--success);">$1,245</td><td><span class="status-pill status-pending">Inactivo</span></td></tr>
+              <tr><td><div class="user-cell"><div class="user-avatar" style="background:var(--purple)">RG</div> Roberto Gómez</div></td><td style="color:var(--text-2);">roberto.g@email.com</td><td style="color:var(--text-2);">+34 600 567 890</td><td style="font-family:var(--font-mono);">45</td><td style="font-family:var(--font-mono); color:var(--success);">$28,940</td><td><span class="status-pill status-success">VIP</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script>
+  const app = document.getElementById('app');
+  const navItems = document.querySelectorAll('.nav-item[data-page]');
+  const pages = document.querySelectorAll('.page');
+  const pageTitle = document.getElementById('page-title');
+  const pageSubtitle = document.getElementById('page-subtitle');
+
+  const pageMeta = {
+    dashboard: { title: "Dashboard", subtitle: "Resumen operativo y financiero del día." },
+    ventas: { title: "Ventas", subtitle: "Gestión de transacciones comerciales." },
+    inventario: { title: "Inventario", subtitle: "Control de stock y catálogo de productos." },
+    clientes: { title: "Clientes", subtitle: "Base de datos y segmentación de usuarios." }
+  };
+
+  function navigateTo(pageId) {
+    navItems.forEach(btn => btn.classList.remove('active'));
+    const activeBtn = document.querySelector(`.nav-item[data-page="${pageId}"]`);
+    if (activeBtn) activeBtn.classList.add('active');
+
+    pages.forEach(p => p.classList.remove('active'));
+    const activePage = document.getElementById(pageId);
+    if (activePage) activePage.classList.add('active');
+
+    if (pageMeta[pageId]) {
+      pageTitle.textContent = pageMeta[pageId].title;
+      pageSubtitle.textContent = pageMeta[pageId].subtitle;
+    }
+    
+    if (window.innerWidth <= 768) {
+      app.classList.remove('sidebar-open');
+    }
+  }
+
+  navItems.forEach(btn => {
+    btn.addEventListener('click', () => navigateTo(btn.dataset.page));
+  });
+
+  function toggleSidebar() {
+    app.classList.toggle('sidebar-open');
+  }
+
+  // Lógica de filtros
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      btn.parentElement.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    });
+  });
+
+  // Tema
+  const html = document.documentElement;
+  function toggleTheme() {
+    const current = html.getAttribute('data-theme');
+    const next = current === 'dark' ? 'light' : 'dark';
+    html.setAttribute('data-theme', next);
+    localStorage.setItem('erp-theme', next);
+  }
+  (function initTheme() {
+    const saved = localStorage.getItem('erp-theme') || 'light';
+    html.setAttribute('data-theme', saved);
+  })();
+</script>
+
+</body>
+</html>
