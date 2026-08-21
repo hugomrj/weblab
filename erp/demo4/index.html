@@ -1,1318 +1,1747 @@
-<html lang="es" class="dark"><head><script src="/wails/ipc.js"></script><script src="/wails/runtime.js"></script>
-    <script type="module" src="/@vite/client"></script>
-
+<!DOCTYPE html>
+<html lang="es" class="dark">
+<head>
     <meta charset="UTF-8">
-    <link rel="icon" type="image/svg+xml" href="/vite.svg">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Faro ERP</title>
-  <style type="text/css" data-vite-dev-id="/home/hugo/dev/go/faro/frontend/src/App.vue?vue&amp;type=style&amp;index=0&amp;lang.css">
-/* Reset básico */
-html, body, #app {
-  margin: 0;
-  padding: 0;
-  height: 100%;
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
-}
-</style><style type="text/css" data-vite-dev-id="/home/hugo/dev/go/faro/frontend/src/assets/main.css">*, ::before, ::after {
-  --tw-border-spacing-x: 0;
-  --tw-border-spacing-y: 0;
-  --tw-translate-x: 0;
-  --tw-translate-y: 0;
-  --tw-rotate: 0;
-  --tw-skew-x: 0;
-  --tw-skew-y: 0;
-  --tw-scale-x: 1;
-  --tw-scale-y: 1;
-  --tw-pan-x:  ;
-  --tw-pan-y:  ;
-  --tw-pinch-zoom:  ;
-  --tw-scroll-snap-strictness: proximity;
-  --tw-gradient-from-position:  ;
-  --tw-gradient-via-position:  ;
-  --tw-gradient-to-position:  ;
-  --tw-ordinal:  ;
-  --tw-slashed-zero:  ;
-  --tw-numeric-figure:  ;
-  --tw-numeric-spacing:  ;
-  --tw-numeric-fraction:  ;
-  --tw-ring-inset:  ;
-  --tw-ring-offset-width: 0px;
-  --tw-ring-offset-color: #fff;
-  --tw-ring-color: rgb(59 130 246 / 0.5);
-  --tw-ring-offset-shadow: 0 0 #0000;
-  --tw-ring-shadow: 0 0 #0000;
-  --tw-shadow: 0 0 #0000;
-  --tw-shadow-colored: 0 0 #0000;
-  --tw-blur:  ;
-  --tw-brightness:  ;
-  --tw-contrast:  ;
-  --tw-grayscale:  ;
-  --tw-hue-rotate:  ;
-  --tw-invert:  ;
-  --tw-saturate:  ;
-  --tw-sepia:  ;
-  --tw-drop-shadow:  ;
-  --tw-backdrop-blur:  ;
-  --tw-backdrop-brightness:  ;
-  --tw-backdrop-contrast:  ;
-  --tw-backdrop-grayscale:  ;
-  --tw-backdrop-hue-rotate:  ;
-  --tw-backdrop-invert:  ;
-  --tw-backdrop-opacity:  ;
-  --tw-backdrop-saturate:  ;
-  --tw-backdrop-sepia:  ;
-  --tw-contain-size:  ;
-  --tw-contain-layout:  ;
-  --tw-contain-paint:  ;
-  --tw-contain-style:  ;
-}
-
-::backdrop {
-  --tw-border-spacing-x: 0;
-  --tw-border-spacing-y: 0;
-  --tw-translate-x: 0;
-  --tw-translate-y: 0;
-  --tw-rotate: 0;
-  --tw-skew-x: 0;
-  --tw-skew-y: 0;
-  --tw-scale-x: 1;
-  --tw-scale-y: 1;
-  --tw-pan-x:  ;
-  --tw-pan-y:  ;
-  --tw-pinch-zoom:  ;
-  --tw-scroll-snap-strictness: proximity;
-  --tw-gradient-from-position:  ;
-  --tw-gradient-via-position:  ;
-  --tw-gradient-to-position:  ;
-  --tw-ordinal:  ;
-  --tw-slashed-zero:  ;
-  --tw-numeric-figure:  ;
-  --tw-numeric-spacing:  ;
-  --tw-numeric-fraction:  ;
-  --tw-ring-inset:  ;
-  --tw-ring-offset-width: 0px;
-  --tw-ring-offset-color: #fff;
-  --tw-ring-color: rgb(59 130 246 / 0.5);
-  --tw-ring-offset-shadow: 0 0 #0000;
-  --tw-ring-shadow: 0 0 #0000;
-  --tw-shadow: 0 0 #0000;
-  --tw-shadow-colored: 0 0 #0000;
-  --tw-blur:  ;
-  --tw-brightness:  ;
-  --tw-contrast:  ;
-  --tw-grayscale:  ;
-  --tw-hue-rotate:  ;
-  --tw-invert:  ;
-  --tw-saturate:  ;
-  --tw-sepia:  ;
-  --tw-drop-shadow:  ;
-  --tw-backdrop-blur:  ;
-  --tw-backdrop-brightness:  ;
-  --tw-backdrop-contrast:  ;
-  --tw-backdrop-grayscale:  ;
-  --tw-backdrop-hue-rotate:  ;
-  --tw-backdrop-invert:  ;
-  --tw-backdrop-opacity:  ;
-  --tw-backdrop-saturate:  ;
-  --tw-backdrop-sepia:  ;
-  --tw-contain-size:  ;
-  --tw-contain-layout:  ;
-  --tw-contain-paint:  ;
-  --tw-contain-style:  ;
-}/*
-! tailwindcss v3.4.19 | MIT License | https://tailwindcss.com
-*//*
-1. Prevent padding and border from affecting element width. (https://github.com/mozdevs/cssremedy/issues/4)
-2. Allow adding a border to an element by just adding a border-width. (https://github.com/tailwindcss/tailwindcss/pull/116)
-*/
-
-*,
-::before,
-::after {
-  box-sizing: border-box; /* 1 */
-  border-width: 0; /* 2 */
-  border-style: solid; /* 2 */
-  border-color: #e5e7eb; /* 2 */
-}
-
-::before,
-::after {
-  --tw-content: '';
-}
-
-/*
-1. Use a consistent sensible line-height in all browsers.
-2. Prevent adjustments of font size after orientation changes in iOS.
-3. Use a more readable tab size.
-4. Use the user's configured `sans` font-family by default.
-5. Use the user's configured `sans` font-feature-settings by default.
-6. Use the user's configured `sans` font-variation-settings by default.
-7. Disable tap highlights on iOS
-*/
-
-html,
-:host {
-  line-height: 1.5; /* 1 */
-  -webkit-text-size-adjust: 100%; /* 2 */
-  -moz-tab-size: 4; /* 3 */
-  -o-tab-size: 4;
-     tab-size: 4; /* 3 */
-  font-family: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"; /* 4 */
-  font-feature-settings: normal; /* 5 */
-  font-variation-settings: normal; /* 6 */
-  -webkit-tap-highlight-color: transparent; /* 7 */
-}
-
-/*
-1. Remove the margin in all browsers.
-2. Inherit line-height from `html` so users can set them as a class directly on the `html` element.
-*/
-
-body {
-  margin: 0; /* 1 */
-  line-height: inherit; /* 2 */
-}
-
-/*
-1. Add the correct height in Firefox.
-2. Correct the inheritance of border color in Firefox. (https://bugzilla.mozilla.org/show_bug.cgi?id=190655)
-3. Ensure horizontal rules are visible by default.
-*/
-
-hr {
-  height: 0; /* 1 */
-  color: inherit; /* 2 */
-  border-top-width: 1px; /* 3 */
-}
-
-/*
-Add the correct text decoration in Chrome, Edge, and Safari.
-*/
-
-abbr:where([title]) {
-  -webkit-text-decoration: underline dotted;
-          text-decoration: underline dotted;
-}
-
-/*
-Remove the default font size and weight for headings.
-*/
-
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  font-size: inherit;
-  font-weight: inherit;
-}
-
-/*
-Reset links to optimize for opt-in styling instead of opt-out.
-*/
-
-a {
-  color: inherit;
-  text-decoration: inherit;
-}
-
-/*
-Add the correct font weight in Edge and Safari.
-*/
-
-b,
-strong {
-  font-weight: bolder;
-}
-
-/*
-1. Use the user's configured `mono` font-family by default.
-2. Use the user's configured `mono` font-feature-settings by default.
-3. Use the user's configured `mono` font-variation-settings by default.
-4. Correct the odd `em` font sizing in all browsers.
-*/
-
-code,
-kbd,
-samp,
-pre {
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; /* 1 */
-  font-feature-settings: normal; /* 2 */
-  font-variation-settings: normal; /* 3 */
-  font-size: 1em; /* 4 */
-}
-
-/*
-Add the correct font size in all browsers.
-*/
-
-small {
-  font-size: 80%;
-}
-
-/*
-Prevent `sub` and `sup` elements from affecting the line height in all browsers.
-*/
-
-sub,
-sup {
-  font-size: 75%;
-  line-height: 0;
-  position: relative;
-  vertical-align: baseline;
-}
-
-sub {
-  bottom: -0.25em;
-}
-
-sup {
-  top: -0.5em;
-}
-
-/*
-1. Remove text indentation from table contents in Chrome and Safari. (https://bugs.chromium.org/p/chromium/issues/detail?id=999088, https://bugs.webkit.org/show_bug.cgi?id=201297)
-2. Correct table border color inheritance in all Chrome and Safari. (https://bugs.chromium.org/p/chromium/issues/detail?id=935729, https://bugs.webkit.org/show_bug.cgi?id=195016)
-3. Remove gaps between table borders by default.
-*/
-
-table {
-  text-indent: 0; /* 1 */
-  border-color: inherit; /* 2 */
-  border-collapse: collapse; /* 3 */
-}
-
-/*
-1. Change the font styles in all browsers.
-2. Remove the margin in Firefox and Safari.
-3. Remove default padding in all browsers.
-*/
-
-button,
-input,
-optgroup,
-select,
-textarea {
-  font-family: inherit; /* 1 */
-  font-feature-settings: inherit; /* 1 */
-  font-variation-settings: inherit; /* 1 */
-  font-size: 100%; /* 1 */
-  font-weight: inherit; /* 1 */
-  line-height: inherit; /* 1 */
-  letter-spacing: inherit; /* 1 */
-  color: inherit; /* 1 */
-  margin: 0; /* 2 */
-  padding: 0; /* 3 */
-}
-
-/*
-Remove the inheritance of text transform in Edge and Firefox.
-*/
-
-button,
-select {
-  text-transform: none;
-}
-
-/*
-1. Correct the inability to style clickable types in iOS and Safari.
-2. Remove default button styles.
-*/
-
-button,
-input:where([type='button']),
-input:where([type='reset']),
-input:where([type='submit']) {
-  -webkit-appearance: button; /* 1 */
-  background-color: transparent; /* 2 */
-  background-image: none; /* 2 */
-}
-
-/*
-Use the modern Firefox focus style for all focusable elements.
-*/
-
-:-moz-focusring {
-  outline: auto;
-}
-
-/*
-Remove the additional `:invalid` styles in Firefox. (https://github.com/mozilla/gecko-dev/blob/2f9eacd9d3d995c937b4251a5557d95d494c9be1/layout/style/res/forms.css#L728-L737)
-*/
-
-:-moz-ui-invalid {
-  box-shadow: none;
-}
-
-/*
-Add the correct vertical alignment in Chrome and Firefox.
-*/
-
-progress {
-  vertical-align: baseline;
-}
-
-/*
-Correct the cursor style of increment and decrement buttons in Safari.
-*/
-
-::-webkit-inner-spin-button,
-::-webkit-outer-spin-button {
-  height: auto;
-}
-
-/*
-1. Correct the odd appearance in Chrome and Safari.
-2. Correct the outline style in Safari.
-*/
-
-[type='search'] {
-  -webkit-appearance: textfield; /* 1 */
-  outline-offset: -2px; /* 2 */
-}
-
-/*
-Remove the inner padding in Chrome and Safari on macOS.
-*/
-
-::-webkit-search-decoration {
-  -webkit-appearance: none;
-}
-
-/*
-1. Correct the inability to style clickable types in iOS and Safari.
-2. Change font properties to `inherit` in Safari.
-*/
-
-::-webkit-file-upload-button {
-  -webkit-appearance: button; /* 1 */
-  font: inherit; /* 2 */
-}
-
-/*
-Add the correct display in Chrome and Safari.
-*/
-
-summary {
-  display: list-item;
-}
-
-/*
-Removes the default spacing and border for appropriate elements.
-*/
-
-blockquote,
-dl,
-dd,
-h1,
-h2,
-h3,
-h4,
-h5,
-h6,
-hr,
-figure,
-p,
-pre {
-  margin: 0;
-}
-
-fieldset {
-  margin: 0;
-  padding: 0;
-}
-
-legend {
-  padding: 0;
-}
-
-ol,
-ul,
-menu {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-/*
-Reset default styling for dialogs.
-*/
-dialog {
-  padding: 0;
-}
-
-/*
-Prevent resizing textareas horizontally by default.
-*/
-
-textarea {
-  resize: vertical;
-}
-
-/*
-1. Reset the default placeholder opacity in Firefox. (https://github.com/tailwindlabs/tailwindcss/issues/3300)
-2. Set the default placeholder color to the user's configured gray 400 color.
-*/
-
-input::-moz-placeholder, textarea::-moz-placeholder {
-  opacity: 1; /* 1 */
-  color: #9ca3af; /* 2 */
-}
-
-input::placeholder,
-textarea::placeholder {
-  opacity: 1; /* 1 */
-  color: #9ca3af; /* 2 */
-}
-
-/*
-Set the default cursor for buttons.
-*/
-
-button,
-[role="button"] {
-  cursor: pointer;
-}
-
-/*
-Make sure disabled buttons don't get the pointer cursor.
-*/
-:disabled {
-  cursor: default;
-}
-
-/*
-1. Make replaced elements `display: block` by default. (https://github.com/mozdevs/cssremedy/issues/14)
-2. Add `vertical-align: middle` to align replaced elements more sensibly by default. (https://github.com/jensimmons/cssremedy/issues/14#issuecomment-634934210)
-   This can trigger a poorly considered lint error in some tools but is included by design.
-*/
-
-img,
-svg,
-video,
-canvas,
-audio,
-iframe,
-embed,
-object {
-  display: block; /* 1 */
-  vertical-align: middle; /* 2 */
-}
-
-/*
-Constrain images and videos to the parent width and preserve their intrinsic aspect ratio. (https://github.com/mozdevs/cssremedy/issues/14)
-*/
-
-img,
-video {
-  max-width: 100%;
-  height: auto;
-}
-
-/* Make elements with the HTML hidden attribute stay hidden by default */
-[hidden]:where(:not([hidden="until-found"])) {
-  display: none;
-}
-  :root {
-    /* MODO CLARO: (Intacto, el que te gustó) */
-    --color-primary: #047857; 
-    --color-primary-hover: #065f46; 
-    --color-primary-soft: rgba(4, 120, 87, 0.08);
-    --color-primary-glow: rgba(4, 120, 87, 0.2);
-
-    --color-sidebar: rgba(255, 255, 255, 0.7);
-    --color-sidebar-text: #57534e;
-    --color-sidebar-active: rgba(4, 120, 87, 0.08);
-    --color-content-bg: #f1f3f2; 
-    --color-text-primary: #1c1917;
-    --color-text-secondary: #78716c;
-    --color-border-strong: rgba(0, 0, 0, 0.07);
-    --color-card: rgba(255, 255, 255, 0.6);
-    --color-card-hover: rgba(255, 255, 255, 0.8);
-    --color-input-bg: rgba(241, 243, 242, 0.8);
-    --color-glass-shine: rgba(255, 255, 255, 0.5);
-    --color-glass-highlight: rgba(0, 0, 0, 0.02);
-    --blur-amount: 24px;
-  }
-
-  .dark {
-    /* MODO OSCURO: Verde medio (Emerald 500). Ya no es neón, es sólido y elegante */
-    --color-primary: #10b981; 
-    --color-primary-hover: #059669; 
-    --color-primary-soft: rgba(16, 185, 129, 0.1);
-    --color-primary-glow: rgba(16, 185, 129, 0.15);
-
-    /* Fondos oscuros Slate */
-    --color-sidebar: rgba(15, 23, 30, 0.85); 
-    --color-sidebar-text: #94a3b8;
-    --color-sidebar-active: rgba(16, 185, 129, 0.08);
-    --color-content-bg: #0f1720; 
-    --color-text-primary: #f1f5f9;
-    --color-text-secondary: #64748b;
-    --color-border-strong: rgba(148, 163, 184, 0.08);
-    --color-card: rgba(30, 41, 55, 0.6); 
-    --color-card-hover: rgba(40, 55, 72, 0.7);
-    --color-input-bg: rgba(15, 23, 42, 0.6);
-    --color-glass-shine: rgba(148, 163, 184, 0.05);
-    --color-glass-highlight: rgba(0, 0, 0, 0.2);
-    --blur-amount: 30px;
-  }
-
-  body {
-  color: var(--color-text-primary);
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-    background-color: var(--color-content-bg);
-}
-
-  body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    z-index: -1;
-    background: 
-      radial-gradient(ellipse 50% 40% at 10% 10%, var(--color-primary-glow), transparent 70%),
-      radial-gradient(ellipse 40% 30% at 90% 90%, var(--color-primary-glow), transparent 70%);
-    pointer-events: none;
-    opacity: 0.4;
-  }
-.glass-sidebar {
-    background: var(--color-sidebar);
-    backdrop-filter: blur(var(--blur-amount)) saturate(150%);
-    -webkit-backdrop-filter: blur(var(--blur-amount)) saturate(150%);
-    border-right: 1px solid var(--color-border-strong);
-  }
-.glass-navbar {
-    background: var(--color-sidebar);
-    backdrop-filter: blur(var(--blur-amount)) saturate(150%);
-    -webkit-backdrop-filter: blur(var(--blur-amount)) saturate(150%);
-    border-bottom: 1px solid var(--color-border-strong);
-  }
-.card {
-  border-radius: 20px;
-  padding: 1.5rem;
-  transition-property: all;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  transition-duration: 300ms;
-    background: var(--color-card);
-    backdrop-filter: blur(var(--blur-amount)) saturate(180%);
-    -webkit-backdrop-filter: blur(var(--blur-amount)) saturate(180%);
-    border: 1px solid var(--color-border-strong);
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04), inset 0 1px 0 var(--color-glass-shine);
-}
-.card:hover {
-    background: var(--color-card-hover);
-    border-color: rgba(148, 163, 184, 0.15);
-  }
-.input-field {
-  width: 100%;
-  border-radius: 16px;
-  padding-left: 1rem;
-  padding-right: 1rem;
-  padding-top: 0.625rem;
-  padding-bottom: 0.625rem;
-  outline: 2px solid transparent;
-  outline-offset: 2px;
-  transition-property: all;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  transition-duration: 300ms;
-    background: var(--color-input-bg);
-    color: var(--color-text-primary);
-    border: 1px solid var(--color-border-strong);
-    backdrop-filter: blur(4px);
-}
-.input-field:focus {
-    border-color: var(--color-primary);
-    box-shadow: 0 0 0 3px var(--color-primary-soft);
-  }
-.btn-primary {
-  border-radius: 16px;
-  padding-left: 1rem;
-  padding-right: 1rem;
-  padding-top: 0.5rem;
-  padding-bottom: 0.5rem;
-  font-weight: 500;
-  transition-property: all;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  transition-duration: 200ms;
-    background: var(--color-primary);
-    color: white;
-    box-shadow: 0 4px 14px var(--color-primary-glow);
-}
-.btn-primary:hover { 
-    background: var(--color-primary-hover); 
-    transform: translateY(-1px);
-    box-shadow: 0 6px 20px var(--color-primary-glow);
-  }
-.btn-primary:active { transform: translateY(0); }
-.btn-secondary {
-  border-radius: 16px;
-  padding-left: 1rem;
-  padding-right: 1rem;
-  padding-top: 0.5rem;
-  padding-bottom: 0.5rem;
-  font-weight: 500;
-  transition-property: all;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  transition-duration: 200ms;
-    background: var(--color-card);
-    color: var(--color-text-primary);
-    border: 1px solid var(--color-border-strong);
-    backdrop-filter: blur(8px);
-    box-shadow: inset 0 1px 0 var(--color-glass-shine);
-}
-.btn-secondary:hover { 
-    background: var(--color-card-hover);
-    transform: translateY(-1px);
-  }
-.menu-item {
-  display: flex;
-  width: 100%;
-  align-items: center;
-  gap: 0.75rem;
-  border-radius: 20px;
-  padding-left: 0.75rem;
-  padding-right: 0.75rem;
-  padding-top: 0.5rem;
-  padding-bottom: 0.5rem;
-  text-align: left;
-  transition-property: all;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  transition-duration: 200ms;
-    color: var(--color-sidebar-text);
-}
-.menu-item:hover { background: var(--color-sidebar-active); color: var(--color-text-primary); }
-.menu-item.active { 
-    background: var(--color-primary-soft); 
-    color: var(--color-primary); 
-    font-weight: 500;
-  }
-.submenu-item {
-  display: flex;
-  width: 100%;
-  align-items: center;
-  gap: 0.625rem;
-  border-radius: 0.5rem;
-  padding-left: 0.75rem;
-  padding-right: 0.75rem;
-  padding-top: 0.375rem;
-  padding-bottom: 0.375rem;
-  text-align: left;
-  font-size: 13px;
-  transition-property: all;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  transition-duration: 200ms;
-    color: var(--color-sidebar-text);
-}
-.submenu-item:hover { background: var(--color-sidebar-active); color: var(--color-text-primary); }
-.submenu-item.active { 
-    background: var(--color-primary-soft); 
-    color: var(--color-primary); 
-    font-weight: 500;
-  }
-.glass-table {
-  overflow: hidden;
-  border-radius: 20px;
-    background: var(--color-card);
-    backdrop-filter: blur(var(--blur-amount));
-    border: 1px solid var(--color-border-strong);
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
-}
-.fixed {
-  position: fixed;
-}
-.absolute {
-  position: absolute;
-}
-.relative {
-  position: relative;
-}
-.inset-0 {
-  inset: 0px;
-}
-.left-3 {
-  left: 0.75rem;
-}
-.left-4 {
-  left: 1rem;
-}
-.top-1\/2 {
-  top: 50%;
-}
-.z-50 {
-  z-index: 50;
-}
-.mx-auto {
-  margin-left: auto;
-  margin-right: auto;
-}
-.my-2 {
-  margin-top: 0.5rem;
-  margin-bottom: 0.5rem;
-}
-.mb-1\.5 {
-  margin-bottom: 0.375rem;
-}
-.mb-2 {
-  margin-bottom: 0.5rem;
-}
-.mb-4 {
-  margin-bottom: 1rem;
-}
-.mb-6 {
-  margin-bottom: 1.5rem;
-}
-.ml-5 {
-  margin-left: 1.25rem;
-}
-.mr-2 {
-  margin-right: 0.5rem;
-}
-.mt-1 {
-  margin-top: 0.25rem;
-}
-.mt-1\.5 {
-  margin-top: 0.375rem;
-}
-.mt-auto {
-  margin-top: auto;
-}
-.block {
-  display: block;
-}
-.flex {
-  display: flex;
-}
-.inline-flex {
-  display: inline-flex;
-}
-.table {
-  display: table;
-}
-.grid {
-  display: grid;
-}
-.hidden {
-  display: none;
-}
-.h-14 {
-  height: 3.5rem;
-}
-.h-16 {
-  height: 4rem;
-}
-.h-4 {
-  height: 1rem;
-}
-.h-5 {
-  height: 1.25rem;
-}
-.h-6 {
-  height: 1.5rem;
-}
-.h-8 {
-  height: 2rem;
-}
-.h-9 {
-  height: 2.25rem;
-}
-.h-\[18px\] {
-  height: 18px;
-}
-.h-\[46px\] {
-  height: 46px;
-}
-.h-full {
-  height: 100%;
-}
-.h-px {
-  height: 1px;
-}
-.h-screen {
-  height: 100vh;
-}
-.max-h-\[90vh\] {
-  max-height: 90vh;
-}
-.min-h-\[120px\] {
-  min-height: 120px;
-}
-.w-4 {
-  width: 1rem;
-}
-.w-5 {
-  width: 1.25rem;
-}
-.w-6 {
-  width: 1.5rem;
-}
-.w-8 {
-  width: 2rem;
-}
-.w-9 {
-  width: 2.25rem;
-}
-.w-\[18px\] {
-  width: 18px;
-}
-.w-\[240px\] {
-  width: 240px;
-}
-.w-\[68px\] {
-  width: 68px;
-}
-.w-full {
-  width: 100%;
-}
-.min-w-0 {
-  min-width: 0px;
-}
-.max-w-2xl {
-  max-width: 42rem;
-}
-.max-w-lg {
-  max-width: 32rem;
-}
-.max-w-sm {
-  max-width: 24rem;
-}
-.max-w-xs {
-  max-width: 20rem;
-}
-.flex-1 {
-  flex: 1 1 0%;
-}
-.shrink-0 {
-  flex-shrink: 0;
-}
-.-translate-y-1\/2 {
-  --tw-translate-y: -50%;
-  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
-}
-.rotate-180 {
-  --tw-rotate: 180deg;
-  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
-}
-.rotate-90 {
-  --tw-rotate: 90deg;
-  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
-}
-.transform {
-  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
-}
-@keyframes spin {
-
-  to {
-    transform: rotate(360deg);
-  }
-}
-.animate-spin {
-  animation: spin 1s linear infinite;
-}
-.cursor-not-allowed {
-  cursor: not-allowed;
-}
-.cursor-pointer {
-  cursor: pointer;
-}
-.resize-y {
-  resize: vertical;
-}
-.appearance-none {
-  -webkit-appearance: none;
-     -moz-appearance: none;
-          appearance: none;
-}
-.grid-cols-1 {
-  grid-template-columns: repeat(1, minmax(0, 1fr));
-}
-.flex-col {
-  flex-direction: column;
-}
-.items-center {
-  align-items: center;
-}
-.justify-end {
-  justify-content: flex-end;
-}
-.justify-center {
-  justify-content: center;
-}
-.justify-between {
-  justify-content: space-between;
-}
-.gap-2 {
-  gap: 0.5rem;
-}
-.gap-3 {
-  gap: 0.75rem;
-}
-.gap-4 {
-  gap: 1rem;
-}
-.gap-6 {
-  gap: 1.5rem;
-}
-.gap-8 {
-  gap: 2rem;
-}
-.space-y-0\.5 > :not([hidden]) ~ :not([hidden]) {
-  --tw-space-y-reverse: 0;
-  margin-top: calc(0.125rem * calc(1 - var(--tw-space-y-reverse)));
-  margin-bottom: calc(0.125rem * var(--tw-space-y-reverse));
-}
-.space-y-1 > :not([hidden]) ~ :not([hidden]) {
-  --tw-space-y-reverse: 0;
-  margin-top: calc(0.25rem * calc(1 - var(--tw-space-y-reverse)));
-  margin-bottom: calc(0.25rem * var(--tw-space-y-reverse));
-}
-.space-y-5 > :not([hidden]) ~ :not([hidden]) {
-  --tw-space-y-reverse: 0;
-  margin-top: calc(1.25rem * calc(1 - var(--tw-space-y-reverse)));
-  margin-bottom: calc(1.25rem * var(--tw-space-y-reverse));
-}
-.space-y-6 > :not([hidden]) ~ :not([hidden]) {
-  --tw-space-y-reverse: 0;
-  margin-top: calc(1.5rem * calc(1 - var(--tw-space-y-reverse)));
-  margin-bottom: calc(1.5rem * var(--tw-space-y-reverse));
-}
-.overflow-auto {
-  overflow: auto;
-}
-.overflow-hidden {
-  overflow: hidden;
-}
-.overflow-x-auto {
-  overflow-x: auto;
-}
-.overflow-y-auto {
-  overflow-y: auto;
-}
-.rounded-\[16px\] {
-  border-radius: 16px;
-}
-.rounded-full {
-  border-radius: 9999px;
-}
-.rounded-lg {
-  border-radius: 0.5rem;
-}
-.rounded-xl {
-  border-radius: 20px;
-}
-.border {
-  border-width: 1px;
-}
-.border-b-2 {
-  border-bottom-width: 2px;
-}
-.border-t {
-  border-top-width: 1px;
-}
-.\!border-red-500 {
-  --tw-border-opacity: 1 !important;
-  border-color: rgb(239 68 68 / var(--tw-border-opacity, 1)) !important;
-}
-.border-indigo-500 {
-  --tw-border-opacity: 1;
-  border-color: rgb(99 102 241 / var(--tw-border-opacity, 1));
-}
-.border-red-500\/50 {
-  border-color: rgb(239 68 68 / 0.5);
-}
-.border-white {
-  --tw-border-opacity: 1;
-  border-color: rgb(255 255 255 / var(--tw-border-opacity, 1));
-}
-.bg-black\/60 {
-  background-color: rgb(0 0 0 / 0.6);
-}
-.p-0 {
-  padding: 0px;
-}
-.p-1\.5 {
-  padding: 0.375rem;
-}
-.p-2 {
-  padding: 0.5rem;
-}
-.p-4 {
-  padding: 1rem;
-}
-.p-5 {
-  padding: 1.25rem;
-}
-.p-6 {
-  padding: 1.5rem;
-}
-.p-8 {
-  padding: 2rem;
-}
-.\!px-3 {
-  padding-left: 0.75rem !important;
-  padding-right: 0.75rem !important;
-}
-.px-2 {
-  padding-left: 0.5rem;
-  padding-right: 0.5rem;
-}
-.px-3 {
-  padding-left: 0.75rem;
-  padding-right: 0.75rem;
-}
-.px-4 {
-  padding-left: 1rem;
-  padding-right: 1rem;
-}
-.px-5 {
-  padding-left: 1.25rem;
-  padding-right: 1.25rem;
-}
-.px-6 {
-  padding-left: 1.5rem;
-  padding-right: 1.5rem;
-}
-.py-1 {
-  padding-top: 0.25rem;
-  padding-bottom: 0.25rem;
-}
-.py-10 {
-  padding-top: 2.5rem;
-  padding-bottom: 2.5rem;
-}
-.py-2 {
-  padding-top: 0.5rem;
-  padding-bottom: 0.5rem;
-}
-.py-20 {
-  padding-top: 5rem;
-  padding-bottom: 5rem;
-}
-.py-3 {
-  padding-top: 0.75rem;
-  padding-bottom: 0.75rem;
-}
-.py-3\.5 {
-  padding-top: 0.875rem;
-  padding-bottom: 0.875rem;
-}
-.pl-10 {
-  padding-left: 2.5rem;
-}
-.pl-3 {
-  padding-left: 0.75rem;
-}
-.pl-8 {
-  padding-left: 2rem;
-}
-.pt-2 {
-  padding-top: 0.5rem;
-}
-.pt-6 {
-  padding-top: 1.5rem;
-}
-.text-left {
-  text-align: left;
-}
-.text-center {
-  text-align: center;
-}
-.text-right {
-  text-align: right;
-}
-.font-mono {
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-}
-.text-2xl {
-  font-size: 1.5rem;
-  line-height: 2rem;
-}
-.text-6xl {
-  font-size: 3.75rem;
-  line-height: 1;
-}
-.text-lg {
-  font-size: 1.125rem;
-  line-height: 1.75rem;
-}
-.text-sm {
-  font-size: 0.875rem;
-  line-height: 1.25rem;
-}
-.text-xs {
-  font-size: 0.75rem;
-  line-height: 1rem;
-}
-.font-bold {
-  font-weight: 700;
-}
-.font-medium {
-  font-weight: 500;
-}
-.font-semibold {
-  font-weight: 600;
-}
-.uppercase {
-  text-transform: uppercase;
-}
-.tracking-tight {
-  letter-spacing: -0.025em;
-}
-.text-\[var\(--color-text-secondary\)\] {
-  color: var(--color-text-secondary);
-}
-.text-\[var\(--text-primary\)\] {
-  color: var(--text-primary);
-}
-.text-\[var\(--text-secondary\)\] {
-  color: var(--text-secondary);
-}
-.text-current {
-  color: currentColor;
-}
-.text-red-400 {
-  --tw-text-opacity: 1;
-  color: rgb(248 113 113 / var(--tw-text-opacity, 1));
-}
-.text-red-500 {
-  --tw-text-opacity: 1;
-  color: rgb(239 68 68 / var(--tw-text-opacity, 1));
-}
-.text-red-600 {
-  --tw-text-opacity: 1;
-  color: rgb(220 38 38 / var(--tw-text-opacity, 1));
-}
-.text-white {
-  --tw-text-opacity: 1;
-  color: rgb(255 255 255 / var(--tw-text-opacity, 1));
-}
-.opacity-25 {
-  opacity: 0.25;
-}
-.opacity-50 {
-  opacity: 0.5;
-}
-.opacity-75 {
-  opacity: 0.75;
-}
-.ring-red-500\/20 {
-  --tw-ring-color: rgb(239 68 68 / 0.2);
-}
-.blur {
-  --tw-blur: blur(8px);
-  filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow);
-}
-.filter {
-  filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow);
-}
-.backdrop-blur-sm {
-  --tw-backdrop-blur: blur(4px);
-  backdrop-filter: var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);
-}
-.backdrop-filter {
-  backdrop-filter: var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);
-}
-.transition {
-  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  transition-duration: 150ms;
-}
-.transition-all {
-  transition-property: all;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  transition-duration: 150ms;
-}
-.transition-colors {
-  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  transition-duration: 150ms;
-}
-.transition-transform {
-  transition-property: transform;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  transition-duration: 150ms;
-}
-.duration-150 {
-  transition-duration: 150ms;
-}
-.duration-200 {
-  transition-duration: 200ms;
-}
-.duration-300 {
-  transition-duration: 300ms;
-}
-.hover\:bg-\[var\(--color-primary-soft\)\]:hover {
-  background-color: var(--color-primary-soft);
-}
-.hover\:bg-\[var\(--color-sidebar-active\)\]:hover {
-  background-color: var(--color-sidebar-active);
-}
-.hover\:text-\[var\(--color-text-primary\)\]:hover {
-  color: var(--color-text-primary);
-}
-.focus\:border-red-500:focus {
-  --tw-border-opacity: 1;
-  border-color: rgb(239 68 68 / var(--tw-border-opacity, 1));
-}
-.focus\:ring-red-500\/20:focus {
-  --tw-ring-color: rgb(239 68 68 / 0.2);
-}
-.disabled\:transform-none:disabled {
-  transform: none;
-}
-.disabled\:cursor-not-allowed:disabled {
-  cursor: not-allowed;
-}
-.disabled\:opacity-50:disabled {
-  opacity: 0.5;
-}
-.dark\:text-red-400:is(.dark *) {
-  --tw-text-opacity: 1;
-  color: rgb(248 113 113 / var(--tw-text-opacity, 1));
-}
-@media (min-width: 768px) {
-
-  .md\:col-span-2 {
-    grid-column: span 2 / span 2;
-  }
-
-  .md\:grid-cols-2 {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}</style><style type="text/css" data-vite-dev-id="/home/hugo/dev/go/faro/frontend/src/components/ui/AppModal.vue?vue&amp;type=style&amp;index=0&amp;scoped=b6ab6215&amp;lang.css">
-.modal-enter-active[data-v-b6ab6215],
-.modal-leave-active[data-v-b6ab6215] {
-  transition: all 0.25s ease-out;
-}
-.modal-enter-from[data-v-b6ab6215],
-.modal-leave-to[data-v-b6ab6215] {
-  opacity: 0;
-}
-.modal-enter-from .card[data-v-b6ab6215],
-.modal-leave-to .card[data-v-b6ab6215] {
-  transform: scale(0.95) translateY(10px);
-}
-</style><style type="text/css" data-vite-dev-id="/home/hugo/dev/go/faro/frontend/src/views/products/FormView.vue?vue&amp;type=style&amp;index=0&amp;scoped=0d3b7667&amp;lang.css">
-.fade-enter-active[data-v-0d3b7667],
-.fade-leave-active[data-v-0d3b7667] {
-  transition: opacity 0.3s ease, transform 0.3s ease;
-}
-.fade-enter-from[data-v-0d3b7667],
-.fade-leave-to[data-v-0d3b7667] {
-  opacity: 0;
-  transform: translateY(-10px);
-}
-select.input-field[data-v-0d3b7667] {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2364748b' stroke-width='2'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 0.75rem center;
-  background-size: 1.25rem;
-  padding-right: 2.5rem;
-}
-</style></head>
-  <body>
-    <div id="app" data-v-app=""><div class="flex h-screen overflow-hidden"><!-- Sidebar --><aside class="glass-sidebar flex flex-col transition-all duration-300 shrink-0 w-[240px]"><!-- Logo --><div class="flex items-center h-16 shrink-0 gap-3 px-5" style="border-bottom: 1px solid var(--color-border);"><div class="w-8 h-8 rounded-lg flex items-center justify-center shrink-0" style="background-color: var(--color-primary);"><svg class="w-4 h-4 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v2M12 6v2M9 22h6M10 22v-4h4v4M8 18h8M7 8l5-4 5 4M8 8c-2 3-2 6 0 10h8c2-4 2-7 0-10"></path></svg></div><span class="text-lg font-bold tracking-tight" style="color: var(--color-text-primary);"> Faro </span></div><!-- Navigation --><nav class="flex-1 overflow-y-auto py-3 px-2 space-y-1"><!-- Grupos con submenú --><div><button class="menu-item active" title=""><svg class="w-[18px] h-[18px] shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg><span class="text-sm font-medium flex-1">Inventario</span><svg class="w-4 h-4 shrink-0 transition-transform duration-200 rotate-90" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="color: var(--color-text-secondary);"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path></svg></button><!-- Submenú --><div class="mt-1 ml-5 pl-3 space-y-0.5" style="border-left: 1px solid var(--color-border);"><button class="submenu-item"><svg class="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"></rect><rect x="14" y="3" width="7" height="7" rx="1"></rect><rect x="3" y="14" width="7" height="7" rx="1"></rect><rect x="14" y="14" width="7" height="7" rx="1"></rect></svg><span>Categorías</span></button><button class="submenu-item active"><svg class="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg><span>Productos</span></button></div></div><div><button class="menu-item" title=""><svg class="w-[18px] h-[18px] shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg><span class="text-sm font-medium flex-1">Ventas</span><svg class="w-4 h-4 shrink-0 transition-transform duration-200 rotate-90" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="color: var(--color-text-secondary);"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path></svg></button><!-- Submenú --><div class="mt-1 ml-5 pl-3 space-y-0.5" style="border-left: 1px solid var(--color-border);"><button class="submenu-item"><svg class="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg><span>Punto de Venta</span></button><button class="submenu-item"><svg class="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg><span>Facturas</span></button></div></div><div><button class="menu-item" title=""><svg class="w-[18px] h-[18px] shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg><span class="text-sm font-medium flex-1">Reportes</span><svg class="w-4 h-4 shrink-0 transition-transform duration-200 rotate-90" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="color: var(--color-text-secondary);"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path></svg></button><!-- Submenú --><div class="mt-1 ml-5 pl-3 space-y-0.5" style="border-left: 1px solid var(--color-border);"><button class="submenu-item"><svg class="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg><span>Inventario</span></button><button class="submenu-item"><svg class="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg><span>Ventas</span></button></div></div><div class="my-2" style="border-top: 1px solid var(--color-border);"></div><!-- Items sin submenú --><button class="menu-item" title=""><svg class="w-[18px] h-[18px] shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg><span class="text-sm font-medium">Configuración</span></button></nav><!-- Botón colapsar --><div class="p-2 shrink-0" style="border-top: 1px solid var(--color-border);"><button class="menu-item justify-center"><svg class="w-4 h-4 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M11 19l-7-7 7-7m8 14l-7-7 7-7"></path></svg><span class="text-xs font-medium">Colapsar</span></button></div></aside><!-- Área principal --><div class="flex-1 flex flex-col overflow-hidden min-w-0"><!-- Navbar --><header class="glass-navbar flex items-center justify-between px-6 h-14 shrink-0"><div class="flex items-center gap-2 text-sm" style="color: var(--color-text-secondary);"><span class="font-medium" style="color: var(--color-text-primary);">Faro</span><span>/</span><span>Inventario</span><span>/</span><span style="color: var(--color-text-primary);">Productos List</span></div><div class="flex items-center gap-2"><button class="w-9 h-9 flex items-center justify-center rounded-xl transition-all duration-200 hover:bg-[var(--color-primary-soft)]" style="color: var(--color-text-secondary);"><svg class="w-[18px] h-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg></button><div class="w-9 h-9 flex items-center justify-center rounded-full text-sm font-bold text-white" style="background: var(--color-primary); box-shadow: 0 2px 12px var(--color-primary-glow);">H</div></div></header><!-- Contenido --><main class="flex-1 overflow-auto p-6" style="background-color: var(--color-bg-base);"><div class="space-y-6"><!-- Header --><div class="flex items-center justify-between"><div><h1 class="text-2xl font-bold" style="color: var(--color-text-primary);">Productos</h1><p class="text-sm mt-1" style="color: var(--color-text-secondary);">Gestiona el inventario de tu negocio</p></div><button type="button" class="inline-flex items-center justify-center font-medium transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none px-4 py-2 rounded-[16px] text-sm btn-primary"><!-- Spinner de carga --><!--v-if--><!-- Contenido --> + Nuevo Producto </button></div><!-- Tabla Glass --><div><!-- ESTÁNDAR FARO: Toda tabla tiene buscador --><div class="mb-4 flex justify-end"><div class="relative w-full max-w-xs"><!-- Icono Lupa --><svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="color: var(--color-text-secondary);"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg><input type="text" class="input-field pl-10 w-full" placeholder="Buscar..."></div></div><!-- Contenedor de la Tabla Glass --><div class="glass-table overflow-x-auto"><table class="w-full text-sm text-left"><thead class="text-xs uppercase" style="color: var(--color-text-secondary); background: var(--color-card-hover);"><tr><th class="px-5 py-3 font-medium">Nombre</th><th class="px-5 py-3 font-medium">Categoría</th><th class="px-5 py-3 font-medium">Precio</th><th class="px-5 py-3 font-medium">Stock</th><th class="px-5 py-3 font-medium">Estado</th><th class="px-5 py-3 font-medium text-right">Acciones</th></tr></thead><tbody><!-- Estado de Carga --><!-- Filas Normales (Iteramos las rows FILTRADAS) --><tr class="transition-colors duration-150 hover:bg-[var(--color-sidebar-active)]" style="border-top: 1px solid var(--color-border);"><td class="px-5 py-3.5" style="color: var(--color-text-primary);"><!-- Si la vista define un slot para esta columna (ej: #cell-price), lo usa. Si no, pone el texto plano -->teclaro</td><td class="px-5 py-3.5" style="color: var(--color-text-primary);"><!-- Si la vista define un slot para esta columna (ej: #cell-price), lo usa. Si no, pone el texto plano -->ELectronica</td><td class="px-5 py-3.5" style="color: var(--color-text-primary);"><!-- Si la vista define un slot para esta columna (ej: #cell-price), lo usa. Si no, pone el texto plano --><span class="font-mono">$ 100008.00</span></td><td class="px-5 py-3.5" style="color: var(--color-text-primary);"><!-- Si la vista define un slot para esta columna (ej: #cell-price), lo usa. Si no, pone el texto plano -->4</td><td class="px-5 py-3.5" style="color: var(--color-text-primary);"><!-- Si la vista define un slot para esta columna (ej: #cell-price), lo usa. Si no, pone el texto plano --><span class="px-3 py-1 rounded-full text-xs font-semibold" style="background: rgba(16, 185, 129, 0.15); color: var(--color-primary-dark);">Activo</span></td><td class="px-5 py-3.5 text-right"><div class="flex items-center justify-end gap-2"><button type="button" class="inline-flex items-center justify-center font-medium transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none p-2 rounded-xl hover:bg-[var(--color-sidebar-active)] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]"><!-- Spinner de carga --><!--v-if--><!-- Contenido --><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931z"></path></svg></button><button type="button" class="inline-flex items-center justify-center font-medium transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none p-2 rounded-xl hover:bg-[var(--color-sidebar-active)] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]"><!-- Spinner de carga --><!--v-if--><!-- Contenido --><svg class="w-4 h-4 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"></path></svg></button></div></td></tr></tbody></table></div></div><!-- Modal de Eliminar --><!--teleport start--><!--teleport end--></div></main></div></div></div>
-    <script type="module" src="/src/main.ts"></script>
-  
-<!--v-if--></body></html>
+    <title>Faro ERP - Sistema de Gestión</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+        :root {
+            --color-primary: #047857;
+            --color-primary-hover: #065f46;
+            --color-primary-soft: rgba(4, 120, 87, 0.08);
+            --color-primary-glow: rgba(4, 120, 87, 0.15);
+            --color-warning: #f59e0b;
+            --color-warning-soft: rgba(245, 158, 11, 0.12);
+            --color-danger: #ef4444;
+            --color-danger-soft: rgba(239, 68, 68, 0.12);
+            --color-info: #3b82f6;
+            --color-info-soft: rgba(59, 130, 246, 0.12);
+            --color-success: #10b981;
+            --color-success-soft: rgba(16, 185, 129, 0.12);
+            --color-sidebar: rgba(255, 255, 255, 0.75);
+            --color-sidebar-text: #57534e;
+            --color-sidebar-hover: rgba(4, 120, 87, 0.06);
+            --color-sidebar-active: rgba(4, 120, 87, 0.1);
+            --color-content-bg: #f8faf9;
+            --color-text-primary: #1c1917;
+            --color-text-secondary: #78716c;
+            --color-text-muted: #a8a29e;
+            --color-border: rgba(0, 0, 0, 0.06);
+            --color-border-strong: rgba(0, 0, 0, 0.1);
+            --color-card: rgba(255, 255, 255, 0.7);
+            --color-card-hover: rgba(255, 255, 255, 0.85);
+            --color-input: rgba(241, 243, 242, 0.8);
+            --color-input-focus: rgba(255, 255, 255, 0.9);
+            --blur-amount: 20px;
+            --radius-sm: 12px;
+            --radius-md: 16px;
+            --radius-lg: 20px;
+        }
+
+        .dark {
+            --color-primary: #10b981;
+            --color-primary-hover: #059669;
+            --color-primary-soft: rgba(16, 185, 129, 0.1);
+            --color-primary-glow: rgba(16, 185, 129, 0.2);
+            --color-warning: #fbbf24;
+            --color-warning-soft: rgba(251, 191, 36, 0.12);
+            --color-danger: #f87171;
+            --color-danger-soft: rgba(248, 113, 113, 0.12);
+            --color-info: #60a5fa;
+            --color-info-soft: rgba(96, 165, 250, 0.12);
+            --color-success: #34d399;
+            --color-success-soft: rgba(52, 211, 153, 0.12);
+            --color-sidebar: rgba(15, 23, 30, 0.85);
+            --color-sidebar-text: #94a3b8;
+            --color-sidebar-hover: rgba(16, 185, 129, 0.06);
+            --color-sidebar-active: rgba(16, 185, 129, 0.1);
+            --color-content-bg: #0f1720;
+            --color-text-primary: #f1f5f9;
+            --color-text-secondary: #64748b;
+            --color-text-muted: #475569;
+            --color-border: rgba(148, 163, 184, 0.08);
+            --color-border-strong: rgba(148, 163, 184, 0.15);
+            --color-card: rgba(30, 41, 55, 0.6);
+            --color-card-hover: rgba(40, 55, 72, 0.7);
+            --color-input: rgba(15, 23, 42, 0.6);
+            --color-input-focus: rgba(30, 41, 55, 0.8);
+            --blur-amount: 24px;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        * { transition: background-color 0.3s ease, border-color 0.3s ease, color 0.2s ease; }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background-color: var(--color-content-bg);
+            color: var(--color-text-primary);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            overflow: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            background: 
+                radial-gradient(ellipse 60% 50% at 15% 15%, var(--color-primary-glow), transparent 70%),
+                radial-gradient(ellipse 50% 40% at 85% 85%, var(--color-primary-glow), transparent 70%);
+            pointer-events: none;
+            opacity: 0.5;
+        }
+
+        .glass { background: var(--color-card); backdrop-filter: blur(var(--blur-amount)) saturate(150%); -webkit-backdrop-filter: blur(var(--blur-amount)) saturate(150%); border: 1px solid var(--color-border); }
+        .glass-sidebar { background: var(--color-sidebar); backdrop-filter: blur(var(--blur-amount)) saturate(180%); -webkit-backdrop-filter: blur(var(--blur-amount)) saturate(180%); border-right: 1px solid var(--color-border); }
+        .glass-navbar { background: var(--color-sidebar); backdrop-filter: blur(var(--blur-amount)) saturate(180%); -webkit-backdrop-filter: blur(var(--blur-amount)) saturate(180%); border-bottom: 1px solid var(--color-border); }
+
+        .glass-card {
+            background: var(--color-card); backdrop-filter: blur(var(--blur-amount)) saturate(150%);
+            border: 1px solid var(--color-border); border-radius: var(--radius-lg);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .glass-card:hover { background: var(--color-card-hover); transform: translateY(-2px); box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.08); }
+        .glass-card.no-hover:hover { transform: none; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04), inset 0 1px 0 rgba(255, 255, 255, 0.05); }
+
+        .glass-table { background: var(--color-card); backdrop-filter: blur(var(--blur-amount)); border: 1px solid var(--color-border); border-radius: var(--radius-lg); overflow: hidden; }
+
+        .input {
+            width: 100%; padding: 0.625rem 1rem; background: var(--color-input); color: var(--color-text-primary);
+            border: 1px solid var(--color-border); border-radius: var(--radius-md); backdrop-filter: blur(8px);
+            outline: none; transition: all 0.2s ease; font-family: inherit; font-size: 0.875rem;
+        }
+        .input:focus { background: var(--color-input-focus); border-color: var(--color-primary); box-shadow: 0 0 0 3px var(--color-primary-soft); }
+        .input::placeholder { color: var(--color-text-muted); }
+        select.input { cursor: pointer; appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+            background-repeat: no-repeat; background-position: right 0.75rem center; padding-right: 2.5rem;
+        }
+        textarea.input { resize: vertical; min-height: 80px; }
+
+        .btn {
+            display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
+            padding: 0.5rem 1rem; border-radius: var(--radius-md); font-weight: 500; font-size: 0.875rem;
+            cursor: pointer; transition: all 0.2s ease; border: none; outline: none; font-family: inherit; white-space: nowrap;
+        }
+        .btn-primary { background: var(--color-primary); color: white; box-shadow: 0 4px 14px var(--color-primary-glow); }
+        .btn-primary:hover:not(:disabled) { background: var(--color-primary-hover); transform: translateY(-1px); box-shadow: 0 6px 20px var(--color-primary-glow); }
+        .btn-primary:active:not(:disabled) { transform: translateY(0); }
+        .btn-secondary { background: var(--color-card); color: var(--color-text-primary); border: 1px solid var(--color-border-strong); }
+        .btn-secondary:hover { background: var(--color-card-hover); }
+        .btn-danger { background: var(--color-danger); color: white; }
+        .btn-danger:hover:not(:disabled) { filter: brightness(0.9); transform: translateY(-1px); }
+        .btn-ghost { background: transparent; color: var(--color-text-secondary); border: 1px solid var(--color-border); }
+        .btn-ghost:hover { background: var(--color-sidebar-hover); color: var(--color-text-primary); }
+        .btn-icon {
+            width: 2.25rem; height: 2.25rem; padding: 0; border-radius: var(--radius-md);
+            color: var(--color-text-secondary); background: none; border: none; cursor: pointer;
+            display: inline-flex; align-items: center; justify-content: center; transition: all 0.2s ease;
+        }
+        .btn-icon:hover { background: var(--color-sidebar-hover); color: var(--color-text-primary); }
+        .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+        .nav-item {
+            display: flex; align-items: center; gap: 0.75rem; padding: 0.5rem 0.75rem; border-radius: var(--radius-md);
+            color: var(--color-sidebar-text); cursor: pointer; transition: all 0.2s ease; width: 100%;
+            text-align: left; border: none; background: none; font-size: 0.875rem; font-family: inherit;
+        }
+        .nav-item:hover { background: var(--color-sidebar-hover); color: var(--color-text-primary); }
+        .nav-item.active { background: var(--color-sidebar-active); color: var(--color-primary); font-weight: 500; }
+        .nav-subitem { padding: 0.375rem 0.75rem; font-size: 0.8125rem; border-radius: var(--radius-sm); }
+        .nav-sub-subitem { padding: 0.25rem 0.625rem; font-size: 0.75rem; border-radius: 8px; margin-left: 0.5rem; }
+
+        .badge { display: inline-flex; align-items: center; padding: 0.25rem 0.75rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 600; }
+        .badge-primary { background: var(--color-primary-soft); color: var(--color-primary); }
+        .badge-warning { background: var(--color-warning-soft); color: var(--color-warning); }
+        .badge-danger { background: var(--color-danger-soft); color: var(--color-danger); }
+        .badge-info { background: var(--color-info-soft); color: var(--color-info); }
+        .badge-success { background: var(--color-success-soft); color: var(--color-success); }
+
+        .modal-overlay {
+            position: fixed; inset: 0; z-index: 100; display: flex; align-items: center; justify-content: center;
+            padding: 1rem; background: rgba(0, 0, 0, 0.4); backdrop-filter: blur(8px);
+            opacity: 0; visibility: hidden; transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+        .modal-overlay.active { opacity: 1; visibility: visible; }
+        .modal-content {
+            background: var(--color-card); backdrop-filter: blur(var(--blur-amount)) saturate(180%);
+            border: 1px solid var(--color-border); border-radius: var(--radius-lg);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2); max-width: 100%; max-height: 90vh;
+            overflow: hidden; transform: scale(0.95) translateY(10px);
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            display: flex; flex-direction: column;
+        }
+        .modal-overlay.active .modal-content { transform: scale(1) translateY(0); }
+        .modal-body { overflow-y: auto; flex: 1; }
+
+        .toast-container { position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: 200; display: flex; flex-direction: column; gap: 0.5rem; }
+        .toast {
+            background: var(--color-card); backdrop-filter: blur(var(--blur-amount)) saturate(180%);
+            border: 1px solid var(--color-border); border-radius: var(--radius-lg);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15); padding: 1rem 1.25rem;
+            display: flex; align-items: center; gap: 0.75rem;
+            transform: translateX(calc(100% + 2rem)); transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            min-width: 300px;
+        }
+        .toast.active { transform: translateX(0); }
+
+        .view { display: none; animation: fadeIn 0.3s ease; }
+        .view.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .table-row { transition: background 0.15s ease; }
+        .table-row:hover { background: var(--color-sidebar-hover); }
+
+        .checkbox {
+            width: 1.125rem; height: 1.125rem; border: 2px solid var(--color-border-strong); border-radius: 6px;
+            cursor: pointer; transition: all 0.2s ease; display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+        }
+        .checkbox:hover { border-color: var(--color-primary); }
+        .checkbox.checked { background: var(--color-primary); border-color: var(--color-primary); }
+        .checkbox.checked::after {
+            content: ''; width: 0.375rem; height: 0.625rem;
+            border: solid white; border-width: 0 2px 2px 0; transform: rotate(45deg); margin-bottom: 2px;
+        }
+
+        .page-btn {
+            min-width: 2rem; height: 2rem; display: flex; align-items: center; justify-content: center;
+            border-radius: var(--radius-sm); font-size: 0.875rem; font-weight: 500;
+            color: var(--color-text-secondary); cursor: pointer; transition: all 0.2s ease;
+            border: none; background: none; font-family: inherit;
+        }
+        .page-btn:hover:not(:disabled) { background: var(--color-primary-soft); color: var(--color-primary); }
+        .page-btn.active { background: var(--color-primary); color: white; }
+        .page-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+        .sortable { cursor: pointer; user-select: none; }
+        .sortable:hover { color: var(--color-primary); }
+        .sort-icon { display: inline-block; margin-left: 4px; opacity: 0.4; transition: opacity 0.2s; }
+        .sort-icon.active { opacity: 1; color: var(--color-primary); }
+
+        .form-group { display: flex; flex-direction: column; gap: 0.375rem; }
+        .form-label { font-size: 0.8125rem; font-weight: 500; color: var(--color-text-secondary); }
+
+        .tab-btn {
+            padding: 0.5rem 1rem; border-radius: var(--radius-sm); font-size: 0.875rem; font-weight: 500;
+            color: var(--color-text-secondary); cursor: pointer; border: none; background: none;
+            font-family: inherit; transition: all 0.2s ease;
+        }
+        .tab-btn:hover { color: var(--color-text-primary); background: var(--color-sidebar-hover); }
+        .tab-btn.active { background: var(--color-primary-soft); color: var(--color-primary); }
+
+        .empty-state { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 3rem 1rem; text-align: center; }
+
+        .progress-bar { height: 6px; border-radius: 3px; background: var(--color-border); overflow: hidden; }
+        .progress-bar-fill { height: 100%; border-radius: 3px; transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1); }
+
+        .avatar {
+            width: 2.25rem; height: 2.25rem; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 0.75rem; font-weight: 700; color: white; flex-shrink: 0;
+        }
+
+        .pagination-footer {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 0.75rem 1.25rem; border-top: 1px solid var(--color-border);
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                position: fixed; left: -100%; top: 0; bottom: 0; z-index: 50;
+                transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                width: 280px !important;
+            }
+            .sidebar.open { left: 0; }
+            .main-content { margin-left: 0 !important; }
+            .mobile-overlay {
+                position: fixed; inset: 0; z-index: 45;
+                background: rgba(0,0,0,0.5); backdrop-filter: blur(4px);
+                opacity: 0; visibility: hidden; transition: opacity 0.3s ease, visibility 0.3s ease;
+            }
+            .mobile-overlay.active { opacity: 1; visibility: visible; }
+            .sidebar-close-btn { display: flex !important; }
+        }
+
+        @media (min-width: 769px) {
+            .sidebar-close-btn { display: none !important; }
+            .mobile-overlay { display: none !important; }
+        }
+
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: var(--color-border-strong); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--color-text-muted); }
+    </style>
+</head>
+<body>
+    <div class="flex h-screen">
+        
+        <!-- Overlay móvil -->
+        <div id="mobile-overlay" class="mobile-overlay" onclick="closeSidebar()"></div>
+
+        <!-- SIDEBAR -->
+        <aside id="sidebar" class="sidebar glass-sidebar flex flex-col w-64 shrink-0">
+            <!-- Header del sidebar con botón cerrar en mobile -->
+            <div class="flex items-center justify-between px-5 h-16 border-b border-[var(--color-border)]">
+                <div class="flex items-center gap-3">
+                    <div class="w-9 h-9 rounded-xl flex items-center justify-center" style="background: var(--color-primary);">
+                        <svg class="w-5 h-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                        </svg>
+                    </div>
+                    <span class="text-lg font-bold" style="color: var(--color-text-primary);">Faro ERP</span>
+                </div>
+                <!-- Botón X para cerrar sidebar en móvil -->
+                <button class="sidebar-close-btn btn-icon" onclick="closeSidebar()" aria-label="Cerrar menú">
+                    <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M18 6L6 18M6 6l12 12"/>
+                    </svg>
+                </button>
+            </div>
+
+            <nav class="flex-1 overflow-y-auto py-3 px-3 space-y-1">
+                <button class="nav-item" data-view="dashboard" onclick="showView('dashboard')">
+                    <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>
+                    <span>Dashboard</span>
+                </button>
+
+                <div>
+                    <button class="nav-item" data-view="inventario" onclick="toggleMenu('inv-menu')">
+                        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
+                        <span class="flex-1">Inventario</span>
+                        <svg id="inv-arrow" class="w-4 h-4 transition-transform duration-200" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5l7 7-7 7"/></svg>
+                    </button>
+                    <div id="inv-menu" class="hidden ml-5 pl-3 mt-1 space-y-0.5 border-l border-[var(--color-border)]">
+                        <button class="nav-item nav-subitem" onclick="toggleMenu('prod-menu')">
+                            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+                            <span class="flex-1">Productos</span>
+                            <svg id="prod-arrow" class="w-3 h-3 transition-transform duration-200" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5l7 7-7 7"/></svg>
+                        </button>
+                        <div id="prod-menu" class="hidden ml-4 mt-1 space-y-0.5">
+                            <button class="nav-item nav-sub-subitem" onclick="filterBySubcategory('')">Todos</button>
+                            <button class="nav-item nav-sub-subitem" onclick="filterBySubcategory('Electrónica')">Electrónica</button>
+                            <button class="nav-item nav-sub-subitem" onclick="filterBySubcategory('Accesorios')">Accesorios</button>
+                            <button class="nav-item nav-sub-subitem" onclick="filterBySubcategory('Mobiliario')">Mobiliario</button>
+                        </div>
+                        <button class="nav-item nav-subitem" data-view="categorias" onclick="showView('categorias')">
+                            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+                            <span>Categorías</span>
+                        </button>
+                        <button class="nav-item nav-subitem" data-view="marcas" onclick="showView('marcas')">
+                            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.585l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/></svg>
+                            <span>Marcas</span>
+                        </button>
+                    </div>
+                </div>
+
+                <button class="nav-item" data-view="ventas" onclick="showView('ventas')">
+                    <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/></svg>
+                    <span>Ventas</span>
+                </button>
+
+                <button class="nav-item" data-view="clientes" onclick="showView('clientes')">
+                    <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+                    <span>Clientes</span>
+                </button>
+
+                <button class="nav-item" data-view="reportes" onclick="showView('reportes')">
+                    <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+                    <span>Reportes</span>
+                </button>
+
+                <div class="my-2 border-t border-[var(--color-border)]"></div>
+
+                <button class="nav-item" data-view="configuracion" onclick="showView('configuracion')">
+                    <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+                    <span>Configuración</span>
+                </button>
+            </nav>
+
+            <div class="p-3 border-t border-[var(--color-border)]">
+                <div class="flex items-center gap-3 p-2 rounded-xl" style="background: var(--color-primary-soft);">
+                    <div class="w-9 h-9 rounded-full flex items-center justify-center text-sm font-bold text-white" style="background: var(--color-primary);">JD</div>
+                    <div class="flex-1 min-w-0">
+                        <p class="text-sm font-medium truncate" style="color: var(--color-text-primary);">Juan Demo</p>
+                        <p class="text-xs truncate" style="color: var(--color-text-secondary);">Administrador</p>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- CONTENIDO PRINCIPAL -->
+        <div class="main-content flex-1 flex flex-col overflow-hidden">
+            
+            <header class="glass-navbar flex items-center justify-between px-6 h-16 shrink-0">
+                <div class="flex items-center gap-4">
+                    <button id="menu-toggle" class="btn-icon md:hidden" onclick="toggleSidebar()">
+                        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+                    </button>
+                    <div class="flex items-center gap-2 text-sm">
+                        <span class="font-medium" style="color: var(--color-text-primary);">Faro</span>
+                        <span style="color: var(--color-text-muted);">/</span>
+                        <span id="breadcrumb-section" style="color: var(--color-text-secondary);">Inventario</span>
+                        <span style="color: var(--color-text-muted);">/</span>
+                        <span id="breadcrumb-page" style="color: var(--color-text-primary);">Productos</span>
+                    </div>
+                </div>
+                <div class="flex items-center gap-2">
+                    <button class="btn-icon relative" onclick="showToast('No hay notificaciones nuevas', 'info')">
+                        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+                        <span class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full" style="background: var(--color-danger);"></span>
+                    </button>
+                    <button id="theme-toggle" class="btn-icon" onclick="toggleTheme()">
+                        <svg id="icon-sun" class="w-5 h-5 hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+                        <svg id="icon-moon" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+                    </button>
+                </div>
+            </header>
+
+            <main class="flex-1 overflow-y-auto p-6">
+                
+                <!-- ==================== DASHBOARD ==================== -->
+                <div id="view-dashboard" class="view">
+                    <div class="max-w-7xl mx-auto space-y-6">
+                        <div>
+                            <h1 class="text-2xl font-bold" style="color: var(--color-text-primary);">Dashboard</h1>
+                            <p class="text-sm mt-1" style="color: var(--color-text-secondary);">Resumen general del sistema</p>
+                        </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                            <div class="glass-card p-5">
+                                <div class="flex items-center justify-between mb-3">
+                                    <div class="w-11 h-11 rounded-xl flex items-center justify-center" style="background: var(--color-primary-soft); color: var(--color-primary);"><svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div>
+                                    <span class="badge badge-primary">+12.5%</span>
+                                </div>
+                                <p class="text-xs font-medium uppercase tracking-wider mb-1" style="color: var(--color-text-secondary);">Ventas Hoy</p>
+                                <p class="text-2xl font-bold" style="color: var(--color-text-primary);">$2,450,000</p>
+                            </div>
+                            <div class="glass-card p-5">
+                                <div class="flex items-center justify-between mb-3">
+                                    <div class="w-11 h-11 rounded-xl flex items-center justify-center" style="background: var(--color-info-soft); color: var(--color-info);"><svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg></div>
+                                    <span class="badge badge-info">+8.2%</span>
+                                </div>
+                                <p class="text-xs font-medium uppercase tracking-wider mb-1" style="color: var(--color-text-secondary);">Facturas</p>
+                                <p class="text-2xl font-bold" style="color: var(--color-text-primary);">47</p>
+                            </div>
+                            <div class="glass-card p-5">
+                                <div class="flex items-center justify-between mb-3">
+                                    <div class="w-11 h-11 rounded-xl flex items-center justify-center" style="background: var(--color-warning-soft); color: var(--color-warning);"><svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg></div>
+                                    <span class="badge badge-warning">12</span>
+                                </div>
+                                <p class="text-xs font-medium uppercase tracking-wider mb-1" style="color: var(--color-text-secondary);">Stock Bajo</p>
+                                <p class="text-2xl font-bold" style="color: var(--color-text-primary);">12</p>
+                            </div>
+                            <div class="glass-card p-5">
+                                <div class="flex items-center justify-between mb-3">
+                                    <div class="w-11 h-11 rounded-xl flex items-center justify-center" style="background: var(--color-danger-soft); color: var(--color-danger);"><svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg></div>
+                                </div>
+                                <p class="text-xs font-medium uppercase tracking-wider mb-1" style="color: var(--color-text-secondary);">Alertas</p>
+                                <p class="text-2xl font-bold" style="color: var(--color-text-primary);">3</p>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+                            <div class="lg:col-span-2 glass-card no-hover p-6">
+                                <div class="flex items-center justify-between mb-6">
+                                    <div><h2 class="text-lg font-bold" style="color: var(--color-text-primary);">Ventas de la Semana</h2><p class="text-xs mt-1" style="color: var(--color-text-secondary);">Últimos 7 días</p></div>
+                                    <span class="badge badge-primary">Total: $15.8M</span>
+                                </div>
+                                <div class="flex items-end justify-between gap-3 h-48">
+                                    <div class="flex-1 flex flex-col items-center gap-2"><div class="w-full rounded-t-lg" style="height: 60%; background: var(--color-primary);"></div><span class="text-xs" style="color: var(--color-text-secondary);">Lun</span></div>
+                                    <div class="flex-1 flex flex-col items-center gap-2"><div class="w-full rounded-t-lg" style="height: 80%; background: var(--color-primary);"></div><span class="text-xs" style="color: var(--color-text-secondary);">Mar</span></div>
+                                    <div class="flex-1 flex flex-col items-center gap-2"><div class="w-full rounded-t-lg" style="height: 45%; background: var(--color-primary);"></div><span class="text-xs" style="color: var(--color-text-secondary);">Mié</span></div>
+                                    <div class="flex-1 flex flex-col items-center gap-2"><div class="w-full rounded-t-lg" style="height: 90%; background: var(--color-primary);"></div><span class="text-xs" style="color: var(--color-text-secondary);">Jue</span></div>
+                                    <div class="flex-1 flex flex-col items-center gap-2"><div class="w-full rounded-t-lg" style="height: 70%; background: var(--color-primary);"></div><span class="text-xs" style="color: var(--color-text-secondary);">Vie</span></div>
+                                    <div class="flex-1 flex flex-col items-center gap-2"><div class="w-full rounded-t-lg" style="height: 95%; background: var(--color-primary);"></div><span class="text-xs" style="color: var(--color-text-secondary);">Sáb</span></div>
+                                    <div class="flex-1 flex flex-col items-center gap-2"><div class="w-full rounded-t-lg" style="height: 50%; background: var(--color-primary); opacity: 0.6;"></div><span class="text-xs" style="color: var(--color-text-secondary);">Dom</span></div>
+                                </div>
+                            </div>
+                            <div class="glass-card no-hover p-6">
+                                <h2 class="text-lg font-bold mb-4" style="color: var(--color-text-primary);">Productos Top</h2>
+                                <div class="space-y-4">
+                                    <div><div class="flex justify-between text-sm mb-1"><span style="color: var(--color-text-primary);">Monitor 27"</span><span style="color: var(--color-text-secondary);">85%</span></div><div class="progress-bar"><div class="progress-bar-fill" style="width: 85%; background: var(--color-primary);"></div></div></div>
+                                    <div><div class="flex justify-between text-sm mb-1"><span style="color: var(--color-text-primary);">Teclado Mecánico</span><span style="color: var(--color-text-secondary);">72%</span></div><div class="progress-bar"><div class="progress-bar-fill" style="width: 72%; background: var(--color-info);"></div></div></div>
+                                    <div><div class="flex justify-between text-sm mb-1"><span style="color: var(--color-text-primary);">Mouse Ergonómico</span><span style="color: var(--color-text-secondary);">65%</span></div><div class="progress-bar"><div class="progress-bar-fill" style="width: 65%; background: var(--color-warning);"></div></div></div>
+                                    <div><div class="flex justify-between text-sm mb-1"><span style="color: var(--color-text-primary);">Silla Ejecutiva</span><span style="color: var(--color-text-secondary);">58%</span></div><div class="progress-bar"><div class="progress-bar-fill" style="width: 58%; background: var(--color-success);"></div></div></div>
+                                    <div><div class="flex justify-between text-sm mb-1"><span style="color: var(--color-text-primary);">Webcam HD</span><span style="color: var(--color-text-secondary);">42%</span></div><div class="progress-bar"><div class="progress-bar-fill" style="width: 42%; background: var(--color-danger);"></div></div></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="glass-table no-hover">
+                            <div class="px-5 py-4 border-b border-[var(--color-border)]"><h2 class="text-lg font-bold" style="color: var(--color-text-primary);">Últimas Ventas</h2></div>
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-sm">
+                                    <thead style="background: var(--color-card-hover);"><tr>
+                                        <th class="px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider" style="color: var(--color-text-secondary);">Factura</th>
+                                        <th class="px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider" style="color: var(--color-text-secondary);">Cliente</th>
+                                        <th class="px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider" style="color: var(--color-text-secondary);">Total</th>
+                                        <th class="px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider" style="color: var(--color-text-secondary);">Estado</th>
+                                        <th class="px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider" style="color: var(--color-text-secondary);">Fecha</th>
+                                    </tr></thead>
+                                    <tbody>
+                                        <tr class="table-row border-t border-[var(--color-border)]"><td class="px-5 py-3 font-medium" style="color: var(--color-text-primary);">FAC-0012</td><td class="px-5 py-3" style="color: var(--color-text-secondary);">María López</td><td class="px-5 py-3 font-medium" style="color: var(--color-text-primary);">$850,000</td><td class="px-5 py-3"><span class="badge badge-success">Pagada</span></td><td class="px-5 py-3" style="color: var(--color-text-muted);">Hoy, 14:32</td></tr>
+                                        <tr class="table-row border-t border-[var(--color-border)]"><td class="px-5 py-3 font-medium" style="color: var(--color-text-primary);">FAC-0011</td><td class="px-5 py-3" style="color: var(--color-text-secondary);">Carlos Ruiz</td><td class="px-5 py-3 font-medium" style="color: var(--color-text-primary);">$1,200,000</td><td class="px-5 py-3"><span class="badge badge-warning">Pendiente</span></td><td class="px-5 py-3" style="color: var(--color-text-muted);">Hoy, 11:15</td></tr>
+                                        <tr class="table-row border-t border-[var(--color-border)]"><td class="px-5 py-3 font-medium" style="color: var(--color-text-primary);">FAC-0010</td><td class="px-5 py-3" style="color: var(--color-text-secondary);">Ana García</td><td class="px-5 py-3 font-medium" style="color: var(--color-text-primary);">$430,000</td><td class="px-5 py-3"><span class="badge badge-success">Pagada</span></td><td class="px-5 py-3" style="color: var(--color-text-muted);">Ayer, 16:48</td></tr>
+                                        <tr class="table-row border-t border-[var(--color-border)]"><td class="px-5 py-3 font-medium" style="color: var(--color-text-primary);">FAC-0009</td><td class="px-5 py-3" style="color: var(--color-text-secondary);">Pedro Martín</td><td class="px-5 py-3 font-medium" style="color: var(--color-text-primary);">$2,100,000</td><td class="px-5 py-3"><span class="badge badge-danger">Anulada</span></td><td class="px-5 py-3" style="color: var(--color-text-muted);">Ayer, 09:22</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ==================== PRODUCTOS ==================== -->
+                <div id="view-productos" class="view active">
+                    <div class="max-w-7xl mx-auto space-y-6">
+                        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                            <div>
+                                <h1 class="text-2xl font-bold" style="color: var(--color-text-primary);">Productos</h1>
+                                <p class="text-sm mt-1" style="color: var(--color-text-secondary);">Gestiona tu inventario de productos</p>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <button class="btn btn-ghost" onclick="exportProductsCSV()" title="Exportar CSV">
+                                    <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+                                    CSV
+                                </button>
+                                <button class="btn btn-danger" id="btn-delete-selected" style="display:none;" onclick="deleteSelected()">
+                                    <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg>
+                                    Eliminar (<span id="selected-count">0</span>)
+                                </button>
+                                <button class="btn btn-primary" onclick="openProductModal()">
+                                    <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 4v16m8-8H4"/></svg>
+                                    Nuevo Producto
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                            <div class="glass-card no-hover p-4">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 rounded-xl flex items-center justify-center" style="background: var(--color-primary-soft); color: var(--color-primary);"><svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg></div>
+                                    <div><p class="text-xs" style="color: var(--color-text-secondary);">Total</p><p class="text-xl font-bold" style="color: var(--color-text-primary);" id="stat-total">0</p></div>
+                                </div>
+                            </div>
+                            <div class="glass-card no-hover p-4">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 rounded-xl flex items-center justify-center" style="background: var(--color-success-soft); color: var(--color-success);"><svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div>
+                                    <div><p class="text-xs" style="color: var(--color-text-secondary);">Activos</p><p class="text-xl font-bold" style="color: var(--color-text-primary);" id="stat-active">0</p></div>
+                                </div>
+                            </div>
+                            <div class="glass-card no-hover p-4">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 rounded-xl flex items-center justify-center" style="background: var(--color-warning-soft); color: var(--color-warning);"><svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg></div>
+                                    <div><p class="text-xs" style="color: var(--color-text-secondary);">Stock Bajo</p><p class="text-xl font-bold" style="color: var(--color-text-primary);" id="stat-low">0</p></div>
+                                </div>
+                            </div>
+                            <div class="glass-card no-hover p-4">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 rounded-xl flex items-center justify-center" style="background: var(--color-info-soft); color: var(--color-info);"><svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div>
+                                    <div><p class="text-xs" style="color: var(--color-text-secondary);">Valor Total</p><p class="text-xl font-bold" style="color: var(--color-text-primary);" id="stat-value">$0</p></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="glass-card no-hover p-4">
+                            <div class="flex flex-col md:flex-row gap-3">
+                                <div class="flex-1 relative">
+                                    <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4" style="color: var(--color-text-muted);" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                                    <input type="text" id="search-products" class="input pl-10" placeholder="Buscar por nombre, SKU o marca..." oninput="filterProducts()">
+                                </div>
+                                <select id="filter-category" class="input md:w-48" onchange="filterProducts()">
+                                    <option value="">Todas las categorías</option>
+                                    <option value="Electrónica">Electrónica</option>
+                                    <option value="Accesorios">Accesorios</option>
+                                    <option value="Mobiliario">Mobiliario</option>
+                                </select>
+                                <select id="filter-status" class="input md:w-48" onchange="filterProducts()">
+                                    <option value="">Todos los estados</option>
+                                    <option value="active">Activos</option>
+                                    <option value="low">Stock Bajo</option>
+                                    <option value="inactive">Inactivos</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="glass-table no-hover" id="products-table-wrapper">
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-sm">
+                                    <thead style="background: var(--color-card-hover);">
+                                        <tr>
+                                            <th class="px-5 py-3 text-left"><div class="checkbox" id="select-all" onclick="toggleSelectAll()"></div></th>
+                                            <th class="px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider sortable" style="color: var(--color-text-secondary);" onclick="sortProducts('name')">Producto <span class="sort-icon" id="sort-name">↕</span></th>
+                                            <th class="px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider sortable" style="color: var(--color-text-secondary);" onclick="sortProducts('sku')">SKU <span class="sort-icon" id="sort-sku">↕</span></th>
+                                            <th class="px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider" style="color: var(--color-text-secondary);">Categoría</th>
+                                            <th class="px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider sortable" style="color: var(--color-text-secondary);" onclick="sortProducts('price')">Precio <span class="sort-icon" id="sort-price">↕</span></th>
+                                            <th class="px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider sortable" style="color: var(--color-text-secondary);" onclick="sortProducts('stock')">Stock <span class="sort-icon" id="sort-stock">↕</span></th>
+                                            <th class="px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider" style="color: var(--color-text-secondary);">Estado</th>
+                                            <th class="px-5 py-3 text-right text-xs font-semibold uppercase tracking-wider" style="color: var(--color-text-secondary);">Acciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="products-tbody"></tbody>
+                                </table>
+                            </div>
+                            <div id="products-empty" class="empty-state hidden">
+                                <svg class="w-16 h-16 mb-3" style="color: var(--color-text-muted);" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
+                                <p class="font-medium" style="color: var(--color-text-secondary);">No se encontraron productos</p>
+                                <p class="text-sm mt-1" style="color: var(--color-text-muted);">Intenta ajustar los filtros de búsqueda</p>
+                            </div>
+                            <div class="pagination-footer" id="products-pagination"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ==================== CATEGORÍAS ==================== -->
+                <div id="view-categorias" class="view">
+                    <div class="max-w-7xl mx-auto space-y-6">
+                        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                            <div><h1 class="text-2xl font-bold" style="color: var(--color-text-primary);">Categorías</h1><p class="text-sm mt-1" style="color: var(--color-text-secondary);">Organiza tus productos por categorías</p></div>
+                            <button class="btn btn-primary" onclick="openCategoryModal()"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 4v16m8-8H4"/></svg>Nueva Categoría</button>
+                        </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4" id="categories-grid"></div>
+                    </div>
+                </div>
+
+                <!-- ==================== MARCAS ==================== -->
+                <div id="view-marcas" class="view">
+                    <div class="max-w-7xl mx-auto space-y-6">
+                        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                            <div><h1 class="text-2xl font-bold" style="color: var(--color-text-primary);">Marcas</h1><p class="text-sm mt-1" style="color: var(--color-text-secondary);">Gestiona las marcas de tus productos</p></div>
+                            <button class="btn btn-primary" onclick="openBrandModal()"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 4v16m8-8H4"/></svg>Nueva Marca</button>
+                        </div>
+                        <div class="glass-table no-hover" id="brands-table-wrapper">
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-sm">
+                                    <thead style="background: var(--color-card-hover);"><tr>
+                                        <th class="px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider sortable" style="color: var(--color-text-secondary);" onclick="sortBrands('name')">Marca <span class="sort-icon" id="sort-brand-name">↕</span></th>
+                                        <th class="px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider sortable" style="color: var(--color-text-secondary);" onclick="sortBrands('count')">Productos <span class="sort-icon" id="sort-brand-count">↕</span></th>
+                                        <th class="px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider sortable" style="color: var(--color-text-secondary);" onclick="sortBrands('country')">País <span class="sort-icon" id="sort-brand-country">↕</span></th>
+                                        <th class="px-5 py-3 text-right text-xs font-semibold uppercase tracking-wider" style="color: var(--color-text-secondary);">Acciones</th>
+                                    </tr></thead>
+                                    <tbody id="brands-tbody"></tbody>
+                                </table>
+                            </div>
+                            <div class="pagination-footer" id="brands-pagination"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ==================== VENTAS ==================== -->
+                <div id="view-ventas" class="view">
+                    <div class="max-w-7xl mx-auto space-y-6">
+                        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                            <div><h1 class="text-2xl font-bold" style="color: var(--color-text-primary);">Ventas</h1><p class="text-sm mt-1" style="color: var(--color-text-secondary);">Historial y gestión de ventas</p></div>
+                            <button class="btn btn-primary" onclick="openSaleModal()"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 4v16m8-8H4"/></svg>Nueva Venta</button>
+                        </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                            <div class="glass-card no-hover p-5"><p class="text-xs font-medium uppercase tracking-wider mb-1" style="color: var(--color-text-secondary);">Ventas del Mes</p><p class="text-2xl font-bold" style="color: var(--color-text-primary);">$45,200,000</p><span class="badge badge-success mt-2">+18.3% vs mes anterior</span></div>
+                            <div class="glass-card no-hover p-5"><p class="text-xs font-medium uppercase tracking-wider mb-1" style="color: var(--color-text-secondary);">Ticket Promedio</p><p class="text-2xl font-bold" style="color: var(--color-text-primary);">$580,000</p><span class="badge badge-info mt-2" id="sales-count-badge">0 ventas totales</span></div>
+                            <div class="glass-card no-hover p-5"><p class="text-xs font-medium uppercase tracking-wider mb-1" style="color: var(--color-text-secondary);">Devoluciones</p><p class="text-2xl font-bold" style="color: var(--color-text-primary);">3</p><span class="badge badge-danger mt-2">$1,250,000</span></div>
+                        </div>
+                        <div class="glass-card no-hover p-4">
+                            <div class="flex flex-col md:flex-row gap-3">
+                                <div class="flex-1 relative">
+                                    <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4" style="color: var(--color-text-muted);" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                                    <input type="text" id="search-sales" class="input pl-10" placeholder="Buscar por factura o cliente..." oninput="renderSales()">
+                                </div>
+                                <select id="filter-sale-status" class="input md:w-48" onchange="renderSales()">
+                                    <option value="">Todos los estados</option>
+                                    <option value="Pagada">Pagada</option>
+                                    <option value="Pendiente">Pendiente</option>
+                                    <option value="Anulada">Anulada</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="glass-table no-hover" id="sales-table-wrapper">
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-sm">
+                                    <thead style="background: var(--color-card-hover);"><tr>
+                                        <th class="px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider sortable" style="color: var(--color-text-secondary);" onclick="sortSales('invoice')">Factura <span class="sort-icon" id="sort-sale-invoice">↕</span></th>
+                                        <th class="px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider sortable" style="color: var(--color-text-secondary);" onclick="sortSales('client')">Cliente <span class="sort-icon" id="sort-sale-client">↕</span></th>
+                                        <th class="px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider" style="color: var(--color-text-secondary);">Items</th>
+                                        <th class="px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider sortable" style="color: var(--color-text-secondary);" onclick="sortSales('total')">Total <span class="sort-icon" id="sort-sale-total">↕</span></th>
+                                        <th class="px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider" style="color: var(--color-text-secondary);">Estado</th>
+                                        <th class="px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider sortable" style="color: var(--color-text-secondary);" onclick="sortSales('date')">Fecha <span class="sort-icon" id="sort-sale-date">↕</span></th>
+                                        <th class="px-5 py-3 text-right text-xs font-semibold uppercase tracking-wider" style="color: var(--color-text-secondary);">Acciones</th>
+                                    </tr></thead>
+                                    <tbody id="sales-tbody"></tbody>
+                                </table>
+                            </div>
+                            <div id="sales-empty" class="empty-state hidden">
+                                <svg class="w-16 h-16 mb-3" style="color: var(--color-text-muted);" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/></svg>
+                                <p class="font-medium" style="color: var(--color-text-secondary);">No se encontraron ventas</p>
+                            </div>
+                            <div class="pagination-footer" id="sales-pagination"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ==================== CLIENTES ==================== -->
+                <div id="view-clientes" class="view">
+                    <div class="max-w-7xl mx-auto space-y-6">
+                        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                            <div><h1 class="text-2xl font-bold" style="color: var(--color-text-primary);">Clientes</h1><p class="text-sm mt-1" style="color: var(--color-text-secondary);">Base de datos de clientes</p></div>
+                            <button class="btn btn-primary" onclick="openClientModal()"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 4v16m8-8H4"/></svg>Nuevo Cliente</button>
+                        </div>
+                        <div class="glass-card no-hover p-4">
+                            <div class="flex-1 relative">
+                                <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4" style="color: var(--color-text-muted);" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                                <input type="text" id="search-clients" class="input pl-10" placeholder="Buscar por nombre, email o documento..." oninput="renderClients()">
+                            </div>
+                        </div>
+                        <div class="glass-table no-hover" id="clients-table-wrapper">
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-sm">
+                                    <thead style="background: var(--color-card-hover);"><tr>
+                                        <th class="px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider sortable" style="color: var(--color-text-secondary);" onclick="sortClients('name')">Cliente <span class="sort-icon" id="sort-client-name">↕</span></th>
+                                        <th class="px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider" style="color: var(--color-text-secondary);">Documento</th>
+                                        <th class="px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider" style="color: var(--color-text-secondary);">Email</th>
+                                        <th class="px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider" style="color: var(--color-text-secondary);">Teléfono</th>
+                                        <th class="px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider sortable" style="color: var(--color-text-secondary);" onclick="sortClients('purchases')">Compras <span class="sort-icon" id="sort-client-purchases">↕</span></th>
+                                        <th class="px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider sortable" style="color: var(--color-text-secondary);" onclick="sortClients('total')">Total <span class="sort-icon" id="sort-client-total">↕</span></th>
+                                        <th class="px-5 py-3 text-right text-xs font-semibold uppercase tracking-wider" style="color: var(--color-text-secondary);">Acciones</th>
+                                    </tr></thead>
+                                    <tbody id="clients-tbody"></tbody>
+                                </table>
+                            </div>
+                            <div id="clients-empty" class="empty-state hidden">
+                                <svg class="w-16 h-16 mb-3" style="color: var(--color-text-muted);" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+                                <p class="font-medium" style="color: var(--color-text-secondary);">No se encontraron clientes</p>
+                            </div>
+                            <div class="pagination-footer" id="clients-pagination"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ==================== REPORTES ==================== -->
+                <div id="view-reportes" class="view">
+                    <div class="max-w-7xl mx-auto space-y-6">
+                        <div><h1 class="text-2xl font-bold" style="color: var(--color-text-primary);">Reportes</h1><p class="text-sm mt-1" style="color: var(--color-text-secondary);">Análisis y reportes del negocio</p></div>
+                        <div class="flex gap-2 flex-wrap">
+                            <button class="tab-btn active" onclick="switchReportTab(this, 'resumen')">Resumen</button>
+                            <button class="tab-btn" onclick="switchReportTab(this, 'inventario')">Inventario</button>
+                            <button class="tab-btn" onclick="switchReportTab(this, 'clientes')">Clientes</button>
+                        </div>
+                        <div id="report-resumen" class="report-tab space-y-4">
+                            <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                                <div class="glass-card no-hover p-6">
+                                    <h3 class="font-bold mb-4" style="color: var(--color-text-primary);">Ventas por Categoría</h3>
+                                    <div class="space-y-3">
+                                        <div><div class="flex justify-between text-sm mb-1"><span style="color: var(--color-text-primary);">Electrónica</span><span style="color: var(--color-text-secondary);">$28.5M (63%)</span></div><div class="progress-bar"><div class="progress-bar-fill" style="width:63%; background: var(--color-primary);"></div></div></div>
+                                        <div><div class="flex justify-between text-sm mb-1"><span style="color: var(--color-text-primary);">Accesorios</span><span style="color: var(--color-text-secondary);">$11.2M (25%)</span></div><div class="progress-bar"><div class="progress-bar-fill" style="width:25%; background: var(--color-info);"></div></div></div>
+                                        <div><div class="flex justify-between text-sm mb-1"><span style="color: var(--color-text-primary);">Mobiliario</span><span style="color: var(--color-text-secondary);">$5.5M (12%)</span></div><div class="progress-bar"><div class="progress-bar-fill" style="width:12%; background: var(--color-warning);"></div></div></div>
+                                    </div>
+                                </div>
+                                <div class="glass-card no-hover p-6">
+                                    <h3 class="font-bold mb-4" style="color: var(--color-text-primary);">Métricas Clave</h3>
+                                    <div class="space-y-4">
+                                        <div class="flex items-center justify-between p-3 rounded-xl" style="background: var(--color-primary-soft);"><span class="text-sm font-medium" style="color: var(--color-text-primary);">Margen Promedio</span><span class="text-lg font-bold" style="color: var(--color-primary);">32.5%</span></div>
+                                        <div class="flex items-center justify-between p-3 rounded-xl" style="background: var(--color-info-soft);"><span class="text-sm font-medium" style="color: var(--color-text-primary);">Rotación Inventario</span><span class="text-lg font-bold" style="color: var(--color-info);">4.2x</span></div>
+                                        <div class="flex items-center justify-between p-3 rounded-xl" style="background: var(--color-warning-soft);"><span class="text-sm font-medium" style="color: var(--color-text-primary);">Clientes Recurrentes</span><span class="text-lg font-bold" style="color: var(--color-warning);">68%</span></div>
+                                        <div class="flex items-center justify-between p-3 rounded-xl" style="background: var(--color-success-soft);"><span class="text-sm font-medium" style="color: var(--color-text-primary);">Tasa Conversión</span><span class="text-lg font-bold" style="color: var(--color-success);">12.8%</span></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="report-inventario" class="report-tab space-y-4 hidden">
+                            <div class="glass-table no-hover">
+                                <div class="px-5 py-4 border-b border-[var(--color-border)]"><h3 class="font-bold" style="color: var(--color-text-primary);">Productos con Mayor Rotación</h3></div>
+                                <div class="overflow-x-auto"><table class="w-full text-sm">
+                                    <thead style="background: var(--color-card-hover);"><tr><th class="px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider" style="color: var(--color-text-secondary);">Producto</th><th class="px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider" style="color: var(--color-text-secondary);">Ventas/Mes</th><th class="px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider" style="color: var(--color-text-secondary);">Stock Actual</th><th class="px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider" style="color: var(--color-text-secondary);">Rotación</th></tr></thead>
+                                    <tbody>
+                                        <tr class="table-row border-t border-[var(--color-border)]"><td class="px-5 py-3 font-medium" style="color: var(--color-text-primary);">Monitor 27" QHD</td><td class="px-5 py-3" style="color: var(--color-text-secondary);">45</td><td class="px-5 py-3" style="color: var(--color-text-secondary);">23</td><td class="px-5 py-3"><span class="badge badge-success">Alta</span></td></tr>
+                                        <tr class="table-row border-t border-[var(--color-border)]"><td class="px-5 py-3 font-medium" style="color: var(--color-text-primary);">Teclado Mecánico RGB</td><td class="px-5 py-3" style="color: var(--color-text-secondary);">38</td><td class="px-5 py-3" style="color: var(--color-text-secondary);">15</td><td class="px-5 py-3"><span class="badge badge-success">Alta</span></td></tr>
+                                        <tr class="table-row border-t border-[var(--color-border)]"><td class="px-5 py-3 font-medium" style="color: var(--color-text-primary);">Mouse Ergonómico Pro</td><td class="px-5 py-3" style="color: var(--color-text-secondary);">32</td><td class="px-5 py-3" style="color: var(--color-text-secondary);">28</td><td class="px-5 py-3"><span class="badge badge-primary">Media</span></td></tr>
+                                        <tr class="table-row border-t border-[var(--color-border)]"><td class="px-5 py-3 font-medium" style="color: var(--color-text-primary);">Silla Ejecutiva Premium</td><td class="px-5 py-3" style="color: var(--color-text-secondary);">12</td><td class="px-5 py-3" style="color: var(--color-text-secondary);">8</td><td class="px-5 py-3"><span class="badge badge-warning">Baja</span></td></tr>
+                                    </tbody>
+                                </table></div>
+                            </div>
+                        </div>
+                        <div id="report-clientes" class="report-tab space-y-4 hidden">
+                            <div class="glass-table no-hover">
+                                <div class="px-5 py-4 border-b border-[var(--color-border)]"><h3 class="font-bold" style="color: var(--color-text-primary);">Top 5 Clientes por Compras</h3></div>
+                                <div class="overflow-x-auto"><table class="w-full text-sm">
+                                    <thead style="background: var(--color-card-hover);"><tr><th class="px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider" style="color: var(--color-text-secondary);">Cliente</th><th class="px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider" style="color: var(--color-text-secondary);">Compras</th><th class="px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider" style="color: var(--color-text-secondary);">Total</th><th class="px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider" style="color: var(--color-text-secondary);">Última Compra</th></tr></thead>
+                                    <tbody>
+                                        <tr class="table-row border-t border-[var(--color-border)]"><td class="px-5 py-3 font-medium" style="color: var(--color-text-primary);">Tech Solutions S.A.</td><td class="px-5 py-3" style="color: var(--color-text-secondary);">24</td><td class="px-5 py-3 font-medium" style="color: var(--color-text-primary);">$18,500,000</td><td class="px-5 py-3" style="color: var(--color-text-muted);">Hoy</td></tr>
+                                        <tr class="table-row border-t border-[var(--color-border)]"><td class="px-5 py-3 font-medium" style="color: var(--color-text-primary);">Oficina Moderna Ltda.</td><td class="px-5 py-3" style="color: var(--color-text-secondary);">18</td><td class="px-5 py-3 font-medium" style="color: var(--color-text-primary);">$12,300,000</td><td class="px-5 py-3" style="color: var(--color-text-muted);">Ayer</td></tr>
+                                        <tr class="table-row border-t border-[var(--color-border)]"><td class="px-5 py-3 font-medium" style="color: var(--color-text-primary);">Design Studio</td><td class="px-5 py-3" style="color: var(--color-text-secondary);">15</td><td class="px-5 py-3 font-medium" style="color: var(--color-text-primary);">$9,800,000</td><td class="px-5 py-3" style="color: var(--color-text-muted);">Hace 3 días</td></tr>
+                                        <tr class="table-row border-t border-[var(--color-border)]"><td class="px-5 py-3 font-medium" style="color: var(--color-text-primary);">StartUp Lab</td><td class="px-5 py-3" style="color: var(--color-text-secondary);">12</td><td class="px-5 py-3 font-medium" style="color: var(--color-text-primary);">$7,200,000</td><td class="px-5 py-3" style="color: var(--color-text-muted);">Hace 5 días</td></tr>
+                                        <tr class="table-row border-t border-[var(--color-border)]"><td class="px-5 py-3 font-medium" style="color: var(--color-text-primary);">María López</td><td class="px-5 py-3" style="color: var(--color-text-secondary);">8</td><td class="px-5 py-3 font-medium" style="color: var(--color-text-primary);">$4,500,000</td><td class="px-5 py-3" style="color: var(--color-text-muted);">Hace 1 semana</td></tr>
+                                    </tbody>
+                                </table></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ==================== CONFIGURACIÓN ==================== -->
+                <div id="view-configuracion" class="view">
+                    <div class="max-w-3xl mx-auto space-y-6">
+                        <div><h1 class="text-2xl font-bold" style="color: var(--color-text-primary);">Configuración</h1><p class="text-sm mt-1" style="color: var(--color-text-secondary);">Ajustes generales del sistema</p></div>
+                        <div class="glass-card no-hover p-6">
+                            <h2 class="text-lg font-bold mb-4" style="color: var(--color-text-primary);">Empresa</h2>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div class="form-group"><label class="form-label">Nombre de la Empresa</label><input type="text" class="input" value="Faro Tecnología S.A.S."></div>
+                                <div class="form-group"><label class="form-label">NIT</label><input type="text" class="input" value="900.123.456-7"></div>
+                                <div class="form-group"><label class="form-label">Email</label><input type="email" class="input" value="contacto@faroerp.com"></div>
+                                <div class="form-group"><label class="form-label">Teléfono</label><input type="tel" class="input" value="+57 601 234 5678"></div>
+                                <div class="form-group md:col-span-2"><label class="form-label">Dirección</label><input type="text" class="input" value="Cra 15 #82-34, Bogotá, Colombia"></div>
+                            </div>
+                            <div class="flex justify-end mt-4"><button class="btn btn-primary" onclick="showToast('Configuración guardada correctamente', 'success')">Guardar Cambios</button></div>
+                        </div>
+                        <div class="glass-card no-hover p-6">
+                            <h2 class="text-lg font-bold mb-4" style="color: var(--color-text-primary);">Preferencias</h2>
+                            <div class="space-y-4">
+                                <div class="flex items-center justify-between p-3 rounded-xl" style="background: var(--color-input);">
+                                    <div><p class="text-sm font-medium" style="color: var(--color-text-primary);">Modo Oscuro</p><p class="text-xs" style="color: var(--color-text-secondary);">Cambiar la apariencia del sistema</p></div>
+                                    <button class="w-12 h-7 rounded-full relative cursor-pointer" id="theme-switch" style="background: var(--color-primary);" onclick="toggleTheme()">
+                                        <div class="w-5 h-5 rounded-full bg-white absolute top-1" id="theme-switch-knob" style="left: 1.375rem; transition: left 0.2s ease;"></div>
+                                    </button>
+                                </div>
+                                <div class="flex items-center justify-between p-3 rounded-xl" style="background: var(--color-input);">
+                                    <div><p class="text-sm font-medium" style="color: var(--color-text-primary);">Notificaciones</p><p class="text-xs" style="color: var(--color-text-secondary);">Recibir alertas de stock bajo</p></div>
+                                    <button class="w-12 h-7 rounded-full relative cursor-pointer" style="background: var(--color-primary);" onclick="toggleSwitch(this)">
+                                        <div class="w-5 h-5 rounded-full bg-white absolute top-1" style="left: 1.375rem; transition: left 0.2s ease;"></div>
+                                    </button>
+                                </div>
+                                <div class="flex items-center justify-between p-3 rounded-xl" style="background: var(--color-input);">
+                                    <div><p class="text-sm font-medium" style="color: var(--color-text-primary);">Umbral Stock Bajo</p><p class="text-xs" style="color: var(--color-text-secondary);">Cantidad mínima antes de alertar</p></div>
+                                    <input type="number" class="input w-20 text-center" value="10" min="1">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="glass-card no-hover p-6" style="border-color: var(--color-danger-soft);">
+                            <h2 class="text-lg font-bold mb-2" style="color: var(--color-danger);">Zona de Peligro</h2>
+                            <p class="text-sm mb-4" style="color: var(--color-text-secondary);">Estas acciones no se pueden deshacer.</p>
+                            <div class="flex gap-3">
+                                <button class="btn btn-ghost" onclick="showToast('Datos exportados correctamente', 'success')">Exportar Datos</button>
+                                <button class="btn btn-danger" onclick="showToast('Esta acción requiere confirmación del administrador', 'warning')">Reiniciar Sistema</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </main>
+        </div>
+    </div>
+
+    <!-- ==================== MODAL: PRODUCTO ==================== -->
+    <div id="product-modal" class="modal-overlay" onclick="if(event.target===this)closeModal('product-modal')">
+        <div class="modal-content w-full max-w-lg">
+            <div class="flex items-center justify-between px-6 py-4 border-b border-[var(--color-border)]">
+                <h2 class="text-lg font-bold" style="color: var(--color-text-primary);" id="product-modal-title">Nuevo Producto</h2>
+                <button class="btn-icon" onclick="closeModal('product-modal')"><svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+            </div>
+            <div class="modal-body p-6 space-y-4">
+                <input type="hidden" id="product-id">
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="form-group col-span-2"><label class="form-label">Nombre del Producto</label><input type="text" id="product-name" class="input" placeholder="Ej: Monitor 27 QHD"></div>
+                    <div class="form-group"><label class="form-label">SKU</label><input type="text" id="product-sku" class="input" placeholder="Ej: MON-027"></div>
+                    <div class="form-group"><label class="form-label">Categoría</label><select id="product-category" class="input"><option value="Electrónica">Electrónica</option><option value="Accesorios">Accesorios</option><option value="Mobiliario">Mobiliario</option></select></div>
+                    <div class="form-group"><label class="form-label">Precio de Compra</label><input type="number" id="product-cost" class="input" placeholder="0" min="0" step="0.01"></div>
+                    <div class="form-group"><label class="form-label">Precio de Venta</label><input type="number" id="product-price" class="input" placeholder="0" min="0" step="0.01"></div>
+                    <div class="form-group"><label class="form-label">Stock</label><input type="number" id="product-stock" class="input" placeholder="0" min="0"></div>
+                    <div class="form-group"><label class="form-label">Marca</label><input type="text" id="product-brand" class="input" placeholder="Ej: Samsung"></div>
+                    <div class="form-group col-span-2"><label class="form-label">Descripción</label><textarea id="product-desc" class="input" placeholder="Descripción del producto..."></textarea></div>
+                </div>
+            </div>
+            <div class="flex items-center justify-end gap-3 px-6 py-4 border-t border-[var(--color-border)]">
+                <button class="btn btn-secondary" onclick="closeModal('product-modal')">Cancelar</button>
+                <button class="btn btn-primary" onclick="saveProduct()">Guardar Producto</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: CATEGORÍA -->
+    <div id="category-modal" class="modal-overlay" onclick="if(event.target===this)closeModal('category-modal')">
+        <div class="modal-content w-full max-w-md">
+            <div class="flex items-center justify-between px-6 py-4 border-b border-[var(--color-border)]">
+                <h2 class="text-lg font-bold" style="color: var(--color-text-primary);" id="category-modal-title">Nueva Categoría</h2>
+                <button class="btn-icon" onclick="closeModal('category-modal')"><svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+            </div>
+            <div class="modal-body p-6 space-y-4">
+                <input type="hidden" id="category-id">
+                <div class="form-group"><label class="form-label">Nombre</label><input type="text" id="category-name" class="input" placeholder="Nombre de la categoría"></div>
+                <div class="form-group"><label class="form-label">Descripción</label><textarea id="category-desc" class="input" placeholder="Descripción breve..."></textarea></div>
+                <div class="form-group"><label class="form-label">Color</label><input type="color" id="category-color" class="input h-10 p-1 cursor-pointer" value="#10b981"></div>
+            </div>
+            <div class="flex items-center justify-end gap-3 px-6 py-4 border-t border-[var(--color-border)]">
+                <button class="btn btn-secondary" onclick="closeModal('category-modal')">Cancelar</button>
+                <button class="btn btn-primary" onclick="saveCategory()">Guardar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: MARCA -->
+    <div id="brand-modal" class="modal-overlay" onclick="if(event.target===this)closeModal('brand-modal')">
+        <div class="modal-content w-full max-w-md">
+            <div class="flex items-center justify-between px-6 py-4 border-b border-[var(--color-border)]">
+                <h2 class="text-lg font-bold" style="color: var(--color-text-primary);" id="brand-modal-title">Nueva Marca</h2>
+                <button class="btn-icon" onclick="closeModal('brand-modal')"><svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+            </div>
+            <div class="modal-body p-6 space-y-4">
+                <input type="hidden" id="brand-id">
+                <div class="form-group"><label class="form-label">Nombre</label><input type="text" id="brand-name" class="input" placeholder="Nombre de la marca"></div>
+                <div class="form-group"><label class="form-label">País de Origen</label><input type="text" id="brand-country" class="input" placeholder="Ej: Corea del Sur"></div>
+            </div>
+            <div class="flex items-center justify-end gap-3 px-6 py-4 border-t border-[var(--color-border)]">
+                <button class="btn btn-secondary" onclick="closeModal('brand-modal')">Cancelar</button>
+                <button class="btn btn-primary" onclick="saveBrand()">Guardar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: VENTA -->
+    <div id="sale-modal" class="modal-overlay" onclick="if(event.target===this)closeModal('sale-modal')">
+        <div class="modal-content w-full max-w-lg">
+            <div class="flex items-center justify-between px-6 py-4 border-b border-[var(--color-border)]">
+                <h2 class="text-lg font-bold" style="color: var(--color-text-primary);">Nueva Venta</h2>
+                <button class="btn-icon" onclick="closeModal('sale-modal')"><svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+            </div>
+            <div class="modal-body p-6 space-y-4">
+                <div class="form-group"><label class="form-label">Cliente</label><select id="sale-client" class="input"><option value="">Seleccionar cliente...</option></select></div>
+                <div class="form-group"><label class="form-label">Producto</label><select id="sale-product" class="input" onchange="updateSalePrice()"><option value="">Seleccionar producto...</option></select></div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="form-group"><label class="form-label">Cantidad</label><input type="number" id="sale-qty" class="input" value="1" min="1" oninput="updateSalePrice()"></div>
+                    <div class="form-group"><label class="form-label">Total</label><input type="text" id="sale-total" class="input" readonly style="opacity: 0.7;"></div>
+                </div>
+                <div class="form-group"><label class="form-label">Notas</label><textarea id="sale-notes" class="input" placeholder="Notas opcionales..."></textarea></div>
+            </div>
+            <div class="flex items-center justify-end gap-3 px-6 py-4 border-t border-[var(--color-border)]">
+                <button class="btn btn-secondary" onclick="closeModal('sale-modal')">Cancelar</button>
+                <button class="btn btn-primary" onclick="saveSale()">Registrar Venta</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: CLIENTE -->
+    <div id="client-modal" class="modal-overlay" onclick="if(event.target===this)closeModal('client-modal')">
+        <div class="modal-content w-full max-w-lg">
+            <div class="flex items-center justify-between px-6 py-4 border-b border-[var(--color-border)]">
+                <h2 class="text-lg font-bold" style="color: var(--color-text-primary);" id="client-modal-title">Nuevo Cliente</h2>
+                <button class="btn-icon" onclick="closeModal('client-modal')"><svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+            </div>
+            <div class="modal-body p-6 space-y-4">
+                <input type="hidden" id="client-id">
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="form-group col-span-2"><label class="form-label">Nombre Completo</label><input type="text" id="client-name" class="input" placeholder="Nombre y apellido"></div>
+                    <div class="form-group"><label class="form-label">Tipo Documento</label><select id="client-doctype" class="input"><option value="CC">Cédula</option><option value="NIT">NIT</option><option value="RUT">RUT</option><option value="CE">Cédula Extranjera</option></select></div>
+                    <div class="form-group"><label class="form-label">Documento</label><input type="text" id="client-doc" class="input" placeholder="Número de documento"></div>
+                    <div class="form-group"><label class="form-label">Email</label><input type="email" id="client-email" class="input" placeholder="correo@ejemplo.com"></div>
+                    <div class="form-group"><label class="form-label">Teléfono</label><input type="tel" id="client-phone" class="input" placeholder="+57 ..."></div>
+                    <div class="form-group col-span-2"><label class="form-label">Dirección</label><input type="text" id="client-address" class="input" placeholder="Dirección completa"></div>
+                </div>
+            </div>
+            <div class="flex items-center justify-end gap-3 px-6 py-4 border-t border-[var(--color-border)]">
+                <button class="btn btn-secondary" onclick="closeModal('client-modal')">Cancelar</button>
+                <button class="btn btn-primary" onclick="saveClient()">Guardar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: CONFIRMAR -->
+    <div id="confirm-modal" class="modal-overlay" onclick="if(event.target===this)closeModal('confirm-modal')">
+        <div class="modal-content w-full max-w-sm">
+            <div class="p-6 text-center">
+                <div class="w-14 h-14 rounded-full mx-auto mb-4 flex items-center justify-center" style="background: var(--color-danger-soft);"><svg class="w-7 h-7" style="color: var(--color-danger);" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg></div>
+                <h3 class="text-lg font-bold mb-2" style="color: var(--color-text-primary);">Confirmar Eliminación</h3>
+                <p class="text-sm" style="color: var(--color-text-secondary);" id="confirm-message">Esta acción no se puede deshacer.</p>
+            </div>
+            <div class="flex gap-3 px-6 pb-6">
+                <button class="btn btn-secondary flex-1" onclick="closeModal('confirm-modal')">Cancelar</button>
+                <button class="btn btn-danger flex-1" id="confirm-btn">Eliminar</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast-container" id="toast-container"></div>
+
+    <script>
+    /* =====================================================
+       DATOS INICIALES
+       ===================================================== */
+    const LOW_STOCK_THRESHOLD = 10;
+    const PER_PAGE = 6;
+    let selectedIds = new Set();
+
+    /* Estado de paginación y ordenamiento por tabla */
+    const tableState = {
+        products: { page: 1, sortKey: null, sortDir: 'asc' },
+        sales:    { page: 1, sortKey: null, sortDir: 'asc' },
+        clients:  { page: 1, sortKey: null, sortDir: 'asc' },
+        brands:   { page: 1, sortKey: null, sortDir: 'asc' },
+    };
+
+    let products = [
+        { id: 1, name: 'Monitor 27" QHD IPS', sku: 'MON-027', category: 'Electrónica', cost: 450000, price: 680000, stock: 23, brand: 'LG', desc: 'Monitor QHD de 27 pulgadas con panel IPS.' },
+        { id: 2, name: 'Teclado Mecánico RGB', sku: 'TEC-MEC-01', category: 'Accesorios', cost: 120000, price: 195000, stock: 45, brand: 'Corsair', desc: 'Teclado mecánico con switches Cherry MX y RGB.' },
+        { id: 3, name: 'Mouse Ergonómico Pro', sku: 'MOU-ERG-01', category: 'Accesorios', cost: 65000, price: 110000, stock: 8, brand: 'Logitech', desc: 'Mouse vertical ergonómico inalámbrico.' },
+        { id: 4, name: 'Silla Ejecutiva Premium', sku: 'SIL-EJE-01', category: 'Mobiliario', cost: 380000, price: 650000, stock: 5, brand: 'Herman Miller', desc: 'Silla ergonómica con soporte lumbar ajustable.' },
+        { id: 5, name: 'Webcam HD 1080p', sku: 'CAM-HD-01', category: 'Electrónica', cost: 85000, price: 145000, stock: 32, brand: 'Logitech', desc: 'Webcam Full HD con micrófono integrado.' },
+        { id: 6, name: 'Monitor Ultrawide 34"', sku: 'MON-034', category: 'Electrónica', cost: 850000, price: 1350000, stock: 7, brand: 'Samsung', desc: 'Monitor ultrawide curvo UWQHD.' },
+        { id: 7, name: 'Auriculares Noise Cancel', sku: 'AUD-NC-01', category: 'Accesorios', cost: 180000, price: 320000, stock: 18, brand: 'Sony', desc: 'Auriculares inalámbricos con cancelación de ruido.' },
+        { id: 8, name: 'Escritorio Standing Desk', sku: 'ESC-STN-01', category: 'Mobiliario', cost: 520000, price: 890000, stock: 3, brand: 'Uplift', desc: 'Escritorio eléctrico ajustable en altura.' },
+        { id: 9, name: 'SSD NVMe 1TB', sku: 'SSD-NVM-01', category: 'Electrónica', cost: 95000, price: 165000, stock: 60, brand: 'Samsung', desc: 'Disco sólido NVMe M.2 de 1TB.' },
+        { id: 10, name: 'Funda Laptop 15.6"', sku: 'FUN-LAP-01', category: 'Accesorios', cost: 25000, price: 55000, stock: 90, brand: 'Tomtoc', desc: 'Funda protectora acolchada para laptop.' },
+        { id: 11, name: 'Router WiFi 6', sku: 'RTR-WF6-01', category: 'Electrónica', cost: 200000, price: 340000, stock: 12, brand: 'TP-Link', desc: 'Router WiFi 6 con velocidad AX3000.' },
+        { id: 12, name: 'Portapapeles Ergonómico', sku: 'ACC-PP-01', category: 'Accesorios', cost: 45000, price: 78000, stock: 4, brand: '3M', desc: 'Soporte para muñeca con gel memory foam.' },
+        { id: 13, name: 'Lámpara LED Desk', sku: 'LAM-LED-01', category: 'Mobiliario', cost: 75000, price: 130000, stock: 25, brand: 'BenQ', desc: 'Lámpara de escritorio LED con regulación de color.' },
+        { id: 14, name: 'Hub USB-C 8 en 1', sku: 'HUB-USC-01', category: 'Accesorios', cost: 55000, price: 95000, stock: 35, brand: 'Anker', desc: 'Hub USB-C con HDMI, USB 3.0, SD, Ethernet.' },
+        { id: 15, name: 'Monitor Portátil 15.6"', sku: 'MON-PTL-01', category: 'Electrónica', cost: 320000, price: 520000, stock: 9, brand: 'ASUS', desc: 'Pantalla portátil IPS Full HD USB-C.' },
+    ];
+
+    let categories = [
+        { id: 1, name: 'Electrónica', desc: 'Dispositivos electrónicos y componentes', color: '#10b981' },
+        { id: 2, name: 'Accesorios', desc: 'Periféricos y accesorios complementarios', color: '#3b82f6' },
+        { id: 3, name: 'Mobiliario', desc: 'Muebles y equipamiento de oficina', color: '#f59e0b' },
+    ];
+
+    let brands = [
+        { id: 1, name: 'LG', country: 'Corea del Sur' },
+        { id: 2, name: 'Samsung', country: 'Corea del Sur' },
+        { id: 3, name: 'Logitech', country: 'Suiza' },
+        { id: 4, name: 'Corsair', country: 'Estados Unidos' },
+        { id: 5, name: 'Sony', country: 'Japón' },
+        { id: 6, name: 'Herman Miller', country: 'Estados Unidos' },
+        { id: 7, name: 'Uplift', country: 'Estados Unidos' },
+        { id: 8, name: 'TP-Link', country: 'China' },
+        { id: 9, name: 'Anker', country: 'China' },
+        { id: 10, name: 'ASUS', country: 'Taiwán' },
+        { id: 11, name: 'BenQ', country: 'Taiwán' },
+        { id: 12, name: '3M', country: 'Estados Unidos' },
+        { id: 13, name: 'Tomtoc', country: 'China' },
+    ];
+
+    let clients = [
+        { id: 1, name: 'María López', doctype: 'CC', doc: '1.098.765.432', email: 'maria.lopez@email.com', phone: '+57 310 123 4567', address: 'Calle 45 #12-34, Bogotá', purchases: 8, total: 4500000 },
+        { id: 2, name: 'Carlos Ruiz', doctype: 'NIT', doc: '900.456.789-0', email: 'contacto@techsol.com', phone: '+57 601 345 6789', address: 'Av. El Dorado #68-40, Bogotá', purchases: 24, total: 18500000 },
+        { id: 3, name: 'Ana García', doctype: 'CC', doc: '1.123.456.789', email: 'ana.garcia@email.com', phone: '+57 320 987 6543', address: 'Cra 7 #45-12, Medellín', purchases: 5, total: 2300000 },
+        { id: 4, name: 'Pedro Martín', doctype: 'NIT', doc: '901.234.567-1', email: 'info@ofinamoderna.com', phone: '+57 601 567 8901', address: 'Calle 72 #10-30, Bogotá', purchases: 18, total: 12300000 },
+        { id: 5, name: 'Laura Sánchez', doctype: 'CC', doc: '1.456.789.012', email: 'laura.s@email.com', phone: '+57 315 456 7890', address: 'Diagonal 36 #20-15, Cali', purchases: 3, total: 980000 },
+        { id: 6, name: 'Design Studio Ltda.', doctype: 'NIT', doc: '902.345.678-2', email: 'hello@designstudio.co', phone: '+57 601 678 9012', address: 'Cra 11 #82-14, Bogotá', purchases: 15, total: 9800000 },
+        { id: 7, name: 'Jorge Ramírez', doctype: 'CC', doc: '1.789.012.345', email: 'jorge.r@email.com', phone: '+57 300 111 2233', address: 'Calle 22 #8-56, Barranquilla', purchases: 2, total: 650000 },
+        { id: 8, name: 'StartUp Lab S.A.S.', doctype: 'NIT', doc: '903.456.789-3', email: 'ops@startuplab.co', phone: '+57 601 789 0123', address: 'Cra 13 #97-70, Bogotá', purchases: 12, total: 7200000 },
+    ];
+
+    let sales = [
+        { id: 1, invoice: 'FAC-0012', clientId: 1, product: 'Monitor 27" QHD IPS', qty: 1, total: 680000, status: 'Pagada', date: '2025-01-15T14:32:00' },
+        { id: 2, invoice: 'FAC-0011', clientId: 2, product: 'Monitor Ultrawide 34"', qty: 1, total: 1350000, status: 'Pendiente', date: '2025-01-15T11:15:00' },
+        { id: 3, invoice: 'FAC-0010', clientId: 3, product: 'Teclado Mecánico RGB', qty: 2, total: 390000, status: 'Pagada', date: '2025-01-14T16:48:00' },
+        { id: 4, invoice: 'FAC-0009', clientId: 4, product: 'Silla Ejecutiva Premium', qty: 3, total: 1950000, status: 'Anulada', date: '2025-01-14T09:22:00' },
+        { id: 5, invoice: 'FAC-0008', clientId: 2, product: 'SSD NVMe 1TB', qty: 5, total: 825000, status: 'Pagada', date: '2025-01-13T15:10:00' },
+        { id: 6, invoice: 'FAC-0007', clientId: 5, product: 'Webcam HD 1080p', qty: 1, total: 145000, status: 'Pagada', date: '2025-01-13T10:05:00' },
+        { id: 7, invoice: 'FAC-0006', clientId: 6, product: 'Escritorio Standing Desk', qty: 2, total: 1780000, status: 'Pendiente', date: '2025-01-12T14:20:00' },
+        { id: 8, invoice: 'FAC-0005', clientId: 1, product: 'Auriculares Noise Cancel', qty: 1, total: 320000, status: 'Pagada', date: '2025-01-12T09:45:00' },
+        { id: 9, invoice: 'FAC-0004', clientId: 7, product: 'Router WiFi 6', qty: 1, total: 340000, status: 'Pagada', date: '2025-01-11T16:30:00' },
+        { id: 10, invoice: 'FAC-0003', clientId: 8, product: 'Hub USB-C 8 en 1', qty: 4, total: 380000, status: 'Pagada', date: '2025-01-11T11:00:00' },
+        { id: 11, invoice: 'FAC-0002', clientId: 4, product: 'Monitor Portátil 15.6"', qty: 2, total: 1040000, status: 'Pagada', date: '2025-01-10T14:15:00' },
+        { id: 12, invoice: 'FAC-0001', clientId: 6, product: 'Lámpara LED Desk', qty: 3, total: 390000, status: 'Pendiente', date: '2025-01-10T09:30:00' },
+    ];
+
+    let nextProductId = 16, nextCategoryId = 4, nextBrandId = 14, nextClientId = 9, nextSaleId = 13, nextInvoice = 13;
+
+    /* =====================================================
+       UTILIDADES
+       ===================================================== */
+    function formatCurrency(v) { return '$' + Number(v).toLocaleString('es-CO'); }
+
+    function getProductStatus(stock) {
+        if (stock <= 0) return { label: 'Agotado', cls: 'badge-danger' };
+        if (stock < LOW_STOCK_THRESHOLD) return { label: 'Stock Bajo', cls: 'badge-warning' };
+        return { label: 'Activo', cls: 'badge-success' };
+    }
+
+    function avatarColor(name) {
+        const c = ['#047857','#0e7490','#7c3aed','#c026d3','#e11d48','#ea580c','#ca8a04','#16a34a','#2563eb','#9333ea'];
+        let h = 0; for (let i = 0; i < name.length; i++) h = name.charCodeAt(i) + ((h << 5) - h);
+        return c[Math.abs(h) % c.length];
+    }
+
+    function initials(name) { return name.split(' ').map(w => w[0]).slice(0, 2).join('').toUpperCase(); }
+
+    /* =====================================================
+       SISTEMA DE PAGINACIÓN REUTILIZABLE
+       ===================================================== */
+    function paginate(data, state) {
+        const total = Math.max(1, Math.ceil(data.length / PER_PAGE));
+        if (state.page > total) state.page = total;
+        if (state.page < 1) state.page = 1;
+        const start = (state.page - 1) * PER_PAGE;
+        return { items: data.slice(start, start + PER_PAGE), total, start, count: data.length };
+    }
+
+    function renderPagination(containerId, pag, goToFn) {
+        const el = document.getElementById(containerId);
+        if (!el) return;
+        if (pag.count === 0) { el.innerHTML = ''; return; }
+
+        const from = pag.count === 0 ? 0 : pag.start + 1;
+        const to = Math.min(pag.start + PER_PAGE, pag.count);
+
+        let html = `<p class="text-sm" style="color: var(--color-text-secondary);">Mostrando ${from}-${to} de ${pag.count}</p>`;
+        html += '<div class="flex items-center gap-1">';
+        html += `<button class="page-btn" onclick="${goToFn}(${pag.page - 1})" ${pag.page <= 1 ? 'disabled' : ''}><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 19l-7-7 7-7"/></svg></button>`;
+
+        for (let i = 1; i <= pag.total; i++) {
+            if (pag.total <= 7 || i === 1 || i === pag.total || Math.abs(i - pag.page) <= 1) {
+                html += `<button class="page-btn ${i === pag.page ? 'active' : ''}" onclick="${goToFn}(${i})">${i}</button>`;
+            } else if (i === pag.page - 2 || i === pag.page + 2) {
+                html += '<span class="px-1" style="color: var(--color-text-muted);">...</span>';
+            }
+        }
+        html += `<button class="page-btn" onclick="${goToFn}(${pag.page + 1})" ${pag.page >= pag.total ? 'disabled' : ''}><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5l7 7-7 7"/></svg></button>`;
+        html += '</div>';
+        el.innerHTML = html;
+    }
+
+    /* =====================================================
+       SISTEMA DE ORDENAMIENTO REUTILIZABLE
+       ===================================================== */
+    function sortData(data, state, key, getVal) {
+        if (state.sortKey === key) {
+            state.sortDir = state.sortDir === 'asc' ? 'desc' : 'asc';
+        } else {
+            state.sortKey = key;
+            state.sortDir = 'asc';
+        }
+        state.page = 1;
+        return [...data].sort((a, b) => {
+            const va = getVal(a), vb = getVal(b);
+            const cmp = typeof va === 'string' ? va.localeCompare(vb) : va - vb;
+            return state.sortDir === 'asc' ? cmp : -cmp;
+        });
+    }
+
+    function updateSortIcons(prefix, activeKey) {
+        /* Limpiar todos los iconos de este grupo */
+        document.querySelectorAll(`[id^="sort-${prefix}"]`).forEach(el => {
+            el.textContent = '↕';
+            el.classList.remove('active');
+        });
+        if (activeKey) {
+            const icon = document.getElementById(`sort-${prefix}-${activeKey}`);
+            if (icon) {
+                icon.textContent = tableState[prefix].sortDir === 'asc' ? '↑' : '↓';
+                icon.classList.add('active');
+            }
+        }
+    }
+
+    /* =====================================================
+       NAVEGACIÓN
+       ===================================================== */
+    const breadcrumbs = {
+        dashboard: { s: 'Inicio', p: 'Dashboard' },
+        productos: { s: 'Inventario', p: 'Productos' },
+        categorias: { s: 'Inventario', p: 'Categorías' },
+        marcas: { s: 'Inventario', p: 'Marcas' },
+        ventas: { s: 'Ventas', p: 'Historial' },
+        clientes: { s: 'Ventas', p: 'Clientes' },
+        reportes: { s: 'Análisis', p: 'Reportes' },
+        configuracion: { s: 'Sistema', p: 'Configuración' },
+    };
+
+    function showView(viewId) {
+        document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+        const target = document.getElementById('view-' + viewId);
+        if (target) target.classList.add('active');
+
+        const bc = breadcrumbs[viewId];
+        if (bc) { document.getElementById('breadcrumb-section').textContent = bc.s; document.getElementById('breadcrumb-page').textContent = bc.p; }
+
+        document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+        const activeBtn = document.querySelector(`.nav-item[data-view="${viewId}"]`);
+        if (activeBtn) activeBtn.classList.add('active');
+
+        closeSidebar();
+
+        if (viewId === 'productos') { tableState.products.page = 1; filterProducts(); }
+        if (viewId === 'categorias') renderCategories();
+        if (viewId === 'marcas') { tableState.brands.page = 1; renderBrands(); }
+        if (viewId === 'ventas') { tableState.sales.page = 1; renderSales(); }
+        if (viewId === 'clientes') { tableState.clients.page = 1; renderClients(); }
+    }
+
+    function toggleMenu(id) {
+        const menu = document.getElementById(id);
+        const arrow = document.getElementById(id.replace('-menu', '-arrow'));
+        if (menu) { menu.classList.toggle('hidden'); if (arrow) arrow.style.transform = menu.classList.contains('hidden') ? '' : 'rotate(90deg)'; }
+    }
+
+    function toggleSidebar() {
+        document.getElementById('sidebar').classList.toggle('open');
+        document.getElementById('mobile-overlay').classList.toggle('active');
+    }
+
+    function closeSidebar() {
+        document.getElementById('sidebar').classList.remove('open');
+        document.getElementById('mobile-overlay').classList.remove('active');
+    }
+
+    function filterBySubcategory(cat) {
+        showView('productos');
+        document.getElementById('filter-category').value = cat;
+        filterProducts();
+    }
+
+    /* =====================================================
+       TEMA
+       ===================================================== */
+    function toggleTheme() {
+        const html = document.documentElement;
+        const isDark = html.classList.toggle('dark');
+        document.getElementById('icon-sun').classList.toggle('hidden', isDark);
+        document.getElementById('icon-moon').classList.toggle('hidden', !isDark);
+        const knob = document.getElementById('theme-switch-knob');
+        const sw = document.getElementById('theme-switch');
+        if (knob) knob.style.left = isDark ? '0.25rem' : '1.375rem';
+        if (sw) sw.style.background = isDark ? 'var(--color-border-strong)' : 'var(--color-primary)';
+    }
+
+    function toggleSwitch(btn) {
+        const knob = btn.firstElementChild;
+        const isOn = knob.style.left === '1.375rem';
+        knob.style.left = isOn ? '0.25rem' : '1.375rem';
+        btn.style.background = isOn ? 'var(--color-border-strong)' : 'var(--color-primary)';
+    }
+
+    /* =====================================================
+       MODALES Y TOASTS
+       ===================================================== */
+    function openModal(id) { document.getElementById(id).classList.add('active'); document.body.style.overflow = 'hidden'; }
+    function closeModal(id) { document.getElementById(id).classList.remove('active'); document.body.style.overflow = ''; }
+
+    /* Cerrar modal activo con Escape */
+    document.addEventListener('keydown', e => {
+        if (e.key === 'Escape') {
+            const active = document.querySelector('.modal-overlay.active');
+            if (active) closeModal(active.id);
+        }
+    });
+
+    function showToast(message, type = 'info') {
+        const container = document.getElementById('toast-container');
+        const toast = document.createElement('div');
+        toast.className = 'toast';
+        const colors = { success: 'var(--color-success)', danger: 'var(--color-danger)', warning: 'var(--color-warning)', info: 'var(--color-info)' };
+        const icons = {
+            success: '<path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>',
+            danger: '<path d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"/>',
+            warning: '<path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>',
+            info: '<path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>'
+        };
+        toast.innerHTML = `<svg class="w-5 h-5 shrink-0" style="color: ${colors[type]};" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">${icons[type]}</svg><span class="text-sm" style="color: var(--color-text-primary);">${message}</span>`;
+        container.appendChild(toast);
+        requestAnimationFrame(() => requestAnimationFrame(() => toast.classList.add('active')));
+        setTimeout(() => { toast.classList.remove('active'); setTimeout(() => toast.remove(), 400); }, 3000);
+    }
+
+    /* =====================================================
+       PRODUCTOS
+       ===================================================== */
+    function getFilteredProducts() {
+        const search = (document.getElementById('search-products')?.value || '').toLowerCase();
+        const catFilter = document.getElementById('filter-category')?.value || '';
+        const statusFilter = document.getElementById('filter-status')?.value || '';
+        return products.filter(p => {
+            const ms = !search || p.name.toLowerCase().includes(search) || p.sku.toLowerCase().includes(search) || p.brand.toLowerCase().includes(search);
+            const mc = !catFilter || p.category === catFilter;
+            let mst = true;
+            if (statusFilter === 'active') mst = p.stock >= LOW_STOCK_THRESHOLD;
+            else if (statusFilter === 'low') mst = p.stock > 0 && p.stock < LOW_STOCK_THRESHOLD;
+            else if (statusFilter === 'inactive') mst = p.stock <= 0;
+            return ms && mc && mst;
+        });
+    }
+
+    function filterProducts() { tableState.products.page = 1; renderProducts(); }
+
+    function sortProducts(key) {
+        const filtered = getFilteredProducts();
+        const sorted = sortData(filtered, tableState.products, key, p => p[key] ?? '');
+        updateSortIcons('', key);
+        /* Mapear key al prefijo del icono */
+        document.querySelectorAll('[id^="sort-"]').forEach(el => {
+            if (['sort-name','sort-sku','sort-price','sort-stock'].includes(el.id)) {
+                el.textContent = '↕'; el.classList.remove('active');
+            }
+        });
+        const icon = document.getElementById('sort-' + key);
+        if (icon) { icon.textContent = tableState.products.sortDir === 'asc' ? '↑' : '↓'; icon.classList.add('active'); }
+        renderProductsTable(sorted);
+    }
+
+    function renderProducts() {
+        let data = getFilteredProducts();
+        /* Aplicar ordenamiento activo */
+        if (tableState.products.sortKey) {
+            const key = tableState.products.sortKey;
+            data = [...data].sort((a, b) => {
+                const va = a[key] ?? '', vb = b[key] ?? '';
+                const cmp = typeof va === 'string' ? va.localeCompare(vb) : va - vb;
+                return tableState.products.sortDir === 'asc' ? cmp : -cmp;
+            });
+        }
+
+        /* Stats */
+        document.getElementById('stat-total').textContent = products.length;
+        document.getElementById('stat-active').textContent = products.filter(p => p.stock >= LOW_STOCK_THRESHOLD).length;
+        document.getElementById('stat-low').textContent = products.filter(p => p.stock > 0 && p.stock < LOW_STOCK_THRESHOLD).length;
+        document.getElementById('stat-value').textContent = formatCurrency(products.reduce((s, p) => s + p.price * p.stock, 0));
+
+        renderProductsTable(data);
+    }
+
+    function renderProductsTable(data) {
+        const pag = paginate(data, tableState.products);
+        const tbody = document.getElementById('products-tbody');
+        const empty = document.getElementById('products-empty');
+
+        if (pag.count === 0) { tbody.innerHTML = ''; empty.classList.remove('hidden'); }
+        else {
+            empty.classList.add('hidden');
+            tbody.innerHTML = pag.items.map(p => {
+                const st = getProductStatus(p.stock);
+                const chk = selectedIds.has(p.id) ? 'checked' : '';
+                return `<tr class="table-row border-t border-[var(--color-border)]">
+                    <td class="px-5 py-3"><div class="checkbox ${chk}" onclick="toggleSelect(${p.id}, this)"></div></td>
+                    <td class="px-5 py-3"><div class="flex items-center gap-3"><div class="w-9 h-9 rounded-lg flex items-center justify-center text-xs font-bold text-white" style="background: ${avatarColor(p.name)};">${initials(p.name)}</div><div><p class="font-medium text-sm" style="color: var(--color-text-primary);">${p.name}</p><p class="text-xs" style="color: var(--color-text-muted);">${p.brand}</p></div></div></td>
+                    <td class="px-5 py-3 font-mono text-xs" style="color: var(--color-text-secondary);">${p.sku}</td>
+                    <td class="px-5 py-3" style="color: var(--color-text-secondary);">${p.category}</td>
+                    <td class="px-5 py-3 font-medium" style="color: var(--color-text-primary);">${formatCurrency(p.price)}</td>
+                    <td class="px-5 py-3"><span class="font-medium" style="color: ${p.stock < LOW_STOCK_THRESHOLD ? 'var(--color-warning)' : 'var(--color-text-primary)'};">${p.stock}</span></td>
+                    <td class="px-5 py-3"><span class="badge ${st.cls}">${st.label}</span></td>
+                    <td class="px-5 py-3 text-right"><div class="flex items-center justify-end gap-1">
+                        <button class="btn-icon" title="Editar" onclick="editProduct(${p.id})"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
+                        <button class="btn-icon" title="Eliminar" onclick="confirmDeleteProduct(${p.id})"><svg class="w-4 h-4" style="color: var(--color-danger);" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg></button>
+                    </div></td></tr>`;
+            }).join('');
+        }
+
+        renderPagination('products-pagination', pag, 'goToProductPage');
+
+        /* Select all */
+        const pageIds = pag.items.map(p => p.id);
+        const sa = document.getElementById('select-all');
+        sa.classList.toggle('checked', pageIds.length > 0 && pageIds.every(id => selectedIds.has(id)));
+
+        /* Botón eliminar */
+        const db = document.getElementById('btn-delete-selected');
+        if (selectedIds.size > 0) { db.style.display = 'inline-flex'; document.getElementById('selected-count').textContent = selectedIds.size; }
+        else db.style.display = 'none';
+    }
+
+    function goToProductPage(p) { tableState.products.page = p; renderProducts(); }
+
+    function toggleSelect(id, el) {
+        if (selectedIds.has(id)) { selectedIds.delete(id); el.classList.remove('checked'); }
+        else { selectedIds.add(id); el.classList.add('checked'); }
+        renderProducts();
+    }
+
+    function toggleSelectAll() {
+        const data = getFilteredProducts();
+        const pag = paginate(data, tableState.products);
+        const pageIds = pag.items.map(p => p.id);
+        const allSel = pageIds.every(id => selectedIds.has(id));
+        pageIds.forEach(id => allSel ? selectedIds.delete(id) : selectedIds.add(id));
+        renderProducts();
+    }
+
+    function openProductModal(id) {
+        document.getElementById('product-modal-title').textContent = id ? 'Editar Producto' : 'Nuevo Producto';
+        document.getElementById('product-id').value = '';
+        ['product-name','product-sku','product-cost','product-price','product-stock','product-brand','product-desc'].forEach(f => document.getElementById(f).value = '');
+        document.getElementById('product-category').value = 'Electrónica';
+        if (id) {
+            const p = products.find(x => x.id === id);
+            if (p) { document.getElementById('product-id').value = p.id; document.getElementById('product-name').value = p.name; document.getElementById('product-sku').value = p.sku; document.getElementById('product-category').value = p.category; document.getElementById('product-cost').value = p.cost; document.getElementById('product-price').value = p.price; document.getElementById('product-stock').value = p.stock; document.getElementById('product-brand').value = p.brand; document.getElementById('product-desc').value = p.desc || ''; }
+        }
+        openModal('product-modal');
+    }
+
+    function editProduct(id) { openProductModal(id); }
+
+    function saveProduct() {
+        const name = document.getElementById('product-name').value.trim();
+        const sku = document.getElementById('product-sku').value.trim();
+        const price = parseFloat(document.getElementById('product-price').value);
+        if (!name) { showToast('El nombre es obligatorio', 'warning'); return; }
+        if (!sku) { showToast('El SKU es obligatorio', 'warning'); return; }
+        if (isNaN(price) || price <= 0) { showToast('El precio debe ser mayor a 0', 'warning'); return; }
+
+        const data = { name, sku, category: document.getElementById('product-category').value, cost: parseFloat(document.getElementById('product-cost').value) || 0, price, stock: parseInt(document.getElementById('product-stock').value) || 0, brand: document.getElementById('product-brand').value.trim(), desc: document.getElementById('product-desc').value.trim() };
+        const editId = document.getElementById('product-id').value;
+
+        if (editId) { const idx = products.findIndex(p => p.id === parseInt(editId)); if (idx >= 0) products[idx] = { ...products[idx], ...data }; showToast('Producto actualizado', 'success'); }
+        else { data.id = nextProductId++; products.unshift(data); showToast('Producto creado', 'success'); }
+
+        closeModal('product-modal'); renderProducts();
+    }
+
+    function confirmDeleteProduct(id) {
+        const p = products.find(x => x.id === id);
+        document.getElementById('confirm-message').textContent = `Se eliminará "${p?.name}". Esta acción no se puede deshacer.`;
+        document.getElementById('confirm-btn').onclick = () => { products = products.filter(x => x.id !== id); selectedIds.delete(id); closeModal('confirm-modal'); renderProducts(); showToast('Producto eliminado', 'success'); };
+        openModal('confirm-modal');
+    }
+
+    function deleteSelected() {
+        if (!selectedIds.size) return;
+        document.getElementById('confirm-message').textContent = `Se eliminarán ${selectedIds.size} productos seleccionados.`;
+        document.getElementById('confirm-btn').onclick = () => { products = products.filter(p => !selectedIds.has(p.id)); selectedIds.clear(); closeModal('confirm-modal'); renderProducts(); showToast('Productos eliminados', 'success'); };
+        openModal('confirm-modal');
+    }
+
+    function exportProductsCSV() {
+        const headers = ['Nombre','SKU','Categoría','Marca','Costo','Precio','Stock','Descripción'];
+        const rows = products.map(p => [p.name, p.sku, p.category, p.brand, p.cost, p.price, p.stock, `"${(p.desc||'').replace(/"/g,'""')}"`]);
+        const csv = [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
+        const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = 'productos_faro_erp.csv';
+        link.click();
+        showToast('Archivo CSV descargado', 'success');
+    }
+
+    /* =====================================================
+       CATEGORÍAS
+       ===================================================== */
+    function renderCategories() {
+        document.getElementById('categories-grid').innerHTML = categories.map(c => {
+            const count = products.filter(p => p.category === c.name).length;
+            return `<div class="glass-card p-5">
+                <div class="flex items-start justify-between mb-3">
+                    <div class="w-11 h-11 rounded-xl flex items-center justify-center" style="background: ${c.color}20; color: ${c.color};"><svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></div>
+                    <div class="flex gap-1">
+                        <button class="btn-icon" onclick="editCategory(${c.id})"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
+                        <button class="btn-icon" onclick="confirmDeleteCategory(${c.id})"><svg class="w-4 h-4" style="color: var(--color-danger);" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg></button>
+                    </div>
+                </div>
+                <h3 class="font-bold text-sm" style="color: var(--color-text-primary);">${c.name}</h3>
+                <p class="text-xs mt-1" style="color: var(--color-text-secondary);">${c.desc}</p>
+                <p class="text-xs mt-3 font-medium" style="color: ${c.color};">${count} productos</p>
+            </div>`;
+        }).join('');
+    }
+
+    function openCategoryModal(id) {
+        document.getElementById('category-modal-title').textContent = id ? 'Editar Categoría' : 'Nueva Categoría';
+        document.getElementById('category-id').value = ''; document.getElementById('category-name').value = ''; document.getElementById('category-desc').value = ''; document.getElementById('category-color').value = '#10b981';
+        if (id) { const c = categories.find(x => x.id === id); if (c) { document.getElementById('category-id').value = c.id; document.getElementById('category-name').value = c.name; document.getElementById('category-desc').value = c.desc; document.getElementById('category-color').value = c.color; } }
+        openModal('category-modal');
+    }
+    function editCategory(id) { openCategoryModal(id); }
+
+    function saveCategory() {
+        const name = document.getElementById('category-name').value.trim();
+        if (!name) { showToast('El nombre es obligatorio', 'warning'); return; }
+        const data = { name, desc: document.getElementById('category-desc').value.trim(), color: document.getElementById('category-color').value };
+        const editId = document.getElementById('category-id').value;
+        if (editId) {
+            const idx = categories.findIndex(c => c.id === parseInt(editId));
+            if (idx >= 0) { const old = categories[idx].name; categories[idx] = { ...categories[idx], ...data }; if (old !== name) products.forEach(p => { if (p.category === old) p.category = name; }); }
+            showToast('Categoría actualizada', 'success');
+        } else { data.id = nextCategoryId++; categories.push(data); showToast('Categoría creada', 'success'); }
+        closeModal('category-modal'); renderCategories();
+    }
+
+    function confirmDeleteCategory(id) {
+        const c = categories.find(x => x.id === id);
+        document.getElementById('confirm-message').textContent = `Se eliminará "${c.name}".`;
+        document.getElementById('confirm-btn').onclick = () => { categories = categories.filter(x => x.id !== id); closeModal('confirm-modal'); renderCategories(); showToast('Categoría eliminada', 'success'); };
+        openModal('confirm-modal');
+    }
+
+    /* =====================================================
+       MARCAS
+       ===================================================== */
+    function sortBrands(key) {
+        let data = brands.map(b => ({ ...b, count: products.filter(p => p.brand === b.name).length }));
+        const sorted = sortData(data, tableState.brands, key, b => b[key] ?? '');
+        document.querySelectorAll('[id^="sort-brand-"]').forEach(el => { el.textContent = '↕'; el.classList.remove('active'); });
+        const icon = document.getElementById('sort-brand-' + key);
+        if (icon) { icon.textContent = tableState.brands.sortDir === 'asc' ? '↑' : '↓'; icon.classList.add('active'); }
+        renderBrandsTable(sorted);
+    }
+
+    function renderBrands() {
+        let data = brands.map(b => ({ ...b, count: products.filter(p => p.brand === b.name).length }));
+        if (tableState.brands.sortKey) {
+            const key = tableState.brands.sortKey;
+            data.sort((a, b) => { const va = a[key] ?? '', vb = b[key] ?? ''; const cmp = typeof va === 'string' ? va.localeCompare(vb) : va - vb; return tableState.brands.sortDir === 'asc' ? cmp : -cmp; });
+        }
+        renderBrandsTable(data);
+    }
+
+    function renderBrandsTable(data) {
+        const pag = paginate(data, tableState.brands);
+        const tbody = document.getElementById('brands-tbody');
+        tbody.innerHTML = pag.items.map(b => `<tr class="table-row border-t border-[var(--color-border)]">
+            <td class="px-5 py-3"><div class="flex items-center gap-3"><div class="w-9 h-9 rounded-lg flex items-center justify-center text-xs font-bold text-white" style="background: ${avatarColor(b.name)};">${initials(b.name)}</div><span class="font-medium" style="color: var(--color-text-primary);">${b.name}</span></div></td>
+            <td class="px-5 py-3" style="color: var(--color-text-secondary);">${b.count} productos</td>
+            <td class="px-5 py-3" style="color: var(--color-text-secondary);">${b.country}</td>
+            <td class="px-5 py-3 text-right"><div class="flex items-center justify-end gap-1">
+                <button class="btn-icon" onclick="editBrand(${b.id})"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
+                <button class="btn-icon" onclick="confirmDeleteBrand(${b.id})"><svg class="w-4 h-4" style="color: var(--color-danger);" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg></button>
+            </div></td></tr>`).join('');
+
+        renderPagination('brands-pagination', pag, 'goToBrandPage');
+    }
+
+    function goToBrandPage(p) { tableState.brands.page = p; renderBrands(); }
+
+    function openBrandModal(id) {
+        document.getElementById('brand-modal-title').textContent = id ? 'Editar Marca' : 'Nueva Marca';
+        document.getElementById('brand-id').value = ''; document.getElementById('brand-name').value = ''; document.getElementById('brand-country').value = '';
+        if (id) { const b = brands.find(x => x.id === id); if (b) { document.getElementById('brand-id').value = b.id; document.getElementById('brand-name').value = b.name; document.getElementById('brand-country').value = b.country; } }
+        openModal('brand-modal');
+    }
+    function editBrand(id) { openBrandModal(id); }
+
+    function saveBrand() {
+        const name = document.getElementById('brand-name').value.trim();
+        if (!name) { showToast('El nombre es obligatorio', 'warning'); return; }
+        const data = { name, country: document.getElementById('brand-country').value.trim() };
+        const editId = document.getElementById('brand-id').value;
+        if (editId) { const idx = brands.findIndex(b => b.id === parseInt(editId)); if (idx >= 0) { const old = brands[idx].name; brands[idx] = { ...brands[idx], ...data }; if (old !== name) products.forEach(p => { if (p.brand === old) p.brand = name; }); } showToast('Marca actualizada', 'success'); }
+        else { data.id = nextBrandId++; brands.push(data); showToast('Marca creada', 'success'); }
+        closeModal('brand-modal'); renderBrands();
+    }
+
+    function confirmDeleteBrand(id) {
+        const b = brands.find(x => x.id === id);
+        document.getElementById('confirm-message').textContent = `Se eliminará "${b.name}".`;
+        document.getElementById('confirm-btn').onclick = () => { brands = brands.filter(x => x.id !== id); closeModal('confirm-modal'); renderBrands(); showToast('Marca eliminada', 'success'); };
+        openModal('confirm-modal');
+    }
+
+    /* =====================================================
+       VENTAS
+       ===================================================== */
+    function sortSales(key) {
+        const search = (document.getElementById('search-sales')?.value || '').toLowerCase();
+        const sf = document.getElementById('filter-sale-status')?.value || '';
+        let data = getFilteredSales(search, sf);
+        const getClient = s => { const c = clients.find(x => x.id === s.clientId); return c ? c.name : ''; };
+        const sorted = sortData(data, tableState.sales, key, s => {
+            if (key === 'client') return getClient(s);
+            if (key === 'date') return new Date(s.date).getTime();
+            return s[key] ?? '';
+        });
+        document.querySelectorAll('[id^="sort-sale-"]').forEach(el => { el.textContent = '↕'; el.classList.remove('active'); });
+        const icon = document.getElementById('sort-sale-' + key);
+        if (icon) { icon.textContent = tableState.sales.sortDir === 'asc' ? '↑' : '↓'; icon.classList.add('active'); }
+        renderSalesTable(sorted);
+    }
+
+    function getFilteredSales(search, sf) {
+        return sales.filter(s => {
+            const client = clients.find(c => c.id === s.clientId);
+            const cn = client ? client.name : '';
+            const ms = !search || s.invoice.toLowerCase().includes(search) || cn.toLowerCase().includes(search) || s.product.toLowerCase().includes(search);
+            const mst = !sf || s.status === sf;
+            return ms && mst;
+        });
+    }
+
+    function renderSales() {
+        const search = (document.getElementById('search-sales')?.value || '').toLowerCase();
+        const sf = document.getElementById('filter-sale-status')?.value || '';
+        let data = getFilteredSales(search, sf);
+
+        document.getElementById('sales-count-badge').textContent = sales.length + ' ventas totales';
+
+        if (tableState.sales.sortKey) {
+            const key = tableState.sales.sortKey;
+            const getClient = s => { const c = clients.find(x => x.id === s.clientId); return c ? c.name : ''; };
+            data.sort((a, b) => {
+                let va, vb;
+                if (key === 'client') { va = getClient(a); vb = getClient(b); return tableState.sales.sortDir === 'asc' ? va.localeCompare(vb) : vb.localeCompare(va); }
+                if (key === 'date') { va = new Date(a.date).getTime(); vb = new Date(b.date).getTime(); }
+                else { va = a[key] ?? ''; vb = b[key] ?? ''; }
+                const cmp = typeof va === 'string' ? va.localeCompare(vb) : va - vb;
+                return tableState.sales.sortDir === 'asc' ? cmp : -cmp;
+            });
+        }
+
+        renderSalesTable(data);
+    }
+
+    function renderSalesTable(data) {
+        const pag = paginate(data, tableState.sales);
+        const tbody = document.getElementById('sales-tbody');
+        const empty = document.getElementById('sales-empty');
+        const statusBadge = { 'Pagada': 'badge-success', 'Pendiente': 'badge-warning', 'Anulada': 'badge-danger' };
+
+        if (pag.count === 0) { tbody.innerHTML = ''; empty.classList.remove('hidden'); }
+        else {
+            empty.classList.add('hidden');
+            tbody.innerHTML = pag.items.map(s => {
+                const client = clients.find(c => c.id === s.clientId);
+                const ds = new Date(s.date).toLocaleString('es-CO', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
+                return `<tr class="table-row border-t border-[var(--color-border)]">
+                    <td class="px-5 py-3 font-mono text-sm font-medium" style="color: var(--color-primary);">${s.invoice}</td>
+                    <td class="px-5 py-3" style="color: var(--color-text-secondary);">${client ? client.name : 'Desconocido'}</td>
+                    <td class="px-5 py-3" style="color: var(--color-text-secondary);">${s.qty}x ${s.product}</td>
+                    <td class="px-5 py-3 font-medium" style="color: var(--color-text-primary);">${formatCurrency(s.total)}</td>
+                    <td class="px-5 py-3"><span class="badge ${statusBadge[s.status] || 'badge-info'}">${s.status}</span></td>
+                    <td class="px-5 py-3 text-xs" style="color: var(--color-text-muted);">${ds}</td>
+                    <td class="px-5 py-3 text-right">${s.status === 'Pendiente' ? `<button class="btn btn-ghost text-xs" onclick="markSalePaid(${s.id})">Pagar</button>` : ''}</td>
+                </tr>`;
+            }).join('');
+        }
+
+        renderPagination('sales-pagination', pag, 'goToSalePage');
+    }
+
+    function goToSalePage(p) { tableState.sales.page = p; renderSales(); }
+
+    function openSaleModal() {
+        document.getElementById('sale-client').innerHTML = '<option value="">Seleccionar cliente...</option>' + clients.map(c => `<option value="${c.id}">${c.name}</option>`).join('');
+        document.getElementById('sale-product').innerHTML = '<option value="">Seleccionar producto...</option>' + products.filter(p => p.stock > 0).map(p => `<option value="${p.id}" data-price="${p.price}">${p.name} (${formatCurrency(p.price)}) - Stock: ${p.stock}</option>`).join('');
+        document.getElementById('sale-qty').value = 1; document.getElementById('sale-total').value = ''; document.getElementById('sale-notes').value = '';
+        openModal('sale-modal');
+    }
+
+    function updateSalePrice() {
+        const sel = document.getElementById('sale-product');
+        const opt = sel.options[sel.selectedIndex];
+        const price = opt ? parseFloat(opt.dataset.price) || 0 : 0;
+        const qty = parseInt(document.getElementById('sale-qty').value) || 0;
+        document.getElementById('sale-total').value = qty > 0 && price > 0 ? formatCurrency(price * qty) : '';
+    }
+
+    function saveSale() {
+        const clientId = parseInt(document.getElementById('sale-client').value);
+        const productId = parseInt(document.getElementById('sale-product').value);
+        const qty = parseInt(document.getElementById('sale-qty').value);
+        if (!clientId) { showToast('Selecciona un cliente', 'warning'); return; }
+        if (!productId) { showToast('Selecciona un producto', 'warning'); return; }
+        if (!qty || qty < 1) { showToast('Cantidad inválida', 'warning'); return; }
+        const product = products.find(p => p.id === productId);
+        if (!product || product.stock < qty) { showToast(`Stock insuficiente. Disponible: ${product?.stock ?? 0}`, 'danger'); return; }
+
+        product.stock -= qty;
+        const inv = String(nextInvoice++).padStart(4, '0');
+        sales.unshift({ id: nextSaleId++, invoice: `FAC-${inv}`, clientId, product: product.name, qty, total: product.price * qty, status: 'Pendiente', date: new Date().toISOString() });
+
+        const client = clients.find(c => c.id === clientId);
+        if (client) { client.purchases++; client.total += product.price * qty; }
+
+        closeModal('sale-modal'); renderSales(); showToast(`Venta FAC-${inv} registrada`, 'success');
+    }
+
+    function markSalePaid(id) { const s = sales.find(x => x.id === id); if (s) { s.status = 'Pagada'; renderSales(); showToast('Venta marcada como pagada', 'success'); } }
+
+    /* =====================================================
+       CLIENTES
+       ===================================================== */
+    function sortClients(key) {
+        const search = (document.getElementById('search-clients')?.value || '').toLowerCase();
+        let data = clients.filter(c => !search || c.name.toLowerCase().includes(search) || c.email.toLowerCase().includes(search) || c.doc.includes(search));
+        const sorted = sortData(data, tableState.clients, key, c => c[key] ?? '');
+        document.querySelectorAll('[id^="sort-client-"]').forEach(el => { el.textContent = '↕'; el.classList.remove('active'); });
+        const icon = document.getElementById('sort-client-' + key);
+        if (icon) { icon.textContent = tableState.clients.sortDir === 'asc' ? '↑' : '↓'; icon.classList.add('active'); }
+        renderClientsTable(sorted);
+    }
+
+    function renderClients() {
+        const search = (document.getElementById('search-clients')?.value || '').toLowerCase();
+        let data = clients.filter(c => !search || c.name.toLowerCase().includes(search) || c.email.toLowerCase().includes(search) || c.doc.includes(search));
+
+        if (tableState.clients.sortKey) {
+            const key = tableState.clients.sortKey;
+            data.sort((a, b) => { const va = a[key] ?? '', vb = b[key] ?? ''; const cmp = typeof va === 'string' ? va.localeCompare(vb) : va - vb; return tableState.clients.sortDir === 'asc' ? cmp : -cmp; });
+        }
+
+        renderClientsTable(data);
+    }
+
+    function renderClientsTable(data) {
+        const pag = paginate(data, tableState.clients);
+        const tbody = document.getElementById('clients-tbody');
+        const empty = document.getElementById('clients-empty');
+
+        if (pag.count === 0) { tbody.innerHTML = ''; empty.classList.remove('hidden'); }
+        else {
+            empty.classList.add('hidden');
+            tbody.innerHTML = pag.items.map(c => `<tr class="table-row border-t border-[var(--color-border)]">
+                <td class="px-5 py-3"><div class="flex items-center gap-3"><div class="avatar" style="background: ${avatarColor(c.name)};">${initials(c.name)}</div><div><p class="font-medium text-sm" style="color: var(--color-text-primary);">${c.name}</p><p class="text-xs" style="color: var(--color-text-muted);">${c.doctype}</p></div></div></td>
+                <td class="px-5 py-3 font-mono text-xs" style="color: var(--color-text-secondary);">${c.doc}</td>
+                <td class="px-5 py-3 text-sm" style="color: var(--color-text-secondary);">${c.email}</td>
+                <td class="px-5 py-3 text-sm" style="color: var(--color-text-secondary);">${c.phone}</td>
+                <td class="px-5 py-3" style="color: var(--color-text-secondary);">${c.purchases}</td>
+                <td class="px-5 py-3 font-medium" style="color: var(--color-text-primary);">${formatCurrency(c.total)}</td>
+                <td class="px-5 py-3 text-right"><div class="flex items-center justify-end gap-1">
+                    <button class="btn-icon" onclick="editClient(${c.id})"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
+                    <button class="btn-icon" onclick="confirmDeleteClient(${c.id})"><svg class="w-4 h-4" style="color: var(--color-danger);" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg></button>
+                </div></td></tr>`).join('');
+        }
+
+        renderPagination('clients-pagination', pag, 'goToClientPage');
+    }
+
+    function goToClientPage(p) { tableState.clients.page = p; renderClients(); }
+
+    function openClientModal(id) {
+        document.getElementById('client-modal-title').textContent = id ? 'Editar Cliente' : 'Nuevo Cliente';
+        document.getElementById('client-id').value = '';
+        ['client-name','client-doc','client-email','client-phone','client-address'].forEach(f => document.getElementById(f).value = '');
+        document.getElementById('client-doctype').value = 'CC';
+        if (id) { const c = clients.find(x => x.id === id); if (c) { document.getElementById('client-id').value = c.id; document.getElementById('client-name').value = c.name; document.getElementById('client-doctype').value = c.doctype; document.getElementById('client-doc').value = c.doc; document.getElementById('client-email').value = c.email; document.getElementById('client-phone').value = c.phone; document.getElementById('client-address').value = c.address; } }
+        openModal('client-modal');
+    }
+    function editClient(id) { openClientModal(id); }
+
+    function saveClient() {
+        const name = document.getElementById('client-name').value.trim();
+        const doc = document.getElementById('client-doc').value.trim();
+        const email = document.getElementById('client-email').value.trim();
+        if (!name) { showToast('El nombre es obligatorio', 'warning'); return; }
+        if (!doc) { showToast('El documento es obligatorio', 'warning'); return; }
+        if (!email) { showToast('El email es obligatorio', 'warning'); return; }
+        const data = { name, doctype: document.getElementById('client-doctype').value, doc, email, phone: document.getElementById('client-phone').value.trim(), address: document.getElementById('client-address').value.trim() };
+        const editId = document.getElementById('client-id').value;
+        if (editId) { const idx = clients.findIndex(c => c.id === parseInt(editId)); if (idx >= 0) clients[idx] = { ...clients[idx], ...data }; showToast('Cliente actualizado', 'success'); }
+        else { data.id = nextClientId++; data.purchases = 0; data.total = 0; clients.push(data); showToast('Cliente creado', 'success'); }
+        closeModal('client-modal'); renderClients();
+    }
+
+    function confirmDeleteClient(id) {
+        const c = clients.find(x => x.id === id);
+        document.getElementById('confirm-message').textContent = `Se eliminará "${c.name}" con ${c.purchases} compras.`;
+        document.getElementById('confirm-btn').onclick = () => { clients = clients.filter(x => x.id !== id); closeModal('confirm-modal'); renderClients(); showToast('Cliente eliminado', 'success'); };
+        openModal('confirm-modal');
+    }
+
+    /* =====================================================
+       REPORTES - TABS
+       ===================================================== */
+    function switchReportTab(btn, tabId) {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        document.querySelectorAll('.report-tab').forEach(t => t.classList.add('hidden'));
+        document.getElementById('report-' + tabId).classList.remove('hidden');
+    }
+
+    /* =====================================================
+       INICIALIZACIÓN
+       ===================================================== */
+    document.addEventListener('DOMContentLoaded', () => {
+        renderProducts();
+        const prodBtn = document.querySelector('.nav-item[data-view="productos"]');
+        if (prodBtn) prodBtn.classList.add('active');
+    });
+    </script>
+</body>
+</html>
