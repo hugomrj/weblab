@@ -43,7 +43,7 @@
         .side { width: var(--side-w); min-width: var(--side-w); background: var(--bg-side); border-right: 1px solid var(--border); display: flex; flex-direction: column; overflow: hidden; transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1), min-width 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
         .side.collapsed { width: var(--side-w-collapsed); min-width: var(--side-w-collapsed); }
         .side-head { padding: 16px; display: flex; align-items: center; justify-content: space-between; }
-        .side.collapsed .side-head { justify-content: center; padding: 16px 0; }
+        .side.collapsed .side-head { justify-content: center; padding: 16px; }
         .logo { font-size: 15px; font-weight: 800; letter-spacing: -0.5px; white-space: nowrap; overflow: hidden; }
         .logo span { color: var(--accent); }
         .side.collapsed .logo { display: none; }
@@ -75,6 +75,18 @@
         .tb-crumb .cur { color: var(--t1); font-weight: 600; }
         .tb-spacer { flex: 1; }
         .kbd { font-size: 10px; font-family: 'JetBrains Mono', monospace; background: var(--bg-surf); border: 1px solid var(--border); padding: 2px 6px; border-radius: 4px; color: var(--t3); }
+        
+        /* UX: Botón de acción principal en Topbar */
+        .btn-new-doc {
+            display: flex; align-items: center; gap: 6px;
+            padding: 6px 14px; border-radius: 8px;
+            background: var(--accent); color: #fff;
+            border: 1px solid var(--accent);
+            font-size: 12px; font-weight: 600; cursor: pointer;
+            transition: all 0.15s ease; font-family: inherit;
+        }
+        .btn-new-doc:hover { filter: brightness(1.15); transform: translateY(-1px); }
+        .btn-new-doc svg { width: 14px; height: 14px; }
 
         .content { flex: 1; overflow: hidden; position: relative; }
         .view { position: absolute; inset: 0; overflow: hidden; display: flex; flex-direction: column; opacity: 0; transform: translateY(8px); transition: opacity 0.25s ease, transform 0.25s ease; pointer-events: none; }
@@ -94,7 +106,7 @@
         .doc-meta { font-size: 11px; color: var(--t3); display: flex; gap: 8px; }
         .doc-actions { display: flex; gap: 6px; opacity: 0; transition: opacity 0.15s; }
         .doc-item:hover .doc-actions { opacity: 1; }
-        .action-btn { padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: 500; border: 1px solid var(--border); background: var(--bg-surf); color: var(--t2); cursor: pointer; transition: all 0.15s; }
+        .action-btn { padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: 500; border: 1px solid var(--border); background: var(--bg-surf); color: var(--t2); cursor: pointer; transition: all 0.15s; font-family: inherit; }
         .action-btn:hover { background: var(--bg-hover); color: var(--t1); border-color: var(--border-l); }
         .action-btn.danger:hover { background: var(--red-d); color: var(--red); border-color: rgba(248,113,113,0.3); }
 
@@ -110,7 +122,8 @@
         .dash-card { background: var(--bg-surf); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
         .dc-head { padding: 14px 18px; border-bottom: 1px solid var(--border); font-size: 13px; font-weight: 600; display: flex; justify-content: space-between; align-items: center; }
         .dc-body { padding: 16px 18px; }
-        .rec-item { display: flex; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--border); align-items: center; }
+        .rec-item { display: flex; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--border); align-items: center; cursor: pointer; transition: background 0.15s; border-radius: 6px; padding-left: 8px; padding-right: 8px; margin: 0 -8px; }
+        .rec-item:hover { background: var(--bg-hover); }
         .rec-item:last-child { border-bottom: none; }
 
         /* MAPA DE CONOCIMIENTO */
@@ -124,7 +137,7 @@
         .map-doc-link:hover { color: var(--t1); }
         .map-doc-link::before { content: '•'; color: var(--t3); font-size: 16px; line-height: 0; }
 
-        /* SEARCH & CHAT (Reusing previous good styles) */
+        /* SEARCH & CHAT */
         .sv-bar { display: flex; gap: 10px; align-items: center; max-width: 640px; margin-bottom: 20px; }
         .sv-bar-wrap { position: relative; flex: 1; }
         .sv-bar-wrap svg { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--t3); pointer-events: none; }
@@ -208,11 +221,8 @@
     <aside class="side" id="sidebar">
         <div class="side-head">
             <div class="logo">Nexus<span>Doc</span></div>
-            <button class="ib" onclick="toggleSidebar()" id="collapseBtn" style="display:none;">
+            <button class="ib" onclick="toggleSidebar()" id="collapseBtn" style="display:none;" title="Colapsar menú">
                 <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
-            </button>
-            <button class="ib acc" onclick="openUpload()" title="Subir documento">
-                <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
             </button>
         </div>
         <div class="side-nav">
@@ -255,6 +265,13 @@
             <div class="tb-spacer"></div>
             <span style="font-size:11px;color:var(--t3);">Búsqueda rápida</span>
             <span class="kbd">Ctrl+K</span>
+            
+            <!-- UX: Botón de acción principal movido aquí -->
+            <button class="btn-new-doc" onclick="openUpload()">
+                <svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+                <span>Nuevo Documento</span>
+            </button>
+
             <button class="ib" onclick="toggleTheme()" title="Cambiar tema" style="margin-left:8px;">
                 <svg id="themeIcon" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
             </button>
@@ -439,7 +456,7 @@ function processDoc(id) {
     const doc = FS.find(f => f.id === id);
     if(doc) {
         doc.status = 'active';
-        doc.folder = 'Biblioteca General'; // Simulación de clasificación
+        doc.folder = 'Biblioteca General';
         renderInbox();
         updateStats();
     }
@@ -529,7 +546,7 @@ function doSearch(q) {
     el.innerHTML = html;
 }
 
-// --- 6. ASISTENTE (Ya existente, simplificado) ---
+// --- 6. ASISTENTE ---
 function askSug(q){document.getElementById('chatInput').value=q;sendChat();}
 function sendChat(){
     const input=document.getElementById('chatInput');const text=input.value.trim();if(!text)return;
@@ -614,7 +631,6 @@ function openNote(id) {
     
     document.getElementById('noteMd').innerHTML = html;
     
-    // Sidebar backlinks simulation
     const related = FS.filter(o => o.id !== f.id && o.tags.some(t => f.tags.includes(t)) && o.status === 'active');
     let sideH = `<div class="ns-section"><div class="ns-label">Propiedades</div><div style="font-size:12px;color:var(--t2);line-height:1.8"><strong>Carpeta:</strong> ${f.folder}<br><strong>Estado:</strong> ${f.status}</div></div>`;
     sideH += `<div class="ns-section"><div class="ns-label">Documentos Relacionados (${related.length})</div>`;
