@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="es" class="">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nexus ERP - Bento System</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            DEFAULT: 'var(--brand-color)',
+                            hover: 'var(--brand-hover)',
+                            light: 'var(--brand-light)',
+                            dark: 'var(--brand-dark)',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* =========================================
+           CONFIGURACIÓN DE TEMA - FÁCIL CAMBIO
+           ========================================= 
+           Cambia --brand-color para cambiar todo el sistema */
+        :root {
+            --brand-color: #6366f1; /* Color Principal - Prueba cambiarlo a #10b981 (verde) o #f43f5e (rojo) */
+            --brand-hover: #4f46e5; 
+            --brand-light: #e0e7ff; 
+            --brand-dark: #312e81;  
+            
+            /* Light Mode */
+            --bg-body: #f8fafc;
+            --bg-card: #ffffff;
+            --bg-sidebar: #ffffff;
+            --bg-subtle: #f1f5f9;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+        }
+
+        .dark {
+            --bg-body: #09090b;
+            --bg-card: #18181b;
+            --bg-sidebar: #09090b;
+            --bg-subtle: #27272a;
+            --text-main: #fafafa;
+            --text-muted: #a1a1aa;
+            --border-color: #27272a;
+            --brand-light: #312e81; /* Ajuste de opacidad para dark mode */
+        }
+
+        body { 
+            background-color: var(--bg-body); 
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+        }
+
+        /* Bento Card Base */
+        .bento-card {
+            background: var(--bg-card);
+            border-radius: 1.5rem; /* Bento style rounded corners */
+            border: 1px solid var(--border-color);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .bento-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.05);
+        }
+        .dark .bento-card:hover {
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Scrollbar */
+        .custom-scroll::-webkit-scrollbar { width: 6px; height: 6px; }
+        .custom-scroll::-webkit-scrollbar-track { background: transparent; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 10px; }
+        .custom-scroll::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+
+        /* Animations */
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .animate-enter { animation: slideUp 0.4s ease-out forwards; opacity: 0; }
+
+        /* Pagination Buttons */
+        .page-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            border: 1px solid var(--border-color);
+            color: var(--text-muted);
+            transition: all 0.2s;
+        }
+        .page-btn:hover:not(:disabled) {
+            background: var(--bg-subtle);
+            color: var(--text-main);
+        }
+        .page-btn.active {
+            background: var(--brand-color);
+            color: #fff;
+            border-color: var(--brand-color);
+        }
+        .page-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        /* Mobile sidebar overlay */
+        .sidebar-overlay {
+            background: rgba(0,0,0,0.5);
+            position: fixed;
+            inset: 0;
+            z-index: 40;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+        }
+        .sidebar-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+    </style>
+</head>
+<body class="antialiased h-screen flex overflow-hidden">
+
+    <!-- Mobile Overlay -->
+    <div id="sidebar-overlay" class="sidebar-overlay md:hidden" onclick="toggleSidebar()"></div>
+
+    <!-- SIDEBAR -->
+    <aside id="sidebar" class="w-64 bg-[var(--bg-sidebar)] border-r border-[var(--border-color)] flex flex-col fixed md:relative h-full z-50 transform -translate-x-full md:translate-x-0 transition-transform duration-300 flex-shrink-0">
+        <div class="h-20 flex items-center justify-between px-6 border-b border-[var(--border-color)]">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-brand rounded-xl flex items-center justify-center shadow-lg shadow-brand/30">
+                    <i class="fa-solid fa-cube text-white text-lg"></i>
+                </div>
+                <span class="font-bold text-lg tracking-tight text-[var(--text-main)]">NEXUS</span>
+            </div>
+            <button class="md:hidden text-[var(--text-muted)]" onclick="toggleSidebar()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <nav class="flex-1 py-4 px-3 space-y-1 overflow-y-auto custom-scroll">
+            <button class="nav-link active w-full flex items-center p-3 rounded-xl transition-all">
+                <i class="fa-solid fa-grip text-xl w-8 text-center"></i>
+                <span class="ml-3">Dashboard</span>
+            </button>
+            <button class="nav-link w-full flex items-center p-3 rounded-xl hover:bg-[var(--bg-subtle)] transition-all text-[var(--text-muted)]">
+                <i class="fa-solid fa-file-invoice-dollar text-xl w-8 text-center"></i>
+                <span class="ml-3">Ventas</span>
+            </button>
+            <button class="nav-link w-full flex items-center p-3 rounded-xl hover:bg-[var(--bg-subtle)] transition-all text-[var(--text-muted)]">
+                <i class="fa-solid fa-boxes-stacked text-xl w-8 text-center"></i>
+                <span class="ml-3">Inventario</span>
+            </button>
+            <button class="nav-link w-full flex items-center p-3 rounded-xl hover:bg-[var(--bg-subtle)] transition-all text-[var(--text-muted)]">
+                <i class="fa-solid fa-chart-pie text-xl w-8 text-center"></i>
+                <span class="ml-3">Finanzas</span>
+            </button>
+        </nav>
+        <div class="p-4 border-t border-[var(--border-color)]">
+            <div class="flex items-center gap-3 bg-[var(--bg-subtle)] p-3 rounded-xl cursor-pointer">
+                <img src="https://ui-avatars.com/api/?name=Admin&background=6366f1&color=fff" class="w-9 h-9 rounded-lg" alt="User">
+                <div class="flex-1 overflow-hidden">
+                    <p class="text-sm font-semibold truncate text-[var(--text-main)]">Admin User</p>
+                    <p class="text-xs text-[var(--text-muted)] truncate">Super Admin</p>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- MAIN AREA -->
+    <main class="flex-1 flex flex-col min-w-0 overflow-hidden">
+        
+        <!-- TOP BAR -->
+        <header class="h-20 flex items-center justify-between px-4 md:px-8 z-20 border-b border-[var(--border-color)] bg-[var(--bg-body)]">
+            <div class="flex items-center gap-4">
+                <button class="md:hidden w-10 h-10 rounded-xl bg-[var(--bg-subtle)] flex items-center justify-center" onclick="toggleSidebar()">
+                    <i class="fas fa-bars text-[var(--text-main)]"></i>
+                </button>
+                <h2 class="text-xl font-bold text-[var(--text-main)]">Dashboard General</h2>
+            </div>
+            <div class="flex items-center gap-2 md:gap-4">
+                <button onclick="toggleTheme()" class="w-10 h-10 rounded-xl bg-[var(--bg-subtle)] text-[var(--text-main)] hover:text-brand flex items-center justify-center transition-colors">
+                    <i id="theme-icon" class="fa-solid fa-moon"></i>
+                </button>
+                <button class="bg-brand hover:bg-brand-hover text-white px-4 md:px-5 py-2.5 rounded-xl text-sm font-semibold shadow-lg shadow-brand/20 transition-all flex items-center gap-2">
+                    <i class="fa-solid fa-plus"></i> <span class="hidden sm:inline">Nuevo</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- CONTENT AREA (BENTO GRID) -->
+        <div id="content-area" class="flex-1 overflow-y-auto p-4 md:p-8 custom-scroll bg-[var(--bg-body)]">
+            
+            <!-- PURE BENTO GRID -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 auto-rows-[minmax(140px,auto)]">
+                
+                <!-- 1. Big Card: Chart (Col-span 2, Row-span 2) -->
+                <div class="bento-card p-6 col-span-1 md:col-span-2 lg:col-span-2 row-span-2 flex flex-col animate-enter">
+                    <div class="flex justify-between items-start mb-6">
+                        <div>
+                            <p class="text-sm text-[var(--text-muted)]">Ingresos Totales</p>
+                            <h3 class="text-3xl font-bold text-[var(--text-main)] mt-1">$ 145,600,000</h3>
+                            <div class="flex items-center gap-2 mt-2">
+                                <span class="bg-brand-light text-brand px-2 py-0.5 rounded-lg font-bold text-xs">+12.5%</span>
+                                <span class="text-[var(--text-muted)] text-xs">vs mes anterior</span>
+                            </div>
+                        </div>
+                        <div class="w-12 h-12 rounded-2xl bg-brand-light text-brand flex items-center justify-center text-xl">
+                            <i class="fa-solid fa-arrow-trend-up"></i>
+                        </div>
+                    </div>
+                    <div class="flex-1 min-h-[200px]">
+                        <canvas id="chartMain"></canvas>
+                    </div>
+                </div>
+
+                <!-- 2. Profit Card -->
+                <div class="bento-card p-6 col-span-1 flex flex-col justify-between animate-enter" style="animation-delay: 0.1s">
+                    <div>
+                        <p class="text-sm text-[var(--text-muted)]">Utilidad Neta</p>
+                        <h3 class="text-2xl font-bold text-[var(--text-main)] mt-1">$ 56,400,000</h3>
+                    </div>
+                    <div>
+                        <div class="h-1.5 w-full bg-[var(--bg-subtle)] rounded-full overflow-hidden">
+                            <div class="h-full bg-brand rounded-full" style="width: 65%"></div>
+                        </div>
+                        <p class="text-xs text-[var(--text-muted)] mt-2">Margen 65%</p>
+                    </div>
+                </div>
+
+                <!-- 3. Actionable Alert Card -->
+                <div class="bento-card p-6 col-span-1 bg-brand text-white flex flex-col justify-between animate-enter" style="animation-delay: 0.2s">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <p class="text-sm text-white/80">Acción Requerida</p>
+                            <h3 class="text-3xl font-bold mt-1">3</h3>
+                            <p class="text-xs text-white/80 mt-1">Lotes Pendientes</p>
+                        </div>
+                        <i class="fa-solid fa-triangle-exclamation text-xl text-white/80"></i>
+                    </div>
+                    <button class="w-full py-2 bg-white/20 hover:bg-white/30 text-white text-xs font-bold rounded-lg transition-colors mt-4 backdrop-blur-sm">
+                        Resolver ahora →
+                    </button>
+                </div>
+
+                <!-- 4. Quick Actions -->
+                <div class="bento-card p-6 col-span-1 md:col-span-2 animate-enter" style="animation-delay: 0.3s">
+                    <h3 class="font-bold text-[var(--text-main)] mb-4">Accesos Rápidos</h3>
+                    <div class="grid grid-cols-3 gap-4">
+                        <button class="flex flex-col items-center p-4 rounded-2xl bg-[var(--bg-subtle)] hover:bg-brand-light hover:text-brand transition-all group">
+                            <i class="fa-solid fa-file-export text-2xl mb-2 group-hover:scale-110 transition-transform"></i>
+                            <span class="text-xs font-bold">Exportar</span>
+                        </button>
+                        <button class="flex flex-col items-center p-4 rounded-2xl bg-[var(--bg-subtle)] hover:bg-brand-light hover:text-brand transition-all group">
+                            <i class="fa-solid fa-user-plus text-2xl mb-2 group-hover:scale-110 transition-transform"></i>
+                            <span class="text-xs font-bold">Cliente</span>
+                        </button>
+                        <button class="flex flex-col items-center p-4 rounded-2xl bg-[var(--bg-subtle)] hover:bg-brand-light hover:text-brand transition-all group">
+                            <i class="fa-solid fa-box-open text-2xl mb-2 group-hover:scale-110 transition-transform"></i>
+                            <span class="text-xs font-bold">Stock</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 5. Recent Transactions Table with Pagination -->
+                <div class="bento-card p-6 col-span-1 md:col-span-2 lg:col-span-4 animate-enter" style="animation-delay: 0.4s">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="font-bold text-[var(--text-main)]">Transacciones Recientes</h3>
+                        <button class="text-xs font-bold text-brand hover:underline">Ver todas</button>
+                    </div>
+                    
+                    <!-- Tabla -->
+                    <div class="overflow-x-auto custom-scroll">
+                        <table class="w-full text-left text-sm">
+                            <thead>
+                                <tr class="text-[var(--text-muted)] uppercase text-[10px] tracking-wider border-b border-[var(--border-color)]">
+                                    <th class="pb-3">ID</th>
+                                    <th class="pb-3">Cliente</th>
+                                    <th class="pb-3 hidden md:table-cell">Fecha</th>
+                                    <th class="pb-3 text-right">Monto</th>
+                                    <th class="pb-3 text-center">Estado</th>
+                                </tr>
+                            </thead>
+                            <tbody id="table-body" class="divide-y divide-[var(--border-color)]">
+                                <!-- JS injects rows here -->
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Paginación -->
+                    <div class="flex justify-between items-center mt-6">
+                        <p id="page-info" class="text-xs text-[var(--text-muted)]">Mostrando 1-5 de 12</p>
+                        <div id="pagination-controls" class="flex gap-2">
+                            <!-- JS injects buttons here -->
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // =========================================
+        // 1. CONFIGURACIÓN Y DATOS (MOCK DATA)
+        // =========================================
+        const db = {
+            transactions: [
+                { id: 'FAC-001', client: 'Importadora Asunción', date: '22 Ago', amount: 12500000, status: 'Validado' },
+                { id: 'FAC-002', client: 'Tech Solutions Py', date: '21 Ago', amount: 4300000, status: 'Pendiente' },
+                { id: 'COMP-003', client: 'Distribuidora Central', date: '20 Ago', amount: 8900000, status: 'Pagado' },
+                { id: 'FAC-004', client: 'Constructora Del Sur', date: '19 Ago', amount: 28000000, status: 'Exportado' },
+                { id: 'FAC-005', client: 'Global Traders', date: '18 Ago', amount: 5600000, status: 'Validado' },
+                { id: 'COMP-006', client: 'Inversiones SA', date: '17 Ago', amount: 9800000, status: 'Pagado' },
+                { id: 'FAC-007', client: 'Servicios Express', date: '16 Ago', amount: 2100000, status: 'Pendiente' },
+                { id: 'FAC-008', client: 'Comercial Este', date: '15 Ago', amount: 7700000, status: 'Validado' },
+                { id: 'COMP-009', client: 'Industrias Metal', date: '14 Ago', amount: 15000000, status: 'Exportado' },
+                { id: 'FAC-010', client: 'Tecno Shop', date: '13 Ago', amount: 3200000, status: 'Pagado' },
+                { id: 'FAC-011', client: 'Ferretería Total', date: '12 Ago', amount: 6400000, status: 'Pendiente' },
+                { id: 'FAC-012', client: 'Mayorista Norte', date: '11 Ago', amount: 11200000, status: 'Validado' }
+            ]
+        };
+
+        // =========================================
+        // 2. PAGINACIÓN
+        // =========================================
+        let currentPage = 1;
+        const itemsPerPage = 5;
+
+        function renderTable() {
+            const tbody = document.getElementById('table-body');
+            const pageInfo = document.getElementById('page-info');
+            const pagControls = document.getElementById('pagination-controls');
+            
+            // Calcular datos a mostrar
+            const start = (currentPage - 1) * itemsPerPage;
+            const end = start + itemsPerPage;
+            const paginatedData = db.transactions.slice(start, end);
+            
+            // Generar HTML de filas
+            tbody.innerHTML = paginatedData.map(t => `
+                <tr class="hover:bg-[var(--bg-subtle)] transition-colors">
+                    <td class="py-4 font-mono font-bold text-[var(--text-main)]">${t.id}</td>
+                    <td class="py-4 text-[var(--text-main)] font-medium">${t.client}</td>
+                    <td class="py-4 text-[var(--text-muted)] text-xs hidden md:table-cell">${t.date}</td>
+                    <td class="py-4 text-right font-bold font-mono text-[var(--text-main)]">$ ${t.amount.toLocaleString()}</td>
+                    <td class="py-4 text-center">
+                        <span class="px-2.5 py-1 rounded-lg text-[10px] font-bold bg-brand-light text-brand">${t.status}</span>
+                    </td>
+                </tr>
+            `).join('');
+            
+            // Actualizar texto de info
+            pageInfo.innerText = `Mostrando ${start + 1}-${Math.min(end, db.transactions.length)} de ${db.transactions.length}`;
+            
+            // Generar botones de paginación
+            const totalPages = Math.ceil(db.transactions.length / itemsPerPage);
+            let buttons = `
+                <button class="page-btn" ${currentPage === 1 ? 'disabled' : ''} onclick="changePage(${currentPage - 1})">
+                    <i class="fa-solid fa-chevron-left"></i>
+                </button>
+            `;
+            for (let i = 1; i <= totalPages; i++) {
+                buttons += `<button class="page-btn ${i === currentPage ? 'active' : ''}" onclick="changePage(${i})">${i}</button>`;
+            }
+            buttons += `
+                <button class="page-btn" ${currentPage === totalPages ? 'disabled' : ''} onclick="changePage(${currentPage + 1})">
+                    <i class="fa-solid fa-chevron-right"></i>
+                </button>
+            `;
+            pagControls.innerHTML = buttons;
+        }
+
+        function changePage(page) {
+            currentPage = page;
+            renderTable();
+        }
+
+        // =========================================
+        // 3. INTERFAZ (UI) LÓGICA
+        // =========================================
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebar-overlay');
+            sidebar.classList.toggle('-translate-x-full');
+            overlay.classList.toggle('active');
+        }
+
+        function toggleTheme() {
+            const html = document.documentElement;
+            const icon = document.getElementById('theme-icon');
+            if (html.classList.contains('dark')) {
+                html.classList.remove('dark');
+                icon.classList.remove('fa-sun');
+                icon.classList.add('fa-moon');
+                localStorage.setItem('theme', 'light');
+            } else {
+                html.classList.add('dark');
+                icon.classList.remove('fa-moon');
+                icon.classList.add('fa-sun');
+                localStorage.setItem('theme', 'dark');
+            }
+            initCharts(); // Re-render chart to update theme colors
+        }
+
+        // Check local storage for theme on load
+        if (localStorage.getItem('theme') === 'dark') {
+            document.documentElement.classList.add('dark');
+            document.getElementById('theme-icon').classList.remove('fa-moon');
+            document.getElementById('theme-icon').classList.add('fa-sun');
+        }
+
+        // =========================================
+        // 4. GRÁFICOS (CHART.JS)
+        // =========================================
+        function initCharts() {
+            const ctx = document.getElementById('chartMain');
+            if (!ctx) return;
+
+            const isDark = document.documentElement.classList.contains('dark');
+            const gridColor = isDark ? 'rgba(255,255,255,0.1)' : '#e2e8f0';
+            const textColor = isDark ? '#a1a1aa' : '#64748b';
+            
+            // Obtener color principal del CSS
+            const brandColor = getComputedStyle(document.documentElement).getPropertyValue('--brand-color').trim();
+            const secondaryColor = isDark ? '#27272a' : '#cbd5e1';
+
+            // Destruir gráfico si ya existe
+            if (window.mainChartInstance) window.mainChartInstance.destroy();
+
+            window.mainChartInstance = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago'],
+                    datasets: [
+                        {
+                            label: 'Ingresos',
+                            data: [95, 110, 105, 120, 135, 145],
+                            backgroundColor: brandColor,
+                            borderRadius: 8,
+                            barPercentage: 0.5
+                        },
+                        {
+                            label: 'Egresos',
+                            data: [60, 75, 68, 80, 85, 89],
+                            backgroundColor: secondaryColor,
+                            borderRadius: 8,
+                            barPercentage: 0.5
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: true, position: 'top', align: 'end', labels: { color: textColor, usePointStyle: true, boxWidth: 8 } },
+                        tooltip: { backgroundColor: isDark ? '#27272a' : '#fff', titleColor: textColor, bodyColor: textColor, borderColor: gridColor, borderWidth: 1 }
+                    },
+                    scales: {
+                        y: { grid: { color: gridColor, drawBorder: false }, ticks: { color: textColor, callback: (val) => val + 'M' } },
+                        x: { grid: { display: false }, ticks: { color: textColor } }
+                    }
+                }
+            });
+        }
+
+        // =========================================
+        // INICIALIZACIÓN
+        // =========================================
+        window.onload = () => {
+            renderTable();
+            initCharts();
+        };
+    </script>
+</body>
+</html>
