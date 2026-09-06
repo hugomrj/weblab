@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#ff5ba0">
+<!-- ✏️ EDITA [1]: título de la pestaña -->
+<title>Te llegó una invitación 🎀</title>
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Baloo+2:wght@600;700;800&family=Anton&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --rosa:#ff4d94; --rosa-f:#ff5ba0; --rosa-pastel:#f6a8ca; --rosa-txt:#f0609e;
+    --tinta:#20232a;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:#e9e9ee;font-family:'Baloo 2',sans-serif;color:var(--tinta)}
+  .app{max-width:430px;margin:0 auto;background:#fff;min-height:100svh;box-shadow:0 0 40px rgba(0,0,0,.18);overflow:hidden}
+  .sec{min-height:100svh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:34px 16px;position:relative}
+
+  /* ===== FONDOS DE RAYAS + MOÑOS ===== */
+  .rayas-fuerte{
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='150' height='100' viewBox='0 0 100 60'%3E%3Cg fill='%23f2a9c9' opacity='.35'%3E%3Cpath d='M50 30 C40 12 8 8 10 30 C11 44 36 48 50 38Z'/%3E%3Cpath d='M50 30 C60 12 92 8 90 30 C89 44 64 48 50 38Z'/%3E%3Ccircle cx='50' cy='34' r='7'/%3E%3C/g%3E%3C/svg%3E"),
+      repeating-linear-gradient(90deg,#f7bfd4 0 24px,#fff 24px 48px);
+  }
+  .rayas-suave{
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='150' height='100' viewBox='0 0 100 60'%3E%3Cg fill='%23f6c3d8' opacity='.3'%3E%3Cpath d='M50 30 C40 12 8 8 10 30 C11 44 36 48 50 38Z'/%3E%3Cpath d='M50 30 C60 12 92 8 90 30 C89 44 64 48 50 38Z'/%3E%3Ccircle cx='50' cy='34' r='7'/%3E%3C/g%3E%3C/svg%3E"),
+      repeating-linear-gradient(90deg,#fbdde9 0 24px,#fff 24px 48px);
+  }
+  .blanca{background:linear-gradient(#f2f2f4,#fff 130px)}
+
+  /* ===== MARCA DE AGUA ===== */
+  .marca{display:block;text-align:center;font-weight:600;color:#c76d92;font-size:.82rem;letter-spacing:.5px}
+
+  /* ===== PORTADA ===== */
+  .portada{cursor:pointer;gap:14px;min-height:100svh}
+  .titulo-inv,.clic{
+    font-family:'Pacifico',cursive;color:var(--rosa);text-align:center;
+    text-shadow:2px 0 0 #fff,-2px 0 0 #fff,0 2px 0 #fff,0 -2px 0 #fff,
+      1.5px 1.5px 0 #fff,-1.5px -1.5px 0 #fff,1.5px -1.5px 0 #fff,-1.5px 1.5px 0 #fff;
+  }
+  .titulo-inv{font-size:1.7rem}
+  .clic{font-size:1.3rem;animation:pulso 1.6s ease-in-out infinite}
+
+  .flor-compuesta{position:relative;width:min(330px,82vw);aspect-ratio:1;
+    animation:pop .7s cubic-bezier(.2,1.6,.4,1) .2s both}
+  .flor{position:absolute;inset:0}
+  .flor-atras{inset:-9%;color:var(--rosa-pastel);animation:girar 38s linear infinite}
+  .flor-frente{color:var(--rosa);animation:girar 26s linear infinite reverse}
+  .kitty-hero{position:absolute;inset:0;margin:auto;width:62%;filter:drop-shadow(0 8px 12px rgba(200,60,120,.3));
+    animation:pop .8s cubic-bezier(.2,1.8,.4,1) .7s both}
+
+  .flecha{width:30px;animation:bajar 1.3s ease-in-out infinite}
+  .brillo{position:absolute;font-size:20px;color:#fff;text-shadow:0 0 6px #ffb6d5;animation:titilar 2s ease-in-out infinite}
+  .b1{top:16%;left:12%}.b2{bottom:24%;right:12%;animation-delay:.9s}
+
+  /* ===== SECCIÓN 2 · NOMBRE Y FOTO ===== */
+  .s2{gap:0;justify-content:flex-start;padding-top:26px}
+  .s2-cab{width:100%;display:flex;justify-content:space-between;align-items:flex-start}
+  .kitty-mini{width:92px;transform:rotate(-10deg)}
+  .globos{position:relative;width:140px;height:150px}
+  .globo{position:absolute;width:52px;color:#f78fb3;animation:flotar 3.6s ease-in-out infinite alternate}
+  .g1{left:0;top:0;color:#ffc1d9}.g2{left:44px;top:26px;color:#ff7bb1;animation-delay:.7s}
+  .g3{left:84px;top:4px;animation-delay:1.2s}.g4{left:64px;top:74px;width:44px;color:#f9a8c9;animation-delay:.4s}
+
+  .corazon-nombre{width:min(250px,68vw);margin:-8px 0 0 -6px;animation:latido 1.7s ease-in-out infinite;transform-origin:center}
+  .corazon-nombre text{font-family:'Pacifico',cursive}
+
+  .polaroid{position:relative;width:min(200px,52vw);background:#fff;padding:11px 11px 44px;
+    box-shadow:0 10px 24px rgba(190,80,130,.3);transform:rotate(6deg);margin:-58px 6px 0 auto;z-index:2}
+  .polaroid img{width:100%;aspect-ratio:3/4;object-fit:cover;display:block;position:relative;z-index:1;background:#ffd3e5}
+  .polaroid .placeholder{position:absolute;inset:11px 11px 44px;display:grid;place-items:center;
+    background:linear-gradient(135deg,#ffd3e5,#ff9cc4);color:#fff;font-weight:700;font-size:.9rem}
+  .polaroid figcaption{position:absolute;bottom:6px;left:0;right:0;text-align:center;
+    font-family:'Pacifico',cursive;color:var(--rosa);font-size:1.35rem}
+
+  .kitty-cora{width:172px;margin:-20px auto 0 -4px;animation:mecer 3.2s ease-in-out infinite}
+
+  /* ===== ONDA + MOÑO ===== */
+  .pie-onda{width:100%;position:relative;margin-top:18px}
+  .ondita{height:22px;background:radial-gradient(circle at 11px 22px,var(--rosa-f) 10.5px,transparent 11.5px);
+    background-size:22px 22px;background-position:bottom left;background-repeat:repeat-x}
+  .cinta{height:12px;background:var(--rosa-f)}
+  .pie-onda .bow{position:absolute;left:50%;top:-12px;transform:translateX(-50%);width:72px}
+
+  /* ===== SECCIÓN 3 · CUENTA REGRESIVA ===== */
+  .s3{gap:10px}
+  .frase{font-family:'Pacifico',cursive;color:var(--rosa-txt);font-size:1.45rem;text-align:center;line-height:1.35}
+  .mini-cora{width:26px}
+  .kitty-face-s3{width:88px;margin-top:4px}
+  .faltan{font-weight:700;color:var(--rosa);font-size:1.2rem;margin-top:6px}
+  .cuenta{display:flex;align-items:flex-start;gap:6px}
+  .cuenta>div{display:flex;flex-direction:column;align-items:center;min-width:52px}
+  .cuenta b{font-weight:800;font-size:clamp(1.9rem,10vw,2.5rem);color:var(--rosa);line-height:1.1}
+  .cuenta span{font-size:.62rem;font-weight:700;letter-spacing:1px;color:#f386b4}
+  .cuenta i{font-style:normal;font-weight:800;font-size:1.9rem;color:#f9a8c9;line-height:1.25}
+  #msjDia{display:none;font-family:'Pacifico',cursive;color:var(--rosa);font-size:1.4rem}
+
+  .panel{position:relative;background:var(--rosa-f);color:#fff;width:100%;margin-top:16px;padding:24px 18px 18px;text-align:center}
+  .panel::before{content:'';position:absolute;top:-8px;left:8px;right:8px;height:8px;
+    background:radial-gradient(circle at 9px 9px,var(--rosa-f) 8px,transparent 9px);background-size:18px 8px}
+  .panel::after{content:'';position:absolute;bottom:-8px;left:8px;right:8px;height:8px;
+    background:radial-gradient(circle at 9px 0,var(--rosa-f) 8px,transparent 9px);background-size:18px 8px}
+  .panel-grid{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:10px}
+  .panel .cur{font-family:'Pacifico',cursive;font-size:1.55rem;line-height:1.15}
+  .panel .grande{font-family:'Anton',sans-serif;font-size:2.6rem;line-height:1.05;letter-spacing:1px}
+  .div-v{border-left:3px dashed rgba(255,255,255,.85);height:104px}
+  .div-h{border-top:3px dashed rgba(255,255,255,.85);margin:14px 4px 10px}
+  .lugar-tit{font-family:'Anton',sans-serif;font-size:1.55rem;letter-spacing:1.5px}
+  .lugar-dir{font-weight:600;font-size:.92rem;margin-top:4px}
+
+  /* ===== SECCIÓN 4 · UBICACIÓN Y CONFIRMACIÓN ===== */
+  .s4{justify-content:flex-start;padding-top:40px;gap:8px}
+  .acciones{display:flex;flex-direction:column;align-items:center;gap:30px;margin-top:10px}
+  .accion{display:flex;flex-direction:column;align-items:center;gap:6px;text-decoration:none}
+  .accion svg{width:100px;animation:latido 2.2s ease-in-out infinite}
+  .accion:nth-child(2) svg{animation-delay:.6s}
+  .accion span{font-family:'Pacifico',cursive;color:var(--rosa-txt);font-size:1.35rem;display:flex;align-items:center;gap:6px}
+  .flechita{width:34px;flex:none}
+  .footer-rayas{width:100%;position:relative;height:200px;margin-top:24px}
+  .footer-rayas .marca{position:absolute;top:14px;left:0;right:0;color:#c76d92;z-index:2}
+  .kitty-footer{position:absolute;bottom:-6px;left:50%;transform:translateX(-50%);width:205px}
+
+  /* ===== ANIMACIONES ===== */
+  @keyframes girar{to{transform:rotate(360deg)}}
+  @keyframes pop{0%{opacity:0;transform:scale(.3)}70%{transform:scale(1.08)}100%{opacity:1;transform:scale(1)}}
+  @keyframes latido{0%,100%{transform:scale(1)}12%{transform:scale(1.1)}24%{transform:scale(1)}36%{transform:scale(1.12)}54%{transform:scale(1)}}
+  @keyframes flotar{from{transform:translateY(0) rotate(-3deg)}to{transform:translateY(-12px) rotate(4deg)}}
+  @keyframes mecer{0%,100%{transform:rotate(-3deg)}50%{transform:rotate(3deg)}}
+  @keyframes bajar{0%,100%{transform:translateY(0);opacity:1}50%{transform:translateY(9px);opacity:.4}}
+  @keyframes titilar{0%,100%{opacity:.3;transform:scale(.8)}50%{opacity:1;transform:scale(1.25)}}
+  @keyframes pulso{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
+
+  /* Aparición al hacer scroll */
+  .revelar{opacity:0;transform:translateY(26px);transition:opacity .7s ease,transform .7s ease}
+  .revelar.ver{opacity:1;transform:none}
+
+  @media (prefers-reduced-motion:reduce){
+    *{animation:none!important;transition:none!important}
+    .revelar{opacity:1;transform:none}
+  }
+</style>
+</head>
+<body>
+
+<!-- ════════ PIEZAS SVG REUTILIZABLES (no editar) ════════ -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <!-- ═══ MICHI · gatito 100% original (pelaje crema, rayitas, boca ω, flor en la oreja) ═══
+         Colores de pelaje por si querés tunearlos:
+         #fdeedd pelaje · #ffb9d0 orejas · #f5a86f rayitas · #ff9ec4/#ffd76e flor -->
+    <symbol id="kitty" viewBox="0 0 240 200">
+      <!-- orejas -->
+      <path d="M56 78 Q28 34 40 12 Q44 5 51 11 Q76 33 98 50 Z" fill="#fdeedd" stroke="#20232a" stroke-width="6" stroke-linejoin="round"/>
+      <path d="M184 78 Q212 34 200 12 Q196 5 189 11 Q164 33 142 50 Z" fill="#fdeedd" stroke="#20232a" stroke-width="6" stroke-linejoin="round"/>
+      <path d="M60 66 Q44 38 50 22 Q66 38 82 50 Z" fill="#ffb9d0"/>
+      <path d="M180 66 Q196 38 190 22 Q174 38 158 50 Z" fill="#ffb9d0"/>
+      <!-- cabeza -->
+      <ellipse cx="120" cy="118" rx="94" ry="70" fill="#fdeedd" stroke="#20232a" stroke-width="6"/>
+      <!-- rayitas de gato en la frente -->
+      <g fill="none" stroke="#f5a86f" stroke-width="7" stroke-linecap="round">
+        <path d="M100 58 q-2 10 1 16"/>
+        <path d="M120 54 q1 11 0 18"/>
+        <path d="M140 58 q2 10 -1 16"/>
+      </g>
+      <!-- ojos grandes con brillito -->
+      <circle cx="82" cy="112" r="13" fill="#20232a"/>
+      <circle cx="158" cy="112" r="13" fill="#20232a"/>
+      <circle cx="77" cy="107" r="4.5" fill="#fff"/><circle cx="87" cy="116" r="2" fill="#fff"/>
+      <circle cx="153" cy="107" r="4.5" fill="#fff"/><circle cx="163" cy="116" r="2" fill="#fff"/>
+      <!-- mejillas sonrojadas -->
+      <ellipse cx="48" cy="134" rx="13" ry="8" fill="#ffc2d4" opacity=".8"/>
+      <ellipse cx="192" cy="134" rx="13" ry="8" fill="#ffc2d4" opacity=".8"/>
+      <!-- nariz + boca sonriente ω (¡con boca!) -->
+      <path d="M111 121 Q120 114 129 121 Q127 131 120 133 Q113 131 111 121 Z" fill="#ff8bb0" stroke="#20232a" stroke-width="3.5" stroke-linejoin="round"/>
+      <path d="M120 133 Q112 143 104 135 M120 133 Q128 143 136 135" fill="none" stroke="#20232a" stroke-width="4.5" stroke-linecap="round"/>
+      <!-- bigotes -->
+      <g fill="none" stroke="#20232a" stroke-width="4.5" stroke-linecap="round">
+        <path d="M30 102 L6 95"/><path d="M30 116 L4 116"/><path d="M30 130 L8 140"/>
+        <path d="M210 102 L234 95"/><path d="M210 116 L236 116"/><path d="M210 130 L232 140"/>
+      </g>
+      <!-- flor en la oreja (en vez de moño) -->
+      <g transform="translate(200 18)" stroke="#20232a" stroke-width="3">
+        <circle cx="0" cy="-9.5" r="8" fill="#ff9ec4"/><circle cx="9" cy="-3" r="8" fill="#ff9ec4"/>
+        <circle cx="5.6" cy="7.7" r="8" fill="#ff9ec4"/><circle cx="-5.6" cy="7.7" r="8" fill="#ff9ec4"/>
+        <circle cx="-9" cy="-3" r="8" fill="#ff9ec4"/>
+        <circle cx="0" cy="0" r="4.5" fill="#ffd76e"/>
+      </g>
+    </symbol>
+    <!-- Corazón base -->
+    <symbol id="cora" viewBox="0 0 120 110">
+      <path d="M60 104 C34 82 8 58 8 36 C8 19 21 8 37 8 C47 8 55 14 60 22 C65 14 73 8 83 8 C99 8 112 19 112 36 C112 58 86 82 60 104 Z"/>
+    </symbol>
+    <!-- Corazón + pin de ubicación -->
+    <symbol id="coraPin" viewBox="0 0 120 120">
+      <use href="#cora" width="120" height="110" y="6" fill="#ff4d94"/>
+      <g transform="translate(60 56)">
+        <path d="M0 24 C-11 12 -16 3 -16 -5 A16 16 0 1 1 16 -5 C16 3 11 12 0 24 Z" fill="#fff"/>
+        <circle cx="0" cy="-5" r="6" fill="#ff4d94"/>
+      </g>
+    </symbol>
+    <!-- Corazón + sobre -->
+    <symbol id="coraMail" viewBox="0 0 120 120">
+      <use href="#cora" width="120" height="110" y="6" fill="#ff4d94"/>
+      <g transform="translate(60 54)">
+        <rect x="-24" y="-16" width="48" height="32" rx="5" fill="#fff"/>
+        <path d="M-22 -13 L0 4 L22 -13" fill="none" stroke="#ff4d94" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+      </g>
+    </symbol>
+    <!-- Michi abrazando corazón (patitas color pelaje) -->
+    <symbol id="kittyCora" viewBox="0 0 200 210">
+      <use href="#kitty" width="180" height="150" x="10"/>
+      <path d="M100 200 C78 182 48 160 48 134 C48 116 62 104 78 104 C88 104 96 110 100 118 C104 110 112 104 122 104 C138 104 152 116 152 134 C152 160 122 182 100 200 Z" fill="#ff4d94" stroke="#20232a" stroke-width="5"/>
+      <ellipse cx="78" cy="112" rx="13" ry="10" fill="#fdeedd" stroke="#20232a" stroke-width="4.5"/>
+      <ellipse cx="122" cy="112" rx="13" ry="10" fill="#fdeedd" stroke="#20232a" stroke-width="4.5"/>
+    </symbol>
+    <!-- Michi con vestidito (footer) -->
+    <symbol id="kittyVestida" viewBox="0 0 240 260">
+      <use href="#kitty" width="240" height="200"/>
+      <path d="M78 186 L60 252 L180 252 L162 186 Z" fill="#ff5ba0" stroke="#20232a" stroke-width="5" stroke-linejoin="round"/>
+      <ellipse cx="68" cy="198" rx="12" ry="18" fill="#fdeedd" stroke="#20232a" stroke-width="4.5" transform="rotate(22 68 198)"/>
+      <ellipse cx="172" cy="198" rx="12" ry="18" fill="#fdeedd" stroke="#20232a" stroke-width="4.5" transform="rotate(-22 172 198)"/>
+    </symbol>
+    <!-- Moño, globo, flor -->
+    <symbol id="bow" viewBox="0 0 120 70">
+      <path d="M60 35 C48 12 10 6 12 32 C13 50 42 56 60 42 Z" fill="#ff8bbd" stroke="#20232a" stroke-width="5" stroke-linejoin="round"/>
+      <path d="M60 35 C72 12 110 6 108 32 C107 50 78 56 60 42 Z" fill="#ff8bbd" stroke="#20232a" stroke-width="5" stroke-linejoin="round"/>
+      <circle cx="60" cy="38" r="10" fill="#ffa8ca" stroke="#20232a" stroke-width="5"/>
+    </symbol>
+    <symbol id="globo" viewBox="0 0 60 92">
+      <ellipse cx="30" cy="30" rx="24" ry="28" fill="currentColor"/>
+      <ellipse cx="21" cy="20" rx="7" ry="10" fill="rgba(255,255,255,.45)"/>
+      <path d="M25 57 L35 57 L30 67 Z" fill="currentColor"/>
+      <path d="M30 67 C23 75 37 79 30 90" fill="none" stroke="currentColor" stroke-width="2"/>
+    </symbol>
+    <symbol id="flor" viewBox="0 0 200 200">
+      <g fill="currentColor">
+        <ellipse cx="100" cy="36" rx="30" ry="50"/>
+        <ellipse cx="100" cy="36" rx="30" ry="50" transform="rotate(60 100 100)"/>
+        <ellipse cx="100" cy="36" rx="30" ry="50" transform="rotate(120 100 100)"/>
+        <ellipse cx="100" cy="36" rx="30" ry="50" transform="rotate(180 100 100)"/>
+        <ellipse cx="100" cy="36" rx="30" ry="50" transform="rotate(240 100 100)"/>
+        <ellipse cx="100" cy="36" rx="30" ry="50" transform="rotate(300 100 100)"/>
+        <circle cx="100" cy="100" r="52"/>
+      </g>
+    </symbol>
+  </defs>
+</svg>
+
+<div class="app">
+
+  <!-- ════════ SECCIÓN 1 · PORTADA ════════ -->
+  <section class="sec rayas-fuerte portada" id="portada">
+    <span class="marca"></span>
+    <!-- ✏️ EDITA [3]: título de la portada -->
+    <h1 class="titulo-inv">Te llegó una invitación...</h1>
+    <span class="marca"></span>
+
+    <div class="flor-compuesta">
+      <!-- Flor de atrás: gira en un sentido -->
+      <svg class="flor flor-atras" aria-hidden="true"><use href="#flor"/></svg>
+      <!-- Flor de adelante: gira en el sentido contrario -->
+      <svg class="flor flor-frente" aria-hidden="true"><use href="#flor"/></svg>
+      <!-- Michi aparece al cargar -->
+      <svg class="kitty-hero" aria-hidden="true"><use href="#kitty"/></svg>
+    </div>
+
+    <span class="marca"></span>
+    <!-- ✏️ EDITA [4]: texto del llamado a abrir -->
+    <p class="clic">¡Clic para abrirla!</p>
+    <svg class="flecha" viewBox="0 0 24 14" aria-hidden="true">
+      <path d="M2 2 L12 12 L22 2" fill="none" stroke="#ff5ba0" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    <span class="brillo b1">✦</span><span class="brillo b2">✦</span>
+  </section>
+
+  <!-- ════════ SECCIÓN 2 · NOMBRE, EDAD Y FOTO ════════ -->
+  <section class="sec rayas-suave s2" id="invitacion">
+    <span class="marca"></span>
+    <div class="s2-cab">
+      <svg class="kitty-mini" aria-hidden="true"><use href="#kitty"/></svg>
+      <div class="globos" aria-hidden="true">
+        <svg class="globo g1"><use href="#globo"/></svg>
+        <svg class="globo g2"><use href="#globo"/></svg>
+        <svg class="globo g3"><use href="#globo"/></svg>
+        <svg class="globo g4"><use href="#globo"/></svg>
+      </div>
+    </div>
+
+    <!-- ✏️ EDITA [5]: nombre dentro del corazón (si es largo, bajá font-size) -->
+    <svg class="corazon-nombre" viewBox="0 0 240 220" role="img">
+      <path d="M120 200 C80 165 20 125 20 78 C20 45 45 22 74 22 C95 22 112 34 120 50 C128 34 145 22 166 22 C195 22 220 45 220 78 C220 125 160 165 120 200 Z" fill="#ff4d94"/>
+      <text x="120" y="108" text-anchor="middle" font-size="54" fill="#fff" transform="rotate(-7 120 100)">Vale</text>
+    </svg>
+
+    <!-- ✏️ EDITA [6]: FOTO. Deja "foto.jpg" junto a este archivo (en la raíz)
+         o cambiá el nombre del archivo acá abajo -->
+    <figure class="polaroid revelar">
+      <span class="placeholder">🎀 Tu foto aquí</span>
+      <img src="foto.jpg" alt="Foto del cumpleañero/a" onerror="this.style.visibility='hidden'">
+      <!-- ✏️ EDITA [7]: edad -->
+      <figcaption>6 años</figcaption>
+    </figure>
+
+    <svg class="kitty-cora revelar" aria-hidden="true"><use href="#kittyCora"/></svg>
+
+    <div class="pie-onda revelar" aria-hidden="true">
+      <div class="ondita"></div><div class="cinta"></div>
+      <svg class="bow"><use href="#bow"/></svg>
+    </div>
+  </section>
+
+  <!-- ════════ SECCIÓN 3 · CUENTA REGRESIVA Y FECHA ════════ -->
+  <section class="sec blanca s3">
+    <span class="marca"></span>
+    <!-- ✏️ EDITA [8]: frases -->
+    <h2 class="frase revelar">¡Acompáñame en este día<br>tan especial!</h2>
+    <svg class="mini-cora revelar" viewBox="0 0 120 110" aria-hidden="true"><use href="#cora" fill="#f0609e"/></svg>
+    <h2 class="frase revelar">¡Disfrutaremos un montón!</h2>
+    <svg class="kitty-face-s3 revelar" aria-hidden="true"><use href="#kitty"/></svg>
+
+    <p class="faltan revelar">Faltan...</p>
+    <div class="cuenta revelar" aria-label="Cuenta regresiva">
+      <div><b id="dias">00</b><span>DÍAS</span></div><i>:</i>
+      <div><b id="horas">00</b><span>HORAS</span></div><i>:</i>
+      <div><b id="minutos">00</b><span>MINUTOS</span></div><i>:</i>
+      <div><b id="segundos">00</b><span>SEGUNDOS</span></div>
+    </div>
+    <p id="msjDia">¡Llegó el gran día! 🎀</p>
+
+    <div class="panel revelar">
+      <div class="panel-grid">
+        <!-- ✏️ EDITA [9]: día de la semana, número, mes -->
+        <div><div class="cur">Sáb</div><div class="grande">22</div><div class="cur">Ago</div></div>
+        <div class="div-v"></div>
+        <!-- ✏️ EDITA [10]: hora -->
+        <div><div class="cur">A las</div><div class="grande">16:00</div><div class="cur">Hs.</div></div>
+      </div>
+      <div class="div-h"></div>
+      <!-- ✏️ EDITA [11]: lugar y dirección -->
+      <p class="lugar-tit">LUGAR DEL EVENTO</p>
+      <p class="lugar-dir">Calle y número, barrio, ciudad</p>
+    </div>
+  </section>
+
+  <!-- ════════ SECCIÓN 4 · UBICACIÓN Y CONFIRMACIÓN ════════ -->
+  <section class="sec blanca s4">
+    <span class="marca"></span>
+    <div class="acciones revelar">
+      <!-- ✏️ EDITA [12]: textos de los botones (los links van en el JS, EDITA [2]) -->
+      <a class="accion" id="btnMaps" href="#">
+        <svg aria-hidden="true"><use href="#coraPin"/></svg>
+        <span>Ubicación
+          <svg class="flechita" viewBox="0 0 40 24" aria-hidden="true">
+            <path d="M3 5 C14 19 24 19 33 11 M27 7 L34 11 L29 18" fill="none" stroke="#f0609e" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </span>
+      </a>
+      <a class="accion" id="btnWsp" href="#">
+        <svg aria-hidden="true"><use href="#coraMail"/></svg>
+        <span>Confirma tu asistencia
+          <svg class="flechita" viewBox="0 0 40 24" aria-hidden="true">
+            <path d="M3 5 C14 19 24 19 33 11 M27 7 L34 11 L29 18" fill="none" stroke="#f0609e" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </span>
+      </a>
+    </div>
+
+    <div class="pie-onda" aria-hidden="true">
+      <div class="ondita"></div><div class="cinta"></div>
+      <svg class="bow"><use href="#bow"/></svg>
+    </div>
+    <footer class="footer-rayas rayas-fuerte">
+      <span class="marca"></span>
+      <svg class="kitty-footer" aria-hidden="true"><use href="#kittyVestida"/></svg>
+    </footer>
+  </section>
+
+</div>
+
+<script>
+  /* ═══════════════════════════════════════════════════════════
+     ✏️ EDITA [2]: DATOS GENERALES (todo en un solo lugar)
+     ═══════════════════════════════════════════════════════════ */
+
+  // Tu marca de agua (aparece en toda la página). Déjala vacía '' para ocultarla.
+  const MARCA = '@tu.marca';
+
+  // Fecha y hora del evento (el contador usa ESTA fecha).
+  // Formato: 'AÑO-MES-DÍA THH:MM:SS'  → ojo, el panel rosa se edita aparte ([9] y [10])
+  const FECHA_EVENTO = new Date('2026-08-22T16:00:00');
+
+  // Link de Google Maps. Dos opciones:
+  //  a) Pegá el link que te da Maps al "Compartir"  → 'https://maps.app.goo.gl/xxxx'
+  //  b) Armalo con la dirección (cambiá los espacios por +):
+  //     'https://www.google.com/maps/search/?api=1&query=Calle+123+Culiacan'
+  const MAPS_LINK = 'https://www.google.com/maps/search/?api=1&query=Calle+123+Culiacan';
+
+  // Confirmación por WhatsApp (sin base de datos)
+  // Código de país + número, TODO PEGADO, sin espacios ni "+"
+  const WA_NUMERO  = '521234567890';
+  const WA_MENSAJE = '¡Hola! Confirmo mi asistencia al cumple de Vale 🎀';
+
+  /* ── Desde acá: no tocar ─────────────────────────────────── */
+
+  // Marca de agua en toda la página
+  document.querySelectorAll('.marca').forEach(m => {
+    m.textContent = MARCA;
+    if (!MARCA) m.style.display = 'none';
+  });
+
+  // Links de los corazones
+  document.getElementById('btnMaps').href = MAPS_LINK;
+  document.getElementById('btnWsp').href =
+    'https://wa.me/' + WA_NUMERO + '?text=' + encodeURIComponent(WA_MENSAJE);
+
+  // Cuenta regresiva
+  const $ = id => document.getElementById(id);
+  function tic() {
+    let ms = FECHA_EVENTO - Date.now();
+    const fin = ms <= 0;
+    if (fin) ms = 0;
+    const s  = Math.floor(ms / 1000);
+    $('dias').textContent     = String(Math.floor(s / 86400)).padStart(2, '0');
+    $('horas').textContent    = String(Math.floor(s % 86400 / 3600)).padStart(2, '0');
+    $('minutos').textContent  = String(Math.floor(s % 3600 / 60)).padStart(2, '0');
+    $('segundos').textContent = String(s % 60).padStart(2, '0');
+    $('msjDia').style.display = fin ? 'block' : 'none';
+  }
+  setInterval(tic, 1000); tic();
+
+  // Aparición suave al hacer scroll
+  const io = new IntersectionObserver(entradas => {
+    entradas.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('ver'); io.unobserve(e.target); }
+    });
+  }, { threshold: .15 });
+  document.querySelectorAll('.revelar').forEach(el => io.observe(el));
+
+  // La portada es clicable: baja a la invitación
+  document.getElementById('portada').addEventListener('click', () =>
+    document.getElementById('invitacion').scrollIntoView({ behavior: 'smooth' })
+  );
+</script>
+
+</body>
+</html>
