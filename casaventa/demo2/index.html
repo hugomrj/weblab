@@ -1,0 +1,1972 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bóveda — Colección inmobiliaria en Paraguay</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%230D0C0A'/%3E%3Crect x='4' y='4' width='24' height='24' fill='none' stroke='%23C8A24D' stroke-width='2'/%3E%3Ctext x='16' y='22' font-family='Georgia' font-size='15' fill='%23C8A24D' text-anchor='middle'%3EB%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ================================================================
+   ⬇⬇⬇  IDENTIDAD DEL CLIENTE — EDITÁ SOLO ESTE BLOQUE  ⬇⬇⬇
+   ----------------------------------------------------------------
+   Todo el color y la tipografía del sitio salen de acá.
+   Para cambiar de cliente:
+   1) Editá los valores de :root, O
+   2) Usá un preset: agregá data-theme="esmeralda" | "carmesi" |
+      "platino" a la etiqueta <html> de arriba.
+   Si cambiás --fd (tipografía de títulos), cargá la fuente en el
+   <link> de Google Fonts del <head>.
+   ================================================================ */
+:root{
+  --bg:#0D0C0A;        /* fondo general (carbón cálido) */
+  --panel:#151310;     /* fondo de paneles y tarjetas */
+  --panel-2:#1C1915;   /* paneles internos / hover */
+  --text:#EDE7DA;      /* texto principal (crema) */
+  --text-2:#A69E8F;    /* texto secundario */
+  --accent:#C8A24D;    /* ACENTO DE MARCA: latón */
+  --accent-d:#A5823A;  /* latón oscuro (hover) */
+  --ok:#7E9B6A;        /* color de "verificado / legal" */
+  --fd:'Instrument Serif',serif; /* tipografía de títulos */
+}
+/* ——— PRESETS LISTOS PARA OTROS CLIENTES ——— */
+[data-theme="esmeralda"]{
+  --bg:#0A0D0B; --panel:#101511; --panel-2:#16201A;
+  --text:#E8EFE6; --text-2:#9BAA9C;
+  --accent:#59B98C; --accent-d:#3E9469; --ok:#C8A24D;
+}
+[data-theme="carmesi"]{
+  --bg:#0E0B0B; --panel:#161111; --panel-2:#1E1515;
+  --text:#F0E7E4; --text-2:#AC9C98;
+  --accent:#C4524A; --accent-d:#9C3C36; --ok:#7E9B6A;
+}
+[data-theme="platino"]{
+  --bg:#0C0C0C; --panel:#141414; --panel-2:#1B1B1B;
+  --text:#ECECEA; --text-2:#A3A3A0;
+  --accent:#D9D4C7; --accent-d:#B7B2A4; --ok:#9BA88F;
+}
+/* ⬆⬆⬆  FIN IDENTIDAD — lo de abajo se calcula solo  ⬆⬆⬆ */
+:root{
+  --fs:'Space Grotesk',sans-serif;
+  --fm:'IBM Plex Mono',monospace;
+  --line:color-mix(in srgb,var(--text) 14%,transparent);
+  --line-2:color-mix(in srgb,var(--text) 32%,transparent);
+  --ink-on-accent:#0D0C0A;
+}
+/* ================================================================ */
+
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:var(--fs);color:var(--text);background:var(--bg);
+  line-height:1.55;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+/* grano fino de sala oscura */
+body::after{content:"";position:fixed;inset:0;z-index:9999;pointer-events:none;opacity:.05;mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+img{display:block}
+/* fotos como piezas: desaturadas, cobran color al hover del contenedor */
+.ph{filter:saturate(.55) contrast(1.05) brightness(.94)}
+.up:hover .ph, .up:focus-visible .ph{filter:none}
+.mono{font-family:var(--fm);font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;font-variant-numeric:tabular-nums}
+.wrap{max-width:1280px;margin:0 auto;padding:0 clamp(16px,3vw,40px)}
+svg.lucide{width:16px;height:16px;stroke-width:1.7;flex:none}
+a{color:inherit;text-decoration:none}
+button{font-family:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+::selection{background:var(--accent);color:var(--ink-on-accent)}
+
+/* ============ BOTONES (rectos, de vitrina) ============ */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;
+  font:600 .72rem var(--fs);letter-spacing:.12em;text-transform:uppercase;
+  padding:14px 24px;border:1px solid transparent;cursor:pointer;border-radius:0;
+  transition:background .2s,color .2s,border-color .2s,transform .2s}
+.btn:active{transform:scale(.97)}
+.btn svg{width:14px;height:14px}
+.btn-solid{background:var(--accent);color:var(--ink-on-accent);border-color:var(--accent)}
+.btn-solid:hover{background:var(--accent-d);border-color:var(--accent-d)}
+.btn-ghost{background:transparent;border-color:var(--line-2);color:var(--text)}
+.btn-ghost:hover{border-color:var(--accent);color:var(--accent)}
+.btn-ink{background:var(--bg);color:var(--text);border-color:var(--bg)}
+.btn-ink:hover{background:transparent;border-color:var(--text)}
+.link-ghost{font:600 .72rem var(--fs);letter-spacing:.1em;text-transform:uppercase;
+  border-bottom:1px solid currentColor;padding-bottom:3px;opacity:.85;transition:opacity .2s;cursor:pointer;background:none;border-top:0;border-left:0;border-right:0}
+.link-ghost:hover{opacity:1;color:var(--accent)}
+
+/* selects con flecha propia */
+.selwrap{position:relative;display:block}
+.selwrap::after{content:"";position:absolute;right:14px;top:50%;width:7px;height:7px;
+  border-right:1.6px solid var(--text-2);border-bottom:1.6px solid var(--text-2);
+  transform:translateY(-70%) rotate(45deg);pointer-events:none}
+.selwrap select{padding-right:36px}
+
+/* ============ HEADER ============ */
+#topbar{position:sticky;top:0;z-index:100;background:color-mix(in srgb,var(--bg) 88%,transparent);
+  backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.topbar-in{display:flex;align-items:center;justify-content:space-between;height:64px;gap:20px}
+.logo{font:400 1.5rem var(--fd);letter-spacing:.02em}
+.logo .lg-al{color:var(--accent);font-style:italic}
+.logo sup{font:500 .5rem var(--fm);vertical-align:super;letter-spacing:0;color:var(--text-2)}
+.nav{display:flex;gap:26px}
+.nav a{font:500 .64rem var(--fm);letter-spacing:.16em;text-transform:uppercase;color:var(--text-2);
+  padding:4px 0;border-bottom:1px solid transparent;transition:color .2s,border-color .2s}
+.nav a:hover{color:var(--accent);border-color:var(--accent)}
+#menuBtn{display:none;background:none;border:1px solid var(--line-2);width:42px;height:42px;cursor:pointer;align-items:center;justify-content:center}
+#mobileNav{display:none;position:fixed;top:64px;left:0;right:0;z-index:99;background:var(--panel);
+  border-bottom:1px solid var(--line);padding:14px 24px 22px;flex-direction:column;gap:2px}
+#mobileNav a{font:500 .78rem var(--fs);text-transform:uppercase;letter-spacing:.08em;padding:13px 4px;border-bottom:1px solid var(--line)}
+#mobileNav button{background:none;border:none;text-align:left;font:500 .78rem var(--fs);text-transform:uppercase;letter-spacing:.08em;padding:13px 4px;cursor:pointer;color:var(--accent)}
+body.nav-open #mobileNav{display:flex}
+
+/* ============ HERO ============ */
+.hero{display:grid;grid-template-columns:minmax(0,7fr) minmax(0,5fr);border-bottom:1px solid var(--line)}
+.h-left{padding:clamp(40px,6vw,88px) clamp(20px,4vw,64px) clamp(36px,5vw,64px);display:flex;flex-direction:column;justify-content:center}
+.kicker{display:inline-flex;align-items:center;gap:10px;color:var(--accent);font-weight:500}
+.kicker svg{width:13px;height:13px}
+.h-left h1{font:400 clamp(2.7rem,5.2vw,4.8rem)/1.02 var(--fd);letter-spacing:-.01em;margin:22px 0 20px}
+.h-left h1 em{font-style:italic;color:var(--accent)}
+.hero-sub{font-size:1rem;color:var(--text-2);max-width:46ch;margin-bottom:30px}
+.hero-cta{display:flex;align-items:center;gap:24px;flex-wrap:wrap;margin-bottom:38px}
+/* buscador horizontal de la galería */
+.hsearch{border:1px solid var(--line);display:grid;grid-template-columns:1fr 1fr 1.1fr auto;background:var(--panel)}
+.hsearch .field{border-right:1px solid var(--line);display:flex;flex-direction:column;justify-content:center}
+.hsearch label{font:500 .56rem var(--fm);letter-spacing:.14em;text-transform:uppercase;color:var(--text-2);padding:10px 14px 0}
+.hsearch select{width:100%;appearance:none;-webkit-appearance:none;background:transparent;border:none;color:var(--text);
+  font:500 .84rem var(--fs);padding:5px 14px 12px;outline:none;cursor:pointer}
+.hsearch select option{background:var(--panel);color:var(--text)}
+.hsearch .hs-btn{display:flex}
+.hsearch .hs-btn .btn{border:none;height:100%}
+.h-right{position:relative;border-left:1px solid var(--line);min-height:520px;overflow:hidden}
+.h-right img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.h-right::after{content:"";position:absolute;inset:0;background:
+  radial-gradient(120% 90% at 70% 20%,transparent 40%,rgba(8,7,5,.55) 100%),
+  linear-gradient(transparent 55%,color-mix(in srgb,var(--bg) 88%,transparent))}
+.h-plate{position:absolute;left:22px;bottom:20px;z-index:2;border-left:2px solid var(--accent);padding:6px 0 6px 16px;color:var(--text)}
+.h-plate .mono{color:rgba(237,231,218,.75);display:block;margin-bottom:4px}
+.h-plate strong{font:400 1.5rem var(--fd)}
+.vlabel{position:absolute;top:20px;right:18px;z-index:2;writing-mode:vertical-rl;
+  font:500 .58rem var(--fm);letter-spacing:.3em;text-transform:uppercase;color:rgba(237,231,218,.55)}
+
+/* ============ TICKER ============ */
+.marquee{border-bottom:1px solid var(--line);overflow:hidden;background:var(--bg)}
+.mtrack{display:flex;align-items:center;gap:44px;width:max-content;padding:12px 0;animation:mq 36s linear infinite}
+.marquee:hover .mtrack{animation-play-state:paused}
+@keyframes mq{to{transform:translateX(-50%)}}
+.mq-item{display:flex;align-items:center;gap:44px;white-space:nowrap;color:var(--text-2)}
+.mq-item svg{width:10px;height:10px;color:var(--accent);stroke-width:2.4}
+
+/* ============ SECCIONES ============ */
+.sec-pad{margin-top:clamp(60px,8vw,110px)}
+.sec-head{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;flex-wrap:wrap;margin-bottom:26px}
+.sec-kicker{color:var(--accent);font-weight:500;margin-bottom:10px}
+.sec-title{font:400 clamp(2rem,3.6vw,3.2rem)/1.05 var(--fd);letter-spacing:-.01em}
+.sec-title em{font-style:italic;color:var(--accent)}
+
+/* ============ BENTO DESTACADOS ============ */
+.bgrid{display:grid;grid-template-columns:repeat(12,1fr);gap:14px}
+.bcell{background:var(--panel);border:1px solid var(--line);position:relative;overflow:hidden;transition:border-color .3s}
+.bcell:hover{border-color:color-mix(in srgb,var(--accent) 45%,var(--line))}
+.feature{grid-column:span 7;grid-row:span 2;display:flex;flex-direction:column;cursor:pointer}
+.feature .feat-img{position:relative;flex:1;min-height:300px;overflow:hidden}
+.feature .feat-img img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .7s cubic-bezier(.2,.7,.2,1),filter .5s}
+.feature:hover .feat-img img{transform:scale(1.04)}
+.feat-plate{padding:22px 24px;border-top:1px solid var(--line);display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap}
+.feat-plate h3{font:400 1.9rem var(--fd);margin:8px 0 4px}
+.feat-plate p{font-size:.9rem;color:var(--text-2);max-width:52ch}
+.stats{grid-column:span 5;display:flex;flex-direction:column}
+.stat{flex:1;display:flex;flex-direction:column;justify-content:center;padding:20px 26px;border-top:1px solid var(--line)}
+.stat:first-child{border-top:none}
+.stat strong{display:block;font:400 2.6rem/1 var(--fd);color:var(--text);transition:color .3s}
+.stat:hover strong{color:var(--accent)}
+.stat .mono{color:var(--text-2);margin-top:6px}
+.appt{grid-column:span 5;background:var(--accent);color:var(--ink-on-accent);border-color:var(--accent);
+  padding:26px 28px;display:flex;flex-direction:column;gap:12px}
+.appt .mono{color:color-mix(in srgb,var(--ink-on-accent) 70%,transparent)}
+.appt h3{font:400 1.9rem/1.1 var(--fd);color:var(--ink-on-accent)}
+.appt p{font-size:.9rem;color:color-mix(in srgb,var(--ink-on-accent) 82%,transparent);max-width:34ch}
+.appt .mono b{color:var(--ink-on-accent);font-weight:500}
+.quote{grid-column:span 7;padding:28px 32px;display:flex;flex-direction:column;justify-content:center}
+.qmark{font:400 4rem/0.55 var(--fd);color:var(--accent)}
+.quote blockquote{font:italic 400 clamp(1.3rem,1.9vw,1.7rem)/1.4 var(--fd);color:var(--text);margin:16px 0 20px;max-width:46ch}
+.quote footer{color:var(--text-2)}
+
+/* ============ EL MURO (listado) ============ */
+.toolbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.chip{font:500 .64rem var(--fm);letter-spacing:.1em;text-transform:uppercase;
+  padding:10px 16px;border:1px solid var(--line-2);background:transparent;cursor:pointer;border-radius:0;
+  color:var(--text-2);transition:all .2s}
+.chip:hover{border-color:var(--accent);color:var(--accent)}
+.chip.on{background:var(--accent);color:var(--ink-on-accent);border-color:var(--accent)}
+.tool-search{position:relative}
+.tool-search svg{position:absolute;left:13px;top:50%;transform:translateY(-50%);width:14px;height:14px;color:var(--text-2);pointer-events:none}
+.tool-search input{width:220px;background:var(--panel);border:1px solid var(--line-2);border-radius:0;
+  font:500 .82rem var(--fs);padding:10px 16px 10px 38px;color:var(--text);outline:none;transition:border-color .2s}
+.tool-search input:focus{border-color:var(--accent)}
+.tool-search input::placeholder{color:var(--text-2)}
+select.tool-sort{appearance:none;-webkit-appearance:none;cursor:pointer;background:var(--panel);
+  border:1px solid var(--line-2);border-radius:0;font:500 .72rem var(--fs);padding:10px 16px;color:var(--text)}
+.list-meta{display:flex;align-items:center;justify-content:space-between;gap:14px;margin:22px 0 18px;flex-wrap:wrap}
+#listCount{color:var(--text-2)}
+.pills{display:flex;gap:8px;flex-wrap:wrap}
+.pill{display:inline-flex;align-items:center;gap:8px;font:500 .6rem var(--fm);letter-spacing:.08em;text-transform:uppercase;
+  background:var(--panel);color:var(--text);border:1px solid var(--line-2);padding:6px 8px 6px 13px;cursor:pointer;border-radius:0}
+.pill svg{width:11px;height:11px;opacity:.7}
+.pill:hover{border-color:var(--accent);color:var(--accent)}
+.wall{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:14px}
+.wcard{background:var(--panel);border:1px solid var(--line);cursor:pointer;transition:border-color .25s;outline-offset:2px}
+.wcard:hover,.wcard:focus-visible{border-color:color-mix(in srgb,var(--accent) 55%,var(--line))}
+.wimg{position:relative;aspect-ratio:4/3;overflow:hidden}
+.wimg img{width:100%;height:100%;object-fit:cover;transition:transform .6s cubic-bezier(.2,.7,.2,1),filter .4s}
+.wcard:hover .wimg img{transform:scale(1.05)}
+.wtag{position:absolute;left:12px;bottom:10px;background:color-mix(in srgb,var(--bg) 78%,transparent);
+  backdrop-filter:blur(4px);color:var(--text);padding:5px 10px;border:1px solid var(--line)}
+.wplate{padding:18px 20px 16px;border-top:1px solid var(--line)}
+.wplate h3{font:400 1.55rem var(--fd);margin-bottom:4px}
+.wspecs{color:var(--text-2);display:block}
+.wfoot{display:flex;justify-content:space-between;align-items:center;margin-top:14px;padding-top:14px;border-top:1px solid var(--line)}
+.wprice{font:500 .95rem var(--fm);color:var(--accent);letter-spacing:-.01em}
+.wgo{width:34px;height:34px;border:1px solid var(--line-2);display:flex;align-items:center;justify-content:center;transition:all .2s}
+.wgo svg{width:14px;height:14px}
+.wcard:hover .wgo{background:var(--accent);border-color:var(--accent);color:var(--ink-on-accent)}
+.empty{border:1px dashed var(--line-2);padding:56px 24px;text-align:center}
+.empty p{font:italic 400 1.3rem var(--fd);color:var(--text-2);margin-bottom:18px}
+
+/* ============ DECISIÓN ============ */
+.dgrid{display:grid;grid-template-columns:repeat(12,1fr);gap:14px}
+.calc{grid-column:span 7;padding:clamp(22px,2.6vw,32px);border:1px solid var(--line);background:var(--panel)}
+.calc header{display:flex;justify-content:space-between;align-items:baseline;gap:14px;flex-wrap:wrap;margin-bottom:28px}
+.calc h3,.method h3{font:400 1.8rem var(--fd)}
+.calc .mono{color:var(--text-2)}
+.calc-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px 30px}
+.ctl-head{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:10px}
+.ctl-head label{font:600 .78rem var(--fs);color:var(--text-2)}
+.ctl-head output{font:500 .72rem var(--fm);color:var(--accent);white-space:nowrap}
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:22px;background:transparent;cursor:pointer;--p:50%}
+input[type=range]::-webkit-slider-runnable-track{height:2px;background:linear-gradient(to right,var(--accent) var(--p),var(--line) var(--p))}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;border-radius:50%;background:var(--bg);border:2.5px solid var(--accent);margin-top:-7px;transition:transform .2s}
+input[type=range]:hover::-webkit-slider-thumb{transform:scale(1.2)}
+input[type=range]::-moz-range-track{height:2px;background:var(--line)}
+input[type=range]::-moz-range-progress{height:2px;background:var(--accent)}
+input[type=range]::-moz-range-thumb{width:12px;height:12px;border-radius:50%;background:var(--bg);border:2.5px solid var(--accent)}
+.calc-result{margin-top:30px;padding-top:26px;border-top:1px solid var(--line)}
+.cuota{display:flex;justify-content:space-between;align-items:baseline;gap:14px;flex-wrap:wrap}
+.cuota .mono{color:var(--text-2)}
+.cuota strong{font:500 clamp(1.4rem,2.4vw,1.9rem) var(--fm);letter-spacing:-.02em;font-variant-numeric:tabular-nums;color:var(--text)}
+.bar{display:flex;height:10px;margin:18px 0 10px;background:var(--panel-2)}
+.bar span{height:100%;transition:width .35s cubic-bezier(.2,.7,.2,1)}
+#barCap,#dcBarCap{background:color-mix(in srgb,var(--text) 55%,transparent)}
+#barInt,#dcBarInt{background:var(--accent)}
+.calc-mini{display:flex;gap:26px;flex-wrap:wrap;list-style:none;color:var(--text-2)}
+.calc-mini b{color:var(--text);font-weight:500;margin-left:7px}
+.method{grid-column:span 5;padding:clamp(22px,2.6vw,32px);border:1px solid var(--line);background:var(--panel)}
+.steps{list-style:none;margin-top:22px}
+.steps li{display:grid;grid-template-columns:3.4rem 1fr;gap:14px;padding:18px 0;border-top:1px solid var(--line)}
+.steps li:first-child{border-top:none;padding-top:4px}
+.steps .mono{color:var(--accent);padding-top:4px}
+.steps h4{font:600 .92rem var(--fs);margin-bottom:4px}
+.steps p{font-size:.85rem;color:var(--text-2)}
+
+/* ============ BANDA DE VISITA ============ */
+.vband{margin-top:14px;border:1px solid var(--line);border-left:3px solid var(--accent);background:var(--panel);
+  display:grid;grid-template-columns:1fr 1.15fr;gap:40px;align-items:center;padding:clamp(24px,3vw,40px)}
+.vband h3{font:400 1.9rem/1.12 var(--fd);margin:12px 0 10px}
+.vband .vb-sub{font-size:.92rem;color:var(--text-2);max-width:36ch}
+.vform{display:grid;gap:12px}
+.vform .frow{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.vform input,.vform select{width:100%;background:var(--bg);border:1px solid var(--line-2);border-radius:0;color:var(--text);
+  font:500 .86rem var(--fs);padding:13px 14px;outline:none;transition:border-color .2s}
+.vform input:focus,.vform select:focus{border-color:var(--accent)}
+.vform input::placeholder{color:var(--text-2)}
+.vform .mono{text-align:center;color:var(--text-2)}
+
+/* ============ FOOTER ============ */
+.site-foot{background:color-mix(in srgb,var(--bg) 70%,#000);margin-top:clamp(64px,9vw,110px);border-top:1px solid var(--line)}
+.foot-grid{display:grid;grid-template-columns:1.5fr 1fr 1fr 1.3fr;gap:40px;padding:60px 0 48px}
+.foot-brand .logo{font-size:2.6rem}
+.foot-brand p{font-size:.9rem;color:var(--text-2);margin-top:14px;max-width:28ch}
+.foot-col h5{font:500 .62rem var(--fm);letter-spacing:.16em;text-transform:uppercase;color:color-mix(in srgb,var(--text) 45%,transparent);margin-bottom:16px}
+.foot-col a,.foot-col span,.foot-col button{display:block;font:500 .88rem var(--fs);color:var(--text-2);padding:5px 0;background:none;border:none;cursor:pointer;text-align:left;transition:color .2s}
+.foot-col a:hover,.foot-col button:hover{color:var(--accent)}
+.nform{display:flex;gap:0;margin-top:4px}
+.nform input{flex:1;min-width:0;background:var(--panel);border:1px solid var(--line-2);border-right:none;color:var(--text);
+  font:500 .82rem var(--fs);padding:12px 16px;outline:none;border-radius:0}
+.nform input:focus{border-color:var(--accent)}
+.nform button{background:var(--accent);color:var(--ink-on-accent);border:1px solid var(--accent);border-radius:0;
+  font:600 .68rem var(--fs);text-transform:uppercase;letter-spacing:.1em;padding:0 18px;cursor:pointer;transition:background .2s}
+.nform button:hover{background:var(--accent-d)}
+.foot-bottom{border-top:1px solid var(--line);padding:20px 0;display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;color:color-mix(in srgb,var(--text) 40%,transparent)}
+
+/* ============ FICHA — PANTALLA COMPLETA ============ */
+#detail{position:fixed;inset:0;z-index:200;background:var(--bg);overflow-y:auto;overscroll-behavior:contain;
+  opacity:0;visibility:hidden;transform:translateY(24px);
+  transition:opacity .3s ease,transform .42s cubic-bezier(.2,.7,.2,1),visibility 0s .42s}
+#detail.open{opacity:1;visibility:visible;transform:none;transition-delay:0s}
+.dt-bar{position:sticky;top:0;z-index:30;background:color-mix(in srgb,var(--bg) 92%,transparent);
+  backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.dt-bar-in{display:flex;align-items:center;gap:18px;height:64px;max-width:1280px;margin:0 auto;padding:0 clamp(16px,3vw,40px)}
+.dt-back{display:inline-flex;align-items:center;gap:10px;font:600 .68rem var(--fs);letter-spacing:.1em;text-transform:uppercase;
+  background:none;border:1px solid var(--line-2);padding:10px 18px;cursor:pointer;white-space:nowrap;transition:all .2s;border-radius:0}
+.dt-back:hover{border-color:var(--accent);color:var(--accent)}
+.dt-bar-title{flex:1;min-width:0;display:flex;align-items:baseline;gap:14px;overflow:hidden;
+  opacity:0;transform:translateY(8px);transition:opacity .3s,transform .3s;pointer-events:none}
+#detail.compact .dt-bar-title{opacity:1;transform:none}
+.dt-bar-title .mono{color:var(--text-2)}
+.dt-bar-title h2{font:400 1.3rem var(--fd);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dt-bar-price{font:500 .82rem var(--fm);color:var(--accent);white-space:nowrap}
+.dt-bar .btn{padding:11px 18px;white-space:nowrap}
+.dt-progress{position:absolute;left:0;bottom:-1px;height:2px;background:var(--accent);width:0}
+
+/* galería: pieza principal + tira de contacto */
+.dt-gallery{max-width:1280px;margin:0 auto;padding:20px clamp(16px,3vw,40px) 0}
+.dg-hero{position:relative;aspect-ratio:16/8.2;overflow:hidden;cursor:zoom-in;border:1px solid var(--line);outline-offset:2px}
+.dg-hero img{width:100%;height:100%;object-fit:cover}
+.dg-hero:hover .ph{filter:none}
+.dg-cap{position:absolute;left:0;bottom:0;padding:34px 18px 12px;color:var(--text);width:100%;
+  background:linear-gradient(transparent,color-mix(in srgb,var(--bg) 82%,transparent));
+  font:500 .6rem var(--fm);letter-spacing:.12em;text-transform:uppercase}
+.dg-open{position:absolute;right:14px;bottom:12px;background:var(--bg);border:1px solid var(--line-2);color:var(--text);
+  font:500 .62rem var(--fm);letter-spacing:.12em;padding:9px 14px;cursor:pointer;transition:all .2s}
+.dg-open:hover{border-color:var(--accent);color:var(--accent)}
+.dg-strip{display:flex;gap:8px;overflow-x:auto;margin-top:8px;padding-bottom:4px;scrollbar-width:thin}
+.dg-thumb{flex:0 0 118px;aspect-ratio:4/3;overflow:hidden;border:1px solid var(--line);cursor:pointer;opacity:.55;
+  transition:opacity .2s,border-color .2s;padding:0;background:none}
+.dg-thumb img{width:100%;height:100%;object-fit:cover}
+.dg-thumb:hover{opacity:.9}
+.dg-thumb.on{opacity:1;border-color:var(--accent)}
+
+.plate-strip{max-width:1280px;margin:24px auto 0;padding:0 clamp(16px,3vw,40px);
+  display:flex;flex-wrap:wrap;gap:10px 30px;color:var(--text-2);align-items:center;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding-top:14px;padding-bottom:14px}
+.plate-strip b{color:var(--text);font-weight:500}
+.plate-strip .dot{width:4px;height:4px;background:var(--line-2)}
+
+.dt-subnav{position:sticky;top:64px;z-index:25;background:color-mix(in srgb,var(--bg) 92%,transparent);
+  backdrop-filter:blur(12px);border-bottom:1px solid var(--line);margin-top:0}
+.dt-subnav-in{max-width:1280px;margin:0 auto;padding:0 clamp(16px,3vw,40px);display:flex;gap:2px;overflow-x:auto;scrollbar-width:none}
+.dt-subnav-in::-webkit-scrollbar{display:none}
+.dt-subnav button{font:500 .6rem var(--fm);letter-spacing:.12em;text-transform:uppercase;
+  padding:14px 14px 12px;color:var(--text-2);background:none;border:none;border-bottom:2px solid transparent;
+  cursor:pointer;white-space:nowrap;transition:color .2s,border-color .2s}
+.dt-subnav button:hover{color:var(--text)}
+.dt-subnav button.on{color:var(--accent);border-color:var(--accent)}
+
+.dt-layout{max-width:1280px;margin:0 auto;padding:8px clamp(16px,3vw,40px) 20px;
+  display:grid;grid-template-columns:minmax(0,1fr) 360px;gap:56px;align-items:start}
+.dt-aside{position:sticky;top:160px;display:grid;gap:14px}
+
+.dt-sec{padding:38px 0 10px;border-top:1px solid var(--line);margin-top:36px}
+.dt-sec:first-child{border-top:none;margin-top:0;padding-top:38px}
+.dt-sec-head{display:flex;align-items:baseline;gap:16px;margin-bottom:24px}
+.dt-sec-head .mono{color:var(--accent);font-weight:500}
+.dt-sec-head h3{font:400 clamp(1.7rem,2.6vw,2.3rem)/1.08 var(--fd)}
+.dt-lede{font:italic 400 clamp(1.25rem,2vw,1.5rem)/1.45 var(--fd);color:var(--text);max-width:52ch;margin-bottom:22px}
+.dt-desc p{font-size:1rem;color:var(--text-2);max-width:64ch;margin-bottom:18px}
+.dt-desc p:last-child{margin-bottom:0}
+.dt-specs{display:grid;grid-template-columns:1fr 1fr;gap:14px 48px;margin-top:30px}
+.dt-specs>div{border-bottom:1px dotted var(--line-2);padding-bottom:10px}
+.dt-specs dt{font:500 .58rem var(--fm);letter-spacing:.12em;text-transform:uppercase;color:var(--text-2);margin-bottom:3px}
+.dt-specs dd{font:500 .9rem var(--fm)}
+.dt-srv{list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:0 44px}
+.dt-srv li{display:flex;gap:16px;padding:17px 0;border-bottom:1px dotted var(--line-2);align-items:flex-start}
+.dt-srv .ic{width:38px;height:38px;border:1px solid var(--line-2);display:flex;align-items:center;justify-content:center;
+  flex:none;color:var(--accent);margin-top:2px}
+.dt-srv .ic svg{width:16px;height:16px}
+.dt-srv h4{font:600 .9rem var(--fs);margin-bottom:2px}
+.dt-srv p{font-size:.82rem;color:var(--text-2)}
+.dt-verified{display:inline-flex;gap:10px;align-items:center;background:color-mix(in srgb,var(--ok) 15%,transparent);color:var(--ok);
+  padding:9px 16px;font:500 .6rem var(--fm);letter-spacing:.12em;text-transform:uppercase;margin-bottom:20px}
+.dt-verified svg{width:14px;height:14px}
+.dt-legal{list-style:none}
+.dt-legal li{display:flex;align-items:center;gap:15px;padding:16px 0;border-bottom:1px solid var(--line)}
+.dt-legal li svg{width:17px;height:17px;color:var(--ok);flex:none}
+.dt-legal b{font-weight:600;font-size:.92rem}
+.dt-legal .val{margin-left:auto;font:400 .7rem var(--fm);color:var(--text-2);text-align:right}
+.dt-legal-note{font-size:.8rem;color:var(--text-2);margin-top:16px;max-width:60ch}
+.dt-geo{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:start}
+.dt-map{border:1px solid var(--line);background:var(--panel);padding:16px;position:relative;color:var(--accent)}
+.dt-map svg{width:100%;height:auto;display:block}
+.dt-map .mono{position:absolute;left:26px;bottom:24px;color:var(--text-2)}
+.dt-map-tag{position:absolute;top:24px;right:26px;font:500 .58rem var(--fm);letter-spacing:.12em;
+  text-transform:uppercase;color:var(--text-2);text-align:right;line-height:1.7}
+.pin-pulse{transform-box:fill-box;transform-origin:center;animation:pp 2.4s ease-out infinite}
+@keyframes pp{0%{transform:scale(.4);opacity:.8}70%{transform:scale(2.6);opacity:0}100%{opacity:0}}
+.dt-dist{list-style:none}
+.dt-dist li{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:13px 0;border-bottom:1px dotted var(--line-2);font-size:.92rem}
+.dt-dist .mono{color:var(--accent)}
+.dt-tl{display:grid;grid-template-columns:repeat(3,1fr);gap:26px;margin-top:8px}
+.dt-tl>div{border-top:2px solid var(--text);padding-top:14px}
+.dt-tl .mono{color:var(--accent);font-weight:500;display:block;margin-bottom:6px}
+.dt-tl h4{font:600 .9rem var(--fs);margin-bottom:4px}
+.dt-tl p{font-size:.82rem;color:var(--text-2)}
+.dt-sim-row{display:flex;gap:18px;align-items:center;padding:16px 12px;border-top:1px solid var(--line);cursor:pointer;transition:background .18s,color .18s}
+.dt-sim .dt-sim-row:last-child{border-bottom:1px solid var(--line)}
+.dt-sim-row:hover{background:var(--panel)}
+.dt-sim-row img{width:92px;aspect-ratio:4/3;object-fit:cover;flex:none;border:1px solid var(--line)}
+.dt-sim-row .s-main{min-width:0;flex:1}
+.dt-sim-row h4{font:400 1.2rem var(--fd)}
+.dt-sim-row .s-meta{font-size:.78rem;color:var(--text-2);margin-top:2px}
+.dt-sim-row .s-price{font:500 .86rem var(--fm);color:var(--accent);white-space:nowrap}
+.acard{background:var(--panel);border:1px solid var(--line);padding:22px}
+.acard .mono{color:var(--text-2)}
+.aprice{font:500 1.5rem var(--fm);letter-spacing:-.02em;color:var(--accent);display:block;margin:8px 0 2px}
+.aprice-sub{font:400 .6rem var(--fm);color:var(--text-2);letter-spacing:.05em}
+.a-cta{display:grid;gap:9px;margin-top:18px}
+.a-actions{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:12px}
+.a-actions .btn{padding:11px 10px;font-size:.64rem}
+.agent{display:flex;align-items:center;gap:14px;margin-top:16px;padding-top:16px;border-top:1px solid var(--line)}
+.agent .av{width:44px;height:44px;background:var(--accent);color:var(--ink-on-accent);
+  display:flex;align-items:center;justify-content:center;font:500 .85rem var(--fm);flex:none}
+.agent b{display:block;font:600 .9rem var(--fs)}
+.agent .mono{display:block;margin-top:2px}
+.mform{display:grid;gap:10px;margin-top:14px}
+.mform input{width:100%;background:var(--bg);border:1px solid var(--line-2);border-radius:0;color:var(--text);
+  font:500 .84rem var(--fs);padding:12px 14px;outline:none;transition:border-color .2s}
+.mform input:focus{border-color:var(--accent)}
+.mform input::placeholder{color:var(--text-2)}
+.dt-foot{border-top:1px solid var(--line);margin-top:26px;padding:26px 0 36px;
+  display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap}
+.flash{animation:flashB 1.3s ease}
+@keyframes flashB{0%,100%{box-shadow:none}30%{box-shadow:0 0 0 3px var(--accent)}}
+
+/* ============ LIGHTBOX ============ */
+#lightbox{position:fixed;inset:0;z-index:650;background:rgba(8,7,5,.96);
+  display:flex;flex-direction:column;opacity:0;visibility:hidden;transition:opacity .28s,visibility .28s}
+#lightbox.open{opacity:1;visibility:visible}
+.lb-stage{flex:1;display:flex;align-items:center;justify-content:center;position:relative;min-height:0;padding:60px 70px 20px}
+#lbImg{max-width:min(1150px,86vw);max-height:calc(100vh - 240px);object-fit:contain;transition:opacity .18s}
+.lb-x{position:absolute;top:18px;right:20px;z-index:5;width:44px;height:44px;background:transparent;
+  color:var(--text);border:1px solid var(--line-2);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;border-radius:0}
+.lb-x:hover{background:var(--accent);border-color:var(--accent);color:var(--ink-on-accent)}
+.lb-nav{position:absolute;top:50%;transform:translateY(-50%);z-index:5;width:50px;height:50px;background:transparent;
+  color:var(--text);border:1px solid var(--line-2);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;border-radius:0}
+.lb-nav:hover{background:var(--accent);border-color:var(--accent);color:var(--ink-on-accent)}
+.lb-prev{left:18px}.lb-next{right:18px}
+.lb-info{display:flex;justify-content:space-between;align-items:baseline;gap:16px;
+  max-width:min(1150px,86vw);width:100%;margin:0 auto;padding:0 70px 14px;color:var(--text)}
+.lb-info .cap{font:italic 400 1rem var(--fd)}
+.lb-info .mono{color:var(--text-2)}
+.lb-thumbs{display:flex;gap:8px;overflow-x:auto;padding:10px 70px 20px;scrollbar-width:thin;margin:0 auto;max-width:100%}
+.lb-thumbs img{width:74px;aspect-ratio:4/3;object-fit:cover;cursor:pointer;opacity:.4;
+  border:1px solid transparent;transition:opacity .2s,border-color .2s;flex:none}
+.lb-thumbs img:hover{opacity:.85}
+.lb-thumbs img.on{opacity:1;border-color:var(--accent)}
+
+/* ============ CURADORA (CHAT) ============ */
+#chatFab{position:fixed;right:22px;bottom:22px;z-index:600;width:56px;height:56px;
+  background:var(--accent);color:var(--ink-on-accent);border:none;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;border-radius:0;
+  box-shadow:0 16px 40px -12px rgba(0,0,0,.7);transition:background .2s,transform .2s}
+#chatFab:hover{background:var(--accent-d);transform:translateY(-2px)}
+#chatFab svg{width:22px;height:22px}
+#chatFab .fab-dot{position:absolute;top:-4px;right:-4px;width:11px;height:11px;background:var(--ok);border:2px solid var(--bg);animation:fabP 2.2s infinite}
+@keyframes fabP{0%{box-shadow:0 0 0 0 color-mix(in srgb,var(--ok) 60%,transparent)}70%{box-shadow:0 0 0 10px transparent}100%{box-shadow:0 0 0 0 transparent}}
+#chatPanel{position:fixed;right:22px;bottom:92px;z-index:600;width:min(400px,calc(100vw - 32px));
+  height:min(560px,calc(100dvh - 146px));background:var(--panel);border:1px solid var(--line-2);
+  display:flex;flex-direction:column;overflow:hidden;
+  box-shadow:0 30px 70px -20px rgba(0,0,0,.75);
+  opacity:0;visibility:hidden;transform:translateY(14px) scale(.98);
+  transition:opacity .25s,transform .3s cubic-bezier(.2,.7,.2,1),visibility 0s .3s}
+#chatPanel.open{opacity:1;visibility:visible;transform:none;transition-delay:0s}
+.ch-head{display:flex;align-items:center;gap:12px;background:var(--panel-2);border-bottom:1px solid var(--line);padding:13px 14px}
+.ch-av{width:38px;height:38px;background:var(--accent);color:var(--ink-on-accent);
+  display:flex;align-items:center;justify-content:center;font:500 .95rem var(--fm);flex:none}
+.ch-head b{font:600 .95rem var(--fs);display:block}
+.ch-status{display:flex;align-items:center;gap:6px;color:var(--text-2)}
+.ch-status .dot{width:7px;height:7px;background:var(--ok);flex:none}
+#chatX{margin-left:auto;background:none;border:1px solid var(--line-2);color:var(--text);
+  width:34px;height:34px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;border-radius:0}
+#chatX:hover{border-color:var(--accent);color:var(--accent)}
+#chatX svg{width:15px;height:15px}
+.ch-log{flex:1;overflow-y:auto;padding:16px 14px;display:flex;flex-direction:column;gap:10px;background:var(--bg)}
+.msg{max-width:88%;padding:11px 14px;font-size:.88rem;line-height:1.5}
+.msg.bot{background:var(--panel);border:1px solid var(--line);align-self:flex-start;color:var(--text)}
+.msg.user{background:var(--accent);color:var(--ink-on-accent);align-self:flex-end}
+.msg b{font-weight:600}
+.typing{display:inline-flex;gap:5px;align-self:flex-start;padding:14px 16px;background:var(--panel);border:1px solid var(--line)}
+.typing span{width:6px;height:6px;background:var(--text-2);animation:tp 1s infinite}
+.typing span:nth-child(2){animation-delay:.15s}
+.typing span:nth-child(3){animation-delay:.3s}
+@keyframes tp{0%,60%,100%{transform:none;opacity:.4}30%{transform:translateY(-4px);opacity:1}}
+.m-cards{display:grid;gap:8px;margin-top:10px;width:100%}
+.m-card{display:flex;gap:10px;align-items:center;text-align:left;background:var(--panel);
+  border:1px solid var(--line-2);padding:8px 10px;cursor:pointer;transition:border-color .2s;font-family:var(--fs);color:var(--text);border-radius:0}
+.m-card:hover{border-color:var(--accent)}
+.m-card img{width:52px;aspect-ratio:4/3;object-fit:cover;flex:none}
+.m-card .mc-info{display:flex;flex-direction:column;min-width:0}
+.m-card b{font:400 1rem var(--fd);line-height:1.2}
+.m-card .mono{color:var(--text-2);font-size:.56rem}
+.m-card .mc-price{font:500 .7rem var(--fm);color:var(--accent);margin-top:2px}
+.ch-chips{display:flex;gap:8px;overflow-x:auto;padding:10px 14px 0;scrollbar-width:none;background:var(--panel)}
+.ch-chips::-webkit-scrollbar{display:none}
+.chip-q{white-space:nowrap;font:500 .68rem var(--fs);border:1px solid var(--line-2);background:transparent;
+  color:var(--text-2);padding:8px 13px;cursor:pointer;transition:all .2s;border-radius:0}
+.chip-q:hover{border-color:var(--accent);color:var(--accent)}
+.ch-input{display:flex;gap:8px;padding:12px 14px;border-top:1px solid var(--line);background:var(--panel)}
+.ch-input input{flex:1;min-width:0;background:var(--bg);border:1px solid var(--line-2);border-radius:0;
+  font:500 .86rem var(--fs);padding:11px 14px;color:var(--text);outline:none;transition:border-color .2s}
+.ch-input input:focus{border-color:var(--accent)}
+.ch-input input::placeholder{color:var(--text-2)}
+.ch-input button{width:44px;background:var(--accent);color:var(--ink-on-accent);border:none;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;transition:background .2s;border-radius:0}
+.ch-input button:hover{background:var(--accent-d)}
+.ch-input button svg{width:16px;height:16px}
+
+/* ============ TOASTS ============ */
+#toasts{position:fixed;left:20px;bottom:20px;z-index:700;display:flex;flex-direction:column;gap:10px}
+.toast{display:flex;align-items:center;gap:12px;background:var(--panel);color:var(--text);
+  border:1px solid var(--line-2);border-left:3px solid var(--accent);
+  padding:14px 18px;max-width:min(420px,calc(100vw - 40px));font-size:.88rem;
+  box-shadow:0 18px 44px -14px rgba(0,0,0,.7);animation:tin .4s cubic-bezier(.2,.7,.2,1)}
+.toast.out{opacity:0;transform:translateY(8px);transition:opacity .35s,transform .35s}
+.toast svg{width:17px;height:17px;color:var(--ok);flex:none}
+.toast.warn svg{color:var(--accent)}
+@keyframes tin{from{opacity:0;transform:translateY(14px)}}
+
+/* ============ REVEAL ============ */
+.rv{opacity:0;transform:translateY(26px);transition:opacity .7s cubic-bezier(.2,.7,.2,1),transform .7s cubic-bezier(.2,.7,.2,1)}
+.rv.in{opacity:1;transform:none}
+.drv{opacity:0;transform:translateY(20px);transition:opacity .55s cubic-bezier(.2,.7,.2,1),transform .55s cubic-bezier(.2,.7,.2,1)}
+.drv.in{opacity:1;transform:none}
+
+/* ============ RESPONSIVE ============ */
+@media (max-width:1080px){
+  .hero{grid-template-columns:1fr}
+  .h-right{min-height:420px;border-left:none;border-top:1px solid var(--line);order:-1}
+  .feature{grid-column:span 12}
+  .stats{grid-column:span 12;flex-direction:row}
+  .stat{border-top:none;border-left:1px solid var(--line)}
+  .stat:first-child{border-left:none}
+  .appt,.quote{grid-column:span 12}
+  .calc,.method{grid-column:span 12}
+  .vband{grid-template-columns:1fr;gap:26px}
+  .foot-grid{grid-template-columns:1fr 1fr}
+  .dt-layout{grid-template-columns:1fr;gap:0}
+  .dt-aside{position:static;margin-top:10px}
+}
+@media (max-width:900px){
+  .hsearch{grid-template-columns:1fr 1fr}
+  .hsearch .field{border-right:none;border-bottom:1px solid var(--line)}
+  .hsearch .hs-btn{grid-column:span 2}
+  .hsearch .hs-btn .btn{width:100%}
+}
+@media (max-width:860px){
+  .nav,.topbar-cta{display:none}
+  #menuBtn{display:flex}
+}
+@media (max-width:760px){
+  .dg-hero{aspect-ratio:4/3}
+  .dt-geo{grid-template-columns:1fr;gap:28px}
+  .dt-srv,.dt-specs{grid-template-columns:1fr;gap:0}
+  .dt-tl{grid-template-columns:1fr}
+  .dt-bar-title h2{display:none}
+  .lb-stage{padding:56px 14px 10px}
+  .lb-info,.lb-thumbs{padding-left:16px;padding-right:16px}
+  .lb-nav{display:none}
+  .stats{flex-direction:column}
+  .stat{border-left:none;border-top:1px solid var(--line)}
+  .stat:first-child{border-top:none}
+}
+@media (max-width:680px){
+  .calc-grid,.vform .frow{grid-template-columns:1fr}
+  .foot-grid{grid-template-columns:1fr}
+  .tool-search input{width:100%}
+  .dt-bar .btn span{display:none}
+  .dt-bar .btn{padding:11px 14px}
+  #chatPanel{right:12px;left:12px;width:auto;bottom:84px;height:min(70vh,calc(100dvh - 108px))}
+  #chatFab{right:16px;bottom:16px}
+  #toasts{left:12px;bottom:88px}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  .rv,.drv{opacity:1;transform:none}
+}
+</style>
+</head>
+<body>
+
+<!-- ============ HEADER ============ -->
+<header id="topbar">
+  <div class="wrap topbar-in">
+    <a href="#" class="logo" id="logoTop"></a>
+    <nav class="nav">
+      <a href="#coleccion">La colección</a>
+      <a href="#decision">Calculadora</a>
+      <a href="#metodo">Método</a>
+      <a href="#visita">Visitas</a>
+    </nav>
+    <div style="display:flex;gap:10px;align-items:center">
+      <a class="btn btn-solid topbar-cta" href="#visita" style="padding:10px 18px">Visita privada</a>
+      <button id="menuBtn" aria-label="Abrir menú"><i data-lucide="menu"></i></button>
+    </div>
+  </div>
+</header>
+<nav id="mobileNav">
+  <a href="#coleccion">La colección</a>
+  <a href="#decision">Calculadora</a>
+  <a href="#metodo">Método</a>
+  <a href="#visita">Visitas / agendar</a>
+  <button id="mnavChat">Hablar con la curadora</button>
+</nav>
+
+<!-- ============ HERO ============ -->
+<section class="hero">
+  <div class="h-left">
+    <p class="mono kicker"><i data-lucide="asterisk"></i> Colección 2025 · Paraguay · Cartera propia</p>
+    <h1>No es un catálogo.<br>Es una <em>colección</em>.</h1>
+    <p class="hero-sub" id="heroSub"></p>
+    <div class="hero-cta">
+      <a class="btn btn-solid" href="#coleccion">Ver la colección <i data-lucide="arrow-down"></i></a>
+      <button class="link-ghost" id="heroChatLink">Consultarle a la curadora</button>
+    </div>
+    <form class="hsearch" id="heroSearch">
+      <div class="field">
+        <label for="sType">Busco</label>
+        <span class="selwrap"><select id="sType">
+          <option value="all">Casas y terrenos</option>
+          <option value="casa">Casas</option>
+          <option value="terreno">Terrenos</option>
+        </select></span>
+      </div>
+      <div class="field">
+        <label for="sZone">Zona</label>
+        <span class="selwrap"><select id="sZone"><option value="all">Todas</option></select></span>
+      </div>
+      <div class="field">
+        <label for="sMax">Presupuesto</label>
+        <span class="selwrap"><select id="sMax">
+          <option value="">Sin límite</option>
+          <option value="600000000">Hasta Gs. 600 millones</option>
+          <option value="1000000000">Hasta Gs. 1.000 millones</option>
+          <option value="1500000000">Hasta Gs. 1.500 millones</option>
+          <option value="2500000000">Hasta Gs. 2.500 millones</option>
+        </select></span>
+      </div>
+      <div class="hs-btn"><button class="btn btn-solid" type="submit">Buscar <i data-lucide="arrow-up-right"></i></button></div>
+    </form>
+  </div>
+  <div class="h-right up">
+    <img class="ph" src="https://picsum.photos/seed/boveda-hero/1200/900.jpg" alt="Propiedad destacada al atardecer">
+    <span class="mono vlabel">GALERÍA · ASUNCIÓN · PY</span>
+    <div class="h-plate">
+      <span class="mono">OBRA Nº 000 · PORTADA</span>
+      <strong>Propiedad de portada</strong>
+    </div>
+  </div>
+</section>
+
+<!-- ============ TICKER ============ -->
+<div class="marquee" aria-hidden="true"><div class="mtrack" id="mTrack"></div></div>
+
+<main class="wrap">
+
+  <!-- ============ BENTO DESTACADOS ============ -->
+  <section class="sec-pad rv" id="destacados">
+    <header class="sec-head">
+      <div>
+        <p class="mono sec-kicker">01 — En exhibición</p>
+        <h2 class="sec-title">Las piezas de <em>esta semana</em></h2>
+      </div>
+    </header>
+    <div class="bgrid">
+      <article class="bcell feature up" id="featCell" tabindex="0" role="button" aria-label="Ver obra Nº 008: Finca La Mesa">
+        <div class="feat-img">
+          <img class="ph" src="https://picsum.photos/seed/terral-mesa/1200/700.jpg" alt="Finca La Mesa">
+          <span class="mono wtag" style="position:absolute;left:14px;bottom:12px;background:color-mix(in srgb,var(--bg) 78%,transparent);padding:6px 11px;border:1px solid var(--line)">OBRA Nº 008 · DESTACADA</span>
+        </div>
+        <div class="feat-plate">
+          <div>
+            <p class="mono kicker"><i data-lucide="asterisk"></i> Terreno · Piribebuy</p>
+            <h3>Finca La Mesa</h3>
+            <p>4,2 hectáreas de meseta cultivada. Casa de herramientas, pozo con permiso y camino asfaltado hasta el portón.</p>
+          </div>
+          <div style="text-align:right">
+            <span class="wprice" style="font:500 1.1rem var(--fm);color:var(--accent)">Gs. 2.400.000.000</span><br>
+            <span class="mono" style="color:var(--text-2);margin-top:4px;display:inline-block">ver obra completa ↓</span>
+          </div>
+        </div>
+      </article>
+
+      <aside class="bcell stats">
+        <div class="stat"><strong data-count="8">0</strong><span class="mono">obras en exhibición</span></div>
+        <div class="stat"><strong data-count="12">0</strong><span class="mono">años de curaduría</span></div>
+        <div class="stat"><strong>0</strong><span class="mono">sorpresas en la escritura</span></div>
+      </aside>
+
+      <aside class="bcell appt">
+        <p class="mono kicker" style="color:color-mix(in srgb,var(--ink-on-accent) 70%,transparent)"><i data-lucide="calendar-days"></i> Con cita previa</p>
+        <h3>La colección se recorre en privado</h3>
+        <p>Visitas guiadas por la zona con medidas, planos y preguntas sin filtro. Sin cola, sin apuro.</p>
+        <div class="mono" style="display:flex;gap:20px;margin-top:6px">
+          <span>DÍA <b>SÁB</b></span><span>SALIDA <b>10:00</b></span><span>CUPOS <b>8 PAX</b></span>
+        </div>
+        <button class="btn btn-ink" id="apptBtn" style="margin-top:14px;align-self:flex-start">Reservar recorrido <i data-lucide="arrow-up-right"></i></button>
+      </aside>
+
+      <aside class="bcell quote">
+        <div class="qmark">“</div>
+        <blockquote>Buscábamos un terreno y terminamos entendiendo el terreno. Eso no lo presenta cualquiera.</blockquote>
+        <footer class="mono">— Familia Benítez · Obra Nº 006 cerrada en 2024</footer>
+      </aside>
+    </div>
+  </section>
+
+  <!-- ============ EL MURO ============ -->
+  <section id="coleccion" class="sec-pad rv">
+    <header class="sec-head">
+      <div>
+        <p class="mono sec-kicker">02 — El muro</p>
+        <h2 class="sec-title">Toda la <em>colección</em></h2>
+      </div>
+      <div class="toolbar">
+        <button class="chip on" data-type="all">Todas</button>
+        <button class="chip" data-type="casa">Casas</button>
+        <button class="chip" data-type="terreno">Terrenos</button>
+        <div class="tool-search">
+          <i data-lucide="search"></i>
+          <input type="text" id="q" placeholder="Nombre, zona, palabra clave…" aria-label="Buscar en la colección">
+        </div>
+        <span class="selwrap">
+          <select class="tool-sort" id="sortSel" aria-label="Ordenar">
+            <option value="num">Obra Nº</option>
+            <option value="price-asc">Precio: menor primero</option>
+            <option value="price-desc">Precio: mayor primero</option>
+            <option value="area-desc">Superficie: mayor primero</option>
+          </select>
+        </span>
+      </div>
+    </header>
+
+    <div class="list-meta">
+      <span class="mono" id="listCount"></span>
+      <div class="pills" id="pills"></div>
+    </div>
+
+    <div class="wall" id="wall"></div>
+
+    <div class="empty" id="empty" hidden style="margin-top:14px">
+      <p>Nada por aquí con esos filtros.</p>
+      <button class="btn btn-ghost" id="clearBtn" style="align-self:center">Ampliar la búsqueda</button>
+    </div>
+  </section>
+
+  <!-- ============ DECISIÓN ============ -->
+  <section id="decision" class="sec-pad rv">
+    <header class="sec-head">
+      <div>
+        <p class="mono sec-kicker">03 — La decisión</p>
+        <h2 class="sec-title">Números claros,<br><em>papeles en regla</em></h2>
+      </div>
+    </header>
+
+    <div class="dgrid">
+      <article class="calc" id="calcCell">
+        <header>
+          <h3>Calculadora de cuota</h3>
+          <p class="mono">Sistema francés · tasa referencial</p>
+        </header>
+        <div class="calc-grid">
+          <div class="ctl">
+            <div class="ctl-head"><label for="rPrice">Valor de la propiedad</label><output id="oPrice"></output></div>
+            <input type="range" id="rPrice" min="300000000" max="5000000000" step="25000000" value="1450000000">
+          </div>
+          <div class="ctl">
+            <div class="ctl-head"><label for="rDown">Enganche</label><output id="oDown"></output></div>
+            <input type="range" id="rDown" min="5" max="70" step="5" value="20">
+          </div>
+          <div class="ctl">
+            <div class="ctl-head"><label for="rRate">Tasa anual</label><output id="oRate"></output></div>
+            <input type="range" id="rRate" min="3" max="15" step="0.1" value="8.5">
+          </div>
+          <div class="ctl">
+            <div class="ctl-head"><label for="rYears">Plazo</label><output id="oYears"></output></div>
+            <input type="range" id="rYears" min="5" max="30" step="1" value="20">
+          </div>
+        </div>
+        <div class="calc-result">
+          <div class="cuota">
+            <span class="mono">Cuota mensual estimada</span>
+            <strong id="oCuota">—</strong>
+          </div>
+          <div class="bar"><span id="barCap"></span><span id="barInt"></span></div>
+          <ul class="calc-mini">
+            <li class="mono">Monto financiado<b id="oFin"></b></li>
+            <li class="mono">Intereses<b id="oInt"></b></li>
+            <li class="mono">Total pagado<b id="oTot"></b></li>
+          </ul>
+        </div>
+      </article>
+
+      <aside class="method" id="metodo">
+        <p class="mono kicker"><i data-lucide="asterisk"></i> El método</p>
+        <h3>Cómo se verifica cada obra</h3>
+        <ol class="steps">
+          <li><span class="mono">01</span><div><h4>Medimos</h4><p>Replanteo en sitio y plano cotejado: el área real, no la del aviso.</p></div></li>
+          <li><span class="mono">02</span><div><h4>Verificamos</h4><p>Título, deudas, gravámenes y permisos. Todo por escrito, todo revisable.</p></div></li>
+          <li><span class="mono">03</span><div><h4>Acompañamos</h4><p>De la oferta a la escritura, con el escribano y sin letra pequeña.</p></div></li>
+        </ol>
+      </aside>
+    </div>
+
+    <!-- banda de visita -->
+    <div class="vband" id="visita">
+      <div>
+        <p class="mono kicker"><i data-lucide="calendar-days"></i> Sin compromiso</p>
+        <h3>Agendá tu visita privada</h3>
+        <p class="vb-sub">Te contactamos el mismo día. Si la obra no te sirve, te lo decimos antes de que pierdas una mañana.</p>
+      </div>
+      <form class="vform" id="bookForm" novalidate>
+        <div class="frow">
+          <input type="text" id="bName" placeholder="Tu nombre" aria-label="Tu nombre">
+          <input type="tel" id="bPhone" placeholder="0981 123 456" aria-label="Teléfono">
+        </div>
+        <div class="frow">
+          <input type="date" id="bDate" aria-label="Fecha preferida">
+          <span class="selwrap" style="width:100%"><select id="bProp" style="width:100%"><option value="">Aún no sé qué obra</option></select></span>
+        </div>
+        <button class="btn btn-solid" type="submit">Agendar visita <i data-lucide="arrow-up-right"></i></button>
+        <p class="mono">Te contactamos el mismo día · sin spam</p>
+      </form>
+    </div>
+  </section>
+</main>
+
+<!-- ============ FOOTER ============ -->
+<footer class="site-foot">
+  <div class="wrap foot-grid">
+    <div class="foot-brand">
+      <span class="logo" id="logoFoot"></span>
+      <p id="footTag"></p>
+    </div>
+    <div class="foot-col">
+      <h5>Colección</h5>
+      <a href="#coleccion">Todas las obras</a>
+      <a href="#decision">Calculadora</a>
+      <a href="#metodo">Método</a>
+      <a href="#visita">Visita privada</a>
+      <button id="footChat">Hablar con la curadora</button>
+    </div>
+    <div class="foot-col">
+      <h5>Galería</h5>
+      <span>Av. Mariscal López 1234, Asunción</span>
+      <span>Lun – Sáb · 9:00 a 19:00</span>
+      <span>+595 981 234 567</span>
+      <span>hola@boveda.com.py</span>
+    </div>
+    <div class="foot-col">
+      <h5>Viernes de obras</h5>
+      <p style="font-size:.86rem;color:var(--text-2);margin-bottom:14px">Las obras nuevas llegan a tu correo cada viernes a las 09:00.</p>
+      <form class="nform" id="newsForm" novalidate>
+        <input type="email" id="nMail" placeholder="tu@correo.com" aria-label="Correo electrónico">
+        <button type="submit">Suscribirme</button>
+      </form>
+    </div>
+  </div>
+  <div class="wrap foot-bottom mono">
+    <span>© 2025 — Colección inmobiliaria · Paraguay</span>
+    <span>Cartera propia, sin intermediarios</span>
+  </div>
+</footer>
+
+<!-- ============ FICHA — PANTALLA COMPLETA ============ -->
+<div id="detail" aria-hidden="true">
+  <div class="dt-bar">
+    <div class="dt-bar-in">
+      <button class="dt-back" id="dtBack"><i data-lucide="arrow-left"></i> Volver al muro</button>
+      <div class="dt-bar-title">
+        <span class="mono" id="dtBarNum"></span>
+        <h2 id="dtBarName"></h2>
+        <span class="dt-bar-price" id="dtBarPrice"></span>
+      </div>
+      <button class="btn btn-solid" id="dtBarCta"><span>Visita privada</span> <i data-lucide="calendar-days"></i></button>
+    </div>
+    <div class="dt-progress" id="dtProgress"></div>
+  </div>
+  <div id="dtBody"></div>
+</div>
+
+<!-- ============ LIGHTBOX ============ -->
+<div id="lightbox" aria-hidden="true">
+  <button class="lb-x" id="lbX" aria-label="Cerrar galería"><i data-lucide="x"></i></button>
+  <div class="lb-stage">
+    <button class="lb-nav lb-prev" id="lbPrev" aria-label="Foto anterior"><i data-lucide="chevron-left"></i></button>
+    <img id="lbImg" class="ph" alt="">
+    <button class="lb-nav lb-next" id="lbNext" aria-label="Foto siguiente"><i data-lucide="chevron-right"></i></button>
+  </div>
+  <div class="lb-info">
+    <span class="cap" id="lbCap"></span>
+    <span class="mono" id="lbCount"></span>
+  </div>
+  <div class="lb-thumbs" id="lbThumbs"></div>
+</div>
+
+<!-- ============ CURADORA (CHAT) ============ -->
+<button id="chatFab" aria-label="Abrir curadora"><i data-lucide="message-circle"></i><span class="fab-dot"></span></button>
+<section id="chatPanel" aria-hidden="true" role="dialog" aria-label="Curadora de la colección">
+  <header class="ch-head">
+    <span class="ch-av" id="chAv">V</span>
+    <div>
+      <b id="chName">Vera</b>
+      <span class="mono ch-status"><span class="dot"></span> en línea · conoce las 8 obras</span>
+    </div>
+    <button id="chatX" aria-label="Cerrar"><i data-lucide="x"></i></button>
+  </header>
+  <div class="ch-log" id="chLog" aria-live="polite"></div>
+  <div class="ch-chips" id="chChips"></div>
+  <form class="ch-input" id="chForm">
+    <input id="chTxt" type="text" placeholder="Preguntá precios, zonas, cuotas…" autocomplete="off" aria-label="Escribí tu pregunta">
+    <button type="submit" aria-label="Enviar"><i data-lucide="arrow-up"></i></button>
+  </form>
+</section>
+
+<div id="toasts" aria-live="polite"></div>
+
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<script>
+/* ================================================================
+   CONFIGURACIÓN DEL CLIENTE — nombre del vendedor y curadora
+   (el color se cambia en el bloque "IDENTIDAD" del CSS)
+   ================================================================ */
+const BRAND = {
+  a:'Bó', b:'veda',
+  title:'Colección inmobiliaria en Paraguay',
+  heroSub:'Ocho propiedades verificadas en Paraguay, medidas en sitio y con papeles en regla. Una sola cartera, un solo vendedor — presentadas como merecen ser vistas.',
+  footTag:'Propiedades con curaduría y papeles en regla. Una colección propia desde 2013.',
+  assistant:'Vera'
+};
+
+/* ================= DATOS (precios en Guaraníes) ================= */
+const PROPS = [
+  {num:'001',name:'Casa Alba',type:'casa',zone:'Piribebuy',price:1450000000,built:186,land:1200,beds:3,baths:2,year:2019,seed:'terral-alba',
+   tag:'Adobe contemporáneo con el huerto ya en producción.',
+   desc:[
+     'Construida en 2019 con muros de adobe blanqueado y galería perimetral, la Casa Alba fue pensada para vivir afuera tanto como adentro: toda la cara sur se abre en vanos con postigos, y la galería de madera envejecida da sombra desde la mañana hasta el anochecer.',
+     'Adentro, la casa se organiza en torno al hogar de leña: sala y comedor comparten el volumen principal, la cocina mira al huerto por una ventana corrida, y los tres dormitorios quedan en el ala tranquila, con vistas a la loma y al pueblo al fondo.',
+     'Los 1.200 m² de terreno están trabajando: 300 m² de huerto en producción, riego por goteo desde el pozo propio con permiso vigente, y una galería de herramientas techada al fondo del lote. El camino hasta la puerta está consolidado y se transita todo el año.'
+   ],
+   gal:['Fachada sur y galería','Sala con hogar','Cocina hacia el huerto','Dormitorio principal','El huerto en producción','Galería al atardecer','Camino de acceso'],
+   x:[['Orientación','Sur-este'],['Calefacción','Hogar a leña + radiadores'],['Agua','Pozo propio + red'],['Techo','Teja artesanal'],['Pisos','Pinotea recuperada'],['Carpinterías','Madera con postigos']],
+   srv:[['droplets','Agua','Pozo propio con permiso vigente + red de la zona'],['zap','Electricidad','Red pública de la ANDE, medidor independiente'],['route','Acceso','Camino consolidado, transitable todo el año'],['wifi','Internet','Fibra óptica disponible en el poste']]},
+
+  {num:'002',name:'Lote Mirador',type:'terreno',zone:'Piribebuy',price:590000000,land:2500,year:2024,seed:'terral-mirador',fresh:true,
+   tag:'2.500 m² en la cornisa de las lomas, con el atardecer incluido.',
+   desc:[
+     'Un lote de esquina en la cornisa de Piribebuy, con 31 metros de frente y 81 de fondo sobre una superficie prácticamente plana que cae suavemente hacia el oeste. Desde cualquier punto del terreno, el valle entero queda a la vista.',
+     'El plano de mensura fue aprobado en 2024 y el uso de suelo es residencial sin restricciones de estilo ni superficie mínima de construcción. La energía eléctrica pasa a 40 metros y el agua municipal a 60: los servicios son cuestión de trámite, no de obra.',
+     'Es de los pocos lotes de la cornisa con esquina doble: permite ubicar la casa de manera que el jardín quede al sur y el acceso al norte, sin desperdiciar ni un metro de vista. Lo medimos en sitio en noviembre y el área coincide con el título al centímetro.'
+   ],
+   gal:['La cornisa, vista al oeste','Plano de mensura aprobado','Frente de 31 metros','Vegetación natural','Atardecer desde el centro del lote','Lindero norte','Camino asfaltado'],
+   x:[['Frente','31 m'],['Fondo','81 m'],['Topografía','Plana, caída suave a oeste'],['Uso de suelo','Residencial sin restricciones'],['Plano','Mensura aprobada 2024'],['Ubicación','Lote de esquina doble']],
+   srv:[['zap','Electricidad','Red de la ANDE a 40 metros del frente'],['droplets','Agua','Red municipal a 60 metros'],['route','Acceso','Asfaltado hasta el frente del lote'],['signal','Cobertura móvil','Completa, 4G/5G']]},
+
+  {num:'003',name:'Casa del Horno',type:'casa',zone:'Asunción Centro',price:1080000000,built:132,land:210,beds:2,baths:1,year:1927,seed:'terral-horno',
+   tag:'Casa de 1927 con el horno de barro original, restaurada en 2021.',
+   desc:[
+     'Una de las casas del centro de Asunción con más carácter de la colección: muros de piedra y adobe de 1927, y un horno de barro original que sigue funcionando — en la restauración de 2021 se decidió conservarlo tal cual, junto con las vigas de algarrobo y el patio empedrado.',
+     'La restauración fue respetuosa y documentada: refuerzo estructural oculto, instalaciones nuevas, aislación en cubierta y la salamandra de fundición que calienta los 132 m² sin ayuda en invierno. Dos dormitorios, un baño amplio y una cocina que se abrió al patio con un gran vano vidriado.',
+     'Se vive a pie de todo: plaza a dos minutos, mercado y panadería a tres. El limón del patio ya da sombra y limones — es ese tipo de casa. El terreno es compacto (210 m²), pero el patio hace que se sienta el doble. Ideal para quien quiere el centro de verdad, con historia verificable y nada por arreglar.'
+   ],
+   gal:['Fachada sobre la calle','El horno de barro original','Sala con salamandra','Cocina hacia el patio','Patio empedrado y limón','Dormitorio con vigas','Detalles de restauración'],
+   x:[['Restauración','2021, documentada'],['Estructura','Piedra + adobe, reforzada'],['Calefacción','Salamandra de fundición'],['Techos','Originales restaurados'],['Instalaciones','Eléctrica y sanitaria nuevas'],['Orientación','Norte, hacia el patio']],
+   srv:[['droplets','Agua','Red municipal de ESSAP'],['zap','Electricidad','Red de la ANDE, tablero nuevo'],['wifi','Internet','Fibra disponible'],['footprints','Todo a pie','Plaza 2 min, mercado 3 min']]},
+
+  {num:'004',name:'Parcela El Roble',type:'terreno',zone:'Ybytyruzú',price:950000000,land:9800,year:2023,seed:'terral-roble',
+   tag:'Casi una hectárea entre robles centenarios, en pleno Ybytyruzú.',
+   desc:[
+     '9.800 m² en la loma alta del Ybytyruzú, rodeados de robles centenarios que dan nombre a la parcela. La topografía es sorprendentemente amable para la altura: una suave media ladera orientada al norte, sin cárcavas ni zonas inundables, con suelo franco verificado en tres calicatas.',
+     'El estudio de suelo la declara apta para cultivo de altura — algo que en esta zona ya es tradición: hay yerbales vecinos en producción. También admite uso residencial aislado, con la ventaja de que el arbolado existente marca por sí solo dónde construir.',
+     'El plano de mensura es de 2023 y el acceso es por camino de ripio consolidado, transitado todo el año. La energía está a 800 metros (tramo a costo compartido ya negociado) y el manantial del lindero norte permite acuerdo de agua con el vecino. Para privacidad real sin renunciar al pueblo: Villarrica está a 35 minutos.'
+   ],
+   gal:['La loma y los robles','Suelo franco, calicata 2','Lindero norte con manantial','Media ladera al norte','Camino de ripio','Vista al valle desde la cima','Amanecer entre robles'],
+   x:[['Frente','45 m'],['Topografía','Media ladera suave, norte'],['Suelo','Franco — apto yerba/huerto'],['Uso de suelo','Rural o residencial aislado'],['Arbolado','Robles centenarios existentes'],['Plano','Mensura 2023']],
+   srv:[['zap','Electricidad','Red a 800 m — tramo negociado'],['droplets','Agua','Manantial lindero, acuerdo posible'],['route','Acceso','Ripio consolidado, todo el año'],['signal','Cobertura móvil','Buena en la loma']]},
+
+  {num:'005',name:'Casa Vertical',type:'casa',zone:'Ybytyruzú',price:2050000000,built:240,land:980,beds:4,baths:3,year:2023,seed:'terral-vertical',fresh:true,
+   tag:'Tres niveles escalonados contra la ladera, cada habitación con su terraza.',
+   desc:[
+     'Obra nueva de 2023 escalonada en tres niveles contra la ladera del Ybytyruzú, diseñada para que cada dormitorio tenga su propia terraza y ninguna habitación le robe la vista a otra. Desde la cocina, en el nivel medio, se ve el valle entero.',
+     'Los 240 m² construidos están resueltos con estructura de hormigón visto, cerramientos de aluminio con doble vidrio y calefacción por piso radiante en los tres niveles. La suite principal ocupa el nivel superior con terraza privada de 28 m²; los tres dormitorios restantes comparten el nivel intermedio.',
+     'El terreno de 980 m² aprovecha el desnivel con jardines escalonados y un garage doble cubierto en el nivel de acceso. La instalación eléctrica es subterránea en todo el lote y el agua llega por red municipal con presión verificada en el punto más alto. Obra entregada con acta y garantías vigentes del constructor.'
+   ],
+   gal:['Los tres niveles','Cocina con vista al valle','Suite principal','Terraza del nivel superior','Sala doble altura','Garage doble cubierto','Atardecer desde la terraza'],
+   x:[['Niveles','3, escalonados'],['Estructura','Hormigón visto'],['Cerramientos','Aluminio, doble vidrio'],['Calefacción','Piso radiante, 3 niveles'],['Garage','Doble, cubierto'],['Terrazas','4 — una por dormitorio']],
+   srv:[['zap','Electricidad','Red subterránea en todo el lote'],['droplets','Agua','Red municipal, presión verificada'],['route','Acceso','Privativo, asfaltado'],['wifi','Internet','Fibra instalada en obra']]},
+
+  {num:'006',name:'Lote Ribera',type:'terreno',zone:'Lago Ypacaraí',price:780000000,land:1800,year:2024,seed:'terral-ribera',
+   tag:'Frente al lago, con sauces propios y suelo fértil de verdad.',
+   desc:[
+     '1.800 m² con 22 metros de frente directo al Lago Ypacaraí y sauces añosos que ya dan la sombra de mayo a noviembre. El suelo es aluvial fértil — de los que ya no aparecen seguido en la costa: dos metros de tierra negra antes de encontrar piedra, verificado en calicata.',
+     'El uso de suelo admite residencial con huerto intensivo, que es exactamente para lo que sirve este lote: casa de fin de semana hacia el norte, huerto mayor hacia el sur con riego a canal comunitario (derecho de toma incluido en el título, algo poco común y verificado).',
+     'El plano de mensura es de 2024 y los servicios están a la vuelta: agua municipal en la esquina del lote, energía a 25 metros y acceso asfaltado. El club de la costa queda a diez minutos caminando. Precio de entrada a la costa sin renunciar a nada: frente propio al agua, árboles propios y tierra de verdad.'
+   ],
+   gal:['El frente al lago','Sauces añosos','Tierra negra, calicata','Vista hacia el centro del lago','El lote desde el club','Riego a canal','Atardecer con el agua quieta'],
+   x:[['Frente al lago','22 m'],['Suelo','Aluvial fértil, 2 m de tierra'],['Uso de suelo','Residencial + huerto'],['Riego','Derecho de toma incluido'],['Plano','Mensura 2024'],['Árboles','Sauces añosos existentes']],
+   srv:[['droplets','Agua','Red municipal en la esquina'],['zap','Electricidad','Red de la ANDE a 25 metros'],['route','Acceso','Asfaltado hasta el lote'],['waves','Lago','Frente propio — 22 m de costa']]},
+
+  {num:'007',name:'Casa Umbral',type:'casa',zone:'Lago Ypacaraí',price:1150000000,built:96,land:640,beds:2,baths:1,year:2011,seed:'terral-umbral',
+   tag:'Madera y quincho junto al lago, con la puerta siempre abierta al agua.',
+   desc:[
+     'Una casa pequeña e inteligente: 96 m² de madera y quincho a 40 metros del Lago Ypacaraí, con un deck de lenga que atraviesa todo el frente y una puerta-umbral que en verano vive abierta hacia el agua. Fue construida en 2011 con criterio — estructura revisada y mantenida, sin humedades, sin parches.',
+     'Adentro tiene lo justo y bien puesto: dos dormitorios, un baño con ducha a dos alturas (la de abajo para volver del lago), cocina abierta y una salamandra que calienta toda la casa en veinte minutos. Los revestimientos interiores son de madera natural sin tratar, que ha envejecido con dignidad.',
+     'El terreno de 640 m² tiene parrilla de obra, un quincho de herramientas y espacio de sobra para una ampliación futura (el uso de suelo lo permite hasta 140 m² construidos). El acceso es asfaltado y la fibra llega hasta el poste: se puede trabajar desde acá sin dramas. Es la casa que uno recuerda de chico — con papeles perfectos.'
+   ],
+   gal:['Frente con deck de lenga','La puerta abierta al lago','Cocina y comedor','Dormitorio hacia el silencio','Salamandra encendida','Parrilla de obra','El lago a 40 metros'],
+   x:[['Estructura','Madera + quincho'],['Deck','Lenga, todo el frente'],['Calefacción','Salamandra'],['Ampliación','Permitida hasta 140 m²'],['Parrilla','De obra, con quincho'],['Distancia al lago','40 m']],
+   srv:[['zap','Electricidad','Red de la ANDE'],['droplets','Agua','Red municipal'],['wifi','Internet','Fibra en el poste'],['route','Acceso','Asfaltado hasta la puerta']]},
+
+  {num:'008',name:'Finca La Mesa',type:'terreno',zone:'Piribebuy',price:2400000000,land:42000,year:2022,seed:'terral-mesa',
+   tag:'4,2 hectáreas de meseta cultivada, camino asfaltado hasta el portón.',
+   desc:[
+     'La obra más seria de la colección de esta temporada: 4,2 hectáreas de meseta plana en las lomas de Piribebuy, de las cuales 2,1 ha están cultivadas y en producción (durazneros y huerto mayor), con riego por gravedad desde el canal comunitario y derechos de agua inscriptos en el título.',
+     'La casa de herramientas de 48 m² (con baño y agua del pozo) permite trabajar y quedarse desde el día uno, mientras se decide dónde va la casa principal — la meseta ofrece al menos tres sitios naturales con vista al valle y protección del viento sur.',
+     'El pozo tiene permiso de explotación vigente (caudal medido: 4.000 l/h), la energía llega trifásica al límite del campo, y el camino es asfaltado hasta el portón: ni un metro de ripio en todo el acceso. Cerco perimetral completo, mensura de 2022, título inscrito y sin gravámenes. Para producción o para proyecto familiar de largo plazo, es la obra que cierra cuentas.'
+   ],
+   gal:['La meseta vista del camino','Durazneros en producción','Casa de herramientas','El pozo con permiso','Canal de riego','Tres sitios para la casa','Atardecer sobre las 4,2 ha'],
+   x:[['Superficie cultivada','2,1 ha — duraznos + huerto'],['Riego','Gravedad, canal comunitario'],['Casa de herramientas','48 m², con baño'],['Pozo','Permiso vigente · 4.000 l/h'],['Energía','Trifásica al límite del campo'],['Cerco','Perimetral completo']],
+   srv:[['droplets','Agua','Pozo con permiso + canal comunitario'],['zap','Electricidad','Trifásica de la ANDE al portón'],['route','Acceso','Asfaltado hasta el portón'],['sprout','Producción','2,1 ha en producción actual']]}
+];
+const WEEK_NUM = '008';
+
+const ZONES = {
+  'Piribebuy':{pin:[150,205],coord:'25°28′40″S · 57°00′15″O',dist:[
+    ['Ruta PY02 — acceso','4 min'],['Pueblo de Piribebuy','6 min'],['Areguá · Lago Ypacaraí','35 min'],['Asunción — centro','1 h 20'],['Aeropuerto Silvio Pettirossi','1 h 10']]},
+  'Asunción Centro':{pin:[85,130],coord:'25°17′12″S · 57°38′05″O',dist:[
+    ['Plaza Uruguaya','5 min a pie'],['Mercado 4','8 min a pie'],['Palacio de López','10 min'],['Costanera de Asunción','8 min'],['Puente Remanso','25 min']]},
+  'Ybytyruzú':{pin:[300,235],coord:'25°55′30″S · 56°26′40″O',dist:[
+    ['Villarrica','35 min'],['Ruta PY08','12 min'],['Salto Cristal','40 min'],['Asunción — centro','2 h 30'],['Ciudad del Este','3 h']]},
+  'Lago Ypacaraí':{pin:[170,150],coord:'25°15′08″S · 57°19′42″O',dist:[
+    ['Lago — acceso propio','en el lote'],['San Bernardino centro','5 min'],['Ruta PY02','8 min'],['Areguá','15 min'],['Asunción — centro','50 min']]}
+};
+
+/* ================= UTILIDADES ================= */
+const $  = s => document.querySelector(s);
+const $$ = s => [...document.querySelectorAll(s)];
+const gs  = n => Math.round(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g,'.');
+const fmt = n => 'Gs. ' + gs(n);
+const fmtArea = m2 => m2 >= 10000
+  ? (m2/10000).toLocaleString('es',{maximumFractionDigits:2}) + ' ha'
+  : m2.toLocaleString('es') + ' m²';
+const byNum = n => PROPS.find(p => p.num === n);
+const icons = () => window.lucide && lucide.createIcons();
+const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;');
+const norm = s => s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+
+function toast(msg, warn = false){
+  const t = document.createElement('div');
+  t.className = 'toast' + (warn ? ' warn' : '');
+  t.innerHTML = (warn
+    ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 8v5"/><path d="M12 16.5v.5"/><circle cx="12" cy="12" r="9.2"/></svg>'
+    : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>')
+    + '<span>' + msg + '</span>';
+  $('#toasts').appendChild(t);
+  setTimeout(() => { t.classList.add('out'); setTimeout(() => t.remove(), 380); }, 3800);
+}
+
+function cuotaFrances(fin, ratePct, years){
+  const r = ratePct / 1200, n = years * 12;
+  return r > 0 ? fin * r / (1 - Math.pow(1 + r, -n)) : fin / n;
+}
+
+/* ================= MARCA ================= */
+(function applyBrand(){
+  const logo = `${BRAND.a}<span class="lg-al">${BRAND.b}</span><sup>®</sup>`;
+  $('#logoTop').innerHTML = logo;
+  $('#logoFoot').innerHTML = logo;
+  document.title = `${BRAND.a}${BRAND.b} — ${BRAND.title}`;
+  $('#heroSub').textContent = BRAND.heroSub;
+  $('#footTag').textContent = BRAND.footTag;
+  $('#chName').textContent = BRAND.assistant;
+  $('#chAv').textContent = BRAND.assistant.charAt(0);
+})();
+
+/* ================= EL MURO ================= */
+const state = { type:'all', zone:'all', max:null, q:'', sort:'num' };
+
+function cardHTML(p){
+  const specs = p.type === 'casa' ? `${p.built} m² · ${p.beds} hab` : fmtArea(p.land);
+  return `
+  <article class="wcard up" data-num="${p.num}" tabindex="0" role="button"
+    aria-label="Ver obra ${p.num}: ${p.name}, ${fmt(p.price)}">
+    <div class="wimg">
+      <img class="ph" loading="lazy" src="https://picsum.photos/seed/${p.seed}/640/480.jpg" alt="${p.name}">
+      <span class="mono wtag">Nº ${p.num} · ${p.zone.toUpperCase()}${p.fresh ? ' · NUEVA' : ''}</span>
+    </div>
+    <div class="wplate">
+      <h3>${p.name}</h3>
+      <span class="mono wspecs">${p.type === 'casa' ? 'Casa · ' + specs : 'Terreno · ' + specs}</span>
+      <div class="wfoot">
+        <span class="wprice">${fmt(p.price)}</span>
+        <span class="wgo"><i data-lucide="arrow-up-right"></i></span>
+      </div>
+    </div>
+  </article>`;
+}
+
+function filtered(){
+  let arr = PROPS.filter(p =>
+    (state.type === 'all' || p.type === state.type) &&
+    (state.zone === 'all' || p.zone === state.zone) &&
+    (!state.max || p.price <= state.max) &&
+    (!state.q || (p.name + ' ' + p.zone + ' ' + p.desc.join(' ')).toLowerCase().includes(state.q.toLowerCase()))
+  );
+  if (state.sort === 'price-asc')  arr.sort((a,b) => a.price - b.price);
+  if (state.sort === 'price-desc') arr.sort((a,b) => b.price - a.price);
+  if (state.sort === 'area-desc')  arr.sort((a,b) => b.land - a.land);
+  if (state.sort === 'num')        arr.sort((a,b) => a.num.localeCompare(b.num));
+  return arr;
+}
+
+function renderPills(){
+  const pills = [];
+  if (state.zone !== 'all') pills.push({label:'Zona: ' + state.zone, clear(){ state.zone = 'all'; $('#sZone').value = 'all'; }});
+  if (state.max)            pills.push({label:'Hasta ' + fmt(state.max), clear(){ state.max = null; $('#sMax').value = ''; }});
+  if (state.q)              pills.push({label:'“' + esc(state.q) + '”', clear(){ state.q = ''; $('#q').value = ''; }});
+  $('#pills').innerHTML = pills.map((p,i) =>
+    `<button class="pill" data-i="${i}">${p.label} <i data-lucide="x"></i></button>`).join('');
+  $$('#pills .pill').forEach(btn => btn.addEventListener('click', () => {
+    pills[+btn.dataset.i].clear(); renderAll();
+  }));
+}
+
+function renderWall(){
+  const arr = filtered();
+  $('#wall').innerHTML = arr.map(cardHTML).join('');
+  $('#listCount').textContent = `${arr.length} / ${PROPS.length} OBRAS`;
+  $('#empty').hidden = arr.length > 0;
+  icons();
+}
+function renderAll(){ renderWall(); renderPills(); syncChips(); }
+function syncChips(){
+  $$('.chip').forEach(c => c.classList.toggle('on', c.dataset.type === state.type));
+}
+
+ $$('.chip').forEach(c => c.addEventListener('click', () => {
+  state.type = c.dataset.type; renderAll();
+}));
+ $('#q').addEventListener('input', e => { state.q = e.target.value.trim(); renderAll(); });
+ $('#sortSel').addEventListener('change', e => { state.sort = e.target.value; renderWall(); });
+ $('#clearBtn').addEventListener('click', () => {
+  Object.assign(state, {type:'all', zone:'all', max:null, q:''});
+  $('#q').value = ''; $('#sZone').value = 'all'; $('#sMax').value = '';
+  renderAll();
+});
+ $('#wall').addEventListener('click', e => {
+  const c = e.target.closest('.wcard'); if (c) go(c.dataset.num);
+});
+ $('#wall').addEventListener('keydown', e => {
+  if (e.key !== 'Enter' && e.key !== ' ') return;
+  const c = e.target.closest('.wcard'); if (c){ e.preventDefault(); go(c.dataset.num); }
+});
+ $('#featCell').addEventListener('click', () => go(WEEK_NUM));
+ $('#featCell').addEventListener('keydown', e => {
+  if (e.key === 'Enter' || e.key === ' '){ e.preventDefault(); go(WEEK_NUM); }
+});
+
+ $('#heroSearch').addEventListener('submit', e => {
+  e.preventDefault();
+  state.type = $('#sType').value;
+  state.zone = $('#sZone').value;
+  state.max  = $('#sMax').value ? +$('#sMax').value : null;
+  renderAll();
+  $('#coleccion').scrollIntoView({behavior:'smooth'});
+});
+
+/* ================= FICHA (ROUTING) ================= */
+function go(num){ location.hash = 'obra-' + num; }
+
+const detail = $('#detail');
+let savedScrollY = 0, openNum = null;
+
+function routeFromHash(){
+  const m = location.hash.match(/^#obra-(\d{3})$/);
+  if (m){
+    const p = byNum(m[1]);
+    if (p){ openDetail(p); return; }
+  }
+  closeDetail();
+}
+window.addEventListener('hashchange', routeFromHash);
+
+function openDetail(p){
+  if (openNum === null) savedScrollY = window.scrollY;
+  openNum = p.num;
+  renderDetail(p);
+  detail.classList.add('open');
+  detail.setAttribute('aria-hidden','false');
+  detail.scrollTop = 0;
+  document.body.style.overflow = 'hidden';
+  $('#dtBack').focus({preventScroll:true});
+  icons();
+}
+
+function closeDetail(){
+  if (openNum === null) return;
+  openNum = null;
+  detail.classList.remove('open','compact');
+  detail.setAttribute('aria-hidden','true');
+  document.body.style.overflow = '';
+  window.scrollTo(0, savedScrollY);
+  $('#dtBody').innerHTML = '';
+}
+
+ $('#dtBack').addEventListener('click', () => { location.hash = ''; });
+
+detail.addEventListener('scroll', () => {
+  detail.classList.toggle('compact', detail.scrollTop > 380);
+  const max = detail.scrollHeight - detail.clientHeight;
+  $('#dtProgress').style.width = (max > 0 ? detail.scrollTop / max * 100 : 0) + '%';
+}, {passive:true});
+
+function renderDetail(p){
+  const z = ZONES[p.zone];
+  const isHouse = p.type === 'casa';
+  const seeds = Array.from({length:7}, (_,i) => `${p.seed}-${i+1}`);
+  const desde = cuotaFrances(p.price * .8, 8.5, 20);
+  const similares = PROPS.filter(x => x.num !== p.num && (x.zone === p.zone || x.type === p.type)).slice(0,3);
+  const brandName = BRAND.a + BRAND.b;
+
+  $('#dtBarNum').textContent = 'OBRA Nº ' + p.num;
+  $('#dtBarName').textContent = p.name;
+  $('#dtBarPrice').textContent = fmt(p.price);
+
+  const specs = [
+    ['Categoría', isHouse ? 'Casa' : 'Terreno'],
+    ['Zona', p.zone],
+    [isHouse ? 'Terreno' : 'Superficie', fmtArea(p.land)],
+    ...p.x
+  ];
+  if (isHouse){
+    specs.splice(3,0,
+      ['Construcción', p.built.toLocaleString('es') + ' m²'],
+      ['Dormitorios', p.beds], ['Baños', p.baths],
+      ['Año de construcción', p.year]);
+  } else {
+    specs.splice(3,0,['Plano / mensura', p.year + ' · aprobado']);
+  }
+
+  const legal = [
+    ['Vendedor', `${brandName} — cartera propia`],
+    ['Título de propiedad', `Inscrito · folio real FR-24-${p.num}`],
+    ['Gravámenes e hipotecas', 'Ninguno — certificación negativa'],
+    ['Impuestos inmobiliarios', 'Al día · ejercicio corriente'],
+    ['Escritura', 'Lista para firmar ante escribano']
+  ];
+
+  const srv = p.srv.map(([ic,t,d]) => `
+    <li><span class="ic"><i data-lucide="${ic}"></i></span><div><h4>${t}</h4><p>${d}</p></div></li>`).join('');
+
+  const dist = z.dist.map(([l,t]) => `
+    <li><span>${l}</span><span class="mono">${t}</span></li>`).join('');
+
+  const [px,py] = z.pin;
+  const mapa = `
+  <svg viewBox="0 0 400 300" role="img" aria-label="Mapa esquemático de la zona ${p.zone}">
+    <rect width="400" height="300" fill="rgba(237,231,218,.03)"/>
+    <path d="M20 118 C 90 88, 150 138, 230 108 S 340 78, 395 103" fill="none" stroke="currentColor" opacity=".22" stroke-width="1.4"/>
+    <path d="M40 168 C 110 143, 170 188, 250 158 S 350 133, 400 158" fill="none" stroke="currentColor" opacity=".15" stroke-width="1.2"/>
+    <path d="M10 68 C 80 43, 140 93, 220 63 S 330 38, 400 63" fill="none" stroke="currentColor" opacity=".1" stroke-width="1.1"/>
+    <path d="M60 213 C 130 193, 190 223, 270 198" fill="none" stroke="currentColor" opacity=".08" stroke-width="1"/>
+    <path d="M-10 250 C 60 235, 110 255, 180 245 S 320 260, 410 248" fill="none" stroke="rgba(120,140,150,.4)" stroke-width="6" stroke-linecap="round"/>
+    <circle cx="${px}" cy="${py}" r="26" fill="currentColor" opacity=".14" class="pin-pulse"/>
+    <circle cx="${px}" cy="${py}" r="6.5" fill="currentColor" stroke="var(--bg)" stroke-width="2"/>
+    <text x="12" y="22" font-family="IBM Plex Mono" font-size="9" fill="rgba(237,231,218,.4)" letter-spacing="1">CARTOGRAFÍA ESQUEMÁTICA · ${brandName.toUpperCase()}</text>
+    <text x="388" y="290" text-anchor="end" font-family="IBM Plex Mono" font-size="9" fill="rgba(237,231,218,.4)" letter-spacing="1">NO A ESCALA</text>
+  </svg>`;
+
+  $('#dtBody').innerHTML = `
+  <div class="dt-gallery">
+    <figure class="dg-hero up" id="dgHero" tabindex="0" role="button" aria-label="Ampliar galería de ${p.name}">
+      <img class="ph" id="dgMainImg" src="https://picsum.photos/seed/${seeds[0]}/1500/940.jpg" alt="${p.name} — ${p.gal[0]}">
+      <figcaption class="dg-cap" id="dgCap">${p.gal[0]}</figcaption>
+      <button class="dg-open" id="dgOpen">VER LAS ${p.gal.length} FOTOS</button>
+    </figure>
+    <div class="dg-strip" id="dgStrip">
+      ${p.gal.map((c,i) => `
+        <button class="dg-thumb${i===0?' on':''}" data-i="${i}" aria-label="Ver foto: ${c}">
+          <img class="ph" loading="lazy" src="https://picsum.photos/seed/${seeds[i]}/240/180.jpg" alt="${c}">
+        </button>`).join('')}
+    </div>
+  </div>
+
+  <div class="plate-strip mono">
+    <span><b>${p.num}</b> · OBRA ${p.fresh ? 'NUEVA' : 'VERIFICADA'}</span>
+    <span class="dot"></span><span>${isHouse ? 'CASA' : 'TERRENO'} EN <b>${p.zone.toUpperCase()}</b></span>
+    <span class="dot"></span><span>${isHouse ? p.built + ' M² CONSTRUIDOS · ' + fmtArea(p.land) : fmtArea(p.land)}</span>
+    <span class="dot"></span><span>${z.coord}</span>
+    <span class="dot"></span><span>${brandName.toUpperCase()} · CARTERA PROPIA</span>
+  </div>
+
+  <nav class="dt-subnav" aria-label="Secciones de la obra">
+    <div class="dt-subnav-in">
+      <button data-sec="dt-sec-inm" class="on">El inmueble</button>
+      <button data-sec="dt-sec-srv">Servicios</button>
+      <button data-sec="dt-sec-leg">Estatus legal</button>
+      <button data-sec="dt-sec-geo">Ubicación</button>
+      <button data-sec="dt-sec-fin">Financiación</button>
+      <button data-sec="dt-sec-sim">Similares</button>
+    </div>
+  </nav>
+
+  <div class="dt-layout">
+    <div class="dt-main">
+      <section class="dt-sec" id="dt-sec-inm">
+        <div class="dt-sec-head"><span class="mono">01 —</span><h3>${p.name}</h3></div>
+        <p class="dt-lede">${p.tag}</p>
+        <div class="dt-desc">${p.desc.map(d => `<p>${d}</p>`).join('')}</div>
+        <dl class="dt-specs">${specs.map(([k,v]) => `<div><dt>${k}</dt><dd>${v}</dd></div>`).join('')}</dl>
+      </section>
+
+      <section class="dt-sec" id="dt-sec-srv">
+        <div class="dt-sec-head"><span class="mono">02 —</span><h3>Servicios e infraestructura</h3></div>
+        <ul class="dt-srv">${srv}</ul>
+      </section>
+
+      <section class="dt-sec" id="dt-sec-leg">
+        <div class="dt-sec-head"><span class="mono">03 —</span><h3>Estatus legal</h3></div>
+        <span class="dt-verified"><i data-lucide="shield-check"></i> Obra verificada — método de 3 pasos completado</span>
+        <ul class="dt-legal">
+          ${legal.map(([k,v]) => `<li><i data-lucide="file-check"></i><b>${k}</b><span class="val">${v}</span></li>`).join('')}
+        </ul>
+        <p class="dt-legal-note">Toda la documentación respalda estas afirmaciones y se entrega en copia simple a quien agenda una visita. Verificado por ${brandName} — responsable de la colección.</p>
+        <div class="dt-tl" style="margin-top:30px">
+          <div><span class="mono">FASE 01</span><h4>Medición en sitio</h4><p>Replanteo completo con plano cotejado. El área del título coincide con la real.</p></div>
+          <div><span class="mono">FASE 02</span><h4>Verificación documental</h4><p>Título, deudas, gravámenes, permisos e impuestos revisados por escrito.</p></div>
+          <div><span class="mono">FASE 03</span><h4>Publicación</h4><p>Obra expuesta en la colección con toda la información arriba expuesta.</p></div>
+        </div>
+      </section>
+
+      <section class="dt-sec" id="dt-sec-geo">
+        <div class="dt-sec-head"><span class="mono">04 —</span><h3>Ubicación y distancias</h3></div>
+        <div class="dt-geo">
+          <div class="dt-map">
+            ${mapa}
+            <span class="mono">${z.coord}</span>
+            <span class="dt-map-tag">${p.zone.toUpperCase()}<br>${p.name.toUpperCase()}</span>
+          </div>
+          <ul class="dt-dist">${dist}</ul>
+        </div>
+      </section>
+
+      <section class="dt-sec" id="dt-sec-fin">
+        <div class="dt-sec-head"><span class="mono">05 —</span><h3>Financiación de esta obra</h3></div>
+        <div class="calc-grid">
+          <div class="ctl">
+            <div class="ctl-head"><label for="dcPrice">Valor</label><output id="dcOPrice"></output></div>
+            <input type="range" id="dcPrice" min="${Math.round(p.price*.5/1e7)*1e7}" max="${Math.round(p.price*1.5/1e7)*1e7}" step="10000000" value="${p.price}">
+          </div>
+          <div class="ctl">
+            <div class="ctl-head"><label for="dcDown">Enganche</label><output id="dcODown"></output></div>
+            <input type="range" id="dcDown" min="5" max="70" step="5" value="20">
+          </div>
+          <div class="ctl">
+            <div class="ctl-head"><label for="dcRate">Tasa anual</label><output id="dcORate"></output></div>
+            <input type="range" id="dcRate" min="3" max="15" step="0.1" value="8.5">
+          </div>
+          <div class="ctl">
+            <div class="ctl-head"><label for="dcYears">Plazo</label><output id="dcOYears"></output></div>
+            <input type="range" id="dcYears" min="5" max="30" step="1" value="20">
+          </div>
+        </div>
+        <div class="calc-result">
+          <div class="cuota"><span class="mono">Cuota mensual estimada</span><strong id="dcOCuota">—</strong></div>
+          <div class="bar"><span id="dcBarCap"></span><span id="dcBarInt"></span></div>
+          <ul class="calc-mini">
+            <li class="mono">Monto financiado<b id="dcOFin"></b></li>
+            <li class="mono">Intereses<b id="dcOInt"></b></li>
+            <li class="mono">Total pagado<b id="dcOTot"></b></li>
+          </ul>
+          <div style="margin-top:22px">
+            <button class="btn btn-ghost" id="dcPlan">Solicitar plan de pagos <i data-lucide="file-text"></i></button>
+          </div>
+        </div>
+      </section>
+
+      <section class="dt-sec" id="dt-sec-sim">
+        <div class="dt-sec-head"><span class="mono">06 —</span><h3>Obras similares</h3></div>
+        <div class="dt-sim">
+          ${similares.map(s => `
+          <div class="dt-sim-row" data-num="${s.num}" tabindex="0" role="button" aria-label="Ver obra ${s.num}: ${s.name}">
+            <img class="ph" loading="lazy" src="https://picsum.photos/seed/${s.seed}/240/180.jpg" alt="${s.name}">
+            <div class="s-main">
+              <h4>${s.name}</h4>
+              <p class="s-meta">${s.type === 'casa' ? 'Casa' : 'Terreno'} · ${s.zone}</p>
+            </div>
+            <span class="s-price">${fmt(s.price)}</span>
+          </div>`).join('')}
+        </div>
+      </section>
+
+      <div class="dt-foot">
+        <span class="mono">OBRA ${p.num} · ${p.name.toUpperCase()} · ${brandName.toUpperCase()}</span>
+        <button class="link-ghost" id="dtTop">Volver arriba de la obra</button>
+      </div>
+    </div>
+
+    <aside class="dt-aside">
+      <div class="acard">
+        <span class="mono">Precio de la obra</span>
+        <span class="aprice">${fmt(p.price)}</span>
+        <span class="aprice-sub">CUOTA DESDE ${fmt(desde)}/MES · 20 AÑOS · 8,5%</span>
+        <div class="a-cta">
+          <button class="btn btn-solid" id="dtBook1">Visita privada <i data-lucide="calendar-days"></i></button>
+          <button class="btn btn-ghost" id="dtToFin">Calcular financiación <i data-lucide="percent"></i></button>
+        </div>
+        <div class="a-actions">
+          <button class="btn btn-ghost" id="dtShare"><i data-lucide="share-2"></i> Compartir</button>
+          <button class="btn btn-ghost" id="dtSave"><i data-lucide="bookmark"></i> Guardar</button>
+        </div>
+      </div>
+
+      <div class="acard" id="dt-book">
+        <span class="mono">Visitar esta obra</span>
+        <form class="mform" id="dtVisitForm" novalidate>
+          <input type="text" id="dvName" placeholder="Tu nombre" aria-label="Tu nombre">
+          <input type="tel" id="dvPhone" placeholder="0981 123 456" aria-label="Teléfono">
+          <input type="date" id="dvDate" aria-label="Fecha preferida">
+          <button class="btn btn-solid" type="submit">Pedir turno <i data-lucide="arrow-up-right"></i></button>
+        </form>
+        <p class="mono" style="text-align:center;margin-top:10px">Te contactamos el mismo día</p>
+        <div class="agent">
+          <span class="av">${BRAND.assistant.charAt(0)}</span>
+          <div><b>${BRAND.assistant}</b><span class="mono">Curadora de la colección</span></div>
+        </div>
+      </div>
+
+      <div class="acard">
+        <span class="mono" style="display:block;margin-bottom:12px">Datos de la galería</span>
+        <dl class="dt-specs" style="margin-top:0;grid-template-columns:1fr;gap:0">
+          <div><dt>Obra</dt><dd>Nº ${p.num} · ${p.fresh ? 'nueva' : 'activa'}</dd></div>
+          <div><dt>Vendedor</dt><dd>${brandName}</dd></div>
+          <div><dt>Verificación</dt><dd>3 fases completadas</dd></div>
+          <div><dt>Publicación</dt><dd>Temporada 2025</dd></div>
+        </dl>
+      </div>
+    </aside>
+  </div>`;
+
+  bindDetail(p, seeds);
+}
+
+function bindDetail(p, seeds){
+  let gvIdx = 0;
+  const setMain = i => {
+    gvIdx = i;
+    $('#dgMainImg').src = `https://picsum.photos/seed/${seeds[i]}/1500/940.jpg`;
+    $('#dgMainImg').alt = `${p.name} — ${p.gal[i]}`;
+    $('#dgCap').textContent = p.gal[i];
+    $$('#dgStrip .dg-thumb').forEach(t => t.classList.toggle('on', +t.dataset.i === i));
+  };
+  $$('#dgStrip .dg-thumb').forEach(t =>
+    t.addEventListener('click', () => setMain(+t.dataset.i)));
+  const openLbHere = () => openLb(p, seeds, gvIdx);
+  $('#dgHero').addEventListener('click', openLbHere);
+  $('#dgHero').addEventListener('keydown', e => {
+    if (e.key === 'Enter' || e.key === ' '){ e.preventDefault(); openLbHere(); }
+  });
+  $('#dgOpen').addEventListener('click', e => { e.stopPropagation(); openLbHere(); });
+
+  $$('#dtBody .dt-subnav button').forEach(b => b.addEventListener('click', () => {
+    const el = document.getElementById(b.dataset.sec);
+    if (el) el.scrollIntoView({behavior:'smooth', block:'start'});
+  }));
+  const spy = new IntersectionObserver(es => es.forEach(e => {
+    if (e.isIntersecting){
+      const id = e.target.id;
+      $$('#dtBody .dt-subnav button').forEach(b =>
+        b.classList.toggle('on', b.dataset.sec === id));
+    }
+  }), {root: detail, rootMargin:'-25% 0px -65% 0px'});
+  $$('#dtBody .dt-sec').forEach(s => spy.observe(s));
+
+  const rio = new IntersectionObserver(es => es.forEach(e => {
+    if (e.isIntersecting){ e.target.classList.add('in'); rio.unobserve(e.target); }
+  }), {root: detail, threshold:.06});
+  $$('#dtBody .dt-sec, #dtBody .dt-aside .acard').forEach(el => {
+    el.classList.add('drv'); rio.observe(el);
+  });
+
+  const scrollToBook = () => $('#dt-book').scrollIntoView({behavior:'smooth', block:'center'});
+  $('#dtBarCta').addEventListener('click', scrollToBook);
+  $('#dtBook1')?.addEventListener('click', scrollToBook);
+  $('#dtToFin')?.addEventListener('click', () =>
+    $('#dt-sec-fin').scrollIntoView({behavior:'smooth', block:'start'}));
+  $('#dtTop')?.addEventListener('click', () =>
+    detail.scrollTo({top:0, behavior:'smooth'}));
+
+  $('#dtShare')?.addEventListener('click', async () => {
+    const url = location.href;
+    try {
+      await navigator.clipboard.writeText(url);
+      toast('Enlace de la obra copiado — mandáselo a quien decida con vos.');
+    } catch {
+      const ta = document.createElement('textarea');
+      ta.value = url; document.body.appendChild(ta); ta.select();
+      try { document.execCommand('copy'); toast('Enlace de la obra copiado.'); }
+      catch { toast('Copiá el enlace del navegador para compartir la obra.', true); }
+      ta.remove();
+    }
+  });
+  $('#dtSave')?.addEventListener('click', () =>
+    toast(`Obra ${p.num} — ${p.name} guardada en tu lista del navegador.`));
+
+  $('#dtVisitForm')?.addEventListener('submit', e => {
+    e.preventDefault();
+    const name = $('#dvName').value.trim(), phone = $('#dvPhone').value.trim();
+    if (!name || !phone){ toast('Completá tu nombre y teléfono para coordinar la visita.', true); return; }
+    toast(`Turno pedido para la obra ${p.num}, ${name}. ${BRAND.assistant} te coordina la visita hoy mismo.`);
+    e.target.reset();
+  });
+
+  const DC = { price:p.price, down:20, rate:8.5, years:20 };
+  const dSl = { dcPrice:'price', dcDown:'down', dcRate:'rate', dcYears:'years' };
+  function upd(){
+    const fin = DC.price * (1 - DC.down/100);
+    const n = DC.years * 12;
+    const cuota = cuotaFrances(fin, DC.rate, DC.years);
+    const total = cuota * n, inter = total - fin;
+
+    $('#dcOPrice').textContent = fmt(DC.price);
+    $('#dcODown').textContent  = `${DC.down}% · ${fmt(DC.price * DC.down/100)}`;
+    $('#dcORate').textContent  = DC.rate.toFixed(1).replace('.',',') + ' % anual';
+    $('#dcOYears').textContent = DC.years + ' años';
+    $('#dcOCuota').textContent = fmt(cuota) + ' /mes';
+    $('#dcOFin').textContent   = fmt(fin);
+    $('#dcOInt').textContent   = fmt(inter);
+    $('#dcOTot').textContent   = fmt(total);
+
+    const cap = total > 0 ? fin / total * 100 : 0;
+    $('#dcBarCap').style.width = cap + '%';
+    $('#dcBarInt').style.width = (100 - cap) + '%';
+
+    for (const [id,k] of Object.entries(dSl)){
+      const el = document.getElementById(id);
+      if (el) el.style.setProperty('--p', ((DC[k]-el.min)/(el.max-el.min)*100) + '%');
+    }
+  }
+  for (const [id,k] of Object.entries(dSl)){
+    document.getElementById(id)?.addEventListener('input', e => { DC[k] = +e.target.value; upd(); });
+  }
+  upd();
+  $('#dcPlan')?.addEventListener('click', () =>
+    toast(`Plan de pagos de la obra ${p.num} en camino — revisá tu correo en unos minutos.`));
+
+  $$('#dtBody .dt-sim-row').forEach(r => {
+    const nav = () => go(r.dataset.num);
+    r.addEventListener('click', nav);
+    r.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' '){ e.preventDefault(); nav(); } });
+  });
+
+  icons();
+}
+
+/* ================= LIGHTBOX ================= */
+const lb = $('#lightbox');
+let lbCtx = null, lbIdx = 0, lbOpen = false;
+
+function openLb(p, seeds, idx){
+  lbCtx = {p, seeds};
+  lbIdx = idx;
+  lb.classList.add('open');
+  lb.setAttribute('aria-hidden','false');
+  lbOpen = true;
+  document.body.style.overflow = 'hidden';
+  renderLb();
+}
+function renderLb(){
+  const {p, seeds} = lbCtx;
+  const src = `https://picsum.photos/seed/${seeds[lbIdx]}/1500/1050.jpg`;
+  const img = $('#lbImg');
+  img.style.opacity = 0;
+  const pre = new Image();
+  pre.onload = () => { img.src = src; img.style.opacity = 1; };
+  pre.src = src;
+  img.alt = `${p.name} — ${p.gal[lbIdx]}`;
+  $('#lbCap').textContent = p.gal[lbIdx];
+  $('#lbCount').textContent = `${lbIdx + 1} / ${p.gal.length} · OBRA ${p.num}`;
+  $('#lbThumbs').innerHTML = p.gal.map((c,i) =>
+    `<img class="ph${i===lbIdx?' on':''}" data-i="${i}" src="https://picsum.photos/seed/${seeds[i]}/160/120.jpg" alt="${c}" tabindex="0">`).join('');
+  $$('#lbThumbs img').forEach(t => {
+    t.addEventListener('click', () => { lbIdx = +t.dataset.i; renderLb(); });
+  });
+  const active = $('#lbThumbs img.on');
+  if (active) active.scrollIntoView({block:'nearest', inline:'center', behavior:'smooth'});
+}
+function lbMove(d){
+  if (!lbCtx) return;
+  lbIdx = (lbIdx + d + lbCtx.p.gal.length) % lbCtx.p.gal.length;
+  renderLb();
+}
+function closeLb(){
+  lb.classList.remove('open');
+  lb.setAttribute('aria-hidden','true');
+  lbOpen = false;
+  document.body.style.overflow = openNum ? 'hidden' : '';
+}
+ $('#lbX').addEventListener('click', closeLb);
+ $('#lbPrev').addEventListener('click', () => lbMove(-1));
+ $('#lbNext').addEventListener('click', () => lbMove(1));
+lb.addEventListener('click', e => { if (e.target === lb || e.target.classList.contains('lb-stage')) closeLb(); });
+let tX = null;
+lb.addEventListener('touchstart', e => { tX = e.touches[0].clientX; }, {passive:true});
+lb.addEventListener('touchend', e => {
+  if (tX === null) return;
+  const dx = e.changedTouches[0].clientX - tX;
+  if (Math.abs(dx) > 48) lbMove(dx < 0 ? 1 : -1);
+  tX = null;
+}, {passive:true});
+
+document.addEventListener('keydown', e => {
+  if (chatOpen && e.key === 'Escape'){ closeChat(); return; }
+  if (lbOpen){
+    if (e.key === 'Escape') closeLb();
+    if (e.key === 'ArrowLeft')  lbMove(-1);
+    if (e.key === 'ArrowRight') lbMove(1);
+    return;
+  }
+  if (openNum && e.key === 'Escape' && detail.classList.contains('open')){
+    location.hash = '';
+  }
+});
+
+/* ================================================================
+   CURADORA — motor local que responde sobre la colección real.
+   Para conectar una IA externa después: reemplazá answer() por un
+   fetch a tu endpoint y devolvé {html, chips, cards} igual.
+   ================================================================ */
+const chatPanel = $('#chatPanel'), chatFab = $('#chatFab'),
+      chLog = $('#chLog'), chChips = $('#chChips');
+let chatOpen = false, chatBooted = false;
+
+const DEFAULT_CHIPS = ['Terrenos en Piribebuy','¿Cuál es la más accesible?','Casas con 3 dormitorios','¿Cómo financio?'];
+const ZKEYS = {
+  piribebuy:'Piribebuy', asuncion:'Asunción Centro', centro:'Asunción Centro',
+  ybytyruzu:'Ybytyruzú', ypacarai:'Lago Ypacaraí', lago:'Lago Ypacaraí',
+  'san bernardino':'Lago Ypacaraí', villarrica:'Ybytyruzú'
+};
+const PKEYS = {alba:'001', mirador:'002', horno:'003', roble:'004', vertical:'005', ribera:'006', umbral:'007', mesa:'008'};
+
+function parseGs(txt){
+  const t = norm(txt).replace(/\./g,'');
+  if (/(^|\s)mil millones(\s|$)/.test(t)) return 1e9;
+  let m = t.match(/(\d+(?:,\d+)?)\s*(mil\s+)?millon(?:es)?/);
+  if (m){ const n = parseFloat(m[1].replace(',','.')); return Math.round(n * (m[2] ? 1e9 : 1e6)); }
+  m = t.match(/(\d{7,})/);
+  return m ? +m[1] : null;
+}
+function findProp(txt){
+  const t = norm(txt);
+  for (const k in PKEYS) if (t.includes(k)) return byNum(PKEYS[k]);
+  return null;
+}
+function cardsOf(list){
+  return `<div class="m-cards">${list.map(p => `
+    <button class="m-card" data-num="${p.num}">
+      <img class="ph" loading="lazy" src="https://picsum.photos/seed/${p.seed}/160/120.jpg" alt="">
+      <span class="mc-info">
+        <b>${p.name}</b>
+        <span class="mono">${p.zone} · ${p.type === 'casa' ? p.built + ' m² · ' + p.beds + ' hab' : fmtArea(p.land)}</span>
+        <span class="mc-price">${fmt(p.price)}</span>
+      </span>
+    </button>`).join('')}</div>`;
+}
+
+function answer(raw){
+  const t = norm(raw);
+  const money = parseGs(raw);
+  const prop = findProp(raw);
+  const zoneKey = Object.keys(ZKEYS).find(k => t.includes(k));
+  const zone = zoneKey ? ZKEYS[zoneKey] : null;
+  const isCasa = /casa/.test(t);
+  const isTerreno = /terreno|lote|campo|hectarea/.test(t);
+  const asc = [...PROPS].sort((a,b) => a.price - b.price);
+  const desc = [...PROPS].sort((a,b) => b.price - a.price);
+
+  if (t.length < 28 && /^(hola|buenas|buen dia|buenos dias|buenas noches|hey|que tal)/.test(t))
+    return {html:'¡Hola! ¿Buscás <b>casa</b> o <b>terreno</b>? Decime también zona o presupuesto y te filtro la colección completa.', chips:DEFAULT_CHIPS};
+
+  if (/gracias|genial|perfecto|excelente|buenisimo/.test(t))
+    return {html:'De nada. Si querés ver algo en persona, coordinamos una visita privada — o seguime preguntando.', chips:[{label:'Agendar visita', act:'visit'}]};
+
+  if (/cuantas|cuantos/.test(t)){
+    const arr = zone ? PROPS.filter(p => p.zone === zone) : PROPS;
+    return {html:`Hay <b>${arr.length} obras</b>${zone ? ' en ' + zone : ''}: ${arr.filter(p=>p.type==='casa').length} casas y ${arr.filter(p=>p.type==='terreno').length} terrenos.`,
+      chips: zone ? [`Ver obras de ${zone}`,'¿Cuál es la más accesible?'] : DEFAULT_CHIPS};
+  }
+
+  if (/barat|accesible|economic|menor precio/.test(t))
+    return {html:`La más accesible de la colección es <b>${asc[0].name}</b> (${asc[0].zone}) a ${fmt(asc[0].price)}. Las tres más accesibles:`,
+      cards:[asc[0],asc[1],asc[2]], chips:[{label:'¿Cómo financio?', act:'calc'},'¿Cuál es la más cara?']};
+  if (/mas cara|mayor precio|premium|top/.test(t))
+    return {html:`La obra más alta de la colección es <b>${desc[0].name}</b> a ${fmt(desc[0].price)} — ${desc[0].tag}`,
+      cards:[desc[0],desc[1]], chips:['¿Cuál es la más accesible?']};
+
+  if (/cuota|financ|credito|prestamo|enganche|interes|hipotec/.test(t)){
+    if (prop){
+      const eng = prop.price * .2, cuota = cuotaFrances(prop.price * .8, 8.5, 20);
+      return {html:`<b>${prop.name}</b> (${fmt(prop.price)}): con 20% de enganche (${fmt(eng)}) al 8,5% anual en 20 años, la cuota ronda <b>${fmt(cuota)}/mes</b>. Son números de referencia — en la ficha podés ajustar enganche, tasa y plazo.`,
+        cards:[prop], chips:[{label:'Abrir la calculadora', act:'calc'}, `¿Cómo agendo una visita a ${prop.name}?`]};
+    }
+    if (money){
+      const cap = PROPS.filter(p => p.price <= money * 5);
+      return cap.length
+        ? {html:`Con ${fmt(money)} de enganche (20%) podés apuntar a obras de hasta ${fmt(money * 5)}. Estas encajan:`, cards:cap.slice(0,4), chips:[{label:'Abrir la calculadora', act:'calc'}]}
+        : {html:`Con ${fmt(money)} de enganche todavía no alcanza ninguna obra — la más accesible pide ${fmt(asc[0].price * .2)} de enganche. Con financiación ese salto puede ser una cuota.`, cards:[asc[0]], chips:[{label:'¿Cómo financio?', act:'calc'}]};
+    }
+    return {html:'Podés financiar de dos maneras: <b>crédito hipotecario</b> (bancos, tasas del 8–12% anual) o <b>financiación directa</b> en obras seleccionadas. La calculadora del sitio te da la cuota al toque — y si me decís una obra, te la estimo yo.',
+      chips:[{label:'Abrir la calculadora', act:'calc'},'Cuota de la Casa Alba','Cuota de la Finca La Mesa']};
+  }
+
+  if (money){
+    const fit = PROPS.filter(p => p.price <= money);
+    return fit.length
+      ? {html:`Con hasta ${fmt(money)} hay <b>${fit.length} obra${fit.length>1?'s':''}</b> en la colección:`,
+         cards:fit.slice(0,4), chips:['¿Cuál es la más accesible?',{label:'¿Cómo financio?', act:'calc'}]}
+      : {html:`La obra más accesible (${asc[0].name}) está a ${fmt(asc[0].price)} — te faltarían ${fmt(asc[0].price - money)}. Con financiación, ese salto puede ser una cuota.`,
+         cards:[asc[0]], chips:[{label:'¿Cómo financio?', act:'calc'}]};
+  }
+
+  const dm = t.match(/([1-4])\s*dorm/) || (/(dormitorios|habitaciones)/.test(t) ? [,'3'] : null);
+  if (dm){
+    const n = +dm[1];
+    const list = PROPS.filter(p => p.type === 'casa' && p.beds >= n);
+    return {html:list.length
+      ? `Casas con ${n}+ dormitorios — hay <b>${list.length}</b>:`
+      : `No tengo casas con ${n}+ dormitorios ahora. Las más grandes: la Casa Vertical (4) y la Casa Alba (3).`,
+      cards:list, chips:['¿Cuál es la más accesible?','Terrenos grandes']};
+  }
+
+  if (/hectarea|grande|grandes/.test(t)){
+    const big = PROPS.filter(p => p.type === 'terreno').sort((a,b) => b.land - a.land).slice(0,3);
+    return {html:'Los terrenos más grandes de la colección:', cards:big, chips:['Terrenos en Piribebuy','¿Cuál es la más accesible?']};
+  }
+
+  if (/visit|turno|agenda|ver en persona|telefono|contact|llamar|horario|galeria|oficina|donde estan|ubicacion/.test(t))
+    return {html:'Las visitas se agendan desde el formulario de la web o al <b>+595 981 234 567</b> (Lun–Sáb, 9:00 a 19:00). Te devuelven el llamado el mismo día. También hay un recorrido privado por la zona los sábados a las 10:00.',
+      chips:[{label:'Agendar visita', act:'visit'},'¿Cómo verifican los papeles?']};
+
+  if (/verific|papeles|segur|confia|legal|titulo|escritur|estafa|gravamen/.test(t))
+    return {html:'Cada obra pasa por 3 fases antes de exponerse: <b>medición en sitio</b> (el área real, no la del aviso), <b>verificación documental</b> (título, gravámenes, impuestos) y publicación con todo a la vista. En cada ficha está el detalle completo del estatus legal.',
+      chips:['¿Cuál es la más accesible?','Terrenos en Piribebuy']};
+
+  if (prop){
+    const cuota = cuotaFrances(prop.price * .8, 8.5, 20);
+    const specs = prop.type === 'casa'
+      ? `${prop.built} m² construidos, ${prop.beds} dormitorios, ${prop.baths} baños, terreno de ${fmtArea(prop.land)}`
+      : fmtArea(prop.land);
+    return {html:`<b>${prop.name}</b> — ${prop.zone}. ${specs}. Precio: <b>${fmt(prop.price)}</b>. ${prop.tag} Cuota estimada desde ${fmt(cuota)}/mes.`,
+      cards:[prop], chips:[`¿Cómo agendo una visita a ${prop.name}?`,{label:'Abrir la calculadora', act:'calc'}]};
+  }
+
+  if (zone){
+    let list = PROPS.filter(p => p.zone === zone);
+    let tipoTxt = 'obras';
+    if (isCasa){ list = list.filter(p => p.type === 'casa'); tipoTxt = 'casas'; }
+    if (isTerreno){ list = list.filter(p => p.type === 'terreno'); tipoTxt = 'terrenos'; }
+    return {html:`En <b>${zone}</b> hay ${list.length} ${tipoTxt}:`, cards:list.slice(0,4),
+      chips:['¿Cuál es la más accesible?','Casas con 3 dormitorios']};
+  }
+
+  if (isCasa || isTerreno){
+    const type = isCasa ? 'casa' : 'terreno';
+    const list = PROPS.filter(p => p.type === type);
+    return {html:`Estas son las ${list.length} ${type === 'casa' ? 'casas' : 'terrenos'} de la colección:`,
+      cards:list.slice(0,4), chips:['¿Cuál es la más accesible?','Terrenos en Piribebuy',{label:'¿Cómo financio?', act:'calc'}]};
+  }
+
+  const kw = ['huerto','pozo','restaurada','nueva','vista','atardecer','esquina','robles','frente','suite','terraza','quincho','madera','galeria','adobe','horno','lago'];
+  const hit = kw.find(k => t.includes(k));
+  if (hit){
+    const list = PROPS.filter(p =>
+      norm(p.tag + ' ' + p.desc.join(' ') + ' ' + p.gal.join(' ')).includes(hit));
+    if (list.length)
+      return {html:`Por “${hit}” encontré ${list.length} obra${list.length>1?'s':''}:`, cards:list.slice(0,4), chips:DEFAULT_CHIPS};
+  }
+
+  return {html:'Esa todavía se me escapa. Lo que sí tengo fresco: <b>precios</b>, <b>zonas</b>, <b>superficie</b>, <b>dormitorios</b>, <b>financiación</b> y <b>visitas</b>. Probá con una de estas:', chips:DEFAULT_CHIPS};
+}
+
+/* ---------- UI del chat ---------- */
+function addMsg(role, html){
+  const d = document.createElement('div');
+  d.className = 'msg ' + role;
+  d.innerHTML = html;
+  chLog.appendChild(d);
+  chLog.scrollTop = chLog.scrollHeight;
+}
+function botSay(html, chips){
+  const ty = document.createElement('div');
+  ty.className = 'typing';
+  ty.innerHTML = '<span></span><span></span><span></span>';
+  chLog.appendChild(ty);
+  chLog.scrollTop = chLog.scrollHeight;
+  setTimeout(() => {
+    ty.remove();
+    addMsg('bot', html);
+    setChips(chips);
+  }, 550 + Math.min(900, html.length * 3));
+}
+function setChips(list){
+  chChips.innerHTML = (list || []).map(c => {
+    const label = typeof c === 'string' ? c : c.label;
+    const act = typeof c === 'string' ? '' : (c.act || '');
+    return `<button class="chip-q" data-send="${esc(label)}" data-act="${act}">${esc(label)}</button>`;
+  }).join('');
+}
+function send(txt){
+  txt = txt.trim(); if (!txt) return;
+  addMsg('user', esc(txt));
+  let res;
+  try { res = answer(txt); }
+  catch { res = {html:'Se me cruzaron los cables — probá de nuevo.'}; }
+  let html = res.html;
+  if (res.cards && res.cards.length) html += cardsOf(res.cards);
+  botSay(html, res.chips);
+}
+function actScroll(sel){
+  closeChat();
+  if (openNum){
+    location.hash = '';
+    setTimeout(() => document.querySelector(sel).scrollIntoView({behavior:'smooth'}), 380);
+  } else {
+    document.querySelector(sel).scrollIntoView({behavior:'smooth'});
+  }
+}
+function openChat(){
+  chatOpen = true;
+  chatPanel.classList.add('open');
+  chatPanel.setAttribute('aria-hidden','false');
+  chatFab.querySelector('.fab-dot')?.remove();
+  if (!chatBooted){
+    chatBooted = true;
+    botSay(`Hola, soy <b>${BRAND.assistant}</b>, la curadora de ${BRAND.a}${BRAND.b}. Conozco las ${PROPS.length} obras de la colección: puedo darte <b>precios</b>, filtrar por <b>zona o superficie</b>, <b>estimar cuotas</b> y coordinar <b>visitas privadas</b>. ¿Qué estás buscando?`, DEFAULT_CHIPS);
+  }
+  setTimeout(() => $('#chTxt').focus(), 260);
+}
+function closeChat(){
+  chatOpen = false;
+  chatPanel.classList.remove('open');
+  chatPanel.setAttribute('aria-hidden','true');
+}
+chatFab.addEventListener('click', () => chatOpen ? closeChat() : openChat());
+ $('#chatX').addEventListener('click', closeChat);
+ $('#chForm').addEventListener('submit', e => {
+  e.preventDefault();
+  const inp = $('#chTxt');
+  send(inp.value);
+  inp.value = '';
+});
+chChips.addEventListener('click', e => {
+  const b = e.target.closest('.chip-q'); if (!b) return;
+  if (b.dataset.act === 'calc'){ actScroll('#decision'); return; }
+  if (b.dataset.act === 'visit'){ actScroll('#visita'); return; }
+  send(b.dataset.send);
+});
+chLog.addEventListener('click', e => {
+  const c = e.target.closest('.m-card'); if (!c) return;
+  closeChat();
+  go(c.dataset.num);
+});
+ $('#heroChatLink').addEventListener('click', openChat);
+ $('#footChat').addEventListener('click', openChat);
+ $('#mnavChat').addEventListener('click', () => { document.body.classList.remove('nav-open'); openChat(); });
+
+/* ================= CALCULADORA DEL HOME ================= */
+const C = { price:1450000000, down:20, rate:8.5, years:20 };
+const sliders = { rPrice:'price', rDown:'down', rRate:'rate', rYears:'years' };
+function updateCalc(){
+  const fin = C.price * (1 - C.down/100);
+  const cuota = cuotaFrances(fin, C.rate, C.years);
+  const total = cuota * C.years * 12, inter = total - fin;
+
+  $('#oPrice').textContent = fmt(C.price);
+  $('#oDown').textContent  = `${C.down}% · ${fmt(C.price * C.down/100)}`;
+  $('#oRate').textContent  = C.rate.toFixed(1).replace('.',',') + ' % anual';
+  $('#oYears').textContent = C.years + ' años';
+  $('#oCuota').textContent = fmt(cuota) + ' /mes';
+  $('#oFin').textContent   = fmt(fin);
+  $('#oInt').textContent   = fmt(inter);
+  $('#oTot').textContent   = fmt(total);
+
+  const capPct = total > 0 ? fin / total * 100 : 0;
+  $('#barCap').style.width = capPct + '%';
+  $('#barInt').style.width = (100 - capPct) + '%';
+
+  for (const [id, key] of Object.entries(sliders)){
+    const el = document.getElementById(id);
+    el.style.setProperty('--p', ((C[key] - el.min) / (el.max - el.min) * 100) + '%');
+  }
+}
+for (const [id, key] of Object.entries(sliders)){
+  document.getElementById(id).addEventListener('input', e => { C[key] = +e.target.value; updateCalc(); });
+}
+
+/* ================= FORMULARIOS ================= */
+ $('#bookForm').addEventListener('submit', e => {
+  e.preventDefault();
+  const name = $('#bName').value.trim(), phone = $('#bPhone').value.trim();
+  if (!name || !phone){ toast('Completá tu nombre y teléfono para agendar.', true); return; }
+  const prop = $('#bProp').value;
+  toast(`Visita agendada, ${name}${prop ? ' — ' + prop : ''}. Te llamamos hoy mismo.`);
+  e.target.reset();
+});
+ $('#apptBtn').addEventListener('click', () =>
+  toast('Recorrido reservado — sábado 10:00. Te mandamos el punto de encuentro.'));
+ $('#newsForm').addEventListener('submit', e => {
+  e.preventDefault();
+  const mail = $('#nMail').value.trim();
+  if (!mail.includes('@')){ toast('Escribí un correo válido para recibir las obras.', true); return; }
+  toast('Listo. Las obras nuevas llegan los viernes a las 09:00.');
+  e.target.reset();
+});
+
+/* ================= TICKER ================= */
+(function buildMarquee(){
+  const zones = [...new Set(PROPS.map(p => p.zone))];
+  const parts = [
+    ...zones.map(z => `${z.toUpperCase()} — ${PROPS.filter(p => p.zone === z).length} OBRAS`),
+    'COLECCIÓN 2025', 'VISITAS PRIVADAS CON CITA', 'TÍTULOS VERIFICADOS',
+    'CURADORA EN LÍNEA · 24/7'
+  ];
+  const chunk = parts.map(t =>
+    `<span class="mq-item mono">${t} <i data-lucide="asterisk"></i></span>`).join('');
+  $('#mTrack').innerHTML = chunk + chunk;
+})();
+
+/* ================= SELECTS ================= */
+(function fillSelects(){
+  const zones = [...new Set(PROPS.map(p => p.zone))].sort();
+  $('#sZone').insertAdjacentHTML('beforeend',
+    zones.map(z => `<option value="${z}">${z}</option>`).join(''));
+  $('#bProp').insertAdjacentHTML('beforeend',
+    PROPS.map(p => `<option value="${p.name}">Obra ${p.num} — ${p.name}</option>`).join(''));
+})();
+
+/* ================= CONTADORES + REVEAL ================= */
+function runCount(el){
+  const target = +el.dataset.count, t0 = performance.now(), dur = 1400;
+  (function tick(now){
+    const k = Math.min(1, (now - t0) / dur);
+    el.textContent = Math.round(target * (1 - Math.pow(1 - k, 3)));
+    if (k < 1) requestAnimationFrame(tick);
+  })(t0);
+}
+const ioCount = new IntersectionObserver(es => es.forEach(e => {
+  if (e.isIntersecting){ runCount(e.target); ioCount.unobserve(e.target); }
+}), {threshold:.5});
+ $$('[data-count]').forEach(el => ioCount.observe(el));
+
+const ioRv = new IntersectionObserver(es => es.forEach(e => {
+  if (e.isIntersecting){ e.target.classList.add('in'); ioRv.unobserve(e.target); }
+}), {threshold:.1});
+ $$('.rv').forEach(el => ioRv.observe(el));
+
+/* menú móvil */
+ $('#menuBtn').addEventListener('click', () => document.body.classList.toggle('nav-open'));
+ $$('#mobileNav a[href^="#"]').forEach(a => a.addEventListener('click', () => document.body.classList.remove('nav-open')));
+
+/* ================= INIT ================= */
+renderAll();
+updateCalc();
+routeFromHash();
+icons();
+</script>
+</body>
+</html>
