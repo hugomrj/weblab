@@ -1,0 +1,1654 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ClientBridge — Canvas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ============ Tokens ============ */
+:root{
+  --bg:#F6F7F9; --surface:#FFFFFF; --surface-2:#F9FAFB;
+  --border:#E9EBF1; --border-strong:#D9DCE5;
+  --text:#101828; --text-2:#475467; --text-3:#98A2B3;
+  --hover:#F2F4F7; --row-hover:#FAFBFD;
+
+  --brand:#465FFF; --t-brand:#3541E3;
+  --purple:#7A5AF8; --t-purple:#6941C6;
+  --blue:#4A6FF3;  --t-blue:#2C4FD8;
+  --warn:#F79009;  --t-warn:#B54708;
+  --green:#12B76A;  --t-green:#027948;
+  --red:#F04438;   --t-red:#B42318;
+  --cyan:#0E9384;  --t-cyan:#087443;
+
+  --wa-me:#D9FDD3; --wa-me-t:#12261C;
+  --shadow:0 14px 38px -14px rgba(16,24,40,.18);
+  --r:12px;
+}
+.dark{
+  --bg:#0D1017; --surface:#141926; --surface-2:#1A2030;
+  --border:#242C3D; --border-strong:#33405C;
+  --text:#F0F2F5; --text-2:#A5ADC1; --text-3:#6A7385;
+  --hover:#1B2233; --row-hover:#181F2E;
+
+  --t-brand:#94A3FF; --t-purple:#BCA5FF; --t-blue:#99ADFF;
+  --t-warn:#FDBA68; --t-green:#62D39B; --t-red:#F98F87; --t-cyan:#5BC9BE;
+
+  --wa-me:#005C4B; --wa-me-t:#DFF6E5;
+  --shadow:0 14px 38px -14px rgba(0,0,0,.6);
+}
+html.theming, html.theming *{transition:background-color .28s ease,border-color .28s ease,color .28s ease,fill .28s ease,box-shadow .28s ease!important}
+*{margin:0;box-sizing:border-box}
+html,body{height:100%}
+body{font-family:'Outfit',sans-serif;font-size:14px;color:var(--text);background:var(--bg);overflow-x:hidden}
+button{font-family:inherit;cursor:pointer}
+::selection{background:color-mix(in srgb,var(--brand) 22%,transparent)}
+:focus-visible{outline:2px solid var(--t-brand);outline-offset:2px;border-radius:6px}
+::-webkit-scrollbar{width:9px;height:9px}
+::-webkit-scrollbar-thumb{background:var(--border-strong);border-radius:99px}
+::-webkit-scrollbar-track{background:transparent}
+.num{font-variant-numeric:tabular-nums}
+
+/* ============ Layout ============ */
+.sidebar{position:fixed;left:0;top:0;bottom:0;width:290px;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;z-index:60;transition:transform .3s ease}
+.content{margin-left:290px;min-height:100vh;display:flex;flex-direction:column}
+#scrim{display:none;position:fixed;inset:0;background:rgba(13,17,25,.5);z-index:55}
+
+/* ============ Sidebar ============ */
+.side-brand{display:flex;align-items:center;justify-content:space-between;padding:30px 20px 24px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--text);font-size:17px;font-weight:600;letter-spacing:-.2px}
+.side-close{display:none}
+.side-scroll{flex:1;overflow-y:auto;padding:0 14px 24px}
+.side-label{font-size:11px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--text-3);margin:22px 8px 10px}
+.menu-item{display:flex;align-items:center;gap:11px;width:100%;padding:7px 8px;border:0;background:none;border-radius:8px;color:var(--text-2);font-size:14px;font-weight:500;text-align:left;transition:background .15s,color .15s}
+.menu-item:hover{background:var(--hover);color:var(--text)}
+.menu-item.active{background:var(--hover);color:var(--text);font-weight:600}
+.mi-ic{width:32px;height:32px;border-radius:8px;display:grid;place-items:center;flex:none}
+.mi-ic svg{width:18px;height:18px;stroke-width:1.8}
+.ic-brand{background:color-mix(in srgb,var(--brand) 11%,transparent);color:var(--t-brand)}
+.ic-purple{background:color-mix(in srgb,var(--purple) 11%,transparent);color:var(--t-purple)}
+.ic-blue{background:color-mix(in srgb,var(--blue) 11%,transparent);color:var(--t-blue)}
+.ic-warn{background:color-mix(in srgb,var(--warn) 14%,transparent);color:var(--t-warn)}
+.ic-green{background:color-mix(in srgb,var(--green) 13%,transparent);color:var(--t-green)}
+.ic-gray{background:var(--surface-2);color:var(--text-3)}
+.menu-item .chev{margin-left:auto;width:18px;height:18px;color:var(--text-3);transition:transform .25s ease;flex:none}
+.menu-item .chev svg{width:18px;height:18px}
+.menu-group.open > .menu-item .chev{transform:rotate(180deg)}
+.menu-group.has-active > .menu-item{color:var(--text)}
+.soon{margin-left:auto;font-size:10px;font-weight:600;color:var(--t-purple);background:color-mix(in srgb,var(--purple) 11%,transparent);padding:2px 8px;border-radius:99px;flex:none}
+.submenu{display:grid;grid-template-rows:0fr;transition:grid-template-rows .3s ease}
+.menu-group.open .submenu{grid-template-rows:1fr}
+.submenu ul{overflow:hidden;list-style:none;margin-left:18px;padding-left:14px;border-left:1px solid var(--border);display:flex;flex-direction:column;gap:2px}
+.sub-item{display:flex;align-items:center;gap:9px;width:100%;padding:6px 8px;border:0;background:none;border-radius:7px;color:var(--text-2);font-size:13.5px;text-align:left;transition:background .15s,color .15s}
+.sub-item svg{width:16px;height:16px;opacity:.7;flex:none}
+.sub-item:hover{color:var(--text);background:var(--hover)}
+.sub-item.active{color:var(--t-brand);background:color-mix(in srgb,var(--brand) 9%,transparent);font-weight:600}
+.sub-item.active svg{opacity:1}
+@keyframes pulse{50%{opacity:.35}}
+
+/* ============ Topbar ============ */
+.topbar{position:sticky;top:0;z-index:50;background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:14px;height:72px;padding:0 28px}
+.tb-btn{display:none;width:42px;height:42px;border:1px solid var(--border);border-radius:10px;background:none;color:var(--text-2);place-items:center}
+.tb-btn svg{width:18px;height:18px}
+.searchbar{display:flex;align-items:center;gap:10px;height:44px;width:430px;max-width:52vw;border:1px solid var(--border);border-radius:10px;background:var(--surface);padding:0 6px 0 13px;color:var(--text-3);transition:border-color .15s,box-shadow .15s}
+.searchbar:focus-within{border-color:var(--brand);box-shadow:0 0 0 3px color-mix(in srgb,var(--brand) 14%,transparent)}
+.searchbar svg{width:17px;height:17px;flex:none}
+.searchbar input{flex:1;min-width:0;border:0;background:none;outline:none;font:inherit;font-size:14px;color:var(--text)}
+.searchbar input::placeholder{color:var(--text-3)}
+.kbd{font-family:ui-monospace,monospace;font-size:11px;color:var(--text-3);border:1px solid var(--border);background:var(--surface-2);border-radius:6px;padding:3px 7px;white-space:nowrap}
+.tb-right{margin-left:auto;display:flex;align-items:center;gap:12px}
+.tb-round{width:44px;height:44px;border-radius:99px;border:1px solid var(--border);background:var(--surface);color:var(--text-2);display:grid;place-items:center;transition:background .15s,color .15s}
+.tb-round:hover{background:var(--hover);color:var(--text)}
+.tb-round svg{width:19px;height:19px}
+.avatar{width:38px;height:38px;border-radius:99px;background:var(--surface-2);border:1px solid var(--border);color:var(--text-2);font-size:12.5px;font-weight:600;display:grid;place-items:center;flex:none}
+.avatar.lg{width:56px;height:56px;font-size:17px}
+.avatar.sm{width:26px;height:26px;font-size:10px}
+
+/* ============ Page ============ */
+.page{width:100%;max-width:1240px;margin:0 auto;padding:28px 32px 80px}
+.page-head{display:flex;align-items:flex-start;justify-content:space-between;gap:18px;flex-wrap:wrap;margin-bottom:22px}
+.page-head h1{font-size:24px;font-weight:600;letter-spacing:-.3px}
+.sub{margin-top:4px;color:var(--text-2);font-size:13.5px}
+.head-actions{display:flex;gap:10px;align-items:center}
+
+/* ============ Buttons ============ */
+.btn{display:inline-flex;align-items:center;gap:8px;height:40px;padding:0 16px;border-radius:9px;border:1px solid transparent;font-size:13.5px;font-weight:600;transition:background .15s,border-color .15s,transform .06s}
+.btn:active{transform:translateY(1px)}
+.btn svg{width:16px;height:16px;stroke-width:2}
+.btn-primary{background:var(--brand);color:#fff}
+.btn-primary:hover{background:color-mix(in srgb,var(--brand) 88%,#000)}
+.btn-ghost{background:var(--surface);border-color:var(--border-strong);color:var(--text-2)}
+.btn-ghost:hover{color:var(--text);background:var(--hover)}
+.btn-danger{background:transparent;border-color:color-mix(in srgb,var(--red) 40%,transparent);color:var(--t-red)}
+.btn-danger:hover{background:color-mix(in srgb,var(--red) 9%,transparent)}
+.btn-sm{height:33px;padding:0 12px;font-size:12.5px;border-radius:8px}
+.btn-sm svg{width:14px;height:14px}
+
+/* ============ Toolbar ============ */
+.toolbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:18px}
+.search{display:flex;align-items:center;gap:9px;height:40px;width:280px;max-width:100%;border:1px solid var(--border-strong);border-radius:9px;background:var(--surface);padding:0 12px;color:var(--text-3);transition:border-color .15s,box-shadow .15s}
+.search:focus-within{border-color:var(--brand);box-shadow:0 0 0 3px color-mix(in srgb,var(--brand) 14%,transparent)}
+.search svg{width:15px;height:15px;flex:none}
+.search input{flex:1;min-width:0;border:0;background:none;outline:none;font:inherit;font-size:13.5px;color:var(--text)}
+.search input::placeholder{color:var(--text-3)}
+.sel{position:relative;display:inline-flex}
+.sel::after{content:"";position:absolute;right:12px;top:50%;width:7px;height:7px;border-right:1.7px solid var(--text-3);border-bottom:1.7px solid var(--text-3);transform:translateY(-70%) rotate(45deg);pointer-events:none}
+.sel select{appearance:none;height:40px;border:1px solid var(--border-strong);background:var(--surface);border-radius:9px;font:500 13.5px 'Outfit';color:var(--text-2);padding:0 32px 0 13px;cursor:pointer}
+.sel select:hover{color:var(--text)}
+.count-line{width:100%;font-size:12.5px;color:var(--text-3);margin-bottom:12px}
+
+/* ============ Cards & tables ============ */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r)}
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+th{font-size:12px;font-weight:500;color:var(--text-3);text-align:left;padding:12px 22px;border-bottom:1px solid var(--border);white-space:nowrap}
+th[data-sort]{cursor:pointer;user-select:none}
+th[data-sort]:hover{color:var(--text-2)}
+.sort-ind{display:inline-block;width:12px;text-align:center;opacity:0;font-size:9px}
+th.sorted .sort-ind{opacity:1}
+td{padding:13px 22px;border-bottom:1px solid var(--border);vertical-align:middle}
+tbody tr{transition:background .12s}
+tbody tr:hover{background:var(--row-hover)}
+tbody tr:last-child td{border-bottom:0}
+.cell-name{display:flex;align-items:center;gap:11px;min-width:200px}
+.cell-name b{font-weight:600;font-size:13.5px}
+.cell-name button{border:0;background:none;padding:0;font:inherit;color:var(--text);text-align:left}
+.cell-name button:hover{color:var(--t-brand)}
+.phone{color:var(--text-2);white-space:nowrap}
+.row-actions{display:flex;gap:16px;justify-content:flex-end;white-space:nowrap}
+.act{border:0;background:none;padding:0;font-size:13px;font-weight:500;color:var(--text-2);border-radius:4px}
+.act:hover{color:var(--t-brand)}
+.act.danger:hover{color:var(--t-red)}
+.badge{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:500;padding:2px 10px;border-radius:99px;white-space:nowrap}
+.badge::before{content:"";width:5px;height:5px;border-radius:99px;background:currentColor}
+.b-brand{background:color-mix(in srgb,var(--brand) 10%,transparent);color:var(--t-brand)}
+.b-gray{background:var(--surface-2);color:var(--text-2);border:1px solid var(--border)}
+.b-warn{background:color-mix(in srgb,var(--warn) 13%,transparent);color:var(--t-warn)}
+.b-purple{background:color-mix(in srgb,var(--purple) 10%,transparent);color:var(--t-purple)}
+.b-green{background:color-mix(in srgb,var(--green) 12%,transparent);color:var(--t-green)}
+.b-red{background:color-mix(in srgb,var(--red) 10%,transparent);color:var(--t-red)}
+.b-blue{background:color-mix(in srgb,var(--blue) 10%,transparent);color:var(--t-blue)}
+.empty{padding:56px 20px;text-align:center}
+.empty svg{width:28px;height:28px;color:var(--text-3);margin-bottom:10px}
+.empty b{display:block;font-size:15px;margin-bottom:4px}
+.empty p{color:var(--text-3);font-size:13px;margin-bottom:16px}
+.chip{display:inline-block;font-size:11.5px;font-weight:500;padding:2px 9px;border-radius:99px;margin:1px 2px 1px 0;white-space:nowrap}
+
+/* ============ Forms (full page, no modal) ============ */
+.backlink{display:inline-flex;align-items:center;gap:7px;border:0;background:none;color:var(--text-2);font-size:13px;font-weight:600;padding:0;margin-bottom:18px}
+.backlink:hover{color:var(--t-brand)}
+.backlink svg{width:15px;height:15px}
+.form-card{padding:26px 28px}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px 20px}
+.span2{grid-column:1/-1}
+.field{display:flex;flex-direction:column;gap:6px;min-width:0}
+.field label{font-size:13px;font-weight:500;color:var(--text-2)}
+.field input,.field select,.field textarea,.qadd input{height:42px;border:1px solid var(--border-strong);border-radius:9px;background:var(--surface);padding:0 13px;font:400 14px 'Outfit';color:var(--text);width:100%;transition:border-color .15s,box-shadow .15s}
+.field textarea{height:auto;min-height:88px;padding:11px 13px;resize:vertical;line-height:1.55}
+.field input:focus,.field select:focus,.field textarea:focus,.qadd input:focus{outline:none;border-color:var(--brand);box-shadow:0 0 0 3px color-mix(in srgb,var(--brand) 14%,transparent)}
+.field.err input,.field.err select{border-color:var(--red)}
+.field .msg{display:none;font-size:11.5px;color:var(--t-red)}
+.field.err .msg{display:block}
+.fsel{position:relative}
+.fsel::after{content:"";position:absolute;right:13px;top:19px;width:7px;height:7px;border-right:1.7px solid var(--text-3);border-bottom:1.7px solid var(--text-3);transform:rotate(45deg);pointer-events:none}
+.fsel select{appearance:none;padding-right:34px}
+.form-foot{display:flex;align-items:center;gap:10px;margin-top:24px;padding-top:20px;border-top:1px solid var(--border)}
+.form-foot .spacer{flex:1}
+.tagpick{display:flex;flex-wrap:wrap;gap:8px;padding:9px 11px;border:1px solid var(--border-strong);border-radius:9px;min-height:42px;align-items:center}
+.tagpick .chip{cursor:pointer;border:1.5px solid transparent;opacity:.6;transition:opacity .15s}
+.tagpick .chip.on{opacity:1;border-color:currentColor}
+
+/* ============ Org detail ============ */
+.detail-head{display:flex;align-items:flex-start;gap:18px;flex-wrap:wrap;margin-bottom:22px}
+.detail-head h1{font-size:22px;font-weight:600;letter-spacing:-.3px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.kv-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px 24px;padding:22px 26px}
+.kv dt{font-size:11.5px;color:var(--text-3);margin-bottom:4px}
+.kv dd{font-size:13.5px;font-weight:500}
+.card-h{display:flex;align-items:center;justify-content:space-between;padding:16px 26px;border-bottom:1px solid var(--border);font-size:14px;font-weight:600}
+.card-b{padding:8px 12px}
+.rel-row{display:flex;align-items:center;gap:12px;padding:11px 14px;border-radius:9px;transition:background .12s}
+.rel-row:hover{background:var(--hover)}
+.rel-row .grow{flex:1;min-width:0}
+.rel-row b{font-size:13.5px;font-weight:600;display:block}
+.rel-row span{font-size:12.5px;color:var(--text-3)}
+.note{padding:16px 26px;font-size:13.5px;color:var(--text-2);line-height:1.65;white-space:pre-wrap}
+
+/* ============ Dashboard ============ */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:16px;margin-bottom:18px}
+.stat{padding:20px 22px}
+.stat .top{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.stat .top span{font-size:12.5px;color:var(--text-3);font-weight:500}
+.stat .big{font-size:26px;font-weight:600;letter-spacing:-.5px;line-height:1.1}
+.stat .delta{margin-top:7px;font-size:12px;color:var(--t-green);font-weight:500}
+.dash-grid{display:grid;grid-template-columns:3fr 2fr;gap:16px}
+.mini-row{display:flex;align-items:center;gap:11px;padding:10px 14px;border-radius:9px}
+.mini-row:hover{background:var(--hover)}
+.mini-row .grow{flex:1;min-width:0}
+.mini-row b{font-size:13px;font-weight:600;display:block}
+.mini-row span{font-size:12px;color:var(--text-3)}
+.mini-table{padding:6px 10px}
+.view-all{border:0;background:none;color:var(--t-brand);font-size:12.5px;font-weight:600;padding:4px}
+.view-all:hover{text-decoration:underline}
+
+/* ============ Kanban (deals) ============ */
+.kanban{display:flex;gap:14px;align-items:flex-start;overflow-x:auto;padding-bottom:10px}
+.kcol{flex:1;min-width:225px;border-radius:12px}
+.kcol.over{background:color-mix(in srgb,var(--brand) 6%,transparent);outline:2px dashed color-mix(in srgb,var(--brand) 45%,transparent);outline-offset:6px}
+.kcol-h{display:flex;align-items:center;gap:8px;padding:6px 10px 12px;font-size:13px;font-weight:600}
+.kcol-h .n{font-size:11px;font-weight:600;color:var(--text-3);background:var(--surface-2);border:1px solid var(--border);border-radius:99px;padding:1px 8px}
+.kcol-h .sum{margin-left:auto;font-size:11.5px;color:var(--text-3);font-weight:500}
+.kstack{display:flex;flex-direction:column;gap:10px;min-height:60px}
+.kcard{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:13px 14px;cursor:grab;transition:box-shadow .15s,border-color .15s}
+.kcard:hover{border-color:var(--border-strong);box-shadow:var(--shadow)}
+.kcard.dragging{opacity:.45;cursor:grabbing}
+.kcard b{font-size:13.5px;font-weight:600;display:block;margin-bottom:3px}
+.kcard .org{font-size:12.5px;color:var(--text-3);margin-bottom:11px}
+.kcard .foot{display:flex;align-items:center;gap:8px}
+.kcard .val{font-size:14px;font-weight:600}
+.kcard .date{margin-left:auto;font-size:11px;color:var(--text-3)}
+
+/* ============ Tasks ============ */
+.task-prog{display:flex;align-items:center;gap:12px;margin-bottom:16px}
+.task-prog .bar{flex:1;height:6px;background:var(--surface-2);border:1px solid var(--border);border-radius:99px;overflow:hidden}
+.task-prog .bar i{display:block;height:100%;background:var(--brand);border-radius:99px;transition:width .3s}
+.task-prog .p{font-size:12px;color:var(--text-3)}
+.trow{display:flex;align-items:center;gap:13px;padding:13px 22px;border-bottom:1px solid var(--border)}
+.trow:last-of-type{border-bottom:0}
+.trow.done .tt{color:var(--text-3);text-decoration:line-through}
+.tk{width:19px;height:19px;border:1.6px solid var(--border-strong);border-radius:6px;background:var(--surface);display:grid;place-items:center;flex:none;transition:background .15s,border-color .15s}
+.tk svg{width:12px;height:12px;color:#fff;stroke-width:3;opacity:0;transition:opacity .15s}
+.trow.done .tk{background:var(--brand);border-color:var(--brand)}
+.trow.done .tk svg{opacity:1}
+.tt{flex:1;font-size:13.5px;min-width:0}
+.tt span{color:var(--text-3);font-size:12.5px}
+.due{font-size:11.5px;font-weight:500;color:var(--text-2);border:1px solid var(--border);border-radius:99px;padding:2px 10px;white-space:nowrap}
+.due.today{color:var(--t-warn);border-color:color-mix(in srgb,var(--warn) 45%,transparent)}
+.due.over{color:var(--t-red);border-color:color-mix(in srgb,var(--red) 45%,transparent)}
+.qadd{display:flex;align-items:center;gap:10px;padding:13px 22px;border-top:1px solid var(--border)}
+.qadd svg{width:16px;height:16px;color:var(--text-3);flex:none}
+.qadd input{flex:1;border:0;background:none;outline:none;font:inherit;font-size:13.5px;color:var(--text)}
+.qadd input::placeholder{color:var(--text-3)}
+
+/* ============ Inbox ============ */
+.inbox{display:grid;grid-template-columns:330px 1fr;min-height:600px}
+.chat-list{border-right:1px solid var(--border);overflow-y:auto;max-height:640px}
+.chat-item{display:flex;gap:11px;width:100%;padding:13px 16px;border:0;background:none;text-align:left;border-bottom:1px solid var(--border);transition:background .12s}
+.chat-item:hover{background:var(--hover)}
+.chat-item.active{background:color-mix(in srgb,var(--brand) 7%,transparent)}
+.chat-item .grow{flex:1;min-width:0}
+.chat-item b{font-size:13.5px;font-weight:600;display:flex;justify-content:space-between;gap:8px}
+.chat-item b time{font-size:10.5px;color:var(--text-3);font-weight:500;flex:none}
+.chat-item p{font-size:12.5px;color:var(--text-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px}
+.unread-n{flex:none;background:var(--green);color:#fff;font-size:10.5px;font-weight:700;border-radius:99px;min-width:18px;height:18px;display:grid;place-items:center;padding:0 5px;align-self:center}
+.chat-pane{display:flex;flex-direction:column;min-width:0}
+.chat-top{display:flex;align-items:center;gap:12px;padding:13px 20px;border-bottom:1px solid var(--border)}
+.chat-top b{font-size:14px;font-weight:600;display:block}
+.chat-top span{font-size:11.5px;color:var(--t-green);display:flex;align-items:center;gap:5px}
+.chat-top span::before{content:"";width:6px;height:6px;border-radius:99px;background:var(--green)}
+.chat-top .btn{margin-left:auto}
+.msgs{flex:1;overflow-y:auto;max-height:470px;padding:20px;display:flex;flex-direction:column;gap:8px;background:var(--surface-2)}
+.msg{max-width:68%;padding:8px 13px;border-radius:12px;font-size:13.5px;line-height:1.45;position:relative}
+.msg time{display:block;font-size:10px;opacity:.55;margin-top:3px}
+.msg .rr{width:14px;height:14px;color:var(--t-blue);vertical-align:-2px;margin-left:4px}
+.msg:not(.me){background:var(--surface);border:1px solid var(--border);border-bottom-left-radius:4px;align-self:flex-start}
+.msg.me{background:var(--wa-me);color:var(--wa-me-t);border-bottom-right-radius:4px;align-self:flex-end}
+.typing{display:inline-flex;gap:4px;padding:12px 14px}
+.typing i{width:6px;height:6px;border-radius:99px;background:var(--text-3);animation:tp 1s infinite}
+.typing i:nth-child(2){animation-delay:.15s}.typing i:nth-child(3){animation-delay:.3s}
+@keyframes tp{50%{opacity:.25;transform:translateY(-2px)}}
+.chat-form{display:flex;gap:10px;padding:14px 18px;border-top:1px solid var(--border)}
+.chat-form input{flex:1;height:40px;border:1px solid var(--border-strong);border-radius:99px;background:var(--surface);padding:0 16px;font:inherit;font-size:13.5px;color:var(--text);outline:none}
+.chat-form input:focus{border-color:var(--brand)}
+
+/* ============ Import / Connection / Calendar / misc ============ */
+.dropzone{display:flex;flex-direction:column;align-items:center;gap:6px;padding:44px 20px;border:1.5px dashed var(--border-strong);border-radius:var(--r);color:var(--text-3);cursor:pointer;text-align:center;transition:border-color .15s,background .15s}
+.dropzone:hover,.dropzone.over{border-color:var(--brand);background:color-mix(in srgb,var(--brand) 4%,transparent)}
+.dropzone svg{width:30px;height:30px;margin-bottom:6px}
+.dropzone b{color:var(--text)}
+.dropzone small{font-size:12px}
+.file-row{display:flex;align-items:center;gap:11px;padding:10px 14px;border:1px solid var(--border);border-radius:9px;margin-top:10px;font-size:13px}
+.file-row svg{width:16px;height:16px;color:var(--t-brand)}
+.file-row .grow{flex:1;min-width:0}
+.file-row span{color:var(--text-3);font-size:12px}
+.file-row button{border:0;background:none;color:var(--text-3);display:grid;place-items:center}
+.file-row button:hover{color:var(--t-red)}
+.conn{max-width:520px;margin:0 auto;text-align:center;padding:34px 32px}
+.conn .st{display:inline-flex;align-items:center;gap:9px;font-size:14px;font-weight:600;margin-bottom:22px}
+.conn .st i{width:10px;height:10px;border-radius:99px;background:var(--red)}
+.conn .st.on i{background:var(--green)}
+.conn .st.w i{background:var(--warn);animation:pulse 1s infinite}
+.qr{width:210px;height:210px;margin:0 auto 20px;border:1px solid var(--border);border-radius:14px;padding:16px;background:#fff}
+.steps{text-align:left;margin:8px 0 24px;display:flex;flex-direction:column;gap:12px}
+.step{display:flex;gap:13px;font-size:13.5px;color:var(--text-2);line-height:1.5}
+.step b{width:24px;height:24px;border-radius:99px;background:color-mix(in srgb,var(--brand) 10%,transparent);color:var(--t-brand);font-size:12px;display:grid;place-items:center;flex:none;margin-top:1px}
+.cal-head{display:flex;align-items:center;gap:12px;margin-bottom:16px}
+.cal-head h2{font-size:16px;font-weight:600;flex:1}
+.cal-nav{width:34px;height:34px;border:1px solid var(--border-strong);border-radius:8px;background:var(--surface);color:var(--text-2);display:grid;place-items:center}
+.cal-nav:hover{background:var(--hover);color:var(--text)}
+.cal-nav svg{width:15px;height:15px}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;padding:18px}
+.cal-dow{font-size:11px;font-weight:600;color:var(--text-3);text-align:center;padding:6px 0;text-transform:uppercase;letter-spacing:.05em}
+.cal-day{aspect-ratio:1.25;border-radius:9px;padding:7px 9px;font-size:12.5px;color:var(--text-2);display:flex;flex-direction:column;gap:5px;min-height:62px}
+.cal-day:not(.blank):not(.out):hover{background:var(--hover)}
+.cal-day.today{background:var(--brand);color:#fff;font-weight:600}
+.cal-day .n{font-size:12.5px}
+.ev{width:6px;height:6px;border-radius:99px;display:inline-block;margin-right:3px}
+.cal-legend{display:flex;gap:18px;padding:0 20px 18px;font-size:12px;color:var(--text-3)}
+.cal-legend i{width:7px;height:7px;border-radius:99px;display:inline-block;margin-right:6px}
+
+/* ============ Tags / Settings / Help / AI ============ */
+.tag-new{display:flex;gap:12px;align-items:center;flex-wrap:wrap;padding:16px 20px;margin-bottom:16px}
+.tag-new input{flex:1;min-width:180px}
+.swatches{display:flex;gap:7px}
+.sw{width:24px;height:24px;border-radius:99px;border:2px solid transparent;cursor:pointer;transition:transform .1s}
+.sw:hover{transform:scale(1.12)}
+.sw.on{border-color:var(--text);box-shadow:0 0 0 2px var(--surface) inset}
+.tag-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px}
+.tag-card{padding:16px 18px;display:flex;align-items:center;gap:12px}
+.tag-card i.dot{width:11px;height:11px;border-radius:99px;flex:none}
+.tag-card b{font-size:14px}
+.tag-card span{display:block;font-size:12px;color:var(--text-3);margin-top:2px}
+.tag-card .icon-btn{margin-left:auto}
+.icon-btn{width:30px;height:30px;border-radius:7px;border:0;background:none;color:var(--text-3);display:grid;place-items:center}
+.icon-btn:hover{background:var(--hover);color:var(--t-red)}
+.icon-btn svg{width:15px;height:15px}
+.set-grid{display:grid;grid-template-columns:1fr;gap:16px;max-width:720px}
+.set-row{display:flex;align-items:center;gap:16px;padding:20px 26px}
+.theme-opts{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;padding:20px 26px}
+.theme-opt{border:1.5px solid var(--border-strong);border-radius:12px;padding:12px;background:none;display:flex;flex-direction:column;gap:10px;font:inherit;color:var(--text-2);transition:border-color .15s}
+.theme-opt:hover{border-color:var(--t-brand)}
+.theme-opt.on{border-color:var(--brand);box-shadow:0 0 0 1px var(--brand)}
+.theme-opt .prev{height:54px;border-radius:8px;overflow:hidden;display:flex;border:1px solid var(--border)}
+.prev .ps{width:22%;background:#E9EAF0}
+.prev .pb{flex:1;padding:6px;display:flex;flex-direction:column;gap:4px}
+.prev .pb i{display:block;height:6px;border-radius:3px;background:#E9EAF0}
+.prev .pb i:first-child{width:70%}
+.prev.light{background:#FDFDFE}
+.prev.dark .ps{background:#1C2333}
+.prev.dark{background:#12172A}
+.prev.dark .pb i{background:#232C44}
+.prev.split .ps{background:linear-gradient(90deg,#E9EAF0 50%,#1C2333 50%)}
+.prev.split{background:linear-gradient(90deg,#FDFDFE 50%,#12172A 50%)}
+.prev.split .pb{background:none}
+.prev.split .pb i{background:linear-gradient(90deg,#E9EAF0 50%,#232C44 50%)}
+.theme-opt b{font-size:13px}
+.faq{border:1px solid var(--border);border-radius:var(--r);overflow:hidden}
+.faq details{border-bottom:1px solid var(--border)}
+.faq details:last-child{border-bottom:0}
+.faq summary{padding:15px 22px;font-size:13.5px;font-weight:600;cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center}
+.faq summary::after{content:"+";font-size:17px;color:var(--text-3)}
+.faq details[open] summary::after{content:"–"}
+.faq details p{padding:0 22px 16px;font-size:13px;color:var(--text-2);line-height:1.65}
+.soon-wrap{max-width:460px;margin:48px auto;text-align:center;padding:44px 36px}
+.soon-ic{width:60px;height:60px;border-radius:18px;background:color-mix(in srgb,var(--purple) 12%,transparent);color:var(--t-purple);display:grid;place-items:center;margin:0 auto 18px}
+.soon-ic svg{width:27px;height:27px}
+.soon-wrap h2{font-size:19px;margin-bottom:6px;display:inline-flex;align-items:center;gap:10px}
+.soon-wrap p{color:var(--text-2);font-size:13.5px;line-height:1.65;margin-bottom:22px}
+
+/* ============ Toasts ============ */
+#toasts{position:fixed;right:20px;bottom:20px;z-index:200;display:flex;flex-direction:column;gap:10px;max-width:360px}
+.toast{display:flex;align-items:center;gap:11px;background:var(--surface);border:1px solid var(--border);border-radius:11px;box-shadow:var(--shadow);padding:12px 15px;font-size:13px;animation:tin .28s cubic-bezier(.2,.9,.3,1.1)}
+.toast svg{width:16px;height:16px;color:var(--t-brand);flex:none}
+.toast.out{animation:tout .22s forwards}
+@keyframes tin{from{opacity:0;transform:translateY(12px) scale(.97)}}
+@keyframes tout{to{opacity:0;transform:translateY(8px)}}
+
+/* ============ Responsive ============ */
+@media (max-width:1023px){
+  .sidebar{transform:translateX(-102%)}
+  body.side-open .sidebar{transform:none}
+  body.side-open #scrim{display:block}
+  .content{margin-left:0}
+  .tb-btn{display:grid}
+  .side-close{display:grid;width:36px;height:36px;border:1px solid var(--border);border-radius:8px;background:none;color:var(--text-2);place-items:center}
+  .searchbar{flex:1;max-width:none}
+  .kbd{display:none}
+}
+@media (max-width:860px){
+  .form-grid{grid-template-columns:1fr}
+  .dash-grid{grid-template-columns:1fr}
+  .inbox{grid-template-columns:1fr}
+  .chat-list{max-height:260px;border-right:0;border-bottom:1px solid var(--border)}
+  .page{padding:22px 18px 70px}
+}
+</style>
+</head>
+<body>
+
+<div id="scrim"></div>
+
+<!-- ================= SIDEBAR ================= -->
+<aside class="sidebar" id="sidebar">
+  <div class="side-brand">
+    <a class="brand" href="#" onclick="return false">
+      <svg width="32" height="32" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+        <rect width="32" height="32" rx="8" fill="#465FFF"/>
+        <path d="M8 21.5V13.5" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/>
+        <path d="M24 21.5V13.5" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/>
+        <path d="M8 14.5C8 14.5 11.2 10.5 16 10.5C20.8 10.5 24 14.5 24 14.5" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/>
+        <circle cx="16" cy="19.5" r="2" fill="#fff" fill-opacity=".9"/>
+      </svg>
+      <span>ClientBridge</span>
+    </a>
+    <button class="side-close" id="sideClose"><i data-lucide="x"></i></button>
+  </div>
+
+  <div class="side-scroll">
+    <nav>
+      <p class="side-label">Workspace</p>
+      <button class="menu-item" data-nav="dashboard">
+        <span class="mi-ic ic-blue"><i data-lucide="pie-chart"></i></span>Dashboard
+      </button>
+      <div class="menu-group" data-group="rel">
+        <button class="menu-item" data-group-toggle="rel">
+          <span class="mi-ic ic-purple"><i data-lucide="users"></i></span>Relationships
+          <i data-lucide="chevron-down" class="chev"></i>
+        </button>
+        <div class="submenu"><ul>
+          <li><button class="sub-item" data-nav="organizations"><i data-lucide="building-2"></i>Organizations</button></li>
+          <li><button class="sub-item" data-nav="contacts"><i data-lucide="contact"></i>Contacts</button></li>
+          <li><button class="sub-item" data-nav="tags"><i data-lucide="tag"></i>Tags</button></li>
+        </ul></div>
+      </div>
+      <div class="menu-group" data-group="sales">
+        <button class="menu-item" data-group-toggle="sales">
+          <span class="mi-ic ic-brand"><i data-lucide="circle-dollar-sign"></i></span>Sales &amp; Finance
+          <i data-lucide="chevron-down" class="chev"></i>
+        </button>
+        <div class="submenu"><ul>
+          <li><button class="sub-item" data-nav="deals"><i data-lucide="star"></i>Deals</button></li>
+          <li><button class="sub-item" data-nav="tasks"><i data-lucide="list-checks"></i>Tasks</button></li>
+          <li><button class="sub-item" data-nav="invoices"><i data-lucide="file-text"></i>Invoices</button></li>
+        </ul></div>
+      </div>
+      <button class="menu-item" data-nav="products">
+        <span class="mi-ic ic-warn"><i data-lucide="box"></i></span>Catalog
+      </button>
+      <button class="menu-item" data-nav="import">
+        <span class="mi-ic ic-gray"><i data-lucide="upload"></i></span>Import
+      </button>
+      <div class="menu-group" data-group="conv">
+        <button class="menu-item" data-group-toggle="conv">
+          <span class="mi-ic ic-green"><i data-lucide="message-circle"></i></span>Conversations
+          <i data-lucide="chevron-down" class="chev"></i>
+        </button>
+        <div class="submenu"><ul>
+          <li><button class="sub-item" data-nav="chats"><i data-lucide="inbox"></i>Inbox</button></li>
+          <li><button class="sub-item" data-nav="connection"><i data-lucide="qr-code"></i>Connection</button></li>
+        </ul></div>
+      </div>
+      <button class="menu-item" data-nav="calendar">
+        <span class="mi-ic ic-gray"><i data-lucide="calendar"></i></span>Calendar
+      </button>
+      <button class="menu-item" data-nav="ai">
+        <span class="mi-ic ic-purple"><i data-lucide="zap"></i></span>AI Agents
+        <span class="soon">Soon</span>
+      </button>
+
+      <p class="side-label">Account</p>
+      <button class="menu-item" data-nav="settings">
+        <span class="mi-ic ic-gray"><i data-lucide="circle-user"></i></span>Account settings
+      </button>
+      <button class="menu-item" data-nav="help">
+        <span class="mi-ic ic-gray"><i data-lucide="circle-help"></i></span>Help &amp; guide
+      </button>
+    </nav>
+  </div>
+</aside>
+
+<!-- ================= MAIN ================= -->
+<div class="content">
+  <header class="topbar">
+    <button class="tb-btn" id="burger"><i data-lucide="menu"></i></button>
+    <label class="searchbar">
+      <i data-lucide="search"></i>
+      <input id="globalSearch" placeholder="Search contacts, deals, invoices…" autocomplete="off">
+      <span class="kbd" id="kbdHint">Ctrl K</span>
+    </label>
+    <div class="tb-right">
+      <button class="tb-round" id="themeBtn" title="Toggle theme"><i data-lucide="moon"></i></button>
+      <div class="avatar">AM</div>
+    </div>
+  </header>
+  <main id="main" class="page" style="padding:0"></main>
+</div>
+
+<div id="toasts"></div>
+
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<script>
+/* ================================================================
+   ClientBridge — canvas demo · single file
+   ================================================================ */
+const $  = s => document.querySelector(s);
+const $$ = s => [...document.querySelectorAll(s)];
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const icons = () => { try { lucide.createIcons(); } catch(e){} };
+const uid = p => p + '_' + Math.random().toString(36).slice(2, 9);
+const D = 864e5, H = 36e5, now = Date.now();
+const fmtMoney = n => new Intl.NumberFormat('en-US',{style:'currency',currency:'USD',maximumFractionDigits:0}).format(n);
+const fmtDate  = t => new Intl.DateTimeFormat('en-GB',{day:'numeric',month:'short',year:'numeric'}).format(t);
+const toISO    = t => new Date(t).toISOString().slice(0,10);
+const relTime  = t => { const m = Math.round((Date.now()-t)/6e4);
+  if (m < 1) return 'Just now'; if (m < 60) return m+'m ago';
+  const h = Math.round(m/60); if (h < 24) return h+'h ago'; return Math.round(h/24)+'d ago'; };
+const initials = n => String(n).split(/\s+/).filter(Boolean).slice(0,2).map(w=>w[0].toUpperCase()).join('');
+
+/* ---------------- Catalogs ---------------- */
+const SECTORS  = ['Distribution','Logistics','Technology','Food & Beverage','Hospitality','Security','Healthcare','Real Estate','Media','Other'];
+const COUNTRIES= ['United Kingdom','Netherlands','United States','Ireland','Portugal','Canada','Spain','Germany','France'];
+const RELS     = ['Customer','Prospect','Vendor','Partner'];
+const REL_BADGE= {Customer:'b-brand',Prospect:'b-gray',Vendor:'b-warn',Partner:'b-purple'};
+const STAGES   = ['New','Qualified','Proposal','Won','Lost'];
+const STAGE_DOT= {New:'var(--text-3)',Qualified:'var(--blue)',Proposal:'var(--warn)',Won:'var(--green)',Lost:'var(--red)'};
+const TAG_COLORS = ['#465FFF','#7A5AF8','#12B76A','#F79009','#F04438','#0E9384','#DD2590','#667085'];
+
+/* ---------------- Seed data ---------------- */
+const orgs = [
+  {id:'org_01',name:'Alto Supply Co.',relationship:'Customer',sector:'Distribution',city:'Leeds',country:'United Kingdom',phone:'+44 113 496 0182',email:'accounts@altosupply.co.uk',website:'altosupply.co.uk',notes:'Wholesale partner since 2022. Orders via WhatsApp group with purchasing team.',createdAt:now-410*D},
+  {id:'org_02',name:'Bright Harbour Logistics',relationship:'Customer',sector:'Logistics',city:'Rotterdam',country:'Netherlands',phone:'+31 10 445 8820',email:'ops@brightharbour.nl',website:'brightharbour.nl',notes:'Fleet operator, 120 vehicles. Prefers invoicing monthly.',createdAt:now-380*D},
+  {id:'org_03',name:'Cobalt Analytics',relationship:'Prospect',sector:'Technology',city:'Austin',country:'United States',phone:'+1 512 555 0148',email:'hello@cobaltanalytics.io',website:'cobaltanalytics.io',notes:'Evaluated two competitors. Pilot budget approved for Q3.',createdAt:now-120*D},
+  {id:'org_04',name:'Fernwell Foods',relationship:'Customer',sector:'Food & Beverage',city:'Cork',country:'Ireland',phone:'+353 21 555 0173',email:'buyers@fernwell.ie',website:'fernwell.ie',notes:'Bakery chain, 14 locations. Seasonal spikes before holidays.',createdAt:now-260*D},
+  {id:'org_05',name:'Grandview Hospitality',relationship:'Partner',sector:'Hospitality',city:'Lisbon',country:'Portugal',phone:'+351 21 555 0340',email:'gm@grandview.pt',website:'grandview.pt',notes:'Resells to their hotel clients. White-label agreement in place.',createdAt:now-540*D},
+  {id:'org_06',name:'Ironclad Security Group',relationship:'Prospect',sector:'Security',city:'Manchester',country:'United Kingdom',phone:'+44 161 555 0206',email:'tenders@ironclad.co.uk',website:'ironclad.co.uk',notes:'Public RFP closing end of quarter. Needs SOC2 documentation.',createdAt:now-64*D},
+  {id:'org_07',name:'Juniper Wellness Clinic',relationship:'Customer',sector:'Healthcare',city:'Vancouver',country:'Canada',phone:'+1 604 555 0192',email:'admin@juniperwellness.ca',website:'juniperwellness.ca',notes:'Two clinics, third opening in fall. Sensitive data — check DPA.',createdAt:now-200*D},
+  {id:'org_08',name:'Northgate Realty',relationship:'Vendor',sector:'Real Estate',city:'Birmingham',country:'United Kingdom',phone:'+44 121 555 0461',email:'office@northgate.bham.co.uk',website:'northgate.bham.co.uk',notes:'Manages our office lease. Invoice received quarterly.',createdAt:now-700*D},
+  {id:'org_09',name:'Silverline Media Group',relationship:'Prospect',sector:'Media',city:'Dublin',country:'Ireland',phone:'+353 1 555 0287',email:'produce@silverline.ie',website:'silverline.ie',notes:'Referred by Grandview. Media buying retainer under discussion.',createdAt:now-38*D}
+];
+const tags = [
+  {name:'VIP',color:'#7A5AF8'},{name:'Wholesale',color:'#465FFF'},{name:'Referral',color:'#12B76A'},
+  {name:'Enterprise',color:'#F79009'},{name:'Trial',color:'#667085'},{name:'Fleet',color:'#0E9384'}
+];
+const contacts = [
+  {id:'ct_01',name:'Marcus Bell',role:'Operations Director',orgId:'org_01',phone:'+44 113 496 0182',whatsapp:'+44 7700 900182',email:'marcus@altosupply.co.uk',tagNames:['VIP','Wholesale'],lastSeen:now-2.5*H,createdAt:now-410*D},
+  {id:'ct_02',name:'Priya Nair',role:'Purchasing Lead',orgId:'org_01',phone:'+44 113 496 0183',whatsapp:'+44 7700 900183',email:'priya@altosupply.co.uk',tagNames:['Wholesale'],lastSeen:now-26*H,createdAt:now-300*D},
+  {id:'ct_03',name:'Daan Verhoeven',role:'Fleet Manager',orgId:'org_02',phone:'+31 10 445 8821',whatsapp:'+31 6 1234 5678',email:'daan@brightharbour.nl',tagNames:['Fleet'],lastSeen:now-5*H,createdAt:now-380*D},
+  {id:'ct_04',name:'Sophie Lambert',role:'Data Lead',orgId:'org_03',phone:'+1 512 555 0149',whatsapp:'+1 512 555 0149',email:'sophie@cobaltanalytics.io',tagNames:['Trial'],lastSeen:now-2*D,createdAt:now-118*D},
+  {id:'ct_05',name:'Eoin Gallagher',role:'Founder',orgId:'org_04',phone:'+353 21 555 0174',whatsapp:'+353 87 555 0174',email:'eoin@fernwell.ie',tagNames:['VIP'],lastSeen:now-9*H,createdAt:now-260*D},
+  {id:'ct_06',name:'Marta Fonseca',role:'General Manager',orgId:'org_05',phone:'+351 21 555 0341',whatsapp:'+351 92 555 0341',email:'marta@grandview.pt',tagNames:['Referral','Enterprise'],lastSeen:now-3*D,createdAt:now-540*D},
+  {id:'ct_07',name:'James Whitfield',role:'Head of Procurement',orgId:'org_06',phone:'+44 161 555 0207',whatsapp:'+44 7700 900207',email:'james@ironclad.co.uk',tagNames:['Enterprise'],lastSeen:now-8*H,createdAt:now-64*D},
+  {id:'ct_08',name:'Hannah Liu',role:'Practice Manager',orgId:'org_07',phone:'+1 604 555 0193',whatsapp:'+1 604 555 0193',email:'hannah@juniperwellness.ca',tagNames:[],lastSeen:now-30*H,createdAt:now-200*D},
+  {id:'ct_09',name:'Tom Breen',role:'Executive Producer',orgId:'org_09',phone:'+353 1 555 0288',whatsapp:'+353 87 555 0288',email:'tom@silverline.ie',tagNames:['Referral'],lastSeen:now-20*H,createdAt:now-38*D},
+  {id:'ct_10',name:'Aoife Kelly',role:'Agent',orgId:'org_08',phone:'+44 121 555 0462',whatsapp:'',email:'aoife@northgate.bham.co.uk',tagNames:[],lastSeen:now-9*D,createdAt:now-700*D}
+];
+const deals = [
+  {id:'dl_01',name:'Q3 wholesale order',orgId:'org_01',stage:'Proposal',value:12400,closeDate:now+12*D,createdAt:now-20*D},
+  {id:'dl_02',name:'Fleet telematics rollout',orgId:'org_02',stage:'Qualified',value:28000,closeDate:now+25*D,createdAt:now-32*D},
+  {id:'dl_03',name:'Analytics integration pilot',orgId:'org_03',stage:'New',value:6500,closeDate:now+40*D,createdAt:now-8*D},
+  {id:'dl_04',name:'Bakery chain supply deal',orgId:'org_04',stage:'Proposal',value:19200,closeDate:now+6*D,createdAt:now-26*D},
+  {id:'dl_05',name:'Group booking platform',orgId:'org_05',stage:'Won',value:15000,closeDate:now-4*D,createdAt:now-60*D},
+  {id:'dl_06',name:'Perimeter sensors RFP',orgId:'org_06',stage:'New',value:42000,closeDate:now+55*D,createdAt:now-5*D},
+  {id:'dl_07',name:'Clinic CRM migration',orgId:'org_07',stage:'Qualified',value:9800,closeDate:now+18*D,createdAt:now-15*D},
+  {id:'dl_08',name:'Media buying retainer',orgId:'org_09',stage:'Lost',value:7300,closeDate:now-9*D,createdAt:now-30*D}
+];
+const tasks = [
+  {id:'tk_01',title:'Send revised quote to Alto Supply',orgId:'org_01',due:now+2*D,done:false},
+  {id:'tk_02',title:'Call Bright Harbour about telematics',orgId:'org_02',due:now,done:false},
+  {id:'tk_03',title:'Chase INV-2046 payment',orgId:'org_04',due:now-3*D,done:false},
+  {id:'tk_04',title:'Prepare Cobalt pilot deck',orgId:'org_03',due:now+5*D,done:false},
+  {id:'tk_05',title:'Confirm Grandview go-live date',orgId:'org_05',due:now-1*D,done:true},
+  {id:'tk_06',title:'Request SOC2 docs for Ironclad',orgId:'org_06',due:now+9*D,done:false},
+  {id:'tk_07',title:'Draft DPA for Juniper',orgId:'org_07',due:now+14*D,done:false},
+  {id:'tk_08',title:'Renew office lease with Northgate',orgId:'org_08',due:now+30*D,done:true}
+];
+const invoices = [
+  {id:'inv_01',number:'INV-2041',orgId:'org_01',amount:4200,status:'Paid',due:now-12*D},
+  {id:'inv_02',number:'INV-2044',orgId:'org_02',amount:8150,status:'Paid',due:now-6*D},
+  {id:'inv_03',number:'INV-2046',orgId:'org_04',amount:2380,status:'Overdue',due:now-9*D},
+  {id:'inv_04',number:'INV-2049',orgId:'org_05',amount:15000,status:'Paid',due:now-3*D},
+  {id:'inv_05',number:'INV-2051',orgId:'org_07',amount:3260,status:'Pending',due:now+8*D},
+  {id:'inv_06',number:'INV-2053',orgId:'org_01',amount:5400,status:'Pending',due:now+15*D},
+  {id:'inv_07',number:'INV-2054',orgId:'org_02',amount:6900,status:'Pending',due:now+20*D},
+  {id:'inv_08',number:'INV-2038',orgId:'org_08',amount:2100,status:'Paid',due:now-40*D}
+];
+const products = [
+  {id:'pr_01',name:'Bridge Pro (monthly)',sku:'BR-PRO-M',price:49,stock:999},
+  {id:'pr_02',name:'Bridge Pro (annual)',sku:'BR-PRO-Y',price:490,stock:999},
+  {id:'pr_03',name:'WhatsApp connector',sku:'BR-WAPP',price:19,stock:999},
+  {id:'pr_04',name:'Onboarding session',sku:'BR-ONB',price:150,stock:24},
+  {id:'pr_05',name:'Analytics add-on',sku:'BR-ANL',price:29,stock:0},
+  {id:'pr_06',name:'Priority support',sku:'BR-SUP',price:99,stock:10}
+];
+const chats = [
+  {id:'ch_01',contactId:'ct_01',unread:2,msgs:[
+    {me:false,t:now-3.4*H,text:'Morning Alex — did the revised Q3 quote go out yet?'},
+    {me:true, t:now-3.1*H,text:'Almost there Marcus, sending it over this afternoon.'},
+    {me:false,t:now-2.6*H,text:'Great, procurement meets at 4 so that works perfectly.'},
+    {me:false,t:now-22*H,text:'Also — can you add the pallet discounts we discussed?'}
+  ]},
+  {id:'ch_02',contactId:'ct_03',unread:1,msgs:[
+    {me:false,t:now-5*H,text:'The telematics proposal looks good. One question on the rollout timeline.'},
+    {me:true, t:now-4.8*H,text:'Happy to walk you through it — is Thursday ok for a call?'}
+  ]},
+  {id:'ch_03',contactId:'ct_05',unread:0,msgs:[
+    {me:false,t:now-9*H,text:'Eoin here — new location opens on the 15th, we will need extra stock.'},
+    {me:true, t:now-8.6*H,text:'Noted. I will prepare a standing order for the opening week.'}
+  ]},
+  {id:'ch_04',contactId:'ct_07',unread:0,msgs:[
+    {me:false,t:now-2*D,text:'Following up on the RFP — do you support on-prem deployment?'},
+    {me:true, t:now-2*D+2*H,text:'We do for Enterprise plans. Sending the security pack now.'},
+    {me:false,t:now-2*D+3*H,text:'Received, thanks. Reviewing with the committee on Friday.'}
+  ]},
+  {id:'ch_05',contactId:'ct_09',unread:0,msgs:[
+    {me:false,t:now-20*H,text:'Hi! Marta from Grandview mentioned you — do you handle media buying?'},
+    {me:true, t:now-19*H,text:'We do. Want to book a quick intro call this week?'}
+  ]}
+];
+
+/* ---------------- Lookups ---------------- */
+const orgById   = id => orgs.find(o => o.id === id);
+const orgName   = id => orgById(id)?.name ?? '—';
+const contactById = id => contacts.find(c => c.id === id);
+const tagColor  = name => tags.find(t => t.name === name)?.color ?? '#667085';
+const badgeFor  = rel => `<span class="badge ${REL_BADGE[rel] ?? 'b-gray'}">${esc(rel)}</span>`;
+const dueLabel  = t => { const d = Math.round((t - now)/D);
+  return d < 0 ? `${-d}d overdue` : d === 0 ? 'Today' : d === 1 ? 'Tomorrow' : fmtDate(t).replace(/ \d{4}/,''); };
+const dueClass  = t => { const d = Math.round((t - now)/D); return d < 0 ? 'over' : d <= 1 ? 'today' : ''; };
+
+/* ---------------- UI state ---------------- */
+const ui = {
+  route:'organizations', form:null, detail:null, wa:'offline',
+  q:{}, filters:{}, sort:{}, groups:{rel:true, sales:false, conv:false},
+  chat:null, typing:false, calOffset:0, files:[], taskFilter:'open'
+};
+const GROUPS = {rel:['organizations','contacts','tags'], sales:['deals','tasks','invoices'], conv:['chats','connection']};
+const TABLE_ROUTES = ['organizations','contacts','invoices','products','tags'];
+
+/* ================================================================
+   THEME
+   ================================================================ */
+function setTheme(mode, silent){
+  const dark = mode === 'dark' || (mode === 'system' && matchMedia('(prefers-color-scheme: dark)').matches);
+  const html = document.documentElement;
+  html.classList.add('theming');
+  html.classList.toggle('dark', dark);
+  clearTimeout(setTheme._t);
+  setTheme._t = setTimeout(() => html.classList.remove('theming'), 320);
+  try { localStorage.setItem('theme', mode); } catch(e){}
+  ui.theme = mode;
+  $('#themeBtn').innerHTML = `<i data-lucide="${dark ? 'sun' : 'moon'}"></i>`;
+  icons();
+  if (!silent && ui.route === 'settings') render();
+}
+try { ui.theme = localStorage.getItem('theme') || 'light'; } catch(e){ ui.theme = 'light'; }
+setTheme(ui.theme, true);
+matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => { if (ui.theme === 'system') setTheme('system', true); });
+ $('#themeBtn').addEventListener('click', () => setTheme(ui.theme === 'dark' ? 'light' : 'dark'));
+if (!/Mac|iP(hone|ad|od)/.test(navigator.platform)) $('#kbdHint').textContent = 'Ctrl K';
+
+/* ================================================================
+   TOASTS
+   ================================================================ */
+function toast(msg, icon = 'check'){
+  const el = document.createElement('div');
+  el.className = 'toast';
+  el.innerHTML = `<i data-lucide="${icon}"></i><span style="flex:1">${msg}</span>`;
+  $('#toasts').appendChild(el); icons();
+  setTimeout(() => { el.classList.add('out'); setTimeout(() => el.remove(), 220); }, 3400);
+}
+
+/* ================================================================
+   SIDEBAR
+   ================================================================ */
+function paintSidebar(){
+  $$('#sidebar [data-nav]').forEach(b => b.classList.toggle('active', b.dataset.nav === ui.route));
+  $$('#sidebar .menu-group').forEach(g => {
+    const has = GROUPS[g.dataset.group].includes(ui.route);
+    g.classList.toggle('has-active', has);
+    if (has) g.classList.add('open');
+  });
+}
+ $('#sidebar').addEventListener('click', e => {
+  const nav = e.target.closest('[data-nav]');
+  if (nav) { go(nav.dataset.nav); document.body.classList.remove('side-open'); return; }
+  const tg = e.target.closest('[data-group-toggle]');
+  if (tg) tg.closest('.menu-group').classList.toggle('open');
+});
+ $('#burger').addEventListener('click', () => document.body.classList.add('side-open'));
+ $('#sideClose').addEventListener('click', () => document.body.classList.remove('side-open'));
+ $('#scrim').addEventListener('click', () => document.body.classList.remove('side-open'));
+
+/* ================================================================
+   NAVIGATION & FILTERING
+   ================================================================ */
+function go(route){ ui.route = route; ui.form = null; ui.detail = null; render(); }
+function getFiltered(route){
+  const q = (ui.q[route] || '').trim().toLowerCase();
+  const f = ui.filters[route] || {};
+  let rows;
+  if (route === 'organizations'){
+    rows = orgs.filter(o => (!q || [o.name,o.city,o.country,o.sector,o.email].join(' ').toLowerCase().includes(q))
+      && (!f.sector || o.sector === f.sector) && (!f.country || o.country === f.country));
+    const s = ui.sort.orgs || {k:'createdAt', d:-1};
+    rows = [...rows].sort((a,b) => (typeof a[s.k] === 'string' ? a[s.k].localeCompare(b[s.k]) : (a[s.k]||0)-(b[s.k]||0)) * s.d);
+  }
+  if (route === 'contacts'){
+    rows = contacts.filter(c => (!q || [c.name,c.phone,c.email,orgName(c.orgId)].join(' ').toLowerCase().includes(q))
+      && (!f.org || c.orgId === f.org));
+    const s = ui.sort.contacts || {k:'name', d:1};
+    rows = [...rows].sort((a,b) => (typeof a[s.k] === 'string' ? a[s.k].localeCompare(b[s.k]) : (a[s.k]||0)-(b[s.k]||0)) * s.d);
+  }
+  if (route === 'invoices') rows = invoices.filter(i => !q || [i.number,orgName(i.orgId)].join(' ').toLowerCase().includes(q));
+  if (route === 'products')  rows = products.filter(p => !q || [p.name,p.sku].join(' ').toLowerCase().includes(q));
+  if (route === 'tags')      rows = tags.filter(t => !q || t.name.toLowerCase().includes(q));
+  return rows;
+}
+function countLineText(route){
+  const map = {organizations:'companies', contacts:'contacts', invoices:'invoices', products:'products', tags:'tags'};
+  return `${getFiltered(route).length} of ${ {organizations:orgs,contacts,invoices,products,tags}[route].length } ${map[route]}`;
+}
+
+/* ================================================================
+   TABLE REGION (refreshable without losing focus)
+   ================================================================ */
+function th(route, k, label, extra){
+  const s = ui.sort[route];
+  return `<th ${extra||''} ${k ? `data-sort data-key="${k}" class="${s && s.k===k ? 'sorted':''}"` : ''}>${label}${k ? `<span class="sort-ind">${s && s.k===k ? (s.d===1?'▲':'▼') : '▲'}</span>` : ''}</th>`;
+}
+function orgsTableHTML(){
+  const rows = getFiltered('organizations');
+  if (!rows.length) return emptyHTML('building-2','No organizations found','Try adjusting your search or filters.');
+  return `<div class="table-wrap"><table>
+    <thead><tr>
+      ${th('orgs','name','Name','style="min-width:220px"')}
+      ${th('orgs','relationship','Relationship')}${th('orgs','sector','Sector')}
+      ${th('orgs','city','City')}${th('orgs','country','Country')}${th('orgs','phone','Phone')}
+      <th style="text-align:right;padding-right:22px"></th>
+    </tr></thead>
+    <tbody>${rows.map(o => `<tr>
+      <td><div class="cell-name"><span class="avatar">${initials(o.name)}</span>
+        <button data-action="open" data-id="${o.id}"><b>${esc(o.name)}</b></button></div></td>
+      <td>${badgeFor(o.relationship)}</td>
+      <td>${esc(o.sector)}</td><td>${esc(o.city)}</td><td>${esc(o.country)}</td>
+      <td class="phone num">${esc(o.phone)}</td>
+      <td><div class="row-actions">
+        <button class="act" data-action="open" data-id="${o.id}">Open</button>
+        <button class="act" data-action="edit" data-id="${o.id}">Edit</button>
+        <button class="act danger" data-action="delete" data-id="${o.id}">Delete</button>
+      </div></td>
+    </tr>`).join('')}</tbody>
+  </table></div>`;
+}
+function contactsTableHTML(){
+  const rows = getFiltered('contacts');
+  if (!rows.length) return emptyHTML('contact','No contacts found','Try adjusting your search or filters.');
+  return `<div class="table-wrap"><table>
+    <thead><tr>
+      ${th('contacts','name','Name','style="min-width:220px"')}
+      ${th('contacts','','Phone')}${th('contacts','','WhatsApp')}
+      ${th('contacts','','Organization')}${th('contacts','','Tags')}
+      ${th('contacts','lastSeen','Last seen')}
+      <th style="text-align:right;padding-right:22px"></th>
+    </tr></thead>
+    <tbody>${rows.map(c => `<tr>
+      <td><div class="cell-name"><span class="avatar">${initials(c.name)}</span>
+        <div><b style="font-weight:600;font-size:13.5px;display:block">${esc(c.name)}</b>
+        <span style="font-size:12px;color:var(--text-3)">${esc(c.role)}</span></div></div></td>
+      <td class="phone num">${esc(c.phone)}</td>
+      <td class="phone num">${esc(c.whatsapp) || '—'}</td>
+      <td><button class="act" data-action="open-org" data-id="${c.orgId}" style="font-size:13px">${esc(orgName(c.orgId))}</button></td>
+      <td>${(c.tagNames||[]).map(t => `<span class="chip" style="background:color-mix(in srgb,${tagColor(t)} 13%,transparent);color:${tagColor(t)}">${esc(t)}</span>`).join('') || '<span style="color:var(--text-3)">—</span>'}</td>
+      <td class="phone">${relTime(c.lastSeen)}</td>
+      <td><div class="row-actions">
+        <button class="act" data-action="edit" data-id="${c.id}">Edit</button>
+        <button class="act danger" data-action="delete" data-id="${c.id}">Delete</button>
+      </div></td>
+    </tr>`).join('')}</tbody>
+  </table></div>`;
+}
+function invoicesTableHTML(){
+  const rows = getFiltered('invoices');
+  if (!rows.length) return emptyHTML('file-text','No invoices found','Try adjusting your search.');
+  const B = {Paid:'b-green',Pending:'b-warn',Overdue:'b-red'};
+  return `<div class="table-wrap"><table>
+    <thead><tr><th style="min-width:110px">Number</th><th>Organization</th><th style="text-align:right">Amount</th><th>Status</th><th>Due date</th><th style="text-align:right;padding-right:22px"></th></tr></thead>
+    <tbody>${rows.map(i => `<tr>
+      <td><b class="num" style="font-weight:600">${esc(i.number)}</b></td>
+      <td>${esc(orgName(i.orgId))}</td>
+      <td class="num" style="text-align:right;font-weight:600">${fmtMoney(i.amount)}</td>
+      <td><span class="badge ${B[i.status]}">${i.status}</span></td>
+      <td class="phone">${fmtDate(i.due)}</td>
+      <td><div class="row-actions">
+        ${i.status !== 'Paid' ? `<button class="act" data-action="invoice-paid" data-id="${i.id}">Mark paid</button>` : ''}
+        <button class="act danger" data-action="delete" data-id="${i.id}">Delete</button>
+      </div></td>
+    </tr>`).join('')}</tbody>
+  </table></div>`;
+}
+function productsTableHTML(){
+  const rows = getFiltered('products');
+  if (!rows.length) return emptyHTML('box','No products found','Add your first catalog item.');
+  return `<div class="table-wrap"><table>
+    <thead><tr><th style="min-width:220px">Product</th><th>SKU</th><th style="text-align:right">Price</th><th style="text-align:right">Stock</th><th style="text-align:right;padding-right:22px"></th></tr></thead>
+    <tbody>${rows.map(p => `<tr>
+      <td><b style="font-weight:600">${esc(p.name)}</b></td>
+      <td class="phone num">${esc(p.sku)}</td>
+      <td class="num" style="text-align:right;font-weight:600">${fmtMoney(p.price)}</td>
+      <td class="num" style="text-align:right">${p.stock === 0 ? '<span style="color:var(--t-red);font-weight:600">Out of stock</span>' : p.stock}</td>
+      <td><div class="row-actions"><button class="act danger" data-action="delete" data-id="${p.id}">Delete</button></div></td>
+    </tr>`).join('')}</tbody>
+  </table></div>`;
+}
+function tagsGridHTML(){
+  const rows = getFiltered('tags');
+  if (!rows.length) return emptyHTML('tag','No tags yet','Tags let you filter contacts and invoices.');
+  const n = t => contacts.filter(c => (c.tagNames||[]).includes(t.name)).length;
+  return `<div class="tag-grid">${rows.map(t => `
+    <div class="card tag-card">
+      <i class="dot" style="background:${t.color}"></i>
+      <div><b>${esc(t.name)}</b><span>${n(t)} contact${n(t)===1?'':'s'}</span></div>
+      <button class="icon-btn" data-action="delete" data-id="${t.name}" title="Delete"><i data-lucide="trash-2"></i></button>
+    </div>`).join('')}</div>`;
+}
+function listRegionHTML(){
+  return {organizations:orgsTableHTML, contacts:contactsTableHTML, invoices:invoicesTableHTML,
+          products:productsTableHTML, tags:tagsGridHTML}[ui.route]();
+}
+function refreshList(){
+  const r = $('#tableRegion'); if (!r) return;
+  r.innerHTML = listRegionHTML();
+  const c = $('#countLine'); if (c) c.textContent = countLineText(ui.route);
+  icons();
+}
+function emptyHTML(icon, title, text){
+  return `<div class="empty"><i data-lucide="${icon}"></i><b>${title}</b><p>${text}</p>
+    <button class="btn btn-ghost btn-sm" data-action="clear-filters">Clear filters</button></div>`;
+}
+function toolbarHTML(opts){
+  const route = ui.route, q = ui.q[route] || '', f = ui.filters[route] || {};
+  const selects = (opts.filters || []).map(s => `<span class="sel"><select data-filter="${s.key}">
+    <option value="">${s.allLabel}</option>
+    ${s.options().map(v => `<option value="${esc(v)}" ${f[s.key]===v?'selected':''}>${esc(s.label ? s.label(v) : v)}</option>`).join('')}
+  </select></span>`).join('');
+  return `<div class="toolbar">
+    <label class="search"><i data-lucide="search"></i><input id="pageSearch" placeholder="${opts.ph}" value="${esc(q)}" autocomplete="off"></label>
+    ${selects}
+    <span style="flex:1"></span>
+    ${opts.cta ? `<button class="btn btn-primary" data-action="new"><i data-lucide="plus"></i>${opts.cta}</button>` : ''}
+  </div>
+  <p class="count-line" id="countLine">${countLineText(route)}</p>`;
+}
+
+/* ================================================================
+   VIEWS
+   ================================================================ */
+const main = $('#main');
+
+/* ---------- Dashboard ---------- */
+function vDashboard(){
+  const h = new Date().getHours();
+  const greet = h < 12 ? 'Good morning' : h < 18 ? 'Good afternoon' : 'Good evening';
+  const open = deals.filter(d => !['Won','Lost'].includes(d.stage));
+  const pipe = open.reduce((s,d) => s+d.value, 0);
+  const unread = chats.reduce((s,c) => s+c.unread, 0);
+  const latest = [...orgs].sort((a,b) => b.createdAt-a.createdAt).slice(0,4);
+  const upcoming = tasks.filter(t => !t.done).sort((a,b) => a.due-b.due).slice(0,5);
+  const stat = (ic, cls, label, big, delta) => `
+    <div class="card stat"><div class="top"><span class="mi-ic ${cls}"><i data-lucide="${ic}"></i></span><span>${label}</span></div>
+    <div class="big num">${big}</div><div class="delta">${delta}</div></div>`;
+  return `
+  <div class="page">
+    <div class="page-head"><div><h1>${greet}, Alex</h1>
+      <p class="sub">Here's what's happening across your workspace today.</p></div></div>
+    <div class="stats">
+      ${stat('building-2','ic-brand','Organizations',orgs.length,'+2 this month')}
+      ${stat('star','ic-blue','Open deals',open.length,'+1 this week')}
+      ${stat('circle-dollar-sign','ic-green','Pipeline value',fmtMoney(pipe),'+12% vs last month')}
+      ${stat('message-circle','ic-purple','Unread messages',unread,'waiting for a reply')}
+    </div>
+    <div class="dash-grid">
+      <div class="card"><div class="card-h">Latest organizations<button class="view-all" data-nav="organizations">View all</button></div>
+        <div class="mini-table">${latest.map(o => `
+          <div class="mini-row"><span class="avatar">${initials(o.name)}</span>
+            <div class="grow"><b>${esc(o.name)}</b><span>${esc(o.sector)}</span></div>
+            ${badgeFor(o.relationship)}
+          </div>`).join('')}</div>
+      </div>
+      <div class="card"><div class="card-h">Upcoming tasks<button class="view-all" data-nav="tasks">View all</button></div>
+        <div class="mini-table">${upcoming.map(t => `
+          <div class="mini-row"><span class="mi-ic ic-gray" style="width:28px;height:28px;border-radius:8px"><i data-lucide="circle"></i></span>
+            <div class="grow"><b>${esc(t.title)}</b><span>${esc(orgName(t.orgId))}</span></div>
+            <span class="due ${dueClass(t.due)}">${dueLabel(t.due)}</span>
+          </div>`).join('')}</div>
+      </div>
+    </div>
+  </div>`;
+}
+
+/* ---------- Organizations list ---------- */
+function vOrgs(){
+  return `<div class="page">
+    <div class="page-head"><div><h1>Organizations</h1>
+      <p class="sub">Companies you sell to or buy from.</p></div></div>
+    ${toolbarHTML({ph:'Search organizations…', cta:'New organization', filters:[
+      {key:'sector', allLabel:'Sector: all', options:() => [...new Set(orgs.map(o=>o.sector))].sort()},
+      {key:'country', allLabel:'Country: all', options:() => [...new Set(orgs.map(o=>o.country))].sort()}
+    ]})}
+    <div class="card" id="tableRegion">${orgsTableHTML()}</div>
+  </div>`;
+}
+
+/* ---------- Organization detail (Open) ---------- */
+function vOrgDetail(id){
+  const o = orgById(id);
+  if (!o) { ui.detail = null; return vOrgs(); }
+  const rel = contacts.filter(c => c.orgId === id);
+  const kv = (k,v) => `<dl class="kv"><dt>${k}</dt><dd>${v || '—'}</dd></dl>`;
+  return `<div class="page">
+    <button class="backlink" data-action="back"><i data-lucide="arrow-left"></i>Back to Organizations</button>
+    <div class="detail-head">
+      <span class="avatar lg">${initials(o.name)}</span>
+      <div style="flex:1;min-width:0">
+        <h1>${esc(o.name)} ${badgeFor(o.relationship)}</h1>
+        <p class="sub">${esc(o.website)} · Member since ${fmtDate(o.createdAt)}</p>
+      </div>
+      <button class="btn btn-ghost" data-action="edit" data-id="${o.id}"><i data-lucide="pencil"></i>Edit</button>
+    </div>
+    <div class="card" style="margin-bottom:16px">
+      <div class="kv-grid">
+        ${kv('Sector',esc(o.sector))}${kv('Location',esc(o.city)+', '+esc(o.country))}
+        ${kv('Phone',`<span class="num">${esc(o.phone)}</span>`)}${kv('Email',esc(o.email))}
+      </div>
+    </div>
+    <div class="card" style="margin-bottom:16px">
+      <div class="card-h">Contacts (${rel.length})<button class="btn btn-primary btn-sm" data-action="new-contact-here" data-id="${o.id}"><i data-lucide="plus"></i>Add contact</button></div>
+      <div class="card-b">${rel.length ? rel.map(c => `
+        <div class="rel-row"><span class="avatar">${initials(c.name)}</span>
+          <div class="grow"><b>${esc(c.name)}</b><span>${esc(c.role)} · ${esc(c.phone)}</span></div>
+          <span class="due">${relTime(c.lastSeen)}</span>
+        </div>`).join('') : `<div class="empty" style="padding:30px"><b>No contacts yet</b><p>Add someone from this organization.</p></div>`}
+      </div>
+    </div>
+    <div class="card"><div class="card-h">Notes</div><p class="note">${esc(o.notes) || 'No notes yet.'}</p></div>
+  </div>`;
+}
+
+/* ---------- Contacts list ---------- */
+function vContacts(){
+  return `<div class="page">
+    <div class="page-head"><div><h1>Contacts</h1>
+      <p class="sub">People, with their WhatsApp thread attached.</p></div></div>
+    ${toolbarHTML({ph:'Search contacts…', cta:'New contact', filters:[
+      {key:'org', allLabel:'Organization: all', options:() => orgs.map(o=>o.id), label:orgName}
+    ]})}
+    <div class="card" id="tableRegion">${contactsTableHTML()}</div>
+  </div>`;
+}
+
+/* ---------- Tags ---------- */
+function vTags(){
+  return `<div class="page">
+    <div class="page-head"><div><h1>Tags</h1>
+      <p class="sub">Colour-coded labels you can filter contacts and invoices by.</p></div></div>
+    <div class="card tag-new">
+      <input id="tagName" placeholder="New tag name…" style="flex:1;height:42px;border:1px solid var(--border-strong);border-radius:9px;background:var(--surface);padding:0 13px;font:inherit;color:var(--text);outline:none">
+      <div class="swatches" id="swatches">${TAG_COLORS.map((c,i) => `<button type="button" class="sw ${i===0?'on':''}" data-color="${c}" style="background:${c}"></button>`).join('')}</div>
+      <button class="btn btn-primary" data-action="tag-add"><i data-lucide="plus"></i>Add tag</button>
+    </div>
+    ${toolbarHTML({ph:'Search tags…'})}
+    <div id="tableRegion">${tagsGridHTML()}</div>
+  </div>`;
+}
+
+/* ---------- Deals (kanban) ---------- */
+function vDeals(){
+  const open = deals.filter(d => !['Won','Lost'].includes(d.stage));
+  const pipe = open.reduce((s,d) => s+d.value, 0);
+  return `<div class="page">
+    <div class="page-head"><div><h1>Deals</h1>
+      <p class="sub">The pipeline board — drag a deal to move its stage.</p></div>
+      <div class="head-actions">
+        <span class="badge b-green" style="height:34px">${open.length} open · ${fmtMoney(pipe)}</span>
+        <button class="btn btn-primary" data-action="new"><i data-lucide="plus"></i>New deal</button>
+      </div></div>
+    <div class="kanban">${STAGES.map(st => {
+      const col = deals.filter(d => d.stage === st);
+      return `<div class="kcol" data-stage="${st}">
+        <div class="kcol-h"><span class="ev" style="background:${STAGE_DOT[st]}"></span>${st}
+          <span class="n">${col.length}</span><span class="sum num">${fmtMoney(col.reduce((s,d)=>s+d.value,0))}</span></div>
+        <div class="kstack">${col.map(d => `
+          <div class="kcard" draggable="true" data-id="${d.id}">
+            <b>${esc(d.name)}</b><div class="org">${esc(orgName(d.orgId))}</div>
+            <div class="foot"><span class="val num">${fmtMoney(d.value)}</span>
+              <span class="ev" style="background:${STAGE_DOT[st]}"></span>
+              <span class="date num">${new Intl.DateTimeFormat('en-GB',{day:'numeric',month:'short'}).format(d.closeDate)}</span>
+              <span class="avatar sm" style="margin-left:auto">AM</span></div>
+          </div>`).join('')}</div>
+      </div>`;}).join('')}
+    </div>
+  </div>`;
+}
+
+/* ---------- Tasks ---------- */
+function vTasks(){
+  const f = ui.taskFilter;
+  const rows = tasks.filter(t => f === 'all' ? true : f === 'open' ? !t.done : t.done).sort((a,b) => (a.done-b.done) || a.due-b.due);
+  const done = tasks.filter(t => t.done).length;
+  return `<div class="page">
+    <div class="page-head"><div><h1>Tasks</h1>
+      <p class="sub">Follow-ups linked to a contact or a deal.</p></div></div>
+    <div class="task-prog">
+      <span class="sel"><select data-task-filter>
+        <option value="open" ${f==='open'?'selected':''}>Open</option>
+        <option value="done" ${f==='done'?'selected':''}>Completed</option>
+        <option value="all" ${f==='all'?'selected':''}>All</option>
+      </select></span>
+      <div class="bar"><i style="width:${done/tasks.length*100}%"></i></div>
+      <span class="p num">${done} of ${tasks.length} done</span>
+    </div>
+    <div class="card">
+      ${rows.map(t => `<div class="trow ${t.done?'done':''}">
+        <span class="tk" data-action="task-toggle" data-id="${t.id}" role="checkbox" tabindex="0"><i data-lucide="check"></i></span>
+        <span class="tt">${esc(t.title)} <span>· ${esc(orgName(t.orgId))}</span></span>
+        <span class="due ${dueClass(t.due)}">${dueLabel(t.due)}</span>
+        <button class="icon-btn" data-action="task-del" data-id="${t.id}"><i data-lucide="x"></i></button>
+      </div>`).join('') || `<div class="empty" style="padding:40px"><b>Nothing here</b><p>No tasks match this filter.</p></div>`}
+      <form class="qadd" id="quickTask"><i data-lucide="plus"></i>
+        <input placeholder="Add a follow-up task and press Enter…" autocomplete="off">
+        <span class="due">due in 1 week</span></form>
+    </div>
+  </div>`;
+}
+
+/* ---------- Invoices ---------- */
+function vInvoices(){
+  return `<div class="page">
+    <div class="page-head"><div><h1>Invoices</h1>
+      <p class="sub">Sales billed to customers, purchases billed by vendors.</p></div></div>
+    ${toolbarHTML({ph:'Search invoices…', cta:'New invoice'})}
+    <div class="card" id="tableRegion">${invoicesTableHTML()}</div>
+  </div>`;
+}
+
+/* ---------- Catalog ---------- */
+function vProducts(){
+  return `<div class="page">
+    <div class="page-head"><div><h1>Catalog</h1>
+      <p class="sub">Products and services you can attach to deals and invoices.</p></div></div>
+    ${toolbarHTML({ph:'Search products…', cta:'New product'})}
+    <div class="card" id="tableRegion">${productsTableHTML()}</div>
+  </div>`;
+}
+
+/* ---------- Import ---------- */
+function vImport(){
+  return `<div class="page">
+    <div class="page-head"><div><h1>Import</h1>
+      <p class="sub">Bring your existing organizations and contacts from a CSV file.</p></div></div>
+    <form id="importForm">
+      <label class="dropzone" id="dropzone">
+        <input type="file" id="fileInput" multiple accept=".csv,text/csv" hidden>
+        <i data-lucide="cloud-upload"></i>
+        <b>Click to upload</b> or drag and drop
+        <small>CSV files, up to 5MB each</small>
+      </label>
+      <div id="fileList">${ui.files.map(f => fileRowHTML(f)).join('')}</div>
+      <div class="form-foot" style="border:0;padding-top:20px">
+        <span class="spacer"></span>
+        <button type="button" class="btn btn-ghost" data-action="clear-files">Clear</button>
+        <button type="submit" class="btn btn-primary"><i data-lucide="upload"></i>Import records</button>
+      </div>
+    </form>
+    <div class="card" style="margin-top:18px;padding:18px 24px">
+      <b style="font-size:13.5px">Expected columns</b>
+      <p style="font-size:12.5px;color:var(--text-3);margin-top:8px;line-height:1.7">
+        name, relationship, sector, city, country, phone, email, website</p>
+    </div>
+  </div>`;
+}
+function fileRowHTML(f){
+  return `<div class="file-row"><i data-lucide="file-text"></i>
+    <div class="grow"><b>${esc(f.name)}</b></div>
+    <span class="num">${(f.size/1024).toFixed(1)} KB</span>
+    <button type="button" data-action="file-del" data-name="${esc(f.name)}"><i data-lucide="x"></i></button></div>`;
+}
+
+/* ---------- Inbox ---------- */
+const REPLIES = ['Got it, thanks!','Let me check and get back to you.','Perfect — I\'ll send it over today.','Sure, sounds good.'];
+function vInbox(){
+  const q = (ui.q.chats || '').trim().toLowerCase();
+  const list = chats.filter(c => { const ct = contactById(c.contactId);
+    return !q || (ct.name + ' ' + (c.msgs.at(-1)?.text || '')).toLowerCase().includes(q); });
+  if (!ui.chat || !list.some(c => c.id === ui.chat)) ui.chat = list[0]?.id || chats[0].id;
+  const cur = chats.find(c => c.id === ui.chat);
+  const ct = contactById(cur.contactId);
+  return `<div class="page">
+    <div class="page-head"><div><h1>Inbox</h1>
+      <p class="sub">Every WhatsApp thread, in one place.</p></div></div>
+    <div class="toolbar">
+      <label class="search"><i data-lucide="search"></i><input id="pageSearch" placeholder="Search conversations…" value="${esc(ui.q.chats||'')}" autocomplete="off"></label>
+    </div>
+    <div class="card inbox">
+      <div class="chat-list">${list.map(c => { const p = contactById(c.contactId); const last = c.msgs.at(-1);
+        return `<button class="chat-item ${c.id===ui.chat?'active':''}" data-action="chat-open" data-id="${c.id}">
+          <span class="avatar">${initials(p.name)}</span>
+          <div class="grow"><b>${esc(p.name)}<time>${last ? relTime(last.t) : ''}</time></b><p>${esc(last?.text || '')}</p></div>
+          ${c.unread ? `<span class="unread-n">${c.unread}</span>` : ''}
+        </button>`; }).join('') || `<div class="empty" style="padding:34px"><b>No conversations found</b></div>`}
+      </div>
+      <div class="chat-pane">
+        <div class="chat-top"><span class="avatar">${initials(ct.name)}</span>
+          <div><b>${esc(ct.name)}</b><span>online</span></div>
+          <button class="btn btn-ghost btn-sm" data-action="view-contact" data-id="${ct.id}">View contact</button>
+        </div>
+        <div class="msgs" id="msgsBox">
+          ${cur.msgs.map(m => `<div class="msg ${m.me?'me':''}">${esc(m.text)}${m.me?'<i data-lucide="check-check" class="rr"></i>':''}<time>${relTime(m.t)}</time></div>`).join('')}
+          ${ui.typing ? `<div class="msg typing"><i></i><i></i><i></i></div>` : ''}
+        </div>
+        <form class="chat-form" id="chatForm">
+          <input id="chatInput" placeholder="Type a message and press Enter…" autocomplete="off">
+          <button class="btn btn-primary" type="submit" style="border-radius:99px"><i data-lucide="send"></i></button>
+        </form>
+      </div>
+    </div>
+  </div>`;
+}
+function scrollMsgs(){ const b = $('#msgsBox'); if (b) b.scrollTop = b.scrollHeight; }
+function chatSend(text){
+  const ch = chats.find(c => c.id === ui.chat); if (!ch) return;
+  ch.msgs.push({me:true, text, t:Date.now()});
+  ch.unread = 0; render(); scrollMsgs();
+  setTimeout(() => {
+    if (ui.route === 'chats' && ui.chat === ch.id){ ui.typing = true; render(); scrollMsgs(); }
+    setTimeout(() => { ui.typing = false;
+      ch.msgs.push({me:false, text:REPLIES[Math.floor(Math.random()*REPLIES.length)], t:Date.now()});
+      if (ui.route === 'chats' && ui.chat === ch.id){ render(); scrollMsgs(); }
+    }, 1200 + Math.random()*900);
+  }, 700);
+}
+
+/* ---------- Connection ---------- */
+function qrSVG(){
+  let s = 7; const rnd = () => (s = s * 16807 % 2147483647) / 2147483647;
+  let cells = '';
+  const finder = (x,y) => `<rect x="${x}" y="${y}" width="7" height="7" fill="currentColor"/><rect x="${x+1}" y="${y+1}" width="5" height="5" fill="#fff"/><rect x="${x+2}" y="${y+2}" width="3" height="3" fill="currentColor"/>`;
+  for (let y = 0; y < 25; y++) for (let x = 0; x < 25; x++){
+    const inF = (x<8&&y<8)||(x>16&&y<8)||(x<8&&y>16);
+    if (!inF && rnd() < .44) cells += `<rect x="${x}" y="${y}" width="1" height="1" fill="currentColor"/>`;
+  }
+  return `<svg viewBox="0 0 25 25" shape-rendering="crispEdges" style="width:100%;height:100%;color:#101828">${cells}${finder(0,0)}${finder(18,0)}${finder(0,18)}</svg>`;
+}
+function vConnection(){
+  const st = ui.wa;
+  return `<div class="page">
+    <div class="page-head"><div><h1>WhatsApp connection</h1>
+      <p class="sub">Pair a number by QR and check bridge status.</p></div></div>
+    <div class="card conn">
+      <div class="st ${st==='online'?'on':st==='connecting'?'w':''}"><i></i>
+        ${st === 'online' ? 'Online — +44 7700 900123' : st === 'connecting' ? 'Connecting…' : 'Offline — no number paired'}</div>
+      ${st === 'online'
+        ? `<p style="color:var(--text-2);font-size:13.5px;line-height:1.6;margin-bottom:22px">Messages are being received and mirrored into your inbox in real time.</p>
+           <button class="btn btn-danger" data-action="wa-disconnect"><i data-lucide="unplug"></i>Disconnect number</button>`
+        : `<div class="qr">${qrSVG()}</div>
+           <div class="steps">
+             <div class="step"><b>1</b>Open WhatsApp on your phone</div>
+             <div class="step"><b>2</b>Tap Settings, then Linked devices</div>
+             <div class="step"><b>3</b>Point your phone at this QR code</div>
+           </div>
+           <button class="btn btn-primary" data-action="wa-connect2"><i data-lucide="refresh-cw"></i>Pair number</button>`}
+    </div>
+  </div>`;
+}
+
+/* ---------- Calendar ---------- */
+function vCalendar(){
+  const base = new Date(); base.setDate(1); base.setMonth(base.getMonth() + ui.calOffset);
+  const y = base.getFullYear(), m = base.getMonth();
+  const title = base.toLocaleString('en-GB', {month:'long', year:'numeric'});
+  const daysIn = new Date(y, m+1, 0).getDate();
+  const firstDow = (new Date(y, m, 1).getDay() + 6) % 7;
+  const todayISO = toISO(Date.now());
+  const evs = {};
+  tasks.filter(t => !t.done).forEach(t => { const k = toISO(t.due); (evs[k] ??= []).push('var(--brand)'); });
+  deals.filter(d => !['Won','Lost'].includes(d.stage)).forEach(d => { const k = toISO(d.closeDate); (evs[k] ??= []).push('var(--green)'); });
+  let cells = '';
+  for (let i = 0; i < firstDow; i++) cells += '<div class="cal-day blank"></div>';
+  for (let d = 1; d <= daysIn; d++){
+    const iso = `${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const ev = evs[iso] || [];
+    cells += `<div class="cal-day ${iso===todayISO?'today':''}"><span class="n num">${d}</span>
+      <span>${ev.slice(0,3).map(c => `<i class="ev" style="background:${iso===todayISO?'#fff':c}"></i>`).join('')}</span></div>`;
+  }
+  return `<div class="page">
+    <div class="page-head"><div><h1>Calendar</h1>
+      <p class="sub">Deal closings and task due dates for the whole workspace.</p></div></div>
+    <div class="cal-head">
+      <button class="cal-nav" data-action="cal-prev"><i data-lucide="chevron-left"></i></button>
+      <button class="cal-nav" data-action="cal-next"><i data-lucide="chevron-right"></i></button>
+      <h2>${title}</h2>
+      <button class="btn btn-ghost btn-sm" data-action="cal-today">Today</button>
+    </div>
+    <div class="card">
+      <div class="cal-grid" style="grid-template-columns:repeat(7,1fr)">
+        ${['Mon','Tue','Wed','Thu','Fri','Sat','Sun'].map(d => `<div class="cal-dow">${d}</div>`).join('')}
+        ${cells}
+      </div>
+      <div class="cal-legend"><span><i style="background:var(--brand)"></i>Task due</span><span><i style="background:var(--green)"></i>Deal closing</span></div>
+    </div>
+  </div>`;
+}
+
+/* ---------- AI Agents ---------- */
+function vAI(){
+  return `<div class="page">
+    <div class="card soon-wrap">
+      <div class="soon-ic"><i data-lucide="zap"></i></div>
+      <h2>AI Agents <span class="soon" style="font-size:10.5px">Soon</span></h2>
+      <p>Automated teammates that draft replies, qualify leads and chase overdue
+      invoices while you sleep. We're putting the finishing touches on them.</p>
+      <button class="btn btn-primary" data-action="notify"><i data-lucide="bell"></i>Notify me at launch</button>
+    </div>
+  </div>`;
+}
+
+/* ---------- Settings (theme section) ---------- */
+function vSettings(){
+  const opt = (mode, label, cls) => `
+    <button type="button" class="theme-opt ${ui.theme===mode?'on':''}" data-action="theme-set" data-mode="${mode}">
+      <span class="prev ${cls}"><span class="ps"></span><span class="pb"><i></i><i></i></span></span>
+      <b>${label}</b>
+    </button>`;
+  return `<div class="page">
+    <div class="page-head"><div><h1>Account settings</h1>
+      <p class="sub">Your profile and workspace preferences.</p></div></div>
+    <div class="set-grid">
+      <form class="card" id="profileForm">
+        <div class="card-h">Profile</div>
+        <div style="display:flex;align-items:center;gap:16px;padding:20px 26px">
+          <span class="avatar lg">AM</span>
+          <div class="form-grid" style="flex:1">
+            <div class="field"><label>Full name</label><input name="name" value="Alex Morgan"></div>
+            <div class="field"><label>Email</label><input name="email" type="email" value="alex@clientbridge.io"></div>
+          </div>
+        </div>
+        <div style="padding:0 26px 22px;text-align:right">
+          <button class="btn btn-primary btn-sm" type="submit"><i data-lucide="check"></i>Save profile</button>
+        </div>
+      </form>
+      <div class="card">
+        <div class="card-h">Appearance</div>
+        <div class="theme-opts">
+          ${opt('light','Light','light')}${opt('dark','Dark','dark')}${opt('system','System','split')}
+        </div>
+        <p style="padding:0 26px 20px;font-size:12.5px;color:var(--text-3)">
+          System follows your operating system preference. You can also toggle quickly from the header.</p>
+      </div>
+    </div>
+  </div>`;
+}
+
+/* ---------- Help ---------- */
+function vHelp(){
+  const faqs = [
+    ['How does the WhatsApp bridge work?','Pair your number once by scanning the QR code under Conversations → Connection. Every incoming thread is mirrored into the Inbox and matched to a contact in your workspace.'],
+    ['Can I import my existing customers?','Yes. Go to Import and upload a CSV with the columns name, relationship, sector, city, country, phone, email and website. Duplicates are merged by website.'],
+    ['What happens when I delete an organization?','The organization and its links are removed, but conversations stay in the Inbox so you never lose history. Deleted records can be restored by support within 30 days.'],
+    ['How do deals move between stages?','Open Deals and simply drag a card to another column. The stage, owner and last activity update automatically.'],
+    ['Is my data safe?','All traffic is encrypted in transit and at rest. WhatsApp messages are stored in the EU region and are never used to train models.']
+  ];
+  return `<div class="page">
+    <div class="page-head"><div><h1>Help &amp; guide</h1>
+      <p class="sub">Answers to the questions we get the most.</p></div></div>
+    <div class="faq">${faqs.map(([q,a]) => `<details><summary>${q}</summary><p>${a}</p></details>`).join('')}</div>
+    <div class="card" style="margin-top:18px;padding:20px 26px;display:flex;align-items:center;gap:14px">
+      <span class="mi-ic ic-blue"><i data-lucide="life-buoy"></i></span>
+      <div style="flex:1"><b style="font-size:14px">Still stuck?</b>
+        <p style="font-size:12.5px;color:var(--text-3);margin-top:3px">Support replies within one business day.</p></div>
+      <button class="btn btn-primary btn-sm" data-action="support">Contact support</button>
+    </div>
+  </div>`;
+}
+
+/* ================================================================
+   FORM ENGINE (full page, never a modal)
+   ================================================================ */
+const KINDS = {
+  organization:{store:'orgs', single:'organization', back:'organizations', backTitle:'Organizations'},
+  contact:{store:'contacts', single:'contact', back:'contacts', backTitle:'Contacts'},
+  deal:{store:'deals', single:'deal', back:'deals', backTitle:'Deals'},
+  invoice:{store:'invoices', single:'invoice', back:'invoices', backTitle:'Invoices'},
+  product:{store:'products', single:'product', back:'products', backTitle:'Catalog'}
+};
+const FIELDS = {
+  organization:[
+    {k:'name',l:'Name',req:1,span:1,ph:'Alto Supply Co.'},
+    {k:'relationship',l:'Relationship',t:'sel',opts:RELS,req:1},
+    {k:'sector',l:'Sector',t:'sel',opts:SECTORS},
+    {k:'country',l:'Country',t:'sel',opts:COUNTRIES},
+    {k:'city',l:'City',ph:'Leeds'},
+    {k:'phone',l:'Phone',ph:'+44 113 496 0182'},
+    {k:'email',l:'Email',t:'email',ph:'accounts@company.com'},
+    {k:'website',l:'Website',ph:'company.com'},
+    {k:'notes',l:'Notes',t:'area',span:2,ph:'Anything your team should know about this account…'}
+  ],
+  contact:[
+    {k:'name',l:'Full name',req:1,ph:'Marcus Bell'},
+    {k:'role',l:'Role',ph:'Operations Director'},
+    {k:'phone',l:'Phone',req:1,ph:'+44 113 496 0182'},
+    {k:'whatsapp',l:'WhatsApp number',ph:'+44 7700 900182'},
+    {k:'email',l:'Email',t:'email',ph:'name@company.com'},
+    {k:'orgId',l:'Organization',t:'sel',opts:orgs.map(o=>({v:o.id,l:o.name})),req:1},
+    {k:'tagNames',l:'Tags',t:'tags',span:2},
+    {k:'notes',l:'Notes',t:'area',span:2,ph:'…'}
+  ],
+  deal:[
+    {k:'name',l:'Deal name',req:1,span:2,ph:'Q3 wholesale order'},
+    {k:'orgId',l:'Organization',t:'sel',opts:orgs.map(o=>({v:o.id,l:o.name})),req:1},
+    {k:'stage',l:'Stage',t:'sel',opts:STAGES},
+    {k:'value',l:'Value (USD)',t:'num',req:1,ph:'12500'},
+    {k:'closeDate',l:'Expected close',t:'date'}
+  ],
+  invoice:[
+    {k:'orgId',l:'Organization',t:'sel',opts:orgs.map(o=>({v:o.id,l:o.name})),req:1},
+    {k:'amount',l:'Amount (USD)',t:'num',req:1,ph:'2500'},
+    {k:'status',l:'Status',t:'sel',opts:['Paid','Pending','Overdue']},
+    {k:'due',l:'Due date',t:'date'}
+  ],
+  product:[
+    {k:'name',l:'Product name',req:1,ph:'Bridge Pro (monthly)'},
+    {k:'sku',l:'SKU',ph:'BR-PRO-M'},
+    {k:'price',l:'Price (USD)',t:'num',ph:'49'},
+    {k:'stock',l:'Stock',t:'num',ph:'100'}
+  ]
+};
+function vForm(form){
+  const K = KINDS[form.kind];
+  const data = form.id ? window[K.store].find(r => r.id === form.id) : null;
+  if (form.id && !data){ ui.form = null; return render(), ''; }
+  const preset = form.preset || {};
+  const val = f => {
+    const v = data ? data[f.k] : preset[f.k];
+    if (f.t === 'date') return v ? toISO(v) : f.k === 'due' || f.k === 'closeDate' ? toISO(now + 14*D) : '';
+    if (f.t === 'sel' && v == null) return '';
+    return v ?? '';
+  };
+  const ctrl = f => {
+    const base = `name="${f.k}" placeholder="${esc(f.ph || '')}"`;
+    if (f.t === 'sel'){
+      const opts = f.opts.map(o => typeof o === 'string' ? {v:o,l:o} : o);
+      return `<div class="fsel"><select ${base}>${!f.req ? '<option value="">— None —</option>' : ''}
+        ${opts.map(o => `<option value="${esc(o.v)}" ${String(val(f))===String(o.v)?'selected':''}>${esc(o.l)}</option>`).join('')}</select></div>`;
+    }
+    if (f.t === 'area') return `<textarea ${base} rows="4">${esc(val(f))}</textarea>`;
+    if (f.t === 'tags'){
+      const cur = (data?.tagNames || preset.tagNames || []);
+      return `<div class="tagpick">${tags.map(t => `<span class="chip ${cur.includes(t.name)?'on':''}" data-tag="${esc(t.name)}"
+        style="background:color-mix(in srgb,${t.color} 13%,transparent);color:${t.color}">${esc(t.name)}</span>`).join('')}</div>`;
+    }
+    return `<input type="${f.t==='num'?'number':f.t==='date'?'date':f.t==='email'?'email':'text'}" ${base} value="${esc(val(f))}" ${f.t==='num'?'min="0" step="any"':''}>`;
+  };
+  return `<div class="page">
+    <button class="backlink" data-action="form-cancel"><i data-lucide="arrow-left"></i>Back to ${K.backTitle}</button>
+    <div class="page-head"><div><h1>${form.id ? 'Edit' : 'New'} ${K.single}</h1>
+      <p class="sub">${form.id ? esc(data.name || data.number || data.title || K.single) + ' · ' + esc(form.id) : 'Fields marked with * are required.'}</p></div></div>
+    <form class="card form-card" id="entityForm" novalidate>
+      <div class="form-grid">
+        ${FIELDS[form.kind].map(f => `
+          <div class="field ${f.span===2?'span2':''}" data-field="${f.k}">
+            <label>${f.l}${f.req ? ' *' : ''}</label>${ctrl(f)}
+            <span class="msg">${f.t === 'email' ? 'Enter a valid email address' : 'This field is required'}</span>
+          </div>`).join('')}
+      </div>
+      <div class="form-foot">
+        ${form.id ? `<button type="button" class="btn btn-danger" data-action="form-delete" data-id="${form.id}"><i data-lucide="trash-2"></i>Delete</button>` : ''}
+        <span class="spacer"></span>
+        <button type="button" class="btn btn-ghost" data-action="form-cancel">Cancel</button>
+        <button type="submit" class="btn btn-primary"><i data-lucide="check"></i>Save ${K.single}</button>
+      </div>
+    </form>
+  </div>`;
+}
+function saveForm(e){
+  e.preventDefault();
+  const form = ui.form, K = KINDS[form.kind], el = e.target;
+  let ok = true, first = null;
+  el.querySelectorAll('.field').forEach(f => f.classList.remove('err'));
+  FIELDS[form.kind].forEach(f => {
+    const wrap = el.querySelector(`.field[data-field="${f.k}"]`); if (!wrap) return;
+    const input = el.querySelector(`[name="${f.k}"]`);
+    let bad = false;
+    if (f.t === 'tags') return;
+    const v = (input.value || '').trim();
+    if (f.req && !v) bad = true;
+    if (f.t === 'email' && v && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)) bad = true;
+    if (bad){ wrap.classList.add('err'); ok = false; first ??= input; }
+  });
+  if (!ok){ first?.focus(); return toast('Please review the highlighted fields', 'circle-alert'); }
+
+  const S = window[K.store];
+  const num = k => { const v = parseFloat(el.querySelector(`[name="${k}"]`)?.value); return isNaN(v) ? 0 : v; };
+  const str = k => (el.querySelector(`[name="${k}"]`)?.value || '').trim();
+  const dt  = k => { const v = el.querySelector(`[name="${k}"]`)?.value; return v ? new Date(v + 'T12:00').getTime() : null; };
+  const tagSel = [...el.querySelectorAll('.tagpick .chip.on')].map(c => c.dataset.tag);
+
+  const obj = {};
+  FIELDS[form.kind].forEach(f => {
+    if (f.t === 'tags') obj[f.k] = tagSel;
+    else if (f.t === 'num') obj[f.k] = num(f.k);
+    else if (f.t === 'date') obj[f.k] = dt(f.k);
+    else if (f.t === 'sel') obj[f.k] = str(f.k) || null;
+    else obj[f.k] = str(f.k);
+  });
+  if (form.kind === 'invoice' && !form.id) obj.number = 'INV-' + (2055 + invoices.length);
+  if (form.kind === 'contact') obj.lastSeen = Date.now();
+
+  if (form.id){
+    Object.assign(S.find(r => r.id === form.id), obj);
+    toast(`${K.single[0].toUpperCase()+K.single.slice(1)} updated`);
+  } else {
+    S.unshift({id: uid(form.kind.slice(0,2)), createdAt: Date.now(), ...obj});
+    toast(`${K.single[0].toUpperCase()+K.single.slice(1)} created`, 'plus');
+  }
+  ui.form = null; render();
+}
+
+/* ================================================================
+   ROUTER
+   ================================================================ */
+function render(){
+  paintSidebar();
+  main.innerHTML = ui.form ? vForm(ui.form)
+    : (ui.route === 'organizations' && ui.detail) ? vOrgDetail(ui.detail)
+    : {dashboard:vDashboard, organizations:vOrgs, contacts:vContacts, tags:vTags, deals:vDeals,
+       tasks:vTasks, invoices:vInvoices, products:vProducts, import:vImport, chats:vInbox,
+       connection:vConnection, calendar:vCalendar, ai:vAI, settings:vSettings, help:vHelp}[ui.route]();
+  icons();
+  if (ui.route === 'chats') scrollMsgs();
+}
+
+/* ================================================================
+   EVENTS
+   ================================================================ */
+main.addEventListener('click', e => {
+  const el = e.target.closest('[data-action]'); if (!el) return;
+  const a = el.dataset.action, id = el.dataset.id;
+  const kindFor = {organizations:'organization', contacts:'contact', deals:'deal', invoices:'invoice', products:'product'}[ui.route];
+
+  switch(a){
+    case 'open':       ui.detail = id; render(); break;
+    case 'open-org':    go('organizations'); ui.detail = id; render(); break;
+    case 'back':        ui.detail = null; render(); break;
+    case 'edit':        ui.form = {kind: kindFor, id, from: ui.route}; render(); break;
+    case 'new':         ui.form = {kind: kindFor, id: null, from: ui.route}; render(); break;
+    case 'new-contact-here': ui.form = {kind:'contact', id:null, from:'organizations', preset:{orgId:id}}; render(); break;
+    case 'form-cancel': ui.form = null; render(); break;
+    case 'form-delete': {
+      const K = KINDS[ui.form.kind], S = window[K.store];
+      const i = S.findIndex(r => r.id === id); if (i > -1) S.splice(i,1);
+      toast(`${K.single} deleted`, 'trash-2'); ui.form = null; render(); break; }
+    case 'delete': {
+      if (ui.route === 'organizations'){ const i = orgs.findIndex(o=>o.id===id); if (i>-1) orgs.splice(i,1); ui.detail = null; }
+      if (ui.route === 'contacts'){ const i = contacts.findIndex(c=>c.id===id); if (i>-1) contacts.splice(i,1); }
+      if (ui.route === 'invoices'){ const i = invoices.findIndex(x=>x.id===id); if (i>-1) invoices.splice(i,1); }
+      if (ui.route === 'products'){ const i = products.findIndex(p=>p.id===id); if (i>-1) products.splice(i,1); }
+      if (ui.route === 'tags'){ const i = tags.findIndex(t=>t.name===id); if (i>-1) tags.splice(i,1); }
+      toast('Deleted', 'trash-2');
+      TABLE_ROUTES.includes(ui.route) && !ui.detail ? refreshList() : render(); break; }
+    case 'clear-filters':
+      ui.filters[ui.route] = {}; ui.q[ui.route] = '';
+      const g = $('#globalSearch'); if (g) g.value = '';
+      render(); break;
+    case 'invoice-paid': {
+      const inv = invoices.find(i => i.id === id); if (inv){ inv.status = 'Paid'; toast(`${inv.number} marked as paid`, 'circle-dollar-sign'); refreshList(); } break; }
+    case 'task-toggle': { const t = tasks.find(x => x.id === id); if (t){ t.done = !t.done; render(); } break; }
+    case 'task-del':    { tasks.splice(tasks.findIndex(t => t.id === id), 1); toast('Task removed', 'trash-2'); render(); break; }
+    case 'tag-add': {
+      const name = $('#tagName').value.trim();
+      if (!name) return toast('Give the tag a name first', 'circle-alert');
+      if (tags.some(t => t.name.toLowerCase() === name.toLowerCase())) return toast('That tag already exists', 'circle-alert');
+      tags.push({name, color: $('#swatches .sw.on')?.dataset.color || TAG_COLORS[0]});
+      toast(`Tag "${esc(name)}" created`, 'plus'); render(); break; }
+    case 'chat-open': {
+      const ch = chats.find(c => c.id === id); if (!ch) break;
+      ui.chat = id; ch.unread = 0; render(); break; }
+    case 'view-contact': ui.form = {kind:'contact', id, from:'chats'}; render(); break;
+    case 'wa-connect2': waConnect(); break;
+    case 'wa-disconnect':
+      ui.wa = 'offline'; toast('Number disconnected', 'unplug'); render(); break;
+    case 'cal-prev':  ui.calOffset--; render(); break;
+    case 'cal-next':  ui.calOffset++; render(); break;
+    case 'cal-today': ui.calOffset = 0; render(); break;
+    case 'theme-set': setTheme(el.dataset.mode); toast(`Theme set to ${el.dataset.mode}`, 'sun-moon'); break;
+    case 'notify':    toast("You're on the early access list", 'bell'); break;
+    case 'support':   toast('Support request sent — we reply within one business day', 'life-buoy'); break;
+    case 'clear-files': ui.files = []; render(); break;
+    case 'file-del':  ui.files = ui.files.filter(f => f.name !== el.dataset.name); render(); break;
+  }
+});
+
+/* WhatsApp pairing (from the Connection page) */
+function waConnect(){
+  if (ui.wa === 'connecting') return;
+  ui.wa = 'connecting';
+  if (ui.route === 'connection') render();
+  setTimeout(() => {
+    ui.wa = 'online';
+    toast('WhatsApp connected — inbox restored', 'message-circle');
+    if (ui.route === 'connection') render();
+  }, 1700);
+}
+
+/* sorting */
+main.addEventListener('click', e => {
+  const th = e.target.closest('th[data-sort]'); if (!th) return;
+  const route = ui.route, k = th.dataset.key;
+  if (!ui.sort[route] || ui.sort[route].k !== k) ui.sort[route] = {k, d: 1};
+  else ui.sort[route].d *= -1;
+  refreshList();
+});
+
+/* selects & filters */
+main.addEventListener('change', e => {
+  const t = e.target;
+  if (t.matches('[data-filter]')){
+    (ui.filters[ui.route] ??= {})[t.dataset.filter] = t.value;
+    refreshList();
+  }
+  if (t.matches('[data-task-filter]')){ ui.taskFilter = t.value; render(); }
+});
+
+/* search inputs */
+main.addEventListener('input', e => {
+  if (e.target.id === 'pageSearch'){
+    ui.q[ui.route] = e.target.value;
+    const g = $('#globalSearch'); if (g) g.value = e.target.value;
+    refreshList();
+  }
+});
+ $('#globalSearch').addEventListener('input', e => {
+  ui.q[ui.route] = e.target.value;
+  const p = $('#pageSearch'); if (p && p !== document.activeElement) p.value = e.target.value;
+  if (TABLE_ROUTES.includes(ui.route)) refreshList();
+  if (ui.route === 'chats') render();
+});
+
+/* tag chips toggle inside form */
+main.addEventListener('click', e => {
+  const chip = e.target.closest('.tagpick .chip');
+  if (chip) chip.classList.toggle('on');
+  const sw = e.target.closest('#swatches .sw');
+  if (sw){ $$('#swatches .sw').forEach(x => x.classList.toggle('on', x === sw)); }
+});
+
+/* submits */
+main.addEventListener('submit', e => {
+  e.preventDefault();
+  if (e.target.id === 'entityForm')  return saveForm(e);
+  if (e.target.id === 'profileForm')  return toast('Profile saved');
+  if (e.target.id === 'chatForm'){
+    const inp = $('#chatInput'); const v = inp.value.trim(); if (!v) return;
+    return chatSend(v);
+  }
+  if (e.target.id === 'quickTask'){
+    const v = e.target.querySelector('input').value.trim(); if (!v) return;
+    tasks.push({id: uid('tk'), title: v, orgId: null, due: now + 7*D, done: false});
+    toast('Task added', 'plus'); render(); return;
+  }
+  if (e.target.id === 'importForm'){
+    if (!ui.files.length) return toast('Choose at least one CSV file first', 'circle-alert');
+    toast(`Parsed ${ui.files.length} file${ui.files.length>1?'s':''} locally, nothing uploaded`, 'upload');
+  }
+});
+
+/* kanban drag */
+let dragId = null;
+main.addEventListener('dragstart', e => {
+  const c = e.target.closest('.kcard'); if (!c) return;
+  dragId = c.dataset.id; c.classList.add('dragging');
+  e.dataTransfer.effectAllowed = 'move';
+});
+main.addEventListener('dragend', e => {
+  const c = e.target.closest('.kcard'); if (c) c.classList.remove('dragging');
+  $$('.kcol.over').forEach(k => k.classList.remove('over'));
+});
+main.addEventListener('dragover', e => {
+  const col = e.target.closest('.kcol'); if (!col || !dragId) return;
+  e.preventDefault(); col.classList.add('over');
+});
+main.addEventListener('dragleave', e => {
+  const col = e.target.closest('.kcol'); if (col) col.classList.remove('over');
+});
+main.addEventListener('drop', e => {
+  const col = e.target.closest('.kcol'); if (!col || !dragId) return;
+  e.preventDefault();
+  const d = deals.find(x => x.id === dragId);
+  if (d && d.stage !== col.dataset.stage){
+    d.stage = col.dataset.stage;
+    toast(`"${esc(d.name)}" moved to ${d.stage}`, 'star');
+  }
+  dragId = null; render();
+});
+
+/* import dropzone */
+main.addEventListener('dragover', e => { if (e.target.closest('#dropzone')){ e.preventDefault(); $('#dropzone').classList.add('over'); } });
+main.addEventListener('dragleave', () => $('#dropzone')?.classList.remove('over'));
+main.addEventListener('drop', e => {
+  const dz = e.target.closest('#dropzone'); if (!dz) return;
+  e.preventDefault(); dz.classList.remove('over');
+  addFiles(e.dataTransfer.files);
+});
+main.addEventListener('change', e => {
+  if (e.target.id === 'fileInput') addFiles(e.target.files);
+});
+function addFiles(list){
+  const ok = [...list].filter(f => /csv$/i.test(f.name) || f.type === 'text/csv');
+  if (!ok.length) return toast('Only CSV files are supported', 'circle-alert');
+  ui.files.push(...ok.filter(f => !ui.files.some(x => x.name === f.name)));
+  render();
+}
+
+/* keyboard */
+document.addEventListener('keydown', e => {
+  if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k'){
+    e.preventDefault(); $('#globalSearch').focus(); $('#globalSearch').select();
+  }
+  if (e.key === 'Escape') document.body.classList.remove('side-open');
+});
+
+/* boot */
+render();
+</script>
+</body>
+</html>
