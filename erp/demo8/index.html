@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ClientBridge — Canvas</title>
+<title>ClientBridge — Espacio de trabajo</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -105,6 +105,19 @@ button{font-family:inherit;cursor:pointer}
 .avatar{width:38px;height:38px;border-radius:99px;background:var(--surface-2);border:1px solid var(--border);color:var(--text-2);font-size:12.5px;font-weight:600;display:grid;place-items:center;flex:none}
 .avatar.lg{width:56px;height:56px;font-size:17px}
 .avatar.sm{width:26px;height:26px;font-size:10px}
+button.avatar{cursor:pointer;transition:border-color .15s,color .15s,background .15s}
+button.avatar:hover{border-color:var(--border-strong);color:var(--text);background:var(--hover)}
+
+/* menú de usuario (avatar) */
+.tb-user{position:relative}
+.user-menu{position:absolute;right:0;top:calc(100% + 10px);width:250px;background:var(--surface);border:1px solid var(--border);border-radius:12px;box-shadow:var(--shadow);padding:6px;opacity:0;visibility:hidden;transform:translateY(-5px);transition:opacity .16s ease,transform .16s ease,visibility .16s;z-index:80}
+.user-menu.open{opacity:1;visibility:visible;transform:none}
+.um-head{display:flex;align-items:center;gap:12px;padding:12px 12px 14px;border-bottom:1px solid var(--border);margin-bottom:6px}
+.um-head b{font-size:13.5px;font-weight:600;display:block}
+.um-head span{font-size:12px;color:var(--text-3)}
+.um-item{display:flex;align-items:center;gap:10px;width:100%;padding:9px 10px;border:0;background:none;border-radius:8px;font:500 13.5px 'Outfit';color:var(--text-2);text-align:left;transition:background .15s,color .15s}
+.um-item:hover{background:var(--hover);color:var(--text)}
+.um-item svg{width:16px;height:16px}
 
 /* ============ Page ============ */
 .page{width:100%;max-width:1240px;margin:0 auto;padding:28px 32px 80px}
@@ -176,7 +189,7 @@ tbody tr:last-child td{border-bottom:0}
 .empty p{color:var(--text-3);font-size:13px;margin-bottom:16px}
 .chip{display:inline-block;font-size:11.5px;font-weight:500;padding:2px 9px;border-radius:99px;margin:1px 2px 1px 0;white-space:nowrap}
 
-/* ============ Forms (full page, no modal) ============ */
+/* ============ Formularios (página completa, nunca modal) ============ */
 .backlink{display:inline-flex;align-items:center;gap:7px;border:0;background:none;color:var(--text-2);font-size:13px;font-weight:600;padding:0;margin-bottom:18px}
 .backlink:hover{color:var(--t-brand)}
 .backlink svg{width:15px;height:15px}
@@ -200,7 +213,7 @@ tbody tr:last-child td{border-bottom:0}
 .tagpick .chip{cursor:pointer;border:1.5px solid transparent;opacity:.6;transition:opacity .15s}
 .tagpick .chip.on{opacity:1;border-color:currentColor}
 
-/* ============ Org detail ============ */
+/* ============ Detalle de organización ============ */
 .detail-head{display:flex;align-items:flex-start;gap:18px;flex-wrap:wrap;margin-bottom:22px}
 .detail-head h1{font-size:22px;font-weight:600;letter-spacing:-.3px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
 .kv-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px 24px;padding:22px 26px}
@@ -215,7 +228,7 @@ tbody tr:last-child td{border-bottom:0}
 .rel-row span{font-size:12.5px;color:var(--text-3)}
 .note{padding:16px 26px;font-size:13.5px;color:var(--text-2);line-height:1.65;white-space:pre-wrap}
 
-/* ============ Dashboard ============ */
+/* ============ Panel ============ */
 .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:16px;margin-bottom:18px}
 .stat{padding:20px 22px}
 .stat .top{display:flex;align-items:center;gap:10px;margin-bottom:14px}
@@ -232,7 +245,7 @@ tbody tr:last-child td{border-bottom:0}
 .view-all{border:0;background:none;color:var(--t-brand);font-size:12.5px;font-weight:600;padding:4px}
 .view-all:hover{text-decoration:underline}
 
-/* ============ Kanban (deals) ============ */
+/* ============ Kanban (negocios) ============ */
 .kanban{display:flex;gap:14px;align-items:flex-start;overflow-x:auto;padding-bottom:10px}
 .kcol{flex:1;min-width:225px;border-radius:12px}
 .kcol.over{background:color-mix(in srgb,var(--brand) 6%,transparent);outline:2px dashed color-mix(in srgb,var(--brand) 45%,transparent);outline-offset:6px}
@@ -249,7 +262,7 @@ tbody tr:last-child td{border-bottom:0}
 .kcard .val{font-size:14px;font-weight:600}
 .kcard .date{margin-left:auto;font-size:11px;color:var(--text-3)}
 
-/* ============ Tasks ============ */
+/* ============ Tareas ============ */
 .task-prog{display:flex;align-items:center;gap:12px;margin-bottom:16px}
 .task-prog .bar{flex:1;height:6px;background:var(--surface-2);border:1px solid var(--border);border-radius:99px;overflow:hidden}
 .task-prog .bar i{display:block;height:100%;background:var(--brand);border-radius:99px;transition:width .3s}
@@ -271,7 +284,7 @@ tbody tr:last-child td{border-bottom:0}
 .qadd input{flex:1;border:0;background:none;outline:none;font:inherit;font-size:13.5px;color:var(--text)}
 .qadd input::placeholder{color:var(--text-3)}
 
-/* ============ Inbox ============ */
+/* ============ Bandeja de entrada ============ */
 .inbox{display:grid;grid-template-columns:330px 1fr;min-height:600px}
 .chat-list{border-right:1px solid var(--border);overflow-y:auto;max-height:640px}
 .chat-item{display:flex;gap:11px;width:100%;padding:13px 16px;border:0;background:none;text-align:left;border-bottom:1px solid var(--border);transition:background .12s}
@@ -302,7 +315,7 @@ tbody tr:last-child td{border-bottom:0}
 .chat-form input{flex:1;height:40px;border:1px solid var(--border-strong);border-radius:99px;background:var(--surface);padding:0 16px;font:inherit;font-size:13.5px;color:var(--text);outline:none}
 .chat-form input:focus{border-color:var(--brand)}
 
-/* ============ Import / Connection / Calendar / misc ============ */
+/* ============ Importar / Conexión / Calendario ============ */
 .dropzone{display:flex;flex-direction:column;align-items:center;gap:6px;padding:44px 20px;border:1.5px dashed var(--border-strong);border-radius:var(--r);color:var(--text-3);cursor:pointer;text-align:center;transition:border-color .15s,background .15s}
 .dropzone:hover,.dropzone.over{border-color:var(--brand);background:color-mix(in srgb,var(--brand) 4%,transparent)}
 .dropzone svg{width:30px;height:30px;margin-bottom:6px}
@@ -338,7 +351,7 @@ tbody tr:last-child td{border-bottom:0}
 .cal-legend{display:flex;gap:18px;padding:0 20px 18px;font-size:12px;color:var(--text-3)}
 .cal-legend i{width:7px;height:7px;border-radius:99px;display:inline-block;margin-right:6px}
 
-/* ============ Tags / Settings / Help / AI ============ */
+/* ============ Etiquetas / Ajustes / IA ============ */
 .tag-new{display:flex;gap:12px;align-items:center;flex-wrap:wrap;padding:16px 20px;margin-bottom:16px}
 .tag-new input{flex:1;min-width:180px}
 .swatches{display:flex;gap:7px}
@@ -355,7 +368,6 @@ tbody tr:last-child td{border-bottom:0}
 .icon-btn:hover{background:var(--hover);color:var(--t-red)}
 .icon-btn svg{width:15px;height:15px}
 .set-grid{display:grid;grid-template-columns:1fr;gap:16px;max-width:720px}
-.set-row{display:flex;align-items:center;gap:16px;padding:20px 26px}
 .theme-opts{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;padding:20px 26px}
 .theme-opt{border:1.5px solid var(--border-strong);border-radius:12px;padding:12px;background:none;display:flex;flex-direction:column;gap:10px;font:inherit;color:var(--text-2);transition:border-color .15s}
 .theme-opt:hover{border-color:var(--t-brand)}
@@ -374,13 +386,6 @@ tbody tr:last-child td{border-bottom:0}
 .prev.split .pb{background:none}
 .prev.split .pb i{background:linear-gradient(90deg,#E9EAF0 50%,#232C44 50%)}
 .theme-opt b{font-size:13px}
-.faq{border:1px solid var(--border);border-radius:var(--r);overflow:hidden}
-.faq details{border-bottom:1px solid var(--border)}
-.faq details:last-child{border-bottom:0}
-.faq summary{padding:15px 22px;font-size:13.5px;font-weight:600;cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center}
-.faq summary::after{content:"+";font-size:17px;color:var(--text-3)}
-.faq details[open] summary::after{content:"–"}
-.faq details p{padding:0 22px 16px;font-size:13px;color:var(--text-2);line-height:1.65}
 .soon-wrap{max-width:460px;margin:48px auto;text-align:center;padding:44px 36px}
 .soon-ic{width:60px;height:60px;border-radius:18px;background:color-mix(in srgb,var(--purple) 12%,transparent);color:var(--t-purple);display:grid;place-items:center;margin:0 auto 18px}
 .soon-ic svg{width:27px;height:27px}
@@ -437,62 +442,54 @@ tbody tr:last-child td{border-bottom:0}
 
   <div class="side-scroll">
     <nav>
-      <p class="side-label">Workspace</p>
+      <p class="side-label">Espacio de trabajo</p>
       <button class="menu-item" data-nav="dashboard">
-        <span class="mi-ic ic-blue"><i data-lucide="pie-chart"></i></span>Dashboard
+        <span class="mi-ic ic-blue"><i data-lucide="pie-chart"></i></span>Panel
       </button>
       <div class="menu-group" data-group="rel">
         <button class="menu-item" data-group-toggle="rel">
-          <span class="mi-ic ic-purple"><i data-lucide="users"></i></span>Relationships
+          <span class="mi-ic ic-purple"><i data-lucide="users"></i></span>Relaciones
           <i data-lucide="chevron-down" class="chev"></i>
         </button>
         <div class="submenu"><ul>
-          <li><button class="sub-item" data-nav="organizations"><i data-lucide="building-2"></i>Organizations</button></li>
-          <li><button class="sub-item" data-nav="contacts"><i data-lucide="contact"></i>Contacts</button></li>
-          <li><button class="sub-item" data-nav="tags"><i data-lucide="tag"></i>Tags</button></li>
+          <li><button class="sub-item" data-nav="organizations"><i data-lucide="building-2"></i>Organizaciones</button></li>
+          <li><button class="sub-item" data-nav="contacts"><i data-lucide="contact"></i>Contactos</button></li>
+          <li><button class="sub-item" data-nav="tags"><i data-lucide="tag"></i>Etiquetas</button></li>
         </ul></div>
       </div>
       <div class="menu-group" data-group="sales">
         <button class="menu-item" data-group-toggle="sales">
-          <span class="mi-ic ic-brand"><i data-lucide="circle-dollar-sign"></i></span>Sales &amp; Finance
+          <span class="mi-ic ic-brand"><i data-lucide="circle-dollar-sign"></i></span>Ventas y finanzas
           <i data-lucide="chevron-down" class="chev"></i>
         </button>
         <div class="submenu"><ul>
-          <li><button class="sub-item" data-nav="deals"><i data-lucide="star"></i>Deals</button></li>
-          <li><button class="sub-item" data-nav="tasks"><i data-lucide="list-checks"></i>Tasks</button></li>
-          <li><button class="sub-item" data-nav="invoices"><i data-lucide="file-text"></i>Invoices</button></li>
+          <li><button class="sub-item" data-nav="deals"><i data-lucide="star"></i>Negocios</button></li>
+          <li><button class="sub-item" data-nav="tasks"><i data-lucide="list-checks"></i>Tareas</button></li>
+          <li><button class="sub-item" data-nav="invoices"><i data-lucide="file-text"></i>Facturas</button></li>
         </ul></div>
       </div>
       <button class="menu-item" data-nav="products">
-        <span class="mi-ic ic-warn"><i data-lucide="box"></i></span>Catalog
+        <span class="mi-ic ic-warn"><i data-lucide="box"></i></span>Catálogo
       </button>
       <button class="menu-item" data-nav="import">
-        <span class="mi-ic ic-gray"><i data-lucide="upload"></i></span>Import
+        <span class="mi-ic ic-gray"><i data-lucide="upload"></i></span>Importar
       </button>
       <div class="menu-group" data-group="conv">
         <button class="menu-item" data-group-toggle="conv">
-          <span class="mi-ic ic-green"><i data-lucide="message-circle"></i></span>Conversations
+          <span class="mi-ic ic-green"><i data-lucide="message-circle"></i></span>Conversaciones
           <i data-lucide="chevron-down" class="chev"></i>
         </button>
         <div class="submenu"><ul>
-          <li><button class="sub-item" data-nav="chats"><i data-lucide="inbox"></i>Inbox</button></li>
-          <li><button class="sub-item" data-nav="connection"><i data-lucide="qr-code"></i>Connection</button></li>
+          <li><button class="sub-item" data-nav="chats"><i data-lucide="inbox"></i>Bandeja de entrada</button></li>
+          <li><button class="sub-item" data-nav="connection"><i data-lucide="qr-code"></i>Conexión</button></li>
         </ul></div>
       </div>
       <button class="menu-item" data-nav="calendar">
-        <span class="mi-ic ic-gray"><i data-lucide="calendar"></i></span>Calendar
+        <span class="mi-ic ic-gray"><i data-lucide="calendar"></i></span>Calendario
       </button>
       <button class="menu-item" data-nav="ai">
-        <span class="mi-ic ic-purple"><i data-lucide="zap"></i></span>AI Agents
-        <span class="soon">Soon</span>
-      </button>
-
-      <p class="side-label">Account</p>
-      <button class="menu-item" data-nav="settings">
-        <span class="mi-ic ic-gray"><i data-lucide="circle-user"></i></span>Account settings
-      </button>
-      <button class="menu-item" data-nav="help">
-        <span class="mi-ic ic-gray"><i data-lucide="circle-help"></i></span>Help &amp; guide
+        <span class="mi-ic ic-purple"><i data-lucide="zap"></i></span>Agentes IA
+        <span class="soon">Pronto</span>
       </button>
     </nav>
   </div>
@@ -504,12 +501,23 @@ tbody tr:last-child td{border-bottom:0}
     <button class="tb-btn" id="burger"><i data-lucide="menu"></i></button>
     <label class="searchbar">
       <i data-lucide="search"></i>
-      <input id="globalSearch" placeholder="Search contacts, deals, invoices…" autocomplete="off">
+      <input id="globalSearch" placeholder="Buscar contactos, negocios, facturas…" autocomplete="off">
       <span class="kbd" id="kbdHint">Ctrl K</span>
     </label>
     <div class="tb-right">
-      <button class="tb-round" id="themeBtn" title="Toggle theme"><i data-lucide="moon"></i></button>
-      <div class="avatar">AM</div>
+      <button class="tb-round" id="themeBtn" title="Cambiar tema"><i data-lucide="moon"></i></button>
+      <div class="tb-user" id="userWrap">
+        <button class="avatar" id="avatarBtn" title="Alejandro Morales">AM</button>
+        <div class="user-menu" id="userMenu">
+          <div class="um-head">
+            <span class="avatar">AM</span>
+            <div><b>Alejandro Morales</b><span>alejandro@clientbridge.io</span></div>
+          </div>
+          <button class="um-item" data-action="go-settings">
+            <i data-lucide="settings"></i>Ajustes de cuenta
+          </button>
+        </div>
+      </div>
     </div>
   </header>
   <main id="main" class="page" style="padding:0"></main>
@@ -520,144 +528,146 @@ tbody tr:last-child td{border-bottom:0}
 <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
 <script>
 /* ================================================================
-   ClientBridge — canvas demo · single file
+   ClientBridge — lienzo demo · un solo archivo
    ================================================================ */
 const $  = s => document.querySelector(s);
 const $$ = s => [...document.querySelectorAll(s)];
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const icons = () => { try { lucide.createIcons(); } catch(e){} };
 const uid = p => p + '_' + Math.random().toString(36).slice(2, 9);
+const cap = s => s[0].toUpperCase() + s.slice(1);
 const D = 864e5, H = 36e5, now = Date.now();
-const fmtMoney = n => new Intl.NumberFormat('en-US',{style:'currency',currency:'USD',maximumFractionDigits:0}).format(n);
-const fmtDate  = t => new Intl.DateTimeFormat('en-GB',{day:'numeric',month:'short',year:'numeric'}).format(t);
+const fmtMoney = n => new Intl.NumberFormat('es-ES',{style:'currency',currency:'EUR',maximumFractionDigits:0}).format(n);
+const fmtDate  = t => new Intl.DateTimeFormat('es-ES',{day:'numeric',month:'short',year:'numeric'}).format(t);
+const fmtShort = t => new Intl.DateTimeFormat('es-ES',{day:'numeric',month:'short'}).format(t);
 const toISO    = t => new Date(t).toISOString().slice(0,10);
 const relTime  = t => { const m = Math.round((Date.now()-t)/6e4);
-  if (m < 1) return 'Just now'; if (m < 60) return m+'m ago';
-  const h = Math.round(m/60); if (h < 24) return h+'h ago'; return Math.round(h/24)+'d ago'; };
+  if (m < 1) return 'Ahora'; if (m < 60) return `hace ${m} min`;
+  const h = Math.round(m/60); if (h < 24) return `hace ${h} h`; return `hace ${Math.round(h/24)} d`; };
 const initials = n => String(n).split(/\s+/).filter(Boolean).slice(0,2).map(w=>w[0].toUpperCase()).join('');
 
-/* ---------------- Catalogs ---------------- */
-const SECTORS  = ['Distribution','Logistics','Technology','Food & Beverage','Hospitality','Security','Healthcare','Real Estate','Media','Other'];
-const COUNTRIES= ['United Kingdom','Netherlands','United States','Ireland','Portugal','Canada','Spain','Germany','France'];
-const RELS     = ['Customer','Prospect','Vendor','Partner'];
-const REL_BADGE= {Customer:'b-brand',Prospect:'b-gray',Vendor:'b-warn',Partner:'b-purple'};
-const STAGES   = ['New','Qualified','Proposal','Won','Lost'];
-const STAGE_DOT= {New:'var(--text-3)',Qualified:'var(--blue)',Proposal:'var(--warn)',Won:'var(--green)',Lost:'var(--red)'};
+/* ---------------- Catálogos ---------------- */
+const SECTORS  = ['Distribución','Logística','Tecnología','Alimentación y bebidas','Hostelería','Seguridad','Salud','Inmobiliaria','Medios','Otro'];
+const COUNTRIES= ['España','México','Colombia','Portugal','Chile','Argentina','Países Bajos','Alemania','Francia','Estados Unidos'];
+const RELS     = ['Cliente','Prospecto','Proveedor','Socio'];
+const REL_BADGE= {Cliente:'b-brand',Prospecto:'b-gray',Proveedor:'b-warn',Socio:'b-purple'};
+const STAGES   = ['Nuevo','Cualificado','Propuesta','Ganado','Perdido'];
+const STAGE_DOT= {Nuevo:'var(--text-3)',Cualificado:'var(--blue)',Propuesta:'var(--warn)',Ganado:'var(--green)',Perdido:'var(--red)'};
 const TAG_COLORS = ['#465FFF','#7A5AF8','#12B76A','#F79009','#F04438','#0E9384','#DD2590','#667085'];
 
-/* ---------------- Seed data ---------------- */
+/* ---------------- Datos de ejemplo ---------------- */
 const orgs = [
-  {id:'org_01',name:'Alto Supply Co.',relationship:'Customer',sector:'Distribution',city:'Leeds',country:'United Kingdom',phone:'+44 113 496 0182',email:'accounts@altosupply.co.uk',website:'altosupply.co.uk',notes:'Wholesale partner since 2022. Orders via WhatsApp group with purchasing team.',createdAt:now-410*D},
-  {id:'org_02',name:'Bright Harbour Logistics',relationship:'Customer',sector:'Logistics',city:'Rotterdam',country:'Netherlands',phone:'+31 10 445 8820',email:'ops@brightharbour.nl',website:'brightharbour.nl',notes:'Fleet operator, 120 vehicles. Prefers invoicing monthly.',createdAt:now-380*D},
-  {id:'org_03',name:'Cobalt Analytics',relationship:'Prospect',sector:'Technology',city:'Austin',country:'United States',phone:'+1 512 555 0148',email:'hello@cobaltanalytics.io',website:'cobaltanalytics.io',notes:'Evaluated two competitors. Pilot budget approved for Q3.',createdAt:now-120*D},
-  {id:'org_04',name:'Fernwell Foods',relationship:'Customer',sector:'Food & Beverage',city:'Cork',country:'Ireland',phone:'+353 21 555 0173',email:'buyers@fernwell.ie',website:'fernwell.ie',notes:'Bakery chain, 14 locations. Seasonal spikes before holidays.',createdAt:now-260*D},
-  {id:'org_05',name:'Grandview Hospitality',relationship:'Partner',sector:'Hospitality',city:'Lisbon',country:'Portugal',phone:'+351 21 555 0340',email:'gm@grandview.pt',website:'grandview.pt',notes:'Resells to their hotel clients. White-label agreement in place.',createdAt:now-540*D},
-  {id:'org_06',name:'Ironclad Security Group',relationship:'Prospect',sector:'Security',city:'Manchester',country:'United Kingdom',phone:'+44 161 555 0206',email:'tenders@ironclad.co.uk',website:'ironclad.co.uk',notes:'Public RFP closing end of quarter. Needs SOC2 documentation.',createdAt:now-64*D},
-  {id:'org_07',name:'Juniper Wellness Clinic',relationship:'Customer',sector:'Healthcare',city:'Vancouver',country:'Canada',phone:'+1 604 555 0192',email:'admin@juniperwellness.ca',website:'juniperwellness.ca',notes:'Two clinics, third opening in fall. Sensitive data — check DPA.',createdAt:now-200*D},
-  {id:'org_08',name:'Northgate Realty',relationship:'Vendor',sector:'Real Estate',city:'Birmingham',country:'United Kingdom',phone:'+44 121 555 0461',email:'office@northgate.bham.co.uk',website:'northgate.bham.co.uk',notes:'Manages our office lease. Invoice received quarterly.',createdAt:now-700*D},
-  {id:'org_09',name:'Silverline Media Group',relationship:'Prospect',sector:'Media',city:'Dublin',country:'Ireland',phone:'+353 1 555 0287',email:'produce@silverline.ie',website:'silverline.ie',notes:'Referred by Grandview. Media buying retainer under discussion.',createdAt:now-38*D}
+  {id:'org_01',name:'Suministros Vega',relationship:'Cliente',sector:'Distribución',city:'Zaragoza',country:'España',phone:'+34 976 214 008',email:'compras@suministrosvega.es',website:'suministrosvega.es',notes:'Socio mayorista desde 2022. Hace los pedidos por un grupo de WhatsApp con el equipo de compras.',createdAt:now-410*D},
+  {id:'org_02',name:'Logística Puerto Claro',relationship:'Cliente',sector:'Logística',city:'Valencia',country:'España',phone:'+34 963 555 882',email:'operaciones@puertoclaro.es',website:'puertoclaro.es',notes:'Operador de flota con 120 vehículos. Prefiere facturación mensual.',createdAt:now-380*D},
+  {id:'org_03',name:'Cobalt Analítica',relationship:'Prospecto',sector:'Tecnología',city:'Ciudad de México',country:'México',phone:'+52 55 555 0148',email:'hola@cobaltanalitica.mx',website:'cobaltanalitica.mx',notes:'Ha evaluado a dos competidores. Presupuesto de piloto aprobado para el T3.',createdAt:now-120*D},
+  {id:'org_04',name:'Alimentos Fernán',relationship:'Cliente',sector:'Alimentación y bebidas',city:'Oviedo',country:'España',phone:'+34 985 555 173',email:'compras@alimentosfernan.es',website:'alimentosfernan.es',notes:'Cadena de panaderías con 14 locales. Picos de demanda antes de las fiestas.',createdAt:now-260*D},
+  {id:'org_05',name:'Grupo Miramar Hoteles',relationship:'Socio',sector:'Hostelería',city:'Marbella',country:'España',phone:'+34 952 555 340',email:'direccion@miramarhoteles.es',website:'miramarhoteles.es',notes:'Revende a sus clientes hoteleros. Acuerdo de marca blanca vigente.',createdAt:now-540*D},
+  {id:'org_06',name:'Grupo Blindado Seguridad',relationship:'Prospecto',sector:'Seguridad',city:'Bilbao',country:'España',phone:'+34 944 555 206',email:'licitaciones@grupoblindado.es',website:'grupoblindado.es',notes:'Licitación pública que cierra a final de trimestre. Piden documentación SOC2.',createdAt:now-64*D},
+  {id:'org_07',name:'Clínica Enebro',relationship:'Cliente',sector:'Salud',city:'Bogotá',country:'Colombia',phone:'+57 601 555 0192',email:'administracion@clinicaenebro.co',website:'clinicaenebro.co',notes:'Dos clínicas; la tercera abre en otoño. Datos sensibles — revisar el acuerdo de tratamiento.',createdAt:now-200*D},
+  {id:'org_08',name:'Inmobiliaria Puerta Norte',relationship:'Proveedor',sector:'Inmobiliaria',city:'Madrid',country:'España',phone:'+34 913 555 046',email:'oficina@puertanorte.es',website:'puertanorte.es',notes:'Gestiona el alquiler de nuestra oficina. Envía factura trimestralmente.',createdAt:now-700*D},
+  {id:'org_09',name:'Medios Plataforma',relationship:'Prospecto',sector:'Medios',city:'Sevilla',country:'España',phone:'+34 954 555 287',email:'produccion@mediosplataforma.es',website:'mediosplataforma.es',notes:'Nos los recomendó Miramar. Retainer de compra de medios en negociación.',createdAt:now-38*D}
 ];
 const tags = [
-  {name:'VIP',color:'#7A5AF8'},{name:'Wholesale',color:'#465FFF'},{name:'Referral',color:'#12B76A'},
-  {name:'Enterprise',color:'#F79009'},{name:'Trial',color:'#667085'},{name:'Fleet',color:'#0E9384'}
+  {name:'VIP',color:'#7A5AF8'},{name:'Mayorista',color:'#465FFF'},{name:'Recomendado',color:'#12B76A'},
+  {name:'Empresa',color:'#F79009'},{name:'Prueba',color:'#667085'},{name:'Flota',color:'#0E9384'}
 ];
 const contacts = [
-  {id:'ct_01',name:'Marcus Bell',role:'Operations Director',orgId:'org_01',phone:'+44 113 496 0182',whatsapp:'+44 7700 900182',email:'marcus@altosupply.co.uk',tagNames:['VIP','Wholesale'],lastSeen:now-2.5*H,createdAt:now-410*D},
-  {id:'ct_02',name:'Priya Nair',role:'Purchasing Lead',orgId:'org_01',phone:'+44 113 496 0183',whatsapp:'+44 7700 900183',email:'priya@altosupply.co.uk',tagNames:['Wholesale'],lastSeen:now-26*H,createdAt:now-300*D},
-  {id:'ct_03',name:'Daan Verhoeven',role:'Fleet Manager',orgId:'org_02',phone:'+31 10 445 8821',whatsapp:'+31 6 1234 5678',email:'daan@brightharbour.nl',tagNames:['Fleet'],lastSeen:now-5*H,createdAt:now-380*D},
-  {id:'ct_04',name:'Sophie Lambert',role:'Data Lead',orgId:'org_03',phone:'+1 512 555 0149',whatsapp:'+1 512 555 0149',email:'sophie@cobaltanalytics.io',tagNames:['Trial'],lastSeen:now-2*D,createdAt:now-118*D},
-  {id:'ct_05',name:'Eoin Gallagher',role:'Founder',orgId:'org_04',phone:'+353 21 555 0174',whatsapp:'+353 87 555 0174',email:'eoin@fernwell.ie',tagNames:['VIP'],lastSeen:now-9*H,createdAt:now-260*D},
-  {id:'ct_06',name:'Marta Fonseca',role:'General Manager',orgId:'org_05',phone:'+351 21 555 0341',whatsapp:'+351 92 555 0341',email:'marta@grandview.pt',tagNames:['Referral','Enterprise'],lastSeen:now-3*D,createdAt:now-540*D},
-  {id:'ct_07',name:'James Whitfield',role:'Head of Procurement',orgId:'org_06',phone:'+44 161 555 0207',whatsapp:'+44 7700 900207',email:'james@ironclad.co.uk',tagNames:['Enterprise'],lastSeen:now-8*H,createdAt:now-64*D},
-  {id:'ct_08',name:'Hannah Liu',role:'Practice Manager',orgId:'org_07',phone:'+1 604 555 0193',whatsapp:'+1 604 555 0193',email:'hannah@juniperwellness.ca',tagNames:[],lastSeen:now-30*H,createdAt:now-200*D},
-  {id:'ct_09',name:'Tom Breen',role:'Executive Producer',orgId:'org_09',phone:'+353 1 555 0288',whatsapp:'+353 87 555 0288',email:'tom@silverline.ie',tagNames:['Referral'],lastSeen:now-20*H,createdAt:now-38*D},
-  {id:'ct_10',name:'Aoife Kelly',role:'Agent',orgId:'org_08',phone:'+44 121 555 0462',whatsapp:'',email:'aoife@northgate.bham.co.uk',tagNames:[],lastSeen:now-9*D,createdAt:now-700*D}
+  {id:'ct_01',name:'Marcos Campano',role:'Director de operaciones',orgId:'org_01',phone:'+34 976 214 008',whatsapp:'+34 640 012 182',email:'marcos@suministrosvega.es',tagNames:['VIP','Mayorista'],lastSeen:now-2.5*H,createdAt:now-410*D},
+  {id:'ct_02',name:'Lucía Naranjo',role:'Responsable de compras',orgId:'org_01',phone:'+34 976 214 009',whatsapp:'+34 640 012 183',email:'lucia@suministrosvega.es',tagNames:['Mayorista'],lastSeen:now-26*H,createdAt:now-300*D},
+  {id:'ct_03',name:'Daniel Hontoria',role:'Responsable de flota',orgId:'org_02',phone:'+34 963 555 883',whatsapp:'+34 639 555 883',email:'daniel@puertoclaro.es',tagNames:['Flota'],lastSeen:now-5*H,createdAt:now-380*D},
+  {id:'ct_04',name:'Sofía Lamar',role:'Responsable de datos',orgId:'org_03',phone:'+52 55 555 0149',whatsapp:'+52 55 555 0149',email:'sofia@cobaltanalitica.mx',tagNames:['Prueba'],lastSeen:now-2*D,createdAt:now-118*D},
+  {id:'ct_05',name:'Eloy Gallardo',role:'Fundador',orgId:'org_04',phone:'+34 985 555 174',whatsapp:'+34 699 555 174',email:'eloy@alimentosfernan.es',tagNames:['VIP'],lastSeen:now-9*H,createdAt:now-260*D},
+  {id:'ct_06',name:'Marta Fonseca',role:'Directora general',orgId:'org_05',phone:'+34 952 555 341',whatsapp:'+34 651 555 341',email:'marta@miramarhoteles.es',tagNames:['Recomendado','Empresa'],lastSeen:now-3*D,createdAt:now-540*D},
+  {id:'ct_07',name:'Jaime Villalba',role:'Jefe de compras',orgId:'org_06',phone:'+34 944 555 207',whatsapp:'+34 688 555 207',email:'jaime@grupoblindado.es',tagNames:['Empresa'],lastSeen:now-8*H,createdAt:now-64*D},
+  {id:'ct_08',name:'Ana Sanz',role:'Administradora',orgId:'org_07',phone:'+57 601 555 0193',whatsapp:'+57 310 555 0193',email:'ana@clinicaenebro.co',tagNames:[],lastSeen:now-30*H,createdAt:now-200*D},
+  {id:'ct_09',name:'Tomás Brea',role:'Productor ejecutivo',orgId:'org_09',phone:'+34 954 555 288',whatsapp:'+34 671 555 288',email:'tomas@mediosplataforma.es',tagNames:['Recomendado'],lastSeen:now-20*H,createdAt:now-38*D},
+  {id:'ct_10',name:'Noelia Ruiz',role:'Agente',orgId:'org_08',phone:'+34 913 555 047',whatsapp:'',email:'noelia@puertanorte.es',tagNames:[],lastSeen:now-9*D,createdAt:now-700*D}
 ];
 const deals = [
-  {id:'dl_01',name:'Q3 wholesale order',orgId:'org_01',stage:'Proposal',value:12400,closeDate:now+12*D,createdAt:now-20*D},
-  {id:'dl_02',name:'Fleet telematics rollout',orgId:'org_02',stage:'Qualified',value:28000,closeDate:now+25*D,createdAt:now-32*D},
-  {id:'dl_03',name:'Analytics integration pilot',orgId:'org_03',stage:'New',value:6500,closeDate:now+40*D,createdAt:now-8*D},
-  {id:'dl_04',name:'Bakery chain supply deal',orgId:'org_04',stage:'Proposal',value:19200,closeDate:now+6*D,createdAt:now-26*D},
-  {id:'dl_05',name:'Group booking platform',orgId:'org_05',stage:'Won',value:15000,closeDate:now-4*D,createdAt:now-60*D},
-  {id:'dl_06',name:'Perimeter sensors RFP',orgId:'org_06',stage:'New',value:42000,closeDate:now+55*D,createdAt:now-5*D},
-  {id:'dl_07',name:'Clinic CRM migration',orgId:'org_07',stage:'Qualified',value:9800,closeDate:now+18*D,createdAt:now-15*D},
-  {id:'dl_08',name:'Media buying retainer',orgId:'org_09',stage:'Lost',value:7300,closeDate:now-9*D,createdAt:now-30*D}
+  {id:'dl_01',name:'Pedido mayorista T3',orgId:'org_01',stage:'Propuesta',value:12400,closeDate:now+12*D,createdAt:now-20*D},
+  {id:'dl_02',name:'Despliegue de telemática de flota',orgId:'org_02',stage:'Cualificado',value:28000,closeDate:now+25*D,createdAt:now-32*D},
+  {id:'dl_03',name:'Piloto de integración analítica',orgId:'org_03',stage:'Nuevo',value:6500,closeDate:now+40*D,createdAt:now-8*D},
+  {id:'dl_04',name:'Acuerdo de suministro panaderías',orgId:'org_04',stage:'Propuesta',value:19200,closeDate:now+6*D,createdAt:now-26*D},
+  {id:'dl_05',name:'Plataforma de reservas de grupo',orgId:'org_05',stage:'Ganado',value:15000,closeDate:now-4*D,createdAt:now-60*D},
+  {id:'dl_06',name:'Licitación sensores perimetrales',orgId:'org_06',stage:'Nuevo',value:42000,closeDate:now+55*D,createdAt:now-5*D},
+  {id:'dl_07',name:'Migración CRM de clínicas',orgId:'org_07',stage:'Cualificado',value:9800,closeDate:now+18*D,createdAt:now-15*D},
+  {id:'dl_08',name:'Retainer de compra de medios',orgId:'org_09',stage:'Perdido',value:7300,closeDate:now-9*D,createdAt:now-30*D}
 ];
 const tasks = [
-  {id:'tk_01',title:'Send revised quote to Alto Supply',orgId:'org_01',due:now+2*D,done:false},
-  {id:'tk_02',title:'Call Bright Harbour about telematics',orgId:'org_02',due:now,done:false},
-  {id:'tk_03',title:'Chase INV-2046 payment',orgId:'org_04',due:now-3*D,done:false},
-  {id:'tk_04',title:'Prepare Cobalt pilot deck',orgId:'org_03',due:now+5*D,done:false},
-  {id:'tk_05',title:'Confirm Grandview go-live date',orgId:'org_05',due:now-1*D,done:true},
-  {id:'tk_06',title:'Request SOC2 docs for Ironclad',orgId:'org_06',due:now+9*D,done:false},
-  {id:'tk_07',title:'Draft DPA for Juniper',orgId:'org_07',due:now+14*D,done:false},
-  {id:'tk_08',title:'Renew office lease with Northgate',orgId:'org_08',due:now+30*D,done:true}
+  {id:'tk_01',title:'Enviar presupuesto revisado a Suministros Vega',orgId:'org_01',due:now+2*D,done:false},
+  {id:'tk_02',title:'Llamar a Puerto Claro sobre la telemática',orgId:'org_02',due:now,done:false},
+  {id:'tk_03',title:'Reclamar el pago de la INV-2046',orgId:'org_04',due:now-3*D,done:false},
+  {id:'tk_04',title:'Preparar la presentación del piloto de Cobalt',orgId:'org_03',due:now+5*D,done:false},
+  {id:'tk_05',title:'Confirmar fecha de lanzamiento con Miramar',orgId:'org_05',due:now-1*D,done:true},
+  {id:'tk_06',title:'Solicitar documentación SOC2 a Blindado',orgId:'org_06',due:now+9*D,done:false},
+  {id:'tk_07',title:'Redactar el DPA de Clínica Enebro',orgId:'org_07',due:now+14*D,done:false},
+  {id:'tk_08',title:'Renovar el alquiler con Puerta Norte',orgId:'org_08',due:now+30*D,done:true}
 ];
 const invoices = [
-  {id:'inv_01',number:'INV-2041',orgId:'org_01',amount:4200,status:'Paid',due:now-12*D},
-  {id:'inv_02',number:'INV-2044',orgId:'org_02',amount:8150,status:'Paid',due:now-6*D},
-  {id:'inv_03',number:'INV-2046',orgId:'org_04',amount:2380,status:'Overdue',due:now-9*D},
-  {id:'inv_04',number:'INV-2049',orgId:'org_05',amount:15000,status:'Paid',due:now-3*D},
-  {id:'inv_05',number:'INV-2051',orgId:'org_07',amount:3260,status:'Pending',due:now+8*D},
-  {id:'inv_06',number:'INV-2053',orgId:'org_01',amount:5400,status:'Pending',due:now+15*D},
-  {id:'inv_07',number:'INV-2054',orgId:'org_02',amount:6900,status:'Pending',due:now+20*D},
-  {id:'inv_08',number:'INV-2038',orgId:'org_08',amount:2100,status:'Paid',due:now-40*D}
+  {id:'inv_01',number:'INV-2041',orgId:'org_01',amount:4200,status:'Pagada',due:now-12*D},
+  {id:'inv_02',number:'INV-2044',orgId:'org_02',amount:8150,status:'Pagada',due:now-6*D},
+  {id:'inv_03',number:'INV-2046',orgId:'org_04',amount:2380,status:'Vencida',due:now-9*D},
+  {id:'inv_04',number:'INV-2049',orgId:'org_05',amount:15000,status:'Pagada',due:now-3*D},
+  {id:'inv_05',number:'INV-2051',orgId:'org_07',amount:3260,status:'Pendiente',due:now+8*D},
+  {id:'inv_06',number:'INV-2053',orgId:'org_01',amount:5400,status:'Pendiente',due:now+15*D},
+  {id:'inv_07',number:'INV-2054',orgId:'org_02',amount:6900,status:'Pendiente',due:now+20*D},
+  {id:'inv_08',number:'INV-2038',orgId:'org_08',amount:2100,status:'Pagada',due:now-40*D}
 ];
 const products = [
-  {id:'pr_01',name:'Bridge Pro (monthly)',sku:'BR-PRO-M',price:49,stock:999},
-  {id:'pr_02',name:'Bridge Pro (annual)',sku:'BR-PRO-Y',price:490,stock:999},
-  {id:'pr_03',name:'WhatsApp connector',sku:'BR-WAPP',price:19,stock:999},
-  {id:'pr_04',name:'Onboarding session',sku:'BR-ONB',price:150,stock:24},
-  {id:'pr_05',name:'Analytics add-on',sku:'BR-ANL',price:29,stock:0},
-  {id:'pr_06',name:'Priority support',sku:'BR-SUP',price:99,stock:10}
+  {id:'pr_01',name:'Puente Pro (mensual)',sku:'PU-PRO-M',price:49,stock:999},
+  {id:'pr_02',name:'Puente Pro (anual)',sku:'PU-PRO-A',price:490,stock:999},
+  {id:'pr_03',name:'Conector de WhatsApp',sku:'PU-WAPP',price:19,stock:999},
+  {id:'pr_04',name:'Sesión de onboarding',sku:'PU-ONB',price:150,stock:24},
+  {id:'pr_05',name:'Complemento analítico',sku:'PU-ANL',price:29,stock:0},
+  {id:'pr_06',name:'Soporte prioritario',sku:'PU-SUP',price:99,stock:10}
 ];
 const chats = [
   {id:'ch_01',contactId:'ct_01',unread:2,msgs:[
-    {me:false,t:now-3.4*H,text:'Morning Alex — did the revised Q3 quote go out yet?'},
-    {me:true, t:now-3.1*H,text:'Almost there Marcus, sending it over this afternoon.'},
-    {me:false,t:now-2.6*H,text:'Great, procurement meets at 4 so that works perfectly.'},
-    {me:false,t:now-22*H,text:'Also — can you add the pallet discounts we discussed?'}
+    {me:false,t:now-3.4*H,text:'Buenos días, Ale — ¿ya salió el presupuesto revisado del T3?'},
+    {me:true, t:now-3.1*H,text:'Ya casi está, Marcos. Te lo envío esta misma tarde.'},
+    {me:false,t:now-2.6*H,text:'Genial, compras se reúne a las 4, así que perfecto.'},
+    {me:false,t:now-22*H,text:'Por cierto — ¿puedes añadir los descuentos por palé de los que hablamos?'}
   ]},
   {id:'ch_02',contactId:'ct_03',unread:1,msgs:[
-    {me:false,t:now-5*H,text:'The telematics proposal looks good. One question on the rollout timeline.'},
-    {me:true, t:now-4.8*H,text:'Happy to walk you through it — is Thursday ok for a call?'}
+    {me:false,t:now-5*H,text:'La propuesta de telemática se ve bien. Me queda una duda con el calendario de despliegue.'},
+    {me:true, t:now-4.8*H,text:'Encantado de repasarlo — ¿te va bien una llamada el jueves?'}
   ]},
   {id:'ch_03',contactId:'ct_05',unread:0,msgs:[
-    {me:false,t:now-9*H,text:'Eoin here — new location opens on the 15th, we will need extra stock.'},
-    {me:true, t:now-8.6*H,text:'Noted. I will prepare a standing order for the opening week.'}
+    {me:false,t:now-9*H,text:'Soy Eloy — el nuevo local abre el día 15 y necesitaremos más stock.'},
+    {me:true, t:now-8.6*H,text:'Anotado. Prepararé un pedido recurrente para la semana de apertura.'}
   ]},
   {id:'ch_04',contactId:'ct_07',unread:0,msgs:[
-    {me:false,t:now-2*D,text:'Following up on the RFP — do you support on-prem deployment?'},
-    {me:true, t:now-2*D+2*H,text:'We do for Enterprise plans. Sending the security pack now.'},
-    {me:false,t:now-2*D+3*H,text:'Received, thanks. Reviewing with the committee on Friday.'}
+    {me:false,t:now-2*D,text:'Doy seguimiento a la licitación — ¿soportáis despliegue on-premise?'},
+    {me:true, t:now-2*D+2*H,text:'Sí, en los planes Empresa. Os envío ahora mismo el dossier de seguridad.'},
+    {me:false,t:now-2*D+3*H,text:'Recibido, gracias. Lo revisa el comité el viernes.'}
   ]},
   {id:'ch_05',contactId:'ct_09',unread:0,msgs:[
-    {me:false,t:now-20*H,text:'Hi! Marta from Grandview mentioned you — do you handle media buying?'},
-    {me:true, t:now-19*H,text:'We do. Want to book a quick intro call this week?'}
+    {me:false,t:now-20*H,text:'¡Hola! Marta de Miramar me habló de vosotros — ¿os encargáis de compra de medios?'},
+    {me:true, t:now-19*H,text:'Así es. ¿Reservamos una llamada breve esta semana?'}
   ]}
 ];
 
-/* ---------------- Lookups ---------------- */
+/* ---------------- Consultas ---------------- */
 const orgById   = id => orgs.find(o => o.id === id);
 const orgName   = id => orgById(id)?.name ?? '—';
 const contactById = id => contacts.find(c => c.id === id);
 const tagColor  = name => tags.find(t => t.name === name)?.color ?? '#667085';
 const badgeFor  = rel => `<span class="badge ${REL_BADGE[rel] ?? 'b-gray'}">${esc(rel)}</span>`;
 const dueLabel  = t => { const d = Math.round((t - now)/D);
-  return d < 0 ? `${-d}d overdue` : d === 0 ? 'Today' : d === 1 ? 'Tomorrow' : fmtDate(t).replace(/ \d{4}/,''); };
+  return d < 0 ? `Vencida hace ${-d} d` : d === 0 ? 'Hoy' : d === 1 ? 'Mañana' : fmtShort(t); };
 const dueClass  = t => { const d = Math.round((t - now)/D); return d < 0 ? 'over' : d <= 1 ? 'today' : ''; };
 
-/* ---------------- UI state ---------------- */
+/* ---------------- Estado ---------------- */
 const ui = {
   route:'organizations', form:null, detail:null, wa:'offline',
-  q:{}, filters:{}, sort:{}, groups:{rel:true, sales:false, conv:false},
+  q:{}, filters:{}, sort:{}, settingsFrom:null,
   chat:null, typing:false, calOffset:0, files:[], taskFilter:'open'
 };
 const GROUPS = {rel:['organizations','contacts','tags'], sales:['deals','tasks','invoices'], conv:['chats','connection']};
 const TABLE_ROUTES = ['organizations','contacts','invoices','products','tags'];
 
 /* ================================================================
-   THEME
+   TEMA
    ================================================================ */
 function setTheme(mode, silent){
   const dark = mode === 'dark' || (mode === 'system' && matchMedia('(prefers-color-scheme: dark)').matches);
@@ -690,6 +700,20 @@ function toast(msg, icon = 'check'){
 }
 
 /* ================================================================
+   MENÚ DE USUARIO (avatar)
+   ================================================================ */
+const userWrap = $('#userWrap'), userMenu = $('#userMenu');
+ $('#avatarBtn').addEventListener('click', e => { e.stopPropagation(); userMenu.classList.toggle('open'); });
+document.addEventListener('click', e => { if (!userWrap.contains(e.target)) userMenu.classList.remove('open'); });
+userMenu.addEventListener('click', e => {
+  if (e.target.closest('[data-action="go-settings"]')){
+    if (ui.route !== 'settings') ui.settingsFrom = ui.route;
+    userMenu.classList.remove('open');
+    go('settings');
+  }
+});
+
+/* ================================================================
    SIDEBAR
    ================================================================ */
 function paintSidebar(){
@@ -711,7 +735,7 @@ function paintSidebar(){
  $('#scrim').addEventListener('click', () => document.body.classList.remove('side-open'));
 
 /* ================================================================
-   NAVIGATION & FILTERING
+   NAVEGACIÓN Y FILTRADO
    ================================================================ */
 function go(route){ ui.route = route; ui.form = null; ui.detail = null; render(); }
 function getFiltered(route){
@@ -722,13 +746,13 @@ function getFiltered(route){
     rows = orgs.filter(o => (!q || [o.name,o.city,o.country,o.sector,o.email].join(' ').toLowerCase().includes(q))
       && (!f.sector || o.sector === f.sector) && (!f.country || o.country === f.country));
     const s = ui.sort.orgs || {k:'createdAt', d:-1};
-    rows = [...rows].sort((a,b) => (typeof a[s.k] === 'string' ? a[s.k].localeCompare(b[s.k]) : (a[s.k]||0)-(b[s.k]||0)) * s.d);
+    rows = [...rows].sort((a,b) => (typeof a[s.k] === 'string' ? a[s.k].localeCompare(b[s.k],'es') : (a[s.k]||0)-(b[s.k]||0)) * s.d);
   }
   if (route === 'contacts'){
     rows = contacts.filter(c => (!q || [c.name,c.phone,c.email,orgName(c.orgId)].join(' ').toLowerCase().includes(q))
       && (!f.org || c.orgId === f.org));
     const s = ui.sort.contacts || {k:'name', d:1};
-    rows = [...rows].sort((a,b) => (typeof a[s.k] === 'string' ? a[s.k].localeCompare(b[s.k]) : (a[s.k]||0)-(b[s.k]||0)) * s.d);
+    rows = [...rows].sort((a,b) => (typeof a[s.k] === 'string' ? a[s.k].localeCompare(b[s.k],'es') : (a[s.k]||0)-(b[s.k]||0)) * s.d);
   }
   if (route === 'invoices') rows = invoices.filter(i => !q || [i.number,orgName(i.orgId)].join(' ').toLowerCase().includes(q));
   if (route === 'products')  rows = products.filter(p => !q || [p.name,p.sku].join(' ').toLowerCase().includes(q));
@@ -736,12 +760,12 @@ function getFiltered(route){
   return rows;
 }
 function countLineText(route){
-  const map = {organizations:'companies', contacts:'contacts', invoices:'invoices', products:'products', tags:'tags'};
-  return `${getFiltered(route).length} of ${ {organizations:orgs,contacts,invoices,products,tags}[route].length } ${map[route]}`;
+  const map = {organizations:'empresas', contacts:'contactos', invoices:'facturas', products:'productos', tags:'etiquetas'};
+  return `${getFiltered(route).length} de ${ {organizations:orgs,contacts,invoices,products,tags}[route].length } ${map[route]}`;
 }
 
 /* ================================================================
-   TABLE REGION (refreshable without losing focus)
+   TABLA (región actualizable sin perder el foco)
    ================================================================ */
 function th(route, k, label, extra){
   const s = ui.sort[route];
@@ -749,12 +773,12 @@ function th(route, k, label, extra){
 }
 function orgsTableHTML(){
   const rows = getFiltered('organizations');
-  if (!rows.length) return emptyHTML('building-2','No organizations found','Try adjusting your search or filters.');
+  if (!rows.length) return emptyHTML('building-2','No se encontraron organizaciones','Prueba a ajustar la búsqueda o los filtros.');
   return `<div class="table-wrap"><table>
     <thead><tr>
-      ${th('orgs','name','Name','style="min-width:220px"')}
-      ${th('orgs','relationship','Relationship')}${th('orgs','sector','Sector')}
-      ${th('orgs','city','City')}${th('orgs','country','Country')}${th('orgs','phone','Phone')}
+      ${th('orgs','name','Nombre','style="min-width:220px"')}
+      ${th('orgs','relationship','Relación')}${th('orgs','sector','Sector')}
+      ${th('orgs','city','Ciudad')}${th('orgs','country','País')}${th('orgs','phone','Teléfono')}
       <th style="text-align:right;padding-right:22px"></th>
     </tr></thead>
     <tbody>${rows.map(o => `<tr>
@@ -764,22 +788,22 @@ function orgsTableHTML(){
       <td>${esc(o.sector)}</td><td>${esc(o.city)}</td><td>${esc(o.country)}</td>
       <td class="phone num">${esc(o.phone)}</td>
       <td><div class="row-actions">
-        <button class="act" data-action="open" data-id="${o.id}">Open</button>
-        <button class="act" data-action="edit" data-id="${o.id}">Edit</button>
-        <button class="act danger" data-action="delete" data-id="${o.id}">Delete</button>
+        <button class="act" data-action="open" data-id="${o.id}">Abrir</button>
+        <button class="act" data-action="edit" data-id="${o.id}">Editar</button>
+        <button class="act danger" data-action="delete" data-id="${o.id}">Eliminar</button>
       </div></td>
     </tr>`).join('')}</tbody>
   </table></div>`;
 }
 function contactsTableHTML(){
   const rows = getFiltered('contacts');
-  if (!rows.length) return emptyHTML('contact','No contacts found','Try adjusting your search or filters.');
+  if (!rows.length) return emptyHTML('contact','No se encontraron contactos','Prueba a ajustar la búsqueda o los filtros.');
   return `<div class="table-wrap"><table>
     <thead><tr>
-      ${th('contacts','name','Name','style="min-width:220px"')}
-      ${th('contacts','','Phone')}${th('contacts','','WhatsApp')}
-      ${th('contacts','','Organization')}${th('contacts','','Tags')}
-      ${th('contacts','lastSeen','Last seen')}
+      ${th('contacts','name','Nombre','style="min-width:220px"')}
+      ${th('contacts','','Teléfono')}${th('contacts','','WhatsApp')}
+      ${th('contacts','','Organización')}${th('contacts','','Etiquetas')}
+      ${th('contacts','lastSeen','Última conexión')}
       <th style="text-align:right;padding-right:22px"></th>
     </tr></thead>
     <tbody>${rows.map(c => `<tr>
@@ -792,18 +816,18 @@ function contactsTableHTML(){
       <td>${(c.tagNames||[]).map(t => `<span class="chip" style="background:color-mix(in srgb,${tagColor(t)} 13%,transparent);color:${tagColor(t)}">${esc(t)}</span>`).join('') || '<span style="color:var(--text-3)">—</span>'}</td>
       <td class="phone">${relTime(c.lastSeen)}</td>
       <td><div class="row-actions">
-        <button class="act" data-action="edit" data-id="${c.id}">Edit</button>
-        <button class="act danger" data-action="delete" data-id="${c.id}">Delete</button>
+        <button class="act" data-action="edit" data-id="${c.id}">Editar</button>
+        <button class="act danger" data-action="delete" data-id="${c.id}">Eliminar</button>
       </div></td>
     </tr>`).join('')}</tbody>
   </table></div>`;
 }
 function invoicesTableHTML(){
   const rows = getFiltered('invoices');
-  if (!rows.length) return emptyHTML('file-text','No invoices found','Try adjusting your search.');
-  const B = {Paid:'b-green',Pending:'b-warn',Overdue:'b-red'};
+  if (!rows.length) return emptyHTML('file-text','No se encontraron facturas','Prueba con otra búsqueda.');
+  const B = {Pagada:'b-green',Pendiente:'b-warn',Vencida:'b-red'};
   return `<div class="table-wrap"><table>
-    <thead><tr><th style="min-width:110px">Number</th><th>Organization</th><th style="text-align:right">Amount</th><th>Status</th><th>Due date</th><th style="text-align:right;padding-right:22px"></th></tr></thead>
+    <thead><tr><th style="min-width:110px">Número</th><th>Organización</th><th style="text-align:right">Importe</th><th>Estado</th><th>Vencimiento</th><th style="text-align:right;padding-right:22px"></th></tr></thead>
     <tbody>${rows.map(i => `<tr>
       <td><b class="num" style="font-weight:600">${esc(i.number)}</b></td>
       <td>${esc(orgName(i.orgId))}</td>
@@ -811,35 +835,35 @@ function invoicesTableHTML(){
       <td><span class="badge ${B[i.status]}">${i.status}</span></td>
       <td class="phone">${fmtDate(i.due)}</td>
       <td><div class="row-actions">
-        ${i.status !== 'Paid' ? `<button class="act" data-action="invoice-paid" data-id="${i.id}">Mark paid</button>` : ''}
-        <button class="act danger" data-action="delete" data-id="${i.id}">Delete</button>
+        ${i.status !== 'Pagada' ? `<button class="act" data-action="invoice-paid" data-id="${i.id}">Marcar pagada</button>` : ''}
+        <button class="act danger" data-action="delete" data-id="${i.id}">Eliminar</button>
       </div></td>
     </tr>`).join('')}</tbody>
   </table></div>`;
 }
 function productsTableHTML(){
   const rows = getFiltered('products');
-  if (!rows.length) return emptyHTML('box','No products found','Add your first catalog item.');
+  if (!rows.length) return emptyHTML('box','No hay productos','Añade el primer artículo al catálogo.');
   return `<div class="table-wrap"><table>
-    <thead><tr><th style="min-width:220px">Product</th><th>SKU</th><th style="text-align:right">Price</th><th style="text-align:right">Stock</th><th style="text-align:right;padding-right:22px"></th></tr></thead>
+    <thead><tr><th style="min-width:220px">Producto</th><th>SKU</th><th style="text-align:right">Precio</th><th style="text-align:right">Existencias</th><th style="text-align:right;padding-right:22px"></th></tr></thead>
     <tbody>${rows.map(p => `<tr>
       <td><b style="font-weight:600">${esc(p.name)}</b></td>
       <td class="phone num">${esc(p.sku)}</td>
       <td class="num" style="text-align:right;font-weight:600">${fmtMoney(p.price)}</td>
-      <td class="num" style="text-align:right">${p.stock === 0 ? '<span style="color:var(--t-red);font-weight:600">Out of stock</span>' : p.stock}</td>
-      <td><div class="row-actions"><button class="act danger" data-action="delete" data-id="${p.id}">Delete</button></div></td>
+      <td class="num" style="text-align:right">${p.stock === 0 ? '<span style="color:var(--t-red);font-weight:600">Sin existencias</span>' : p.stock}</td>
+      <td><div class="row-actions"><button class="act danger" data-action="delete" data-id="${p.id}">Eliminar</button></div></td>
     </tr>`).join('')}</tbody>
   </table></div>`;
 }
 function tagsGridHTML(){
   const rows = getFiltered('tags');
-  if (!rows.length) return emptyHTML('tag','No tags yet','Tags let you filter contacts and invoices.');
+  if (!rows.length) return emptyHTML('tag','Aún no hay etiquetas','Las etiquetas te permiten filtrar contactos y facturas.');
   const n = t => contacts.filter(c => (c.tagNames||[]).includes(t.name)).length;
   return `<div class="tag-grid">${rows.map(t => `
     <div class="card tag-card">
       <i class="dot" style="background:${t.color}"></i>
-      <div><b>${esc(t.name)}</b><span>${n(t)} contact${n(t)===1?'':'s'}</span></div>
-      <button class="icon-btn" data-action="delete" data-id="${t.name}" title="Delete"><i data-lucide="trash-2"></i></button>
+      <div><b>${esc(t.name)}</b><span>${n(t)} ${n(t)===1?'contacto':'contactos'}</span></div>
+      <button class="icon-btn" data-action="delete" data-id="${t.name}" title="Eliminar"><i data-lucide="trash-2"></i></button>
     </div>`).join('')}</div>`;
 }
 function listRegionHTML(){
@@ -854,7 +878,7 @@ function refreshList(){
 }
 function emptyHTML(icon, title, text){
   return `<div class="empty"><i data-lucide="${icon}"></i><b>${title}</b><p>${text}</p>
-    <button class="btn btn-ghost btn-sm" data-action="clear-filters">Clear filters</button></div>`;
+    <button class="btn btn-ghost btn-sm" data-action="clear-filters">Limpiar filtros</button></div>`;
 }
 function toolbarHTML(opts){
   const route = ui.route, q = ui.q[route] || '', f = ui.filters[route] || {};
@@ -872,15 +896,15 @@ function toolbarHTML(opts){
 }
 
 /* ================================================================
-   VIEWS
+   VISTAS
    ================================================================ */
 const main = $('#main');
 
-/* ---------- Dashboard ---------- */
+/* ---------- Panel ---------- */
 function vDashboard(){
   const h = new Date().getHours();
-  const greet = h < 12 ? 'Good morning' : h < 18 ? 'Good afternoon' : 'Good evening';
-  const open = deals.filter(d => !['Won','Lost'].includes(d.stage));
+  const greet = h < 12 ? 'Buenos días' : h < 18 ? 'Buenas tardes' : 'Buenas noches';
+  const open = deals.filter(d => !['Ganado','Perdido'].includes(d.stage));
   const pipe = open.reduce((s,d) => s+d.value, 0);
   const unread = chats.reduce((s,c) => s+c.unread, 0);
   const latest = [...orgs].sort((a,b) => b.createdAt-a.createdAt).slice(0,4);
@@ -890,23 +914,23 @@ function vDashboard(){
     <div class="big num">${big}</div><div class="delta">${delta}</div></div>`;
   return `
   <div class="page">
-    <div class="page-head"><div><h1>${greet}, Alex</h1>
-      <p class="sub">Here's what's happening across your workspace today.</p></div></div>
+    <div class="page-head"><div><h1>${greet}, Alejandro</h1>
+      <p class="sub">Esto es lo que ocurre hoy en tu espacio de trabajo.</p></div></div>
     <div class="stats">
-      ${stat('building-2','ic-brand','Organizations',orgs.length,'+2 this month')}
-      ${stat('star','ic-blue','Open deals',open.length,'+1 this week')}
-      ${stat('circle-dollar-sign','ic-green','Pipeline value',fmtMoney(pipe),'+12% vs last month')}
-      ${stat('message-circle','ic-purple','Unread messages',unread,'waiting for a reply')}
+      ${stat('building-2','ic-brand','Organizaciones',orgs.length,'+2 este mes')}
+      ${stat('star','ic-blue','Negocios abiertos',open.length,'+1 esta semana')}
+      ${stat('circle-dollar-sign','ic-green','Valor del pipeline',fmtMoney(pipe),'+12% frente al mes pasado')}
+      ${stat('message-circle','ic-purple','Mensajes sin leer',unread,'a la espera de respuesta')}
     </div>
     <div class="dash-grid">
-      <div class="card"><div class="card-h">Latest organizations<button class="view-all" data-nav="organizations">View all</button></div>
+      <div class="card"><div class="card-h">Últimas organizaciones<button class="view-all" data-nav="organizations">Ver todas</button></div>
         <div class="mini-table">${latest.map(o => `
           <div class="mini-row"><span class="avatar">${initials(o.name)}</span>
             <div class="grow"><b>${esc(o.name)}</b><span>${esc(o.sector)}</span></div>
             ${badgeFor(o.relationship)}
           </div>`).join('')}</div>
       </div>
-      <div class="card"><div class="card-h">Upcoming tasks<button class="view-all" data-nav="tasks">View all</button></div>
+      <div class="card"><div class="card-h">Próximas tareas<button class="view-all" data-nav="tasks">Ver todas</button></div>
         <div class="mini-table">${upcoming.map(t => `
           <div class="mini-row"><span class="mi-ic ic-gray" style="width:28px;height:28px;border-radius:8px"><i data-lucide="circle"></i></span>
             <div class="grow"><b>${esc(t.title)}</b><span>${esc(orgName(t.orgId))}</span></div>
@@ -917,91 +941,91 @@ function vDashboard(){
   </div>`;
 }
 
-/* ---------- Organizations list ---------- */
+/* ---------- Organizaciones ---------- */
 function vOrgs(){
   return `<div class="page">
-    <div class="page-head"><div><h1>Organizations</h1>
-      <p class="sub">Companies you sell to or buy from.</p></div></div>
-    ${toolbarHTML({ph:'Search organizations…', cta:'New organization', filters:[
-      {key:'sector', allLabel:'Sector: all', options:() => [...new Set(orgs.map(o=>o.sector))].sort()},
-      {key:'country', allLabel:'Country: all', options:() => [...new Set(orgs.map(o=>o.country))].sort()}
+    <div class="page-head"><div><h1>Organizaciones</h1>
+      <p class="sub">Empresas a las que vendes o de las que compras.</p></div></div>
+    ${toolbarHTML({ph:'Buscar organizaciones…', cta:'Nueva organización', filters:[
+      {key:'sector', allLabel:'Sector: todos', options:() => [...new Set(orgs.map(o=>o.sector))].sort((a,b)=>a.localeCompare(b,'es'))},
+      {key:'country', allLabel:'País: todos', options:() => [...new Set(orgs.map(o=>o.country))].sort((a,b)=>a.localeCompare(b,'es'))}
     ]})}
     <div class="card" id="tableRegion">${orgsTableHTML()}</div>
   </div>`;
 }
 
-/* ---------- Organization detail (Open) ---------- */
+/* ---------- Detalle de organización (Abrir) ---------- */
 function vOrgDetail(id){
   const o = orgById(id);
   if (!o) { ui.detail = null; return vOrgs(); }
   const rel = contacts.filter(c => c.orgId === id);
   const kv = (k,v) => `<dl class="kv"><dt>${k}</dt><dd>${v || '—'}</dd></dl>`;
   return `<div class="page">
-    <button class="backlink" data-action="back"><i data-lucide="arrow-left"></i>Back to Organizations</button>
+    <button class="backlink" data-action="back"><i data-lucide="arrow-left"></i>Volver a Organizaciones</button>
     <div class="detail-head">
       <span class="avatar lg">${initials(o.name)}</span>
       <div style="flex:1;min-width:0">
         <h1>${esc(o.name)} ${badgeFor(o.relationship)}</h1>
-        <p class="sub">${esc(o.website)} · Member since ${fmtDate(o.createdAt)}</p>
+        <p class="sub">${esc(o.website)} · Dado de alta desde ${fmtDate(o.createdAt)}</p>
       </div>
-      <button class="btn btn-ghost" data-action="edit" data-id="${o.id}"><i data-lucide="pencil"></i>Edit</button>
+      <button class="btn btn-ghost" data-action="edit" data-id="${o.id}"><i data-lucide="pencil"></i>Editar</button>
     </div>
     <div class="card" style="margin-bottom:16px">
       <div class="kv-grid">
-        ${kv('Sector',esc(o.sector))}${kv('Location',esc(o.city)+', '+esc(o.country))}
-        ${kv('Phone',`<span class="num">${esc(o.phone)}</span>`)}${kv('Email',esc(o.email))}
+        ${kv('Sector',esc(o.sector))}${kv('Ubicación',esc(o.city)+', '+esc(o.country))}
+        ${kv('Teléfono',`<span class="num">${esc(o.phone)}</span>`)}${kv('Correo',esc(o.email))}
       </div>
     </div>
     <div class="card" style="margin-bottom:16px">
-      <div class="card-h">Contacts (${rel.length})<button class="btn btn-primary btn-sm" data-action="new-contact-here" data-id="${o.id}"><i data-lucide="plus"></i>Add contact</button></div>
+      <div class="card-h">Contactos (${rel.length})<button class="btn btn-primary btn-sm" data-action="new-contact-here" data-id="${o.id}"><i data-lucide="plus"></i>Añadir contacto</button></div>
       <div class="card-b">${rel.length ? rel.map(c => `
         <div class="rel-row"><span class="avatar">${initials(c.name)}</span>
           <div class="grow"><b>${esc(c.name)}</b><span>${esc(c.role)} · ${esc(c.phone)}</span></div>
           <span class="due">${relTime(c.lastSeen)}</span>
-        </div>`).join('') : `<div class="empty" style="padding:30px"><b>No contacts yet</b><p>Add someone from this organization.</p></div>`}
+        </div>`).join('') : `<div class="empty" style="padding:30px"><b>Sin contactos todavía</b><p>Añade a alguien de esta organización.</p></div>`}
       </div>
     </div>
-    <div class="card"><div class="card-h">Notes</div><p class="note">${esc(o.notes) || 'No notes yet.'}</p></div>
+    <div class="card"><div class="card-h">Notas</div><p class="note">${esc(o.notes) || 'Todavía no hay notas.'}</p></div>
   </div>`;
 }
 
-/* ---------- Contacts list ---------- */
+/* ---------- Contactos ---------- */
 function vContacts(){
   return `<div class="page">
-    <div class="page-head"><div><h1>Contacts</h1>
-      <p class="sub">People, with their WhatsApp thread attached.</p></div></div>
-    ${toolbarHTML({ph:'Search contacts…', cta:'New contact', filters:[
-      {key:'org', allLabel:'Organization: all', options:() => orgs.map(o=>o.id), label:orgName}
+    <div class="page-head"><div><h1>Contactos</h1>
+      <p class="sub">Personas, con su hilo de WhatsApp asociado.</p></div></div>
+    ${toolbarHTML({ph:'Buscar contactos…', cta:'Nuevo contacto', filters:[
+      {key:'org', allLabel:'Organización: todas', options:() => orgs.map(o=>o.id), label:orgName}
     ]})}
     <div class="card" id="tableRegion">${contactsTableHTML()}</div>
   </div>`;
 }
 
-/* ---------- Tags ---------- */
+/* ---------- Etiquetas ---------- */
 function vTags(){
   return `<div class="page">
-    <div class="page-head"><div><h1>Tags</h1>
-      <p class="sub">Colour-coded labels you can filter contacts and invoices by.</p></div></div>
+    <div class="page-head"><div><h1>Etiquetas</h1>
+      <p class="sub">Etiquetas de colores para filtrar contactos y facturas.</p></div></div>
     <div class="card tag-new">
-      <input id="tagName" placeholder="New tag name…" style="flex:1;height:42px;border:1px solid var(--border-strong);border-radius:9px;background:var(--surface);padding:0 13px;font:inherit;color:var(--text);outline:none">
+      <input id="tagName" placeholder="Nombre de la nueva etiqueta…" style="flex:1;height:42px;border:1px solid var(--border-strong);border-radius:9px;background:var(--surface);padding:0 13px;font:inherit;color:var(--text);outline:none">
       <div class="swatches" id="swatches">${TAG_COLORS.map((c,i) => `<button type="button" class="sw ${i===0?'on':''}" data-color="${c}" style="background:${c}"></button>`).join('')}</div>
-      <button class="btn btn-primary" data-action="tag-add"><i data-lucide="plus"></i>Add tag</button>
+      <button class="btn btn-primary" data-action="tag-add"><i data-lucide="plus"></i>Añadir etiqueta</button>
     </div>
-    ${toolbarHTML({ph:'Search tags…'})}
+    ${toolbarHTML({ph:'Buscar etiquetas…'})}
     <div id="tableRegion">${tagsGridHTML()}</div>
   </div>`;
 }
 
-/* ---------- Deals (kanban) ---------- */
+/* ---------- Negocios (kanban) ---------- */
 function vDeals(){
-  const open = deals.filter(d => !['Won','Lost'].includes(d.stage));
+  const open = deals.filter(d => !['Ganado','Perdido'].includes(d.stage));
   const pipe = open.reduce((s,d) => s+d.value, 0);
   return `<div class="page">
-    <div class="page-head"><div><h1>Deals</h1>
-      <p class="sub">The pipeline board — drag a deal to move its stage.</p></div>
+    <div class="page-head"><div><h1>Negocios</h1>
+      <p class="sub">El panel del pipeline — arrastra un negocio para cambiar su etapa.</p></div>
       <div class="head-actions">
-        <span class="badge b-green" style="height:34px">${open.length} open · ${fmtMoney(pipe)}</span>
-        <button class="btn btn-primary" data-action="new"><i data-lucide="plus"></i>New deal</button>
+        <span class="badge b-green" style="height:34px">${open.length} ${open.length===1?'abierto':'abiertos'} · ${fmtMoney(pipe)}</span>
+        <button class="btn btn-primary" data-action="new"><i data-lucide="plus"></i>Nuevo negocio</button>
       </div></div>
     <div class="kanban">${STAGES.map(st => {
       const col = deals.filter(d => d.stage === st);
@@ -1013,7 +1037,7 @@ function vDeals(){
             <b>${esc(d.name)}</b><div class="org">${esc(orgName(d.orgId))}</div>
             <div class="foot"><span class="val num">${fmtMoney(d.value)}</span>
               <span class="ev" style="background:${STAGE_DOT[st]}"></span>
-              <span class="date num">${new Intl.DateTimeFormat('en-GB',{day:'numeric',month:'short'}).format(d.closeDate)}</span>
+              <span class="date num">${fmtShort(d.closeDate)}</span>
               <span class="avatar sm" style="margin-left:auto">AM</span></div>
           </div>`).join('')}</div>
       </div>`;}).join('')}
@@ -1021,22 +1045,22 @@ function vDeals(){
   </div>`;
 }
 
-/* ---------- Tasks ---------- */
+/* ---------- Tareas ---------- */
 function vTasks(){
   const f = ui.taskFilter;
   const rows = tasks.filter(t => f === 'all' ? true : f === 'open' ? !t.done : t.done).sort((a,b) => (a.done-b.done) || a.due-b.due);
   const done = tasks.filter(t => t.done).length;
   return `<div class="page">
-    <div class="page-head"><div><h1>Tasks</h1>
-      <p class="sub">Follow-ups linked to a contact or a deal.</p></div></div>
+    <div class="page-head"><div><h1>Tareas</h1>
+      <p class="sub">Seguimientos vinculados a un contacto o a un negocio.</p></div></div>
     <div class="task-prog">
       <span class="sel"><select data-task-filter>
-        <option value="open" ${f==='open'?'selected':''}>Open</option>
-        <option value="done" ${f==='done'?'selected':''}>Completed</option>
-        <option value="all" ${f==='all'?'selected':''}>All</option>
+        <option value="open" ${f==='open'?'selected':''}>Abiertas</option>
+        <option value="done" ${f==='done'?'selected':''}>Completadas</option>
+        <option value="all" ${f==='all'?'selected':''}>Todas</option>
       </select></span>
       <div class="bar"><i style="width:${done/tasks.length*100}%"></i></div>
-      <span class="p num">${done} of ${tasks.length} done</span>
+      <span class="p num">${done} de ${tasks.length} hechas</span>
     </div>
     <div class="card">
       ${rows.map(t => `<div class="trow ${t.done?'done':''}">
@@ -1044,57 +1068,57 @@ function vTasks(){
         <span class="tt">${esc(t.title)} <span>· ${esc(orgName(t.orgId))}</span></span>
         <span class="due ${dueClass(t.due)}">${dueLabel(t.due)}</span>
         <button class="icon-btn" data-action="task-del" data-id="${t.id}"><i data-lucide="x"></i></button>
-      </div>`).join('') || `<div class="empty" style="padding:40px"><b>Nothing here</b><p>No tasks match this filter.</p></div>`}
+      </div>`).join('') || `<div class="empty" style="padding:40px"><b>Nada por aquí</b><p>Ninguna tarea coincide con este filtro.</p></div>`}
       <form class="qadd" id="quickTask"><i data-lucide="plus"></i>
-        <input placeholder="Add a follow-up task and press Enter…" autocomplete="off">
-        <span class="due">due in 1 week</span></form>
+        <input placeholder="Añade una tarea de seguimiento y pulsa Intro…" autocomplete="off">
+        <span class="due">vence en 1 semana</span></form>
     </div>
   </div>`;
 }
 
-/* ---------- Invoices ---------- */
+/* ---------- Facturas ---------- */
 function vInvoices(){
   return `<div class="page">
-    <div class="page-head"><div><h1>Invoices</h1>
-      <p class="sub">Sales billed to customers, purchases billed by vendors.</p></div></div>
-    ${toolbarHTML({ph:'Search invoices…', cta:'New invoice'})}
+    <div class="page-head"><div><h1>Facturas</h1>
+      <p class="sub">Ventas facturadas a clientes y compras facturadas por proveedores.</p></div></div>
+    ${toolbarHTML({ph:'Buscar facturas…', cta:'Nueva factura'})}
     <div class="card" id="tableRegion">${invoicesTableHTML()}</div>
   </div>`;
 }
 
-/* ---------- Catalog ---------- */
+/* ---------- Catálogo ---------- */
 function vProducts(){
   return `<div class="page">
-    <div class="page-head"><div><h1>Catalog</h1>
-      <p class="sub">Products and services you can attach to deals and invoices.</p></div></div>
-    ${toolbarHTML({ph:'Search products…', cta:'New product'})}
+    <div class="page-head"><div><h1>Catálogo</h1>
+      <p class="sub">Productos y servicios que puedes asociar a negocios y facturas.</p></div></div>
+    ${toolbarHTML({ph:'Buscar productos…', cta:'Nuevo producto'})}
     <div class="card" id="tableRegion">${productsTableHTML()}</div>
   </div>`;
 }
 
-/* ---------- Import ---------- */
+/* ---------- Importar ---------- */
 function vImport(){
   return `<div class="page">
-    <div class="page-head"><div><h1>Import</h1>
-      <p class="sub">Bring your existing organizations and contacts from a CSV file.</p></div></div>
+    <div class="page-head"><div><h1>Importar</h1>
+      <p class="sub">Trae tus organizaciones y contactos existentes desde un archivo CSV.</p></div></div>
     <form id="importForm">
       <label class="dropzone" id="dropzone">
         <input type="file" id="fileInput" multiple accept=".csv,text/csv" hidden>
         <i data-lucide="cloud-upload"></i>
-        <b>Click to upload</b> or drag and drop
-        <small>CSV files, up to 5MB each</small>
+        <b>Haz clic para subir</b> o arrastra y suelta
+        <small>Archivos CSV, hasta 5 MB cada uno</small>
       </label>
       <div id="fileList">${ui.files.map(f => fileRowHTML(f)).join('')}</div>
       <div class="form-foot" style="border:0;padding-top:20px">
         <span class="spacer"></span>
-        <button type="button" class="btn btn-ghost" data-action="clear-files">Clear</button>
-        <button type="submit" class="btn btn-primary"><i data-lucide="upload"></i>Import records</button>
+        <button type="button" class="btn btn-ghost" data-action="clear-files">Limpiar</button>
+        <button type="submit" class="btn btn-primary"><i data-lucide="upload"></i>Importar registros</button>
       </div>
     </form>
     <div class="card" style="margin-top:18px;padding:18px 24px">
-      <b style="font-size:13.5px">Expected columns</b>
+      <b style="font-size:13.5px">Columnas esperadas</b>
       <p style="font-size:12.5px;color:var(--text-3);margin-top:8px;line-height:1.7">
-        name, relationship, sector, city, country, phone, email, website</p>
+        nombre, relación, sector, ciudad, país, teléfono, correo, sitio web</p>
     </div>
   </div>`;
 }
@@ -1105,8 +1129,8 @@ function fileRowHTML(f){
     <button type="button" data-action="file-del" data-name="${esc(f.name)}"><i data-lucide="x"></i></button></div>`;
 }
 
-/* ---------- Inbox ---------- */
-const REPLIES = ['Got it, thanks!','Let me check and get back to you.','Perfect — I\'ll send it over today.','Sure, sounds good.'];
+/* ---------- Bandeja de entrada ---------- */
+const REPLIES = ['¡Recibido, gracias!','Déjame comprobarlo y te digo.','Perfecto — te lo envío hoy mismo.','Claro, me parece bien.'];
 function vInbox(){
   const q = (ui.q.chats || '').trim().toLowerCase();
   const list = chats.filter(c => { const ct = contactById(c.contactId);
@@ -1115,10 +1139,10 @@ function vInbox(){
   const cur = chats.find(c => c.id === ui.chat);
   const ct = contactById(cur.contactId);
   return `<div class="page">
-    <div class="page-head"><div><h1>Inbox</h1>
-      <p class="sub">Every WhatsApp thread, in one place.</p></div></div>
+    <div class="page-head"><div><h1>Bandeja de entrada</h1>
+      <p class="sub">Todos los hilos de WhatsApp, en un solo lugar.</p></div></div>
     <div class="toolbar">
-      <label class="search"><i data-lucide="search"></i><input id="pageSearch" placeholder="Search conversations…" value="${esc(ui.q.chats||'')}" autocomplete="off"></label>
+      <label class="search"><i data-lucide="search"></i><input id="pageSearch" placeholder="Buscar conversaciones…" value="${esc(ui.q.chats||'')}" autocomplete="off"></label>
     </div>
     <div class="card inbox">
       <div class="chat-list">${list.map(c => { const p = contactById(c.contactId); const last = c.msgs.at(-1);
@@ -1126,19 +1150,19 @@ function vInbox(){
           <span class="avatar">${initials(p.name)}</span>
           <div class="grow"><b>${esc(p.name)}<time>${last ? relTime(last.t) : ''}</time></b><p>${esc(last?.text || '')}</p></div>
           ${c.unread ? `<span class="unread-n">${c.unread}</span>` : ''}
-        </button>`; }).join('') || `<div class="empty" style="padding:34px"><b>No conversations found</b></div>`}
+        </button>`; }).join('') || `<div class="empty" style="padding:34px"><b>No se encontraron conversaciones</b></div>`}
       </div>
       <div class="chat-pane">
         <div class="chat-top"><span class="avatar">${initials(ct.name)}</span>
-          <div><b>${esc(ct.name)}</b><span>online</span></div>
-          <button class="btn btn-ghost btn-sm" data-action="view-contact" data-id="${ct.id}">View contact</button>
+          <div><b>${esc(ct.name)}</b><span>en línea</span></div>
+          <button class="btn btn-ghost btn-sm" data-action="view-contact" data-id="${ct.id}">Ver contacto</button>
         </div>
         <div class="msgs" id="msgsBox">
           ${cur.msgs.map(m => `<div class="msg ${m.me?'me':''}">${esc(m.text)}${m.me?'<i data-lucide="check-check" class="rr"></i>':''}<time>${relTime(m.t)}</time></div>`).join('')}
           ${ui.typing ? `<div class="msg typing"><i></i><i></i><i></i></div>` : ''}
         </div>
         <form class="chat-form" id="chatForm">
-          <input id="chatInput" placeholder="Type a message and press Enter…" autocomplete="off">
+          <input id="chatInput" placeholder="Escribe un mensaje y pulsa Intro…" autocomplete="off">
           <button class="btn btn-primary" type="submit" style="border-radius:99px"><i data-lucide="send"></i></button>
         </form>
       </div>
@@ -1159,7 +1183,7 @@ function chatSend(text){
   }, 700);
 }
 
-/* ---------- Connection ---------- */
+/* ---------- Conexión ---------- */
 function qrSVG(){
   let s = 7; const rnd = () => (s = s * 16807 % 2147483647) / 2147483647;
   let cells = '';
@@ -1173,36 +1197,36 @@ function qrSVG(){
 function vConnection(){
   const st = ui.wa;
   return `<div class="page">
-    <div class="page-head"><div><h1>WhatsApp connection</h1>
-      <p class="sub">Pair a number by QR and check bridge status.</p></div></div>
+    <div class="page-head"><div><h1>Conexión de WhatsApp</h1>
+      <p class="sub">Vincula un número mediante QR y consulta el estado del puente.</p></div></div>
     <div class="card conn">
       <div class="st ${st==='online'?'on':st==='connecting'?'w':''}"><i></i>
-        ${st === 'online' ? 'Online — +44 7700 900123' : st === 'connecting' ? 'Connecting…' : 'Offline — no number paired'}</div>
+        ${st === 'online' ? 'En línea — +34 640 012 345' : st === 'connecting' ? 'Conectando…' : 'Desconectado — ningún número vinculado'}</div>
       ${st === 'online'
-        ? `<p style="color:var(--text-2);font-size:13.5px;line-height:1.6;margin-bottom:22px">Messages are being received and mirrored into your inbox in real time.</p>
-           <button class="btn btn-danger" data-action="wa-disconnect"><i data-lucide="unplug"></i>Disconnect number</button>`
+        ? `<p style="color:var(--text-2);font-size:13.5px;line-height:1.6;margin-bottom:22px">Los mensajes se reciben y se reflejan en la bandeja de entrada en tiempo real.</p>
+           <button class="btn btn-danger" data-action="wa-disconnect"><i data-lucide="unplug"></i>Desconectar número</button>`
         : `<div class="qr">${qrSVG()}</div>
            <div class="steps">
-             <div class="step"><b>1</b>Open WhatsApp on your phone</div>
-             <div class="step"><b>2</b>Tap Settings, then Linked devices</div>
-             <div class="step"><b>3</b>Point your phone at this QR code</div>
+             <div class="step"><b>1</b>Abre WhatsApp en tu teléfono</div>
+             <div class="step"><b>2</b>Toca Ajustes y, a continuación, Dispositivos vinculados</div>
+             <div class="step"><b>3</b>Apunta tu teléfono a este código QR</div>
            </div>
-           <button class="btn btn-primary" data-action="wa-connect2"><i data-lucide="refresh-cw"></i>Pair number</button>`}
+           <button class="btn btn-primary" data-action="wa-connect2"><i data-lucide="refresh-cw"></i>Vincular número</button>`}
     </div>
   </div>`;
 }
 
-/* ---------- Calendar ---------- */
+/* ---------- Calendario ---------- */
 function vCalendar(){
   const base = new Date(); base.setDate(1); base.setMonth(base.getMonth() + ui.calOffset);
   const y = base.getFullYear(), m = base.getMonth();
-  const title = base.toLocaleString('en-GB', {month:'long', year:'numeric'});
+  const title = base.toLocaleString('es-ES', {month:'long', year:'numeric'});
   const daysIn = new Date(y, m+1, 0).getDate();
   const firstDow = (new Date(y, m, 1).getDay() + 6) % 7;
   const todayISO = toISO(Date.now());
   const evs = {};
   tasks.filter(t => !t.done).forEach(t => { const k = toISO(t.due); (evs[k] ??= []).push('var(--brand)'); });
-  deals.filter(d => !['Won','Lost'].includes(d.stage)).forEach(d => { const k = toISO(d.closeDate); (evs[k] ??= []).push('var(--green)'); });
+  deals.filter(d => !['Ganado','Perdido'].includes(d.stage)).forEach(d => { const k = toISO(d.closeDate); (evs[k] ??= []).push('var(--green)'); });
   let cells = '';
   for (let i = 0; i < firstDow; i++) cells += '<div class="cal-day blank"></div>';
   for (let d = 1; d <= daysIn; d++){
@@ -1212,38 +1236,38 @@ function vCalendar(){
       <span>${ev.slice(0,3).map(c => `<i class="ev" style="background:${iso===todayISO?'#fff':c}"></i>`).join('')}</span></div>`;
   }
   return `<div class="page">
-    <div class="page-head"><div><h1>Calendar</h1>
-      <p class="sub">Deal closings and task due dates for the whole workspace.</p></div></div>
+    <div class="page-head"><div><h1>Calendario</h1>
+      <p class="sub">Cierres de negocios y vencimientos de tareas de todo el espacio.</p></div></div>
     <div class="cal-head">
       <button class="cal-nav" data-action="cal-prev"><i data-lucide="chevron-left"></i></button>
       <button class="cal-nav" data-action="cal-next"><i data-lucide="chevron-right"></i></button>
-      <h2>${title}</h2>
-      <button class="btn btn-ghost btn-sm" data-action="cal-today">Today</button>
+      <h2 style="text-transform:capitalize">${title}</h2>
+      <button class="btn btn-ghost btn-sm" data-action="cal-today">Hoy</button>
     </div>
     <div class="card">
       <div class="cal-grid" style="grid-template-columns:repeat(7,1fr)">
-        ${['Mon','Tue','Wed','Thu','Fri','Sat','Sun'].map(d => `<div class="cal-dow">${d}</div>`).join('')}
+        ${['Lun','Mar','Mié','Jue','Vie','Sáb','Dom'].map(d => `<div class="cal-dow">${d}</div>`).join('')}
         ${cells}
       </div>
-      <div class="cal-legend"><span><i style="background:var(--brand)"></i>Task due</span><span><i style="background:var(--green)"></i>Deal closing</span></div>
+      <div class="cal-legend"><span><i style="background:var(--brand)"></i>Tarea pendiente</span><span><i style="background:var(--green)"></i>Cierre de negocio</span></div>
     </div>
   </div>`;
 }
 
-/* ---------- AI Agents ---------- */
+/* ---------- Agentes IA ---------- */
 function vAI(){
   return `<div class="page">
     <div class="card soon-wrap">
       <div class="soon-ic"><i data-lucide="zap"></i></div>
-      <h2>AI Agents <span class="soon" style="font-size:10.5px">Soon</span></h2>
-      <p>Automated teammates that draft replies, qualify leads and chase overdue
-      invoices while you sleep. We're putting the finishing touches on them.</p>
-      <button class="btn btn-primary" data-action="notify"><i data-lucide="bell"></i>Notify me at launch</button>
+      <h2>Agentes IA <span class="soon" style="font-size:10.5px">Pronto</span></h2>
+      <p>Compañeros automáticos que redactan respuestas, cualifican leads y reclaman
+      facturas vencidas mientras duermes. Les estamos dando los últimos retoques.</p>
+      <button class="btn btn-primary" data-action="notify"><i data-lucide="bell"></i>Avísame en el lanzamiento</button>
     </div>
   </div>`;
 }
 
-/* ---------- Settings (theme section) ---------- */
+/* ---------- Ajustes (perfil + apariencia) ---------- */
 function vSettings(){
   const opt = (mode, label, cls) => `
     <button type="button" class="theme-opt ${ui.theme===mode?'on':''}" data-action="theme-set" data-mode="${mode}">
@@ -1251,106 +1275,85 @@ function vSettings(){
       <b>${label}</b>
     </button>`;
   return `<div class="page">
-    <div class="page-head"><div><h1>Account settings</h1>
-      <p class="sub">Your profile and workspace preferences.</p></div></div>
+    <button class="backlink" data-action="settings-back"><i data-lucide="arrow-left"></i>Volver</button>
+    <div class="page-head"><div><h1>Ajustes de cuenta</h1>
+      <p class="sub">Tu perfil y preferencias del espacio de trabajo.</p></div></div>
     <div class="set-grid">
       <form class="card" id="profileForm">
-        <div class="card-h">Profile</div>
+        <div class="card-h">Perfil</div>
         <div style="display:flex;align-items:center;gap:16px;padding:20px 26px">
           <span class="avatar lg">AM</span>
           <div class="form-grid" style="flex:1">
-            <div class="field"><label>Full name</label><input name="name" value="Alex Morgan"></div>
-            <div class="field"><label>Email</label><input name="email" type="email" value="alex@clientbridge.io"></div>
+            <div class="field"><label>Nombre completo</label><input name="name" value="Alejandro Morales"></div>
+            <div class="field"><label>Correo electrónico</label><input name="email" type="email" value="alejandro@clientbridge.io"></div>
           </div>
         </div>
         <div style="padding:0 26px 22px;text-align:right">
-          <button class="btn btn-primary btn-sm" type="submit"><i data-lucide="check"></i>Save profile</button>
+          <button class="btn btn-primary btn-sm" type="submit"><i data-lucide="check"></i>Guardar perfil</button>
         </div>
       </form>
       <div class="card">
-        <div class="card-h">Appearance</div>
+        <div class="card-h">Apariencia</div>
         <div class="theme-opts">
-          ${opt('light','Light','light')}${opt('dark','Dark','dark')}${opt('system','System','split')}
+          ${opt('light','Claro','light')}${opt('dark','Oscuro','dark')}${opt('system','Sistema','split')}
         </div>
         <p style="padding:0 26px 20px;font-size:12.5px;color:var(--text-3)">
-          System follows your operating system preference. You can also toggle quickly from the header.</p>
+          «Sistema» sigue la preferencia de tu sistema operativo. También puedes cambiarlo al vuelo desde la cabecera.</p>
       </div>
     </div>
   </div>`;
 }
 
-/* ---------- Help ---------- */
-function vHelp(){
-  const faqs = [
-    ['How does the WhatsApp bridge work?','Pair your number once by scanning the QR code under Conversations → Connection. Every incoming thread is mirrored into the Inbox and matched to a contact in your workspace.'],
-    ['Can I import my existing customers?','Yes. Go to Import and upload a CSV with the columns name, relationship, sector, city, country, phone, email and website. Duplicates are merged by website.'],
-    ['What happens when I delete an organization?','The organization and its links are removed, but conversations stay in the Inbox so you never lose history. Deleted records can be restored by support within 30 days.'],
-    ['How do deals move between stages?','Open Deals and simply drag a card to another column. The stage, owner and last activity update automatically.'],
-    ['Is my data safe?','All traffic is encrypted in transit and at rest. WhatsApp messages are stored in the EU region and are never used to train models.']
-  ];
-  return `<div class="page">
-    <div class="page-head"><div><h1>Help &amp; guide</h1>
-      <p class="sub">Answers to the questions we get the most.</p></div></div>
-    <div class="faq">${faqs.map(([q,a]) => `<details><summary>${q}</summary><p>${a}</p></details>`).join('')}</div>
-    <div class="card" style="margin-top:18px;padding:20px 26px;display:flex;align-items:center;gap:14px">
-      <span class="mi-ic ic-blue"><i data-lucide="life-buoy"></i></span>
-      <div style="flex:1"><b style="font-size:14px">Still stuck?</b>
-        <p style="font-size:12.5px;color:var(--text-3);margin-top:3px">Support replies within one business day.</p></div>
-      <button class="btn btn-primary btn-sm" data-action="support">Contact support</button>
-    </div>
-  </div>`;
-}
-
 /* ================================================================
-   FORM ENGINE (full page, never a modal)
+   MOTOR DE FORMULARIOS (página completa, nunca modal)
    ================================================================ */
 const KINDS = {
-  organization:{store:'orgs', single:'organization', back:'organizations', backTitle:'Organizations'},
-  contact:{store:'contacts', single:'contact', back:'contacts', backTitle:'Contacts'},
-  deal:{store:'deals', single:'deal', back:'deals', backTitle:'Deals'},
-  invoice:{store:'invoices', single:'invoice', back:'invoices', backTitle:'Invoices'},
-  product:{store:'products', single:'product', back:'products', backTitle:'Catalog'}
+  organization:{store:'orgs', single:'organización', fem:true,  backTitle:'Organizaciones'},
+  contact:    {store:'contacts', single:'contacto', fem:false, backTitle:'Contactos'},
+  deal:       {store:'deals', single:'negocio', fem:false, backTitle:'Negocios'},
+  invoice:    {store:'invoices', single:'factura', fem:true,  backTitle:'Facturas'},
+  product:    {store:'products', single:'producto', fem:false, backTitle:'Catálogo'}
 };
 const FIELDS = {
   organization:[
-    {k:'name',l:'Name',req:1,span:1,ph:'Alto Supply Co.'},
-    {k:'relationship',l:'Relationship',t:'sel',opts:RELS,req:1},
+    {k:'name',l:'Nombre',req:1,ph:'Suministros Vega'},
+    {k:'relationship',l:'Relación',t:'sel',opts:RELS,req:1},
     {k:'sector',l:'Sector',t:'sel',opts:SECTORS},
-    {k:'country',l:'Country',t:'sel',opts:COUNTRIES},
-    {k:'city',l:'City',ph:'Leeds'},
-    {k:'phone',l:'Phone',ph:'+44 113 496 0182'},
-    {k:'email',l:'Email',t:'email',ph:'accounts@company.com'},
-    {k:'website',l:'Website',ph:'company.com'},
-    {k:'notes',l:'Notes',t:'area',span:2,ph:'Anything your team should know about this account…'}
+    {k:'country',l:'País',t:'sel',opts:COUNTRIES},
+    {k:'city',l:'Ciudad',ph:'Zaragoza'},
+    {k:'phone',l:'Teléfono',ph:'+34 976 214 008'},
+    {k:'email',l:'Correo electrónico',t:'email',ph:'compras@empresa.es'},
+    {k:'website',l:'Sitio web',ph:'empresa.es'},
+    {k:'notes',l:'Notas',t:'area',span:2,ph:'Cualquier cosa que tu equipo deba saber sobre esta cuenta…'}
   ],
   contact:[
-    {k:'name',l:'Full name',req:1,ph:'Marcus Bell'},
-    {k:'role',l:'Role',ph:'Operations Director'},
-    {k:'phone',l:'Phone',req:1,ph:'+44 113 496 0182'},
-    {k:'whatsapp',l:'WhatsApp number',ph:'+44 7700 900182'},
-    {k:'email',l:'Email',t:'email',ph:'name@company.com'},
-    {k:'orgId',l:'Organization',t:'sel',opts:orgs.map(o=>({v:o.id,l:o.name})),req:1},
-    {k:'tagNames',l:'Tags',t:'tags',span:2},
-    {k:'notes',l:'Notes',t:'area',span:2,ph:'…'}
+    {k:'name',l:'Nombre completo',req:1,ph:'Marcos Campano'},
+    {k:'role',l:'Cargo',ph:'Director de operaciones'},
+    {k:'phone',l:'Teléfono',req:1,ph:'+34 976 214 008'},
+    {k:'whatsapp',l:'Número de WhatsApp',ph:'+34 640 012 182'},
+    {k:'email',l:'Correo electrónico',t:'email',ph:'nombre@empresa.es'},
+    {k:'orgId',l:'Organización',t:'sel',opts:orgs.map(o=>({v:o.id,l:o.name})),req:1},
+    {k:'tagNames',l:'Etiquetas',t:'tags',span:2},
+    {k:'notes',l:'Notas',t:'area',span:2,ph:'…'}
   ],
   deal:[
-    {k:'name',l:'Deal name',req:1,span:2,ph:'Q3 wholesale order'},
-    {k:'orgId',l:'Organization',t:'sel',opts:orgs.map(o=>({v:o.id,l:o.name})),req:1},
-    {k:'stage',l:'Stage',t:'sel',opts:STAGES},
-    {k:'value',l:'Value (USD)',t:'num',req:1,ph:'12500'},
-    {k:'closeDate',l:'Expected close',t:'date'}
+    {k:'name',l:'Nombre del negocio',req:1,span:2,ph:'Pedido mayorista T3'},
+    {k:'orgId',l:'Organización',t:'sel',opts:orgs.map(o=>({v:o.id,l:o.name})),req:1},
+    {k:'stage',l:'Etapa',t:'sel',opts:STAGES},
+    {k:'value',l:'Valor (EUR)',t:'num',req:1,ph:'12500'},
+    {k:'closeDate',l:'Cierre previsto',t:'date'}
   ],
   invoice:[
-    {k:'orgId',l:'Organization',t:'sel',opts:orgs.map(o=>({v:o.id,l:o.name})),req:1},
-    {k:'amount',l:'Amount (USD)',t:'num',req:1,ph:'2500'},
-    {k:'status',l:'Status',t:'sel',opts:['Paid','Pending','Overdue']},
-    {k:'due',l:'Due date',t:'date'}
+    {k:'orgId',l:'Organización',t:'sel',opts:orgs.map(o=>({v:o.id,l:o.name})),req:1},
+    {k:'amount',l:'Importe (EUR)',t:'num',req:1,ph:'2500'},
+    {k:'status',l:'Estado',t:'sel',opts:['Pagada','Pendiente','Vencida']},
+    {k:'due',l:'Vencimiento',t:'date'}
   ],
   product:[
-    {k:'name',l:'Product name',req:1,ph:'Bridge Pro (monthly)'},
-    {k:'sku',l:'SKU',ph:'BR-PRO-M'},
-    {k:'price',l:'Price (USD)',t:'num',ph:'49'},
-    {k:'stock',l:'Stock',t:'num',ph:'100'}
+    {k:'name',l:'Nombre del producto',req:1,ph:'Puente Pro (mensual)'},
+    {k:'sku',l:'SKU',ph:'PU-PRO-M'},
+    {k:'price',l:'Precio (EUR)',t:'num',ph:'49'},
+    {k:'stock',l:'Existencias',t:'num',ph:'100'}
   ]
 };
 function vForm(form){
@@ -1368,7 +1371,7 @@ function vForm(form){
     const base = `name="${f.k}" placeholder="${esc(f.ph || '')}"`;
     if (f.t === 'sel'){
       const opts = f.opts.map(o => typeof o === 'string' ? {v:o,l:o} : o);
-      return `<div class="fsel"><select ${base}>${!f.req ? '<option value="">— None —</option>' : ''}
+      return `<div class="fsel"><select ${base}>${!f.req ? '<option value="">— Sin definir —</option>' : ''}
         ${opts.map(o => `<option value="${esc(o.v)}" ${String(val(f))===String(o.v)?'selected':''}>${esc(o.l)}</option>`).join('')}</select></div>`;
     }
     if (f.t === 'area') return `<textarea ${base} rows="4">${esc(val(f))}</textarea>`;
@@ -1380,22 +1383,22 @@ function vForm(form){
     return `<input type="${f.t==='num'?'number':f.t==='date'?'date':f.t==='email'?'email':'text'}" ${base} value="${esc(val(f))}" ${f.t==='num'?'min="0" step="any"':''}>`;
   };
   return `<div class="page">
-    <button class="backlink" data-action="form-cancel"><i data-lucide="arrow-left"></i>Back to ${K.backTitle}</button>
-    <div class="page-head"><div><h1>${form.id ? 'Edit' : 'New'} ${K.single}</h1>
-      <p class="sub">${form.id ? esc(data.name || data.number || data.title || K.single) + ' · ' + esc(form.id) : 'Fields marked with * are required.'}</p></div></div>
+    <button class="backlink" data-action="form-cancel"><i data-lucide="arrow-left"></i>Volver a ${K.backTitle}</button>
+    <div class="page-head"><div><h1>${form.id ? 'Editar' : (K.fem ? 'Nueva' : 'Nuevo')} ${K.single}</h1>
+      <p class="sub">${form.id ? esc(data.name || data.number || K.single) + ' · ' + esc(form.id) : 'Los campos marcados con * son obligatorios.'}</p></div></div>
     <form class="card form-card" id="entityForm" novalidate>
       <div class="form-grid">
         ${FIELDS[form.kind].map(f => `
           <div class="field ${f.span===2?'span2':''}" data-field="${f.k}">
             <label>${f.l}${f.req ? ' *' : ''}</label>${ctrl(f)}
-            <span class="msg">${f.t === 'email' ? 'Enter a valid email address' : 'This field is required'}</span>
+            <span class="msg">${f.t === 'email' ? 'Introduce un correo electrónico válido' : 'Este campo es obligatorio'}</span>
           </div>`).join('')}
       </div>
       <div class="form-foot">
-        ${form.id ? `<button type="button" class="btn btn-danger" data-action="form-delete" data-id="${form.id}"><i data-lucide="trash-2"></i>Delete</button>` : ''}
+        ${form.id ? `<button type="button" class="btn btn-danger" data-action="form-delete" data-id="${form.id}"><i data-lucide="trash-2"></i>Eliminar</button>` : ''}
         <span class="spacer"></span>
-        <button type="button" class="btn btn-ghost" data-action="form-cancel">Cancel</button>
-        <button type="submit" class="btn btn-primary"><i data-lucide="check"></i>Save ${K.single}</button>
+        <button type="button" class="btn btn-ghost" data-action="form-cancel">Cancelar</button>
+        <button type="submit" class="btn btn-primary"><i data-lucide="check"></i>Guardar ${K.single}</button>
       </div>
     </form>
   </div>`;
@@ -1408,14 +1411,14 @@ function saveForm(e){
   FIELDS[form.kind].forEach(f => {
     const wrap = el.querySelector(`.field[data-field="${f.k}"]`); if (!wrap) return;
     const input = el.querySelector(`[name="${f.k}"]`);
-    let bad = false;
     if (f.t === 'tags') return;
+    let bad = false;
     const v = (input.value || '').trim();
     if (f.req && !v) bad = true;
     if (f.t === 'email' && v && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)) bad = true;
     if (bad){ wrap.classList.add('err'); ok = false; first ??= input; }
   });
-  if (!ok){ first?.focus(); return toast('Please review the highlighted fields', 'circle-alert'); }
+  if (!ok){ first?.focus(); return toast('Revisa los campos marcados', 'circle-alert'); }
 
   const S = window[K.store];
   const num = k => { const v = parseFloat(el.querySelector(`[name="${k}"]`)?.value); return isNaN(v) ? 0 : v; };
@@ -1436,10 +1439,10 @@ function saveForm(e){
 
   if (form.id){
     Object.assign(S.find(r => r.id === form.id), obj);
-    toast(`${K.single[0].toUpperCase()+K.single.slice(1)} updated`);
+    toast(`${cap(K.single)} actualizad${K.fem?'a':'o'}`);
   } else {
     S.unshift({id: uid(form.kind.slice(0,2)), createdAt: Date.now(), ...obj});
-    toast(`${K.single[0].toUpperCase()+K.single.slice(1)} created`, 'plus');
+    toast(`${cap(K.single)} cread${K.fem?'a':'o'}`, 'plus');
   }
   ui.form = null; render();
 }
@@ -1453,13 +1456,13 @@ function render(){
     : (ui.route === 'organizations' && ui.detail) ? vOrgDetail(ui.detail)
     : {dashboard:vDashboard, organizations:vOrgs, contacts:vContacts, tags:vTags, deals:vDeals,
        tasks:vTasks, invoices:vInvoices, products:vProducts, import:vImport, chats:vInbox,
-       connection:vConnection, calendar:vCalendar, ai:vAI, settings:vSettings, help:vHelp}[ui.route]();
+       connection:vConnection, calendar:vCalendar, ai:vAI, settings:vSettings}[ui.route]();
   icons();
   if (ui.route === 'chats') scrollMsgs();
 }
 
 /* ================================================================
-   EVENTS
+   EVENTOS
    ================================================================ */
 main.addEventListener('click', e => {
   const el = e.target.closest('[data-action]'); if (!el) return;
@@ -1470,67 +1473,67 @@ main.addEventListener('click', e => {
     case 'open':       ui.detail = id; render(); break;
     case 'open-org':    go('organizations'); ui.detail = id; render(); break;
     case 'back':        ui.detail = null; render(); break;
-    case 'edit':        ui.form = {kind: kindFor, id, from: ui.route}; render(); break;
-    case 'new':         ui.form = {kind: kindFor, id: null, from: ui.route}; render(); break;
-    case 'new-contact-here': ui.form = {kind:'contact', id:null, from:'organizations', preset:{orgId:id}}; render(); break;
+    case 'edit':        ui.form = {kind: kindFor, id}; render(); break;
+    case 'new':         ui.form = {kind: kindFor, id: null}; render(); break;
+    case 'new-contact-here': ui.form = {kind:'contact', id:null, preset:{orgId:id}}; render(); break;
     case 'form-cancel': ui.form = null; render(); break;
     case 'form-delete': {
       const K = KINDS[ui.form.kind], S = window[K.store];
       const i = S.findIndex(r => r.id === id); if (i > -1) S.splice(i,1);
-      toast(`${K.single} deleted`, 'trash-2'); ui.form = null; render(); break; }
+      toast(`${cap(K.single)} eliminad${K.fem?'a':'o'}`, 'trash-2'); ui.form = null; render(); break; }
     case 'delete': {
       if (ui.route === 'organizations'){ const i = orgs.findIndex(o=>o.id===id); if (i>-1) orgs.splice(i,1); ui.detail = null; }
       if (ui.route === 'contacts'){ const i = contacts.findIndex(c=>c.id===id); if (i>-1) contacts.splice(i,1); }
       if (ui.route === 'invoices'){ const i = invoices.findIndex(x=>x.id===id); if (i>-1) invoices.splice(i,1); }
       if (ui.route === 'products'){ const i = products.findIndex(p=>p.id===id); if (i>-1) products.splice(i,1); }
       if (ui.route === 'tags'){ const i = tags.findIndex(t=>t.name===id); if (i>-1) tags.splice(i,1); }
-      toast('Deleted', 'trash-2');
+      toast('Eliminado', 'trash-2');
       TABLE_ROUTES.includes(ui.route) && !ui.detail ? refreshList() : render(); break; }
     case 'clear-filters':
       ui.filters[ui.route] = {}; ui.q[ui.route] = '';
       const g = $('#globalSearch'); if (g) g.value = '';
       render(); break;
     case 'invoice-paid': {
-      const inv = invoices.find(i => i.id === id); if (inv){ inv.status = 'Paid'; toast(`${inv.number} marked as paid`, 'circle-dollar-sign'); refreshList(); } break; }
+      const inv = invoices.find(i => i.id === id); if (inv){ inv.status = 'Pagada'; toast(`${inv.number} marcada como pagada`, 'circle-dollar-sign'); refreshList(); } break; }
     case 'task-toggle': { const t = tasks.find(x => x.id === id); if (t){ t.done = !t.done; render(); } break; }
-    case 'task-del':    { tasks.splice(tasks.findIndex(t => t.id === id), 1); toast('Task removed', 'trash-2'); render(); break; }
+    case 'task-del':    { tasks.splice(tasks.findIndex(t => t.id === id), 1); toast('Tarea eliminada', 'trash-2'); render(); break; }
     case 'tag-add': {
       const name = $('#tagName').value.trim();
-      if (!name) return toast('Give the tag a name first', 'circle-alert');
-      if (tags.some(t => t.name.toLowerCase() === name.toLowerCase())) return toast('That tag already exists', 'circle-alert');
+      if (!name) return toast('Primero dale un nombre a la etiqueta', 'circle-alert');
+      if (tags.some(t => t.name.toLowerCase() === name.toLowerCase())) return toast('Esa etiqueta ya existe', 'circle-alert');
       tags.push({name, color: $('#swatches .sw.on')?.dataset.color || TAG_COLORS[0]});
-      toast(`Tag "${esc(name)}" created`, 'plus'); render(); break; }
+      toast(`Etiqueta «${esc(name)}» creada`, 'plus'); render(); break; }
     case 'chat-open': {
       const ch = chats.find(c => c.id === id); if (!ch) break;
       ui.chat = id; ch.unread = 0; render(); break; }
-    case 'view-contact': ui.form = {kind:'contact', id, from:'chats'}; render(); break;
+    case 'view-contact': ui.form = {kind:'contact', id}; render(); break;
     case 'wa-connect2': waConnect(); break;
     case 'wa-disconnect':
-      ui.wa = 'offline'; toast('Number disconnected', 'unplug'); render(); break;
+      ui.wa = 'offline'; toast('Número desconectado', 'unplug'); render(); break;
     case 'cal-prev':  ui.calOffset--; render(); break;
     case 'cal-next':  ui.calOffset++; render(); break;
     case 'cal-today': ui.calOffset = 0; render(); break;
-    case 'theme-set': setTheme(el.dataset.mode); toast(`Theme set to ${el.dataset.mode}`, 'sun-moon'); break;
-    case 'notify':    toast("You're on the early access list", 'bell'); break;
-    case 'support':   toast('Support request sent — we reply within one business day', 'life-buoy'); break;
+    case 'settings-back': go(ui.settingsFrom || 'dashboard'); break;
+    case 'theme-set': setTheme(el.dataset.mode); toast(`Tema cambiado a ${{light:'claro',dark:'oscuro',system:'sistema'}[el.dataset.mode]}`, 'sun-moon'); break;
+    case 'notify':    toast('Estás en la lista de acceso anticipado', 'bell'); break;
     case 'clear-files': ui.files = []; render(); break;
     case 'file-del':  ui.files = ui.files.filter(f => f.name !== el.dataset.name); render(); break;
   }
 });
 
-/* WhatsApp pairing (from the Connection page) */
+/* Vinculación de WhatsApp (desde la página de Conexión) */
 function waConnect(){
   if (ui.wa === 'connecting') return;
   ui.wa = 'connecting';
   if (ui.route === 'connection') render();
   setTimeout(() => {
     ui.wa = 'online';
-    toast('WhatsApp connected — inbox restored', 'message-circle');
+    toast('WhatsApp conectado — bandeja restaurada', 'message-circle');
     if (ui.route === 'connection') render();
   }, 1700);
 }
 
-/* sorting */
+/* ordenación */
 main.addEventListener('click', e => {
   const th = e.target.closest('th[data-sort]'); if (!th) return;
   const route = ui.route, k = th.dataset.key;
@@ -1539,7 +1542,7 @@ main.addEventListener('click', e => {
   refreshList();
 });
 
-/* selects & filters */
+/* selects y filtros */
 main.addEventListener('change', e => {
   const t = e.target;
   if (t.matches('[data-filter]')){
@@ -1549,7 +1552,7 @@ main.addEventListener('change', e => {
   if (t.matches('[data-task-filter]')){ ui.taskFilter = t.value; render(); }
 });
 
-/* search inputs */
+/* búsquedas */
 main.addEventListener('input', e => {
   if (e.target.id === 'pageSearch'){
     ui.q[ui.route] = e.target.value;
@@ -1564,7 +1567,7 @@ main.addEventListener('input', e => {
   if (ui.route === 'chats') render();
 });
 
-/* tag chips toggle inside form */
+/* chips de etiquetas dentro del formulario */
 main.addEventListener('click', e => {
   const chip = e.target.closest('.tagpick .chip');
   if (chip) chip.classList.toggle('on');
@@ -1572,11 +1575,11 @@ main.addEventListener('click', e => {
   if (sw){ $$('#swatches .sw').forEach(x => x.classList.toggle('on', x === sw)); }
 });
 
-/* submits */
+/* envíos */
 main.addEventListener('submit', e => {
   e.preventDefault();
   if (e.target.id === 'entityForm')  return saveForm(e);
-  if (e.target.id === 'profileForm')  return toast('Profile saved');
+  if (e.target.id === 'profileForm')  return toast('Perfil guardado');
   if (e.target.id === 'chatForm'){
     const inp = $('#chatInput'); const v = inp.value.trim(); if (!v) return;
     return chatSend(v);
@@ -1584,15 +1587,16 @@ main.addEventListener('submit', e => {
   if (e.target.id === 'quickTask'){
     const v = e.target.querySelector('input').value.trim(); if (!v) return;
     tasks.push({id: uid('tk'), title: v, orgId: null, due: now + 7*D, done: false});
-    toast('Task added', 'plus'); render(); return;
+    toast('Tarea añadida', 'plus'); render(); return;
   }
   if (e.target.id === 'importForm'){
-    if (!ui.files.length) return toast('Choose at least one CSV file first', 'circle-alert');
-    toast(`Parsed ${ui.files.length} file${ui.files.length>1?'s':''} locally, nothing uploaded`, 'upload');
+    if (!ui.files.length) return toast('Elige al menos un archivo CSV primero', 'circle-alert');
+    const n = ui.files.length;
+    toast(`${n} ${n>1?'archivos':'archivo'} analizado${n>1?'s':''} en local — no se ha subido nada`, 'upload');
   }
 });
 
-/* kanban drag */
+/* arrastrar en el kanban */
 let dragId = null;
 main.addEventListener('dragstart', e => {
   const c = e.target.closest('.kcard'); if (!c) return;
@@ -1616,12 +1620,12 @@ main.addEventListener('drop', e => {
   const d = deals.find(x => x.id === dragId);
   if (d && d.stage !== col.dataset.stage){
     d.stage = col.dataset.stage;
-    toast(`"${esc(d.name)}" moved to ${d.stage}`, 'star');
+    toast(`«${esc(d.name)}» movido a ${d.stage}`, 'star');
   }
   dragId = null; render();
 });
 
-/* import dropzone */
+/* zona de importación */
 main.addEventListener('dragover', e => { if (e.target.closest('#dropzone')){ e.preventDefault(); $('#dropzone').classList.add('over'); } });
 main.addEventListener('dragleave', () => $('#dropzone')?.classList.remove('over'));
 main.addEventListener('drop', e => {
@@ -1634,20 +1638,20 @@ main.addEventListener('change', e => {
 });
 function addFiles(list){
   const ok = [...list].filter(f => /csv$/i.test(f.name) || f.type === 'text/csv');
-  if (!ok.length) return toast('Only CSV files are supported', 'circle-alert');
+  if (!ok.length) return toast('Solo se admiten archivos CSV', 'circle-alert');
   ui.files.push(...ok.filter(f => !ui.files.some(x => x.name === f.name)));
   render();
 }
 
-/* keyboard */
+/* teclado */
 document.addEventListener('keydown', e => {
   if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k'){
     e.preventDefault(); $('#globalSearch').focus(); $('#globalSearch').select();
   }
-  if (e.key === 'Escape') document.body.classList.remove('side-open');
+  if (e.key === 'Escape'){ document.body.classList.remove('side-open'); userMenu.classList.remove('open'); }
 });
 
-/* boot */
+/* arranque */
 render();
 </script>
 </body>
