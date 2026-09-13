@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AVA Core · Plataforma white-label</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:system-ui,-apple-system,'Segoe UI',sans-serif}
+:root{--navy:#0b1220;--panel:#101c33;--line:#1c2a44;--ok:#10b981;--bad:#ef4444;--warn:#f59e0b}
+body[data-theme="nemu"]{--acc:#10b981;--acc2:#0d9488}
+body[data-theme="clinica"]{--acc:#3b82f6;--acc2:#6366f1}
+body[data-theme="aurora"]{--acc:#f43f5e;--acc2:#a855f7}
+body[data-theme="agro"]{--acc:#f59e0b;--acc2:#ea580c}
+body{background:#0d1526;color:#e2e8f0;height:100vh;display:flex;flex-direction:column;overflow:hidden}
+.mono{font-family:ui-monospace,monospace}
+
+header{display:flex;align-items:center;gap:14px;padding:12px 22px;border-bottom:1px solid var(--line);background:var(--navy);flex-shrink:0}
+.mark{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,var(--acc),var(--acc2));display:flex;align-items:center;justify-content:center;font-weight:800;color:#fff}
+header h1{font-size:15px;font-weight:800;letter-spacing:-.3px}
+header h1 small{display:block;font-size:10.5px;color:#64748b;font-weight:500}
+nav{display:flex;gap:8px;margin-left:18px}
+.nbtn{background:var(--panel);border:1px solid var(--line);color:#94a3b8;border-radius:10px;padding:9px 16px;font-size:12.5px;font-weight:700;cursor:pointer}
+.nbtn.on{background:color-mix(in srgb,var(--acc) 14%,transparent);border-color:var(--acc);color:var(--acc)}
+.hright{margin-left:auto;display:flex;gap:10px}
+.chip{font-size:11px;font-weight:700;padding:6px 12px;border-radius:99px;background:var(--panel);border:1px solid var(--line);color:var(--acc)}
+.chip b{color:#fff;font-family:ui-monospace,monospace}
+.chip.al{border-color:var(--bad);color:#f87171;cursor:pointer}
+
+.maincol{flex:1;display:flex;flex-direction:column;min-width:0;min-height:0;overflow:hidden}
+.view{display:none;flex:1;overflow-y:auto;min-height:0}
+.view.on{display:block}
+#secR.on{display:flex;flex-direction:column;overflow:hidden}
+
+/* ===== OPERACIÓN ===== */
+.op{padding:18px 22px}
+.op-head{display:flex;align-items:baseline;gap:14px;margin-bottom:14px;flex-wrap:wrap}
+.op-head h2{font-size:17px;font-weight:800}
+.op-head .sub{font-size:12px;color:#64748b}
+.op-head .upd{margin-left:auto;font-size:10.5px;color:#475569;font-family:ui-monospace,monospace}
+.op-sum{display:flex;gap:12px;margin-bottom:16px;flex-wrap:wrap}
+.opk{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:11px 18px}
+.opk small{display:block;font-size:9.5px;color:#64748b;font-weight:800;text-transform:uppercase;letter-spacing:.6px;margin-bottom:4px}
+.opk b{font-size:18px;font-weight:800}
+.op-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:14px}
+.opcard{background:var(--panel);border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column}
+.opcard.alerta{border-color:color-mix(in srgb,var(--bad) 55%,transparent)}
+.och{display:flex;align-items:center;gap:11px;padding:13px 15px;border-bottom:1px solid var(--line)}
+.avx{width:38px;height:38px;border-radius:11px;background:#16233d;border:1px solid color-mix(in srgb,var(--acc) 55%,transparent);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:var(--acc);flex-shrink:0}
+.och .on2{font-weight:800;font-size:14px}
+.och .or2{font-size:11px;color:#64748b}
+.stag{margin-left:auto;font-size:9.5px;font-weight:800;padding:4px 10px;border-radius:99px}
+.st-on{background:color-mix(in srgb,var(--ok) 15%,transparent);color:var(--ok)}
+.st-pa{background:#1a2233;color:#64748b}
+.st-tr{background:color-mix(in srgb,var(--warn) 15%,transparent);color:var(--warn)}
+.st-al{background:color-mix(in srgb,var(--bad) 15%,transparent);color:#f87171}
+.now{display:flex;align-items:center;gap:10px;padding:11px 15px;background:color-mix(in srgb,var(--acc) 6%,transparent);border-bottom:1px solid var(--line)}
+.now.al3{background:color-mix(in srgb,var(--bad) 8%,transparent)}
+.pulse{width:8px;height:8px;border-radius:50%;background:var(--acc);flex-shrink:0;animation:pl 1.4s infinite}
+.now.al3 .pulse{background:var(--bad);animation-name:plb}
+@keyframes pl{0%{box-shadow:0 0 0 0 color-mix(in srgb,var(--acc) 50%,transparent)}70%{box-shadow:0 0 0 6px transparent}100%{box-shadow:0 0 0 0 transparent}}
+@keyframes plb{0%{box-shadow:0 0 0 0 color-mix(in srgb,var(--bad) 50%,transparent)}70%{box-shadow:0 0 0 6px transparent}100%{box-shadow:0 0 0 0 transparent}}
+.now .nt{font-size:12.5px;font-weight:700;line-height:1.4}
+.now.al3 .nt{color:#fca5a5}
+.now .ns{font-size:10px;color:#475569;font-family:ui-monospace,monospace;margin-left:auto;flex-shrink:0}
+.trow{display:flex;gap:9px;padding:8px 15px;font-size:12px;line-height:1.45;border-bottom:1px solid rgba(28,42,68,.45)}
+.trow:last-child{border:none}
+.trow .td{width:6px;height:6px;border-radius:50%;background:#33456a;margin-top:5px;flex-shrink:0}
+.trow.ok .td{background:var(--ok)}
+.trow.bad .td{background:var(--bad)}
+.trow .tt2{color:#aebbd4}
+.trow .th{margin-left:auto;font-size:10px;color:#475569;font-family:ui-monospace,monospace;flex-shrink:0}
+.oempty{padding:10px 15px;font-size:11.5px;color:#475569}
+
+/* ===== RUNTIME ===== */
+.rtwrap{flex:1;display:grid;grid-template-columns:1fr 380px;min-height:0}
+.braincol{display:flex;flex-direction:column;min-height:0;padding:14px 0 0 14px}
+.bh{display:flex;align-items:center;gap:10px;padding:0 14px 10px 0}
+.panel-tag{font-size:9.5px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;padding:5px 12px;border-radius:99px}
+.tag-int{background:color-mix(in srgb,var(--acc) 12%,transparent);color:var(--acc);border:1px solid color-mix(in srgb,var(--acc) 35%,transparent)}
+.tag-cli{background:#1a2233;color:#64748b;border:1px solid #24365c}
+.st{margin-left:auto;font-size:11px;font-weight:800;padding:5px 13px;border-radius:99px;background:var(--panel);border:1px solid var(--line);color:#64748b}
+.st.ok{background:color-mix(in srgb,var(--ok) 12%,transparent);border-color:var(--ok);color:var(--ok)}
+.st.esc{background:color-mix(in srgb,var(--bad) 12%,transparent);border-color:var(--bad);color:#f87171}
+.st.skip{color:#94a3b8}
+.log{flex:1;overflow-y:auto;padding:4px 18px 10px 4px;display:flex;flex-direction:column;border:1px solid var(--line);border-radius:14px 14px 0 0;background:rgba(16,28,51,.35)}
+.ev{display:flex;gap:12px;animation:pop .25s ease}
+.ev .rail{display:flex;flex-direction:column;align-items:center}
+.ev .rail::before{content:'';flex:1;width:2px;background:var(--line);margin-top:3px}
+.ev:last-child .rail::before{display:none}
+.dot3{width:26px;height:26px;border-radius:50%;background:#16233d;border:1px solid #24365c;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;flex-shrink:0;font-family:ui-monospace,monospace}
+.ev.ok .dot3{background:color-mix(in srgb,var(--ok) 15%,transparent);border-color:var(--ok);color:var(--ok)}
+.ev.bad .dot3{background:color-mix(in srgb,var(--bad) 15%,transparent);border-color:var(--bad);color:#f87171}
+.ev.skip .dot3{background:#1a2233}
+.eb{padding:3px 0 14px;min-width:0;flex:1}
+.et{font-size:13px;color:#c9d5e8;font-weight:600}
+.ev.bad .et{color:#fca5a5}
+.ets{font-size:10px;color:#475569;font-family:ui-monospace,monospace;margin-left:8px}
+.json{margin-top:8px;background:#0a1120;border:1px solid var(--line);border-radius:9px;padding:10px 13px;font-family:ui-monospace,monospace;font-size:11px;line-height:1.7;color:#8ea3c2;white-space:pre;overflow-x:auto;display:none}
+.json .hl{color:var(--warn);font-weight:700}
+.json.on{display:block;animation:pop .3s ease}
+.idle{margin:auto;text-align:center;color:#33456a;font-size:13px;line-height:1.8;padding:30px}
+.idle b{color:#64748b}
+.controls{display:flex;gap:9px;padding:12px 14px 12px 0;flex-wrap:wrap;align-items:center}
+.controls .lbl{font-size:10.5px;font-weight:800;color:#475569;text-transform:uppercase;letter-spacing:1px}
+.sc{background:var(--panel);border:1px solid #24365c;color:#c9d5e8;border-radius:10px;padding:9px 14px;font-size:12.5px;font-weight:600;cursor:pointer}
+.sc:hover{border-color:var(--acc);color:var(--acc)}
+.sc:disabled{opacity:.45;cursor:wait}
+.sc .n{font-family:ui-monospace,monospace;font-size:10px;color:#475569;margin-right:6px}
+.tip{font-size:11px;color:#5b708f;margin-left:auto}
+
+.phonewrap{display:flex;flex-direction:column;padding:14px;border-left:1px solid var(--line);background:radial-gradient(circle at 30% 20%,#111d33,#0d1526)}
+.phone{flex:1;border:8px solid #1a2540;border-radius:34px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 20px 50px rgba(0,0,0,.5);min-height:0}
+.ph{background:var(--navy);border-bottom:1px solid var(--line);color:#fff;padding:12px 14px;display:flex;align-items:center;gap:10px;flex-shrink:0}
+.ph .av{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--acc),var(--acc2));display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#fff}
+.ph .pn{font-weight:700;font-size:13.5px}
+.ph .ps{font-size:10.5px;color:#64748b;display:flex;align-items:center;gap:5px}
+.ph .ps .dot{width:6px;height:6px;border-radius:50%;background:var(--acc);animation:pl 1.5s infinite}
+.chat{flex:1;background:#0b141a;overflow-y:auto;padding:14px 11px;display:flex;flex-direction:column;gap:7px;min-height:0}
+.sep{align-self:center;font-size:10px;color:#8696a0;background:#182229;padding:4px 10px;border-radius:8px;margin:3px 0}
+.m{max-width:85%;padding:7px 10px 5px;border-radius:9px;font-size:13px;line-height:1.45;animation:pop .22s ease;word-wrap:break-word}
+@keyframes pop{from{opacity:0;transform:translateY(7px) scale(.97)}to{opacity:1;transform:none}}
+.m.cli{align-self:flex-start;background:#1f2c33;border-top-left-radius:2px}
+.m.bot{align-self:flex-end;background:color-mix(in srgb,var(--acc) 20%,#0b141a);border:1px solid color-mix(in srgb,var(--acc) 45%,transparent);border-top-right-radius:2px}
+.m.sys{align-self:center;background:#1a2540;border:1px solid #2a3a5c;color:#93b4f5;font-size:11px;text-align:center;max-width:92%}
+.m.sys.bad{color:#fca5a5;border-color:#5c2a2a;background:#251a1a}
+.m .tm{font-size:9px;color:rgba(233,237,239,.5);float:right;margin:5px 0 0 7px}
+.typing{align-self:flex-end;background:color-mix(in srgb,var(--acc) 20%,#0b141a);border:1px solid color-mix(in srgb,var(--acc) 45%,transparent);border-radius:9px;border-top-right-radius:2px;padding:11px 14px;display:none;gap:4px;flex-shrink:0}
+.typing.on{display:flex}
+.typing span{width:6px;height:6px;border-radius:50%;background:#8696a0;animation:bl 1s infinite}
+.typing span:nth-child(2){animation-delay:.18s}
+.typing span:nth-child(3){animation-delay:.36s}
+@keyframes bl{0%,80%,100%{opacity:.25}40%{opacity:1}}
+.inbar{background:#182229;padding:9px 12px;flex-shrink:0}
+.inbar .fake{background:#2a3942;border-radius:99px;padding:8px 13px;font-size:12px;color:#8696a0}
+
+/* ===== EQUIPO / CONFIG ===== */
+.sec{padding:18px 22px}
+.brandnote{font-size:12px;color:#8ea3c2;background:color-mix(in srgb,var(--acc) 7%,transparent);border:1px solid color-mix(in srgb,var(--acc) 25%,transparent);border-radius:10px;padding:10px 14px;margin-bottom:14px;line-height:1.6}
+.brandnote b{color:var(--acc)}
+.eq-kpis{display:flex;gap:12px;margin-bottom:16px;flex-wrap:wrap}
+.eqk{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:11px 18px}
+.eqk small{display:block;font-size:10.5px;color:#64748b;font-weight:700;text-transform:uppercase;letter-spacing:.5px}
+.eqk b{font-size:17px;font-weight:800}
+.eq{display:grid;grid-template-columns:300px 1fr;gap:16px;align-items:start}
+.tcard{background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:12px 14px;display:flex;align-items:center;gap:11px;cursor:pointer;margin-bottom:9px}
+.tcard:hover{border-color:#2a3f66}
+.tcard.sel{border-color:var(--acc)}
+.tcard .tn2{font-weight:800;font-size:13.5px}
+.tcard .tr2{font-size:11px;color:#64748b}
+.tcard .ts{margin-left:auto;text-align:right}
+.stag2{font-size:9.5px;font-weight:800;padding:3px 9px;border-radius:99px;display:inline-block}
+.tcard .pr{font-size:10px;color:#475569;font-weight:700;margin-top:3px}
+.hire{border:1.5px dashed #2a3f66;background:transparent;color:#64748b;border-radius:13px;padding:13px;width:100%;font-size:12.5px;font-weight:700;cursor:pointer}
+.hire:hover{border-color:var(--acc);color:var(--acc)}
+.editor{background:var(--panel);border:1px solid var(--line);border-radius:15px;overflow:hidden}
+.eh{display:flex;align-items:center;gap:13px;padding:15px 18px;border-bottom:1px solid var(--line)}
+.eh h3{font-size:17px;font-weight:800}
+.eh .rl{font-size:12px;color:#64748b;font-weight:600}
+.eh .sp{margin-left:auto;text-align:right}
+.eh .sp small{display:block;font-size:9.5px;color:#64748b;font-weight:700;text-transform:uppercase}
+.eh .sp b{font-size:14px}
+.ebody{padding:16px 18px;display:flex;flex-direction:column;gap:16px}
+.sect{font-size:10.5px;font-weight:800;color:#475569;text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px}
+.frow{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.fin{background:#0d1830;border:1px solid var(--line);border-radius:9px;padding:9px 12px;font-size:13px;color:#e2e8f0;outline:none}
+.fin:focus{border-color:var(--acc)}
+.farea{width:100%;min-height:54px;resize:vertical;line-height:1.5;font-family:inherit}
+.sw2{width:42px;height:23px;border-radius:99px;background:#2a3a5c;position:relative;cursor:pointer;border:none;flex-shrink:0}
+.sw2::after{content:'';position:absolute;width:16px;height:16px;border-radius:50%;background:#fff;top:3.5px;left:4px;transition:.2s}
+.sw2.on{background:var(--acc)}
+.sw2.on::after{left:22px}
+.litems{display:flex;flex-direction:column;gap:6px}
+.litem{display:flex;align-items:center;gap:9px;background:#0d1830;border:1px solid var(--line);border-radius:9px;padding:8px 12px;font-size:12.5px;line-height:1.4}
+.litem .x{margin-left:auto;color:#3d5375;font-weight:800;cursor:pointer}
+.litem .x:hover{color:#f87171}
+.litem.guarda-viva{border-color:color-mix(in srgb,var(--warn) 40%,transparent)}
+.gv{font-size:9px;font-weight:800;color:var(--warn);background:color-mix(in srgb,var(--warn) 12%,transparent);padding:2px 7px;border-radius:99px;flex-shrink:0}
+.addrow{display:flex;gap:8px}
+.addrow input{flex:1;background:transparent;border:1.5px dashed #2a3f66;border-radius:9px;padding:8px 12px;font-size:12.5px;color:#e2e8f0;outline:none}
+.addrow input:focus{border-color:var(--acc);border-style:solid}
+.tchip{font-size:11px;font-weight:700;background:#0d1830;border:1.5px solid var(--line);color:#64748b;padding:6px 12px;border-radius:99px;cursor:pointer;font-family:ui-monospace,monospace}
+.tchip.on{border-color:var(--acc);color:var(--acc)}
+.qa{background:#0d1830;border:1px solid var(--line);border-radius:9px;padding:9px 12px;font-size:12.3px;line-height:1.5;margin-bottom:6px}
+.qa b{color:#7dd3fc}
+.qa .a{color:#86efac}
+.qa .x{float:right;color:#3d5375;font-weight:800;cursor:pointer}
+.qa .x:hover{color:#f87171}
+.esave{display:flex;gap:10px;justify-content:flex-end}
+.btn2{background:#0d1830;border:1px solid var(--line);color:#94a3b8;border-radius:10px;padding:10px 16px;font-weight:700;font-size:12.5px;cursor:pointer}
+.btn2.go{background:var(--acc);border-color:var(--acc);color:#fff}
+.btn2.rd{border-color:color-mix(in srgb,var(--bad) 50%,transparent);color:#f87171}
+.hintbox{font-size:11.5px;color:#8ea3c2;background:#0d1830;border:1px solid var(--line);border-radius:10px;padding:10px 13px;line-height:1.6}
+.hintbox b{color:var(--acc)}
+.cfg{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start;max-width:900px}
+.themecard{background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:16px}
+.tgrid{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+.topt{background:#0d1830;border:1.5px solid var(--line);border-radius:12px;padding:12px;cursor:pointer;width:calc(50% - 5px);display:flex;align-items:center;gap:10px}
+.topt:hover{border-color:#2a3f66}
+.topt.on{border-color:var(--acc)}
+.tdot{width:26px;height:26px;border-radius:8px;flex-shrink:0}
+.topt h5{font-size:12.5px;font-weight:700}
+.topt small{display:block;font-size:10px;color:#64748b}
+
+.ov{position:fixed;inset:0;background:rgba(5,10,20,.7);display:none;align-items:center;justify-content:center;z-index:100;padding:18px}
+.ov.on{display:flex}
+.modal{background:var(--panel);border:1px solid #24365c;border-radius:16px;max-width:560px;width:100%;padding:20px;animation:pop .25s ease}
+.modal h3{font-size:16px;font-weight:800;margin-bottom:4px}
+.modal .ms{font-size:12.5px;color:#64748b;margin-bottom:14px}
+.hgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.hopt{background:#0d1830;border:1.5px solid var(--line);border-radius:13px;padding:15px;cursor:pointer;display:flex;gap:12px;align-items:center}
+.hopt:hover{border-color:var(--acc)}
+.hopt h4{font-size:14px;font-weight:800}
+.hopt p{font-size:11.5px;color:#64748b;line-height:1.4}
+.hopt .hp{font-size:11px;font-weight:800;color:var(--acc);margin-top:4px}
+.mclose{margin-top:14px;width:100%;background:#0d1830;border:1px solid var(--line);color:#94a3b8;border-radius:10px;padding:10px;font-weight:700;font-size:12.5px;cursor:pointer}
+.toasts{position:fixed;bottom:20px;right:20px;z-index:200;display:flex;flex-direction:column;gap:8px}
+.toast{background:var(--navy);border:1px solid var(--line);border-left:3px solid var(--acc);color:#fff;padding:12px 15px;border-radius:11px;font-size:12.5px;font-weight:600;box-shadow:0 10px 26px rgba(0,0,0,.4);animation:pop .3s ease;max-width:340px}
+@media(max-width:1240px){.rtwrap{grid-template-columns:1fr 340px}}
+@media(max-width:1000px){.rtwrap{grid-template-columns:1fr;grid-template-rows:auto 1fr}.phonewrap{border-left:none;border-top:1px solid var(--line)}.phone{max-height:360px}.log{max-height:400px}.braincol{padding:14px 14px 0}.controls{padding:12px 14px}.eq,.cfg{grid-template-columns:1fr}.tip{display:none}}
+</style>
+</head>
+<body data-theme="nemu">
+
+<header>
+  <div class="mark">A</div>
+  <h1>AVA Core<small id="brandSub">Ferretería Ñemu S.A. · instancia dedicada</small></h1>
+  <nav>
+    <button class="nbtn on" id="nvD" onclick="view('op')">Operación</button>
+    <button class="nbtn" id="nvR" onclick="view('runtime')">Runtime</button>
+    <button class="nbtn" id="nvE" onclick="view('equipo')">Equipo</button>
+    <button class="nbtn" id="nvC" onclick="view('config')">Configuración</button>
+  </nav>
+  <div class="hright">
+    <div class="chip al" id="chipAlerts" style="display:none" onclick="view('op')"><b id="nAlerts">0</b> esperando tu decisión</div>
+    <div class="chip">Costo sesión: <b id="cost">$0.000</b></div>
+  </div>
+</header>
+
+<div class="maincol">
+
+  <!-- OPERACIÓN -->
+  <div class="view on" id="secD">
+    <div class="op">
+      <div class="op-head">
+        <h2>Operación de la empresa</h2>
+        <span class="sub">cada empleado reportando qué hace, en vivo</span>
+        <span class="upd" id="updClock"></span>
+      </div>
+      <div class="op-sum">
+        <div class="opk"><small>Mensajes de hoy</small><b id="opMsgs">0</b></div>
+        <div class="opk"><small>Ventas de hoy</small><b id="opSales">G. 0</b></div>
+        <div class="opk"><small>Citas de hoy</small><b id="opCitas">0</b></div>
+        <div class="opk"><small>Guardas disparadas</small><b id="opGuards">0</b></div>
+        <div class="opk"><small>Empleados activos</small><b id="opOn">0</b></div>
+      </div>
+      <div class="op-grid" id="opGrid"></div>
+    </div>
+  </div>
+
+  <!-- RUNTIME: cerebro izquierda + WhatsApp derecha -->
+  <div class="view" id="secR">
+    <div class="rtwrap">
+      <div class="braincol">
+        <div class="bh">
+          <span class="panel-tag tag-int">Cómo piensa el agente — registro interno</span>
+          <span class="st" id="status">esperando</span>
+        </div>
+        <div class="log" id="log">
+          <div class="idle">
+            <b>Registro interno del proceso.</b><br>
+            A la derecha, el teléfono: lo que el cliente ve.<br>
+            Cada escenario actualiza también la tarjeta del empleado en Operación.<br><br>
+            Dispará un escenario abajo.
+          </div>
+        </div>
+        <div class="controls">
+          <span class="lbl">Escenarios</span>
+          <button class="sc" id="b0" onclick="run('precio')"><span class="n">01</span>Consulta de precio</button>
+          <button class="sc" id="b1" onclick="run('guarda')"><span class="n">02</span>Pedido y la guarda</button>
+          <button class="sc" id="b2" onclick="run('dup')"><span class="n">03</span>Duplicado de Meta</button>
+          <button class="sc" id="b3" onclick="run('noche')"><span class="n">04</span>Venta a las 2 AM</button>
+          <span class="tip">Editá límites en Equipo y re-corré el 02 — cambia el desenlace</span>
+        </div>
+      </div>
+      <div class="phonewrap">
+        <span class="panel-tag tag-cli">Lo que ve el cliente</span>
+        <div class="phone">
+          <div class="ph">
+            <div class="av" id="phAv">RO</div>
+            <div>
+              <div class="pn" id="phName">Rosa · Asistente</div>
+              <div class="ps"><span class="dot"></span><span id="phStatus">en línea 24/7</span></div>
+            </div>
+          </div>
+          <div class="chat" id="chat"></div>
+          <div class="typing" id="typing"><span></span><span></span><span></span></div>
+          <div class="inbar"><div class="fake">El cliente escribe por WhatsApp real…</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- EQUIPO -->
+  <div class="view sec" id="secE">
+    <div class="brandnote">Empleados de <b id="brandNote">Ferretería Ñemu S.A.</b> — la ficha es la configuración viva del agente.</div>
+    <div class="eq-kpis">
+      <div class="eqk"><small>Empleados</small><b id="kCount">—</b></div>
+      <div class="eqk"><small>Activos</small><b id="kOn">—</b></div>
+      <div class="eqk"><small>Costo equipo / mes</small><b id="kCostT">—</b></div>
+      <div class="eqk"><small>Guardas activas</small><b id="kGuards">—</b></div>
+    </div>
+    <div class="eq">
+      <div id="tlist"></div>
+      <div id="edwrap"></div>
+    </div>
+  </div>
+
+  <!-- CONFIGURACIÓN -->
+  <div class="view sec" id="secC">
+    <div class="brandnote">Ajustes de la instancia. El tema de colores lo define la empresa en su onboarding.</div>
+    <div class="cfg">
+      <div class="editor">
+        <div class="eh"><div><h3>Datos de la empresa</h3><div class="rl">Aparecen en la plataforma y en cómo se presentan los agentes</div></div></div>
+        <div class="ebody">
+          <div><div class="sect">Nombre comercial</div>
+            <input class="fin" id="cfgName" value="Ferretería Ñemu S.A." style="width:100%"></div>
+          <div><div class="sect">Rubro</div>
+            <input class="fin" id="cfgRubro" value="Ferretería y materiales de construcción" style="width:100%"></div>
+          <div><div class="sect">WhatsApp del negocio</div>
+            <input class="fin" value="+595 981 555-0100" disabled style="width:100%;opacity:.5"></div>
+          <div class="esave" style="justify-content:flex-start"><button class="btn2 go" onclick="saveCompany()">Guardar cambios</button></div>
+        </div>
+      </div>
+      <div class="themecard">
+        <div class="sect">Tema visual de la empresa</div>
+        <p style="font-size:12px;color:#64748b;line-height:1.6">Colores que tiñen toda la plataforma. Se configura una vez en el onboarding.</p>
+        <div class="tgrid" id="tgrid"></div>
+        <div class="hintbox" style="margin-top:12px">En producción el backend inyecta estos colores desde la ficha del tenant. La app es una sola; la marca, infinita.</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="ov" id="ov"><div class="modal" id="modal"></div></div>
+<div class="toasts" id="toasts"></div>
+
+<script>
+/* detector de errores visibles */
+window.onerror=function(m,s,l){
+  var c=document.getElementById('log');
+  document.body.insertAdjacentHTML('afterbegin','<div style="background:#7f1d1d;color:#fff;padding:10px 16px;font-family:monospace;font-size:12px">Error: '+m+' (linea '+l+')</div>');
+};
+
+/* ================= TENANTS ================= */
+var THEMES={
+  nemu:{name:'Ferretería Ñemu',c1:'#10b981',c2:'#0d9488',company:'Ferretería Ñemu S.A.'},
+  clinica:{name:'Clínica Santa María',c1:'#3b82f6',c2:'#6366f1',company:'Clínica Santa María'},
+  aurora:{name:'Boutique Aurora',c1:'#f43f5e',c2:'#a855f7',company:'Boutique Aurora'},
+  agro:{name:'AgroCampo PY',c1:'#f59e0b',c2:'#ea580c',company:'AgroCampo PY'}
+};
+var THEME='nemu';
+function renderThemes(){
+  var h='';
+  Object.keys(THEMES).forEach(function(k){
+    var t=THEMES[k];
+    h+='<div class="topt '+(k===THEME?'on':'')+'" onclick="pickTheme(\''+k+'\')">'
+     +'<div class="tdot" style="background:linear-gradient(135deg,'+t.c1+','+t.c2+')"></div>'
+     +'<div><h5>'+t.name+'</h5><small>'+t.c1+' · '+t.c2+'</small></div></div>';
+  });
+  document.getElementById('tgrid').innerHTML=h;
+}
+function pickTheme(k){
+  THEME=k;
+  document.body.dataset.theme=k;
+  renderThemes();
+  toast('Tema aplicado: '+THEMES[k].company);
+}
+function saveCompany(){
+  var n=document.getElementById('cfgName').value.trim()||THEMES[THEME].company;
+  THEMES[THEME].company=n;
+  document.getElementById('brandSub').textContent=n+' · instancia dedicada';
+  document.getElementById('brandNote').textContent=n;
+  toast('Datos actualizados — '+n);
+}
+
+/* ================= EQUIPO ================= */
+var TEAM={
+  rosa:{name:'Rosa',role:'Atención al Cliente',price:490000,status:'on',
+    tono:'Cercana y resolutiva. Nunca promete lo que no puede cumplir.',
+    tasks:['Responder precio y stock al instante','Informar estado de pedidos','Derivar reclamos al dueño'],
+    limits:[{d:'Descuentos máximo 10%'},{d:'Devoluciones: siempre escala al dueño'}],
+    pedidoMax:2000000,
+    tools:['buscar_producto','info_pedido','escalar_a_humano'],
+    know:[{q:'¿Hacen envíos?',a:'Sí, delivery en Asunción y Central.'}],
+    stats:'412 conv · 91% resueltas'},
+  luz:{name:'Luz',role:'Agendadora de Citas',price:390000,status:'on',
+    tono:'Clara y puntual. Confirmaciones cortas.',
+    tasks:['Agendar y reagendar por WhatsApp','Recordatorio 24h antes','Reasignar cancelaciones'],
+    limits:[{d:'No agenda fuera del horario del local'}],
+    pedidoMax:0,
+    tools:['listar_horarios','agendar_cita','escalar_a_humano'],
+    know:[{q:'¿Atienden sábados?',a:'Sí, de 8 a 12.'}],
+    stats:'287 conv · 95% resueltas'},
+  eusebio:{name:'Don Eusebio',role:'Gestor de Cobros',price:590000,status:'on',
+    tono:'Respetuoso pero firme: cobra sin arrugar.',
+    tasks:['Recordar vencimientos','Coordinar fechas de pago','Enviar comprobantes SET'],
+    limits:[{d:'Quitas y planes de pago: decide el dueño'},{d:'Nunca contacta clientes "no molestar"'}],
+    pedidoMax:0,
+    tools:['consultar_deuda','registrar_compromiso','escalar_a_humano'],
+    know:[{q:'¿Puedo pagar en cuotas?',a:'Te propongo nueva fecha; los planes los define el dueño.'}],
+    stats:'198 conv · 84% resueltas'},
+  marcelo:{name:'Marcelo',role:'Ventas y Cotizaciones',price:590000,status:'on',
+    tono:'Proactivo y amable: siempre propone el siguiente paso.',
+    tasks:['Cotizar por cantidad','Registrar pedidos','Seguimiento a cotizaciones frías'],
+    limits:[{d:'Descuentos solo de la tabla autorizada'},{d:'Pedidos grandes: aprueba el dueño'}],
+    pedidoMax:5000000,
+    tools:['cotizar','crear_pedido','escalar_a_humano'],
+    know:[{q:'¿Cuánto demora la entrega?',a:'24 a 48 h en Asunción y Central.'}],
+    stats:'156 conv · 89% resueltas'},
+  tito:{name:'Tito',role:'Pedidos Mayoristas',price:690000,status:'on',
+    tono:'Directo y eficiente. Toma pedidos completos sin errores.',
+    tasks:['Tomar pedidos por WhatsApp','Verificar stock','Generar remisión'],
+    limits:[{d:'Precio mayorista mínimo intocable'}],
+    pedidoMax:8000000,
+    tools:['tomar_pedido','check_stock','escalar_a_humano'],
+    know:[{q:'¿Pido para mañana tem tem?',a:'Sí, si pedís antes de las 15:00.'}],
+    stats:'120 pedidos · 97% sin errores'}
+};
+var CATALOG={
+  ramona:{name:'Ramona',role:'Post-Venta y Fidelización',price:450000,desc:'Encuesta post-compra, detecta insatisfechos a tiempo y reactiva a los que no vuelven.'},
+  carlos:{name:'Carlos',role:'Compras y Proveedores',price:550000,desc:'Controla stock mínimo, arma órdenes de compra y da seguimiento a proveedores.'}
+};
+
+var $=function(id){return document.getElementById(id)};
+var ini=function(n){var p=n.split(' ');return (p[0][0]+(p[1]?p[1][0]:'')).toUpperCase()};
+var gs=function(n){return 'G. '+Math.round(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g,'.')};
+var timers=[],cost=0,selId='rosa';
+
+function toast(h){
+  var t=document.createElement('div');t.className='toast';t.textContent=h;
+  $('toasts').appendChild(t);
+  setTimeout(function(){t.style.opacity=0;t.style.transition='.4s';setTimeout(function(){t.remove()},400)},4000);
+}
+function clock(){var d=new Date();return ('0'+d.getHours()).slice(-2)+':'+('0'+d.getMinutes()).slice(-2)}
+function addCost(n){cost+=n;$('cost').textContent='$'+cost.toFixed(3)}
+
+/* ================= NAVEGACIÓN ================= */
+function view(v){
+  $('secD').classList.toggle('on',v==='op');
+  $('secR').classList.toggle('on',v==='runtime');
+  $('secE').classList.toggle('on',v==='equipo');
+  $('secC').classList.toggle('on',v==='config');
+  $('nvD').classList.toggle('on',v==='op');
+  $('nvR').classList.toggle('on',v==='runtime');
+  $('nvE').classList.toggle('on',v==='equipo');
+  $('nvC').classList.toggle('on',v==='config');
+  if(v==='equipo')renderTeam();
+  if(v==='config')renderThemes();
+  if(v==='op')renderOp();
+}
+
+/* ================= OPERACIÓN ================= */
+var OP={msgs:38,sales:0,citas:3,guards:0,now:{},today:{}};
+(function seed(){
+  var s={
+    rosa:[['Respondió consulta de precio de tornillos','ok'],['Informó estado del pedido #1042','ok'],['Registró cliente nuevo','ok']],
+    luz:[['Agendó cita · medición de obra jueves 09:00','ok'],['Envió recordatorios del día','ok']],
+    eusebio:[['Registró compromiso de pago · Villa Elisa · viernes','ok'],['Envió comprobantes SET','ok']],
+    marcelo:[['Envió cotización de pintura','ok'],['Cerró pedido #1042 · 40 paneles LED','ok']],
+    tito:[['Generó remisión #1043 · Constructora Acosta','ok'],['Verificó stock del depósito','ok']]
+  };
+  Object.keys(s).forEach(function(id){
+    OP.today[id]=s[id].map(function(x){return {txt:x[0],t:clock(),cls:x[1]}});
+  });
+  Object.keys(TEAM).forEach(function(id){
+    OP.now[id]={txt:'Disponible — esperando mensajes',since:clock(),alerta:false};
+  });
+})();
+
+function setNow(id,txt,alerta){
+  OP.now[id]={txt:txt,since:clock(),alerta:!!alerta};
+  renderOp();
+}
+function pushToday(id,txt,cls){
+  if(!OP.today[id])OP.today[id]=[];
+  OP.today[id].unshift({txt:txt,t:clock(),cls:cls||''});
+  if(OP.today[id].length>6)OP.today[id].pop();
+}
+function renderOp(){
+  $('opMsgs').textContent=OP.msgs;
+  $('opSales').textContent=gs(OP.sales);
+  $('opCitas').textContent=OP.citas;
+  $('opGuards').textContent=OP.guards;
+  var on=0,total=0;
+  Object.keys(TEAM).forEach(function(id){if(TEAM[id].status==='on')on++;total++});
+  $('opOn').textContent=on+' / '+total;
+  var up=$('updClock');if(up)up.textContent='última actualización '+clock();
+  var h='';
+  Object.keys(TEAM).forEach(function(id){
+    var a=TEAM[id],n=OP.now[id]||{txt:'—'},td=OP.today[id]||[];
+    var alerta=n.alerta&&a.status==='on';
+    var st=a.status==='on'
+      ?(alerta?'<span class="stag st-al">EN ALERTA</span>':'<span class="stag st-on">ACTIVO</span>')
+      :(a.status==='train'?'<span class="stag st-tr">ENTRENANDO</span>':'<span class="stag st-pa">PAUSADO</span>');
+    var nowLine=a.status==='paused'
+      ?'<div class="now"><div class="pulse" style="background:#64748b;animation:none"></div><div class="nt" style="color:#64748b">Pausado — autoreply</div></div>'
+      :'<div class="now'+(alerta?' al3':'')+'"><div class="pulse"></div><div class="nt">'+n.txt+'</div><span class="ns">desde '+n.since+'</span></div>';
+    var hist=td.length
+      ?td.map(function(r){return '<div class="trow '+(r.cls||'')+'"><div class="td"></div><div class="tt2">'+r.txt+'</div><span class="th">'+r.t+'</span></div>'}).join('')
+      :'<div class="oempty">Sin actividad registrada hoy.</div>';
+    h+='<div class="opcard'+(alerta?' alerta':'')+'">'
+     +'<div class="och"><div class="avx">'+ini(a.name)+'</div>'
+     +'<div><div class="on2">'+a.name+'</div><div class="or2">'+a.role+'</div></div>'+st+'</div>'
+     +nowLine
+     +'<div class="today">'+hist+'</div>'
+     +(alerta?'<button class="btn2 rd" style="margin:10px 15px" onclick="resolveAlert(\''+id+'\')">Revisar y resolver como dueño</button>':'')
+     +'</div>';
+  });
+  $('opGrid').innerHTML=h;
+  var nal=Object.keys(OP.now).filter(function(id){return OP.now[id].alerta&&TEAM[id].status==='on'}).length;
+  $('nAlerts').textContent=nal;
+  $('chipAlerts').style.display=nal?'block':'none';
+}
+function resolveAlert(id){
+  if(OP.now[id])OP.now[id].alerta=false;
+  pushToday(id,'Caso resuelto por el dueño — el agente aprende del caso','ok');
+  setNow(id,'Disponible — esperando mensajes');
+  toast('Alerta resuelta — '+TEAM[id].name+' vuelve a operar');
+}
+
+/* ================= EQUIPO ================= */
+function renderTeam(){
+  var ids=Object.keys(TEAM),on=0,total=0,guards=0;
+  ids.forEach(function(id){
+    var a=TEAM[id];
+    if(a.status==='on')on++;
+    if(a.status!=='train')total+=a.price;
+    guards+=a.limits.length;
+  });
+  $('kCount').textContent=ids.length;
+  $('kOn').textContent=on+' / '+ids.length;
+  $('kCostT').textContent=gs(total);
+  $('kGuards').textContent=guards;
+  var h='';
+  ids.forEach(function(id){
+    var a=TEAM[id];
+    var st=a.status==='on'?'<span class="stag2 st-on">ACTIVO</span>':(a.status==='train'?'<span class="stag2 st-tr">ENTRENANDO</span>':'<span class="stag2 st-pa">PAUSADO</span>');
+    h+='<div class="tcard '+(id===selId?'sel':'')+'" onclick="pick(\''+id+'\')">'
+     +'<div class="avx">'+ini(a.name)+'</div>'
+     +'<div><div class="tn2">'+a.name+'</div><div class="tr2">'+a.role+'</div></div>'
+     +'<div class="ts">'+st+'<div class="pr">'+gs(a.price)+'/mes</div></div></div>';
+  });
+  h+='<button class="hire" onclick="openHire()">Contratar del catálogo</button>';
+  $('tlist').innerHTML=h;
+  renderEditor();
+}
+function pick(id){selId=id;renderTeam()}
+function renderEditor(){
+  var a=TEAM[selId];
+  var h='<div class="editor">'
+   +'<div class="eh"><div class="avx" style="width:48px;height:48px;font-size:14px">'+ini(a.name)+'</div>'
+   +'<div><h3>'+a.name+'</h3><div class="rl">'+a.role+' · '+a.stats+'</div></div>'
+   +'<div class="sp"><small>salario digital</small><b>'+gs(a.price)+'/mes</b></div></div>'
+   +'<div class="ebody">';
+  h+='<div><div class="sect">Identidad</div><div class="frow">'
+   +'<input class="fin" id="eName" value="'+a.name+'" style="width:130px">'
+   +'<input class="fin" id="eRole" value="'+a.role+'" style="flex:1;min-width:180px"></div></div>';
+  h+='<div><div class="sect">Personalidad — va directo al prompt del LLM</div>'
+   +'<textarea class="fin farea" id="eTono">'+a.tono+'</textarea></div>';
+  h+='<div><div class="sect">Estado</div><div class="frow">'
+   +'<button class="sw2 '+(a.status==='on'?'on':'')+'" '+(a.status==='train'?'disabled style="opacity:.4"':'')+' onclick="toggleStatus()"></button>'
+   +'<span style="font-size:12.5px;font-weight:600">'+(a.status==='on'?'Activo — atiende 24/7':(a.status==='train'?'Entrenando (~48h)':'Pausado — autoreply'))+'</span>'
+   +'</div><div class="hintbox" style="margin-top:8px">Pausá este empleado y dispará un escenario en Runtime — el cliente recibe autoreply y su tarjeta en Operación lo refleja.</div></div>';
+  h+='<div><div class="sect">Tareas</div><div class="litems">'
+   +a.tasks.map(function(t,i){return '<div class="litem">✓ '+t+'<span class="x" onclick="delItem(\'tasks\','+i+')">✕</span></div>'}).join('')
+   +'</div><div class="addrow"><input id="newTask" placeholder="Nueva tarea…" onkeydown="if(event.key===\'Enter\')addItem(\'tasks\')"><button class="btn2" style="padding:8px 14px" onclick="addItem(\'tasks\')">Agregar</button></div></div>';
+  h+='<div><div class="sect">Límites — guardas en código, el LLM no puede violarlas</div><div class="litems">'
+   +a.limits.map(function(l,i){return '<div class="litem">· '+l.d+'<span class="x" onclick="delItem(\'limits\','+i+')">✕</span></div>'}).join('');
+  if(a.pedidoMax>0){
+    h+='<div class="litem guarda-viva"><span class="gv">GUARDA ACTIVA</span>Pedido máximo sin aprobación:'
+     +'<input class="fin mono" id="eMax" value="'+a.pedidoMax+'" style="width:130px;padding:5px 9px;font-size:12px;margin-left:6px"></div>';
+  }
+  h+='</div><div class="addrow"><input id="newLim" placeholder="Nuevo límite…" onkeydown="if(event.key===\'Enter\')addItem(\'limits\')"><button class="btn2" style="padding:8px 14px" onclick="addItem(\'limits\')">Agregar</button></div></div>';
+  h+='<div><div class="sect">Tools que puede llamar</div><div class="frow">'
+   +a.tools.map(function(t){return '<span class="tchip on" onclick="this.classList.toggle(\'on\')">'+t+'</span>'}).join('')
+   +'</div></div>';
+  h+='<div><div class="sect">Entrenamiento — respuestas aprendidas</div>'
+   +a.know.map(function(k,i){return '<div class="qa"><span class="x" onclick="delQa('+i+')">✕</span><b>P:</b> '+k.q+'<br><span class="a">→ '+k.a+'</span></div>'}).join('')
+   +'<div class="addrow"><input id="newQ" placeholder="Cuando pregunten…"><input id="newA" placeholder="Respondé…" onkeydown="if(event.key===\'Enter\')addQa()"><button class="btn2" style="padding:8px 14px" onclick="addQa()">Agregar</button></div></div>';
+  h+='<div class="esave"><button class="btn2" onclick="renderEditor()">Descartar</button>'
+   +'<button class="btn2 go" onclick="saveEd()">Guardar y sincronizar agente</button></div>';
+  h+='</div></div>';
+  $('edwrap').innerHTML=h;
+}
+function addItem(k){
+  var inp=$(k==='tasks'?'newTask':'newLim');
+  if(!inp.value.trim())return;
+  if(k==='tasks'){TEAM[selId].tasks.push(inp.value.trim())}
+  else{TEAM[selId].limits.push({d:inp.value.trim()})}
+  renderEditor();
+}
+function delItem(k,i){
+  TEAM[selId][k].splice(i,1);
+  renderEditor();
+}
+function addQa(){
+  var q=$('newQ').value.trim(),r=$('newA').value.trim();
+  if(!q||!r)return;
+  TEAM[selId].know.push({q:q,a:r});
+  renderEditor();
+  toast(TEAM[selId].name+' aprendió una respuesta');
+}
+function delQa(i){TEAM[selId].know.splice(i,1);renderEditor()}
+function toggleStatus(){
+  var a=TEAM[selId];
+  a.status=(a.status==='on')?'paused':'on';
+  renderTeam();
+  renderOp();
+  if(a.status==='on')setNow(selId,'Disponible — esperando mensajes');
+  toast(a.status==='on'?a.name+' activa':a.name+' pausada — autoreply activo');
+}
+function saveEd(){
+  var a=TEAM[selId];
+  setTimeout(function(){
+    a.name=$('eName').value.trim()||a.name;
+    a.role=$('eRole').value.trim()||a.role;
+    a.tono=$('eTono').value.trim();
+    var mx=$('eMax');
+    if(mx)a.pedidoMax=parseInt(mx.value.replace(/[^\d]/g,''),10)||0;
+    renderTeam();
+    renderPhoneIdle();
+    renderOp();
+    pushToday(selId,'Ficha actualizada por el dueño','');
+    toast(a.name+' sincronizada');
+  },600);
+}
+function renderPhoneIdle(){
+  $('phAv').textContent=ini(TEAM.rosa.name);
+  $('phName').textContent=TEAM.rosa.name+' · Asistente';
+}
+function openHire(){
+  var h='<h3>Catálogo de empleados</h3><div class="ms">Se integran al equipo y entrenan con los datos de la empresa (~48h simuladas en 8s)</div><div class="hgrid">';
+  Object.keys(CATALOG).forEach(function(id){
+    var c=CATALOG[id];
+    h+='<div class="hopt" onclick="hire(\''+id+'\')"><div class="avx">'+ini(c.name)+'</div>'
+     +'<div><h4>'+c.name+'</h4><p>'+c.role+'<br>'+c.desc+'</p><div class="hp">'+gs(c.price)+'/mes · Contratar</div></div></div>';
+  });
+  h+='</div><button class="mclose" onclick="closeM()">Cerrar</button>';
+  $('modal').innerHTML=h;
+  $('ov').classList.add('on');
+}
+function closeM(){$('ov').classList.remove('on')}
+ $('ov').addEventListener('click',function(e){if(e.target===$('ov'))closeM()});
+function hire(id){
+  var c=CATALOG[id];
+  delete CATALOG[id];
+  TEAM[id]={name:c.name,role:c.role,price:c.price,status:'train',
+    tono:c.desc,tasks:['(definir tareas con el dueño)'],limits:[{d:'(definir límites con el dueño)'}],
+    pedidoMax:0,tools:['escalar_a_humano'],know:[],stats:'recién contratado'};
+  OP.now[id]={txt:'Entrenando con los datos de la empresa',since:clock(),alerta:false};
+  OP.today[id]=[];
+  closeM();
+  view('equipo');
+  toast(c.name+' contratada — entrenando');
+  setTimeout(function(){
+    if(TEAM[id]){
+      TEAM[id].status='on';
+      TEAM[id].tasks=['Responder según su rubro','Escalar al dueño lo que no sepa'];
+      TEAM[id].limits=[{d:'Máximo 2 mensajes por cliente por semana'}];
+      setNow(id,'Disponible — esperando mensajes');
+      renderTeam();
+      toast(c.name+' terminó el entrenamiento — ya está activa');
+    }
+  },8000);
+}
+
+/* ================= RUNTIME ================= */
+var chat=$('chat'),log=$('log'),typing=$('typing'),statusEl=$('status');
+function addM(c,txt){
+  var d=document.createElement('div');d.className='m '+c;
+  d.innerHTML=txt+'<span class="tm">'+clock()+'</span>';
+  chat.appendChild(d);chat.scrollTop=chat.scrollHeight;
+}
+function addSep(t){
+  var d=document.createElement('div');d.className='sep';d.textContent=t;
+  chat.appendChild(d);chat.scrollTop=chat.scrollHeight;
+}
+function addEv(h,cls,json){
+  var e=document.createElement('div');e.className='ev '+(cls||'');
+  var ic=(cls==='bad')?'!':((cls==='skip')?'»':((cls==='ok')?'OK':'·'));
+  e.innerHTML='<div class="rail"><div class="dot3">'+ic+'</div></div>'
+   +'<div class="eb"><div class="et">'+h+'<span class="ets">'+clock()+'</span></div>'
+   +(json?'<div class="json">'+json+'</div>':'')+'</div>';
+  log.appendChild(e);log.scrollTop=log.scrollHeight;
+  if(json){
+    var j=e.querySelector('.json');
+    setTimeout(function(){j.classList.add('on');log.scrollTop=log.scrollHeight},350);
+  }
+}
+function setSt(t,c){statusEl.textContent=t;statusEl.className='st '+(c||'')}
+function en(on){
+  ['b0','b1','b2','b3'].forEach(function(b){$(b).disabled=!on});
+}
+
+function buildScenario(key){
+  if(key==='precio'){
+    var a=TEAM.rosa,s=[];
+    s.push({t:100,av:a.name,st:(a.status==='on'?'en línea 24/7':'PAUSADO'),clear:1});
+    s.push({t:300,cli:'Buenas, ¿a cuento el cemento?'});
+    s.push({t:600,ev:'POST /webhook/whatsapp — Meta entrega el mensaje'});
+    s.push({t:950,ev:'Firma verificada · dedupe OK',cls:'ok'});
+    if(a.status!=='on'){
+      s.push({t:1400,ev:'Routing: '+a.name+' está PAUSADA — cola + autoreply',cls:'skip'});
+      s.push({t:1900,sys:'Mensaje en cola — vuelve cuando el dueño la active',bad:1});
+      s.push({t:2300,bot:'Hola, estamos con atención limitada. En breve te respondemos.'});
+      s.push({t:2800,ev:'Autoreply enviada · mensaje encolado',cls:'skip'});
+      s.push({t:3200,done:['skip','AGENTE PAUSADO'],fin:'pausa',who:'rosa'});
+      return s;
+    }
+    s.push({t:1300,ev:'Routing → '+a.name+' · tools: '+a.tools.join(', '),cls:'ok'});
+    s.push({t:1800,ev:'LLM llamada 1 → tool_call buscar_producto',json:'{ "tool": "buscar_producto",\n  "args": { "q": "cemento" } }'});
+    s.push({t:2450,ev:'Tool responde con datos reales del negocio',json:'{ "ok": true, "res": [\n  { "n": "Cemento Portland 50kg", "Gs": 52000, "stock": 340 },\n  { "n": "Cemento Pózzolánico", "Gs": 47500 } ] }'});
+    s.push({t:2950,typing:1});
+    s.push({t:3550,bot:'Hola, Cemento Portland 50kg a G. 52.000 y Pózzolánico a G. 47.500. ¿Para cuántos sacos lo necesitás?',ev:'LLM llamada 2 → redacta con datos de la tool'});
+    s.push({t:4100,ev:'WhatsApp send · DB write · métricas +1',cls:'ok'});
+    s.push({t:4500,done:['ok','RESPONDIDO · 1.4s'],fin:'precio',who:'rosa'});
+    return s;
+  }
+  if(key==='guarda'){
+    var m=TEAM.marcelo,total=10400000,max=m.pedidoMax,p=[];
+    p.push({t:100,av:m.name,st:(m.status==='on'?'en línea':'PAUSADO'),clear:1});
+    p.push({t:300,cli:'Necesito 200 bolsas de cemento para mañana temprano'});
+    p.push({t:600,ev:'POST /webhook → routing → '+m.name+' (Ventas)'});
+    p.push({t:1000,ev:'LLM llamada 1 → tool_call crear_pedido',json:'{ "tool": "crear_pedido",\n  "args": { "items": "200x CEM-50", "entrega": "mañana" } }'});
+    if(m.status!=='on'){
+      p.push({t:1700,ev:'Agente PAUSADO → autoreply',cls:'skip'});
+      p.push({t:2200,bot:'Hola, atención limitada ahora, en breve te confirmamos.'});
+      p.push({t:2600,done:['skip','AGENTE PAUSADO'],fin:'pausa',who:'marcelo'});
+      return p;
+    }
+    if(total>max){
+      p.push({t:1700,ev:'GUARDA EN CÓDIGO: '+gs(total)+' supera el límite '+gs(max)+' — BLOQUEADO',cls:'bad',
+        json:'// runtime/tools/pedidos.js — leyendo la ficha de '+m.name+'\nconst total = await calcularTotal(args);   // '+gs(total)+'\nconst limite = agent.ficha.pedidoMax;      // '+gs(max)+'\n\nif (total > limite) {\n  return escalar_a_humano({ motivo: "supera el límite" });\n}'});
+      p.push({t:2800,ev:'escalar_a_humano() → agente en pausa · aviso al dueño',cls:'bad'});
+      p.push({t:3300,sys:'Escalado — esperando tu decisión',bad:1});
+      p.push({t:3900,typing:1});
+      p.push({t:4500,bot:'Anoté todo. Por el volumen, el dueño te confirma precio y entrega en minutos. ¡Gracias!',ev:'LLM llamada 2 → informa SIN prometer nada'});
+      p.push({t:5000,ev:'Enviado · alerta creada',cls:'ok'});
+      p.push({t:5400,done:['esc','ESCALADO AL DUEÑO'],fin:'guarda',who:'marcelo'});
+    }else{
+      p.push({t:1700,ev:'GUARDA OK: '+gs(total)+' dentro del límite '+gs(max)+' — autorizado',cls:'ok',
+        json:'// runtime/tools/pedidos.js\nconst total = '+gs(total)+';\nconst limite = agent.ficha.pedidoMax;   // '+gs(max)+'\n\nif (total > limite) { … escalar }   // NO entra\nawait db.pedidos.insert({ total: '+gs(total)+' });'});
+      p.push({t:2700,ev:'crear_pedido OK → pedido #1044 · depósito notificado',cls:'ok'});
+      p.push({t:3200,typing:1});
+      p.push({t:3800,bot:'Listo, pedido #1044: 200 bolsas para mañana. Total '+gs(total)+', sale primero hora.',ev:'LLM llamada 2 → confirma el pedido'});
+      p.push({t:4300,ev:'Enviado · producción actualizada',cls:'ok'});
+      p.push({t:4700,done:['ok','PEDIDO CREADO '+gs(total)],fin:'venta',who:'marcelo'});
+    }
+    return p;
+  }
+  if(key==='dup'){
+    return [
+      {t:100,av:TEAM.rosa.name,st:'en línea',clear:1},
+      {t:300,sys:'Contexto: este mensaje YA fue respondido. Meta a veces reintenta…'},
+      {t:800,ev:'POST /webhook — reintento con el MISMO wamid'},
+      {t:1200,ev:'Firma verificada',cls:'ok'},
+      {t:1650,ev:'DEDUPE: wamid.BgK1043 ya visto → descartar',cls:'skip',
+        json:'// webhook/whatsapp.js — idempotencia\nif (await db.yaProcesado(msg.id)) {\n  return res.status(200).end();\n}'},
+      {t:2400,ev:'200 OK en 13ms · cero LLM · el cliente NO recibe doble respuesta',cls:'skip'},
+      {t:2900,done:['skip','DUPLICADO DESCARTADO'],fin:'dup',who:'rosa'}
+    ];
+  }
+  if(key==='noche'){
+    var r=TEAM.rosa,q=[];
+    q.push({t:100,av:r.name,st:(r.status==='on'?'en línea 24/7':'PAUSADO'),clear:1});
+    q.push({t:300,sep:'Hoy · 02:14 AM'});
+    q.push({t:600,cli:'Buenas, mañana feriado abren?'});
+    q.push({t:950,ev:'POST /webhook — 02:14 AM · local cerrado, dueño durmiendo'});
+    if(r.status!=='on'){
+      q.push({t:1450,ev:r.name+' PAUSADA y es de madrugada → cola para la mañana',cls:'skip'});
+      q.push({t:1900,sys:'Sin cobertura — activá a '+r.name+' en Equipo',bad:1});
+      q.push({t:2400,done:['skip','MENSAJE EN COLA'],fin:'pausa',who:'rosa'});
+      return q;
+    }
+    q.push({t:1400,ev:'Routing → '+r.name+' · horario 24/7 → opera igual',cls:'ok'});
+    q.push({t:1850,ev:'LLM llamada 1 → respuesta directa (horario en su knowledge)'});
+    q.push({t:2400,typing:1});
+    q.push({t:3000,bot:'Buenas, mañana feriado estamos cerrados. El jueves abrimos normal de 7:00. ¿Te anoto algo?'});
+    q.push({t:3550,ev:'WhatsApp send — nadie despierto, el worker sí',cls:'ok'});
+    q.push({t:3950,ev:'Cliente nuevo capturado · conversación guardada',cls:'ok'});
+    q.push({t:4350,done:['ok','VENTA CAPTURADA A LAS 2 AM'],fin:'noche',who:'rosa'});
+    return q;
+  }
+}
+
+function run(key){
+  timers.forEach(clearTimeout);
+  timers=[];
+  var steps=buildScenario(key);
+  chat.innerHTML='<div class="sep">Conversación con '+THEMES[THEME].company+'</div>';
+  log.innerHTML='';
+  typing.classList.remove('on');
+  setSt('procesando…','');
+  steps.forEach(function(p){
+    timers.push(setTimeout(function(){
+      if(p.clear){
+        $('phAv').textContent=ini(p.av);
+        $('phName').textContent=p.av+' · Asistente';
+        $('phStatus').textContent=p.st;
+      }
+      if(p.sep)addSep(p.sep);
+      if(p.cli)addM('cli',p.cli);
+      if(p.sys)addM('sys'+(p.bad?' bad':''),p.sys);
+      if(p.typing)typing.classList.add('on');
+      if(p.bot){typing.classList.remove('on');addM('bot',p.bot)}
+      if(p.ev)addEv(p.ev,p.cls,p.json);
+      if(p.done){
+        setSt(p.done[1],p.done[0]);
+        en(true);
+        finScenario(key,p.fin,p.who);
+      }
+    },p.t));
+  });
+  en(false);
+}
+
+function finScenario(key,fin,who){
+  if(fin==='precio'){
+    OP.msgs++;addCost(0.004);
+    pushToday(who,'Respondió consulta de precio · cemento','ok');
+    setNow(who,'Respondiendo consulta de precio — Cliente Obra Vera');
+  }
+  if(fin==='noche'){
+    OP.msgs++;addCost(0.004);
+    pushToday(who,'Atendió consulta a las 2 AM — cliente nuevo capturado','ok');
+    setNow(who,'Atendiendo cliente nuevo — 02:14 AM');
+  }
+  if(fin==='guarda'){
+    OP.msgs++;OP.guards++;addCost(0.004);
+    pushToday(who,'GUARDA: pedido de '+gs(10400000)+' bloqueado — escalado al dueño','bad');
+    setNow(who,'ESPERANDO TU DECISIÓN — pedido de '+gs(10400000)+' (Constructora)',true);
+    toast('Guarda disparada — '+TEAM[who].name+' espera tu decisión en Operación');
+  }
+  if(fin==='venta'){
+    OP.msgs++;OP.sales+=10400000;addCost(0.008);
+    pushToday(who,'Pedido #1044 confirmado · '+gs(10400000)+' · entrega mañana','ok');
+    setNow(who,'Disponible — esperando mensajes');
+    toast('Pedido creado — registrado en Operación');
+  }
+  if(fin==='dup'){
+    pushToday(who,'Mensaje duplicado descartado (idempotencia)','');
+  }
+  if(fin==='pausa'){
+    pushToday(who,'Mensaje en cola — agente pausado, autoreply enviada','');
+  }
+  if($('secD').classList.contains('on'))renderOp();
+}
+
+/* pulso de fondo */
+var FONDO={
+  rosa:['Respondiendo consulta de stock','Informando estado de pedido'],
+  luz:['Reasignando cita cancelada','Confirmando asistencia del día'],
+  eusebio:['Recordando vencimiento','Registrando fecha de pago nueva'],
+  marcelo:['Enviando cotización','Haciendo seguimiento a cotización fría'],
+  tito:['Tomando pedido por WhatsApp','Avisando faltante al depósito']
+};
+setInterval(function(){
+  var ids=Object.keys(TEAM).filter(function(id){
+    return TEAM[id].status==='on'&&OP.now[id]&&!OP.now[id].alerta&&FONDO[id];
+  });
+  if(!ids.length)return;
+  var id=ids[Math.floor(Math.random()*ids.length)];
+  var ops=FONDO[id];
+  var txt=ops[Math.floor(Math.random()*ops.length)];
+  OP.msgs++;addCost(0.003);
+  pushToday(id,txt,'ok');
+  setNow(id,txt+' — cliente atendido');
+},12000);
+
+setInterval(function(){
+  var up=$('updClock');
+  if(up)up.textContent='última actualización '+clock();
+},30000);
+
+/* arranque */
+renderPhoneIdle();
+renderThemes();
+renderOp();
+</script>
+</body>
+</html>
