@@ -6,11 +6,7 @@
 <title>AVA Core · Plataforma white-label</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:system-ui,-apple-system,'Segoe UI',sans-serif}
-:root{--navy:#0b1220;--panel:#101c33;--line:#1c2a44;--ok:#10b981;--bad:#ef4444;--warn:#f59e0b}
-body[data-theme="nemu"]{--acc:#10b981;--acc2:#0d9488}
-body[data-theme="clinica"]{--acc:#3b82f6;--acc2:#6366f1}
-body[data-theme="aurora"]{--acc:#f43f5e;--acc2:#a855f7}
-body[data-theme="agro"]{--acc:#f59e0b;--acc2:#ea580c}
+:root{--navy:#0b1220;--panel:#101c33;--line:#1c2a44;--ok:#10b981;--bad:#ef4444;--warn:#f59e0b;--acc:#10b981;--acc2:#0d9488}
 body{background:#0d1526;color:#e2e8f0;height:100vh;display:flex;flex-direction:column;overflow:hidden}
 .mono{font-family:ui-monospace,monospace}
 
@@ -53,6 +49,10 @@ nav{display:flex;gap:8px;margin-left:18px}
 .st-pa{background:#1a2233;color:#64748b}
 .st-tr{background:color-mix(in srgb,var(--warn) 15%,transparent);color:var(--warn)}
 .st-al{background:color-mix(in srgb,var(--bad) 15%,transparent);color:#f87171}
+.qbox{padding:9px 15px;background:color-mix(in srgb,var(--warn) 6%,transparent);border-bottom:1px solid var(--line);font-size:12px;line-height:1.5}
+.qbox b{color:var(--warn)}
+.qbox .qi{display:flex;align-items:center;gap:7px;padding:3px 0;color:#c9d5e8}
+.qbox .qi .qdot{width:5px;height:5px;border-radius:50%;background:var(--warn);flex-shrink:0}
 .now{display:flex;align-items:center;gap:10px;padding:11px 15px;background:color-mix(in srgb,var(--acc) 6%,transparent);border-bottom:1px solid var(--line)}
 .now.al3{background:color-mix(in srgb,var(--bad) 8%,transparent)}
 .pulse{width:8px;height:8px;border-radius:50%;background:var(--acc);flex-shrink:0;animation:pl 1.4s infinite}
@@ -72,8 +72,20 @@ nav{display:flex;gap:8px;margin-left:18px}
 .oempty{padding:10px 15px;font-size:11.5px;color:#475569}
 
 /* ===== RUNTIME ===== */
+.rtbar{display:flex;align-items:center;gap:8px;padding:12px 14px 10px 14px;flex-wrap:wrap;flex-shrink:0}
+.rtbar .lbl{font-size:10.5px;font-weight:800;color:#475569;text-transform:uppercase;letter-spacing:1px}
+.rtchip{display:flex;align-items:center;gap:7px;background:var(--panel);border:1px solid var(--line);color:#94a3b8;border-radius:99px;padding:7px 13px 7px 7px;font-size:12.5px;font-weight:700;cursor:pointer}
+.rtchip:hover{border-color:#2a3f66}
+.rtchip.sel{border-color:var(--acc);color:var(--acc);background:color-mix(in srgb,var(--acc) 10%,transparent)}
+.rdot{width:7px;height:7px;border-radius:50%;background:var(--ok)}
+.rdot.off{background:#475569}
+.rdot.tr{background:var(--warn)}
+.simb{margin-left:auto;background:var(--panel);border:1px dashed #2a3f66;color:#94a3b8;border-radius:99px;padding:8px 15px;font-size:11.5px;font-weight:700;cursor:pointer}
+.simb:hover{border-color:var(--acc);color:var(--acc)}
+.simb:disabled{opacity:.4;cursor:wait}
+
 .rtwrap{flex:1;display:grid;grid-template-columns:1fr 380px;min-height:0}
-.braincol{display:flex;flex-direction:column;min-height:0;padding:14px 0 0 14px}
+.braincol{display:flex;flex-direction:column;min-height:0;padding:0 0 14px 14px}
 .bh{display:flex;align-items:center;gap:10px;padding:0 14px 10px 0}
 .panel-tag{font-size:9.5px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;padding:5px 12px;border-radius:99px}
 .tag-int{background:color-mix(in srgb,var(--acc) 12%,transparent);color:var(--acc);border:1px solid color-mix(in srgb,var(--acc) 35%,transparent)}
@@ -82,7 +94,7 @@ nav{display:flex;gap:8px;margin-left:18px}
 .st.ok{background:color-mix(in srgb,var(--ok) 12%,transparent);border-color:var(--ok);color:var(--ok)}
 .st.esc{background:color-mix(in srgb,var(--bad) 12%,transparent);border-color:var(--bad);color:#f87171}
 .st.skip{color:#94a3b8}
-.log{flex:1;overflow-y:auto;padding:4px 18px 10px 4px;display:flex;flex-direction:column;border:1px solid var(--line);border-radius:14px 14px 0 0;background:rgba(16,28,51,.35)}
+.log{flex:1;overflow-y:auto;padding:4px 18px 10px 4px;display:flex;flex-direction:column;border:1px solid var(--line);border-radius:14px;background:rgba(16,28,51,.35)}
 .ev{display:flex;gap:12px;animation:pop .25s ease}
 .ev .rail{display:flex;flex-direction:column;align-items:center}
 .ev .rail::before{content:'';flex:1;width:2px;background:var(--line);margin-top:3px}
@@ -100,38 +112,29 @@ nav{display:flex;gap:8px;margin-left:18px}
 .json.on{display:block;animation:pop .3s ease}
 .idle{margin:auto;text-align:center;color:#33456a;font-size:13px;line-height:1.8;padding:30px}
 .idle b{color:#64748b}
-.controls{display:flex;gap:9px;padding:12px 14px 12px 0;flex-wrap:wrap;align-items:center}
-.controls .lbl{font-size:10.5px;font-weight:800;color:#475569;text-transform:uppercase;letter-spacing:1px}
-.sc{background:var(--panel);border:1px solid #24365c;color:#c9d5e8;border-radius:10px;padding:9px 14px;font-size:12.5px;font-weight:600;cursor:pointer}
-.sc:hover{border-color:var(--acc);color:var(--acc)}
-.sc:disabled{opacity:.45;cursor:wait}
-.sc .n{font-family:ui-monospace,monospace;font-size:10px;color:#475569;margin-right:6px}
-.tip{font-size:11px;color:#5b708f;margin-left:auto}
 
-.phonewrap{display:flex;flex-direction:column;padding:14px;border-left:1px solid var(--line);background:radial-gradient(circle at 30% 20%,#111d33,#0d1526)}
-.phone{flex:1;border:8px solid #1a2540;border-radius:34px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 20px 50px rgba(0,0,0,.5);min-height:0}
-.ph{background:var(--navy);border-bottom:1px solid var(--line);color:#fff;padding:12px 14px;display:flex;align-items:center;gap:10px;flex-shrink:0}
-.ph .av{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--acc),var(--acc2));display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#fff}
-.ph .pn{font-weight:700;font-size:13.5px}
-.ph .ps{font-size:10.5px;color:#64748b;display:flex;align-items:center;gap:5px}
-.ph .ps .dot{width:6px;height:6px;border-radius:50%;background:var(--acc);animation:pl 1.5s infinite}
-.chat{flex:1;background:#0b141a;overflow-y:auto;padding:14px 11px;display:flex;flex-direction:column;gap:7px;min-height:0}
-.sep{align-self:center;font-size:10px;color:#8696a0;background:#182229;padding:4px 10px;border-radius:8px;margin:3px 0}
-.m{max-width:85%;padding:7px 10px 5px;border-radius:9px;font-size:13px;line-height:1.45;animation:pop .22s ease;word-wrap:break-word}
+.saywrap{display:flex;flex-direction:column;padding:14px;border-left:1px solid var(--line);background:#0b1220}
+.sayhead{display:flex;align-items:center;gap:10px;padding:11px 13px;border:1px solid var(--line);border-radius:12px;background:var(--panel);margin-bottom:10px;flex-shrink:0}
+.sayhead .av{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--acc),var(--acc2));display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#fff}
+.sayhead .pn{font-weight:700;font-size:13px}
+.sayhead .ps{font-size:10.5px;color:#64748b;display:flex;align-items:center;gap:5px}
+.sayhead .ps .dot{width:6px;height:6px;border-radius:50%;background:var(--acc);animation:pl 1.5s infinite}
+.chat{flex:1;background:var(--panel);border:1px solid var(--line);border-radius:14px;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:9px;min-height:0}
+.sep{align-self:center;font-size:10px;color:#64748b;background:#0d1830;padding:4px 12px;border-radius:99px;margin:2px 0}
+.m{max-width:88%;padding:9px 12px;border-radius:11px;font-size:13px;line-height:1.5;animation:pop .22s ease;word-wrap:break-word}
 @keyframes pop{from{opacity:0;transform:translateY(7px) scale(.97)}to{opacity:1;transform:none}}
-.m.cli{align-self:flex-start;background:#1f2c33;border-top-left-radius:2px}
-.m.bot{align-self:flex-end;background:color-mix(in srgb,var(--acc) 20%,#0b141a);border:1px solid color-mix(in srgb,var(--acc) 45%,transparent);border-top-right-radius:2px}
-.m.sys{align-self:center;background:#1a2540;border:1px solid #2a3a5c;color:#93b4f5;font-size:11px;text-align:center;max-width:92%}
-.m.sys.bad{color:#fca5a5;border-color:#5c2a2a;background:#251a1a}
-.m .tm{font-size:9px;color:rgba(233,237,239,.5);float:right;margin:5px 0 0 7px}
-.typing{align-self:flex-end;background:color-mix(in srgb,var(--acc) 20%,#0b141a);border:1px solid color-mix(in srgb,var(--acc) 45%,transparent);border-radius:9px;border-top-right-radius:2px;padding:11px 14px;display:none;gap:4px;flex-shrink:0}
+.m.cli{align-self:flex-end;background:#0d1830;border:1px solid var(--line);color:#94a3b8;font-style:italic}
+.m.bot{align-self:flex-start;background:color-mix(in srgb,var(--acc) 14%,#101c33);border:1px solid color-mix(in srgb,var(--acc) 45%,transparent)}
+.m.sys{align-self:center;background:#0d1830;border:1px solid var(--line);color:#93b4f5;font-size:11px;text-align:center;max-width:94%}
+.m.sys.bad{color:#fca5a5;border-color:#5c2a2a}
+.m .tm{font-size:9px;color:#475569;float:right;margin:6px 0 0 8px;font-family:ui-monospace,monospace}
+.typing{align-self:flex-start;background:color-mix(in srgb,var(--acc) 14%,#101c33);border:1px solid color-mix(in srgb,var(--acc) 45%,transparent);border-radius:11px;padding:11px 14px;display:none;gap:4px;flex-shrink:0}
 .typing.on{display:flex}
-.typing span{width:6px;height:6px;border-radius:50%;background:#8696a0;animation:bl 1s infinite}
+.typing span{width:6px;height:6px;border-radius:50%;background:#64748b;animation:bl 1s infinite}
 .typing span:nth-child(2){animation-delay:.18s}
 .typing span:nth-child(3){animation-delay:.36s}
 @keyframes bl{0%,80%,100%{opacity:.25}40%{opacity:1}}
-.inbar{background:#182229;padding:9px 12px;flex-shrink:0}
-.inbar .fake{background:#2a3942;border-radius:99px;padding:8px 13px;font-size:12px;color:#8696a0}
+.sayfoot{font-size:10.5px;color:#475569;padding:9px 2px 0;flex-shrink:0;line-height:1.5}
 
 /* ===== EQUIPO / CONFIG ===== */
 .sec{padding:18px 22px}
@@ -191,7 +194,7 @@ nav{display:flex;gap:8px;margin-left:18px}
 .btn2.rd{border-color:color-mix(in srgb,var(--bad) 50%,transparent);color:#f87171}
 .hintbox{font-size:11.5px;color:#8ea3c2;background:#0d1830;border:1px solid var(--line);border-radius:10px;padding:10px 13px;line-height:1.6}
 .hintbox b{color:var(--acc)}
-.cfg{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start;max-width:900px}
+.cfg{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start;max-width:1000px}
 .themecard{background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:16px}
 .tgrid{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
 .topt{background:#0d1830;border:1.5px solid var(--line);border-radius:12px;padding:12px;cursor:pointer;width:calc(50% - 5px);display:flex;align-items:center;gap:10px}
@@ -199,7 +202,12 @@ nav{display:flex;gap:8px;margin-left:18px}
 .topt.on{border-color:var(--acc)}
 .tdot{width:26px;height:26px;border-radius:8px;flex-shrink:0}
 .topt h5{font-size:12.5px;font-weight:700}
-.topt small{display:block;font-size:10px;color:#64748b}
+.topt small{display:block;font-size:10px;color:#64748b;font-family:ui-monospace,monospace}
+.colpick{width:42px;height:32px;border:none;background:none;cursor:pointer;padding:0}
+.knlist{display:flex;flex-direction:column;gap:6px;margin-top:10px}
+.knrow{display:flex;gap:9px;align-items:center;background:#0d1830;border:1px solid var(--line);border-radius:9px;padding:8px 12px;font-size:12.3px}
+.knrow .kk{font-weight:800;color:var(--acc);min-width:110px;font-size:11px;text-transform:uppercase}
+.knrow input{flex:1;background:transparent;border:none;outline:none;color:#e2e8f0;font-family:inherit;font-size:12.3px}
 
 .ov{position:fixed;inset:0;background:rgba(5,10,20,.7);display:none;align-items:center;justify-content:center;z-index:100;padding:18px}
 .ov.on{display:flex}
@@ -216,10 +224,10 @@ nav{display:flex;gap:8px;margin-left:18px}
 .toasts{position:fixed;bottom:20px;right:20px;z-index:200;display:flex;flex-direction:column;gap:8px}
 .toast{background:var(--navy);border:1px solid var(--line);border-left:3px solid var(--acc);color:#fff;padding:12px 15px;border-radius:11px;font-size:12.5px;font-weight:600;box-shadow:0 10px 26px rgba(0,0,0,.4);animation:pop .3s ease;max-width:340px}
 @media(max-width:1240px){.rtwrap{grid-template-columns:1fr 340px}}
-@media(max-width:1000px){.rtwrap{grid-template-columns:1fr;grid-template-rows:auto 1fr}.phonewrap{border-left:none;border-top:1px solid var(--line)}.phone{max-height:360px}.log{max-height:400px}.braincol{padding:14px 14px 0}.controls{padding:12px 14px}.eq,.cfg{grid-template-columns:1fr}.tip{display:none}}
+@media(max-width:1000px){.rtwrap{grid-template-columns:1fr;grid-template-rows:auto 1fr}.saywrap{border-left:none;border-top:1px solid var(--line)}.chat{max-height:360px}.log{max-height:400px}.braincol{padding:14px 14px 0}.eq,.cfg{grid-template-columns:1fr}}
 </style>
 </head>
-<body data-theme="nemu">
+<body>
 
 <header>
   <div class="mark">A</div>
@@ -243,7 +251,7 @@ nav{display:flex;gap:8px;margin-left:18px}
     <div class="op">
       <div class="op-head">
         <h2>Operación de la empresa</h2>
-        <span class="sub">cada empleado reportando qué hace, en vivo</span>
+        <span class="sub">cada empleado: su bandeja, su actividad, su estado</span>
         <span class="upd" id="updClock"></span>
       </div>
       <div class="op-sum">
@@ -252,57 +260,54 @@ nav{display:flex;gap:8px;margin-left:18px}
         <div class="opk"><small>Citas de hoy</small><b id="opCitas">0</b></div>
         <div class="opk"><small>Guardas disparadas</small><b id="opGuards">0</b></div>
         <div class="opk"><small>Empleados activos</small><b id="opOn">0</b></div>
+        <div class="opk"><small>En bandejas</small><b id="opQueue">0</b></div>
       </div>
       <div class="op-grid" id="opGrid"></div>
     </div>
   </div>
 
-  <!-- RUNTIME: cerebro izquierda + WhatsApp derecha -->
+  <!-- RUNTIME: elegir empleado y observar -->
   <div class="view" id="secR">
+    <div class="rtbar">
+      <span class="lbl">Observando:</span>
+      <span id="rtbar" style="display:flex;gap:8px;flex-wrap:wrap"></span>
+      <button class="simb" id="simBtn" onclick="simular()">Simular que un cliente escribe</button>
+    </div>
     <div class="rtwrap">
       <div class="braincol">
         <div class="bh">
-          <span class="panel-tag tag-int">Cómo piensa el agente — registro interno</span>
-          <span class="st" id="status">esperando</span>
+          <span class="panel-tag tag-int">Cómo piensa <span id="bhName">Rosa</span> — registro interno en vivo</span>
+          <span class="st" id="status">sin actividad</span>
         </div>
         <div class="log" id="log">
           <div class="idle">
-            <b>Registro interno del proceso.</b><br>
-            A la derecha, el teléfono: lo que el cliente ve.<br>
-            Cada escenario actualiza también la tarjeta del empleado en Operación.<br><br>
-            Dispará un escenario abajo.
+            <b>Cámara del empleado.</b><br>
+            Elegí a quién observar arriba. Los mensajes de clientes llegan solos:<br>
+            el empleado decide, consulta sus datos, respeta sus límites y responde.<br>
+            Nadie dispara su trabajo — llega y lo hace.<br><br>
+            También podés simular que un cliente le escribe.
           </div>
-        </div>
-        <div class="controls">
-          <span class="lbl">Escenarios</span>
-          <button class="sc" id="b0" onclick="run('precio')"><span class="n">01</span>Consulta de precio</button>
-          <button class="sc" id="b1" onclick="run('guarda')"><span class="n">02</span>Pedido y la guarda</button>
-          <button class="sc" id="b2" onclick="run('dup')"><span class="n">03</span>Duplicado de Meta</button>
-          <button class="sc" id="b3" onclick="run('noche')"><span class="n">04</span>Venta a las 2 AM</button>
-          <span class="tip">Editá límites en Equipo y re-corré el 02 — cambia el desenlace</span>
         </div>
       </div>
-      <div class="phonewrap">
-        <span class="panel-tag tag-cli">Lo que ve el cliente</span>
-        <div class="phone">
-          <div class="ph">
-            <div class="av" id="phAv">RO</div>
-            <div>
-              <div class="pn" id="phName">Rosa · Asistente</div>
-              <div class="ps"><span class="dot"></span><span id="phStatus">en línea 24/7</span></div>
-            </div>
+      <div class="saywrap">
+        <span class="panel-tag tag-cli">Lo que dice el agente</span>
+        <div class="sayhead">
+          <div class="av" id="phAv">RO</div>
+          <div>
+            <div class="pn" id="phName">Rosa · Asistente</div>
+            <div class="ps"><span class="dot"></span><span id="phStatus">en línea 24/7</span></div>
           </div>
-          <div class="chat" id="chat"></div>
-          <div class="typing" id="typing"><span></span><span></span><span></span></div>
-          <div class="inbar"><div class="fake">El cliente escribe por WhatsApp real…</div></div>
         </div>
+        <div class="chat" id="chat"></div>
+        <div class="typing" id="typing"><span></span><span></span><span></span></div>
+        <div class="sayfoot">Lo que recibe (atenuado, derecha) y lo que responde (su color, izquierda). El canal de publicación — WhatsApp — se configura aparte.</div>
       </div>
     </div>
   </div>
 
   <!-- EQUIPO -->
   <div class="view sec" id="secE">
-    <div class="brandnote">Empleados de <b id="brandNote">Ferretería Ñemu S.A.</b> — la ficha es la configuración viva del agente.</div>
+    <div class="brandnote">Empleados de <b id="brandNote">Ferretería Ñemu S.A.</b> — la ficha es la configuración viva del agente. Los eventos que escucha definen qué entra en su bandeja.</div>
     <div class="eq-kpis">
       <div class="eqk"><small>Empleados</small><b id="kCount">—</b></div>
       <div class="eqk"><small>Activos</small><b id="kOn">—</b></div>
@@ -317,25 +322,51 @@ nav{display:flex;gap:8px;margin-left:18px}
 
   <!-- CONFIGURACIÓN -->
   <div class="view sec" id="secC">
-    <div class="brandnote">Ajustes de la instancia. El tema de colores lo define la empresa en su onboarding.</div>
+    <div class="brandnote">Esta instancia pertenece a <b>una sola empresa</b>. Lo que se declara acá lo leen todos sus empleados.</div>
     <div class="cfg">
-      <div class="editor">
-        <div class="eh"><div><h3>Datos de la empresa</h3><div class="rl">Aparecen en la plataforma y en cómo se presentan los agentes</div></div></div>
-        <div class="ebody">
-          <div><div class="sect">Nombre comercial</div>
-            <input class="fin" id="cfgName" value="Ferretería Ñemu S.A." style="width:100%"></div>
-          <div><div class="sect">Rubro</div>
-            <input class="fin" id="cfgRubro" value="Ferretería y materiales de construcción" style="width:100%"></div>
-          <div><div class="sect">WhatsApp del negocio</div>
-            <input class="fin" value="+595 981 555-0100" disabled style="width:100%;opacity:.5"></div>
-          <div class="esave" style="justify-content:flex-start"><button class="btn2 go" onclick="saveCompany()">Guardar cambios</button></div>
+      <div style="display:flex;flex-direction:column;gap:16px">
+        <div class="editor">
+          <div class="eh"><div><h3>Datos de la empresa</h3><div class="rl">Se definen una sola vez en el alta de la instancia</div></div></div>
+          <div class="ebody">
+            <div><div class="sect">Nombre comercial</div>
+              <input class="fin" id="cfgName" value="Ferretería Ñemu S.A." style="width:100%"></div>
+            <div><div class="sect">Rubro</div>
+              <input class="fin" id="cfgRubro" value="Ferretería y materiales de construcción" style="width:100%"></div>
+            <div><div class="sect">WhatsApp del negocio</div>
+              <input class="fin" value="+595 981 555-0100" disabled style="width:100%;opacity:.5"></div>
+            <div class="esave" style="justify-content:flex-start"><button class="btn2 go" onclick="saveCompany()">Guardar cambios</button></div>
+          </div>
+        </div>
+        <div class="themecard">
+          <div class="sect">Conocimiento compartido — todos los empleados lo leen</div>
+          <div class="knlist">
+            <div class="knrow"><span class="kk">Horario local</span><input id="knHorario" value="Lun a Sáb de 07:00 a 19:00"></div>
+            <div class="knrow"><span class="kk">Próximo feriado</span><input id="knFeriado" value="mañana (miércoles)"></div>
+            <div class="knrow"><span class="kk">Reapertura</span><input id="knReapertura" value="el jueves desde las 07:00"></div>
+            <div class="knrow"><span class="kk">Delivery</span><input id="knDelivery" value="Asunción y Central · 24 a 48 h"></div>
+          </div>
+          <div class="esave" style="justify-content:flex-start;margin-top:12px"><button class="btn2 go" onclick="saveKnowledge()">Guardar conocimiento</button></div>
+        </div>
+        <div class="themecard">
+          <div class="sect">Canal de salida</div>
+          <p style="font-size:12px;color:#64748b;line-height:1.6">Los empleados hablan primero; el canal donde esas palabras llegan al cliente se conecta acá.</p>
+          <div class="knrow" style="margin-top:10px">
+            <span class="kk">WhatsApp Business</span>
+            <span style="flex:1;color:#64748b;font-size:12px">por conectar — el runtime ya produce las respuestas</span>
+            <span class="stag st-pa">PENDIENTE</span>
+          </div>
         </div>
       </div>
       <div class="themecard">
-        <div class="sect">Tema visual de la empresa</div>
-        <p style="font-size:12px;color:#64748b;line-height:1.6">Colores que tiñen toda la plataforma. Se configura una vez en el onboarding.</p>
+        <div class="sect">Colores de la empresa</div>
+        <p style="font-size:12px;color:#64748b;line-height:1.6">Tiñen toda la plataforma. Se eligen una vez en el alta de la instancia.</p>
         <div class="tgrid" id="tgrid"></div>
-        <div class="hintbox" style="margin-top:12px">En producción el backend inyecta estos colores desde la ficha del tenant. La app es una sola; la marca, infinita.</div>
+        <div class="frow" style="margin-top:14px">
+          <span style="font-size:11.5px;color:#64748b;font-weight:700">O personalizado:</span>
+          <input type="color" class="colpick" id="col1" value="#10b981" title="Color principal">
+          <input type="color" class="colpick" id="col2" value="#0d9488" title="Color secundario">
+          <button class="btn2 go" style="padding:7px 14px" onclick="applyCustom()">Aplicar</button>
+        </div>
       </div>
     </div>
   </div>
@@ -346,67 +377,82 @@ nav{display:flex;gap:8px;margin-left:18px}
 <div class="toasts" id="toasts"></div>
 
 <script>
-/* detector de errores visibles */
 window.onerror=function(m,s,l){
-  var c=document.getElementById('log');
-  document.body.insertAdjacentHTML('afterbegin','<div style="background:#7f1d1d;color:#fff;padding:10px 16px;font-family:monospace;font-size:12px">Error: '+m+' (linea '+l+')</div>');
+  document.body.insertAdjacentHTML('afterbegin','<div style="background:#7f1d1d;color:#fff;padding:10px 16px;font-family:monospace;font-size:12px;z-index:999">Error: '+m+' (linea '+l+')</div>');
 };
 
-/* ================= TENANTS ================= */
-var THEMES={
-  nemu:{name:'Ferretería Ñemu',c1:'#10b981',c2:'#0d9488',company:'Ferretería Ñemu S.A.'},
-  clinica:{name:'Clínica Santa María',c1:'#3b82f6',c2:'#6366f1',company:'Clínica Santa María'},
-  aurora:{name:'Boutique Aurora',c1:'#f43f5e',c2:'#a855f7',company:'Boutique Aurora'},
-  agro:{name:'AgroCampo PY',c1:'#f59e0b',c2:'#ea580c',company:'AgroCampo PY'}
+var COMPANY='Ferretería Ñemu S.A.';
+var PALETAS={
+  esmeralda:{name:'Esmeralda',c1:'#10b981',c2:'#0d9488'},
+  azul:{name:'Azul corporativo',c1:'#3b82f6',c2:'#6366f1'},
+  rubi:{name:'Rubí',c1:'#f43f5e',c2:'#a855f7'},
+  ambar:{name:'Ámbar',c1:'#f59e0b',c2:'#ea580c'}
 };
-var THEME='nemu';
+var PAL='esmeralda';
 function renderThemes(){
   var h='';
-  Object.keys(THEMES).forEach(function(k){
-    var t=THEMES[k];
-    h+='<div class="topt '+(k===THEME?'on':'')+'" onclick="pickTheme(\''+k+'\')">'
+  Object.keys(PALETAS).forEach(function(k){
+    var t=PALETAS[k];
+    h+='<div class="topt '+(k===PAL?'on':'')+'" onclick="pickTheme(\''+k+'\')">'
      +'<div class="tdot" style="background:linear-gradient(135deg,'+t.c1+','+t.c2+')"></div>'
      +'<div><h5>'+t.name+'</h5><small>'+t.c1+' · '+t.c2+'</small></div></div>';
   });
-  document.getElementById('tgrid').innerHTML=h;
+  $('tgrid').innerHTML=h;
 }
 function pickTheme(k){
-  THEME=k;
-  document.body.dataset.theme=k;
+  PAL=k;
+  var t=PALETAS[k];
+  document.body.style.setProperty('--acc',t.c1);
+  document.body.style.setProperty('--acc2',t.c2);
   renderThemes();
-  toast('Tema aplicado: '+THEMES[k].company);
+  toast('Paleta aplicada: '+t.name);
+}
+function applyCustom(){
+  document.body.style.setProperty('--acc',$('col1').value);
+  document.body.style.setProperty('--acc2',$('col2').value);
+  PAL=null;
+  renderThemes();
+  toast('Colores personalizados aplicados');
 }
 function saveCompany(){
-  var n=document.getElementById('cfgName').value.trim()||THEMES[THEME].company;
-  THEMES[THEME].company=n;
-  document.getElementById('brandSub').textContent=n+' · instancia dedicada';
-  document.getElementById('brandNote').textContent=n;
+  var n=$('cfgName').value.trim()||COMPANY;
+  COMPANY=n;
+  $('brandSub').textContent=n+' · instancia dedicada';
+  $('brandNote').textContent=n;
   toast('Datos actualizados — '+n);
+}
+var KN={horario:'Lun a Sáb de 07:00 a 19:00',feriado:'mañana (miércoles)',reapertura:'el jueves desde las 07:00',delivery:'Asunción y Central · 24 a 48 h'};
+function saveKnowledge(){
+  KN.horario=$('knHorario').value.trim()||KN.horario;
+  KN.feriado=$('knFeriado').value.trim()||KN.feriado;
+  KN.reapertura=$('knReapertura').value.trim()||KN.reapertura;
+  KN.delivery=$('knDelivery').value.trim()||KN.delivery;
+  toast('Conocimiento guardado — todos los agentes ya lo leen');
 }
 
 /* ================= EQUIPO ================= */
 var TEAM={
   rosa:{name:'Rosa',role:'Atención al Cliente',price:490000,status:'on',
     tono:'Cercana y resolutiva. Nunca promete lo que no puede cumplir.',
-    tasks:['Responder precio y stock al instante','Informar estado de pedidos','Derivar reclamos al dueño'],
+    tasks:['Responder precio y stock al instante','Informar estado de pedidos','Derivar al especialista si el caso lo requiere'],
     limits:[{d:'Descuentos máximo 10%'},{d:'Devoluciones: siempre escala al dueño'}],
-    pedidoMax:2000000,
-    tools:['buscar_producto','info_pedido','escalar_a_humano'],
-    know:[{q:'¿Hacen envíos?',a:'Sí, delivery en Asunción y Central.'}],
+    pedidoMax:2000000,watch:['cita'],
+    tools:['buscar_producto','info_pedido','derivar_a'],
+    know:[{q:'¿Hacen envíos?',a:'Leo la política de delivery de la empresa.'}],
     stats:'412 conv · 91% resueltas'},
   luz:{name:'Luz',role:'Agendadora de Citas',price:390000,status:'on',
     tono:'Clara y puntual. Confirmaciones cortas.',
-    tasks:['Agendar y reagendar por WhatsApp','Recordatorio 24h antes','Reasignar cancelaciones'],
+    tasks:['Agendar y reagendar','Recordatorio 24h antes','Reasignar cancelaciones'],
     limits:[{d:'No agenda fuera del horario del local'}],
-    pedidoMax:0,
+    pedidoMax:0,watch:['cita'],
     tools:['listar_horarios','agendar_cita','escalar_a_humano'],
-    know:[{q:'¿Atienden sábados?',a:'Sí, de 8 a 12.'}],
+    know:[{q:'¿Atienden sábados?',a:'Leo el horario del local de la empresa.'}],
     stats:'287 conv · 95% resueltas'},
   eusebio:{name:'Don Eusebio',role:'Gestor de Cobros',price:590000,status:'on',
     tono:'Respetuoso pero firme: cobra sin arrugar.',
     tasks:['Recordar vencimientos','Coordinar fechas de pago','Enviar comprobantes SET'],
     limits:[{d:'Quitas y planes de pago: decide el dueño'},{d:'Nunca contacta clientes "no molestar"'}],
-    pedidoMax:0,
+    pedidoMax:0,watch:['venta'],
     tools:['consultar_deuda','registrar_compromiso','escalar_a_humano'],
     know:[{q:'¿Puedo pagar en cuotas?',a:'Te propongo nueva fecha; los planes los define el dueño.'}],
     stats:'198 conv · 84% resueltas'},
@@ -414,22 +460,22 @@ var TEAM={
     tono:'Proactivo y amable: siempre propone el siguiente paso.',
     tasks:['Cotizar por cantidad','Registrar pedidos','Seguimiento a cotizaciones frías'],
     limits:[{d:'Descuentos solo de la tabla autorizada'},{d:'Pedidos grandes: aprueba el dueño'}],
-    pedidoMax:5000000,
+    pedidoMax:5000000,watch:['venta'],
     tools:['cotizar','crear_pedido','escalar_a_humano'],
-    know:[{q:'¿Cuánto demora la entrega?',a:'24 a 48 h en Asunción y Central.'}],
+    know:[{q:'¿Cuánto demora la entrega?',a:'Leo el dato de delivery de la empresa.'}],
     stats:'156 conv · 89% resueltas'},
   tito:{name:'Tito',role:'Pedidos Mayoristas',price:690000,status:'on',
     tono:'Directo y eficiente. Toma pedidos completos sin errores.',
-    tasks:['Tomar pedidos por WhatsApp','Verificar stock','Generar remisión'],
+    tasks:['Tomar pedidos','Verificar stock','Generar remisión'],
     limits:[{d:'Precio mayorista mínimo intocable'}],
-    pedidoMax:8000000,
+    pedidoMax:8000000,watch:['pedido'],
     tools:['tomar_pedido','check_stock','escalar_a_humano'],
     know:[{q:'¿Pido para mañana tem tem?',a:'Sí, si pedís antes de las 15:00.'}],
     stats:'120 pedidos · 97% sin errores'}
 };
 var CATALOG={
-  ramona:{name:'Ramona',role:'Post-Venta y Fidelización',price:450000,desc:'Encuesta post-compra, detecta insatisfechos a tiempo y reactiva a los que no vuelven.'},
-  carlos:{name:'Carlos',role:'Compras y Proveedores',price:550000,desc:'Controla stock mínimo, arma órdenes de compra y da seguimiento a proveedores.'}
+  ramona:{name:'Ramona',role:'Post-Venta y Fidelización',price:450000,desc:'Encuesta post-compra, detecta insatisfechos a tiempo y reactiva a los que no vuelven.',watch:['venta']},
+  carlos:{name:'Carlos',role:'Compras y Proveedores',price:550000,desc:'Controla stock mínimo, arma órdenes de compra y da seguimiento a proveedores.',watch:['pedido']}
 };
 
 var $=function(id){return document.getElementById(id)};
@@ -445,6 +491,129 @@ function toast(h){
 function clock(){var d=new Date();return ('0'+d.getHours()).slice(-2)+':'+('0'+d.getMinutes()).slice(-2)}
 function addCost(n){cost+=n;$('cost').textContent='$'+cost.toFixed(3)}
 
+/* ================= EVENTOS + BANDEJAS ================= */
+var OP={msgs:38,sales:0,citas:3,guards:0,now:{},today:{},queue:{}};
+Object.keys(TEAM).forEach(function(id){
+  OP.now[id]={txt:'Disponible — esperando mensajes',since:clock(),alerta:false};
+  OP.today[id]=[];
+  OP.queue[id]=[];
+});
+(function seed(){
+  var s={
+    rosa:[['Respondió consulta de precio de tornillos','ok'],['Informó estado del pedido #1042','ok']],
+    luz:[['Envió recordatorios del día','ok']],
+    eusebio:[['Envió comprobantes SET','ok']],
+    marcelo:[['Envió cotización de pintura','ok']],
+    tito:[['Verificó stock del depósito','ok']]
+  };
+  Object.keys(s).forEach(function(id){
+    OP.today[id]=s[id].map(function(x){return {txt:x[0],t:clock(),cls:x[1]}});
+  });
+})();
+
+function emitEvent(tipo,titulo,detalle,monto,origenId){
+  var recibieron=[];
+  Object.keys(TEAM).forEach(function(id){
+    var a=TEAM[id];
+    if(id===origenId)return;
+    if(a.watch&&a.watch.indexOf(tipo)>=0){
+      OP.queue[id].push({t:titulo,d:detalle,m:monto||null,src:origenId,time:clock()});
+      recibieron.push(a.name);
+    }
+  });
+  if(recibieron.length){
+    toast('Hecho registrado → bandeja de '+recibieron.join(', '));
+    procesarBandejas();
+  }
+  renderOp();
+}
+var procesando={};
+function procesarBandejas(){
+  Object.keys(TEAM).forEach(function(id){
+    var a=TEAM[id];
+    if(a.status==='on'&&OP.queue[id].length&&!procesando[id]){
+      procesando[id]=true;
+      setTimeout(function(){
+        if(!TEAM[id]||TEAM[id].status!=='on'){procesando[id]=false;return}
+        var item=OP.queue[id].shift();
+        procesando[id]=false;
+        pushToday(id,'Procesó: '+item.t,'ok');
+        setNowQuiet(id,'Disponible — esperando mensajes');
+        renderOp();
+      },2500+Math.random()*3000);
+    }
+  });
+}
+function setNowQuiet(id,txt){OP.now[id]={txt:txt,since:clock(),alerta:false};}
+function setNow(id,txt,alerta){
+  OP.now[id]={txt:txt,since:clock(),alerta:!!alerta};
+  renderOp();
+}
+function pushToday(id,txt,cls){
+  if(!OP.today[id])OP.today[id]=[];
+  OP.today[id].unshift({txt:txt,t:clock(),cls:cls||''});
+  if(OP.today[id].length>6)OP.today[id].pop();
+}
+function totalQueue(){
+  var n=0;
+  Object.keys(OP.queue).forEach(function(id){n+=OP.queue[id].length});
+  return n;
+}
+function renderOp(){
+  var e;
+  e=$('opMsgs');if(e)e.textContent=OP.msgs;
+  e=$('opSales');if(e)e.textContent=gs(OP.sales);
+  e=$('opCitas');if(e)e.textContent=OP.citas;
+  e=$('opGuards');if(e)e.textContent=OP.guards;
+  e=$('opQueue');if(e)e.textContent=totalQueue();
+  var on=0,total=0;
+  Object.keys(TEAM).forEach(function(id){if(TEAM[id].status==='on')on++;total++});
+  e=$('opOn');if(e)e.textContent=on+' / '+total;
+  e=$('updClock');if(e)e.textContent='última actualización '+clock();
+  var h='';
+  Object.keys(TEAM).forEach(function(id){
+    var a=TEAM[id],n=OP.now[id]||{txt:'—'},td=OP.today[id]||[],q=OP.queue[id]||[];
+    var alerta=n.alerta&&a.status==='on';
+    var st=a.status==='on'
+      ?(alerta?'<span class="stag st-al">EN ALERTA</span>':'<span class="stag st-on">ACTIVO</span>')
+      :(a.status==='train'?'<span class="stag st-tr">ENTRENANDO</span>':'<span class="stag st-pa">PAUSADO</span>');
+    var qline='';
+    if(q.length){
+      var items=q.slice(0,3).map(function(it){
+        return '<div class="qi"><div class="qdot"></div>'+it.t+(it.m?' · <b>'+gs(it.m)+'</b>':'')+' <small style="color:#475569">(de '+TEAM[it.src].name+')</small></div>';
+      }).join('');
+      qline='<div class="qbox"><b>Bandeja: '+q.length+' pendiente'+(q.length>1?'s':'')+'</b>'+items
+        +(q.length>3?'<div class="qi">… y '+(q.length-3)+' más</div>':'')
+        +(a.status==='paused'?'<div class="qi" style="color:#64748b">acumula mientras esté pausado</div>':'')
+        +'</div>';
+    }
+    var nowLine=a.status==='paused'
+      ?'<div class="now"><div class="pulse" style="background:#64748b;animation:none"></div><div class="nt" style="color:#64748b">Pausado — autoreply · su bandeja se acumula</div></div>'
+      :'<div class="now'+(alerta?' al3':'')+'"><div class="pulse"></div><div class="nt">'+n.txt+'</div><span class="ns">desde '+n.since+'</span></div>';
+    var hist=td.length
+      ?td.map(function(r){return '<div class="trow '+(r.cls||'')+'"><div class="td"></div><div class="tt2">'+r.txt+'</div><span class="th">'+r.t+'</span></div>'}).join('')
+      :'<div class="oempty">Sin actividad registrada hoy.</div>';
+    h+='<div class="opcard'+(alerta?' alerta':'')+'">'
+     +'<div class="och"><div class="avx">'+ini(a.name)+'</div>'
+     +'<div><div class="on2">'+a.name+'</div><div class="or2">'+a.role+' · escucha: '+(a.watch?a.watch.join(', '):'—')+'</div></div>'+st+'</div>'
+     +qline
+     +nowLine
+     +'<div class="today">'+hist+'</div>'
+     +(alerta?'<button class="btn2 rd" style="margin:10px 15px" onclick="resolveAlert(\''+id+'\')">Revisar y resolver como dueño</button>':'')
+     +'</div>';
+  });
+  $('opGrid').innerHTML=h;
+  var nal=Object.keys(OP.now).filter(function(id){return OP.now[id].alerta&&TEAM[id].status==='on'}).length;
+  e=$('nAlerts');if(e)e.textContent=nal;
+  e=$('chipAlerts');if(e)e.style.display=nal?'block':'none';
+}
+function resolveAlert(id){
+  if(OP.now[id])OP.now[id].alerta=false;
+  pushToday(id,'Caso resuelto por el dueño — el agente aprende del caso','ok');
+  setNow(id,'Disponible — esperando mensajes');
+  toast('Alerta resuelta — '+TEAM[id].name+' vuelve a operar');
+}
+
 /* ================= NAVEGACIÓN ================= */
 function view(v){
   $('secD').classList.toggle('on',v==='op');
@@ -458,78 +627,10 @@ function view(v){
   if(v==='equipo')renderTeam();
   if(v==='config')renderThemes();
   if(v==='op')renderOp();
+  if(v==='runtime')renderRtBar();
 }
 
-/* ================= OPERACIÓN ================= */
-var OP={msgs:38,sales:0,citas:3,guards:0,now:{},today:{}};
-(function seed(){
-  var s={
-    rosa:[['Respondió consulta de precio de tornillos','ok'],['Informó estado del pedido #1042','ok'],['Registró cliente nuevo','ok']],
-    luz:[['Agendó cita · medición de obra jueves 09:00','ok'],['Envió recordatorios del día','ok']],
-    eusebio:[['Registró compromiso de pago · Villa Elisa · viernes','ok'],['Envió comprobantes SET','ok']],
-    marcelo:[['Envió cotización de pintura','ok'],['Cerró pedido #1042 · 40 paneles LED','ok']],
-    tito:[['Generó remisión #1043 · Constructora Acosta','ok'],['Verificó stock del depósito','ok']]
-  };
-  Object.keys(s).forEach(function(id){
-    OP.today[id]=s[id].map(function(x){return {txt:x[0],t:clock(),cls:x[1]}});
-  });
-  Object.keys(TEAM).forEach(function(id){
-    OP.now[id]={txt:'Disponible — esperando mensajes',since:clock(),alerta:false};
-  });
-})();
-
-function setNow(id,txt,alerta){
-  OP.now[id]={txt:txt,since:clock(),alerta:!!alerta};
-  renderOp();
-}
-function pushToday(id,txt,cls){
-  if(!OP.today[id])OP.today[id]=[];
-  OP.today[id].unshift({txt:txt,t:clock(),cls:cls||''});
-  if(OP.today[id].length>6)OP.today[id].pop();
-}
-function renderOp(){
-  $('opMsgs').textContent=OP.msgs;
-  $('opSales').textContent=gs(OP.sales);
-  $('opCitas').textContent=OP.citas;
-  $('opGuards').textContent=OP.guards;
-  var on=0,total=0;
-  Object.keys(TEAM).forEach(function(id){if(TEAM[id].status==='on')on++;total++});
-  $('opOn').textContent=on+' / '+total;
-  var up=$('updClock');if(up)up.textContent='última actualización '+clock();
-  var h='';
-  Object.keys(TEAM).forEach(function(id){
-    var a=TEAM[id],n=OP.now[id]||{txt:'—'},td=OP.today[id]||[];
-    var alerta=n.alerta&&a.status==='on';
-    var st=a.status==='on'
-      ?(alerta?'<span class="stag st-al">EN ALERTA</span>':'<span class="stag st-on">ACTIVO</span>')
-      :(a.status==='train'?'<span class="stag st-tr">ENTRENANDO</span>':'<span class="stag st-pa">PAUSADO</span>');
-    var nowLine=a.status==='paused'
-      ?'<div class="now"><div class="pulse" style="background:#64748b;animation:none"></div><div class="nt" style="color:#64748b">Pausado — autoreply</div></div>'
-      :'<div class="now'+(alerta?' al3':'')+'"><div class="pulse"></div><div class="nt">'+n.txt+'</div><span class="ns">desde '+n.since+'</span></div>';
-    var hist=td.length
-      ?td.map(function(r){return '<div class="trow '+(r.cls||'')+'"><div class="td"></div><div class="tt2">'+r.txt+'</div><span class="th">'+r.t+'</span></div>'}).join('')
-      :'<div class="oempty">Sin actividad registrada hoy.</div>';
-    h+='<div class="opcard'+(alerta?' alerta':'')+'">'
-     +'<div class="och"><div class="avx">'+ini(a.name)+'</div>'
-     +'<div><div class="on2">'+a.name+'</div><div class="or2">'+a.role+'</div></div>'+st+'</div>'
-     +nowLine
-     +'<div class="today">'+hist+'</div>'
-     +(alerta?'<button class="btn2 rd" style="margin:10px 15px" onclick="resolveAlert(\''+id+'\')">Revisar y resolver como dueño</button>':'')
-     +'</div>';
-  });
-  $('opGrid').innerHTML=h;
-  var nal=Object.keys(OP.now).filter(function(id){return OP.now[id].alerta&&TEAM[id].status==='on'}).length;
-  $('nAlerts').textContent=nal;
-  $('chipAlerts').style.display=nal?'block':'none';
-}
-function resolveAlert(id){
-  if(OP.now[id])OP.now[id].alerta=false;
-  pushToday(id,'Caso resuelto por el dueño — el agente aprende del caso','ok');
-  setNow(id,'Disponible — esperando mensajes');
-  toast('Alerta resuelta — '+TEAM[id].name+' vuelve a operar');
-}
-
-/* ================= EQUIPO ================= */
+/* ================= EQUIPO UI ================= */
 function renderTeam(){
   var ids=Object.keys(TEAM),on=0,total=0,guards=0;
   ids.forEach(function(id){
@@ -548,7 +649,7 @@ function renderTeam(){
     var st=a.status==='on'?'<span class="stag2 st-on">ACTIVO</span>':(a.status==='train'?'<span class="stag2 st-tr">ENTRENANDO</span>':'<span class="stag2 st-pa">PAUSADO</span>');
     h+='<div class="tcard '+(id===selId?'sel':'')+'" onclick="pick(\''+id+'\')">'
      +'<div class="avx">'+ini(a.name)+'</div>'
-     +'<div><div class="tn2">'+a.name+'</div><div class="tr2">'+a.role+'</div></div>'
+     +'<div><div class="tn2">'+a.name+'</div><div class="tr2">'+a.role+' · escucha: '+(a.watch||[]).join(', ')+'</div></div>'
      +'<div class="ts">'+st+'<div class="pr">'+gs(a.price)+'/mes</div></div></div>';
   });
   h+='<button class="hire" onclick="openHire()">Contratar del catálogo</button>';
@@ -558,6 +659,7 @@ function renderTeam(){
 function pick(id){selId=id;renderTeam()}
 function renderEditor(){
   var a=TEAM[selId];
+  var evs=['venta','pedido','cita','pago'];
   var h='<div class="editor">'
    +'<div class="eh"><div class="avx" style="width:48px;height:48px;font-size:14px">'+ini(a.name)+'</div>'
    +'<div><h3>'+a.name+'</h3><div class="rl">'+a.role+' · '+a.stats+'</div></div>'
@@ -566,12 +668,16 @@ function renderEditor(){
   h+='<div><div class="sect">Identidad</div><div class="frow">'
    +'<input class="fin" id="eName" value="'+a.name+'" style="width:130px">'
    +'<input class="fin" id="eRole" value="'+a.role+'" style="flex:1;min-width:180px"></div></div>';
+  h+='<div><div class="sect">Eventos que escucha — entran en su bandeja</div><div class="frow">'
+   +evs.map(function(e){
+     return '<span class="tchip '+(a.watch&&a.watch.indexOf(e)>=0?'on':'')+'" onclick="toggleWatch(\''+e+'\')">'+e+'</span>';
+   }).join('')
+   +'</div><div class="hintbox" style="margin-top:8px">Cuando ocurre un hecho, los empleados que escuchan ese evento lo reciben en su bandeja y lo procesan si están activos.</div></div>';
   h+='<div><div class="sect">Personalidad — va directo al prompt del LLM</div>'
    +'<textarea class="fin farea" id="eTono">'+a.tono+'</textarea></div>';
   h+='<div><div class="sect">Estado</div><div class="frow">'
    +'<button class="sw2 '+(a.status==='on'?'on':'')+'" '+(a.status==='train'?'disabled style="opacity:.4"':'')+' onclick="toggleStatus()"></button>'
-   +'<span style="font-size:12.5px;font-weight:600">'+(a.status==='on'?'Activo — atiende 24/7':(a.status==='train'?'Entrenando (~48h)':'Pausado — autoreply'))+'</span>'
-   +'</div><div class="hintbox" style="margin-top:8px">Pausá este empleado y dispará un escenario en Runtime — el cliente recibe autoreply y su tarjeta en Operación lo refleja.</div></div>';
+   +'<span style="font-size:12.5px;font-weight:600">'+(a.status==='on'?'Activo — atiende y procesa su bandeja':(a.status==='train'?'Entrenando (~48h)':'Pausado — autoreply y bandeja acumulando'))+'</span></div></div>';
   h+='<div><div class="sect">Tareas</div><div class="litems">'
    +a.tasks.map(function(t,i){return '<div class="litem">✓ '+t+'<span class="x" onclick="delItem(\'tasks\','+i+')">✕</span></div>'}).join('')
    +'</div><div class="addrow"><input id="newTask" placeholder="Nueva tarea…" onkeydown="if(event.key===\'Enter\')addItem(\'tasks\')"><button class="btn2" style="padding:8px 14px" onclick="addItem(\'tasks\')">Agregar</button></div></div>';
@@ -583,7 +689,7 @@ function renderEditor(){
   }
   h+='</div><div class="addrow"><input id="newLim" placeholder="Nuevo límite…" onkeydown="if(event.key===\'Enter\')addItem(\'limits\')"><button class="btn2" style="padding:8px 14px" onclick="addItem(\'limits\')">Agregar</button></div></div>';
   h+='<div><div class="sect">Tools que puede llamar</div><div class="frow">'
-   +a.tools.map(function(t){return '<span class="tchip on" onclick="this.classList.toggle(\'on\')">'+t+'</span>'}).join('')
+   +a.tools.map(function(t){return '<span class="tchip on">'+t+'</span>'}).join('')
    +'</div></div>';
   h+='<div><div class="sect">Entrenamiento — respuestas aprendidas</div>'
    +a.know.map(function(k,i){return '<div class="qa"><span class="x" onclick="delQa('+i+')">✕</span><b>P:</b> '+k.q+'<br><span class="a">→ '+k.a+'</span></div>'}).join('')
@@ -593,6 +699,13 @@ function renderEditor(){
   h+='</div></div>';
   $('edwrap').innerHTML=h;
 }
+function toggleWatch(e){
+  var a=TEAM[selId];
+  if(!a.watch)a.watch=[];
+  var i=a.watch.indexOf(e);
+  if(i>=0)a.watch.splice(i,1);else a.watch.push(e);
+  renderEditor();
+}
 function addItem(k){
   var inp=$(k==='tasks'?'newTask':'newLim');
   if(!inp.value.trim())return;
@@ -600,10 +713,7 @@ function addItem(k){
   else{TEAM[selId].limits.push({d:inp.value.trim()})}
   renderEditor();
 }
-function delItem(k,i){
-  TEAM[selId][k].splice(i,1);
-  renderEditor();
-}
+function delItem(k,i){TEAM[selId][k].splice(i,1);renderEditor()}
 function addQa(){
   var q=$('newQ').value.trim(),r=$('newA').value.trim();
   if(!q||!r)return;
@@ -616,9 +726,15 @@ function toggleStatus(){
   var a=TEAM[selId];
   a.status=(a.status==='on')?'paused':'on';
   renderTeam();
+  renderRtBar();
   renderOp();
-  if(a.status==='on')setNow(selId,'Disponible — esperando mensajes');
-  toast(a.status==='on'?a.name+' activa':a.name+' pausada — autoreply activo');
+  if(a.status==='on'){
+    setNowQuiet(selId,'Disponible — esperando mensajes');
+    procesarBandejas();
+    toast(a.name+' activa — procesa su bandeja acumulada');
+  }else{
+    toast(a.name+' pausada — su bandeja se acumula');
+  }
 }
 function saveEd(){
   var a=TEAM[selId];
@@ -629,15 +745,11 @@ function saveEd(){
     var mx=$('eMax');
     if(mx)a.pedidoMax=parseInt(mx.value.replace(/[^\d]/g,''),10)||0;
     renderTeam();
-    renderPhoneIdle();
+    renderRtBar();
     renderOp();
     pushToday(selId,'Ficha actualizada por el dueño','');
     toast(a.name+' sincronizada');
   },600);
-}
-function renderPhoneIdle(){
-  $('phAv').textContent=ini(TEAM.rosa.name);
-  $('phName').textContent=TEAM.rosa.name+' · Asistente';
 }
 function openHire(){
   var h='<h3>Catálogo de empleados</h3><div class="ms">Se integran al equipo y entrenan con los datos de la empresa (~48h simuladas en 8s)</div><div class="hgrid">';
@@ -657,25 +769,72 @@ function hire(id){
   delete CATALOG[id];
   TEAM[id]={name:c.name,role:c.role,price:c.price,status:'train',
     tono:c.desc,tasks:['(definir tareas con el dueño)'],limits:[{d:'(definir límites con el dueño)'}],
-    pedidoMax:0,tools:['escalar_a_humano'],know:[],stats:'recién contratado'};
+    pedidoMax:0,watch:c.watch||[],tools:['escalar_a_humano'],know:[],stats:'recién contratado'};
   OP.now[id]={txt:'Entrenando con los datos de la empresa',since:clock(),alerta:false};
   OP.today[id]=[];
+  OP.queue[id]=[];
   closeM();
   view('equipo');
   toast(c.name+' contratada — entrenando');
   setTimeout(function(){
     if(TEAM[id]){
       TEAM[id].status='on';
-      TEAM[id].tasks=['Responder según su rubro','Escalar al dueño lo que no sepa'];
+      TEAM[id].tasks=['Responder según su rubro','Procesar eventos de: '+(TEAM[id].watch||[]).join(', ')];
       TEAM[id].limits=[{d:'Máximo 2 mensajes por cliente por semana'}];
-      setNow(id,'Disponible — esperando mensajes');
+      setNowQuiet(id,'Disponible — esperando mensajes');
+      procesarBandejas();
       renderTeam();
-      toast(c.name+' terminó el entrenamiento — ya está activa');
+      renderRtBar();
+      toast(c.name+' terminó el entrenamiento — activa');
     }
   },8000);
 }
 
-/* ================= RUNTIME ================= */
+/* ================= MEMORIA DE CLIENTES ================= */
+var CLIENTES={
+  mirian:{nombre:'Doña Mirian',notas:'prefiere mañanas · medición de obra pendiente'},
+  vera:{nombre:'Obra Vera',notas:'compra cemento recurrente'},
+  acosta:{nombre:'Constructora Acosta',notas:'compra cada 2 semanas · factura a la empresa'},
+  paz:{nombre:'Hermanos Paz',notas:'paga justo · pide quitas siempre'}
+};
+function memoriaCliente(key){
+  var c=CLIENTES[key];
+  if(!c)return '';
+  return 'Memoria compartida: '+c.nombre+' — '+c.notas;
+}
+
+/* ================= RUNTIME: motor de tráfico en vivo ================= */
+var RT={sel:'rosa',busy:{}};
+
+function renderRtBar(){
+  var h='';
+  Object.keys(TEAM).forEach(function(id){
+    var a=TEAM[id];
+    var dot=a.status==='on'?'':(a.status==='train'?' tr':' off');
+    h+='<button class="rtchip '+(id===RT.sel?'sel':'')+'" onclick="pickAgent(\''+id+'\')">'
+     +'<span class="avx" style="width:26px;height:26px;font-size:10px">'+ini(a.name)+'</span>'
+     +a.name
+     +'<span class="rdot'+dot+'"></span>'
+     +'</button>';
+  });
+  $('rtbar').innerHTML=h;
+}
+function pickAgent(id){
+  RT.sel=id;
+  renderRtBar();
+  $('bhName').textContent=TEAM[id].name;
+  var a=TEAM[id];
+  $('phAv').textContent=ini(a.name);
+  $('phName').textContent=a.name+' · '+a.role;
+  $('phStatus').textContent=a.status==='on'?'en línea':(a.status==='train'?'entrenando':'pausado');
+  clearRtTimers();
+  log.innerHTML='';
+  chat.innerHTML='<div class="sep">Diálogo de '+a.name+'</div>';
+  typing.classList.remove('on');
+  setSt(a.status==='on'?'en línea · esperando mensajes':(a.status==='train'?'entrenando':'pausado'),a.status==='on'?'ok':'');
+  addEv('Siguiendo a '+a.name+' — su trabajo llega solo: mensajes de clientes, decisiones, tools y respuestas.','ok');
+}
+
 var chat=$('chat'),log=$('log'),typing=$('typing'),statusEl=$('status');
 function addM(c,txt){
   var d=document.createElement('div');d.className='m '+c;
@@ -699,184 +858,309 @@ function addEv(h,cls,json){
   }
 }
 function setSt(t,c){statusEl.textContent=t;statusEl.className='st '+(c||'')}
-function en(on){
-  ['b0','b1','b2','b3'].forEach(function(b){$(b).disabled=!on});
-}
+function clearRtTimers(){timers.forEach(clearTimeout);timers=[]}
+function setSim(on){var b=$('simBtn');if(b){b.disabled=!on;b.textContent=on?'Simular que un cliente escribe':'cliente escribiendo…';}}
 
-function buildScenario(key){
-  if(key==='precio'){
-    var a=TEAM.rosa,s=[];
-    s.push({t:100,av:a.name,st:(a.status==='on'?'en línea 24/7':'PAUSADO'),clear:1});
-    s.push({t:300,cli:'Buenas, ¿a cuento el cemento?'});
-    s.push({t:600,ev:'POST /webhook/whatsapp — Meta entrega el mensaje'});
-    s.push({t:950,ev:'Firma verificada · dedupe OK',cls:'ok'});
-    if(a.status!=='on'){
-      s.push({t:1400,ev:'Routing: '+a.name+' está PAUSADA — cola + autoreply',cls:'skip'});
-      s.push({t:1900,sys:'Mensaje en cola — vuelve cuando el dueño la active',bad:1});
-      s.push({t:2300,bot:'Hola, estamos con atención limitada. En breve te respondemos.'});
-      s.push({t:2800,ev:'Autoreply enviada · mensaje encolado',cls:'skip'});
-      s.push({t:3200,done:['skip','AGENTE PAUSADO'],fin:'pausa',who:'rosa'});
-      return s;
-    }
-    s.push({t:1300,ev:'Routing → '+a.name+' · tools: '+a.tools.join(', '),cls:'ok'});
-    s.push({t:1800,ev:'LLM llamada 1 → tool_call buscar_producto',json:'{ "tool": "buscar_producto",\n  "args": { "q": "cemento" } }'});
-    s.push({t:2450,ev:'Tool responde con datos reales del negocio',json:'{ "ok": true, "res": [\n  { "n": "Cemento Portland 50kg", "Gs": 52000, "stock": 340 },\n  { "n": "Cemento Pózzolánico", "Gs": 47500 } ] }'});
-    s.push({t:2950,typing:1});
-    s.push({t:3550,bot:'Hola, Cemento Portland 50kg a G. 52.000 y Pózzolánico a G. 47.500. ¿Para cuántos sacos lo necesitás?',ev:'LLM llamada 2 → redacta con datos de la tool'});
-    s.push({t:4100,ev:'WhatsApp send · DB write · métricas +1',cls:'ok'});
-    s.push({t:4500,done:['ok','RESPONDIDO · 1.4s'],fin:'precio',who:'rosa'});
-    return s;
-  }
-  if(key==='guarda'){
-    var m=TEAM.marcelo,total=10400000,max=m.pedidoMax,p=[];
-    p.push({t:100,av:m.name,st:(m.status==='on'?'en línea':'PAUSADO'),clear:1});
-    p.push({t:300,cli:'Necesito 200 bolsas de cemento para mañana temprano'});
-    p.push({t:600,ev:'POST /webhook → routing → '+m.name+' (Ventas)'});
-    p.push({t:1000,ev:'LLM llamada 1 → tool_call crear_pedido',json:'{ "tool": "crear_pedido",\n  "args": { "items": "200x CEM-50", "entrega": "mañana" } }'});
-    if(m.status!=='on'){
-      p.push({t:1700,ev:'Agente PAUSADO → autoreply',cls:'skip'});
-      p.push({t:2200,bot:'Hola, atención limitada ahora, en breve te confirmamos.'});
-      p.push({t:2600,done:['skip','AGENTE PAUSADO'],fin:'pausa',who:'marcelo'});
-      return p;
-    }
-    if(total>max){
-      p.push({t:1700,ev:'GUARDA EN CÓDIGO: '+gs(total)+' supera el límite '+gs(max)+' — BLOQUEADO',cls:'bad',
-        json:'// runtime/tools/pedidos.js — leyendo la ficha de '+m.name+'\nconst total = await calcularTotal(args);   // '+gs(total)+'\nconst limite = agent.ficha.pedidoMax;      // '+gs(max)+'\n\nif (total > limite) {\n  return escalar_a_humano({ motivo: "supera el límite" });\n}'});
-      p.push({t:2800,ev:'escalar_a_humano() → agente en pausa · aviso al dueño',cls:'bad'});
-      p.push({t:3300,sys:'Escalado — esperando tu decisión',bad:1});
-      p.push({t:3900,typing:1});
-      p.push({t:4500,bot:'Anoté todo. Por el volumen, el dueño te confirma precio y entrega en minutos. ¡Gracias!',ev:'LLM llamada 2 → informa SIN prometer nada'});
-      p.push({t:5000,ev:'Enviado · alerta creada',cls:'ok'});
-      p.push({t:5400,done:['esc','ESCALADO AL DUEÑO'],fin:'guarda',who:'marcelo'});
-    }else{
-      p.push({t:1700,ev:'GUARDA OK: '+gs(total)+' dentro del límite '+gs(max)+' — autorizado',cls:'ok',
-        json:'// runtime/tools/pedidos.js\nconst total = '+gs(total)+';\nconst limite = agent.ficha.pedidoMax;   // '+gs(max)+'\n\nif (total > limite) { … escalar }   // NO entra\nawait db.pedidos.insert({ total: '+gs(total)+' });'});
-      p.push({t:2700,ev:'crear_pedido OK → pedido #1044 · depósito notificado',cls:'ok'});
-      p.push({t:3200,typing:1});
-      p.push({t:3800,bot:'Listo, pedido #1044: 200 bolsas para mañana. Total '+gs(total)+', sale primero hora.',ev:'LLM llamada 2 → confirma el pedido'});
-      p.push({t:4300,ev:'Enviado · producción actualizada',cls:'ok'});
-      p.push({t:4700,done:['ok','PEDIDO CREADO '+gs(total)],fin:'venta',who:'marcelo'});
-    }
-    return p;
-  }
-  if(key==='dup'){
-    return [
-      {t:100,av:TEAM.rosa.name,st:'en línea',clear:1},
-      {t:300,sys:'Contexto: este mensaje YA fue respondido. Meta a veces reintenta…'},
-      {t:800,ev:'POST /webhook — reintento con el MISMO wamid'},
-      {t:1200,ev:'Firma verificada',cls:'ok'},
-      {t:1650,ev:'DEDUPE: wamid.BgK1043 ya visto → descartar',cls:'skip',
-        json:'// webhook/whatsapp.js — idempotencia\nif (await db.yaProcesado(msg.id)) {\n  return res.status(200).end();\n}'},
-      {t:2400,ev:'200 OK en 13ms · cero LLM · el cliente NO recibe doble respuesta',cls:'skip'},
-      {t:2900,done:['skip','DUPLICADO DESCARTADO'],fin:'dup',who:'rosa'}
-    ];
-  }
-  if(key==='noche'){
-    var r=TEAM.rosa,q=[];
-    q.push({t:100,av:r.name,st:(r.status==='on'?'en línea 24/7':'PAUSADO'),clear:1});
-    q.push({t:300,sep:'Hoy · 02:14 AM'});
-    q.push({t:600,cli:'Buenas, mañana feriado abren?'});
-    q.push({t:950,ev:'POST /webhook — 02:14 AM · local cerrado, dueño durmiendo'});
-    if(r.status!=='on'){
-      q.push({t:1450,ev:r.name+' PAUSADA y es de madrugada → cola para la mañana',cls:'skip'});
-      q.push({t:1900,sys:'Sin cobertura — activá a '+r.name+' en Equipo',bad:1});
-      q.push({t:2400,done:['skip','MENSAJE EN COLA'],fin:'pausa',who:'rosa'});
-      return q;
-    }
-    q.push({t:1400,ev:'Routing → '+r.name+' · horario 24/7 → opera igual',cls:'ok'});
-    q.push({t:1850,ev:'LLM llamada 1 → respuesta directa (horario en su knowledge)'});
-    q.push({t:2400,typing:1});
-    q.push({t:3000,bot:'Buenas, mañana feriado estamos cerrados. El jueves abrimos normal de 7:00. ¿Te anoto algo?'});
-    q.push({t:3550,ev:'WhatsApp send — nadie despierto, el worker sí',cls:'ok'});
-    q.push({t:3950,ev:'Cliente nuevo capturado · conversación guardada',cls:'ok'});
-    q.push({t:4350,done:['ok','VENTA CAPTURADA A LAS 2 AM'],fin:'noche',who:'rosa'});
-    return q;
-  }
-}
-
-function run(key){
-  timers.forEach(clearTimeout);
-  timers=[];
-  var steps=buildScenario(key);
-  chat.innerHTML='<div class="sep">Conversación con '+THEMES[THEME].company+'</div>';
-  log.innerHTML='';
-  typing.classList.remove('on');
-  setSt('procesando…','');
-  steps.forEach(function(p){
-    timers.push(setTimeout(function(){
-      if(p.clear){
-        $('phAv').textContent=ini(p.av);
-        $('phName').textContent=p.av+' · Asistente';
-        $('phStatus').textContent=p.st;
-      }
-      if(p.sep)addSep(p.sep);
-      if(p.cli)addM('cli',p.cli);
-      if(p.sys)addM('sys'+(p.bad?' bad':''),p.sys);
-      if(p.typing)typing.classList.add('on');
-      if(p.bot){typing.classList.remove('on');addM('bot',p.bot)}
-      if(p.ev)addEv(p.ev,p.cls,p.json);
-      if(p.done){
-        setSt(p.done[1],p.done[0]);
-        en(true);
-        finScenario(key,p.fin,p.who);
-      }
-    },p.t));
-  });
-  en(false);
-}
-
-function finScenario(key,fin,who){
-  if(fin==='precio'){
-    OP.msgs++;addCost(0.004);
-    pushToday(who,'Respondió consulta de precio · cemento','ok');
-    setNow(who,'Respondiendo consulta de precio — Cliente Obra Vera');
-  }
-  if(fin==='noche'){
-    OP.msgs++;addCost(0.004);
-    pushToday(who,'Atendió consulta a las 2 AM — cliente nuevo capturado','ok');
-    setNow(who,'Atendiendo cliente nuevo — 02:14 AM');
-  }
-  if(fin==='guarda'){
-    OP.msgs++;OP.guards++;addCost(0.004);
-    pushToday(who,'GUARDA: pedido de '+gs(10400000)+' bloqueado — escalado al dueño','bad');
-    setNow(who,'ESPERANDO TU DECISIÓN — pedido de '+gs(10400000)+' (Constructora)',true);
-    toast('Guarda disparada — '+TEAM[who].name+' espera tu decisión en Operación');
-  }
-  if(fin==='venta'){
-    OP.msgs++;OP.sales+=10400000;addCost(0.008);
-    pushToday(who,'Pedido #1044 confirmado · '+gs(10400000)+' · entrega mañana','ok');
-    setNow(who,'Disponible — esperando mensajes');
-    toast('Pedido creado — registrado en Operación');
-  }
-  if(fin==='dup'){
-    pushToday(who,'Mensaje duplicado descartado (idempotencia)','');
-  }
-  if(fin==='pausa'){
-    pushToday(who,'Mensaje en cola — agente pausado, autoreply enviada','');
-  }
-  if($('secD').classList.contains('on'))renderOp();
-}
-
-/* pulso de fondo */
-var FONDO={
-  rosa:['Respondiendo consulta de stock','Informando estado de pedido'],
-  luz:['Reasignando cita cancelada','Confirmando asistencia del día'],
-  eusebio:['Recordando vencimiento','Registrando fecha de pago nueva'],
-  marcelo:['Enviando cotización','Haciendo seguimiento a cotización fría'],
-  tito:['Tomando pedido por WhatsApp','Avisando faltante al depósito']
+/* qué mensajes puede recibir cada empleado según su rol */
+var TRAFICO={
+  rosa:[
+    {k:'precio',cli:'Buenas, ¿a cuento el cemento?',cliKey:'vera'},
+    {k:'envios',cli:'¿Hacen envíos a San Lorenzo?'},
+    {k:'derivar',cli:'Hola, quiero hacer un pedido grande para mi obra',cliKey:'vera'}
+  ],
+  luz:[
+    {k:'cita',cli:'Buenas, ¿queda algo el jueves para una medición de obra?',cliKey:'mirian'}
+  ],
+  eusebio:[
+    {k:'quita',cli:'Ando justo. ¿Me hacen una quieta del 30% y le pago el resto esta semana?',cliKey:'paz'},
+    {k:'compromiso',cli:'Le paso el pago el viernes, ¿quedo anotado?'}
+  ],
+  marcelo:[
+    {k:'cotiza',cli:'Necesito 40 paneles LED, ¿a cuento por cantidad?',cliKey:'vera'},
+    {k:'grande',cli:'Necesito 200 bolsas de cemento para mañana temprano',cliKey:'acosta'}
+  ],
+  tito:[
+    {k:'mayorista',cli:'Pedime para mañana: 30 cementos, 10 mallas y 200 ladrillos',cliKey:'acosta'}
+  ]
 };
+
+/* construir la secuencia de procesamiento de un mensaje */
+function stepsPara(id,m){
+  var a=TEAM[id],s=[];
+  var fin=null;
+  s.push({t:60,av:a.name,st:(a.status==='on'?'en línea':(a.status==='train'?'entrenando':'pausado')),clear:1});
+  s.push({t:250,cli:m.cli});
+  s.push({t:500,ev:'Mensaje entrante del cliente'});
+  s.push({t:750,ev:'Firma verificada · dedupe OK',cls:'ok'});
+  if(m.cliKey)s.push({t:1000,ev:memoriaCliente(m.cliKey),cls:'ok'});
+  if(a.status!=='on'){
+    s.push({t:1300,ev:a.name+' está '+(a.status==='train'?'entrenando':'PAUSADO')+' → cola + autoreply',cls:'skip'});
+    s.push({t:1700,typing:1});
+    s.push({t:2300,bot:'Hola, en este momento tenemos atención limitada. En breve te respondemos.'});
+    s.push({t:2700,ev:'Autoreply enviada · mensaje encolado',cls:'skip'});
+    fin={k:'pausa',res:'AGENTE NO DISPONIBLE'};
+    return {s:s,fin:fin};
+  }
+  s.push({t:1300,ev:'Routing → '+a.name+' ('+a.role+')',cls:'ok'});
+
+  if(m.k==='precio'){
+    s.push({t:1700,ev:'LLM 1 → tool_call buscar_producto',json:'{ "tool": "buscar_producto",\n  "args": { "q": "cemento" } }'});
+    s.push({t:2300,ev:'Tool → precios y stock reales',json:'{ "ok": true, "res": [\n  { "n": "Cemento Portland 50kg", "Gs": 52000 },\n  { "n": "Cemento Pózzolánico", "Gs": 47500 } ] }'});
+    s.push({t:2700,typing:1});
+    s.push({t:3300,bot:'Hola'+(m.cliKey?' '+CLIENTES[m.cliKey].nombre:'')+', Cemento Portland a G. 52.000 y Pózzolánico a G. 47.500. ¿Para cuántos sacos?'});
+    fin={k:'precio',res:'RESPONDIDO'};
+  }
+  if(m.k==='envios'){
+    s.push({t:1700,ev:'LLM 1 → consulta conocimiento compartido',json:'{ "tool": "empresa_knowledge",\n  "args": { "q": "delivery" } }\n\n→ '+KN.delivery});
+    s.push({t:2200,typing:1});
+    s.push({t:2800,bot:'Sí, hacemos envíos: '+KN.delivery+'. ¿Te cotizo algo?'});
+    fin={k:'envios',res:'RESPONDIDO'};
+  }
+  if(m.k==='derivar'){
+    s.push({t:1700,ev:'LLM 1 → evalúa: "pedido grande" = caso de VENTAS'});
+    s.push({t:2100,ev:'tool_call derivar_a("marcelo")',json:'{ "tool": "derivar_a",\n  "args": { "empleado": "marcelo", "motivo": "pedido grande" } }\n\n// Único pase permitido: conversacional.\n// El trabajo interno sigue por eventos y bandejas.'});
+    s.push({t:2700,ev:'CONVERSACIÓN REASIGNADA → ahora atiende '+TEAM.marcelo.name,cls:'ok'});
+    s.push({t:2900,av:TEAM.marcelo.name,st:'tomó la conversación'});
+    s.push({t:3200,typing:1});
+    s.push({t:3800,bot:'¡Hola! Marcelo acá, de ventas. ¿Qué materiales y para cuándo?'});
+    fin={k:'pase',res:'DERIVADA A '+TEAM.marcelo.name.toUpperCase()};
+  }
+  if(m.k==='cita'){
+    s.push({t:1700,ev:'LLM 1 → tool_call listar_horarios',json:'{ "tool": "listar_horarios",\n  "args": { "dia": "jueves" } }'});
+    s.push({t:2200,ev:'Tool → 09:00 y 14:00 libres',json:'{ "ok": true, "libres": [ "09:00", "14:00" ] }'});
+    s.push({t:2500,typing:1});
+    s.push({t:3100,bot:'Hola'+(m.cliKey?' '+CLIENTES[m.cliKey].nombre:'')+', el jueves tengo 09:00 o 14:00. ¿Cuál le va mejor?'});
+    s.push({t:3500,cli:'A las 9 dale'});
+    s.push({t:3900,ev:'LLM 2 → tool_call agendar_cita',json:'{ "tool": "agendar_cita",\n  "args": { "dia": "jueves", "hora": "09:00" } }'});
+    s.push({t:4500,ev:'GUARDA DE HORARIO: dentro del horario del local — OK',cls:'ok',
+      json:'// runtime/tools/agenda.js\nif (fueraDeHorario(fecha, empresa.horario)) {\n  return { ok: false, motivo: "fuera_horario" };\n}\nawait calendar.crearEvento(cita);\nawait db.jobs.encolar("recordatorio_24h", cita);'});
+    s.push({t:5000,typing:1});
+    s.push({t:5500,bot:'Listo, jueves 09:00 confirmado. Le recuerdo el miércoles por acá.'});
+    fin={k:'cita',res:'CITA AGENDADA'};
+  }
+  if(m.k==='quita'){
+    s.push({t:1700,ev:'LLM 1 → evalúa: pide QUIETA → revisa límites de su ficha'});
+    s.push({t:2200,ev:'GUARDA: "quitas: decide el dueño" → BLOQUEADO',cls:'bad',
+      json:'// runtime/tools/cobros.js\nif (args.quita_pct > 0) {\n  return escalar_a_humano({ motivo: "pide quita" });\n}'});
+    s.push({t:2900,ev:'escalar_a_humano() → alerta al dueño',cls:'bad'});
+    s.push({t:3200,typing:1});
+    s.push({t:3800,bot:'Entiendo su situación. Las quitas no las autorizo yo — le registro la propuesta y el dueño le responde hoy mismo.'});
+    fin={k:'cobro',res:'ESCALADO AL DUEÑO'};
+  }
+  if(m.k==='compromiso'){
+    s.push({t:1700,ev:'LLM 1 → tool_call registrar_compromiso',json:'{ "tool": "registrar_compromiso",\n  "args": { "fecha": "viernes" } }'});
+    s.push({t:2300,ev:'Compromiso registrado en planilla de cobros',cls:'ok'});
+    s.push({t:2700,typing:1});
+    s.push({t:3300,bot:'Anotado: el viernes. Le envío el comprobante cuando se acredite.'});
+    fin={k:'compromiso',res:'COMPROMISO REGISTRADO'};
+  }
+  if(m.k==='cotiza'){
+    s.push({t:1700,ev:'LLM 1 → tool_call cotizar',json:'{ "tool": "cotizar",\n  "args": { "sku": "LED-18", "cant": 40 } }'});
+    s.push({t:2300,ev:'Tool → G. 41.500 c/u con descuento por cantidad',json:'{ "ok": true, "unitario": 41500, "total": 1660000 }'});
+    s.push({t:2700,typing:1});
+    s.push({t:3300,bot:'Por 40 unidades: G. 41.500 c/u, total G. 1.660.000 con delivery. ¿Te preparo el pedido?'});
+    fin={k:'cotiza',res:'COTIZACIÓN ENVIADA'};
+  }
+  if(m.k==='grande'){
+    var total=10400000,max=a.pedidoMax;
+    s.push({t:1700,ev:'LLM 1 → tool_call crear_pedido',json:'{ "tool": "crear_pedido",\n  "args": { "items": "200x CEM-50", "entrega": "mañana" } }'});
+    if(total>max){
+      s.push({t:2300,ev:'GUARDA: '+gs(total)+' supera el límite '+gs(max)+' — BLOQUEADO',cls:'bad',
+        json:'// runtime/tools/pedidos.js\nconst total = await calcularTotal(args);   // '+gs(total)+'\nconst limite = agent.ficha.pedidoMax;      // '+gs(max)+'\n\nif (total > limite) {\n  return escalar_a_humano({ motivo: "supera el límite" });\n}'});
+      s.push({t:2900,ev:'escalar_a_humano() → alerta al dueño',cls:'bad'});
+      s.push({t:3200,typing:1});
+      s.push({t:3800,bot:'Anoté todo. Por el volumen, el dueño te confirma precio y entrega en minutos.'});
+      fin={k:'guarda',res:'ESCALADO AL DUEÑO'};
+    }else{
+      s.push({t:2300,ev:'GUARDA OK: '+gs(total)+' dentro del límite '+gs(max)+' — autorizado',cls:'ok',
+        json:'// runtime/tools/pedidos.js\nconst limite = agent.ficha.pedidoMax;   // '+gs(max)+' ← subiste el límite en Equipo\nif (total > limite) { … escalar }   // NO entra\nawait db.pedidos.insert({ total: '+gs(total)+' });'});
+      s.push({t:2900,ev:'Hecho emitido: VENTA '+gs(total),cls:'ok'});
+      s.push({t:3200,ev:'EVENTO → bandeja de Don Eusebio (escucha "venta")',cls:'ok'});
+      s.push({t:3500,typing:1});
+      s.push({t:4100,bot:'Listo, pedido confirmado por '+gs(total)+'. Sale mañana primera hora.'});
+      fin={k:'venta',res:'PEDIDO CREADO '+gs(total)};
+    }
+  }
+  if(m.k==='mayorista'){
+    s.push({t:1700,ev:'LLM 1 → tool_call check_stock',json:'{ "tool": "check_stock",\n  "args": { "items": ["CEM-50 x30","MALLA x10","LADRILLO x200"] } }'});
+    s.push({t:2300,ev:'Tool → todo disponible',json:'{ "ok": true, "stock": { "CEM-50": 340, "MALLA": 85 } }'});
+    s.push({t:2700,ev:'LLM 2 → tomar_pedido · remisión',json:'{ "tool": "tomar_pedido",\n  "args": { "total": 4120000, "entrega": "mañana" } }\n\n// GUARDA: G. 4.120.000 ≤ límite mayorista G. 8.000.000 — OK'});
+    s.push({t:3300,ev:'Remisión #1087 generada · depósito notificado',cls:'ok'});
+    s.push({t:3700,typing:1});
+    s.push({t:4300,bot:'Anotado: 30 cementos, 10 mallas, 200 ladrillos. Total G. 4.120.000, mañana primera hora.'});
+    s.push({t:4700,ev:'Hecho emitido: VENTA G. 4.120.000 → bandeja de Don Eusebio',cls:'ok'});
+    fin={k:'mayorista',res:'PEDIDO MAYORISTA · REMISIÓN LISTA'};
+  }
+  s.push({t:4100,ev:'Publicado en el canal del negocio · DB write',cls:'ok'});
+  return {s:s,fin:fin};
+}
+
+/* PROCESAR: llega un mensaje a un empleado — se anima si lo estás observando */
+function procesarMensaje(id,m,manual){
+  if(RT.busy[id])return;
+  RT.busy[id]=true;
+  OP.msgs++;
+  var a=TEAM[id];
+  setNow(id,'Procesando mensaje de cliente...');
+  var build=stepsPara(id,m);
+  var fin=build.fin;
+  var animar=(id===RT.sel);
+
+  if(animar){
+    clearRtTimers();
+    log.innerHTML='';
+    chat.innerHTML='<div class="sep">Diálogo de '+a.name+(manual?' · mensaje simulado':'')+'</div>';
+    setSt('procesando…','');
+    var delay=0;
+    build.s.forEach(function(p){
+      timers.push(setTimeout(function(){
+        if(p.clear){
+          $('phAv').textContent=ini(p.av);
+          $('phName').textContent=p.av+' · '+a.role;
+          $('phStatus').textContent=p.st;
+        }
+        if(p.cli)addM('cli',p.cli);
+        if(p.sys)addM('sys'+(p.bad?' bad':''),p.sys);
+        if(p.typing)typing.classList.add('on');
+        if(p.bot){typing.classList.remove('on');addM('bot',p.bot)}
+        if(p.ev)addEv(p.ev,p.cls,p.json);
+      },delay));
+      delay+=p.typing?700:520;
+    });
+    timers.push(setTimeout(function(){
+      terminarMensaje(id,fin);
+      RT.busy[id]=false;
+      setSim(true);
+    },delay+300));
+    setSim(false);
+  }else{
+    /* no lo estás mirando: el trabajo ocurre igual, se registra en su tarjeta */
+    pushToday(id,mensajeResumen(m,fin),'ok');
+    if(fin&&fin.k==='guarda'){
+      OP.guards++;
+      setNow(id,'ESPERANDO TU DECISIÓN — pedido de '+gs(10400000),true);
+    }else if(fin&&fin.k==='cobro'){
+      OP.guards++;
+      setNow(id,'ESPERANDO TU DECISIÓN — quita del 30%',true);
+    }else if(fin&&(fin.k==='venta'||fin.k==='mayorista')){
+      var monto=fin.k==='mayorista'?4120000:10400000;
+      OP.sales+=monto;
+      setNowQuiet(id,'Disponible — esperando mensajes');
+      emitEvent('venta','Venta — Constructora Acosta','Pedido registrado',monto,id);
+    }else if(fin&&fin.k==='cita'){
+      OP.citas++;
+      setNowQuiet(id,'Disponible — esperando mensajes');
+    }else{
+      setNowQuiet(id,'Disponible — esperando mensajes');
+    }
+    addCost(0.004);
+    RT.busy[id]=false;
+    renderOp();
+  }
+}
+function mensajeResumen(m,fin){
+  var base=m.cli.length>34?m.cli.slice(0,34)+'…':m.cli;
+  if(fin&&fin.k==='guarda')return 'GUARDA: pedido grande bloqueado — escalado al dueño';
+  if(fin&&fin.k==='cobro')return 'GUARDA: quita pedida — escalado al dueño';
+  if(fin&&fin.k==='venta')return 'Vendió: pedido confirmado '+gs(10400000);
+  if(fin&&fin.k==='mayorista')return 'Pedido mayorista confirmado '+gs(4120000);
+  if(fin&&fin.k==='cita')return 'Agendó cita · jueves 09:00';
+  if(fin&&fin.k==='pase')return 'Derivó conversación a Marcelo';
+  if(fin&&fin.k==='pausa')return 'Mensaje en cola — autoreply enviada';
+  return 'Respondió: "'+base+'"';
+}
+function terminarMensaje(id,fin){
+  var k=fin?fin.k:'';
+  if(k==='precio'){
+    addCost(0.004);
+    pushToday(id,'Respondió consulta de precio','ok');
+    setNow(id,'Disponible — esperando mensajes');
+  }
+  if(k==='envios'){
+    addCost(0.003);
+    pushToday(id,'Respondió consulta de envíos (conocimiento compartido)','ok');
+    setNow(id,'Disponible — esperando mensajes');
+  }
+  if(k==='cita'){
+    OP.citas++;addCost(0.006);
+    pushToday(id,'Agendó cita · jueves 09:00 · recordatorio programado','ok');
+    setNow(id,'Disponible — esperando mensajes');
+  }
+  if(k==='compromiso'){
+    addCost(0.004);
+    pushToday(id,'Registró compromiso de pago · viernes','ok');
+    setNow(id,'Disponible — esperando mensajes');
+  }
+  if(k==='cotiza'){
+    addCost(0.004);
+    pushToday(id,'Envió cotización de paneles LED','ok');
+    setNow(id,'Disponible — esperando mensajes');
+  }
+  if(k==='guarda'){
+    OP.guards++;addCost(0.004);
+    pushToday(id,'GUARDA: pedido de '+gs(10400000)+' bloqueado — escalado al dueño','bad');
+    setNow(id,'ESPERANDO TU DECISIÓN — pedido de '+gs(10400000),true);
+    toast('Guarda disparada — '+TEAM[id].name+' espera tu decisión en Operación');
+  }
+  if(k==='cobro'){
+    OP.guards++;addCost(0.004);
+    pushToday(id,'GUARDA: quita del 30% pedida — escalada al dueño','bad');
+    setNow(id,'ESPERANDO TU DECISIÓN — quita del 30%',true);
+    toast('Guarda de cobros — '+TEAM[id].name+' espera tu decisión');
+  }
+  if(k==='venta'){
+    OP.sales+=10400000;addCost(0.008);
+    pushToday(id,'Pedido confirmado · '+gs(10400000),'ok');
+    setNow(id,'Disponible — esperando mensajes');
+    emitEvent('venta','Venta — Constructora Acosta','200 bolsas de cemento · genera factura',10400000,id);
+  }
+  if(k==='mayorista'){
+    OP.sales+=4120000;addCost(0.006);
+    pushToday(id,'Pedido mayorista · '+gs(4120000),'ok');
+    setNow(id,'Disponible — esperando mensajes');
+    emitEvent('venta','Venta — Constructora Acosta','Pedido mayorista · genera factura',4120000,id);
+  }
+  if(k==='pase'){
+    addCost(0.006);
+    pushToday(id,'Derivó conversación a '+TEAM.marcelo.name,'ok');
+    pushToday('marcelo','Tomó conversación derivada por '+TEAM[id].name,'ok');
+    setNow(id,'Disponible — esperando mensajes');
+  }
+  if(k==='pausa'){
+    pushToday(id,'Mensaje en cola — autoreply enviada','');
+    setNow(id,'Disponible — esperando mensajes');
+  }
+  setSt('sin actividad · esperando','ok');
+  renderOp();
+}
+
+/* el tráfico: los mensajes llegan solos */
 setInterval(function(){
   var ids=Object.keys(TEAM).filter(function(id){
-    return TEAM[id].status==='on'&&OP.now[id]&&!OP.now[id].alerta&&FONDO[id];
+    return TEAM[id].status==='on'&&!RT.busy[id]&&TRAFICO[id];
   });
   if(!ids.length)return;
   var id=ids[Math.floor(Math.random()*ids.length)];
-  var ops=FONDO[id];
-  var txt=ops[Math.floor(Math.random()*ops.length)];
-  OP.msgs++;addCost(0.003);
-  pushToday(id,txt,'ok');
-  setNow(id,txt+' — cliente atendido');
-},12000);
+  var tipos=TRAFICO[id];
+  var m=tipos[Math.floor(Math.random()*tipos.length)];
+  procesarMensaje(id,m,false);
+},11000);
+
+/* simular un cliente para el empleado observado */
+function simular(){
+  var id=RT.sel;
+  var tipos=TRAFICO[id];
+  if(!tipos){toast('Este empleado todavía no tiene tráfico definido');return}
+  var m=tipos[Math.floor(Math.random()*tipos.length)];
+  procesarMensaje(id,m,true);
+}
+
+/* si estás mirando a alguien cuando pausás desde Equipo, la barra se actualiza */
+var _toggleStatus=toggleStatus;
+toggleStatus=function(){
+  _toggleStatus();
+  renderRtBar();
+};
 
 setInterval(function(){
   var up=$('updClock');
@@ -884,9 +1168,9 @@ setInterval(function(){
 },30000);
 
 /* arranque */
-renderPhoneIdle();
 renderThemes();
 renderOp();
+renderRtBar();
 </script>
 </body>
 </html>
