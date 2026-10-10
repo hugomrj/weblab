@@ -1,0 +1,1181 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Amelia - Asistente de Sueldos y Beneficios</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --terracota: #c2703d;
+            --terracota-light: #d4956a;
+            --terracota-dark: #a35a2e;
+            --gold: #d4a853;
+            --gold-light: #e8c87a;
+            --blue-deep: #1a3a5c;
+            --blue-medium: #2d5f8a;
+            --green-natural: #4a7c59;
+            --cream: #faf6f0;
+            --cream-warm: #f5ede3;
+            --sand: #ede4d8;
+            --brown-soft: #8b6f5c;
+            --text-dark: #2c1810;
+            --text-medium: #5a4a3f;
+            --text-light: #8b7b6f;
+            --white: #ffffff;
+            
+            --shadow-warm: 0 4px 20px rgba(139, 95, 60, 0.08);
+            --shadow-hover: 0 8px 30px rgba(139, 95, 60, 0.12);
+            --radius: 16px;
+            --radius-sm: 10px;
+            --radius-lg: 24px;
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: var(--cream);
+            color: var(--text-dark);
+            min-height: 100vh;
+            line-height: 1.7;
+        }
+        
+        .container {
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .header {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            padding: 1.75rem 2.5rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow-warm);
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            border: 1px solid rgba(194, 112, 61, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--terracota), var(--gold), var(--blue-deep), var(--gold), var(--terracota));
+        }
+        
+        .logo {
+            width: 52px; height: 52px;
+            background: linear-gradient(135deg, var(--terracota), var(--gold));
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 22px;
+            color: white;
+            font-weight: 800;
+            box-shadow: 0 4px 15px rgba(194, 112, 61, 0.3);
+        }
+        
+        .header-text h1 {
+            font-size: 1.75rem;
+            font-weight: 800;
+            color: var(--blue-deep);
+        }
+        
+        .header-text p {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            font-weight: 500;
+        }
+        
+        .main-layout {
+            display: grid;
+            grid-template-columns: 1fr 320px;
+            gap: 2rem;
+        }
+        
+        .content-area {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        
+        .card {
+            background: var(--white);
+            border-radius: var(--radius);
+            padding: 2rem;
+            box-shadow: var(--shadow-warm);
+            border: 1px solid rgba(194, 112, 61, 0.08);
+            transition: all 0.3s ease;
+        }
+        
+        .card:hover { box-shadow: var(--shadow-hover); }
+        
+        .search-label {
+            font-size: 1.15rem;
+            color: var(--blue-deep);
+            margin-bottom: 1rem;
+            display: block;
+            font-weight: 800;
+        }
+        
+        .search-input-wrapper { position: relative; margin-bottom: 1.25rem; }
+        
+        .search-input {
+            width: 100%;
+            padding: 1rem 4rem 1rem 1.5rem;
+            background: var(--cream);
+            border: 2px solid var(--sand);
+            border-radius: var(--radius);
+            font-size: 1rem;
+            color: var(--text-dark);
+            transition: all 0.3s;
+            font-family: inherit;
+            font-weight: 600;
+        }
+        
+        .search-input::placeholder { color: var(--text-light); font-weight: 400; }
+        
+        .search-input:focus {
+            outline: none;
+            border-color: var(--terracota);
+            background: var(--white);
+            box-shadow: 0 0 0 4px rgba(194, 112, 61, 0.1);
+        }
+        
+        .search-button {
+            position: absolute;
+            right: 0.5rem; top: 50%;
+            transform: translateY(-50%);
+            background: linear-gradient(135deg, var(--terracota), var(--terracota-dark));
+            color: white; border: none;
+            padding: 0.75rem 1.25rem;
+            border-radius: var(--radius-sm);
+            cursor: pointer; font-size: 1rem;
+            transition: all 0.3s;
+            box-shadow: 0 3px 10px rgba(194, 112, 61, 0.3);
+            font-family: inherit;
+            font-weight: 700;
+        }
+        
+        .search-button:hover {
+            transform: translateY(-50%) translateY(-2px);
+            box-shadow: 0 5px 20px rgba(194, 112, 61, 0.4);
+        }
+        
+        .category-chips { display: flex; gap: 0.75rem; flex-wrap: wrap; }
+        
+        .chip {
+            padding: 0.6rem 1.25rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid;
+        }
+        
+        .chip-sueldos { border-color: var(--blue-medium); color: var(--blue-medium); background: rgba(45,95,138,0.05); }
+        .chip-beneficios { border-color: var(--green-natural); color: var(--green-natural); background: rgba(74,124,89,0.05); }
+        .chip-descuentos { border-color: var(--terracota); color: var(--terracota); background: rgba(194,112,61,0.05); }
+        .chip-certificados { border-color: var(--gold); color: var(--brown-soft); background: rgba(212,168,83,0.05); }
+        
+        .chip:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+        .chip-sueldos:hover { background: var(--blue-medium); color: white; }
+        .chip-beneficios:hover { background: var(--green-natural); color: white; }
+        .chip-descuentos:hover { background: var(--terracota); color: white; }
+        .chip-certificados:hover { background: var(--gold); color: var(--text-dark); }
+        
+        /* Ejemplos sugeridos */
+        .examples-section {
+            margin-top: 1.5rem;
+            padding-top: 1.25rem;
+            border-top: 1px solid var(--sand);
+        }
+        
+        .examples-title {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--text-light);
+            margin-bottom: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .examples-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.5rem;
+        }
+        
+        .example-item {
+            padding: 0.6rem 1rem;
+            background: var(--cream);
+            border: 1px solid var(--sand);
+            border-radius: var(--radius-sm);
+            font-size: 0.85rem;
+            color: var(--text-medium);
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: 600;
+        }
+        
+        .example-item:hover {
+            background: var(--cream-warm);
+            border-color: var(--terracota-light);
+            color: var(--terracota-dark);
+        }
+        
+        /* Progress */
+        .progress-section { display: none; }
+        .progress-section.active { display: block; animation: fadeUp 0.4s ease; }
+        
+        .progress-item { display: flex; align-items: center; gap: 1rem; padding: 0.75rem 0; }
+        
+        .progress-icon {
+            width: 30px; height: 30px;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 13px; flex-shrink: 0;
+        }
+        
+        .progress-icon.completed { background: var(--green-natural); color: white; }
+        .progress-icon.active { background: var(--terracota); color: white; animation: breathe 2s infinite; }
+        .progress-icon.pending { background: var(--sand); color: var(--text-light); }
+        
+        @keyframes breathe {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(194,112,61,0.4); }
+            50% { box-shadow: 0 0 0 8px rgba(194,112,61,0); }
+        }
+        
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Results */
+        .results-section { display: none; }
+        .results-section.active { display: block; animation: fadeUp 0.4s ease; }
+        
+        .result-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .result-title {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: var(--blue-deep);
+        }
+        
+        .confidence-badge {
+            display: flex; align-items: center; gap: 0.4rem;
+            padding: 0.4rem 1rem;
+            background: rgba(74,124,89,0.1);
+            border: 1px solid rgba(74,124,89,0.2);
+            border-radius: 50px;
+            font-size: 0.8rem; font-weight: 700;
+            color: var(--green-natural);
+        }
+        
+        .ai-response {
+            background: var(--cream-warm);
+            border-radius: var(--radius);
+            padding: 1.75rem;
+            margin-bottom: 1.5rem;
+            border-left: 4px solid var(--terracota);
+        }
+        
+        .ai-response-header {
+            display: flex; align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+        }
+        
+        .ai-avatar {
+            width: 38px; height: 38px;
+            background: linear-gradient(135deg, var(--terracota), var(--gold));
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 16px;
+            color: white;
+            font-weight: 800;
+        }
+        
+        .ai-name {
+            font-size: 1rem;
+            font-weight: 800;
+            color: var(--blue-deep);
+        }
+        
+        .ai-text {
+            font-size: 0.95rem;
+            color: var(--text-medium);
+            line-height: 1.8;
+            font-weight: 500;
+        }
+        
+        .ai-text p { margin-bottom: 0.75rem; }
+        .ai-text strong { color: var(--text-dark); font-weight: 700; }
+        
+        .employee-info {
+            background: var(--white);
+            border: 1px solid var(--sand);
+            border-radius: var(--radius-sm);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .employee-info-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.25rem;
+        }
+        
+        .info-item { display: flex; flex-direction: column; gap: 0.25rem; }
+        .info-label { font-size: 0.7rem; color: var(--text-light); text-transform: uppercase; letter-spacing: 1px; font-weight: 700; }
+        .info-value { font-size: 0.95rem; color: var(--text-dark); font-weight: 700; }
+        
+        .section-title {
+            font-size: 1.05rem;
+            font-weight: 800;
+            color: var(--blue-deep);
+            margin-bottom: 1rem;
+            margin-top: 1.5rem;
+        }
+        
+        .data-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .data-card {
+            background: var(--cream);
+            border-radius: var(--radius-sm);
+            padding: 1.25rem;
+            border: 1px solid var(--sand);
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .data-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 3px;
+            background: linear-gradient(90deg, var(--terracota), var(--gold));
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .data-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-warm); }
+        .data-card:hover::before { opacity: 1; }
+        
+        .data-card-title { font-size: 0.8rem; color: var(--text-light); margin-bottom: 0.4rem; font-weight: 600; }
+        .data-card-value { font-size: 1.25rem; font-weight: 800; color: var(--blue-deep); }
+        .data-card-detail { font-size: 0.75rem; color: var(--text-light); margin-top: 0.25rem; }
+        
+        .benefits-list { display: flex; flex-direction: column; gap: 0.75rem; }
+        
+        .benefit-item {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 1rem 1.25rem;
+            background: var(--cream);
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--sand);
+            transition: all 0.3s;
+        }
+        
+        .benefit-item:hover { background: var(--white); transform: translateX(4px); box-shadow: var(--shadow-warm); }
+        .benefit-name { font-size: 0.95rem; color: var(--text-dark); font-weight: 600; }
+        .benefit-status { font-size: 0.85rem; color: var(--green-natural); font-weight: 700; }
+        
+        .chart-container {
+            position: relative;
+            height: 260px;
+            margin: 1.5rem 0;
+            background: var(--cream);
+            border-radius: var(--radius-sm);
+            padding: 1rem;
+            border: 1px solid var(--sand);
+        }
+        
+        .normativa-source {
+            display: flex; align-items: center; gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            background: var(--cream);
+            border-radius: var(--radius-sm);
+            margin-bottom: 1rem;
+            border: 1px solid var(--sand);
+        }
+        
+        .normativa-source-text { font-size: 0.85rem; color: var(--text-medium); font-weight: 600; }
+        .normativa-source-page { font-size: 0.75rem; color: var(--text-light); }
+        
+        .normativa-content {
+            background: var(--white);
+            border: 1px solid var(--sand);
+            border-radius: var(--radius-sm);
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .normativa-text { font-size: 0.95rem; color: var(--text-medium); line-height: 1.9; font-weight: 500; }
+        .normativa-text p { margin-bottom: 0.75rem; }
+        
+        .highlight {
+            background: rgba(212, 168, 83, 0.15);
+            padding: 0.1rem 0.3rem;
+            border-radius: 4px;
+            font-weight: 700;
+            color: var(--text-dark);
+        }
+        
+        .certificado-preview {
+            background: var(--white);
+            border: 2px solid var(--sand);
+            border-radius: var(--radius-sm);
+            padding: 2.5rem;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            position: relative;
+        }
+        
+        .certificado-preview::before {
+            content: '';
+            position: absolute;
+            top: 10px; left: 10px; right: 10px; bottom: 10px;
+            border: 1px solid var(--sand);
+            border-radius: var(--radius-sm);
+            pointer-events: none;
+        }
+        
+        .certificado-title {
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: var(--blue-deep);
+            margin-bottom: 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        
+        .certificado-body {
+            font-size: 0.9rem;
+            color: var(--text-medium);
+            line-height: 2;
+            text-align: left;
+            max-width: 500px;
+            margin: 0 auto;
+            font-weight: 500;
+        }
+        
+        .certificado-footer {
+            margin-top: 2rem;
+            font-size: 0.8rem;
+            color: var(--text-light);
+        }
+        
+        .action-buttons {
+            display: flex; gap: 1rem;
+            margin-top: 1.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+            display: flex; align-items: center; gap: 0.5rem;
+            font-family: inherit;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--terracota), var(--terracota-dark));
+            color: white;
+            box-shadow: 0 4px 12px rgba(194,112,61,0.3);
+        }
+        
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(194,112,61,0.4); }
+        
+        .btn-secondary {
+            background: var(--cream);
+            color: var(--text-medium);
+            border: 1px solid var(--sand);
+        }
+        
+        .btn-secondary:hover { background: var(--sand); transform: translateY(-2px); }
+        
+        .quick-pills {
+            margin-top: 1.5rem;
+            padding-top: 1.25rem;
+            border-top: 1px solid var(--sand);
+        }
+        
+        .pills-title { font-size: 0.8rem; font-weight: 700; color: var(--text-light); margin-bottom: 0.75rem; }
+        .pills-container { display: flex; gap: 0.6rem; flex-wrap: wrap; }
+        
+        .pill {
+            padding: 0.5rem 1rem;
+            background: var(--cream-warm);
+            border: 1px solid var(--sand);
+            border-radius: 50px;
+            font-size: 0.85rem;
+            color: var(--text-medium);
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+        
+        .pill:hover {
+            background: var(--terracota);
+            color: white;
+            border-color: var(--terracota);
+            transform: scale(1.03);
+        }
+        
+        /* Sidebar */
+        .sidebar { display: flex; flex-direction: column; gap: 1.5rem; }
+        
+        .sidebar-card {
+            background: var(--white);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            box-shadow: var(--shadow-warm);
+            border: 1px solid rgba(194,112,61,0.08);
+        }
+        
+        .sidebar-title {
+            font-size: 0.85rem;
+            font-weight: 800;
+            color: var(--blue-deep);
+            margin-bottom: 1rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 2px solid var(--cream-warm);
+        }
+        
+        .stat-item {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 0.6rem 0;
+            border-bottom: 1px solid var(--cream);
+        }
+        
+        .stat-item:last-child { border-bottom: none; }
+        .stat-label { font-size: 0.85rem; color: var(--text-light); }
+        .stat-value { font-size: 0.95rem; font-weight: 800; color: var(--blue-deep); }
+        
+        .recent-search {
+            padding: 0.6rem 0;
+            border-bottom: 1px solid var(--cream);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .recent-search:last-child { border-bottom: none; }
+        .recent-search:hover { color: var(--terracota); }
+        .recent-search-text { font-size: 0.85rem; color: var(--text-medium); margin-bottom: 0.15rem; font-weight: 600; }
+        .recent-search-time { font-size: 0.7rem; color: var(--text-light); }
+        
+        @media (max-width: 1024px) {
+            .main-layout { grid-template-columns: 1fr; }
+            .sidebar { order: -1; }
+            .employee-info-grid { grid-template-columns: repeat(2, 1fr); }
+            .examples-grid { grid-template-columns: 1fr; }
+        }
+        
+        @media (max-width: 640px) {
+            .container { padding: 1rem; }
+            .employee-info-grid { grid-template-columns: 1fr; }
+            .data-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">A</div>
+            <div class="header-text">
+                <h1>Amelia</h1>
+                <p>Asistente de Sueldos y Beneficios</p>
+            </div>
+        </div>
+        
+        <div class="main-layout">
+            <div class="content-area">
+                <div class="card">
+                    <label class="search-label">¿En qué puedo ayudarte hoy?</label>
+                    <div class="search-input-wrapper">
+                        <input type="text" class="search-input" id="searchInput" placeholder="Escribí tu consulta...">
+                        <button class="search-button" onclick="performSearch()">Buscar</button>
+                    </div>
+                    <div class="category-chips">
+                        <div class="chip chip-sueldos" onclick="setSearch('sueldos')">Sueldos</div>
+                        <div class="chip chip-beneficios" onclick="setSearch('beneficios')">Beneficios</div>
+                        <div class="chip chip-descuentos" onclick="setSearch('descuentos')">Descuentos</div>
+                        <div class="chip chip-certificados" onclick="setSearch('certificados')">Certificados</div>
+                    </div>
+                    
+                    <div class="examples-section">
+                        <div class="examples-title">Ejemplos que podés probar</div>
+                        <div class="examples-grid">
+                            <div class="example-item" onclick="useExample('situación de 3437941')">situación de 3437941</div>
+                            <div class="example-item" onclick="useExample('descuentos de 3437941')">descuentos de 3437941</div>
+                            <div class="example-item" onclick="useExample('beneficios de 3437941')">beneficios de 3437941</div>
+                            <div class="example-item" onclick="useExample('plus de nocturnidad')">plus de nocturnidad</div>
+                            <div class="example-item" onclick="useExample('descuentos por departamento Q3')">descuentos por departamento Q3</div>
+                            <div class="example-item" onclick="useExample('certificado de trabajo 3437941')">certificado de trabajo 3437941</div>
+                            <div class="example-item" onclick="useExample('cuánto se descuenta por IPS')">cuánto se descuenta por IPS</div>
+                            <div class="example-item" onclick="useExample('cómo solicitar el seguro médico')">cómo solicitar el seguro médico</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Progress -->
+                <div class="card progress-section" id="progressSection">
+                    <div class="progress-item">
+                        <div class="progress-icon completed">✓</div>
+                        <span>Entendiendo tu consulta...</span>
+                    </div>
+                    <div class="progress-item">
+                        <div class="progress-icon completed">✓</div>
+                        <span>Buscando información...</span>
+                    </div>
+                    <div class="progress-item">
+                        <div class="progress-icon active">◐</div>
+                        <span>Revisando registros...</span>
+                    </div>
+                    <div class="progress-item">
+                        <div class="progress-icon pending">○</div>
+                        <span>Preparando respuesta...</span>
+                    </div>
+                </div>
+                
+                <!-- Results container -->
+                <div class="card results-section" id="resultsSection">
+                    <div id="resultContent"></div>
+                </div>
+            </div>
+            
+            <div class="sidebar">
+                <div class="sidebar-card">
+                    <div class="sidebar-title">Resumen General</div>
+                    <div class="stat-item">
+                        <span class="stat-label">Funcionarios</span>
+                        <span class="stat-value">247</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Actualizado</span>
+                        <span class="stat-value">11/10/2026</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Nóminas</span>
+                        <span class="stat-value">247</span>
+                    </div>
+                </div>
+                
+                <div class="sidebar-card">
+                    <div class="sidebar-title">Consultas Recientes</div>
+                    <div class="recent-search" onclick="useExample('situación de 3437941')">
+                        <div class="recent-search-text">Situación 3437941</div>
+                        <div class="recent-search-time">Hace 2 horas</div>
+                    </div>
+                    <div class="recent-search" onclick="useExample('plus de nocturnidad')">
+                        <div class="recent-search-text">Plus de nocturnidad</div>
+                        <div class="recent-search-time">Hace 5 horas</div>
+                    </div>
+                    <div class="recent-search" onclick="useExample('descuentos por departamento Q3')">
+                        <div class="recent-search-text">Descuentos Q3 por depto</div>
+                        <div class="recent-search-time">Ayer</div>
+                    </div>
+                    <div class="recent-search" onclick="useExample('certificado de trabajo 3437941')">
+                        <div class="recent-search-text">Certificado Juan Pérez</div>
+                        <div class="recent-search-time">Hace 2 días</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        let currentChart = null;
+        
+        function performSearch() {
+            const query = document.getElementById('searchInput').value.trim();
+            if (!query) return;
+            
+            document.getElementById('progressSection').classList.add('active');
+            document.getElementById('resultsSection').classList.remove('active');
+            
+            setTimeout(() => {
+                document.getElementById('progressSection').classList.remove('active');
+                document.getElementById('resultsSection').classList.add('active');
+                generateResult(query);
+            }, 2000);
+        }
+        
+        function setSearch(category) {
+            const searches = {
+                'sueldos': 'información sobre sueldos',
+                'beneficios': 'beneficios sociales disponibles',
+                'descuentos': 'descuentos en nómina',
+                'certificados': 'generar certificado de trabajo'
+            };
+            document.getElementById('searchInput').value = searches[category];
+            document.getElementById('searchInput').focus();
+        }
+        
+        function useExample(text) {
+            document.getElementById('searchInput').value = text;
+            performSearch();
+        }
+        
+        function generateResult(query) {
+            const content = document.getElementById('resultContent');
+            const q = query.toLowerCase();
+            
+            // Detectar tipo de consulta
+            if (q.includes('certificado')) {
+                content.innerHTML = getCertificadoResult(query);
+            } else if (q.includes('plus') || q.includes('nocturnidad') || q.includes('normativa') || q.includes('artículo') || q.includes('manual') || q.includes('cuánto se descuenta') || q.includes('cómo solicitar')) {
+                content.innerHTML = getNormativaResult(query);
+            } else if (q.includes('departamento') || q.includes('total') || q.includes('q3') || q.includes('q4')) {
+                content.innerHTML = getDescuentosGeneralesResult(query);
+                setTimeout(() => createDescuentosChart(), 100);
+            } else if (/\d{5,}/.test(q)) {
+                content.innerHTML = getFuncionarioResult(query);
+                setTimeout(() => createFuncionarioChart(), 100);
+            } else {
+                content.innerHTML = getGenericResult(query);
+            }
+        }
+        
+        function getFuncionarioResult(query) {
+            return `
+                <div class="result-header">
+                    <h2 class="result-title">Situación del Funcionario</h2>
+                    <div class="confidence-badge">Verificado</div>
+                </div>
+                
+                <div class="ai-response">
+                    <div class="ai-response-header">
+                        <div class="ai-avatar">A</div>
+                        <div class="ai-name">Amelia dice:</div>
+                    </div>
+                    <div class="ai-text">
+                        <p>¡Hola! Consulté la información del funcionario con CI <strong>3.437.941</strong>. Se trata de <strong>Juan Pérez González</strong>, del departamento de <strong>IT</strong>.</p>
+                        <p>Actualmente está <strong>activo</strong> con contrato indefinido desde marzo de 2020. Su última nómina fue procesada el <strong>30 de septiembre de 2026</strong>.</p>
+                        <p>Aquí te dejo el detalle completo de sus descuentos y beneficios. Si necesitás algo más, no dudes en preguntarme.</p>
+                    </div>
+                </div>
+                
+                <div class="employee-info">
+                    <div class="employee-info-grid">
+                        <div class="info-item">
+                            <span class="info-label">Nombre Completo</span>
+                            <span class="info-value">Juan Pérez González</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Cédula</span>
+                            <span class="info-value">3.437.941</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Departamento</span>
+                            <span class="info-value">IT</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Ingreso</span>
+                            <span class="info-value">15/03/2020</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Cargo</span>
+                            <span class="info-value">Analista Senior</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Estado</span>
+                            <span class="info-value" style="color: var(--green-natural);">Activo</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="section-title">Descuentos del Mes</div>
+                <div class="data-grid">
+                    <div class="data-card">
+                        <div class="data-card-title">Seguridad Social</div>
+                        <div class="data-card-value">₲ 1.250.000</div>
+                        <div class="data-card-detail">9% sobre salario base</div>
+                    </div>
+                    <div class="data-card">
+                        <div class="data-card-title">IRPF</div>
+                        <div class="data-card-value">₲ 1.850.000</div>
+                        <div class="data-card-detail">Retención mensual</div>
+                    </div>
+                    <div class="data-card">
+                        <div class="data-card-title">Sindicato</div>
+                        <div class="data-card-value">₲ 150.000</div>
+                        <div class="data-card-detail">Cuota mensual</div>
+                    </div>
+                    <div class="data-card">
+                        <div class="data-card-title">Total</div>
+                        <div class="data-card-value">₲ 3.250.000</div>
+                        <div class="data-card-detail">Octubre 2026</div>
+                    </div>
+                </div>
+                
+                <div class="section-title">Beneficios Activos</div>
+                <div class="benefits-list">
+                    <div class="benefit-item">
+                        <span class="benefit-name">Seguro Médico Familiar</span>
+                        <span class="benefit-status">Activo</span>
+                    </div>
+                    <div class="benefit-item">
+                        <span class="benefit-name">Cheque Restaurante</span>
+                        <span class="benefit-status">₲ 450.000/mes</span>
+                    </div>
+                    <div class="benefit-item">
+                        <span class="benefit-name">Plan de Pensiones</span>
+                        <span class="benefit-status">Activo</span>
+                    </div>
+                </div>
+                
+                <div class="chart-container">
+                    <canvas id="currentChart"></canvas>
+                </div>
+                
+                <div class="action-buttons">
+                    <button class="btn btn-primary">Descargar Detalle</button>
+                    <button class="btn btn-secondary">Generar Certificado</button>
+                    <button class="btn btn-secondary">Nueva Consulta</button>
+                </div>
+                
+                <div class="quick-pills">
+                    <div class="pills-title">También podés consultar</div>
+                    <div class="pills-container">
+                        <div class="pill" onclick="useExample('historial de pagos 3437941')">Historial de pagos</div>
+                        <div class="pill" onclick="useExample('vacaciones pendientes 3437941')">Vacaciones pendientes</div>
+                        <div class="pill" onclick="useExample('beneficiarios seguro 3437941')">Beneficiarios del seguro</div>
+                    </div>
+                </div>
+            `;
+        }
+        
+        function getNormativaResult(query) {
+            return `
+                <div class="result-header">
+                    <h2 class="result-title">Consulta sobre Normativa</h2>
+                    <div class="confidence-badge">Fuente verificada</div>
+                </div>
+                
+                <div class="ai-response">
+                    <div class="ai-response-header">
+                        <div class="ai-avatar">A</div>
+                        <div class="ai-name">Amelia dice:</div>
+                    </div>
+                    <div class="ai-text">
+                        <p>Encontré la información que buscás sobre el <strong>plus de nocturnidad</strong>. Te lo explico de forma sencilla:</p>
+                        <p>El plus de nocturnidad es un <strong>recargo del 25%</strong> sobre el salario base que se aplica cuando el funcionario trabaja entre las <strong>22:00 y las 06:00</strong>. Se calcula de forma proporcional a las horas efectivamente trabajadas en ese horario.</p>
+                        <p>Si tenés más dudas sobre cómo se aplica en tu caso particular, puedo ayudarte a buscar más detalles.</p>
+                    </div>
+                </div>
+                
+                <div class="normativa-source">
+                    <div>
+                        <div class="normativa-source-text">Manual de Retribuciones y Beneficios 2026</div>
+                        <div class="normativa-source-page">Página 34, Sección 4.2 - Plus de Nocturnidad</div>
+                    </div>
+                </div>
+                
+                <div class="normativa-content">
+                    <div class="normativa-text">
+                        <p><strong>Artículo 12 - Plus de Nocturnidad</strong></p>
+                        <p>El personal que preste servicios en horario comprendido entre las <span class="highlight">22:00 y las 06:00 horas</span> percibirá un recargo del <span class="highlight">25% sobre su salario base</span> por cada hora trabajada en dicha franja horaria.</p>
+                        <p>Este recargo se liquidará mensualmente junto con el pago de haberes y no será computable para el cálculo de aguinaldo ni vacaciones, salvo disposición expresa en contrario.</p>
+                        <p>En caso de que la jornada nocturna no exceda las 4 horas, se aplicará el recargo proporcional correspondiente al tiempo efectivamente trabajado.</p>
+                    </div>
+                </div>
+                
+                <div class="action-buttons">
+                    <button class="btn btn-primary">Descargar Documento</button>
+                    <button class="btn btn-secondary">Ver Sección Completa</button>
+                </div>
+                
+                <div class="quick-pills">
+                    <div class="pills-title">Consultas relacionadas</div>
+                    <div class="pills-container">
+                        <div class="pill" onclick="useExample('plus por horas extras')">Plus por horas extras</div>
+                        <div class="pill" onclick="useExample('plus por antigüedad')">Plus por antigüedad</div>
+                        <div class="pill" onclick="useExample('complementos salariales')">Complementos salariales</div>
+                    </div>
+                </div>
+            `;
+        }
+        
+        function getDescuentosGeneralesResult(query) {
+            return `
+                <div class="result-header">
+                    <h2 class="result-title">Descuentos por Departamento</h2>
+                    <div class="confidence-badge">Datos del período</div>
+                </div>
+                
+                <div class="ai-response">
+                    <div class="ai-response-header">
+                        <div class="ai-avatar">A</div>
+                        <div class="ai-name">Amelia dice:</div>
+                    </div>
+                    <div class="ai-text">
+                        <p>¡Listo! Analicé los <strong>descuentos del último trimestre</strong> (Q3 2026) para todos los departamentos.</p>
+                        <p>El departamento de <strong>IT</strong> registra los montos más altos, seguido por <strong>Recursos Humanos</strong>. En total, los descuentos del trimestre suman <strong>₲ 87.450.000</strong>.</p>
+                        <p>Te muestro el desglose detallado y un gráfico para que veas la distribución. Si querés profundizar en algún departamento específico, decime.</p>
+                    </div>
+                </div>
+                
+                <div class="section-title">Resumen por Departamento</div>
+                <div class="data-grid">
+                    <div class="data-card">
+                        <div class="data-card-title">IT</div>
+                        <div class="data-card-value">₲ 28.500.000</div>
+                        <div class="data-card-detail">32.6% del total</div>
+                    </div>
+                    <div class="data-card">
+                        <div class="data-card-title">RRHH</div>
+                        <div class="data-card-value">₲ 22.300.000</div>
+                        <div class="data-card-detail">25.5% del total</div>
+                    </div>
+                    <div class="data-card">
+                        <div class="data-card-title">Contabilidad</div>
+                        <div class="data-card-value">₲ 19.800.000</div>
+                        <div class="data-card-detail">22.6% del total</div>
+                    </div>
+                    <div class="data-card">
+                        <div class="data-card-title">Administración</div>
+                        <div class="data-card-value">₲ 16.850.000</div>
+                        <div class="data-card-detail">19.3% del total</div>
+                    </div>
+                </div>
+                
+                <div class="chart-container">
+                    <canvas id="currentChart"></canvas>
+                </div>
+                
+                <div class="action-buttons">
+                    <button class="btn btn-primary">Descargar Excel</button>
+                    <button class="btn btn-secondary">Ver Gráfico Completo</button>
+                    <button class="btn btn-secondary">Comparar con Q2</button>
+                </div>
+                
+                <div class="quick-pills">
+                    <div class="pills-title">Consultas relacionadas</div>
+                    <div class="pills-container">
+                        <div class="pill" onclick="useExample('comparar descuentos Q2 vs Q3')">Comparar con Q2</div>
+                        <div class="pill" onclick="useExample('desglose por tipo de descuento')">Desglose por tipo</div>
+                        <div class="pill" onclick="useExample('exportar descuentos por departamento')">Exportar por departamento</div>
+                    </div>
+                </div>
+            `;
+        }
+        
+        function getCertificadoResult(query) {
+            return `
+                <div class="result-header">
+                    <h2 class="result-title">Certificado de Trabajo</h2>
+                    <div class="confidence-badge">Generado</div>
+                </div>
+                
+                <div class="ai-response">
+                    <div class="ai-response-header">
+                        <div class="ai-avatar">A</div>
+                        <div class="ai-name">Amelia dice:</div>
+                    </div>
+                    <div class="ai-text">
+                        <p>¡Perfecto! Generé el <strong>certificado de trabajo</strong> para <strong>Juan Pérez González</strong> (CI 3.437.941).</p>
+                        <p>El documento incluye sus datos laborales, cargo actual, fecha de ingreso y remuneración. Podés descargarlo en PDF o solicitar una versión con información adicional.</p>
+                        <p>Si necesitás que incluya algún dato extra o querés generar otro certificado, decime y lo preparo enseguida.</p>
+                    </div>
+                </div>
+                
+                <div class="certificado-preview">
+                    <div class="certificado-title">Certificado de Trabajo</div>
+                    <div class="certificado-body">
+                        <p>Por medio del presente certificado, se hace constar que el/la Sr./Sra. <strong>Juan Pérez González</strong>, con Cédula de Identidad N° <strong>3.437.941</strong>, presta servicios en esta institución desde el <strong>15 de marzo de 2020</strong>, desempeñando actualmente el cargo de <strong>Analista Senior</strong> en el Departamento de <strong>IT</strong>.</p>
+                        <br>
+                        <p>Su remuneración mensual actual asciende a <strong>₲ 14.500.000</strong> (guaraníes catorce millones quinientos mil), más los beneficios correspondientes según la normativa vigente.</p>
+                        <br>
+                        <p>Se expide el presente certificado a solicitud del interesado/a para los fines que estime convenientes.</p>
+                    </div>
+                    <div class="certificado-footer">
+                        Asunción, 11 de octubre de 2026<br>
+                        Departamento de Sueldos y Beneficios
+                    </div>
+                </div>
+                
+                <div class="action-buttons">
+                    <button class="btn btn-primary">Descargar PDF</button>
+                    <button class="btn btn-secondary">Editar Datos</button>
+                    <button class="btn btn-secondary">Versión Extendida</button>
+                </div>
+                
+                <div class="quick-pills">
+                    <div class="pills-title">Otros certificados disponibles</div>
+                    <div class="pills-container">
+                        <div class="pill" onclick="useExample('certificado de ingresos 3437941')">Certificado de ingresos</div>
+                        <div class="pill" onclick="useExample('certificado de antigüedad 3437941')">Certificado de antigüedad</div>
+                        <div class="pill" onclick="useExample('constancia de beneficios 3437941')">Constancia de beneficios</div>
+                    </div>
+                </div>
+            `;
+        }
+        
+        function getGenericResult(query) {
+            return `
+                <div class="result-header">
+                    <h2 class="result-title">Respuesta</h2>
+                    <div class="confidence-badge">Información general</div>
+                </div>
+                
+                <div class="ai-response">
+                    <div class="ai-response-header">
+                        <div class="ai-avatar">A</div>
+                        <div class="ai-name">Amelia dice:</div>
+                    </div>
+                    <div class="ai-text">
+                        <p>Entiendo que querés consultar sobre: <strong>"${query}"</strong></p>
+                        <p>Estoy buscando información relacionada con tu consulta. Mientras tanto, te sugiero algunas opciones que podrían ayudarte:</p>
+                        <p>Si buscás información de un funcionario específico, podés escribir su número de cédula. Si necesitás datos sobre normativa, beneficios o descuentos, puedo buscar en los documentos disponibles.</p>
+                    </div>
+                </div>
+                
+                <div class="quick-pills">
+                    <div class="pills-title">Prueba con alguna de estas consultas</div>
+                    <div class="pills-container">
+                        <div class="pill" onclick="useExample('situación de 3437941')">Situación de funcionario</div>
+                        <div class="pill" onclick="useExample('plus de nocturnidad')">Consultar normativa</div>
+                        <div class="pill" onclick="useExample('descuentos por departamento Q3')">Ver descuentos generales</div>
+                        <div class="pill" onclick="useExample('certificado de trabajo 3437941')">Generar certificado</div>
+                    </div>
+                </div>
+            `;
+        }
+        
+        function createFuncionarioChart() {
+            const canvas = document.getElementById('currentChart');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            if (currentChart) currentChart.destroy();
+            
+            currentChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Seguridad Social', 'IRPF', 'Sindicato'],
+                    datasets: [{
+                        data: [1250000, 1850000, 150000],
+                        backgroundColor: ['#c2703d', '#1a3a5c', '#d4a853'],
+                        borderWidth: 3,
+                        borderColor: '#ffffff',
+                        borderRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: { color: '#5a4a3f', padding: 15, font: { family: "'Nunito', sans-serif", size: 12, weight: '600' } }
+                        },
+                        title: {
+                            display: true,
+                            text: 'Distribución de Descuentos',
+                            color: '#1a3a5c',
+                            font: { family: "'Nunito', sans-serif", size: 15, weight: '700' }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) { return context.label + ': ₲ ' + context.parsed.toLocaleString(); }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        
+        function createDescuentosChart() {
+            const canvas = document.getElementById('currentChart');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            if (currentChart) currentChart.destroy();
+            
+            currentChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['IT', 'RRHH', 'Contabilidad', 'Administración'],
+                    datasets: [
+                        {
+                            label: 'Seguridad Social',
+                            data: [16500000, 12800000, 11200000, 9500000],
+                            backgroundColor: '#c2703d',
+                            borderRadius: 8
+                        },
+                        {
+                            label: 'IRPF',
+                            data: [12000000, 9500000, 8600000, 7350000],
+                            backgroundColor: '#1a3a5c',
+                            borderRadius: 8
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: { color: '#5a4a3f', padding: 15, font: { family: "'Nunito', sans-serif", size: 12, weight: '600' } }
+                        },
+                        title: {
+                            display: true,
+                            text: 'Descuentos por Departamento - Q3 2026',
+                            color: '#1a3a5c',
+                            font: { family: "'Nunito', sans-serif", size: 15, weight: '700' }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) { return context.dataset.label + ': ₲ ' + context.parsed.y.toLocaleString(); }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) { return '₲ ' + (value / 1000000).toFixed(0) + 'M'; },
+                                font: { family: "'Nunito', sans-serif" }
+                            },
+                            grid: { color: 'rgba(0,0,0,0.05)' }
+                        },
+                        x: {
+                            ticks: { font: { family: "'Nunito', sans-serif", weight: '600' } },
+                            grid: { display: false }
+                        }
+                    }
+                }
+            });
+        }
+        
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') performSearch();
+        });
+    </script>
+</body>
+</html>
