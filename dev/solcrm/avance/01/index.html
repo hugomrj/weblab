@@ -39,7 +39,7 @@
     overflow: hidden;
     margin-bottom: 12px;
   }
-  .bar i { display: block; height: 100%; width: 30%; background: #465FFF; border-radius: 99px; }
+  .bar i { display: block; height: 100%; width: 40%; background: #465FFF; border-radius: 99px; }
 
   .stage {
     font-size: 13px;
@@ -147,12 +147,12 @@
   <p class="sub">Informe de avance · 12 de octubre de 2026</p>
 
   <div class="progress">
-    <b>30%</b>
+    <b>40%</b>
     <span>completado</span>
   </div>
   <div class="bar"><i></i></div>
   <div class="stage">
-    Estado actual: <b>MVP del CRM operativo</b>. Funcional para demo interna. No listo para clientes reales.
+    Estado actual: <b>CRM completo + Ventas iniciado</b>. Funcional para demo interna con datos reales. No listo para clientes productivos.
   </div>
 
   <h2>Lo que está funcionando 100%</h2>
@@ -165,18 +165,25 @@
     <li><span><span class="dot green"></span>Búsqueda en menú con Ctrl+K</span></li>
     <li><span><span class="dot green"></span>Modales de confirmación personalizados</span></li>
     <li><span><span class="dot green"></span>Componente propio de select con búsqueda</span></li>
-    <li><span><span class="dot green"></span>Diseño responsive con design system completo</span></li>
-    <li><span><span class="dot green"></span>Arquitectura modular por dominio (crm/, ventas/, operaciones/)</span></li>
+    <li><span><span class="dot green"></span>Design system completo + componentes reutilizables</span></li>
+    <li><span><span class="dot green"></span>Arquitectura modular por dominio (crm/, ventas/, sistema/)</span></li>
+    <li><span><span class="dot green"></span>Script instalador de producción (systemd + Puma + nginx-ready)</span></li>
+    <li><span><span class="dot green"></span>Carga automática de datos de demo por tenant</span></li>
   </ul>
 
   <h2>Módulos funcionales (con pendientes)</h2>
   <ul>
-    <li><strong>Usuarios</strong><span class="m">CRUD · roles · búsqueda · paginación</span></li>
+    <li><strong>Usuarios</strong><span class="m">CRUD · roles múltiples · búsqueda · paginación</span></li>
     <li><strong>Perfil propio</strong><span class="m">Edición de datos + cambio de contraseña</span></li>
     <li><strong>Clientes</strong><span class="m">B2B + B2C · filtros · búsqueda</span></li>
     <li><strong>Contactos</strong><span class="m">Vinculados a clientes</span></li>
-    <li><strong>Leads</strong><span class="m">5 estados · conversión a cliente</span></li>
+    <li><strong>Leads</strong><span class="m">5 estados · conversión automática a cliente</span></li>
     <li><strong>Pipeline</strong><span class="m">Kanban con drag & drop · 6 etapas</span></li>
+    <li><strong>Actividades</strong><span class="m">Llamadas · emails · reuniones · notas · tareas</span></li>
+    <li><strong>Calendario</strong><span class="m">Vista mensual con actividades por día</span></li>
+    <li><strong>Tareas</strong><span class="m">Barra de progreso · vencidas · completadas</span></li>
+    <li><strong>Dashboard real</strong><span class="m">Métricas del CRM · pipeline · últimas oportunidades</span></li>
+    <li><strong>Artículos</strong><span class="m">Catálogo productos/servicios · precios en ₲</span></li>
   </ul>
 
   <div class="warning">
@@ -190,19 +197,19 @@
     <div class="track"><i style="width: 95%"></i></div>
   </div>
   <div class="progress-row">
-    <span class="name"><span class="dot green"></span>Sistema (permisos, menús, scripts)</span>
+    <span class="name"><span class="dot green"></span>Sistema (permisos, menús, scripts, deploy)</span>
+    <span class="pct">95%</span>
+    <div class="track"><i style="width: 95%"></i></div>
+  </div>
+  <div class="progress-row">
+    <span class="name"><span class="dot green"></span>CRM (clientes, contactos, leads, pipeline, actividades, dashboard)</span>
     <span class="pct">90%</span>
     <div class="track"><i style="width: 90%"></i></div>
   </div>
   <div class="progress-row">
-    <span class="name"><span class="dot orange"></span>CRM (clientes, contactos, leads, pipeline)</span>
-    <span class="pct">60%</span>
-    <div class="track"><i class="orange" style="width: 60%"></i></div>
-  </div>
-  <div class="progress-row">
-    <span class="name"><span class="dot gray"></span>Ventas (facturas, pagos, artículos)</span>
-    <span class="pct">0%</span>
-    <div class="track"><i class="gray" style="width: 0%"></i></div>
+    <span class="name"><span class="dot orange"></span>Ventas (artículos listo, faltan facturas y pagos)</span>
+    <span class="pct">15%</span>
+    <div class="track"><i class="orange" style="width: 15%"></i></div>
   </div>
   <div class="progress-row">
     <span class="name"><span class="dot gray"></span>Operaciones (stock, gastos, proyectos)</span>
@@ -224,11 +231,11 @@
   <ul>
     <li><span><span class="dot orange"></span>Validaciones y manejo de errores en todos los módulos</span></li>
     <li><span><span class="dot orange"></span>Tests automatizados (hoy no hay ninguno)</span></li>
-    <li><span><span class="dot orange"></span>Actividades (calendario + tareas + llamadas)</span></li>
-    <li><span><span class="dot orange"></span>Dashboard real con métricas del CRM</span></li>
     <li><span><span class="dot orange"></span>Historial visible de cambios de etapa (oportunidades)</span></li>
     <li><span><span class="dot orange"></span>Cierre automático de oportunidades ganadas/perdidas</span></li>
-    <li><span><span class="dot gray"></span>Módulo de Ventas: Artículos, Facturas, Pagos, Notas de crédito</span></li>
+    <li><span><span class="dot orange"></span>Configuración de etapas del pipeline por UI</span></li>
+    <li><span><span class="dot gray"></span>Facturas con items y totales</span></li>
+    <li><span><span class="dot gray"></span>Pagos y Notas de crédito</span></li>
     <li><span><span class="dot gray"></span>Módulo de Operaciones: Proveedores, Stock, Gastos, Proyectos</span></li>
     <li><span><span class="dot gray"></span>Panel Super Admin para gestionar tenants sin scripts</span></li>
     <li><span><span class="dot gray"></span>Configuración de roles con interfaz gráfica</span></li>
@@ -239,23 +246,21 @@
     <li><span><span class="dot gray"></span>Búsqueda global (más allá del menú)</span></li>
   </ul>
 
-  <h2>Próximos pasos sugeridos · ~6.5 h</h2>
+  <h2>Próximos pasos sugeridos · ~5 h</h2>
   <ul>
-    <li><span><span class="dot blue"></span>1. Dashboard real con métricas del CRM</span><span class="m">1 h</span></li>
-    <li><span><span class="dot blue"></span>2. Actividades unificadas (calendario/tareas/llamadas)</span><span class="m">2 h</span></li>
-    <li><span><span class="dot blue"></span>3. Artículos (productos y servicios)</span><span class="m">30 min</span></li>
-    <li><span><span class="dot blue"></span>4. Facturas con items y totales</span><span class="m">3 h</span></li>
+    <li><span><span class="dot blue"></span>1. Facturas con items y totales</span><span class="m">3 h</span></li>
+    <li><span><span class="dot blue"></span>2. Pagos (parciales y totales)</span><span class="m">1 h</span></li>
+    <li><span><span class="dot blue"></span>3. Notas de crédito</span><span class="m">1 h</span></li>
   </ul>
 
   <h2>Estimación total para MVP vendible</h2>
   <ul>
-    <li><span>Cerrar CRM + dashboard</span><span class="m">3 h</span></li>
-    <li><span>Módulo de Ventas completo</span><span class="m">5 h</span></li>
+    <li><span>Cerrar Ventas (facturas, pagos, notas)</span><span class="m">5 h</span></li>
     <li><span>Módulo de Operaciones básico</span><span class="m">4 h</span></li>
     <li><span>Panel Super Admin</span><span class="m">4 h</span></li>
     <li><span>Soporte + Archivos + Informes</span><span class="m">6 h</span></li>
     <li><span>Pulido, validaciones y tests</span><span class="m">8 h</span></li>
-    <li><strong>Total estimado</strong><strong class="m" style="color: #101828;">~30 h</strong></li>
+    <li><strong>Total estimado</strong><strong class="m" style="color: #101828;">~27 h</strong></li>
   </ul>
 
   <footer>
