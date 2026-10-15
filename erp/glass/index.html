@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aura UI — Glassmorphism + Bento</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+
+/* ═══════════════════════════════════════════
+EL ORIGEN DE TODO: UN SOLO MATIZ (H) + SATURACIÓN (S)
+Cambia estos 2 valores y TODA la paleta se recalcula
+═══════════════════════════════════════════ */
+:root{
+--primary-h: 245;
+--primary-s: 85%;
+
+/* Escalera tonal derivada automáticamente */
+--p-50: hsl(var(--primary-h) calc(var(--primary-s) - 25%) 97%);
+--p-100: hsl(var(--primary-h) calc(var(--primary-s) - 20%) 94%);
+--p-200: hsl(var(--primary-h) calc(var(--primary-s) - 15%) 86%);
+--p-300: hsl(var(--primary-h) calc(var(--primary-s) - 10%) 76%);
+--p-400: hsl(var(--primary-h) calc(var(--primary-s) - 5%) 66%);
+--p-500: hsl(var(--primary-h) var(--primary-s) 58%);
+--p-600: hsl(var(--primary-h) var(--primary-s) 50%);
+--p-700: hsl(var(--primary-h) var(--primary-s) 42%);
+--p-800: hsl(var(--primary-h) var(--primary-s) 34%);
+--p-900: hsl(var(--primary-h) calc(var(--primary-s) - 5%) 26%);
+--p-950: hsl(var(--primary-h) calc(var(--primary-s) - 10%) 18%);
+
+/* Matiz análogo para el fondo aurora (también derivado) */
+--analog-h: calc(var(--primary-h) + 45);
+}
+
+/* ── Temas ── */
+html[data-theme="dark"]{
+--bg: hsl(var(--primary-h) 32% 6%);
+--text: hsl(var(--primary-h) 20% 96%);
+--text-2: hsl(var(--primary-h) 12% 66%);
+--accent-txt:var(--p-300);
+--glass-bg: hsl(var(--primary-h) 25% 14% / .48);
+--glass-brd: hsl(var(--primary-h) 30% 75% / .15);
+--glass-hi: hsl(0 0% 100% / .07);
+--aurora-op: .30;
+--shadow: 0 8px 32px hsl(var(--primary-h) 60% 2% / .5);
+--chip-bg: hsl(var(--primary-h) 22% 16% / .55);
+color-scheme: dark;
+}
+html[data-theme="light"]{
+--bg: hsl(var(--primary-h) 40% 97%);
+--text: hsl(var(--primary-h) 25% 14%);
+--text-2: hsl(var(--primary-h) 10% 42%);
+--accent-txt:var(--p-600);
+--glass-bg: hsl(0 0% 100% / .62);
+--glass-brd: hsl(0 0% 100% / .9);
+--glass-hi: hsl(0 0% 100% / .6);
+--aurora-op: .42;
+--shadow: 0 8px 32px hsl(var(--primary-h) 40% 55% / .16);
+--chip-bg: hsl(0 0% 100% / .55);
+color-scheme: light;
+}
+
+body{
+font-family:'Inter', system-ui, sans-serif;
+background:var(--bg);
+color:var(--text);
+min-height:100vh;
+padding:24px;
+overflow-x:hidden;
+transition:background .4s, color .4s;
+}
+
+/* ── Fondo aurora (lo que el vidrio difumina) ── */
+.aurora{
+position:fixed; inset:0; z-index:-1;
+background:
+radial-gradient(600px 420px at 12% 8%, hsl(var(--primary-h) var(--primary-s) 60% / var(--aurora-op)), transparent 70%),
+radial-gradient(520px 400px at 88% 12%, hsl(var(--analog-h) var(--primary-s) 65% / var(--aurora-op)), transparent 70%),
+radial-gradient(700px 520px at 50% 105%,hsl(var(--primary-h) var(--primary-s) 45% / calc(var(--aurora-op) * .85)), transparent 70%);
+filter:blur(40px);
+transition:background .4s;
+}
+
+/* ── Header ── */
+header{
+max-width:1100px; margin:0 auto 22px;
+display:flex; align-items:center; justify-content:space-between;
+gap:14px; flex-wrap:wrap;
+}
+.logo{ display:flex; align-items:center; gap:10px; font-weight:800; font-size:17px; letter-spacing:-.02em; }
+.logo-mark{
+width:34px; height:34px; border-radius:10px;
+background:linear-gradient(135deg, var(--p-400), var(--p-600));
+box-shadow:0 0 18px hsl(var(--primary-h) var(--primary-s) 58% / .55);
+transition:background .4s;
+}
+.logo small{ font-weight:500; color:var(--text-2); font-size:11px; display:block; letter-spacing:.08em; }
+
+.controls{ display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
+
+.swatches{
+display:flex; gap:8px; padding:7px 10px; border-radius:999px;
+background:var(--chip-bg); border:1px solid var(--glass-brd);
+backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px);
+}
+.swatch{
+width:22px; height:22px; border-radius:50%; cursor:pointer;
+border:2px solid transparent; transition:transform .2s, border-color .2s, box-shadow .2s;
+}
+.swatch:hover{ transform:scale(1.15); }
+.swatch.active{
+border-color:var(--text);
+box-shadow:0 0 12px hsl(0 0% 0% / .3);
+transform:scale(1.12);
+}
+
+.toggle{
+display:flex; gap:2px; padding:4px; border-radius:999px;
+background:var(--chip-bg); border:1px solid var(--glass-brd);
+backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px);
+}
+.toggle button{
+width:34px; height:30px; border-radius:999px; border:none;
+background:transparent; color:var(--text-2); cursor:pointer;
+display:grid; place-items:center; transition:.25s;
+}
+.toggle button.on{
+background:linear-gradient(135deg, var(--p-400), var(--p-600));
+color:#fff;
+box-shadow:0 0 14px hsl(var(--primary-h) var(--primary-s) 58% / .5);
+}
+.toggle svg{ width:16px; height:16px; }
+
+/* ── Bento grid ── */
+.bento{
+max-width:1100px; margin:0 auto;
+display:grid; grid-template-columns:repeat(4, 1fr);
+gap:16px;
+}
+.card{
+background:var(--glass-bg);
+border:1px solid var(--glass-brd);
+backdrop-filter:blur(16px) saturate(160%);
+-webkit-backdrop-filter:blur(16px) saturate(160%);
+border-radius:20px;
+padding:22px;
+box-shadow:var(--shadow), inset 0 1px 0 var(--glass-hi);
+transition:transform .25s, box-shadow .25s, background .4s, border-color .4s;
+position:relative; overflow:hidden;
+}
+.card:hover{ transform:translateY(-3px); }
+.c2{ grid-column:span 2; }
+.r2{ grid-row:span 2; }
+
+/* ── Hero ── */
+.hero{ display:flex; flex-direction:column; }
+.badge{
+align-self:flex-start;
+display:inline-flex; align-items:center; gap:6px;
+padding:6px 12px; border-radius:999px;
+font-size:12px; font-weight:600;
+background:hsl(var(--primary-h) var(--primary-s) 58% / .14);
+border:1px solid hsl(var(--primary-h) var(--primary-s) 58% / .3);
+color:var(--accent-txt);
+transition:background .4s, color .4s;
+}
+.hero h1{ font-size:30px; letter-spacing:-.03em; margin:16px 0 8px; }
+.hero p{ color:var(--text-2); font-size:14.5px; line-height:1.6; max-width:340px; }
+.hero-actions{ display:flex; gap:10px; margin-top:20px; flex-wrap:wrap; }
+
+.btn{
+padding:10px 18px; border-radius:12px; font-weight:600; font-size:14px;
+cursor:pointer; border:none; font-family:inherit; transition:.2s;
+}
+.btn-primary{
+background:linear-gradient(135deg, var(--p-400), var(--p-600));
+color:#fff;
+box-shadow:0 4px 16px hsl(var(--primary-h) var(--primary-s) 50% / .4);
+transition:background .4s, transform .2s, box-shadow .2s;
+}
+.btn-primary:hover{ transform:translateY(-2px); box-shadow:0 8px 24px hsl(var(--primary-h) var(--primary-s) 50% / .55); }
+.btn-ghost{
+background:transparent; color:var(--text);
+border:1px solid var(--glass-brd);
+backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px);
+}
+.btn-ghost:hover{ background:var(--glass-hi); }
+
+.hero-stats{
+margin-top:auto; padding-top:22px;
+display:flex; gap:28px; flex-wrap:wrap;
+}
+.hstat span{ display:block; font-size:11.5px; color:var(--text-2); font-weight:500; }
+.hstat strong{ font-size:20px; letter-spacing:-.02em; }
+
+/* ── Métricas con glow ── */
+.metric{ display:flex; flex-direction:column; gap:12px; }
+.icon-wrap{
+width:42px; height:42px; border-radius:12px;
+display:grid; place-items:center; color:#fff;
+background:linear-gradient(135deg, var(--p-400), var(--p-600));
+box-shadow:0 0 20px hsl(var(--primary-h) var(--primary-s) 58% / .55),
+inset 0 1px 0 hsl(0 0% 100% / .35);
+transition:background .4s, box-shadow .4s;
+}
+.icon-wrap svg{ width:20px; height:20px; }
+.m-label{ font-size:13px; color:var(--text-2); font-weight:500; }
+.m-value{ font-size:27px; font-weight:800; letter-spacing:-.02em; }
+.m-foot{ display:flex; align-items:center; gap:8px; font-size:12px; color:var(--text-2); }
+
+.delta{
+font-size:11.5px; font-weight:700; padding:3px 9px; border-radius:999px;
+}
+.delta.up{ background:hsl(152 70% 45% / .15); color:hsl(152 65% 42%); }
+.delta.down{ background:hsl(350 80% 60% / .15); color:hsl(350 80% 62%); }
+html[data-theme="dark"] .delta.up{ color:hsl(152 70% 55%); }
+html[data-theme="dark"] .delta.down{ color:hsl(350 85% 68%); }
+
+/* ── Gráfico ── */
+.card-head{ display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; }
+.card-head h3{ font-size:14.5px; font-weight:600; }
+.hint{ font-size:11.5px; color:var(--text-2); }
+.chart-value{ font-size:26px; font-weight:800; letter-spacing:-.02em; margin-bottom:6px; }
+.spark{ width:100%; height:90px; display:block; }
+.spark .line{
+fill:none; stroke:var(--p-500); stroke-width:2.5;
+stroke-linecap:round; stroke-linejoin:round;
+filter:drop-shadow(0 0 6px hsl(var(--primary-h) var(--primary-s) 58% / .6));
+transition:stroke .4s;
+}
+
+/* ── Escalera tonal ── */
+.ramp-row{ display:flex; gap:6px; margin-top:14px; }
+.ramp-row div{
+flex:1; height:46px; border-radius:9px;
+display:flex; align-items:flex-end; justify-content:center;
+padding-bottom:4px; font-size:9px; font-weight:700;
+transition:background .4s;
+}
+.ramp-row .lt{ color:hsl(var(--primary-h) 25% 30%); }
+.ramp-row .dk{ color:hsl(0 0% 100% / .85); }
+
+/* ── Actividad ── */
+.activity ul{ list-style:none; margin-top:12px; display:flex; flex-direction:column; gap:13px; }
+.activity li{
+display:flex; align-items:center; gap:11px;
+font-size:13.5px;
+}
+.dot{
+width:9px; height:9px; border-radius:50%; flex-shrink:0;
+background:var(--p-500);
+box-shadow:0 0 10px hsl(var(--primary-h) var(--primary-s) 58% / .8);
+transition:background .4s;
+}
+.dot.alt{ background:var(--p-300); }
+.activity time{ margin-left:auto; font-size:11.5px; color:var(--text-2); white-space:nowrap; }
+.activity li.wrap{ flex-wrap:wrap; }
+.activity li.wrap span.txt{ flex:1; min-width:150px; }
+
+footer{
+max-width:1100px; margin:22px auto 0;
+text-align:center; font-size:12px; color:var(--text-2);
+}
+
+/* ── Responsive ── */
+@media(max-width:900px){
+.bento{ grid-template-columns:repeat(2,1fr); }
+.c2{ grid-column:span 2; }
+.r2{ grid-row:span 1; }
+}
+@media(max-width:560px){
+body{ padding:14px; }
+.bento{ grid-template-columns:1fr; }
+.c2{ grid-column:span 1; }
+.hero h1{ font-size:25px; }
+}
+</style>
+
+</head>
+<body>
+
+<div class="aurora"></div>
+
+<header>
+<div class="logo">
+<div class="logo-mark"></div>
+<div>Aura UI<small>SISTEMA VISUAL</small></div>
+</div>
+<div class="controls">
+<div class="swatches" id="swatches">
+<div class="swatch active" data-c="indigo" style="background:hsl(245 85% 58%)" title="Índigo"></div>
+<div class="swatch" data-c="violet" style="background:hsl(270 80% 60%)" title="Violeta"></div>
+<div class="swatch" data-c="fuchsia" style="background:hsl(330 85% 60%)" title="Fucsia"></div>
+<div class="swatch" data-c="emerald" style="background:hsl(160 84% 45%)" title="Esmeralda"></div>
+<div class="swatch" data-c="cyan" style="background:hsl(190 90% 50%)" title="Cian"></div>
+<div class="swatch" data-c="amber" style="background:hsl(40 95% 55%)" title="Ámbar"></div>
+</div>
+<div class="toggle">
+<button id="btnLight" title="Modo claro">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+</button>
+<button id="btnDark" class="on" title="Modo oscuro">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+</button>
+</div>
+</div>
+</header>
+
+<main class="bento">
+
+<!-- HERO -->
+<section class="card c2 r2 hero">
+<span class="badge">✨ Aura UI · v2.0</span>
+<h1>Hola, Alex 👋</h1>
+<p>Todo el sistema nace de un solo matiz. Prueba los círculos de arriba: la escalera, el fondo, el vidrio y el glow se regeneran solos.</p>
+<div class="hero-actions">
+<button class="btn btn-primary">Nuevo proyecto</button>
+<button class="btn btn-ghost">Documentación</button>
+</div>
+<div class="hero-stats">
+<div class="hstat"><span>Proyectos</span><strong>24</strong></div>
+<div class="hstat"><span>Componentes</span><strong>86</strong></div>
+<div class="hstat"><span>Uptime</span><strong>99.9%</strong></div>
+</div>
+</section>
+
+<!-- MÉTRICA 1 -->
+<section class="card metric">
+<div class="icon-wrap">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+</div>
+<span class="m-label">Usuarios activos</span>
+<strong class="m-value">12,480</strong>
+<div class="m-foot"><span class="delta up">↗ +12.4%</span> vs. mes anterior</div>
+</section>
+
+<!-- MÉTRICA 2 -->
+<section class="card metric">
+<div class="icon-wrap">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+</div>
+<span class="m-label">Rendimiento</span>
+<strong class="m-value">98.2<span style="font-size:15px;color:var(--text-2)">/100</span></strong>
+<div class="m-foot"><span class="delta up">↗ +3.1%</span> esta semana</div>
+</section>
+
+<!-- GRÁFICO -->
+<section class="card c2">
+<div class="card-head">
+<h3>Ingresos semanales</h3>
+<span class="delta up">↗ +8.2%</span>
+</div>
+<div class="chart-value">$24,590</div>
+<svg class="spark" viewBox="0 0 300 90" preserveAspectRatio="none">
+<defs>
+<linearGradient id="fillG" x1="0" y1="0" x2="0" y2="1">
+<stop offset="0" style="stop-color:var(--p-500)" stop-opacity=".3"/>
+<stop offset="1" style="stop-color:var(--p-500)" stop-opacity="0"/>
+</linearGradient>
+</defs>
+<path d="M0,75 L30,60 L60,66 L90,45 L120,56 L150,35 L180,43 L210,28 L240,38 L270,20 L300,27 L300,90 L0,90 Z" fill="url(#fillG)"/>
+<path class="line" d="M0,75 L30,60 L60,66 L90,45 L120,56 L150,35 L180,43 L210,28 L240,38 L270,20 L300,27"/>
+</svg>
+</section>
+
+<!-- ESCALERA TONAL -->
+<section class="card c2">
+<div class="card-head">
+<h3>Escalera tonal</h3>
+<span class="hint">derivada de un solo matiz</span>
+</div>
+<div class="ramp-row">
+<div class="lt" style="background:var(--p-50)">50</div>
+<div class="lt" style="background:var(--p-100)">100</div>
+<div class="lt" style="background:var(--p-200)">200</div>
+<div class="lt" style="background:var(--p-300)">300</div>
+<div class="lt" style="background:var(--p-400)">400</div>
+<div class="dk" style="background:var(--p-500)">500</div>
+<div class="dk" style="background:var(--p-600)">600</div>
+<div class="dk" style="background:var(--p-700)">700</div>
+<div class="dk" style="background:var(--p-800)">800</div>
+<div class="dk" style="background:var(--p-900)">900</div>
+<div class="dk" style="background:var(--p-950)">950</div>
+</div>
+</section>
+
+<!-- ACTIVIDAD -->
+<section class="card c2 activity">
+<div class="card-head">
+<h3>Actividad reciente</h3>
+<span class="hint">Hoy</span>
+</div>
+<ul>
+<li><span class="dot"></span><span class="txt">Ana publicó el informe trimestral</span><time>hace 2 min</time></li>
+<li><span class="dot alt"></span><span class="txt">Nuevo despliegue en producción</span><time>hace 18 min</time></li>
+<li><span class="dot"></span><span class="txt">Carlos comentó en el diseño v3</span><time>hace 1 h</time></li>
+<li><span class="dot alt"></span><span class="txt">Backup completado sin errores</span><time>hace 3 h</time></li>
+</ul>
+</section>
+
+</main>
+
+<footer>Glassmorphism · Bento Grid · Glow — todo derivado de un único color primario</footer>
+
+<script>
+/* ═══ Las paletas: cada una es solo un matiz + saturación ═══ */
+const palettes = {
+indigo: { h:245, s:85 },
+violet: { h:270, s:80 },
+fuchsia: { h:330, s:85 },
+emerald: { h:160, s:84 },
+cyan: { h:190, s:90 },
+amber: { h:40, s:95 },
+};
+
+const root = document.documentElement;
+
+/* Cambio de color primario en vivo */
+document.querySelectorAll('.swatch').forEach(sw => {
+sw.addEventListener('click', () => {
+const p = palettes[sw.dataset.c];
+root.style.setProperty('--primary-h', p.h);
+root.style.setProperty('--primary-s', p.s + '%');
+document.querySelectorAll('.swatch').forEach(x => x.classList.remove('active'));
+sw.classList.add('active');
+});
+});
+
+/* Toggle dark / light */
+const btnLight = document.getElementById('btnLight');
+const btnDark = document.getElementById('btnDark');
+function setTheme(t){
+root.dataset.theme = t;
+btnLight.classList.toggle('on', t === 'light');
+btnDark.classList.toggle('on', t === 'dark');
+}
+btnLight.addEventListener('click', () => setTheme('light'));
+btnDark.addEventListener('click', () => setTheme('dark'));
+</script>
+
+</body>
+</html>

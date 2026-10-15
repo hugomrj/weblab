@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TuMarca — Sistema</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<script>
+/* ═══ Anti-FOUC: aplica preferencias Y calcula el tono tinta-segura
+   (texto blanco siempre → el fondo del botón se oscurece hasta ≥4.5:1)
+   ANTES del primer render. 1ª visita: sigue el tema del sistema operativo. ═══ */
+(function(){
+  function relLum(h,s,l){
+    s/=100;l/=100;
+    const k=n=>(n+h/30)%12,a=s*Math.min(l,1-l);
+    const f=n=>{let x=l-a*Math.max(-1,Math.min(k(n)-3,Math.min(9-k(n),1)));return Math.max(0,Math.min(1,x))};
+    const lin=c=>c<=0.04045?c/12.92:Math.pow((c+0.055)/1.055,2.4);
+    return 0.2126*lin(f(0))+0.7152*lin(f(8))+0.0722*lin(f(4));
+  }
+  function inkSafeL(h,s){
+    let lo=12,hi=64;
+    while(hi-lo>0.5){const mid=(lo+hi)/2;
+      if(relLum(h,s,mid)<=0.17)lo=mid;else hi=mid}
+    return Math.round(lo);
+  }
+  let p={};
+  try{p=JSON.parse(localStorage.getItem('ui-prefs')||'{}')}catch(e){}
+  const sysLight=matchMedia('(prefers-color-scheme: light)').matches;
+  const h=p.h||160, s=p.s||84, L=inkSafeL(h,s);
+  document.documentElement.dataset.theme=p.theme||(sysLight?'light':'dark');
+  document.documentElement.style.setProperty('--h',h);
+  document.documentElement.style.setProperty('--s',s+'%');
+  document.documentElement.style.setProperty('--acc-strong',`hsl(${h} ${s}% ${L}%)`);
+  document.documentElement.style.setProperty('--glow',`hsl(${h} ${s}% ${L}% / .38)`);
+})();
+</script>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+
+/* ═══ ORIGEN: un solo matiz gobierna todo. --acc-strong lo fija el JS ═══ */
+:root{--h:160;--s:84%;
+  /* fallbacks si JS está desactivado */
+  --acc-strong:hsl(var(--h) var(--s) 30%);
+  --glow:hsl(var(--h) var(--s) 30% / .38)}
+
+html[data-theme="dark"]{
+  --bg:hsl(var(--h) 20% 6.5%);
+  --text:hsl(var(--h) 15% 95%);
+  --text-2:hsl(var(--h) 10% 62%);
+  --hover:hsl(var(--h) 25% 30% / .14);
+  --brd:hsl(0 0% 100% / .08);
+  --brd-2:hsl(0 0% 100% / .15);
+  --th-bg:hsl(0 0% 100% / .035);
+  --field:hsl(0 0% 100% / .05);
+  --ov-bg:hsl(var(--h) 30% 3% / .6);
+
+  --glass:hsl(var(--h) 24% 15% / .55);
+  --glass-2:hsl(var(--h) 24% 16% / .82);
+  --glass-brd:hsl(0 0% 100% / .09);
+  --glass-hi:hsl(0 0% 100% / .09);
+  --sheen:hsl(0 0% 100% / .055);
+
+  /* Acentos vivos (no llevan texto encima) */
+  --acc:hsl(var(--h) calc(var(--s) - 6%) 60%);
+  --acc-txt:hsl(var(--h) calc(var(--s) - 8%) 75%);
+  --acc-soft:hsl(var(--h) calc(var(--s) - 6%) 58% / .16);
+  --ring:hsl(var(--h) calc(var(--s) - 6%) 58% / .32);
+
+  --ok:hsl(152 58% 52%);   --ok-bg:hsl(152 58% 45% / .15);
+  --warn:hsl(38 85% 60%);  --warn-bg:hsl(38 85% 50% / .15);
+  --danger:hsl(354 66% 62%);--danger-bg:hsl(354 66% 55% / .14);
+
+  --shadow:0 10px 30px hsl(var(--h) 40% 2% / .45);
+  color-scheme:dark;
+}
+html[data-theme="light"]{
+  --bg:hsl(var(--h) 32% 95.5%);
+  --text:hsl(var(--h) 25% 13%);
+  --text-2:hsl(var(--h) 10% 42%);
+  --hover:hsl(var(--h) 40% 40% / .08);
+  --brd:hsl(var(--h) 25% 15% / .09);
+  --brd-2:hsl(var(--h) 25% 15% / .17);
+  --th-bg:hsl(var(--h) 25% 10% / .03);
+  --field:hsl(0 0% 100% / .6);
+  --ov-bg:hsl(var(--h) 25% 12% / .4);
+
+  --glass:hsl(0 0% 100% / .62);
+  --glass-2:hsl(0 0% 100% / .88);
+  --glass-brd:hsl(0 0% 100% / .9);
+  --glass-hi:hsl(0 0% 100% / .85);
+  --sheen:hsl(0 0% 100% / .0);
+
+  /* Menú e iconos: oscuros para fondo claro */
+  --acc:hsl(var(--h) var(--s) 38%);
+  --acc-txt:hsl(var(--h) var(--s) 28%);
+  --acc-soft:hsl(var(--h) var(--s) 45% / .12);
+  --ring:hsl(var(--h) var(--s) 45% / .22);
+
+  --ok:hsl(152 62% 33%);   --ok-bg:hsl(152 60% 40% / .12);
+  --warn:hsl(30 90% 36%);  --warn-bg:hsl(38 90% 45% / .13);
+  --danger:hsl(354 72% 43%);--danger-bg:hsl(354 70% 50% / .1);
+
+  --shadow:0 8px 28px hsl(var(--h) 45% 40% / .13);
+  color-scheme:light;
+}
+
+body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text);
+  min-height:100vh;line-height:1.55;transition:background .3s,color .3s}
+:focus-visible{outline:2px solid var(--acc);outline-offset:2px;border-radius:8px}
+
+/* ═══ VIDRIO DENSO (superficies) · VIDRIO REAL (flotantes) ═══ */
+.glass{background:var(--glass);border:1px solid var(--glass-brd);
+  backdrop-filter:blur(22px) saturate(150%);-webkit-backdrop-filter:blur(22px) saturate(150%);
+  box-shadow:var(--shadow),inset 0 1px 0 var(--glass-hi);position:relative}
+.glass::after{content:'';position:absolute;inset:0;border-radius:inherit;pointer-events:none;
+  background:linear-gradient(115deg,var(--sheen),transparent 42%)}
+.glass-deep{background:var(--glass-2);border:1px solid var(--brd-2);
+  backdrop-filter:blur(28px) saturate(160%);-webkit-backdrop-filter:blur(28px) saturate(160%);
+  box-shadow:var(--shadow),inset 0 1px 0 var(--glass-hi)}
+
+/* ═══ SIDEBAR ═══ */
+.sidebar{position:fixed;left:0;top:0;bottom:0;width:256px;z-index:60;display:flex;flex-direction:column;
+  border-radius:0 16px 16px 0;padding:18px 13px;transition:width .25s,transform .3s,background .3s}
+.brand{display:flex;align-items:center;gap:11px;padding:4px 8px 20px;overflow:hidden;white-space:nowrap;position:relative;z-index:1}
+.brand-mark{width:38px;height:38px;border-radius:11px;flex-shrink:0;display:grid;place-items:center;color:#fff;
+  background:var(--acc-strong);box-shadow:0 0 16px var(--glow),inset 0 1px 0 hsl(0 0% 100%/.25)}
+.brand-mark svg{width:19px;height:19px}
+.brand b{font-size:17px;letter-spacing:-.02em}
+.brand small{display:block;font-size:10px;font-weight:500;color:var(--text-2);letter-spacing:.12em}
+
+.nav-label{font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--text-2);padding:16px 13px 7px;white-space:nowrap;position:relative;z-index:1}
+.nav-item,.group-btn{display:flex;align-items:center;gap:12px;width:100%;padding:11px 13px;border:none;
+  border-radius:10px;background:none;color:var(--text-2);font-family:inherit;font-size:13.5px;font-weight:500;
+  cursor:pointer;text-align:left;transition:.15s;white-space:nowrap;position:relative;z-index:1}
+.nav-item svg,.group-btn svg{width:17px;height:17px;flex-shrink:0}
+.nav-item:hover,.group-btn:hover{background:var(--hover);color:var(--text)}
+.group-btn{color:var(--text);font-weight:600}
+.chev{margin-left:auto;transition:transform .25s;width:14px!important;height:14px!important;color:var(--text-2)}
+.group.open .chev{transform:rotate(180deg)}
+.sub{display:grid;grid-template-rows:0fr;transition:grid-template-rows .28s ease}
+.group.open .sub{grid-template-rows:1fr}
+.sub-inner{overflow:hidden;padding-left:22px}
+.sub-item{display:flex;align-items:center;gap:11px;width:100%;padding:9.5px 13px;border:none;border-radius:9px;
+  background:none;color:var(--text-2);font-family:inherit;font-size:13px;font-weight:500;cursor:pointer;
+  text-align:left;transition:.15s;white-space:nowrap;position:relative;z-index:1}
+.sub-item svg{width:15px;height:15px;flex-shrink:0}
+.sub-item:hover{background:var(--hover);color:var(--text)}
+.sub-item.active{background:var(--acc-soft);color:var(--acc-txt);font-weight:600}
+.sub-item.active::before{content:'';width:3px;height:14px;border-radius:3px;background:var(--acc);
+  box-shadow:0 0 8px var(--glow);margin-left:-8px;margin-right:2px}
+.collapse-btn{margin-top:auto;display:flex;align-items:center;gap:12px;width:100%;padding:11px 13px;border:none;
+  border-radius:10px;background:none;color:var(--text-2);font-family:inherit;font-size:13px;font-weight:500;
+  cursor:pointer;white-space:nowrap;transition:.15s;position:relative;z-index:1}
+.collapse-btn:hover{background:var(--hover);color:var(--text)}
+.collapse-btn svg{width:16px;height:16px;flex-shrink:0;transition:transform .25s}
+body.collapsed .collapse-btn svg{transform:rotate(180deg)}
+
+body.collapsed .sidebar{width:72px;padding:18px 11px}
+body.collapsed .brand b,body.collapsed .brand small,body.collapsed .nav-label,
+body.collapsed .group-btn span,body.collapsed .sub-item span,
+body.collapsed .collapse-btn span,body.collapsed .chev{display:none}
+body.collapsed .sub{display:none}
+body.collapsed .nav-item,body.collapsed .group-btn,body.collapsed .collapse-btn{justify-content:center;padding:12px 0}
+
+/* ═══ MAIN + TOPBAR ═══ */
+.main{margin-left:256px;min-height:100vh;display:flex;flex-direction:column;transition:margin .25s}
+body.collapsed .main{margin-left:72px}
+
+.topbar{position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:12px;padding:13px 30px;
+  background:color-mix(in srgb, var(--bg) 75%, transparent);
+  backdrop-filter:blur(16px) saturate(150%);-webkit-backdrop-filter:blur(16px) saturate(150%);
+  border-bottom:1px solid var(--brd)}
+.crumbs{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--text-2);margin-right:auto;white-space:nowrap}
+.crumbs b{color:var(--text);font-weight:600}
+.crumbs .sep{opacity:.5}
+.search{display:flex;align-items:center;gap:9px;padding:9.5px 15px;border-radius:10px;min-width:240px;
+  background:var(--field);border:1px solid var(--brd-2);transition:.2s}
+.search:focus-within{border-color:var(--acc);box-shadow:0 0 0 3px var(--ring)}
+.search svg{width:15px;height:15px;color:var(--text-2)}
+.search input{border:none;background:none;outline:none;color:var(--text);font-family:inherit;font-size:13px;width:100%}
+.search kbd{font-size:10.5px;color:var(--text-2);border:1px solid var(--brd-2);border-radius:5px;padding:2px 7px}
+.icon-btn{width:38px;height:38px;border-radius:10px;border:1px solid var(--brd-2);background:var(--field);
+  color:var(--text-2);cursor:pointer;display:grid;place-items:center;transition:.15s}
+.icon-btn:hover{color:var(--text);border-color:var(--acc);transform:translateY(-1px)}
+.icon-btn svg{width:16px;height:16px}
+.avatar-btn{width:38px;height:38px;border-radius:50%;border:none;cursor:pointer;color:#fff;
+  font-weight:700;font-size:12.5px;font-family:inherit;background:var(--acc-strong);box-shadow:0 0 12px var(--glow)}
+
+/* ═══ PALETA: botón arcoíris + popover 4×2 con 8 colores + gotero ═══ */
+.palette-wrap{position:relative}
+.palette-btn{width:38px;height:38px;border-radius:10px;border:1px solid var(--brd-2);cursor:pointer;
+  background:conic-gradient(hsl(0 80% 55%),hsl(60 80% 50%),hsl(120 70% 45%),
+    hsl(180 80% 45%),hsl(240 80% 60%),hsl(300 70% 55%),hsl(0 80% 55%));
+  box-shadow:inset 0 1px 2px hsl(0 0% 100%/.4);transition:.15s}
+.palette-btn:hover{transform:scale(1.06)}
+.palette-pop{position:absolute;top:calc(100% + 10px);right:0;z-index:90;width:280px;border-radius:16px;
+  padding:14px;opacity:0;transform:translateY(-6px) scale(.97);pointer-events:none;
+  transition:.18s;transform-origin:top right}
+.palette-pop.open{opacity:1;transform:none;pointer-events:auto}
+.palette-pop h4{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--text-2);margin-bottom:10px;position:relative;z-index:1}
+.palette-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;position:relative;z-index:1}
+.palette-grid .swatch{width:100%;aspect-ratio:1;height:auto;border-radius:9px}
+.swatch{cursor:pointer;border:2px solid transparent;transition:.15s;
+  box-shadow:inset 0 1px 2px hsl(0 0% 100%/.35),0 1px 4px hsl(0 0% 0%/.25)}
+.swatch:hover{transform:scale(1.12)}
+.swatch.active{border-color:var(--text);transform:scale(1.05)}
+.custom-row{display:flex;align-items:center;gap:10px;margin-top:13px;padding-top:13px;
+  border-top:1px solid var(--brd);position:relative;z-index:1}
+.custom-row span{font-size:12px;color:var(--text-2);font-weight:500}
+.custom-swatch{position:relative;width:32px;height:32px;border-radius:9px;flex-shrink:0;
+  background:conic-gradient(hsl(0 80% 55%),hsl(60 80% 50%),hsl(120 70% 45%),
+    hsl(180 80% 45%),hsl(240 80% 60%),hsl(300 70% 55%),hsl(0 80% 55%));
+  border:2px solid var(--brd-2)}
+.custom-swatch input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+
+/* ═══ CONTENIDO · densidad media ═══ */
+.content{padding:32px 36px 60px;max-width:1240px;width:100%;margin:0 auto}
+.page-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:30px}
+.page-head h1{font-size:25px;letter-spacing:-.03em;font-weight:800}
+.page-head p{font-size:14px;color:var(--text-2);margin-top:6px}
+
+.btn{display:inline-flex;align-items:center;gap:8px;padding:11px 19px;border-radius:11px;border:none;
+  font-family:inherit;font-weight:600;font-size:13.5px;cursor:pointer;transition:.15s}
+.btn svg{width:15px;height:15px}
+/* Botón primario: SIEMPRE texto blanco sobre tono tinta-segura */
+.btn-primary{background:var(--acc-strong);color:#fff;
+  box-shadow:0 4px 16px var(--glow),inset 0 1px 0 hsl(0 0% 100%/.22)}
+.btn-primary:hover{filter:brightness(1.14);transform:translateY(-1px);box-shadow:0 6px 22px var(--glow)}
+.btn-ghost{background:var(--field);color:var(--text);border:1px solid var(--brd-2)}
+.btn-ghost:hover{background:var(--hover)}
+.btn-danger{background:var(--danger-bg);color:var(--danger)}
+.btn-danger:hover{background:var(--danger);color:#fff}
+
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:28px}
+@media(max-width:1000px){.stats{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:560px){.stats{grid-template-columns:1fr}}
+.stat{display:flex;align-items:center;gap:14px;padding:18px 20px;border-radius:16px;transition:border-color .2s}
+.stat:hover{border-color:var(--acc)}
+.stat .ic{width:40px;height:40px;border-radius:11px;display:grid;place-items:center;flex-shrink:0;
+  background:var(--acc-soft);color:var(--acc-txt);border:1px solid var(--acc-soft)}
+.stat .ic svg{width:18px;height:18px}
+.stat .lbl{font-size:12px;color:var(--text-2);font-weight:500}
+.stat .val{font-size:19px;font-weight:800;letter-spacing:-.02em}
+
+.panel{border-radius:16px;overflow:hidden}
+.panel-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:18px 22px;
+  border-bottom:1px solid var(--brd);flex-wrap:wrap;position:relative;z-index:1}
+.panel-head h2{font-size:15px;font-weight:700}
+.table-wrap{overflow-x:auto;position:relative;z-index:1}
+table{width:100%;border-collapse:collapse;font-size:13.5px;min-width:780px}
+th{text-align:left;font-size:10.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--text-2);padding:14px 22px;border-bottom:1px solid var(--brd);background:var(--th-bg)}
+td{padding:16px 22px;border-bottom:1px solid var(--brd);vertical-align:middle}
+tbody tr{transition:background .12s}
+tbody tr:hover{background:var(--hover)}
+tbody tr:last-child td{border-bottom:none}
+.id-cell{font-family:ui-monospace,monospace;font-size:12px;color:var(--text-2)}
+.cell-name b{font-weight:600}
+.cell-name span{display:block;font-size:12px;color:var(--text-2);margin-top:3px;max-width:400px;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.qty{font-weight:600;font-size:13.5px}
+
+/* ═══ PÍLDORAS · tinte del color, borde fino, radio 8, sin punto ═══ */
+.status{display:inline-flex;align-items:center;font-size:12px;font-weight:600;letter-spacing:.01em;
+  padding:4.5px 13px;border-radius:8px;
+  background:color-mix(in srgb, currentColor 14%, transparent);
+  border:1px solid color-mix(in srgb, currentColor 34%, transparent);
+  backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
+  box-shadow:inset 0 1px 0 hsl(0 0% 100% / .07)}
+.status.ok{color:var(--ok)}
+.status.off{color:var(--text-2)}
+.count-pill{font-size:11.5px;font-weight:700;padding:4.5px 12px;border-radius:8px;color:var(--acc-txt);
+  background:color-mix(in srgb, var(--acc) 14%, transparent);
+  border:1px solid color-mix(in srgb, var(--acc) 32%, transparent)}
+
+.row-actions{position:relative}
+.kebab{width:31px;height:31px;border-radius:8px;border:1px solid transparent;background:none;color:var(--text-2);
+  cursor:pointer;display:grid;place-items:center;transition:.15s}
+.kebab:hover{background:var(--hover);color:var(--text);border-color:var(--brd-2)}
+.kebab svg{width:15px;height:15px}
+
+.dd{position:absolute;top:calc(100% + 6px);right:0;min-width:165px;z-index:80;border-radius:12px;padding:5px;
+  opacity:0;transform:translateY(-5px) scale(.97);pointer-events:none;transition:.15s;transform-origin:top right}
+.dd.open{opacity:1;transform:none;pointer-events:auto}
+.dd button{display:flex;align-items:center;gap:10px;width:100%;padding:9px 12px;border:none;border-radius:8px;
+  background:none;color:var(--text);font-family:inherit;font-size:13px;cursor:pointer;text-align:left;transition:.12s;position:relative;z-index:1}
+.dd button svg{width:14px;height:14px;color:var(--text-2)}
+.dd button:hover{background:var(--hover)}
+.dd button.danger,.dd button.danger svg{color:var(--danger)}
+.dd button.danger:hover{background:var(--danger-bg)}
+
+.empty{display:none;flex-direction:column;align-items:center;padding:60px 20px;text-align:center;position:relative;z-index:1}
+.empty.show{display:flex}
+.empty .fig{width:66px;height:66px;border-radius:18px;display:grid;place-items:center;margin-bottom:18px;
+  background:var(--acc-soft);color:var(--acc-txt);border:1px solid var(--acc-soft)}
+.empty .fig svg{width:29px;height:29px}
+.empty h3{font-size:15.5px;font-weight:700;margin-bottom:6px}
+.empty p{font-size:13.5px;color:var(--text-2);margin-bottom:20px;max-width:320px}
+
+.panel-foot{display:flex;align-items:center;justify-content:space-between;padding:15px 22px;flex-wrap:wrap;gap:10px;position:relative;z-index:1}
+.panel-foot span{font-size:12.5px;color:var(--text-2)}
+.pager{display:flex;gap:5px}
+.pager button{min-width:33px;height:33px;border-radius:8px;border:1px solid var(--brd-2);background:var(--field);
+  color:var(--text-2);font-family:inherit;font-size:12.5px;font-weight:600;cursor:pointer;transition:.15s}
+.pager button:hover{color:var(--text)}
+.pager button.on{background:var(--acc-strong);color:#fff;border-color:transparent;box-shadow:0 0 10px var(--glow)}
+
+/* ═══ MODAL · vidrio real sobre la página difuminada ═══ */
+.ov{position:fixed;inset:0;z-index:150;background:var(--ov-bg);
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  display:grid;place-items:center;padding:20px;opacity:0;pointer-events:none;transition:.2s}
+.ov.show{opacity:1;pointer-events:auto}
+.modal{width:100%;max-width:440px;border-radius:18px;padding:26px;
+  transform:translateY(14px) scale(.97);transition:.2s}
+.ov.show .modal{transform:none}
+.modal h3{font-size:17px;font-weight:700;letter-spacing:-.01em;position:relative;z-index:1}
+.modal .sub-t{font-size:13.5px;color:var(--text-2);margin:5px 0 20px;position:relative;z-index:1}
+.field{margin-bottom:17px;position:relative;z-index:1}
+.field label{display:block;font-size:12.5px;font-weight:600;margin-bottom:7px}
+.input,.select{width:100%;padding:12px 14px;border-radius:11px;border:1px solid var(--brd-2);
+  background:var(--field);color:var(--text);font-family:inherit;font-size:13.5px;outline:none;transition:.15s}
+.input:focus,.select:focus{border-color:var(--acc);box-shadow:0 0 0 3px var(--ring)}
+.input.error{border-color:var(--danger);box-shadow:0 0 0 3px var(--danger-bg)}
+.err-msg{display:none;font-size:12px;color:var(--danger);margin-top:6px}
+.err-msg.show{display:block}
+.modal-foot{display:flex;gap:10px;justify-content:flex-end;margin-top:22px;position:relative;z-index:1}
+
+/* ═══ TOASTS ═══ */
+.toasts{position:fixed;bottom:22px;right:22px;z-index:300;display:flex;flex-direction:column;gap:10px;max-width:350px}
+.toast{display:flex;gap:12px;padding:14px 15px;border-radius:13px;align-items:flex-start;position:relative;overflow:hidden;
+  animation:tIn .28s cubic-bezier(.2,.9,.3,1.15)}
+.toast.out{animation:tOut .22s forwards}
+@keyframes tIn{from{opacity:0;transform:translateX(50px)}to{opacity:1;transform:none}}
+@keyframes tOut{to{opacity:0;transform:translateX(50px)}}
+.toast svg{width:17px;height:17px;flex-shrink:0;margin-top:1px;position:relative;z-index:1}
+.toast b{font-size:13px;display:block;margin-bottom:2px;position:relative;z-index:1}
+.toast p{font-size:12.5px;color:var(--text-2);line-height:1.45;position:relative;z-index:1}
+.toast .x{margin-left:auto;background:none;border:none;color:var(--text-2);cursor:pointer;padding:2px;font-size:12px;position:relative;z-index:1}
+.toast .bar{position:absolute;left:0;bottom:0;height:2.5px;width:100%;transform-origin:left;animation:bar 3.5s linear forwards;z-index:1}
+@keyframes bar{from{transform:scaleX(1)}to{transform:scaleX(0)}}
+.toast.ok svg,.toast.ok .bar{color:var(--ok);background:var(--ok)}
+.toast.err svg,.toast.err .bar{color:var(--danger);background:var(--danger)}
+.toast.info svg,.toast.info .bar{color:var(--acc);background:var(--acc)}
+
+.scrim{position:fixed;inset:0;z-index:55;background:rgb(0 0 0/.5);opacity:0;pointer-events:none;transition:.3s}
+.scrim.show{opacity:1;pointer-events:auto}
+
+@media(max-width:900px){
+  .sidebar{transform:translateX(-105%);width:256px!important;padding:18px 13px!important}
+  .sidebar.open{transform:none}
+  body.collapsed .brand b,body.collapsed .brand small,body.collapsed .nav-label,
+  body.collapsed .group-btn span,body.collapsed .sub,body.collapsed .sub-item span,
+  body.collapsed .collapse-btn span,body.collapsed .chev{display:revert}
+  body.collapsed .sub{display:grid}
+  body.collapsed .nav-item,body.collapsed .group-btn,body.collapsed .collapse-btn{justify-content:flex-start;padding:11px 13px}
+  .main{margin-left:0!important}
+  .search{min-width:0;flex:1}
+  .search kbd{display:none}
+  .crumbs .hide-m{display:none}
+  .content{padding:22px 18px 50px}
+}
+</style>
+</head>
+<body>
+<div class="scrim" id="scrim"></div>
+
+<!-- ═══ SIDEBAR (vidrio denso) ═══ -->
+<aside class="sidebar glass" id="sidebar">
+  <!-- ⚙️ Cambia nombre/logo aquí -->
+  <div class="brand">
+    <div class="brand-mark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6c0 5-3 8-6 8s-6-3-6-8 3-4 6-4 6-1 6 4z"/><path d="M12 14v7"/></svg></div>
+    <div><b>TuMarca</b><small>PUNTO DE VENTA</small></div>
+  </div>
+
+  <div class="nav-label">Operación</div>
+
+  <div class="group open">
+    <button class="group-btn" data-group>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><path d="m3.3 7 8.7 5 8.7-5M12 22V12"/></svg>
+      <span>Inventario</span>
+      <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m6 9 6 6 6-6"/></svg>
+    </button>
+    <div class="sub"><div class="sub-inner">
+      <button class="sub-item active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg><span>Categorías</span></button>
+      <button class="sub-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2H2v10h10V2z"/><path d="m17 2 5 5-5 5-5-5 5-5z"/><path d="M12 12v10H2V12h10z"/></svg><span>Productos</span></button>
+    </div></div>
+  </div>
+
+  <div class="group">
+    <button class="group-btn" data-group>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1.6"/><circle cx="19" cy="21" r="1.6"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57L23 6H5.12"/></svg>
+      <span>Ventas</span>
+      <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m6 9 6 6 6-6"/></svg>
+    </button>
+    <div class="sub"><div class="sub-inner">
+      <button class="sub-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg><span>Punto de Venta</span></button>
+      <button class="sub-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8"/></svg><span>Facturas</span></button>
+    </div></div>
+  </div>
+
+  <button class="nav-item">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 3v18h18"/><path d="M7 16v-5M12 16V8M17 16v-8"/></svg>
+    <span>Reportes</span>
+  </button>
+
+  <div class="nav-label">Sistema</div>
+  <button class="nav-item">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+    <span>Configuración</span>
+  </button>
+
+  <button class="collapse-btn" id="btnCollapse">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m11 17-5-5 5-5M18 17l-5-5 5-5"/></svg>
+    <span>Colapsar</span>
+  </button>
+</aside>
+
+<!-- ═══ MAIN ═══ -->
+<div class="main">
+  <header class="topbar">
+    <!-- 🍔 Dual: colapsa en desktop, abre panel en móvil -->
+    <button class="icon-btn" id="btnSide" title="Mostrar / ocultar menú">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+    </button>
+    <nav class="crumbs"><span class="hide-m">TuMarca</span><span class="sep hide-m">/</span><span class="hide-m">Inventario</span><span class="sep hide-m">/</span><b>Categorías</b></nav>
+
+    <div class="search">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+      <input id="inpSearch" placeholder="Buscar categoría…"><kbd>/</kbd>
+    </div>
+
+    <!-- 🎨 Paleta final: 8 colores curados (4×2) + gotero personalizado -->
+    <div class="palette-wrap">
+      <button class="palette-btn" id="btnPalette" title="Paleta de colores"></button>
+      <div class="palette-pop glass-deep" id="palettePop">
+        <h4>Color del sistema</h4>
+        <div class="palette-grid" id="swatches">
+          <!-- Fila 1: cálidos -->
+          <div class="swatch" data-h="350" data-s="68" style="background:hsl(350 68% 58%)" title="Rojo cereza"></div>
+          <div class="swatch" data-h="38"  data-s="92" style="background:hsl(38 92% 50%)"  title="Ámbar"></div>
+          <div class="swatch" data-h="145" data-s="70" style="background:hsl(145 70% 42%)" title="Verde bosque"></div>
+          <div class="swatch active" data-h="160" data-s="84" style="background:hsl(160 84% 45%)" title="Esmeralda"></div>
+          <!-- Fila 2: fríos y profundos -->
+          <div class="swatch" data-h="212" data-s="90" style="background:hsl(212 90% 52%)" title="Azul"></div>
+          <div class="swatch" data-h="245" data-s="85" style="background:hsl(245 85% 58%)" title="Índigo"></div>
+          <div class="swatch" data-h="275" data-s="75" style="background:hsl(275 75% 56%)" title="Violeta"></div>
+          <div class="swatch" data-h="320" data-s="58" style="background:hsl(320 58% 55%)" title="Magenta"></div>
+        </div>
+        <div class="custom-row">
+          <div class="custom-swatch"><input type="color" id="customColor" value="#10b981" title="Elegir cualquier color"></div>
+          <span>Personalizado — elige cualquier color</span>
+        </div>
+      </div>
+    </div>
+
+    <button class="icon-btn" id="btnTheme" title="Cambiar tema">
+      <svg id="icoSun" style="display:none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+      <svg id="icoMoon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+    </button>
+
+    <button class="avatar-btn" title="Usuario">AR</button>
+  </header>
+
+  <main class="content">
+    <div class="page-head">
+      <div>
+        <h1>Categorías</h1>
+        <p>Organiza tu inventario agrupando productos por categoría.</p>
+      </div>
+      <button class="btn btn-primary" onclick="openForm()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+        Nueva Categoría
+      </button>
+    </div>
+
+    <div class="stats">
+      <div class="stat glass"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></div><div><div class="lbl">Categorías</div><div class="val" id="stCats">0</div></div></div>
+      <div class="stat glass"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><path d="m3.3 7 8.7 5 8.7-5M12 22V12"/></svg></div><div><div class="lbl">Productos totales</div><div class="val" id="stProds">0</div></div></div>
+      <div class="stat glass"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1.6"/><circle cx="19" cy="21" r="1.6"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57L23 6H5.12"/></svg></div><div><div class="lbl">Ventas de hoy</div><div class="val">34</div></div></div>
+      <div class="stat glass"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg></div><div><div class="lbl">Ingresos de hoy</div><div class="val">$1,284</div></div></div>
+    </div>
+
+    <div class="panel glass">
+      <div class="panel-head">
+        <h2>Listado de categorías</h2>
+        <span class="count-pill" id="pillCount">0 registros</span>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>ID</th><th>Nombre</th><th>Productos</th><th>Estado</th><th style="width:56px;text-align:right">Acciones</th></tr></thead>
+          <tbody id="tbody"></tbody>
+        </table>
+      </div>
+
+      <div class="empty" id="emptyBox">
+        <div class="fig"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><path d="m3.3 7 8.7 5 8.7-5M12 22V12"/></svg></div>
+        <h3>No hay categorías creadas aún</h3>
+        <p>Crea tu primera categoría para comenzar a organizar los productos de tu inventario.</p>
+        <button class="btn btn-primary" onclick="openForm()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>Crear la primera</button>
+      </div>
+
+      <div class="panel-foot">
+        <span id="footInfo">—</span>
+        <div class="pager"><button>‹</button><button class="on">1</button><button>2</button><button>3</button><button>›</button></div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- ═══ MODAL FORM (vidrio real) ═══ -->
+<div class="ov" id="ovForm">
+  <div class="modal glass-deep">
+    <h3 id="formTitle">Nueva categoría</h3>
+    <p class="sub-t" id="formSub">Las categorías agrupan productos con características comunes.</p>
+    <div class="field"><label>Nombre</label><input class="input" id="fName" placeholder="Ej. Bebidas"><div class="err-msg" id="fErr">El nombre es obligatorio.</div></div>
+    <div class="field"><label>Descripción <span style="font-weight:400;color:var(--text-2)">(opcional)</span></label><input class="input" id="fDesc" placeholder="Breve descripción…"></div>
+    <div class="field"><label>Estado</label><select class="select" id="fState"><option value="ok">Activa</option><option value="off">Inactiva</option></select></div>
+    <div class="modal-foot">
+      <button class="btn btn-ghost" onclick="closeOv(ovForm)">Cancelar</button>
+      <button class="btn btn-primary" id="btnSave">Guardar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ MODAL CONFIRM ═══ -->
+<div class="ov" id="ovDel">
+  <div class="modal glass-deep">
+    <h3>Eliminar categoría</h3>
+    <p class="sub-t">¿Seguro que deseas eliminar <b id="delName" style="color:var(--text)"></b>? Esta acción no se puede deshacer.</p>
+    <div class="modal-foot">
+      <button class="btn btn-ghost" onclick="closeOv(ovDel)">Cancelar</button>
+      <button class="btn btn-danger" id="btnDel">Sí, eliminar</button>
+    </div>
+  </div>
+</div>
+
+<div class="toasts" id="toasts"></div>
+
+<script>
+/* ═══ PERSISTENCIA ═══ */
+const PREFS_KEY='ui-prefs',root=document.documentElement;
+let curH=parseFloat(getComputedStyle(root).getPropertyValue('--h'))||160;
+let curS=parseFloat(getComputedStyle(root).getPropertyValue('--s'))||84;
+function persist(){try{localStorage.setItem(PREFS_KEY,JSON.stringify({theme:root.dataset.theme,h:curH,s:curS}))}catch(e){}}
+
+/* ═══ MOTOR DE COLOR: luminancia WCAG + búsqueda tinta-segura ═══ */
+function relLum(h,s,l){
+  s/=100;l/=100;
+  const k=n=>(n+h/30)%12,a=s*Math.min(l,1-l);
+  const f=n=>{let x=l-a*Math.max(-1,Math.min(k(n)-3,Math.min(9-k(n),1)));return Math.max(0,Math.min(1,x))};
+  const lin=c=>c<=0.04045?c/12.92:Math.pow((c+0.055)/1.055,2.4);
+  return 0.2126*lin(f(0))+0.7152*lin(f(8))+0.0722*lin(f(4));
+}
+function inkSafeL(h,s){
+  let lo=12,hi=64;
+  while(hi-lo>0.5){const mid=(lo+hi)/2;
+    if(relLum(h,s,mid)<=0.17)lo=mid;else hi=mid}
+  return Math.round(lo);
+}
+/* Aplica el tono de botón que garantiza contraste AA con texto blanco */
+function applyStrong(){
+  const L=inkSafeL(curH,curS);
+  root.style.setProperty('--acc-strong',`hsl(${curH} ${curS}% ${L}%)`);
+  root.style.setProperty('--glow',`hsl(${curH} ${curS}% ${L}% / .38)`);
+}
+applyStrong();
+
+/* ── Datos demo ── */
+let cats=[
+  {id:'CAT-001',name:'Bebidas',       desc:'Gaseosas, jugos, aguas y energizantes', prods:48, st:'ok'},
+  {id:'CAT-002',name:'Lácteos',       desc:'Leche, quesos, yogures y mantequillas', prods:32, st:'ok'},
+  {id:'CAT-003',name:'Panadería',     desc:'Pan fresco, bollería y pasteles',       prods:21, st:'ok'},
+  {id:'CAT-004',name:'Aseo del hogar',desc:'Detergentes, jabones y limpiadores',    prods:27, st:'ok'},
+  {id:'CAT-005',name:'Snacks',        desc:'Papas, galletas, chocolates y dulces',  prods:39, st:'off'},
+];
+let nextN=6,editingId=null,deletingId=null;
+
+/* ── Iconos de tema ── */
+const icoSun=document.getElementById('icoSun'),icoMoon=document.getElementById('icoMoon');
+function syncThemeIcons(){const l=root.dataset.theme==='light';
+  icoSun.style.display=l?'block':'none';icoMoon.style.display=l?'none':'block'}
+syncThemeIcons();
+
+/* Restaurar swatch activo guardado (si coincide con uno del grid) */
+document.querySelectorAll('.swatch').forEach(sw=>{
+  if(+sw.dataset.h===curH&&+sw.dataset.s===curS){
+    document.querySelectorAll('.swatch').forEach(x=>x.classList.remove('active'));
+    sw.classList.add('active')}
+});
+
+/* ── Render de la tabla ── */
+const tbody=document.getElementById('tbody'),emptyBox=document.getElementById('emptyBox');
+function render(){
+  const q=document.getElementById('inpSearch').value.trim().toLowerCase();
+  const rows=cats.filter(c=>c.name.toLowerCase().includes(q)||c.desc.toLowerCase().includes(q));
+  tbody.innerHTML=rows.map(c=>`
+    <tr>
+      <td class="id-cell">${c.id}</td>
+      <td class="cell-name"><b>${c.name}</b><span>${c.desc}</span></td>
+      <td class="qty">${c.prods}</td>
+      <td><span class="status ${c.st}">${c.st==='ok'?'Activa':'Inactiva'}</span></td>
+      <td style="text-align:right"><div class="row-actions">
+        <button class="kebab" data-kebab><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="1.7"/><circle cx="12" cy="12" r="1.7"/><circle cx="12" cy="19" r="1.7"/></svg></button>
+        <div class="dd glass-deep">
+          <button data-edit="${c.id}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.12 2.12 0 0 1 3 3L12 15l-4 1 1-4z"/></svg>Editar</button>
+          <button class="danger" data-del="${c.id}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/></svg>Eliminar</button>
+        </div>
+      </div></td>
+    </tr>`).join('');
+  emptyBox.classList.toggle('show',rows.length===0);
+  document.querySelector('.table-wrap').style.display=rows.length===0?'none':'block';
+  document.getElementById('pillCount').textContent=`${rows.length} registro${rows.length!==1?'s':''}`;
+  document.getElementById('footInfo').textContent=`Mostrando ${rows.length} de ${cats.length} categorías`;
+  document.getElementById('stCats').textContent=cats.length;
+  document.getElementById('stProds').textContent=cats.reduce((a,c)=>a+c.prods,0);
+}
+render();
+
+/* ── Dropdowns de fila ── */
+document.addEventListener('click',e=>{
+  const kb=e.target.closest('[data-kebab]');
+  document.querySelectorAll('.dd.open').forEach(d=>{if(!kb||d.previousElementSibling!==kb)d.classList.remove('open')});
+  if(kb)kb.nextElementSibling.classList.toggle('open');
+  const ed=e.target.closest('[data-edit]');if(ed)openForm(ed.dataset.edit);
+  const dl=e.target.closest('[data-del]');if(dl){deletingId=dl.dataset.del;
+    document.getElementById('delName').textContent=cats.find(c=>c.id===deletingId).name;show(ovDel)}
+  if(!e.target.closest('.row-actions'))document.querySelectorAll('.dd.open').forEach(d=>d.classList.remove('open'));
+});
+
+/* ── Form crear / editar ── */
+const ovForm=document.getElementById('ovForm'),ovDel=document.getElementById('ovDel');
+function show(ov){ov.classList.add('show')}
+function closeOv(ov){ov.classList.remove('show')}
+function openForm(id){
+  editingId=id||null;
+  const f=document.getElementById('fName'),d=document.getElementById('fDesc'),s=document.getElementById('fState');
+  document.getElementById('fErr').classList.remove('show');f.classList.remove('error');
+  if(id){const c=cats.find(x=>x.id===id);
+    document.getElementById('formTitle').textContent='Editar categoría';
+    document.getElementById('formSub').textContent=`Modificando ${c.id}`;
+    f.value=c.name;d.value=c.desc;s.value=c.st;
+  }else{
+    document.getElementById('formTitle').textContent='Nueva categoría';
+    document.getElementById('formSub').textContent='Las categorías agrupan productos con características comunes.';
+    f.value='';d.value='';s.value='ok';
+  }
+  show(ovForm);setTimeout(()=>f.focus(),180);
+}
+document.getElementById('btnSave').onclick=()=>{
+  const f=document.getElementById('fName');
+  if(!f.value.trim()){f.classList.add('error');document.getElementById('fErr').classList.add('show');return}
+  const data={name:f.value.trim(),desc:document.getElementById('fDesc').value.trim()||'Sin descripción',
+    st:document.getElementById('fState').value};
+  if(editingId){Object.assign(cats.find(c=>c.id===editingId),data);
+    toast('ok','Cambios guardados',`${data.name} se actualizó correctamente.`)}
+  else{cats.push({id:'CAT-'+String(nextN++).padStart(3,'0'),prods:0,...data});
+    toast('ok','Categoría creada',`${data.name} se agregó al inventario.`)}
+  closeOv(ovForm);render();
+};
+document.getElementById('fName').addEventListener('input',e=>{e.target.classList.remove('error');document.getElementById('fErr').classList.remove('show')});
+document.getElementById('btnDel').onclick=()=>{
+  const c=cats.find(x=>x.id===deletingId);
+  cats=cats.filter(x=>x.id!==deletingId);
+  closeOv(ovDel);render();
+  toast('err','Categoría eliminada',`${c.name} fue eliminada del inventario.`);
+};
+
+/* ── Búsqueda (/ para enfocar, Escape para cerrar todo) ── */
+document.getElementById('inpSearch').addEventListener('input',render);
+document.addEventListener('keydown',e=>{
+  if(e.key==='/'&&!/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName)){e.preventDefault();document.getElementById('inpSearch').focus()}
+  if(e.key==='Escape'){closeOv(ovForm);closeOv(ovDel);palettePop.classList.remove('open')}
+});
+
+/* ── Tema: toggle + persistencia + seguir al SO si nunca eligió ── */
+document.getElementById('btnTheme').onclick=()=>{
+  root.dataset.theme=root.dataset.theme==='dark'?'light':'dark';
+  syncThemeIcons();persist();
+};
+matchMedia('(prefers-color-scheme: light)').addEventListener('change',e=>{
+  let saved={};try{saved=JSON.parse(localStorage.getItem(PREFS_KEY)||'{}')}catch(err){}
+  if(!saved.theme){root.dataset.theme=e.matches?'light':'dark';syncThemeIcons()}
+});
+
+/* ── Popover de paleta ── */
+const btnPalette=document.getElementById('btnPalette'),palettePop=document.getElementById('palettePop');
+btnPalette.addEventListener('click',e=>{e.stopPropagation();palettePop.classList.toggle('open')});
+document.addEventListener('click',e=>{
+  if(!e.target.closest('.palette-wrap'))palettePop.classList.remove('open')});
+
+/* ── Swatches: elegir color + recalcular botón + persistir ── */
+document.querySelectorAll('.swatch').forEach(sw=>sw.addEventListener('click',()=>{
+  curH=+sw.dataset.h;curS=+sw.dataset.s;
+  root.style.setProperty('--h',curH);
+  root.style.setProperty('--s',curS+'%');
+  document.querySelectorAll('.swatch').forEach(x=>x.classList.remove('active'));
+  sw.classList.add('active');
+  applyStrong();persist();
+  palettePop.classList.remove('open');
+}));
+
+/* ── Gotero personalizado: HEX → matiz/saturación ── */
+document.getElementById('customColor').addEventListener('input',e=>{
+  const hex=e.target.value;
+  const r=parseInt(hex.slice(1,3),16)/255,
+        g=parseInt(hex.slice(3,5),16)/255,
+        b=parseInt(hex.slice(5,7),16)/255;
+  const max=Math.max(r,g,b),min=Math.min(r,g,b),d=max-min;
+  let h=0,s=0;
+  if(d!==0){
+    s=(max+min)/2>0.5 ? d/(2-max-min) : d/(max+min);
+    if(max===r)h=(g-b)/d+(g<b?6:0);
+    else if(max===g)h=(b-r)/d+2;
+    else h=(r-g)/d+4;
+    h=Math.round(h*60);
+  }
+  s=Math.round(s*100);
+  if(s<10)return; /* ignora grises: sin matiz no hay sistema */
+  curH=h;curS=Math.max(s,45); /* piso de saturación para que luzca */
+  root.style.setProperty('--h',curH);
+  root.style.setProperty('--s',curS+'%');
+  document.querySelectorAll('.swatch').forEach(x=>x.classList.remove('active'));
+  applyStrong();persist();
+});
+
+/* ── Sidebar: acordeones + colapsar + hamburguesa dual ── */
+document.querySelectorAll('[data-group]').forEach(b=>b.addEventListener('click',()=>b.closest('.group').classList.toggle('open')));
+document.getElementById('btnCollapse').onclick=()=>document.body.classList.toggle('collapsed');
+const side=document.getElementById('sidebar'),scrim=document.getElementById('scrim'),
+      mqMobile=matchMedia('(max-width:900px)'),
+      btnSide=document.getElementById('btnSide');
+btnSide.onclick=()=>{
+  if(mqMobile.matches){side.classList.add('open');scrim.classList.add('show')}
+  else{document.body.classList.toggle('collapsed')}
+};
+scrim.onclick=()=>{side.classList.remove('open');scrim.classList.remove('show')};
+mqMobile.addEventListener('change',()=>{side.classList.remove('open');scrim.classList.remove('show')});
+
+/* ── Toasts ── */
+const icons={ok:'<circle cx="12" cy="12" r="10"/><path d="m8.5 12.5 2.5 2.5 5-6"/>',
+  err:'<circle cx="12" cy="12" r="10"/><path d="M15 9l-6 6M9 9l6 6"/>',
+  info:'<circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/>'};
+function toast(type,title,msg){
+  const t=document.createElement('div');t.className='toast glass-deep';
+  t.innerHTML=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${icons[type]}</svg>
+    <div><b>${title}</b><p>${msg}</p></div><button class="x">✕</button><span class="bar"></span>`;
+  document.getElementById('toasts').appendChild(t);
+  const kill=()=>{t.classList.add('out');setTimeout(()=>t.remove(),220)};
+  t.querySelector('.x').onclick=kill;setTimeout(kill,3500);
+}
+setTimeout(()=>toast('info','Paleta final','8 colores curados 🎨 + gotero personalizado. Todo persiste en tu navegador.'),700);
+</script>
+</body>
+</html>

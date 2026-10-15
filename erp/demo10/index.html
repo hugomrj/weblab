@@ -1,0 +1,960 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TuMarca — Sistema</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<script>
+/* ═══ Anti-FOUC: aplica preferencias Y calcula el tono tinta-segura
+   (texto blanco siempre → el fondo del botón se oscurece hasta ≥4.5:1)
+   ANTES del primer render. 1ª visita: sigue el tema del sistema operativo. ═══ */
+(function(){
+  function relLum(h,s,l){
+    s/=100;l/=100;
+    const k=n=>(n+h/30)%12,a=s*Math.min(l,1-l);
+    const f=n=>{let x=l-a*Math.max(-1,Math.min(k(n)-3,Math.min(9-k(n),1)));return Math.max(0,Math.min(1,x))};
+    const lin=c=>c<=0.04045?c/12.92:Math.pow((c+0.055)/1.055,2.4);
+    return 0.2126*lin(f(0))+0.7152*lin(f(8))+0.0722*lin(f(4));
+  }
+  function inkSafeL(h,s){
+    let lo=12,hi=64;
+    while(hi-lo>0.5){const mid=(lo+hi)/2;
+      if(relLum(h,s,mid)<=0.17)lo=mid;else hi=mid}
+    return Math.round(lo);
+  }
+  let p={};
+  try{p=JSON.parse(localStorage.getItem('ui-prefs')||'{}')}catch(e){}
+  const sysLight=matchMedia('(prefers-color-scheme: light)').matches;
+  const h=p.h||160, s=p.s||84, L=inkSafeL(h,s);
+  document.documentElement.dataset.theme=p.theme||(sysLight?'light':'dark');
+  document.documentElement.style.setProperty('--h',h);
+  document.documentElement.style.setProperty('--s',s+'%');
+  document.documentElement.style.setProperty('--acc-strong',`hsl(${h} ${s}% ${L}%)`);
+  document.documentElement.style.setProperty('--glow',`hsl(${h} ${s}% ${L}% / .38)`);
+})();
+</script>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+
+/* ═══ ORIGEN: un solo matiz gobierna todo. --acc-strong lo fija el JS ═══ */
+:root{--h:160;--s:84%;
+  --acc-strong:hsl(var(--h) var(--s) 30%);
+  --glow:hsl(var(--h) var(--s) 30% / .38)}
+
+html[data-theme="dark"]{
+  --bg:hsl(var(--h) 22% 5.8%);
+  --panel:hsl(var(--h) 20% 9%);
+  --panel-2:hsl(var(--h) 20% 12%);
+  --text:hsl(var(--h) 15% 95%);
+  --text-2:hsl(var(--h) 10% 62%);
+  --hover:hsl(var(--h) 25% 30% / .14);
+  --brd:hsl(0 0% 100% / .08);
+  --brd-2:hsl(0 0% 100% / .15);
+  --th-bg:hsl(0 0% 100% / .035);
+  --field:hsl(0 0% 100% / .05);
+  --ov-bg:hsl(var(--h) 30% 3% / .6);
+
+  --acc:hsl(var(--h) calc(var(--s) - 6%) 60%);
+  --acc-txt:hsl(var(--h) calc(var(--s) - 8%) 75%);
+  --acc-soft:hsl(var(--h) calc(var(--s) - 6%) 58% / .16);
+  --ring:hsl(var(--h) calc(var(--s) - 6%) 58% / .32);
+
+  --ok:hsl(152 58% 52%);   --ok-bg:hsl(152 58% 45% / .15);
+  --warn:hsl(38 85% 60%);  --warn-bg:hsl(38 85% 50% / .15);
+  --danger:hsl(354 66% 62%);--danger-bg:hsl(354 66% 55% / .14);
+
+  --shadow:0 10px 30px hsl(var(--h) 40% 2% / .45);
+  color-scheme:dark;
+}
+html[data-theme="light"]{
+  /* Fondo casi blanco: diferencia sutil con los paneles, como en dark */
+  --bg:hsl(var(--h) 26% 97%);
+  --panel:#ffffff;
+  --panel-2:#ffffff;
+  --text:hsl(var(--h) 25% 13%);
+  --text-2:hsl(var(--h) 10% 42%);
+  --hover:hsl(var(--h) 40% 40% / .07);
+  --brd:hsl(var(--h) 25% 15% / .1);
+  --brd-2:hsl(var(--h) 25% 15% / .18);
+  --th-bg:hsl(var(--h) 25% 10% / .035);
+  --field:hsl(0 0% 100% / .7);
+  --ov-bg:hsl(var(--h) 25% 12% / .4);
+
+  --acc:hsl(var(--h) var(--s) 38%);
+  --acc-txt:hsl(var(--h) var(--s) 28%);
+  --acc-soft:hsl(var(--h) var(--s) 45% / .12);
+  --ring:hsl(var(--h) var(--s) 45% / .22);
+
+  --ok:hsl(152 62% 33%);   --ok-bg:hsl(152 60% 40% / .12);
+  --warn:hsl(30 90% 36%);  --warn-bg:hsl(38 90% 45% / .13);
+  --danger:hsl(354 72% 43%);--danger-bg:hsl(354 70% 50% / .1);
+
+  --shadow:0 6px 22px hsl(var(--h) 45% 40% / .09);
+  color-scheme:light;
+}
+
+body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text);
+  min-height:100vh;line-height:1.55;transition:background .3s,color .3s}
+:focus-visible{outline:2px solid var(--acc);outline-offset:2px;border-radius:8px}
+
+/* ═══ SUPERFICIES SÓLIDAS · profundidad por: luminosidad + borde 1px + sombra suave ═══ */
+.glass{background:var(--panel);border:1px solid var(--brd);box-shadow:var(--shadow)}
+.glass-deep{background:var(--panel-2);border:1px solid var(--brd-2);box-shadow:var(--shadow)}
+
+/* ═══ SIDEBAR ═══ */
+.sidebar{position:fixed;left:0;top:0;bottom:0;width:256px;z-index:60;display:flex;flex-direction:column;
+  border-radius:0 16px 16px 0;padding:18px 13px;transition:width .25s,transform .3s,background .3s}
+.brand{display:flex;align-items:center;gap:11px;padding:4px 8px 20px;overflow:hidden;white-space:nowrap;position:relative;z-index:1}
+.brand-mark{width:38px;height:38px;border-radius:11px;flex-shrink:0;display:grid;place-items:center;color:#fff;
+  background:var(--acc-strong);box-shadow:0 0 16px var(--glow),inset 0 1px 0 hsl(0 0% 100%/.25)}
+.brand-mark svg{width:19px;height:19px}
+.brand b{font-size:17px;letter-spacing:-.02em}
+.brand small{display:block;font-size:10px;font-weight:500;color:var(--text-2);letter-spacing:.12em}
+
+.nav-label{font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--text-2);padding:16px 13px 7px;white-space:nowrap;position:relative;z-index:1}
+.nav-item,.group-btn{display:flex;align-items:center;gap:12px;width:100%;padding:11px 13px;border:none;
+  border-radius:10px;background:none;color:var(--text-2);font-family:inherit;font-size:13.5px;font-weight:500;
+  cursor:pointer;text-align:left;transition:.15s;white-space:nowrap;position:relative;z-index:1}
+.nav-item svg,.group-btn svg{width:17px;height:17px;flex-shrink:0}
+.nav-item:hover,.group-btn:hover{background:var(--hover);color:var(--text)}
+.group-btn{color:var(--text);font-weight:600}
+.chev{margin-left:auto;transition:transform .25s;width:14px!important;height:14px!important;color:var(--text-2)}
+.group.open .chev{transform:rotate(180deg)}
+.sub{display:grid;grid-template-rows:0fr;transition:grid-template-rows .28s ease}
+.group.open .sub{grid-template-rows:1fr}
+.sub-inner{overflow:hidden;padding-left:22px}
+.sub-item{display:flex;align-items:center;gap:11px;width:100%;padding:9.5px 13px;border:none;border-radius:9px;
+  background:none;color:var(--text-2);font-family:inherit;font-size:13px;font-weight:500;cursor:pointer;
+  text-align:left;transition:.15s;white-space:nowrap;position:relative;z-index:1}
+.sub-item svg{width:15px;height:15px;flex-shrink:0}
+.sub-item:hover{background:var(--hover);color:var(--text)}
+.sub-item.active{background:var(--acc-soft);color:var(--acc-txt);font-weight:600}
+.sub-item.active::before{content:'';width:3px;height:14px;border-radius:3px;background:var(--acc);
+  box-shadow:0 0 8px var(--glow);margin-left:-8px;margin-right:2px}
+.collapse-btn{margin-top:auto;display:flex;align-items:center;gap:12px;width:100%;padding:11px 13px;border:none;
+  border-radius:10px;background:none;color:var(--text-2);font-family:inherit;font-size:13px;font-weight:500;
+  cursor:pointer;white-space:nowrap;transition:.15s;position:relative;z-index:1}
+.collapse-btn:hover{background:var(--hover);color:var(--text)}
+.collapse-btn svg{width:16px;height:16px;flex-shrink:0;transition:transform .25s}
+body.collapsed .collapse-btn svg{transform:rotate(180deg)}
+
+body.collapsed .sidebar{width:72px;padding:18px 11px}
+body.collapsed .brand b,body.collapsed .brand small,body.collapsed .nav-label,
+body.collapsed .group-btn span,body.collapsed .sub-item span,
+body.collapsed .collapse-btn span,body.collapsed .chev{display:none}
+body.collapsed .sub{display:none}
+body.collapsed .nav-item,body.collapsed .group-btn,body.collapsed .collapse-btn{justify-content:center;padding:12px 0}
+
+/* ═══ MAIN + TOPBAR ═══ */
+.main{margin-left:256px;min-height:100vh;display:flex;flex-direction:column;transition:margin .25s}
+body.collapsed .main{margin-left:72px}
+
+.topbar{position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:12px;padding:13px 30px;
+  background:var(--bg);border-bottom:1px solid var(--brd)}
+.crumbs{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--text-2);margin-right:auto;white-space:nowrap}
+.crumbs b{color:var(--text);font-weight:600}
+.crumbs .sep{opacity:.5}
+.icon-btn{width:38px;height:38px;border-radius:10px;border:1px solid var(--brd-2);background:var(--field);
+  color:var(--text-2);cursor:pointer;display:grid;place-items:center;transition:.15s}
+.icon-btn:hover{color:var(--text);border-color:var(--acc);transform:translateY(-1px)}
+.icon-btn svg{width:16px;height:16px}
+.avatar-btn{width:38px;height:38px;border-radius:50%;border:none;cursor:pointer;color:#fff;
+  font-weight:700;font-size:12.5px;font-family:inherit;background:var(--acc-strong);box-shadow:0 0 12px var(--glow)}
+
+/* ═══ PALETA: 8 colores (4×2) + gotero ═══ */
+.palette-wrap{position:relative}
+.palette-btn{width:38px;height:38px;border-radius:10px;border:1px solid var(--brd-2);cursor:pointer;
+  background:conic-gradient(hsl(0 80% 55%),hsl(60 80% 50%),hsl(120 70% 45%),
+    hsl(180 80% 45%),hsl(240 80% 60%),hsl(300 70% 55%),hsl(0 80% 55%));
+  box-shadow:inset 0 1px 2px hsl(0 0% 100%/.4);transition:.15s}
+.palette-btn:hover{transform:scale(1.06)}
+.palette-pop{position:absolute;top:calc(100% + 10px);right:0;z-index:90;width:280px;border-radius:16px;
+  padding:14px;opacity:0;transform:translateY(-6px) scale(.97);pointer-events:none;
+  transition:.18s;transform-origin:top right}
+.palette-pop.open{opacity:1;transform:none;pointer-events:auto}
+.palette-pop h4{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--text-2);margin-bottom:10px;position:relative;z-index:1}
+.palette-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;position:relative;z-index:1}
+.palette-grid .swatch{width:100%;aspect-ratio:1;height:auto;border-radius:9px}
+.swatch{cursor:pointer;border:2px solid transparent;transition:.15s;
+  box-shadow:inset 0 1px 2px hsl(0 0% 100%/.35),0 1px 4px hsl(0 0% 0%/.25)}
+.swatch:hover{transform:scale(1.12)}
+.swatch.active{border-color:var(--text);transform:scale(1.05)}
+.custom-row{display:flex;align-items:center;gap:10px;margin-top:13px;padding-top:13px;
+  border-top:1px solid var(--brd);position:relative;z-index:1}
+.custom-row span{font-size:12px;color:var(--text-2);font-weight:500}
+.custom-swatch{position:relative;width:32px;height:32px;border-radius:9px;flex-shrink:0;
+  background:conic-gradient(hsl(0 80% 55%),hsl(60 80% 50%),hsl(120 70% 45%),
+    hsl(180 80% 45%),hsl(240 80% 60%),hsl(300 70% 55%),hsl(0 80% 55%));
+  border:2px solid var(--brd-2)}
+.custom-swatch input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+
+/* ═══ CONTENIDO ═══ */
+.content{padding:32px 36px 60px;max-width:1240px;width:100%;margin:0 auto}
+.page-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:22px}
+.page-head h1{font-size:25px;letter-spacing:-.03em;font-weight:800}
+.page-head p{font-size:14px;color:var(--text-2);margin-top:6px}
+
+.btn{display:inline-flex;align-items:center;gap:8px;padding:11px 19px;border-radius:11px;border:none;
+  font-family:inherit;font-weight:600;font-size:13.5px;cursor:pointer;transition:.15s}
+.btn svg{width:15px;height:15px}
+.btn-primary{background:var(--acc-strong);color:#fff;
+  box-shadow:0 4px 16px var(--glow),inset 0 1px 0 hsl(0 0% 100%/.22)}
+.btn-primary:hover{filter:brightness(1.14);transform:translateY(-1px);box-shadow:0 6px 22px var(--glow)}
+.btn-ghost{background:var(--field);color:var(--text);border:1px solid var(--brd-2)}
+.btn-ghost:hover{background:var(--hover)}
+.btn-danger{background:var(--danger-bg);color:var(--danger)}
+.btn-danger:hover{background:var(--danger);color:#fff}
+.btn-sm{padding:8px 14px;font-size:12.5px;border-radius:9px}
+
+.btn-back{display:inline-flex;align-items:center;gap:7px;background:none;border:none;cursor:pointer;
+  color:var(--text-2);font-family:inherit;font-size:13px;font-weight:600;padding:4px 0;margin-bottom:10px;transition:.15s}
+.btn-back:hover{color:var(--acc-txt)}
+.btn-back svg{width:15px;height:15px;transition:transform .15s}
+.btn-back:hover svg{transform:translateX(-3px)}
+
+/* ═══ BARRA DE FILTROS ═══ */
+.filters{display:flex;align-items:center;gap:12px;padding:14px 16px;border-radius:14px;
+  margin-bottom:18px;flex-wrap:wrap;position:relative;z-index:1}
+.f-search{display:flex;align-items:center;gap:9px;padding:9.5px 14px;border-radius:10px;flex:1;min-width:200px;
+  background:var(--field);border:1px solid var(--brd-2);transition:.2s}
+.f-search:focus-within{border-color:var(--acc);box-shadow:0 0 0 3px var(--ring)}
+.f-search svg{width:15px;height:15px;color:var(--text-2);flex-shrink:0}
+.f-search input{border:none;background:none;outline:none;color:var(--text);font-family:inherit;font-size:13px;width:100%}
+.f-search kbd{font-size:10.5px;color:var(--text-2);border:1px solid var(--brd-2);border-radius:5px;padding:2px 7px}
+.f-select{padding:9.5px 34px 9.5px 13px;border-radius:10px;border:1px solid var(--brd-2);
+  background:var(--field);color:var(--text);font-family:inherit;font-size:13px;outline:none;
+  cursor:pointer;transition:.15s;appearance:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 12px center}
+.f-select:focus{border-color:var(--acc);box-shadow:0 0 0 3px var(--ring)}
+.f-clear{margin-left:auto}
+
+/* ═══ PANEL DE TABLA ═══ */
+.panel{border-radius:16px;overflow:hidden;display:flex;flex-direction:column}
+.panel-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 22px;
+  border-bottom:1px solid var(--brd);flex-wrap:wrap;position:relative;z-index:1}
+.panel-head h2{font-size:15px;font-weight:700}
+.table-wrap{position:relative;z-index:1}
+table{width:100%;border-collapse:collapse;font-size:13.5px;table-layout:auto}
+th{text-align:left;font-size:10.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--text-2);padding:13px 20px;border-bottom:1px solid var(--brd);background:var(--th-bg);white-space:nowrap}
+td{padding:15px 20px;border-bottom:1px solid var(--brd);vertical-align:middle}
+tbody tr{transition:background .12s}
+tbody tr:hover{background:var(--hover)}
+tbody tr:last-child td{border-bottom:none}
+th.c-id,td.c-id{width:90px}
+th.c-prods,td.c-prods{width:100px}
+th.c-state,td.c-state{width:120px}
+th.c-actions,td.c-actions{width:56px;text-align:right}
+.id-cell{font-family:ui-monospace,monospace;font-size:12px;color:var(--text-2)}
+.cell-name{min-width:0}
+.cell-name b{font-weight:600;display:block}
+.cell-name span{display:block;font-size:12px;color:var(--text-2);margin-top:2px;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:420px}
+.qty{font-weight:600;font-size:13.5px}
+
+/* ═══ PÍLDORAS ═══ */
+.status{display:inline-flex;align-items:center;font-size:12px;font-weight:600;letter-spacing:.01em;
+  padding:4.5px 13px;border-radius:8px;
+  background:color-mix(in srgb, currentColor 14%, transparent);
+  border:1px solid color-mix(in srgb, currentColor 34%, transparent);
+  box-shadow:inset 0 1px 0 hsl(0 0% 100% / .07)}
+.status.ok{color:var(--ok)}
+.status.off{color:var(--text-2)}
+.count-pill{font-size:11.5px;font-weight:700;padding:4.5px 12px;border-radius:8px;color:var(--acc-txt);
+  background:color-mix(in srgb, var(--acc) 14%, transparent);
+  border:1px solid color-mix(in srgb, var(--acc) 32%, transparent)}
+
+.row-actions{position:relative;display:inline-block}
+.kebab{width:31px;height:31px;border-radius:8px;border:1px solid transparent;background:none;color:var(--text-2);
+  cursor:pointer;display:grid;place-items:center;transition:.15s}
+.kebab:hover{background:var(--hover);color:var(--text);border-color:var(--brd-2)}
+.kebab svg{width:15px;height:15px}
+
+.dd{position:absolute;top:calc(100% + 6px);right:0;min-width:165px;z-index:80;border-radius:12px;padding:5px;
+  opacity:0;transform:translateY(-5px) scale(.97);pointer-events:none;transition:.15s;transform-origin:top right}
+.dd.open{opacity:1;transform:none;pointer-events:auto}
+.dd button{display:flex;align-items:center;gap:10px;width:100%;padding:9px 12px;border:none;border-radius:8px;
+  background:none;color:var(--text);font-family:inherit;font-size:13px;cursor:pointer;text-align:left;transition:.12s;position:relative;z-index:1}
+.dd button svg{width:14px;height:14px;color:var(--text-2)}
+.dd button:hover{background:var(--hover)}
+.dd button.danger,.dd button.danger svg{color:var(--danger)}
+.dd button.danger:hover{background:var(--danger-bg)}
+
+.empty{display:none;flex-direction:column;align-items:center;padding:56px 20px;text-align:center;position:relative;z-index:1}
+.empty.show{display:flex}
+.empty .fig{width:66px;height:66px;border-radius:18px;display:grid;place-items:center;margin-bottom:18px;
+  background:var(--acc-soft);color:var(--acc-txt);border:1px solid var(--acc-soft)}
+.empty .fig svg{width:29px;height:29px}
+.empty h3{font-size:15.5px;font-weight:700;margin-bottom:6px}
+.empty p{font-size:13.5px;color:var(--text-2);margin-bottom:20px;max-width:320px}
+
+.panel-foot{margin-top:auto;display:flex;align-items:center;justify-content:space-between;
+  padding:14px 22px;flex-wrap:wrap;gap:10px;position:relative;z-index:1;
+  border-top:1px solid var(--brd);background:var(--th-bg)}
+.panel-foot span{font-size:12.5px;color:var(--text-2)}
+.pager{display:flex;gap:5px}
+.pager button{min-width:33px;height:33px;border-radius:8px;border:1px solid var(--brd-2);background:var(--field);
+  color:var(--text-2);font-family:inherit;font-size:12.5px;font-weight:600;cursor:pointer;transition:.15s;padding:0 6px}
+.pager button:hover:not(:disabled){color:var(--text)}
+.pager button:disabled{opacity:.4;cursor:not-allowed}
+.pager button.on{background:var(--acc-strong);color:#fff;border-color:transparent;box-shadow:0 0 10px var(--glow)}
+
+/* ═══ VISTA FORMULARIO · full ancho + grid flexible 1–4 columnas ═══ */
+.form-panel{padding:28px 30px;position:relative;z-index:1}
+/* Grid base de 4 columnas: cada campo elige su ancho con fw-1/2/3/full */
+.form-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0 20px}
+.fw-1{grid-column:span 1}
+.fw-2{grid-column:span 2}
+.fw-3{grid-column:span 3}
+.fw-full{grid-column:1 / -1}
+/* Tablet: 4 → 2 columnas (los fw-3 se acomodan a 2) */
+@media(max-width:1000px){
+  .form-grid{grid-template-columns:repeat(2,1fr)}
+  .fw-3{grid-column:span 2}
+}
+/* Móvil: 2 → 1 columna */
+@media(max-width:640px){
+  .form-grid{grid-template-columns:1fr}
+  .fw-1,.fw-2,.fw-3{grid-column:1 / -1}
+}
+
+.field{margin-bottom:20px}
+.field label{display:block;font-size:12.5px;font-weight:600;margin-bottom:8px}
+.field .opt{font-weight:400;color:var(--text-2)}
+.input,.textarea{width:100%;padding:12px 14px;border-radius:11px;border:1px solid var(--brd-2);
+  background:var(--field);color:var(--text);font-family:inherit;font-size:13.5px;outline:none;transition:.15s}
+.input:focus,.textarea:focus{border-color:var(--acc);box-shadow:0 0 0 3px var(--ring)}
+.input.error{border-color:var(--danger);box-shadow:0 0 0 3px var(--danger-bg)}
+.input::placeholder,.textarea::placeholder{color:var(--text-2)}
+.textarea{resize:vertical;min-height:96px}
+.err-msg{display:none;font-size:12px;color:var(--danger);margin-top:7px;align-items:center;gap:6px}
+.err-msg.show{display:flex}
+.err-msg svg{width:13px;height:13px}
+.hint{font-size:12px;color:var(--text-2);margin-top:7px}
+
+.radio-group{display:flex;gap:10px;flex-wrap:wrap}
+.radio-pill{padding:10px 18px;border-radius:11px;border:1px solid var(--brd-2);font-size:13px;font-weight:500;
+  cursor:pointer;background:var(--field);transition:.15s;display:flex;align-items:center;gap:9px;color:var(--text)}
+.radio-pill input{accent-color:var(--acc-strong);cursor:pointer}
+.radio-pill:has(input:checked){border-color:var(--acc);background:var(--acc-soft);color:var(--acc-txt);
+  box-shadow:0 0 0 3px var(--ring);font-weight:600}
+
+.form-sep{height:1px;background:var(--brd);margin:24px -30px}
+.form-actions{display:flex;gap:12px;align-items:center}
+.form-actions .spacer{flex:1}
+.form-note{font-size:12px;color:var(--text-2)}
+
+/* ═══ MODAL ═══ */
+.ov{position:fixed;inset:0;z-index:150;background:var(--ov-bg);
+  display:grid;place-items:center;padding:20px;opacity:0;pointer-events:none;transition:.2s}
+.ov.show{opacity:1;pointer-events:auto}
+.modal{width:100%;max-width:420px;border-radius:18px;padding:26px;
+  transform:translateY(14px) scale(.97);transition:.2s}
+.ov.show .modal{transform:none}
+.modal h3{font-size:17px;font-weight:700;letter-spacing:-.01em;position:relative;z-index:1}
+.modal .sub-t{font-size:13.5px;color:var(--text-2);margin:5px 0 20px;position:relative;z-index:1}
+.modal-foot{display:flex;gap:10px;justify-content:flex-end;margin-top:4px;position:relative;z-index:1}
+
+/* ═══ TOASTS ═══ */
+.toasts{position:fixed;bottom:22px;right:22px;z-index:300;display:flex;flex-direction:column;gap:10px;max-width:350px}
+.toast{display:flex;gap:12px;padding:14px 15px;border-radius:13px;align-items:flex-start;position:relative;overflow:hidden;
+  animation:tIn .28s cubic-bezier(.2,.9,.3,1.15)}
+.toast.out{animation:tOut .22s forwards}
+@keyframes tIn{from{opacity:0;transform:translateX(50px)}to{opacity:1;transform:none}}
+@keyframes tOut{to{opacity:0;transform:translateX(50px)}}
+.toast svg{width:17px;height:17px;flex-shrink:0;margin-top:1px;position:relative;z-index:1}
+.toast b{font-size:13px;display:block;margin-bottom:2px;position:relative;z-index:1}
+.toast p{font-size:12.5px;color:var(--text-2);line-height:1.45;position:relative;z-index:1}
+.toast .x{margin-left:auto;background:none;border:none;color:var(--text-2);cursor:pointer;padding:2px;font-size:12px;position:relative;z-index:1}
+.toast .bar{position:absolute;left:0;bottom:0;height:2.5px;width:100%;transform-origin:left;animation:bar 3.5s linear forwards;z-index:1}
+@keyframes bar{from{transform:scaleX(1)}to{transform:scaleX(0)}}
+.toast.ok svg,.toast.ok .bar{color:var(--ok);background:var(--ok)}
+.toast.err svg,.toast.err .bar{color:var(--danger);background:var(--danger)}
+.toast.info svg,.toast.info .bar{color:var(--acc);background:var(--acc)}
+
+.scrim{position:fixed;inset:0;z-index:55;background:rgb(0 0 0/.5);opacity:0;pointer-events:none;transition:.3s}
+.scrim.show{opacity:1;pointer-events:auto}
+
+/* ═══ RESPONSIVE ═══ */
+@media(max-width:820px){
+  .cell-name span{display:none}
+  th,td{padding:13px 14px}
+  .form-panel{padding:22px 18px}
+  .form-sep{margin:20px -18px}
+}
+@media(max-width:640px){
+  th.c-id,td.c-id{display:none}
+  th.c-state,td.c-state{display:none}
+  .f-clear{margin-left:0}
+  .content{padding:22px 16px 50px}
+  .crumbs .hide-m{display:none}
+}
+@media(max-width:900px){
+  .sidebar{transform:translateX(-105%);width:256px!important;padding:18px 13px!important}
+  .sidebar.open{transform:none}
+  body.collapsed .brand b,body.collapsed .brand small,body.collapsed .nav-label,
+  body.collapsed .group-btn span,body.collapsed .sub,body.collapsed .sub-item span,
+  body.collapsed .collapse-btn span,body.collapsed .chev{display:revert}
+  body.collapsed .sub{display:grid}
+  body.collapsed .nav-item,body.collapsed .group-btn,body.collapsed .collapse-btn{justify-content:flex-start;padding:11px 13px}
+  .main{margin-left:0!important}
+}
+</style>
+</head>
+<body>
+<div class="scrim" id="scrim"></div>
+
+<!-- ═══ SIDEBAR ═══ -->
+<aside class="sidebar glass" id="sidebar">
+  <!-- ⚙️ Cambia nombre/logo aquí -->
+  <div class="brand">
+    <div class="brand-mark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6c0 5-3 8-6 8s-6-3-6-8 3-4 6-4 6-1 6 4z"/><path d="M12 14v7"/></svg></div>
+    <div><b>TuMarca</b><small>PUNTO DE VENTA</small></div>
+  </div>
+
+  <div class="nav-label">Operación</div>
+
+  <div class="group open">
+    <button class="group-btn" data-group>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><path d="m3.3 7 8.7 5 8.7-5M12 22V12"/></svg>
+      <span>Inventario</span>
+      <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m6 9 6 6 6-6"/></svg>
+    </button>
+    <div class="sub"><div class="sub-inner">
+      <button class="sub-item active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg><span>Categorías</span></button>
+      <button class="sub-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2H2v10h10V2z"/><path d="m17 2 5 5-5 5-5-5 5-5z"/><path d="M12 12v10H2V12h10z"/></svg><span>Productos</span></button>
+    </div></div>
+  </div>
+
+  <div class="group">
+    <button class="group-btn" data-group>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1.6"/><circle cx="19" cy="21" r="1.6"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57L23 6H5.12"/></svg>
+      <span>Ventas</span>
+      <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m6 9 6 6 6-6"/></svg>
+    </button>
+    <div class="sub"><div class="sub-inner">
+      <button class="sub-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg><span>Punto de Venta</span></button>
+      <button class="sub-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8"/></svg><span>Facturas</span></button>
+    </div></div>
+  </div>
+
+  <button class="nav-item">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 3v18h18"/><path d="M7 16v-5M12 16V8M17 16v-8"/></svg>
+    <span>Reportes</span>
+  </button>
+
+  <div class="nav-label">Sistema</div>
+  <button class="nav-item">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+    <span>Configuración</span>
+  </button>
+
+  <button class="collapse-btn" id="btnCollapse">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m11 17-5-5 5-5M18 17l-5-5 5-5"/></svg>
+    <span>Colapsar</span>
+  </button>
+</aside>
+
+<!-- ═══ MAIN ═══ -->
+<div class="main">
+  <header class="topbar">
+    <button class="icon-btn" id="btnSide" title="Mostrar / ocultar menú">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+    </button>
+    <nav class="crumbs">
+      <span class="hide-m">TuMarca</span><span class="sep hide-m">/</span>
+      <span class="hide-m">Inventario</span><span class="sep hide-m">/</span>
+      <b id="crumbHere">Categorías</b>
+    </nav>
+
+    <!-- 🎨 Paleta: 8 colores (4×2) + gotero — Turquesa incluido -->
+    <div class="palette-wrap">
+      <button class="palette-btn" id="btnPalette" title="Paleta de colores"></button>
+      <div class="palette-pop glass-deep" id="palettePop">
+        <h4>Color del sistema</h4>
+        <div class="palette-grid" id="swatches">
+          <!-- Fila 1 -->
+          <div class="swatch" data-h="350" data-s="68" style="background:hsl(350 68% 58%)" title="Rojo cereza"></div>
+          <div class="swatch" data-h="38"  data-s="92" style="background:hsl(38 92% 50%)"  title="Ámbar"></div>
+          <div class="swatch active" data-h="160" data-s="84" style="background:hsl(160 84% 45%)" title="Esmeralda"></div>
+          <div class="swatch" data-h="183" data-s="72" style="background:hsl(183 72% 46%)" title="Turquesa"></div>
+          <!-- Fila 2 -->
+          <div class="swatch" data-h="212" data-s="90" style="background:hsl(212 90% 52%)" title="Azul"></div>
+          <div class="swatch" data-h="245" data-s="85" style="background:hsl(245 85% 58%)" title="Índigo"></div>
+          <div class="swatch" data-h="275" data-s="75" style="background:hsl(275 75% 56%)" title="Violeta"></div>
+          <div class="swatch" data-h="320" data-s="58" style="background:hsl(320 58% 55%)" title="Magenta"></div>
+        </div>
+        <div class="custom-row">
+          <div class="custom-swatch"><input type="color" id="customColor" value="#10b981" title="Elegir cualquier color"></div>
+          <span>Personalizado — elige cualquier color</span>
+        </div>
+      </div>
+    </div>
+
+    <button class="icon-btn" id="btnTheme" title="Cambiar tema">
+      <svg id="icoSun" style="display:none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+      <svg id="icoMoon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+    </button>
+
+    <button class="avatar-btn" title="Usuario">AR</button>
+  </header>
+
+  <main class="content">
+
+    <!-- ═══════════ VISTA 1: LISTADO ═══════════ -->
+    <div id="viewList">
+      <div class="page-head">
+        <div>
+          <h1>Categorías</h1>
+          <p>Organiza tu inventario agrupando productos por categoría.</p>
+        </div>
+        <button class="btn btn-primary" onclick="showForm()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+          Nueva Categoría
+        </button>
+      </div>
+
+      <div class="filters glass">
+        <div class="f-search">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+          <input id="inpSearch" placeholder="Buscar por nombre o descripción…"><kbd>/</kbd>
+        </div>
+        <select class="f-select" id="fState" title="Filtrar por estado">
+          <option value="all">Todos los estados</option>
+          <option value="ok">Activas</option>
+          <option value="off">Inactivas</option>
+        </select>
+        <select class="f-select" id="fOrder" title="Ordenar">
+          <option value="default">Orden por defecto</option>
+          <option value="name">Nombre (A–Z)</option>
+          <option value="prods">Más productos</option>
+        </select>
+        <button class="btn btn-ghost btn-sm f-clear" id="btnClear" hidden>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+          Limpiar filtros
+        </button>
+      </div>
+
+      <div class="panel glass">
+        <div class="panel-head">
+          <h2>Listado de categorías</h2>
+          <span class="count-pill" id="pillCount">0 registros</span>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead><tr>
+              <th class="c-id">ID</th>
+              <th>Nombre</th>
+              <th class="c-prods">Productos</th>
+              <th class="c-state">Estado</th>
+              <th class="c-actions">Acciones</th>
+            </tr></thead>
+            <tbody id="tbody"></tbody>
+          </table>
+        </div>
+
+        <div class="empty" id="emptyBox">
+          <div class="fig"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><path d="m3.3 7 8.7 5 8.7-5M12 22V12"/></svg></div>
+          <h3 id="emptyTitle">No hay categorías creadas aún</h3>
+          <p id="emptyMsg">Crea tu primera categoría para comenzar a organizar los productos de tu inventario.</p>
+          <button class="btn btn-primary" onclick="showForm()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>Crear la primera</button>
+        </div>
+
+        <div class="panel-foot">
+          <span id="footInfo">—</span>
+          <div class="pager" id="pager"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════ VISTA 2: FORMULARIO · full ancho + grid flexible ═══════════ -->
+    <div id="viewForm" hidden>
+      <button class="btn-back" id="btnBack">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        Volver a categorías
+      </button>
+      <div class="page-head">
+        <div>
+          <h1 id="formTitle">Nueva categoría</h1>
+          <p id="formSub">Las categorías agrupan productos con características comunes.</p>
+        </div>
+      </div>
+
+      <div class="panel glass form-panel">
+        <div class="form-grid">
+          <!-- fw-2 = mitad del ancho · fw-full = todo el ancho · fw-1 = un cuarto -->
+          <div class="field fw-2">
+            <label for="fName">Nombre</label>
+            <input class="input" id="fName" placeholder="Ej. Bebidas" maxlength="60">
+            <div class="err-msg" id="fErr">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
+              El nombre es obligatorio.
+            </div>
+          </div>
+
+          <div class="field fw-2">
+            <label>Estado</label>
+            <div class="radio-group">
+              <label class="radio-pill"><input type="radio" name="fSt" value="ok" checked> Activa</label>
+              <label class="radio-pill"><input type="radio" name="fSt" value="off"> Inactiva</label>
+            </div>
+            <div class="hint">Las inactivas no se ofrecen al crear nuevos productos.</div>
+          </div>
+
+          <div class="field fw-full">
+            <label for="fDesc">Descripción <span class="opt">(opcional)</span></label>
+            <textarea class="textarea" id="fDesc" placeholder="Breve descripción de qué tipo de productos agrupa esta categoría…"></textarea>
+            <div class="hint">Máximo 200 caracteres. Ayuda a tu equipo a entender qué va en cada categoría.</div>
+          </div>
+        </div>
+
+        <div class="form-sep"></div>
+
+        <div class="form-actions">
+          <span class="form-note" id="formNote"></span>
+          <span class="spacer"></span>
+          <button class="btn btn-ghost" id="btnCancel">Cancelar</button>
+          <button class="btn btn-primary" id="btnSave">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><path d="M17 21v-8H7v8M7 3v5h8"/></svg>
+            Guardar categoría
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- ═══ MODAL: confirmación de borrado ═══ -->
+<div class="ov" id="ovDel">
+  <div class="modal glass-deep">
+    <h3>Eliminar categoría</h3>
+    <p class="sub-t">¿Seguro que deseas eliminar <b id="delName" style="color:var(--text)"></b>? Esta acción no se puede deshacer.</p>
+    <div class="modal-foot">
+      <button class="btn btn-ghost" onclick="closeOv(ovDel)">Cancelar</button>
+      <button class="btn btn-danger" id="btnDel">Sí, eliminar</button>
+    </div>
+  </div>
+</div>
+
+<div class="toasts" id="toasts"></div>
+
+<script>
+/* ═══ PERSISTENCIA ═══ */
+const PREFS_KEY='ui-prefs',root=document.documentElement;
+let curH=parseFloat(getComputedStyle(root).getPropertyValue('--h'))||160;
+let curS=parseFloat(getComputedStyle(root).getPropertyValue('--s'))||84;
+function persist(){try{localStorage.setItem(PREFS_KEY,JSON.stringify({theme:root.dataset.theme,h:curH,s:curS}))}catch(e){}}
+
+/* ═══ MOTOR DE COLOR ═══ */
+function relLum(h,s,l){
+  s/=100;l/=100;
+  const k=n=>(n+h/30)%12,a=s*Math.min(l,1-l);
+  const f=n=>{let x=l-a*Math.max(-1,Math.min(k(n)-3,Math.min(9-k(n),1)));return Math.max(0,Math.min(1,x))};
+  const lin=c=>c<=0.04045?c/12.92:Math.pow((c+0.055)/1.055,2.4);
+  return 0.2126*lin(f(0))+0.7152*lin(f(8))+0.0722*lin(f(4));
+}
+function inkSafeL(h,s){
+  let lo=12,hi=64;
+  while(hi-lo>0.5){const mid=(lo+hi)/2;
+    if(relLum(h,s,mid)<=0.17)lo=mid;else hi=mid}
+  return Math.round(lo);
+}
+function applyStrong(){
+  const L=inkSafeL(curH,curS);
+  root.style.setProperty('--acc-strong',`hsl(${curH} ${curS}% ${L}%)`);
+  root.style.setProperty('--glow',`hsl(${curH} ${curS}% ${L}% / .38)`);
+}
+applyStrong();
+
+/* ── Datos demo ── */
+let cats=[
+  {id:'CAT-001',name:'Bebidas',       desc:'Gaseosas, jugos, aguas y energizantes', prods:48, st:'ok'},
+  {id:'CAT-002',name:'Lácteos',       desc:'Leche, quesos, yogures y mantequillas', prods:32, st:'ok'},
+  {id:'CAT-003',name:'Panadería',     desc:'Pan fresco, bollería y pasteles',       prods:21, st:'ok'},
+  {id:'CAT-004',name:'Aseo del hogar',desc:'Detergentes, jabones y limpiadores',    prods:27, st:'ok'},
+  {id:'CAT-005',name:'Snacks',        desc:'Papas, galletas, chocolates y dulces',  prods:39, st:'off'},
+  {id:'CAT-006',name:'Carnes y fríos',desc:'Cortes frescos, embutidos y congelados',prods:18, st:'ok'},
+  {id:'CAT-007',name:'Frutas y verduras',desc:'Producción fresca de temporada',     prods:44, st:'ok'},
+  {id:'CAT-008',name:'Limpieza personal',desc:'Jabones, shampus e higiene diaria', prods:26, st:'off'},
+];
+let nextN=9,editingId=null,deletingId=null;
+
+/* ── Iconos de tema ── */
+const icoSun=document.getElementById('icoSun'),icoMoon=document.getElementById('icoMoon');
+function syncThemeIcons(){const l=root.dataset.theme==='light';
+  icoSun.style.display=l?'block':'none';icoMoon.style.display=l?'none':'block'}
+syncThemeIcons();
+
+document.querySelectorAll('.swatch').forEach(sw=>{
+  if(+sw.dataset.h===curH&&+sw.dataset.s===curS){
+    document.querySelectorAll('.swatch').forEach(x=>x.classList.remove('active'));
+    sw.classList.add('active')}
+});
+
+/* ═══ NAVEGACIÓN ENTRE VISTAS ═══ */
+const viewList=document.getElementById('viewList'),
+      viewForm=document.getElementById('viewForm'),
+      crumbHere=document.getElementById('crumbHere'),
+      inpSearch=document.getElementById('inpSearch');
+function showList(){
+  viewForm.hidden=true;viewList.hidden=false;
+  crumbHere.textContent='Categorías';
+}
+function showForm(id){
+  editingId=id||null;
+  const f=document.getElementById('fName'),d=document.getElementById('fDesc');
+  document.getElementById('fErr').classList.remove('show');f.classList.remove('error');
+  if(id){
+    const c=cats.find(x=>x.id===id);
+    document.getElementById('formTitle').textContent='Editar categoría';
+    document.getElementById('formSub').textContent=`Modificando ${c.id} — los cambios se aplican al guardar.`;
+    document.getElementById('formNote').textContent=`Editando: ${c.name}`;
+    f.value=c.name;d.value=c.desc;
+    document.querySelector(`input[name="fSt"][value="${c.st}"]`).checked=true;
+    crumbHere.textContent='Editar categoría';
+  }else{
+    document.getElementById('formTitle').textContent='Nueva categoría';
+    document.getElementById('formSub').textContent='Las categorías agrupan productos con características comunes.';
+    document.getElementById('formNote').textContent='';
+    f.value='';d.value='';
+    document.querySelector('input[name="fSt"][value="ok"]').checked=true;
+    crumbHere.textContent='Nueva categoría';
+  }
+  viewList.hidden=true;viewForm.hidden=false;
+  window.scrollTo({top:0,behavior:'smooth'});
+  setTimeout(()=>f.focus(),150);
+}
+document.getElementById('btnBack').onclick=showList;
+document.getElementById('btnCancel').onclick=showList;
+
+/* ═══ FILTROS + TABLA + PAGINACIÓN ═══ */
+const tbody=document.getElementById('tbody'),emptyBox=document.getElementById('emptyBox'),
+      fState=document.getElementById('fState'),
+      fOrder=document.getElementById('fOrder'),
+      btnClear=document.getElementById('btnClear'),
+      pillCount=document.getElementById('pillCount'),
+      footInfo=document.getElementById('footInfo'),
+      pagerEl=document.getElementById('pager');
+const PAGE_SIZE=5;
+let page=1;
+
+function getFiltered(){
+  const q=inpSearch.value.trim().toLowerCase(), st=fState.value;
+  let rows=cats.filter(c=>
+    (c.name.toLowerCase().includes(q)||c.desc.toLowerCase().includes(q)) &&
+    (st==='all'||c.st===st));
+  if(fOrder.value==='name') rows=[...rows].sort((a,b)=>a.name.localeCompare(b.name));
+  if(fOrder.value==='prods')rows=[...rows].sort((a,b)=>b.prods-a.prods);
+  return rows;
+}
+
+function render(){
+  const rows=getFiltered();
+  const total=rows.length;
+  const totalPages=Math.max(1,Math.ceil(total/PAGE_SIZE));
+  if(page>totalPages)page=totalPages;
+  const start=(page-1)*PAGE_SIZE;
+  const view=rows.slice(start,start+PAGE_SIZE);
+
+  tbody.innerHTML=view.map(c=>`
+    <tr>
+      <td class="id-cell c-id">${c.id}</td>
+      <td class="cell-name"><b>${c.name}</b><span>${c.desc}</span></td>
+      <td class="qty c-prods">${c.prods}</td>
+      <td class="c-state"><span class="status ${c.st}">${c.st==='ok'?'Activa':'Inactiva'}</span></td>
+      <td class="c-actions"><div class="row-actions">
+        <button class="kebab" data-kebab><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="1.7"/><circle cx="12" cy="12" r="1.7"/><circle cx="12" cy="19" r="1.7"/></svg></button>
+        <div class="dd glass-deep">
+          <button data-edit="${c.id}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.12 2.12 0 0 1 3 3L12 15l-4 1 1-4z"/></svg>Editar</button>
+          <button class="danger" data-del="${c.id}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/></svg>Eliminar</button>
+        </div>
+      </div></td>
+    </tr>`).join('');
+
+  const noResults=total===0;
+  emptyBox.classList.toggle('show',noResults);
+  document.querySelector('.table-wrap').style.display=noResults?'none':'block';
+  if(noResults){
+    const filtered=inpSearch.value.trim()||fState.value!=='all';
+    document.getElementById('emptyTitle').textContent=filtered?'Sin resultados':'No hay categorías creadas aún';
+    document.getElementById('emptyMsg').textContent=filtered
+      ?'Ninguna categoría coincide con los filtros aplicados. Prueba con otros términos o límpialos.'
+      :'Crea tu primera categoría para comenzar a organizar los productos de tu inventario.';
+  }
+
+  pillCount.textContent=`${total} registro${total!==1?'s':''}`;
+  footInfo.textContent=total===0?'Sin resultados'
+    :`Mostrando ${start+1}–${Math.min(start+PAGE_SIZE,total)} de ${total}`;
+  btnClear.hidden=!(inpSearch.value.trim()||fState.value!=='all'||fOrder.value!=='default');
+
+  let html=`<button ${page===1?'disabled':''} data-pg="prev" title="Anterior">‹</button>`;
+  for(let i=1;i<=totalPages;i++)html+=`<button class="${i===page?'on':''}" data-pg="${i}">${i}</button>`;
+  html+=`<button ${page===totalPages?'disabled':''} data-pg="next" title="Siguiente">›</button>`;
+  pagerEl.innerHTML=html;
+}
+
+inpSearch.addEventListener('input',()=>{page=1;render()});
+fState.addEventListener('change',()=>{page=1;render()});
+fOrder.addEventListener('change',()=>{page=1;render()});
+btnClear.onclick=()=>{
+  inpSearch.value='';fState.value='all';fOrder.value='default';
+  page=1;render();inpSearch.focus();
+};
+pagerEl.addEventListener('click',e=>{
+  const b=e.target.closest('[data-pg]');if(!b||b.disabled)return;
+  const v=b.dataset.pg;
+  const totalPages=Math.max(1,Math.ceil(getFiltered().length/PAGE_SIZE));
+  if(v==='prev')page=Math.max(1,page-1);
+  else if(v==='next')page=Math.min(totalPages,page+1);
+  else page=+v;
+  render();
+});
+render();
+
+/* ── Dropdowns de fila ── */
+document.addEventListener('click',e=>{
+  const kb=e.target.closest('[data-kebab]');
+  document.querySelectorAll('.dd.open').forEach(d=>{if(!kb||d.previousElementSibling!==kb)d.classList.remove('open')});
+  if(kb)kb.nextElementSibling.classList.toggle('open');
+  const ed=e.target.closest('[data-edit]');if(ed)showForm(ed.dataset.edit);
+  const dl=e.target.closest('[data-del]');if(dl){deletingId=dl.dataset.del;
+    document.getElementById('delName').textContent=cats.find(c=>c.id===deletingId).name;
+    document.getElementById('ovDel').classList.add('show')}
+  if(!e.target.closest('.row-actions'))document.querySelectorAll('.dd.open').forEach(d=>d.classList.remove('open'));
+});
+
+/* ── Guardar ── */
+const fName=document.getElementById('fName');
+document.getElementById('btnSave').onclick=()=>{
+  if(!fName.value.trim()){
+    fName.classList.add('error');
+    document.getElementById('fErr').classList.add('show');
+    fName.focus();return;
+  }
+  const data={
+    name:fName.value.trim(),
+    desc:document.getElementById('fDesc').value.trim()||'Sin descripción',
+    st:document.querySelector('input[name="fSt"]:checked').value
+  };
+  if(editingId){
+    Object.assign(cats.find(c=>c.id===editingId),data);
+    toast('ok','Cambios guardados',`${data.name} se actualizó correctamente.`);
+  }else{
+    cats.push({id:'CAT-'+String(nextN++).padStart(3,'0'),prods:0,...data});
+    toast('ok','Categoría creada',`${data.name} se agregó al inventario.`);
+  }
+  showList();render();
+};
+fName.addEventListener('input',e=>{e.target.classList.remove('error');document.getElementById('fErr').classList.remove('show')});
+
+/* ── Eliminar ── */
+const ovDel=document.getElementById('ovDel');
+function closeOv(ov){ov.classList.remove('show')}
+document.getElementById('btnDel').onclick=()=>{
+  const c=cats.find(x=>x.id===deletingId);
+  cats=cats.filter(x=>x.id!==deletingId);
+  closeOv(ovDel);render();
+  toast('err','Categoría eliminada',`${c.name} fue eliminada del inventario.`);
+};
+
+/* ── Atajos ── */
+document.addEventListener('keydown',e=>{
+  if(e.key==='/'&&!/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName)&&!viewList.hidden){
+    e.preventDefault();inpSearch.focus();
+  }
+  if(e.key==='Escape'){
+    closeOv(ovDel);
+    palettePop.classList.remove('open');
+    if(!viewForm.hidden)showList();
+  }
+});
+
+/* ── Tema ── */
+document.getElementById('btnTheme').onclick=()=>{
+  root.dataset.theme=root.dataset.theme==='dark'?'light':'dark';
+  syncThemeIcons();persist();
+};
+matchMedia('(prefers-color-scheme: light)').addEventListener('change',e=>{
+  let saved={};try{saved=JSON.parse(localStorage.getItem(PREFS_KEY)||'{}')}catch(err){}
+  if(!saved.theme){root.dataset.theme=e.matches?'light':'dark';syncThemeIcons()}
+});
+
+/* ── Popover de paleta ── */
+const btnPalette=document.getElementById('btnPalette'),palettePop=document.getElementById('palettePop');
+btnPalette.addEventListener('click',e=>{e.stopPropagation();palettePop.classList.toggle('open')});
+document.addEventListener('click',e=>{
+  if(!e.target.closest('.palette-wrap'))palettePop.classList.remove('open')});
+
+/* ── Swatches ── */
+document.querySelectorAll('.swatch').forEach(sw=>sw.addEventListener('click',()=>{
+  curH=+sw.dataset.h;curS=+sw.dataset.s;
+  root.style.setProperty('--h',curH);
+  root.style.setProperty('--s',curS+'%');
+  document.querySelectorAll('.swatch').forEach(x=>x.classList.remove('active'));
+  sw.classList.add('active');
+  applyStrong();persist();
+  palettePop.classList.remove('open');
+}));
+
+/* ── Gotero personalizado ── */
+document.getElementById('customColor').addEventListener('input',e=>{
+  const hex=e.target.value;
+  const r=parseInt(hex.slice(1,3),16)/255,
+        g=parseInt(hex.slice(3,5),16)/255,
+        b=parseInt(hex.slice(5,7),16)/255;
+  const max=Math.max(r,g,b),min=Math.min(r,g,b),d=max-min;
+  let h=0,s=0;
+  if(d!==0){
+    s=(max+min)/2>0.5 ? d/(2-max-min) : d/(max+min);
+    if(max===r)h=(g-b)/d+(g<b?6:0);
+    else if(max===g)h=(b-r)/d+2;
+    else h=(r-g)/d+4;
+    h=Math.round(h*60);
+  }
+  s=Math.round(s*100);
+  if(s<10)return;
+  curH=h;curS=Math.max(s,45);
+  root.style.setProperty('--h',curH);
+  root.style.setProperty('--s',curS+'%');
+  document.querySelectorAll('.swatch').forEach(x=>x.classList.remove('active'));
+  applyStrong();persist();
+});
+
+/* ── Sidebar ── */
+document.querySelectorAll('[data-group]').forEach(b=>b.addEventListener('click',()=>b.closest('.group').classList.toggle('open')));
+document.getElementById('btnCollapse').onclick=()=>document.body.classList.toggle('collapsed');
+const side=document.getElementById('sidebar'),scrim=document.getElementById('scrim'),
+      mqMobile=matchMedia('(max-width:900px)'),
+      btnSide=document.getElementById('btnSide');
+btnSide.onclick=()=>{
+  if(mqMobile.matches){side.classList.add('open');scrim.classList.add('show')}
+  else{document.body.classList.toggle('collapsed')}
+};
+scrim.onclick=()=>{side.classList.remove('open');scrim.classList.remove('show')};
+mqMobile.addEventListener('change',()=>{side.classList.remove('open');scrim.classList.remove('show')});
+
+/* ── Toasts ── */
+const icons={ok:'<circle cx="12" cy="12" r="10"/><path d="m8.5 12.5 2.5 2.5 5-6"/>',
+  err:'<circle cx="12" cy="12" r="10"/><path d="M15 9l-6 6M9 9l6 6"/>',
+  info:'<circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/>'};
+function toast(type,title,msg){
+  const t=document.createElement('div');t.className='toast glass-deep';
+  t.innerHTML=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${icons[type]}</svg>
+    <div><b>${title}</b><p>${msg}</p></div><button class="x">✕</button><span class="bar"></span>`;
+  document.getElementById('toasts').appendChild(t);
+  const kill=()=>{t.classList.add('out');setTimeout(()=>t.remove(),220)};
+  t.querySelector('.x').onclick=kill;setTimeout(kill,3500);
+}
+setTimeout(()=>toast('info','Grid de formularios flexible','Hasta 4 columnas: fw-1, fw-2, fw-3 o fw-full por campo. Colapsa 4→2→1 según pantalla.'),700);
+</script>
+</body>
+</html>
