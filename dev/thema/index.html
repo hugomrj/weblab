@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TuMarca — Sistema</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<!-- Anti-FOUC (CRÍTICO - debe ir inline) -->
+<script>
+(function(){
+  function relLum(h,s,l){
+    s/=100;l/=100;
+    const k=n=>(n+h/30)%12,a=s*Math.min(l,1-l);
+    const f=n=>{let x=l-a*Math.max(-1,Math.min(k(n)-3,Math.min(9-k(n),1)));return Math.max(0,Math.min(1,x))};
+    const lin=c=>c<=0.04045?c/12.92:Math.pow((c+0.055)/1.055,2.4);
+    return 0.2126*lin(f(0))+0.7152*lin(f(8))+0.0722*lin(f(4));
+  }
+  function inkSafeL(h,s){
+    let lo=12,hi=64;
+    while(hi-lo>0.5){const mid=(lo+hi)/2;if(relLum(h,s,mid)<=0.17)lo=mid;else hi=mid}
+    return Math.round(lo);
+  }
+  let p={};
+  try{p=JSON.parse(localStorage.getItem('ui-prefs-v2')||'{}')}catch(e){}
+  const sysLight=matchMedia('(prefers-color-scheme: light)').matches;
+  const h=p.h||160, s=p.s||84, L=inkSafeL(h,s);
+  document.documentElement.dataset.theme=p.theme||(sysLight?'light':'dark');
+  document.documentElement.style.setProperty('--h',h);
+  document.documentElement.style.setProperty('--s',s+'%');
+  document.documentElement.style.setProperty('--acc-strong',`hsl(${h} ${s}% ${L}%)`);
+  document.documentElement.style.setProperty('--glow',`hsl(${h} ${s}% ${L}% / .38)`);
+})();
+</script>
+
+<link rel="stylesheet" href="css/01-theme.css">
+<link rel="stylesheet" href="css/02-layout.css">
+<link rel="stylesheet" href="css/03-components.css">
+<link rel="stylesheet" href="css/04-dashboard.css">
+</head>
+<body>
+<div class="scrim" id="scrim"></div>
+<div class="tooltip" id="tooltip"></div>
+
+<!-- ═══ SIDEBAR ═══ -->
+<aside class="sidebar glass" id="sidebar">
+  <div class="brand">
+    <div class="brand-mark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6c0 5-3 8-6 8s-6-3-6-8 3-4 6-4 6-1 6 4z"/><path d="M12 14v7"/></svg></div>
+    <div><b>TuMarca</b><small>PUNTO DE VENTA</small></div>
+  </div>
+
+  <nav class="side-scroll" id="sideScroll">
+    <div class="nav-label">Operación</div>
+
+    <button class="nav-item active" data-view="dash">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></svg>
+      <span>Dashboard</span>
+    </button>
+
+    <div class="group open">
+      <button class="group-btn" data-group>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><path d="m3.3 7 8.7 5 8.7-5M12 22V12"/></svg>
+        <span>Inventario</span>
+        <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m6 9 6 6 6-6"/></svg>
+      </button>
+      <div class="sub"><div class="sub-inner">
+        <button class="sub-item" data-view="cats"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg><span>Categorías</span></button>
+        <button class="sub-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2H2v10h10V2z"/><path d="m17 2 5 5-5 5-5-5 5-5z"/><path d="M12 12v10H2V12h10z"/></svg><span>Productos</span></button>
+      </div></div>
+    </div>
+
+    <div class="group">
+      <button class="group-btn" data-group>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1.6"/><circle cx="19" cy="21" r="1.6"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57L23 6H5.12"/></svg>
+        <span>Ventas</span>
+        <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m6 9 6 6 6-6"/></svg>
+      </button>
+      <div class="sub"><div class="sub-inner">
+        <button class="sub-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg><span>Punto de Venta</span></button>
+        <button class="sub-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8"/></svg><span>Facturas</span></button>
+      </div></div>
+    </div>
+
+    <div class="group">
+      <button class="group-btn" data-group>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+        <span>Compras</span>
+        <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m6 9 6 6 6-6"/></svg>
+      </button>
+      <div class="sub"><div class="sub-inner">
+        <button class="sub-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/></svg><span>Órdenes de compra</span></button>
+      </div></div>
+    </div>
+
+    <button class="nav-item" data-view="clientes">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      <span>Clientes</span>
+    </button>
+
+    <div class="nav-label">Gestión</div>
+
+    <button class="nav-item" data-view="usuarios">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      <span>Usuarios</span>
+    </button>
+
+    <button class="nav-item" data-view="empleados">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 21h20"/><path d="M6 21V7a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v14"/><path d="M10 9h.01"/><path d="M14 9h.01"/><path d="M10 13h.01"/><path d="M14 13h.01"/><path d="M10 17h.01"/><path d="M14 17h.01"/></svg>
+      <span>Empleados</span>
+    </button>
+
+    <button class="nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+      <span>Reportes</span>
+    </button>
+
+    <button class="nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="18" rx="2"/><path d="M2 9h20"/><path d="M8 14h4M8 18h7"/></svg>
+      <span>Contabilidad</span>
+    </button>
+
+    <button class="nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>
+      <span>Bancos</span>
+    </button>
+
+    <button class="nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 5c-1.5 0-2.8 1.4-3 2-3.5-1.5-11-.3-11 5 0 1.8 0 3 2 4.5V20h4v-2h3v2h4v-4c1-.5 1.7-1 2-2h2v-4h-2c0-1-.5-1.5-1-2h0V5z"/><path d="M2 9v1c0 1.1.9 2 2 2h1"/><path d="M21 11v1c0 1.1-.9 2-2 2h-1"/></svg>
+      <span>Caja / Efectivo</span>
+    </button>
+
+    <div class="nav-label">Sistema</div>
+
+    <button class="nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="21" x2="14" y1="4" y2="4"/><line x1="10" x2="3" y1="4" y2="4"/><line x1="21" x2="12" y1="12" y2="12"/><line x1="8" x2="3" y1="12" y2="12"/><line x1="21" x2="16" y1="20" y2="20"/><line x1="12" x2="3" y1="20" y2="20"/><line x1="14" x2="14" y1="2" y2="6"/><line x1="8" x2="8" y1="10" y2="14"/><line x1="16" x2="16" y1="18" y2="22"/></svg>
+      <span>Configuración</span>
+    </button>
+
+    <button class="nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+      <span>Seguridad / Accesos</span>
+    </button>
+
+    <button class="nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      <span>Soporte / Mensajes</span>
+    </button>
+
+    <button class="nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>
+      <span>Sucursales</span>
+    </button>
+
+    <button class="nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8V4H8"/><rect x="4" y="8" width="16" height="12" rx="2"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M15 13v2"/><path d="M9 13v2"/></svg>
+      <span>Integraciones / APIs</span>
+    </button>
+  </nav>
+
+  <button class="collapse-btn" id="btnCollapse" data-tip="Colapsar / expandir menú">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m11 17-5-5 5-5M18 17l-5-5 5-5"/></svg>
+    <span>Colapsar</span>
+  </button>
+</aside>
+
+<!-- ══ MAIN ═══ -->
+<div class="main">
+  <header class="topbar">
+    <button class="icon-btn" id="btnSide" data-tip="Mostrar / ocultar menú">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+    </button>
+    <nav class="crumbs">
+      <span class="hide-m">TuMarca</span><span class="sep hide-m">/</span>
+      <span class="hide-m" id="crumbSec" style="display:none">Inicio</span><span class="sep hide-m" style="display:none">/</span>
+      <b id="crumbHere">Dashboard</b>
+    </nav>
+
+    <div class="notif-wrap">
+      <button class="icon-btn" id="btnNotif" data-tip="Notificaciones">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg>
+        <span class="ping" id="notifPing"></span>
+      </button>
+      <div class="notif-menu glass-deep" id="notifMenu">
+        <div class="n-head">
+          <b>Notificaciones</b>
+          <button class="n-mark" id="btnMarkAll">Marcar todas como leídas</button>
+        </div>
+        <ul class="n-list" id="notifList"></ul>
+        <div class="n-empty" id="notifEmpty">
+          <div class="fig"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg></div>
+          <b>Todo al día</b>
+          <p>No tienes notificaciones nuevas en este momento.</p>
+        </div>
+      </div>
+    </div>
+
+    <button class="icon-btn" id="btnTheme" data-tip="Cambiar tema">
+      <svg id="icoSun" style="display:none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+      <svg id="icoMoon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+    </button>
+
+    <div class="user-wrap">
+      <button class="avatar-btn" id="avatarBtn" data-tip="Cuenta">AR</button>
+      <div class="user-menu glass-deep" id="userMenu">
+        <div class="u-head">
+          <div class="u-avatar">AR</div>
+          <div class="u-info">
+            <b>Alex Rivera</b>
+            <span>alex@tumarca.io</span>
+          </div>
+        </div>
+
+        <div class="u-sep"></div>
+        <button class="u-item" data-action="perfil">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          Mi perfil
+        </button>
+        <button class="u-item" data-action="preferencias">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+          Preferencias
+        </button>
+        <button class="u-item" data-action="notificaciones">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg>
+          Notificaciones
+          <span class="badge" id="userBadge">3</span>
+        </button>
+
+        <div class="u-sep"></div>
+        <div class="u-colors">
+          <div class="u-colors-label">Color del sistema</div>
+          <div class="u-swatches" id="swatches">
+            <div class="swatch" data-h="350" data-s="68" data-tip="Rojo cereza" style="background:hsl(350 68% 58%)"></div>
+            <div class="swatch" data-h="38"  data-s="92" data-tip="Ámbar" style="background:hsl(38 92% 50%)"></div>
+            <div class="swatch active" data-h="160" data-s="84" data-tip="Esmeralda" style="background:hsl(160 84% 45%)"></div>
+            <div class="swatch" data-h="212" data-s="90" data-tip="Azul" style="background:hsl(212 90% 52%)"></div>
+            <div class="swatch" data-h="245" data-s="85" data-tip="Índigo" style="background:hsl(245 85% 58%)"></div>
+            <div class="swatch" data-h="320" data-s="58" data-tip="Magenta" style="background:hsl(320 58% 55%)"></div>
+            <label class="u-custom" data-tip="Elegir cualquier color">
+              <input type="color" id="customColor" value="#10b981">
+            </label>
+          </div>
+        </div>
+
+        <div class="u-sep"></div>
+        <button class="u-item danger" data-action="logout">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></svg>
+          Cerrar sesión
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="content">
+
+    <!-- ═══ DASHBOARD ═══ -->
+    <div id="viewDash">
+      <div class="page-head">
+        <div>
+          <h1>Dashboard</h1>
+          <p>Resumen general de tu operación. Datos en vivo desde los módulos.</p>
+        </div>
+        <div class="fsel" id="fsRange">
+          <button class="fsel-btn" data-fsel>
+            <span class="fsel-lbl">Últimos 7 días</span>
+            <svg class="fsel-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m6 9 6 6 6-6"/></svg>
+          </button>
+          <div class="fsel-menu glass-deep">
+            <button class="fsel-opt sel" data-val="7">Últimos 7 días</button>
+            <button class="fsel-opt" data-val="14">Últimas 2 semanas</button>
+            <button class="fsel-opt" data-val="30">Último mes</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="dash-grid">
+        <div class="dash-card glass dc-3 metric">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1.6"/><circle cx="19" cy="21" r="1.6"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57L23 6H5.12"/></svg></div>
+          <span class="lbl">Ventas del periodo</span>
+          <strong class="val" id="mVentas">$0</strong>
+          <div class="metric-foot"><span class="delta up" id="mVentasDelta">↗ +12.4%</span><span>vs. anterior</span></div>
+        </div>
+
+        <div class="dash-card glass dc-3 metric">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+          <span class="lbl">Clientes activos</span>
+          <strong class="val" id="mClientes">0</strong>
+          <div class="metric-foot"><span class="delta up">↗ +3.1%</span><span>de <b id="mClientesTot">0</b></span></div>
+        </div>
+
+        <div class="dash-card glass dc-3 metric">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><path d="m3.3 7 8.7 5 8.7-5M12 22V12"/></svg></div>
+          <span class="lbl">Productos totales</span>
+          <strong class="val" id="mProds">0</strong>
+          <div class="metric-foot"><span class="delta flat">— estable</span><span>en <b id="mCats">0</b> categorías</span></div>
+        </div>
+
+        <div class="dash-card glass dc-3 metric">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+          <span class="lbl">Usuarios del sistema</span>
+          <strong class="val" id="mUsers">0</strong>
+          <div class="metric-foot"><span class="delta up">↗ +1</span><span><b id="mUsersOn">0</b> activos</span></div>
+        </div>
+      </div>
+
+      <div class="dash-grid">
+        <div class="dash-card glass dc-8">
+          <div class="chart-head">
+            <div>
+              <h3>Ingresos por día</h3>
+              <span class="hint">Ventas simuladas del periodo seleccionado</span>
+            </div>
+            <div style="text-align:right">
+              <div class="chart-value" id="chartTotal">$0</div>
+              <span class="delta up" id="chartDelta">↗ +8.2%</span>
+            </div>
+          </div>
+          <div class="chart-box">
+            <svg class="linechart" viewBox="0 0 600 170" preserveAspectRatio="none">
+              <defs>
+                <linearGradient id="areaG" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0" style="stop-color:var(--acc)" stop-opacity=".35"/>
+                  <stop offset="1" style="stop-color:var(--acc)" stop-opacity="0"/>
+                </linearGradient>
+              </defs>
+              <g id="chartGrid"></g>
+              <path id="areaPath" fill="url(#areaG)"/>
+              <path id="linePath" class="chart-line"/>
+            </svg>
+            <div id="chartDots" style="position:absolute;inset:0"></div>
+          </div>
+          <div class="chart-xlabels" id="chartXLabels"></div>
+        </div>
+
+        <div class="dash-card glass dc-4">
+          <div class="chart-head">
+            <h3>Actividad reciente</h3>
+            <span class="hint">Hoy</span>
+          </div>
+          <ul class="acts">
+            <li><span class="dot"></span><span class="txt wrap">Ana publicó el informe trimestral</span><time>hace 2 min</time></li>
+            <li><span class="dot alt"></span><span class="txt wrap">Nuevo despliegue en producción</span><time>hace 18 min</time></li>
+            <li><span class="dot"></span><span class="txt wrap">Carlos comentó en el diseño v3</span><time>hace 1 h</time></li>
+            <li><span class="dot alt"></span><span class="txt wrap">Backup completado sin errores</span><time>hace 3 h</time></li>
+            <li><span class="dot"></span><span class="txt wrap">Se registró la venta #0248</span><time>hace 4 h</time></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="dash-grid">
+        <div class="dash-card glass dc-12">
+          <div class="chart-head">
+            <h3>Top categorías por productos</h3>
+            <span class="hint">Distribución del inventario</span>
+          </div>
+          <ul class="top-cats" id="topCats" style="margin-top:6px"></ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ LISTADO ═══ -->
+    <div id="viewList" hidden>
+      <div class="page-head">
+        <div>
+          <h1 id="listTitle">Categorías</h1>
+          <p id="listDesc">Organiza tu inventario agrupando productos por categoría.</p>
+        </div>
+        <button class="btn btn-primary" onclick="showForm()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+          <span id="btnNew">Nueva Categoría</span>
+        </button>
+      </div>
+
+      <div class="filters glass">
+        <div class="f-search">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+          <input id="inpSearch" placeholder="Buscar…"><kbd>/</kbd>
+        </div>
+        <div class="fsel" id="fsOrder">
+          <button class="fsel-btn" data-fsel>
+            <span class="fsel-lbl">Orden por defecto</span>
+            <svg class="fsel-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m6 9 6 6 6-6"/></svg>
+          </button>
+          <div class="fsel-menu glass-deep">
+            <button class="fsel-opt sel" data-val="default">Orden por defecto</button>
+            <button class="fsel-opt" data-val="name">Nombre (A–Z)</button>
+            <button class="fsel-opt" data-val="prods">Más registros</button>
+          </div>
+        </div>
+        <button class="btn btn-ghost btn-sm f-clear" id="btnClear" hidden>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+          Limpiar filtros
+        </button>
+      </div>
+
+      <div class="panel glass">
+        <div class="panel-head">
+          <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+            <h2 id="panelTitle">Listado</h2>
+            <div class="tabs" id="listTabs">
+              <button class="tab on" data-tab="all">Todas<span class="t-count" id="tcAll">0</span></button>
+              <button class="tab" data-tab="ok">Activas<span class="t-count" id="tcOk">0</span></button>
+              <button class="tab" data-tab="off">Inactivas<span class="t-count" id="tcOff">0</span></button>
+            </div>
+          </div>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead><tr>
+              <th class="c-chk"><input type="checkbox" id="chkAll" data-tip="Seleccionar todo"></th>
+              <th class="c-id">ID</th>
+              <th>Nombre</th>
+              <th class="c-prods" id="thCol">Registros</th>
+              <th class="c-state">Estado</th>
+              <th class="c-actions">Acciones</th>
+            </tr></thead>
+            <tbody id="tbody"></tbody>
+          </table>
+        </div>
+
+        <div class="empty" id="emptyBox">
+          <div class="fig"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><path d="m3.3 7 8.7 5 8.7-5M12 22V12"/></svg></div>
+          <h3 id="emptyTitle">No hay registros aún</h3>
+          <p id="emptyMsg">Crea el primero para comenzar.</p>
+          <button class="btn btn-primary" onclick="showForm()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>Crear el primero</button>
+        </div>
+
+        <div class="panel-foot">
+          <span id="footInfo">—</span>
+          <div class="pager" id="pager"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ FORMULARIO ═══ -->
+    <div id="viewForm" hidden>
+      <button class="btn-back" id="btnBack">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        Volver
+      </button>
+      <div class="page-head">
+        <div>
+          <h1 id="formTitle">Nuevo registro</h1>
+          <p id="formSub">Descripción del formulario.</p>
+        </div>
+      </div>
+
+      <div class="panel glass form-panel">
+        <div class="form-grid">
+          <div class="field fw-2">
+            <label for="fName">Nombre</label>
+            <input class="input" id="fName" placeholder="Ej. Bebidas" maxlength="60">
+            <div class="err-msg" id="fErr">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
+              El nombre es obligatorio.
+            </div>
+          </div>
+
+          <div class="field fw-2">
+            <label for="fEmail">Correo <span class="opt">(según módulo)</span></label>
+            <input class="input" id="fEmail" type="email" placeholder="correo@ejemplo.com">
+            <div class="hint">Visible en módulos de personas; se ignora en otros.</div>
+          </div>
+
+          <div class="field fw-2">
+            <label for="fActive">Estado</label>
+            <label class="switch-row">
+              <input type="checkbox" id="fActive" class="switch" checked>
+              <span class="switch-state"></span>
+            </label>
+          </div>
+
+          <div class="field fw-full">
+            <label for="fDesc">Descripción <span class="opt">(opcional)</span></label>
+            <textarea class="textarea" id="fDesc" placeholder="Breve descripción…"></textarea>
+          </div>
+        </div>
+
+        <div class="form-sep"></div>
+
+        <div class="form-actions">
+          <span class="form-note" id="formNote"></span>
+          <span class="spacer"></span>
+          <button class="btn btn-ghost" id="btnCancel">Cancelar</button>
+          <!-- NUEVO: Botón Editar (oculto por defecto, visible en modo detalles) -->
+          <button class="btn btn-primary" id="btnEditFromDetails" hidden>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.12 2.12 0 0 1 3 3L12 15l-4 1 1-4z"/></svg>
+            Editar
+          </button>
+          <button class="btn btn-primary" id="btnSave">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><path d="M17 21v-8H7v8M7 3v5h8"/></svg>
+            <span id="btnSaveTxt">Guardar</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ ERROR / 404 ═══ -->
+    <div id="viewError" hidden>
+      <div class="error-view">
+        <div class="fig"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m16.2 7.8-2 6.3-6.4 2.1 2-6.3z"/></svg></div>
+        <h1 id="errTitle">Sección no disponible</h1>
+        <p id="errMsg">Esta sección del prototipo aún no tiene una vista implementada.</p>
+        <div class="error-actions">
+          <button class="btn btn-ghost" id="btnRetry">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M3 21v-5h5"/></svg>
+            Reintentar
+          </button>
+          <button class="btn btn-primary" id="btnErrHome">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/></svg>
+            Volver al inicio
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<div class="bulkbar glass-deep" id="bulkbar">
+  <span class="bulk-count" id="bulkCount">0 seleccionados</span>
+  <span class="sep-v"></span>
+  <button class="btn btn-ghost btn-sm" id="bulkActivate">Activar</button>
+  <button class="btn btn-ghost btn-sm" id="bulkDeactivate">Desactivar</button>
+  <button class="btn btn-danger btn-sm" id="bulkDelete">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/></svg>
+    Eliminar
+  </button>
+</div>
+
+<div class="ov" id="ovDel">
+  <div class="modal glass-deep">
+    <h3 id="delTitle">Eliminar registro</h3>
+    <p class="sub-t" id="delSub">¿Seguro? Esta acción no se puede deshacer.</p>
+    <div class="modal-foot">
+      <button class="btn btn-ghost" onclick="closeOv(ovDel)">Cancelar</button>
+      <button class="btn btn-danger" id="btnDel">Sí, eliminar</button>
+    </div>
+  </div>
+</div>
+
+<div class="toasts" id="toasts"></div>
+
+<!-- TuMarca UI JS -->
+<script src="js/theme.js"></script>
+<script src="js/components.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
