@@ -23,7 +23,8 @@
   display: flex;
   align-items: center;
   gap: 0.6875rem; /* 11px */
-  padding: 1.125rem 1.3125rem 1rem; /* 18px 21px 16px */
+  /* padding: 1.125rem 1.3125rem 1rem;  18px 21px 16px */
+  padding: 0.8125rem 1.875rem;
   flex-shrink: 0;
   white-space: nowrap;
   position: relative;
@@ -286,7 +287,8 @@ body.collapsed .sidebar {
 }
 
 body.collapsed .brand {
-  padding: 1.125rem 1.0625rem 1rem; /* 18px 17px 16px */
+  /*padding: 1.125rem 1.0625rem 1rem;  18px 17px 16px */
+  padding: 0.8125rem 1.875rem;
   justify-content: center;
 }
 
