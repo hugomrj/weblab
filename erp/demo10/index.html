@@ -8,9 +8,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
 <script>
-/* ═══ Anti-FOUC: aplica preferencias Y calcula el tono tinta-segura
-   (texto blanco siempre → el fondo del botón se oscurece hasta ≥4.5:1)
-   ANTES del primer render. 1ª visita: sigue el tema del sistema operativo. ═══ */
+/* ═══ Anti-FOUC + tinta-segura. Clave v2: evita residuos de prefs viejas ═══ */
 (function(){
   function relLum(h,s,l){
     s/=100;l/=100;
@@ -26,7 +24,7 @@
     return Math.round(lo);
   }
   let p={};
-  try{p=JSON.parse(localStorage.getItem('ui-prefs')||'{}')}catch(e){}
+  try{p=JSON.parse(localStorage.getItem('ui-prefs-v2')||'{}')}catch(e){}
   const sysLight=matchMedia('(prefers-color-scheme: light)').matches;
   const h=p.h||160, s=p.s||84, L=inkSafeL(h,s);
   document.documentElement.dataset.theme=p.theme||(sysLight?'light':'dark');
@@ -40,7 +38,6 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 
-/* ═══ ORIGEN: un solo matiz gobierna todo. --acc-strong lo fija el JS ═══ */
 :root{--h:160;--s:84%;
   --acc-strong:hsl(var(--h) var(--s) 30%);
   --glow:hsl(var(--h) var(--s) 30% / .38)}
@@ -51,6 +48,8 @@ html[data-theme="dark"]{
   --panel-2:hsl(var(--h) 20% 12%);
   --text:hsl(var(--h) 15% 95%);
   --text-2:hsl(var(--h) 10% 62%);
+  --side-ic:hsl(var(--h) 24% 74%);
+  --side-ic-hov:hsl(var(--h) 15% 95%);
   --hover:hsl(var(--h) 25% 30% / .14);
   --brd:hsl(0 0% 100% / .08);
   --brd-2:hsl(0 0% 100% / .15);
@@ -71,12 +70,13 @@ html[data-theme="dark"]{
   color-scheme:dark;
 }
 html[data-theme="light"]{
-  /* Fondo casi blanco: diferencia sutil con los paneles, como en dark */
   --bg:hsl(var(--h) 26% 97%);
   --panel:#ffffff;
   --panel-2:#ffffff;
   --text:hsl(var(--h) 25% 13%);
   --text-2:hsl(var(--h) 10% 42%);
+  --side-ic:hsl(var(--h) 22% 38%);
+  --side-ic-hov:hsl(var(--h) 25% 13%);
   --hover:hsl(var(--h) 40% 40% / .07);
   --brd:hsl(var(--h) 25% 15% / .1);
   --brd-2:hsl(var(--h) 25% 15% / .18);
@@ -101,28 +101,44 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--t
   min-height:100vh;line-height:1.55;transition:background .3s,color .3s}
 :focus-visible{outline:2px solid var(--acc);outline-offset:2px;border-radius:8px}
 
-/* ═══ SUPERFICIES SÓLIDAS · profundidad por: luminosidad + borde 1px + sombra suave ═══ */
 .glass{background:var(--panel);border:1px solid var(--brd);box-shadow:var(--shadow)}
 .glass-deep{background:var(--panel-2);border:1px solid var(--brd-2);box-shadow:var(--shadow)}
 
 /* ═══ SIDEBAR ═══ */
 .sidebar{position:fixed;left:0;top:0;bottom:0;width:256px;z-index:60;display:flex;flex-direction:column;
-  border-radius:0 16px 16px 0;padding:18px 13px;transition:width .25s,transform .3s,background .3s}
-.brand{display:flex;align-items:center;gap:11px;padding:4px 8px 20px;overflow:hidden;white-space:nowrap;position:relative;z-index:1}
+  border-radius:0 16px 16px 0;padding:0 0 14px;transition:width .25s,transform .3s,background .3s;overflow:hidden}
+.brand{display:flex;align-items:center;gap:11px;padding:18px 21px 16px;flex-shrink:0;white-space:nowrap;position:relative;z-index:2;background:inherit}
 .brand-mark{width:38px;height:38px;border-radius:11px;flex-shrink:0;display:grid;place-items:center;color:#fff;
   background:var(--acc-strong);box-shadow:0 0 16px var(--glow),inset 0 1px 0 hsl(0 0% 100%/.25)}
 .brand-mark svg{width:19px;height:19px}
 .brand b{font-size:17px;letter-spacing:-.02em}
 .brand small{display:block;font-size:10px;font-weight:500;color:var(--text-2);letter-spacing:.12em}
+.side-scroll{flex:1;min-height:0;overflow-y:auto;padding:2px 13px;
+  scrollbar-width:thin;scrollbar-color:hsl(0 0% 50% / .3) transparent}
+.side-scroll::-webkit-scrollbar{width:5px}
+.side-scroll::-webkit-scrollbar-thumb{background:hsl(0 0% 50% / .3);border-radius:99px}
+.side-scroll::-webkit-scrollbar-track{background:transparent}
+.collapse-btn{flex-shrink:0;display:flex;align-items:center;gap:12px;width:calc(100% - 26px);margin:8px 13px 0;padding:11px 13px;
+  border:none;border-radius:10px;background:none;color:var(--text-2);font-family:inherit;font-size:13px;font-weight:500;
+  cursor:pointer;white-space:nowrap;transition:.15s;position:relative;z-index:2;border-top:1px solid var(--brd)}
+.collapse-btn>svg:first-child{color:var(--side-ic);transition:color .15s}
+.collapse-btn:hover{background:var(--hover);color:var(--text)}
+.collapse-btn:hover>svg:first-child{color:var(--side-ic-hov)}
+.collapse-btn svg{width:16px;height:16px;flex-shrink:0;transition:transform .25s}
+body.collapsed .collapse-btn svg{transform:rotate(180deg)}
 
 .nav-label{font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
   color:var(--text-2);padding:16px 13px 7px;white-space:nowrap;position:relative;z-index:1}
+/* group-btn y nav-item: MISMO estilo */
 .nav-item,.group-btn{display:flex;align-items:center;gap:12px;width:100%;padding:11px 13px;border:none;
   border-radius:10px;background:none;color:var(--text-2);font-family:inherit;font-size:13.5px;font-weight:500;
   cursor:pointer;text-align:left;transition:.15s;white-space:nowrap;position:relative;z-index:1}
+.nav-item>svg:first-child,.group-btn>svg:first-child{color:var(--side-ic);transition:color .15s}
+.nav-item:hover>svg:first-child,.group-btn:hover>svg:first-child{color:var(--side-ic-hov)}
 .nav-item svg,.group-btn svg{width:17px;height:17px;flex-shrink:0}
 .nav-item:hover,.group-btn:hover{background:var(--hover);color:var(--text)}
-.group-btn{color:var(--text);font-weight:600}
+.group-btn.active{color:var(--acc-txt)}
+.group-btn.active>svg:first-child{color:var(--acc-txt)}
 .chev{margin-left:auto;transition:transform .25s;width:14px!important;height:14px!important;color:var(--text-2)}
 .group.open .chev{transform:rotate(180deg)}
 .sub{display:grid;grid-template-rows:0fr;transition:grid-template-rows .28s ease}
@@ -136,19 +152,21 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--t
 .sub-item.active{background:var(--acc-soft);color:var(--acc-txt);font-weight:600}
 .sub-item.active::before{content:'';width:3px;height:14px;border-radius:3px;background:var(--acc);
   box-shadow:0 0 8px var(--glow);margin-left:-8px;margin-right:2px}
-.collapse-btn{margin-top:auto;display:flex;align-items:center;gap:12px;width:100%;padding:11px 13px;border:none;
-  border-radius:10px;background:none;color:var(--text-2);font-family:inherit;font-size:13px;font-weight:500;
-  cursor:pointer;white-space:nowrap;transition:.15s;position:relative;z-index:1}
-.collapse-btn:hover{background:var(--hover);color:var(--text)}
-.collapse-btn svg{width:16px;height:16px;flex-shrink:0;transition:transform .25s}
-body.collapsed .collapse-btn svg{transform:rotate(180deg)}
+.nav-item.active{background:var(--acc-soft);color:var(--acc-txt);font-weight:600}
+.nav-item.active>svg:first-child{color:var(--acc-txt)}
+.nav-item.active::before{content:'';width:3px;height:14px;border-radius:3px;background:var(--acc);
+  box-shadow:0 0 8px var(--glow);margin-left:-8px;margin-right:2px}
 
-body.collapsed .sidebar{width:72px;padding:18px 11px}
+body.collapsed .sidebar{width:72px;padding:0 0 14px}
+body.collapsed .brand{padding:18px 17px 16px;justify-content:center}
 body.collapsed .brand b,body.collapsed .brand small,body.collapsed .nav-label,
+body.collapsed .nav-item span,
 body.collapsed .group-btn span,body.collapsed .sub-item span,
 body.collapsed .collapse-btn span,body.collapsed .chev{display:none}
 body.collapsed .sub{display:none}
-body.collapsed .nav-item,body.collapsed .group-btn,body.collapsed .collapse-btn{justify-content:center;padding:12px 0}
+body.collapsed .nav-item,body.collapsed .group-btn{justify-content:center;padding:12px 0}
+body.collapsed .side-scroll{padding:2px 11px}
+body.collapsed .collapse-btn{width:calc(100% - 22px);margin:8px 11px 0;justify-content:center;padding:12px 0}
 
 /* ═══ MAIN + TOPBAR ═══ */
 .main{margin-left:256px;min-height:100vh;display:flex;flex-direction:column;transition:margin .25s}
@@ -160,43 +178,104 @@ body.collapsed .main{margin-left:72px}
 .crumbs b{color:var(--text);font-weight:600}
 .crumbs .sep{opacity:.5}
 .icon-btn{width:38px;height:38px;border-radius:10px;border:1px solid var(--brd-2);background:var(--field);
-  color:var(--text-2);cursor:pointer;display:grid;place-items:center;transition:.15s}
+  color:var(--text-2);cursor:pointer;display:grid;place-items:center;transition:.15s;position:relative}
 .icon-btn:hover{color:var(--text);border-color:var(--acc);transform:translateY(-1px)}
 .icon-btn svg{width:16px;height:16px}
-.avatar-btn{width:38px;height:38px;border-radius:50%;border:none;cursor:pointer;color:#fff;
-  font-weight:700;font-size:12.5px;font-family:inherit;background:var(--acc-strong);box-shadow:0 0 12px var(--glow)}
+.icon-btn .ping{position:absolute;top:7px;right:8px;width:8px;height:8px;border-radius:50%;
+  background:var(--danger);border:2px solid var(--bg);box-shadow:0 0 8px var(--danger)}
+.icon-btn.active{border-color:var(--acc);color:var(--acc-txt)}
+.avatar-btn{width:38px;height:38px;border-radius:50%;border:2px solid transparent;cursor:pointer;color:#fff;
+  font-weight:700;font-size:12.5px;font-family:inherit;background:var(--acc-strong);
+  box-shadow:0 0 12px var(--glow);transition:.15s}
+.avatar-btn:hover{transform:scale(1.06)}
+.avatar-btn.active{border-color:var(--acc)}
 
-/* ═══ PALETA: 8 colores (4×2) + gotero ═══ */
-.palette-wrap{position:relative}
-.palette-btn{width:38px;height:38px;border-radius:10px;border:1px solid var(--brd-2);cursor:pointer;
-  background:conic-gradient(hsl(0 80% 55%),hsl(60 80% 50%),hsl(120 70% 45%),
-    hsl(180 80% 45%),hsl(240 80% 60%),hsl(300 70% 55%),hsl(0 80% 55%));
-  box-shadow:inset 0 1px 2px hsl(0 0% 100%/.4);transition:.15s}
-.palette-btn:hover{transform:scale(1.06)}
-.palette-pop{position:absolute;top:calc(100% + 10px);right:0;z-index:90;width:280px;border-radius:16px;
-  padding:14px;opacity:0;transform:translateY(-6px) scale(.97);pointer-events:none;
+/* ═══ MENÚ DE USUARIO ═══ */
+.user-wrap{position:relative}
+.user-menu{position:absolute;top:calc(100% + 10px);right:0;z-index:100;width:256px;border-radius:15px;
+  padding:7px;opacity:0;transform:translateY(-6px) scale(.97);pointer-events:none;
   transition:.18s;transform-origin:top right}
-.palette-pop.open{opacity:1;transform:none;pointer-events:auto}
-.palette-pop h4{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
-  color:var(--text-2);margin-bottom:10px;position:relative;z-index:1}
-.palette-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;position:relative;z-index:1}
-.palette-grid .swatch{width:100%;aspect-ratio:1;height:auto;border-radius:9px}
-.swatch{cursor:pointer;border:2px solid transparent;transition:.15s;
+.user-menu.open{opacity:1;transform:none;pointer-events:auto}
+.u-head{display:flex;align-items:center;gap:11px;padding:10px 11px 12px}
+.u-avatar{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;flex-shrink:0;color:#fff;
+  font-weight:700;font-size:12.5px;background:var(--acc-strong);box-shadow:0 0 12px var(--glow)}
+.u-info{min-width:0}
+.u-info b{display:block;font-size:13.5px;letter-spacing:-.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.u-info span{display:block;font-size:11.5px;color:var(--text-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.u-sep{height:1px;background:var(--brd);margin:5px 6px}
+.u-item{display:flex;align-items:center;gap:11px;width:100%;padding:9.5px 11px;border:none;border-radius:9px;
+  background:none;color:var(--text);font-family:inherit;font-size:13px;font-weight:500;cursor:pointer;
+  text-align:left;transition:.12s;position:relative;z-index:1}
+.u-item svg{width:15px;height:15px;color:var(--text-2);flex-shrink:0}
+.u-item:hover{background:var(--hover)}
+.u-item.danger,.u-item.danger svg{color:var(--danger)}
+.u-item.danger:hover{background:var(--danger-bg)}
+.u-item .badge{margin-left:auto;font-size:10px;font-weight:700;padding:2px 7px;border-radius:999px;
+  background:var(--danger-bg);color:var(--danger)}
+.u-item .badge.hide{display:none}
+
+.u-colors{padding:4px 8px 8px;position:relative;z-index:1}
+.u-colors-label{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--text-2);margin-bottom:9px}
+.u-swatches{display:flex;flex-wrap:nowrap;justify-content:space-between;align-items:center}
+.swatch{width:22px;height:22px;border-radius:50%;cursor:pointer;border:2px solid transparent;transition:.15s;flex-shrink:0;
   box-shadow:inset 0 1px 2px hsl(0 0% 100%/.35),0 1px 4px hsl(0 0% 0%/.25)}
-.swatch:hover{transform:scale(1.12)}
-.swatch.active{border-color:var(--text);transform:scale(1.05)}
-.custom-row{display:flex;align-items:center;gap:10px;margin-top:13px;padding-top:13px;
-  border-top:1px solid var(--brd);position:relative;z-index:1}
-.custom-row span{font-size:12px;color:var(--text-2);font-weight:500}
-.custom-swatch{position:relative;width:32px;height:32px;border-radius:9px;flex-shrink:0;
+.swatch:hover{transform:scale(1.15)}
+.swatch.active{border-color:var(--text);transform:scale(1.08)}
+.u-custom{position:relative;width:22px;height:22px;border-radius:50%;cursor:pointer;flex-shrink:0;
   background:conic-gradient(hsl(0 80% 55%),hsl(60 80% 50%),hsl(120 70% 45%),
     hsl(180 80% 45%),hsl(240 80% 60%),hsl(300 70% 55%),hsl(0 80% 55%));
-  border:2px solid var(--brd-2)}
-.custom-swatch input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+  border:2px solid var(--brd-2);transition:.15s}
+.u-custom:hover{transform:scale(1.15)}
+.u-custom input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+
+/* ═══ NOTIFICACIONES ═══ */
+.notif-wrap{position:relative}
+.notif-menu{position:absolute;top:calc(100% + 10px);right:0;z-index:100;width:330px;border-radius:15px;
+  padding:7px;opacity:0;transform:translateY(-6px) scale(.97);pointer-events:none;
+  transition:.18s;transform-origin:top right}
+.notif-menu.open{opacity:1;transform:none;pointer-events:auto}
+.n-head{display:flex;align-items:center;justify-content:space-between;padding:9px 11px 10px}
+.n-head b{font-size:13.5px;letter-spacing:-.01em}
+.n-mark{border:none;background:none;color:var(--acc-txt);font-family:inherit;font-size:11.5px;
+  font-weight:600;cursor:pointer;padding:3px 7px;border-radius:7px;transition:.12s}
+.n-mark:hover{background:var(--acc-soft)}
+.n-list{list-style:none;max-height:320px;overflow-y:auto}
+.n-item{display:flex;gap:11px;padding:11px;border-radius:10px;cursor:pointer;transition:.12s;position:relative;z-index:1}
+.n-item:hover{background:var(--hover)}
+.n-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:6px;
+  background:var(--acc);box-shadow:0 0 8px var(--glow)}
+.n-item.read .n-dot{background:transparent;box-shadow:none}
+.n-body{min-width:0}
+.n-body b{display:block;font-size:12.5px;font-weight:600;letter-spacing:-.01em}
+.n-item.read .n-body b{color:var(--text-2);font-weight:500}
+.n-body p{font-size:12px;color:var(--text-2);line-height:1.45;margin-top:1px}
+.n-body time{font-size:10.5px;color:var(--text-2);opacity:.8}
+.n-empty{display:none;flex-direction:column;align-items:center;padding:34px 16px;text-align:center}
+.n-empty.show{display:flex}
+.n-empty .fig{width:52px;height:52px;border-radius:15px;display:grid;place-items:center;margin-bottom:12px;
+  background:var(--acc-soft);color:var(--acc-txt)}
+.n-empty .fig svg{width:24px;height:24px}
+.n-empty b{font-size:13px;margin-bottom:3px}
+.n-empty p{font-size:12px;color:var(--text-2);max-width:220px}
+
+/* ═══ TOOLTIP ═══ */
+.tooltip{position:fixed;z-index:400;pointer-events:none;
+  background:var(--panel-2);border:1px solid var(--brd-2);color:var(--text);
+  font-size:11.5px;font-weight:600;padding:5.5px 11px;border-radius:8px;
+  box-shadow:var(--shadow);white-space:nowrap;
+  opacity:0;transform:translate(-50%,calc(-100% - 8px)) scale(.96);
+  transition:opacity .15s,transform .15s}
+.tooltip.show{opacity:1;transform:translate(-50%,calc(-100% - 12px)) scale(1)}
+.tooltip::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);
+  border:5px solid transparent;border-top-color:var(--brd-2)}
+.tooltip.below{transform:translate(-50%,8px) scale(.96)}
+.tooltip.below.show{transform:translate(-50%,12px) scale(1)}
+.tooltip.below::after{top:auto;bottom:100%;border-top-color:transparent;border-bottom-color:var(--brd-2)}
 
 /* ═══ CONTENIDO ═══ */
-.content{padding:32px 36px 60px;max-width:1240px;width:100%;margin:0 auto}
-.page-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:22px}
+.content{padding:28px 36px 60px;max-width:1240px;width:100%;margin:0 auto}
+.page-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:20px}
 .page-head h1{font-size:25px;letter-spacing:-.03em;font-weight:800}
 .page-head p{font-size:14px;color:var(--text-2);margin-top:6px}
 
@@ -218,7 +297,7 @@ body.collapsed .main{margin-left:72px}
 .btn-back svg{width:15px;height:15px;transition:transform .15s}
 .btn-back:hover svg{transform:translateX(-3px)}
 
-/* ═══ BARRA DE FILTROS ═══ */
+/* ═══ FILTROS ═══ */
 .filters{display:flex;align-items:center;gap:12px;padding:14px 16px;border-radius:14px;
   margin-bottom:18px;flex-wrap:wrap;position:relative;z-index:1}
 .f-search{display:flex;align-items:center;gap:9px;padding:9.5px 14px;border-radius:10px;flex:1;min-width:200px;
@@ -227,17 +306,44 @@ body.collapsed .main{margin-left:72px}
 .f-search svg{width:15px;height:15px;color:var(--text-2);flex-shrink:0}
 .f-search input{border:none;background:none;outline:none;color:var(--text);font-family:inherit;font-size:13px;width:100%}
 .f-search kbd{font-size:10.5px;color:var(--text-2);border:1px solid var(--brd-2);border-radius:5px;padding:2px 7px}
-.f-select{padding:9.5px 34px 9.5px 13px;border-radius:10px;border:1px solid var(--brd-2);
-  background:var(--field);color:var(--text);font-family:inherit;font-size:13px;outline:none;
-  cursor:pointer;transition:.15s;appearance:none;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
-  background-repeat:no-repeat;background-position:right 12px center}
-.f-select:focus{border-color:var(--acc);box-shadow:0 0 0 3px var(--ring)}
 .f-clear{margin-left:auto}
 
-/* ═══ PANEL DE TABLA ═══ */
+/* ═══ SELECT CUSTOM · despliega panel glass coherente con el tema ═══ */
+.fsel{position:relative;min-width:170px}
+.fsel-btn{display:flex;align-items:center;gap:9px;width:100%;padding:9.5px 13px;border-radius:10px;
+  border:1px solid var(--brd-2);background:var(--field);color:var(--text);font-family:inherit;
+  font-size:13px;font-weight:500;cursor:pointer;transition:.15s;text-align:left;white-space:nowrap}
+.fsel-btn:hover{transform:translateY(-1px)}
+.fsel-btn:focus-visible{border-color:var(--acc);box-shadow:0 0 0 3px var(--ring)}
+.fsel-btn .fsel-lbl{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.fsel-btn .fsel-arrow{margin-left:auto;transition:transform .2s;width:14px;height:14px;color:var(--text-2);flex-shrink:0}
+.fsel.open .fsel-arrow{transform:rotate(180deg)}
+.fsel-menu{position:absolute;top:calc(100% + 6px);left:0;right:0;z-index:90;border-radius:11px;padding:5px;
+  opacity:0;transform:translateY(-5px) scale(.97);pointer-events:none;transition:.15s;transform-origin:top left}
+.fsel.open .fsel-menu{opacity:1;transform:none;pointer-events:auto}
+.fsel-opt{display:flex;align-items:center;gap:9px;width:100%;padding:9px 12px;border:none;border-radius:8px;
+  background:none;color:var(--text);font-family:inherit;font-size:13px;font-weight:500;cursor:pointer;
+  text-align:left;transition:.12s;position:relative;z-index:1}
+.fsel-opt:hover{background:var(--hover)}
+.fsel-opt.sel{color:var(--acc-txt);font-weight:600}
+.fsel-opt.sel::after{content:'✓';margin-left:auto;font-weight:700}
+
+/* ═══ TABS ═══ */
+.tabs{display:flex;gap:22px;align-self:stretch;align-items:stretch;margin-left:6px}
+.tab{position:relative;display:inline-flex;align-items:center;padding:0 2px;border:none;background:none;
+  color:var(--text-2);font-family:inherit;font-size:13.5px;font-weight:600;cursor:pointer;
+  transition:color .15s;white-space:nowrap}
+.tab::after{content:'';position:absolute;left:0;right:0;bottom:-15px;height:2.5px;border-radius:3px 3px 0 0;
+  background:var(--acc);box-shadow:0 0 10px var(--glow);
+  transform:scaleX(0);transform-origin:center;transition:transform .22s}
+.tab:hover{color:var(--text)}
+.tab.on{color:var(--acc-txt)}
+.tab.on::after{transform:scaleX(1)}
+.tab .t-count{font-size:10.5px;font-weight:700;margin-left:5px;opacity:.6}
+
+/* ═══ TABLA ═══ */
 .panel{border-radius:16px;overflow:hidden;display:flex;flex-direction:column}
-.panel-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 22px;
+.panel-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 22px;
   border-bottom:1px solid var(--brd);flex-wrap:wrap;position:relative;z-index:1}
 .panel-head h2{font-size:15px;font-weight:700}
 .table-wrap{position:relative;z-index:1}
@@ -248,10 +354,13 @@ td{padding:15px 20px;border-bottom:1px solid var(--brd);vertical-align:middle}
 tbody tr{transition:background .12s}
 tbody tr:hover{background:var(--hover)}
 tbody tr:last-child td{border-bottom:none}
+tbody tr.selected{background:var(--acc-soft)}
+th.c-chk,td.c-chk{width:44px}
 th.c-id,td.c-id{width:90px}
 th.c-prods,td.c-prods{width:100px}
 th.c-state,td.c-state{width:120px}
 th.c-actions,td.c-actions{width:56px;text-align:right}
+td.c-chk input,th.c-chk input{width:16px;height:16px;accent-color:var(--acc-strong);cursor:pointer;display:block}
 .id-cell{font-family:ui-monospace,monospace;font-size:12px;color:var(--text-2)}
 .cell-name{min-width:0}
 .cell-name b{font-weight:600;display:block}
@@ -259,17 +368,21 @@ th.c-actions,td.c-actions{width:56px;text-align:right}
   overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:420px}
 .qty{font-weight:600;font-size:13.5px}
 
-/* ═══ PÍLDORAS ═══ */
-.status{display:inline-flex;align-items:center;font-size:12px;font-weight:600;letter-spacing:.01em;
-  padding:4.5px 13px;border-radius:8px;
+/* ═══ SKELETON ═══ */
+.skel{border-radius:7px;height:13px;
+  background:linear-gradient(90deg,var(--hover) 25%,var(--brd-2) 50%,var(--hover) 75%);
+  background-size:200% 100%;animation:skel 1.3s infinite linear}
+@keyframes skel{from{background-position:200% 0}to{background-position:-200% 0}}
+tr.skel-row td{padding:16px 20px}
+
+/* ═══ PÍLDORAS · compactas ═══ */
+.status{display:inline-flex;align-items:center;font-size:11.5px;font-weight:600;letter-spacing:.01em;
+  padding:3px 10px;border-radius:7px;
   background:color-mix(in srgb, currentColor 14%, transparent);
   border:1px solid color-mix(in srgb, currentColor 34%, transparent);
   box-shadow:inset 0 1px 0 hsl(0 0% 100% / .07)}
 .status.ok{color:var(--ok)}
 .status.off{color:var(--text-2)}
-.count-pill{font-size:11.5px;font-weight:700;padding:4.5px 12px;border-radius:8px;color:var(--acc-txt);
-  background:color-mix(in srgb, var(--acc) 14%, transparent);
-  border:1px solid color-mix(in srgb, var(--acc) 32%, transparent)}
 
 .row-actions{position:relative;display:inline-block}
 .kebab{width:31px;height:31px;border-radius:8px;border:1px solid transparent;background:none;color:var(--text-2);
@@ -306,20 +419,36 @@ th.c-actions,td.c-actions{width:56px;text-align:right}
 .pager button:disabled{opacity:.4;cursor:not-allowed}
 .pager button.on{background:var(--acc-strong);color:#fff;border-color:transparent;box-shadow:0 0 10px var(--glow)}
 
-/* ═══ VISTA FORMULARIO · full ancho + grid flexible 1–4 columnas ═══ */
+/* ═══ BULKBAR ═══ */
+.bulkbar{position:fixed;left:50%;bottom:26px;transform:translate(-50%,90px);z-index:120;
+  display:flex;align-items:center;gap:8px;padding:10px 12px;border-radius:15px;
+  transition:transform .28s cubic-bezier(.2,.9,.3,1.1);max-width:calc(100vw - 32px)}
+.bulkbar.show{transform:translate(-50%,0)}
+.bulk-count{font-size:13px;font-weight:700;color:var(--acc-txt);padding:0 6px;white-space:nowrap}
+.bulkbar .sep-v{width:1px;height:22px;background:var(--brd);margin:0 2px}
+@media(max-width:640px){.bulkbar{flex-wrap:wrap;justify-content:center}}
+
+/* ═══ 404 ═══ */
+.error-view{display:flex;flex-direction:column;align-items:center;text-align:center;
+  padding:90px 20px 60px;max-width:480px;margin:0 auto;position:relative;z-index:1}
+.error-view .fig{width:88px;height:88px;border-radius:24px;display:grid;place-items:center;margin-bottom:24px;
+  background:var(--acc-soft);color:var(--acc-txt);border:1px solid var(--acc-soft)}
+.error-view .fig svg{width:40px;height:40px}
+.error-view h1{font-size:26px;letter-spacing:-.03em;font-weight:800;margin-bottom:10px}
+.error-view p{font-size:14px;color:var(--text-2);margin-bottom:28px;max-width:360px;line-height:1.6}
+.error-actions{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
+
+/* ═══ FORM ═══ */
 .form-panel{padding:28px 30px;position:relative;z-index:1}
-/* Grid base de 4 columnas: cada campo elige su ancho con fw-1/2/3/full */
 .form-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0 20px}
 .fw-1{grid-column:span 1}
 .fw-2{grid-column:span 2}
 .fw-3{grid-column:span 3}
 .fw-full{grid-column:1 / -1}
-/* Tablet: 4 → 2 columnas (los fw-3 se acomodan a 2) */
 @media(max-width:1000px){
   .form-grid{grid-template-columns:repeat(2,1fr)}
   .fw-3{grid-column:span 2}
 }
-/* Móvil: 2 → 1 columna */
 @media(max-width:640px){
   .form-grid{grid-template-columns:1fr}
   .fw-1,.fw-2,.fw-3{grid-column:1 / -1}
@@ -339,12 +468,22 @@ th.c-actions,td.c-actions{width:56px;text-align:right}
 .err-msg svg{width:13px;height:13px}
 .hint{font-size:12px;color:var(--text-2);margin-top:7px}
 
-.radio-group{display:flex;gap:10px;flex-wrap:wrap}
-.radio-pill{padding:10px 18px;border-radius:11px;border:1px solid var(--brd-2);font-size:13px;font-weight:500;
-  cursor:pointer;background:var(--field);transition:.15s;display:flex;align-items:center;gap:9px;color:var(--text)}
-.radio-pill input{accent-color:var(--acc-strong);cursor:pointer}
-.radio-pill:has(input:checked){border-color:var(--acc);background:var(--acc-soft);color:var(--acc-txt);
-  box-shadow:0 0 0 3px var(--ring);font-weight:600}
+/* ═══ SWITCH ═══ */
+.field .switch-row{display:inline-flex;align-items:center;gap:10px;margin:0;padding:6px 0;
+  font-size:13.5px;font-weight:400;cursor:pointer;user-select:none;width:fit-content}
+input.switch{appearance:none;-webkit-appearance:none;margin:0;flex-shrink:0;display:inline-block;
+  width:40px;height:22px;border-radius:999px;border:none;position:relative;cursor:pointer;
+  background:hsl(0 0% 50% / .4);transition:background .2s,box-shadow .2s;outline:none}
+html[data-theme="dark"] input.switch{background:hsl(0 0% 100% / .18)}
+input.switch::after{content:'';position:absolute;top:3px;left:3px;width:16px;height:16px;
+  border-radius:50%;background:#fff;box-shadow:0 1px 3px rgb(0 0 0/.35);transition:transform .2s}
+input.switch:checked{background:var(--acc-strong);box-shadow:0 0 12px var(--glow)}
+input.switch:checked::after{transform:translateX(18px)}
+input.switch:focus-visible{box-shadow:0 0 0 3px var(--ring),0 0 12px var(--glow)}
+.switch-state{font-size:13.5px;font-weight:500;color:var(--text-2);transition:color .2s}
+.switch-state::before{content:'Inactivo'}
+input.switch:checked ~ .switch-state{color:var(--text);font-weight:600}
+input.switch:checked ~ .switch-state::before{content:'Activo'}
 
 .form-sep{height:1px;background:var(--brd);margin:24px -30px}
 .form-actions{display:flex;gap:12px;align-items:center}
@@ -363,24 +502,109 @@ th.c-actions,td.c-actions{width:56px;text-align:right}
 .modal-foot{display:flex;gap:10px;justify-content:flex-end;margin-top:4px;position:relative;z-index:1}
 
 /* ═══ TOASTS ═══ */
-.toasts{position:fixed;bottom:22px;right:22px;z-index:300;display:flex;flex-direction:column;gap:10px;max-width:350px}
-.toast{display:flex;gap:12px;padding:14px 15px;border-radius:13px;align-items:flex-start;position:relative;overflow:hidden;
-  animation:tIn .28s cubic-bezier(.2,.9,.3,1.15)}
+.toasts{position:fixed;bottom:22px;right:22px;z-index:300;display:flex;flex-direction:column;gap:12px;max-width:400px}
+.toast{display:flex;gap:13px;padding:15px 16px 17px 20px;border-radius:14px;align-items:flex-start;
+  position:relative;overflow:hidden;
+  animation:tIn .32s cubic-bezier(.2,.9,.3,1.15)}
 .toast.out{animation:tOut .22s forwards}
-@keyframes tIn{from{opacity:0;transform:translateX(50px)}to{opacity:1;transform:none}}
-@keyframes tOut{to{opacity:0;transform:translateX(50px)}}
-.toast svg{width:17px;height:17px;flex-shrink:0;margin-top:1px;position:relative;z-index:1}
-.toast b{font-size:13px;display:block;margin-bottom:2px;position:relative;z-index:1}
-.toast p{font-size:12.5px;color:var(--text-2);line-height:1.45;position:relative;z-index:1}
-.toast .x{margin-left:auto;background:none;border:none;color:var(--text-2);cursor:pointer;padding:2px;font-size:12px;position:relative;z-index:1}
-.toast .bar{position:absolute;left:0;bottom:0;height:2.5px;width:100%;transform-origin:left;animation:bar 3.5s linear forwards;z-index:1}
+@keyframes tIn{from{opacity:0;transform:translateX(70px) scale(.96)}to{opacity:1;transform:none}}
+@keyframes tOut{to{opacity:0;transform:translateX(70px)}}
+.toast::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;background:currentColor}
+.toast .ic{width:36px;height:36px;border-radius:11px;display:grid;place-items:center;flex-shrink:0;
+  background:color-mix(in srgb, currentColor 16%, transparent);
+  border:1px solid color-mix(in srgb, currentColor 32%, transparent);
+  position:relative;z-index:1}
+.toast .ic svg{width:19px;height:19px}
+.toast b{font-size:14px;display:block;margin-bottom:3px;position:relative;z-index:1;letter-spacing:-.01em}
+.toast p{font-size:13px;color:var(--text);opacity:.75;line-height:1.5;position:relative;z-index:1}
+.toast .x{margin-left:auto;background:none;border:none;color:var(--text-2);cursor:pointer;
+  padding:2px 4px;font-size:13px;position:relative;z-index:1;border-radius:6px;transition:.12s}
+.toast .x:hover{color:var(--text);background:var(--hover)}
+.toast .bar{position:absolute;left:4px;right:0;bottom:0;height:3px;width:auto;transform-origin:left;
+  animation:bar 4s linear forwards;z-index:1;opacity:.85}
 @keyframes bar{from{transform:scaleX(1)}to{transform:scaleX(0)}}
-.toast.ok svg,.toast.ok .bar{color:var(--ok);background:var(--ok)}
-.toast.err svg,.toast.err .bar{color:var(--danger);background:var(--danger)}
-.toast.info svg,.toast.info .bar{color:var(--acc);background:var(--acc)}
+.toast.ok{color:var(--ok);background:color-mix(in srgb, var(--ok) 9%, var(--panel-2));
+  border:1px solid color-mix(in srgb, var(--ok) 30%, transparent)}
+.toast.err{color:var(--danger);background:color-mix(in srgb, var(--danger) 9%, var(--panel-2));
+  border:1px solid color-mix(in srgb, var(--danger) 30%, transparent)}
+.toast.warn{color:var(--warn);background:color-mix(in srgb, var(--warn) 9%, var(--panel-2));
+  border:1px solid color-mix(in srgb, var(--warn) 30%, transparent)}
+.toast.info{color:var(--acc);background:color-mix(in srgb, var(--acc) 9%, var(--panel-2));
+  border:1px solid color-mix(in srgb, var(--acc) 30%, transparent)}
 
 .scrim{position:fixed;inset:0;z-index:55;background:rgb(0 0 0/.5);opacity:0;pointer-events:none;transition:.3s}
 .scrim.show{opacity:1;pointer-events:auto}
+
+/* ═══════════════════════════════════════════════
+   DASHBOARD · compacto, glass denso, línea SVG
+   ═══════════════════════════════════════════════ */
+.dash-grid{display:grid;grid-template-columns:repeat(12,1fr);gap:14px;margin-bottom:14px}
+.dash-card{border-radius:16px;padding:16px 18px;position:relative;overflow:hidden;
+  display:flex;flex-direction:column;gap:9px;transition:transform .2s,border-color .2s}
+.dash-card:hover{border-color:var(--acc);transform:translateY(-2px)}
+.dc-3{grid-column:span 3}
+.dc-4{grid-column:span 4}
+.dc-8{grid-column:span 8}
+.dc-12{grid-column:span 12}
+@media(max-width:1100px){
+  .dc-3{grid-column:span 6}
+  .dc-8{grid-column:span 12}
+}
+@media(max-width:640px){
+  .dash-grid{gap:11px}
+  .dc-3,.dc-4,.dc-8,.dc-12{grid-column:span 12}
+  .dash-card{padding:14px 16px}
+}
+
+/* KPI compacto: chip gradiente + label + valor + delta */
+.metric .ic{width:38px;height:38px;border-radius:11px;display:grid;place-items:center;color:#fff;
+  background:linear-gradient(135deg,var(--acc),var(--acc-strong));
+  box-shadow:0 0 14px var(--glow),inset 0 1px 0 hsl(0 0% 100%/.3)}
+.metric .ic svg{width:18px;height:18px}
+.metric .lbl{font-size:12px;color:var(--text-2);font-weight:500}
+.metric .val{font-size:22px;font-weight:800;letter-spacing:-.02em;line-height:1.1}
+.metric-foot{display:flex;align-items:center;gap:7px;font-size:11.5px;color:var(--text-2)}
+.delta{font-size:10.5px;font-weight:700;padding:2.5px 8px;border-radius:999px}
+.delta.up{background:var(--ok-bg);color:var(--ok)}
+.delta.down{background:var(--danger-bg);color:var(--danger)}
+.delta.flat{background:var(--hover);color:var(--text-2)}
+
+/* Gráfico de LÍNEA estilo glass */
+.chart-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.chart-head h3{font-size:14.5px;font-weight:700;letter-spacing:-.01em}
+.chart-head .hint{font-size:12px;color:var(--text-2)}
+.chart-value{font-size:24px;font-weight:800;letter-spacing:-.02em;line-height:1.2}
+.chart-value small{font-size:13px;font-weight:600;color:var(--text-2)}
+.chart-box{position:relative;flex:1;min-height:170px}
+.linechart{position:absolute;inset:0;width:100%;height:100%}
+.chart-line{fill:none;stroke:var(--acc);stroke-width:2.5;
+  stroke-linecap:round;stroke-linejoin:round;
+  filter:drop-shadow(0 4px 10px var(--glow))}
+.chart-grid-l{stroke:var(--brd);stroke-width:1;stroke-dasharray:3 5}
+.chart-dot{width:12px;height:12px;border-radius:50%;position:absolute;
+  transform:translate(-50%,-50%);cursor:pointer}
+.chart-dot:hover::after{content:'';position:absolute;inset:2px;border-radius:50%;
+  background:var(--acc);box-shadow:0 0 10px var(--glow)}
+.chart-xlabels{display:flex;justify-content:space-between;padding:8px 4px 0;font-size:10.5px;color:var(--text-2);font-weight:500}
+
+/* Actividades + top categorías */
+.acts{list-style:none;display:flex;flex-direction:column;gap:12px}
+.acts li{display:flex;align-items:center;gap:11px;font-size:12.5px}
+.acts li.wrap{flex-wrap:wrap}
+.acts li.wrap .txt{flex:1;min-width:130px}
+.dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;
+  background:var(--acc);box-shadow:0 0 8px var(--glow)}
+.dot.alt{background:var(--acc-txt)}
+.acts time{margin-left:auto;font-size:10.5px;color:var(--text-2);white-space:nowrap}
+
+.top-cats{list-style:none;display:flex;flex-direction:column;gap:12px}
+.top-cats li{display:flex;flex-direction:column;gap:6px}
+.top-cats .tc-row{display:flex;align-items:center;gap:10px;font-size:12.5px;font-weight:500}
+.top-cats .tc-row .n{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.top-cats .tc-row .v{color:var(--text-2);font-size:11.5px;font-weight:600}
+.progress{height:5px;border-radius:99px;background:var(--hover);overflow:hidden}
+.progress i{display:block;height:100%;border-radius:99px;
+  background:linear-gradient(90deg,var(--acc),var(--acc-strong));box-shadow:0 0 8px var(--glow)}
 
 /* ═══ RESPONSIVE ═══ */
 @media(max-width:820px){
@@ -388,18 +612,23 @@ th.c-actions,td.c-actions{width:56px;text-align:right}
   th,td{padding:13px 14px}
   .form-panel{padding:22px 18px}
   .form-sep{margin:20px -18px}
+  .error-view{padding:60px 16px 40px}
 }
 @media(max-width:640px){
   th.c-id,td.c-id{display:none}
   th.c-state,td.c-state{display:none}
   .f-clear{margin-left:0}
-  .content{padding:22px 16px 50px}
+  .content{padding:22px 16px 80px}
   .crumbs .hide-m{display:none}
+  .toasts{left:16px;right:16px;max-width:none;bottom:88px}
+  .tabs{width:100%;justify-content:center;gap:16px;margin-left:0}
 }
 @media(max-width:900px){
-  .sidebar{transform:translateX(-105%);width:256px!important;padding:18px 13px!important}
+  .sidebar{transform:translateX(-105%);width:256px!important;padding:0 0 14px!important}
   .sidebar.open{transform:none}
+  body.collapsed .brand{padding:18px 21px 16px;justify-content:flex-start}
   body.collapsed .brand b,body.collapsed .brand small,body.collapsed .nav-label,
+  body.collapsed .nav-item span,
   body.collapsed .group-btn span,body.collapsed .sub,body.collapsed .sub-item span,
   body.collapsed .collapse-btn span,body.collapsed .chev{display:revert}
   body.collapsed .sub{display:grid}
@@ -410,53 +639,124 @@ th.c-actions,td.c-actions{width:56px;text-align:right}
 </head>
 <body>
 <div class="scrim" id="scrim"></div>
+<div class="tooltip" id="tooltip"></div>
 
 <!-- ═══ SIDEBAR ═══ -->
 <aside class="sidebar glass" id="sidebar">
-  <!-- ⚙️ Cambia nombre/logo aquí -->
   <div class="brand">
     <div class="brand-mark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6c0 5-3 8-6 8s-6-3-6-8 3-4 6-4 6-1 6 4z"/><path d="M12 14v7"/></svg></div>
     <div><b>TuMarca</b><small>PUNTO DE VENTA</small></div>
   </div>
 
-  <div class="nav-label">Operación</div>
+  <nav class="side-scroll" id="sideScroll">
+    <div class="nav-label">Operación</div>
 
-  <div class="group open">
-    <button class="group-btn" data-group>
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><path d="m3.3 7 8.7 5 8.7-5M12 22V12"/></svg>
-      <span>Inventario</span>
-      <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m6 9 6 6 6-6"/></svg>
+    <button class="nav-item active" data-view="dash">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></svg>
+      <span>Dashboard</span>
     </button>
-    <div class="sub"><div class="sub-inner">
-      <button class="sub-item active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg><span>Categorías</span></button>
-      <button class="sub-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2H2v10h10V2z"/><path d="m17 2 5 5-5 5-5-5 5-5z"/><path d="M12 12v10H2V12h10z"/></svg><span>Productos</span></button>
-    </div></div>
-  </div>
 
-  <div class="group">
-    <button class="group-btn" data-group>
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1.6"/><circle cx="19" cy="21" r="1.6"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57L23 6H5.12"/></svg>
-      <span>Ventas</span>
-      <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m6 9 6 6 6-6"/></svg>
+    <div class="group open">
+      <button class="group-btn" data-group>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><path d="m3.3 7 8.7 5 8.7-5M12 22V12"/></svg>
+        <span>Inventario</span>
+        <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m6 9 6 6 6-6"/></svg>
+      </button>
+      <div class="sub"><div class="sub-inner">
+        <button class="sub-item" data-view="cats"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg><span>Categorías</span></button>
+        <button class="sub-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2H2v10h10V2z"/><path d="m17 2 5 5-5 5-5-5 5-5z"/><path d="M12 12v10H2V12h10z"/></svg><span>Productos</span></button>
+      </div></div>
+    </div>
+
+    <div class="group">
+      <button class="group-btn" data-group>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1.6"/><circle cx="19" cy="21" r="1.6"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57L23 6H5.12"/></svg>
+        <span>Ventas</span>
+        <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m6 9 6 6 6-6"/></svg>
+      </button>
+      <div class="sub"><div class="sub-inner">
+        <button class="sub-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg><span>Punto de Venta</span></button>
+        <button class="sub-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8"/></svg><span>Facturas</span></button>
+      </div></div>
+    </div>
+
+    <div class="group">
+      <button class="group-btn" data-group>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+        <span>Compras</span>
+        <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m6 9 6 6 6-6"/></svg>
+      </button>
+      <div class="sub"><div class="sub-inner">
+        <button class="sub-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/></svg><span>Órdenes de compra</span></button>
+      </div></div>
+    </div>
+
+    <button class="nav-item" data-view="clientes">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      <span>Clientes</span>
     </button>
-    <div class="sub"><div class="sub-inner">
-      <button class="sub-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg><span>Punto de Venta</span></button>
-      <button class="sub-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8"/></svg><span>Facturas</span></button>
-    </div></div>
-  </div>
 
-  <button class="nav-item">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 3v18h18"/><path d="M7 16v-5M12 16V8M17 16v-8"/></svg>
-    <span>Reportes</span>
-  </button>
+    <div class="nav-label">Gestión</div>
 
-  <div class="nav-label">Sistema</div>
-  <button class="nav-item">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-    <span>Configuración</span>
-  </button>
+    <button class="nav-item" data-view="usuarios">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      <span>Usuarios</span>
+    </button>
 
-  <button class="collapse-btn" id="btnCollapse">
+    <button class="nav-item" data-view="empleados">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 21h20"/><path d="M6 21V7a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v14"/><path d="M10 9h.01"/><path d="M14 9h.01"/><path d="M10 13h.01"/><path d="M14 13h.01"/><path d="M10 17h.01"/><path d="M14 17h.01"/></svg>
+      <span>Empleados</span>
+    </button>
+
+    <button class="nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+      <span>Reportes</span>
+    </button>
+
+    <button class="nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="18" rx="2"/><path d="M2 9h20"/><path d="M8 14h4M8 18h7"/></svg>
+      <span>Contabilidad</span>
+    </button>
+
+    <button class="nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>
+      <span>Bancos</span>
+    </button>
+
+    <button class="nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 5c-1.5 0-2.8 1.4-3 2-3.5-1.5-11-.3-11 5 0 1.8 0 3 2 4.5V20h4v-2h3v2h4v-4c1-.5 1.7-1 2-2h2v-4h-2c0-1-.5-1.5-1-2h0V5z"/><path d="M2 9v1c0 1.1.9 2 2 2h1"/><path d="M21 11v1c0 1.1-.9 2-2 2h-1"/></svg>
+      <span>Caja / Efectivo</span>
+    </button>
+
+    <div class="nav-label">Sistema</div>
+
+    <button class="nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="21" x2="14" y1="4" y2="4"/><line x1="10" x2="3" y1="4" y2="4"/><line x1="21" x2="12" y1="12" y2="12"/><line x1="8" x2="3" y1="12" y2="12"/><line x1="21" x2="16" y1="20" y2="20"/><line x1="12" x2="3" y1="20" y2="20"/><line x1="14" x2="14" y1="2" y2="6"/><line x1="8" x2="8" y1="10" y2="14"/><line x1="16" x2="16" y1="18" y2="22"/></svg>
+      <span>Configuración</span>
+    </button>
+
+    <button class="nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+      <span>Seguridad / Accesos</span>
+    </button>
+
+    <button class="nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      <span>Soporte / Mensajes</span>
+    </button>
+
+    <button class="nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>
+      <span>Sucursales</span>
+    </button>
+
+    <button class="nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8V4H8"/><rect x="4" y="8" width="16" height="12" rx="2"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M15 13v2"/><path d="M9 13v2"/></svg>
+      <span>Integraciones / APIs</span>
+    </button>
+  </nav>
+
+  <button class="collapse-btn" id="btnCollapse" data-tip="Colapsar / expandir menú">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m11 17-5-5 5-5M18 17l-5-5 5-5"/></svg>
     <span>Colapsar</span>
   </button>
@@ -465,77 +765,231 @@ th.c-actions,td.c-actions{width:56px;text-align:right}
 <!-- ═══ MAIN ═══ -->
 <div class="main">
   <header class="topbar">
-    <button class="icon-btn" id="btnSide" title="Mostrar / ocultar menú">
+    <button class="icon-btn" id="btnSide" data-tip="Mostrar / ocultar menú">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
     </button>
     <nav class="crumbs">
       <span class="hide-m">TuMarca</span><span class="sep hide-m">/</span>
-      <span class="hide-m">Inventario</span><span class="sep hide-m">/</span>
-      <b id="crumbHere">Categorías</b>
+      <span class="hide-m" id="crumbSec" style="display:none">Inicio</span><span class="sep hide-m" style="display:none">/</span>
+      <b id="crumbHere">Dashboard</b>
     </nav>
 
-    <!-- 🎨 Paleta: 8 colores (4×2) + gotero — Turquesa incluido -->
-    <div class="palette-wrap">
-      <button class="palette-btn" id="btnPalette" title="Paleta de colores"></button>
-      <div class="palette-pop glass-deep" id="palettePop">
-        <h4>Color del sistema</h4>
-        <div class="palette-grid" id="swatches">
-          <!-- Fila 1 -->
-          <div class="swatch" data-h="350" data-s="68" style="background:hsl(350 68% 58%)" title="Rojo cereza"></div>
-          <div class="swatch" data-h="38"  data-s="92" style="background:hsl(38 92% 50%)"  title="Ámbar"></div>
-          <div class="swatch active" data-h="160" data-s="84" style="background:hsl(160 84% 45%)" title="Esmeralda"></div>
-          <div class="swatch" data-h="183" data-s="72" style="background:hsl(183 72% 46%)" title="Turquesa"></div>
-          <!-- Fila 2 -->
-          <div class="swatch" data-h="212" data-s="90" style="background:hsl(212 90% 52%)" title="Azul"></div>
-          <div class="swatch" data-h="245" data-s="85" style="background:hsl(245 85% 58%)" title="Índigo"></div>
-          <div class="swatch" data-h="275" data-s="75" style="background:hsl(275 75% 56%)" title="Violeta"></div>
-          <div class="swatch" data-h="320" data-s="58" style="background:hsl(320 58% 55%)" title="Magenta"></div>
+    <div class="notif-wrap">
+      <button class="icon-btn" id="btnNotif" data-tip="Notificaciones">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg>
+        <span class="ping" id="notifPing"></span>
+      </button>
+      <div class="notif-menu glass-deep" id="notifMenu">
+        <div class="n-head">
+          <b>Notificaciones</b>
+          <button class="n-mark" id="btnMarkAll">Marcar todas como leídas</button>
         </div>
-        <div class="custom-row">
-          <div class="custom-swatch"><input type="color" id="customColor" value="#10b981" title="Elegir cualquier color"></div>
-          <span>Personalizado — elige cualquier color</span>
+        <ul class="n-list" id="notifList"></ul>
+        <div class="n-empty" id="notifEmpty">
+          <div class="fig"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg></div>
+          <b>Todo al día</b>
+          <p>No tienes notificaciones nuevas en este momento.</p>
         </div>
       </div>
     </div>
 
-    <button class="icon-btn" id="btnTheme" title="Cambiar tema">
+    <button class="icon-btn" id="btnTheme" data-tip="Cambiar tema">
       <svg id="icoSun" style="display:none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
       <svg id="icoMoon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
     </button>
 
-    <button class="avatar-btn" title="Usuario">AR</button>
+    <div class="user-wrap">
+      <button class="avatar-btn" id="avatarBtn" data-tip="Cuenta">AR</button>
+      <div class="user-menu glass-deep" id="userMenu">
+        <div class="u-head">
+          <div class="u-avatar">AR</div>
+          <div class="u-info">
+            <b>Alex Rivera</b>
+            <span>alex@tumarca.io</span>
+          </div>
+        </div>
+
+        <div class="u-sep"></div>
+        <button class="u-item" data-action="perfil">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          Mi perfil
+        </button>
+        <button class="u-item" data-action="preferencias">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+          Preferencias
+        </button>
+        <button class="u-item" data-action="notificaciones">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg>
+          Notificaciones
+          <span class="badge" id="userBadge">3</span>
+        </button>
+
+        <div class="u-sep"></div>
+        <div class="u-colors">
+          <div class="u-colors-label">Color del sistema</div>
+          <div class="u-swatches" id="swatches">
+            <div class="swatch" data-h="350" data-s="68" data-tip="Rojo cereza" style="background:hsl(350 68% 58%)"></div>
+            <div class="swatch" data-h="38"  data-s="92" data-tip="Ámbar" style="background:hsl(38 92% 50%)"></div>
+            <div class="swatch active" data-h="160" data-s="84" data-tip="Esmeralda" style="background:hsl(160 84% 45%)"></div>
+            <div class="swatch" data-h="212" data-s="90" data-tip="Azul" style="background:hsl(212 90% 52%)"></div>
+            <div class="swatch" data-h="245" data-s="85" data-tip="Índigo" style="background:hsl(245 85% 58%)"></div>
+            <div class="swatch" data-h="320" data-s="58" data-tip="Magenta" style="background:hsl(320 58% 55%)"></div>
+            <label class="u-custom" data-tip="Elegir cualquier color">
+              <input type="color" id="customColor" value="#10b981">
+            </label>
+          </div>
+        </div>
+
+        <div class="u-sep"></div>
+        <button class="u-item danger" data-action="logout">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></svg>
+          Cerrar sesión
+        </button>
+      </div>
+    </div>
   </header>
 
   <main class="content">
 
-    <!-- ═══════════ VISTA 1: LISTADO ═══════════ -->
-    <div id="viewList">
+    <!-- ═══════════ VISTA: DASHBOARD ═══════════ -->
+    <div id="viewDash">
       <div class="page-head">
         <div>
-          <h1>Categorías</h1>
-          <p>Organiza tu inventario agrupando productos por categoría.</p>
+          <h1>Dashboard</h1>
+          <p>Resumen general de tu operación. Datos en vivo desde los módulos.</p>
+        </div>
+        <!-- Select custom de periodo -->
+        <div class="fsel" id="fsRange">
+          <button class="fsel-btn" data-fsel>
+            <span class="fsel-lbl">Últimos 7 días</span>
+            <svg class="fsel-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m6 9 6 6 6-6"/></svg>
+          </button>
+          <div class="fsel-menu glass-deep">
+            <button class="fsel-opt sel" data-val="7">Últimos 7 días</button>
+            <button class="fsel-opt" data-val="14">Últimas 2 semanas</button>
+            <button class="fsel-opt" data-val="30">Último mes</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- FILA 1: 4 KPIs -->
+      <div class="dash-grid">
+        <div class="dash-card glass dc-3 metric">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1.6"/><circle cx="19" cy="21" r="1.6"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57L23 6H5.12"/></svg></div>
+          <span class="lbl">Ventas del periodo</span>
+          <strong class="val" id="mVentas">$0</strong>
+          <div class="metric-foot"><span class="delta up" id="mVentasDelta">↗ +12.4%</span><span>vs. anterior</span></div>
+        </div>
+
+        <div class="dash-card glass dc-3 metric">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+          <span class="lbl">Clientes activos</span>
+          <strong class="val" id="mClientes">0</strong>
+          <div class="metric-foot"><span class="delta up">↗ +3.1%</span><span>de <b id="mClientesTot">0</b></span></div>
+        </div>
+
+        <div class="dash-card glass dc-3 metric">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><path d="m3.3 7 8.7 5 8.7-5M12 22V12"/></svg></div>
+          <span class="lbl">Productos totales</span>
+          <strong class="val" id="mProds">0</strong>
+          <div class="metric-foot"><span class="delta flat">— estable</span><span>en <b id="mCats">0</b> categorías</span></div>
+        </div>
+
+        <div class="dash-card glass dc-3 metric">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+          <span class="lbl">Usuarios del sistema</span>
+          <strong class="val" id="mUsers">0</strong>
+          <div class="metric-foot"><span class="delta up">↗ +1</span><span><b id="mUsersOn">0</b> activos</span></div>
+        </div>
+      </div>
+
+      <!-- FILA 2: GRÁFICO DE LÍNEA + ACTIVIDAD -->
+      <div class="dash-grid">
+        <div class="dash-card glass dc-8">
+          <div class="chart-head">
+            <div>
+              <h3>Ingresos por día</h3>
+              <span class="hint">Ventas simuladas del periodo seleccionado</span>
+            </div>
+            <div style="text-align:right">
+              <div class="chart-value" id="chartTotal">$0</div>
+              <span class="delta up" id="chartDelta">↗ +8.2%</span>
+            </div>
+          </div>
+          <div class="chart-box">
+            <svg class="linechart" viewBox="0 0 600 170" preserveAspectRatio="none">
+              <defs>
+                <linearGradient id="areaG" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0" style="stop-color:var(--acc)" stop-opacity=".35"/>
+                  <stop offset="1" style="stop-color:var(--acc)" stop-opacity="0"/>
+                </linearGradient>
+              </defs>
+              <g id="chartGrid"></g>
+              <path id="areaPath" fill="url(#areaG)"/>
+              <path id="linePath" class="chart-line"/>
+            </svg>
+            <div id="chartDots" style="position:absolute;inset:0"></div>
+          </div>
+          <div class="chart-xlabels" id="chartXLabels"></div>
+        </div>
+
+        <div class="dash-card glass dc-4">
+          <div class="chart-head">
+            <h3>Actividad reciente</h3>
+            <span class="hint">Hoy</span>
+          </div>
+          <ul class="acts">
+            <li><span class="dot"></span><span class="txt wrap">Ana publicó el informe trimestral</span><time>hace 2 min</time></li>
+            <li><span class="dot alt"></span><span class="txt wrap">Nuevo despliegue en producción</span><time>hace 18 min</time></li>
+            <li><span class="dot"></span><span class="txt wrap">Carlos comentó en el diseño v3</span><time>hace 1 h</time></li>
+            <li><span class="dot alt"></span><span class="txt wrap">Backup completado sin errores</span><time>hace 3 h</time></li>
+            <li><span class="dot"></span><span class="txt wrap">Se registró la venta #0248</span><time>hace 4 h</time></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- FILA 3: TOP CATEGORÍAS -->
+      <div class="dash-grid">
+        <div class="dash-card glass dc-12">
+          <div class="chart-head">
+            <h3>Top categorías por productos</h3>
+            <span class="hint">Distribución del inventario</span>
+          </div>
+          <ul class="top-cats" id="topCats" style="margin-top:6px"></ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════ VISTA: LISTADO ═══════════ -->
+    <div id="viewList" hidden>
+      <div class="page-head">
+        <div>
+          <h1 id="listTitle">Categorías</h1>
+          <p id="listDesc">Organiza tu inventario agrupando productos por categoría.</p>
         </div>
         <button class="btn btn-primary" onclick="showForm()">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
-          Nueva Categoría
+          <span id="btnNew">Nueva Categoría</span>
         </button>
       </div>
 
       <div class="filters glass">
         <div class="f-search">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
-          <input id="inpSearch" placeholder="Buscar por nombre o descripción…"><kbd>/</kbd>
+          <input id="inpSearch" placeholder="Buscar…"><kbd>/</kbd>
         </div>
-        <select class="f-select" id="fState" title="Filtrar por estado">
-          <option value="all">Todos los estados</option>
-          <option value="ok">Activas</option>
-          <option value="off">Inactivas</option>
-        </select>
-        <select class="f-select" id="fOrder" title="Ordenar">
-          <option value="default">Orden por defecto</option>
-          <option value="name">Nombre (A–Z)</option>
-          <option value="prods">Más productos</option>
-        </select>
+        <!-- Select custom de orden -->
+        <div class="fsel" id="fsOrder">
+          <button class="fsel-btn" data-fsel>
+            <span class="fsel-lbl">Orden por defecto</span>
+            <svg class="fsel-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m6 9 6 6 6-6"/></svg>
+          </button>
+          <div class="fsel-menu glass-deep">
+            <button class="fsel-opt sel" data-val="default">Orden por defecto</button>
+            <button class="fsel-opt" data-val="name">Nombre (A–Z)</button>
+            <button class="fsel-opt" data-val="prods">Más registros</button>
+          </div>
+        </div>
         <button class="btn btn-ghost btn-sm f-clear" id="btnClear" hidden>
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
           Limpiar filtros
@@ -544,16 +998,23 @@ th.c-actions,td.c-actions{width:56px;text-align:right}
 
       <div class="panel glass">
         <div class="panel-head">
-          <h2>Listado de categorías</h2>
-          <span class="count-pill" id="pillCount">0 registros</span>
+          <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+            <h2 id="panelTitle">Listado</h2>
+            <div class="tabs" id="listTabs">
+              <button class="tab on" data-tab="all">Todas<span class="t-count" id="tcAll">0</span></button>
+              <button class="tab" data-tab="ok">Activas<span class="t-count" id="tcOk">0</span></button>
+              <button class="tab" data-tab="off">Inactivas<span class="t-count" id="tcOff">0</span></button>
+            </div>
+          </div>
         </div>
 
         <div class="table-wrap">
           <table>
             <thead><tr>
+              <th class="c-chk"><input type="checkbox" id="chkAll" data-tip="Seleccionar todo"></th>
               <th class="c-id">ID</th>
               <th>Nombre</th>
-              <th class="c-prods">Productos</th>
+              <th class="c-prods" id="thCol">Registros</th>
               <th class="c-state">Estado</th>
               <th class="c-actions">Acciones</th>
             </tr></thead>
@@ -563,9 +1024,9 @@ th.c-actions,td.c-actions{width:56px;text-align:right}
 
         <div class="empty" id="emptyBox">
           <div class="fig"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><path d="m3.3 7 8.7 5 8.7-5M12 22V12"/></svg></div>
-          <h3 id="emptyTitle">No hay categorías creadas aún</h3>
-          <p id="emptyMsg">Crea tu primera categoría para comenzar a organizar los productos de tu inventario.</p>
-          <button class="btn btn-primary" onclick="showForm()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>Crear la primera</button>
+          <h3 id="emptyTitle">No hay registros aún</h3>
+          <p id="emptyMsg">Crea el primero para comenzar.</p>
+          <button class="btn btn-primary" onclick="showForm()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>Crear el primero</button>
         </div>
 
         <div class="panel-foot">
@@ -575,22 +1036,21 @@ th.c-actions,td.c-actions{width:56px;text-align:right}
       </div>
     </div>
 
-    <!-- ═══════════ VISTA 2: FORMULARIO · full ancho + grid flexible ═══════════ -->
+    <!-- ═══════════ VISTA: FORMULARIO ═══════════ -->
     <div id="viewForm" hidden>
       <button class="btn-back" id="btnBack">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
-        Volver a categorías
+        Volver
       </button>
       <div class="page-head">
         <div>
-          <h1 id="formTitle">Nueva categoría</h1>
-          <p id="formSub">Las categorías agrupan productos con características comunes.</p>
+          <h1 id="formTitle">Nuevo registro</h1>
+          <p id="formSub">Descripción del formulario.</p>
         </div>
       </div>
 
       <div class="panel glass form-panel">
         <div class="form-grid">
-          <!-- fw-2 = mitad del ancho · fw-full = todo el ancho · fw-1 = un cuarto -->
           <div class="field fw-2">
             <label for="fName">Nombre</label>
             <input class="input" id="fName" placeholder="Ej. Bebidas" maxlength="60">
@@ -601,18 +1061,22 @@ th.c-actions,td.c-actions{width:56px;text-align:right}
           </div>
 
           <div class="field fw-2">
-            <label>Estado</label>
-            <div class="radio-group">
-              <label class="radio-pill"><input type="radio" name="fSt" value="ok" checked> Activa</label>
-              <label class="radio-pill"><input type="radio" name="fSt" value="off"> Inactiva</label>
-            </div>
-            <div class="hint">Las inactivas no se ofrecen al crear nuevos productos.</div>
+            <label for="fEmail">Correo <span class="opt">(según módulo)</span></label>
+            <input class="input" id="fEmail" type="email" placeholder="correo@ejemplo.com">
+            <div class="hint">Visible en módulos de personas; se ignora en otros.</div>
+          </div>
+
+          <div class="field fw-2">
+            <label for="fActive">Estado</label>
+            <label class="switch-row">
+              <input type="checkbox" id="fActive" class="switch" checked>
+              <span class="switch-state"></span>
+            </label>
           </div>
 
           <div class="field fw-full">
             <label for="fDesc">Descripción <span class="opt">(opcional)</span></label>
-            <textarea class="textarea" id="fDesc" placeholder="Breve descripción de qué tipo de productos agrupa esta categoría…"></textarea>
-            <div class="hint">Máximo 200 caracteres. Ayuda a tu equipo a entender qué va en cada categoría.</div>
+            <textarea class="textarea" id="fDesc" placeholder="Breve descripción…"></textarea>
           </div>
         </div>
 
@@ -624,7 +1088,26 @@ th.c-actions,td.c-actions{width:56px;text-align:right}
           <button class="btn btn-ghost" id="btnCancel">Cancelar</button>
           <button class="btn btn-primary" id="btnSave">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><path d="M17 21v-8H7v8M7 3v5h8"/></svg>
-            Guardar categoría
+            <span id="btnSaveTxt">Guardar</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════ VISTA: ERROR / 404 ═══════════ -->
+    <div id="viewError" hidden>
+      <div class="error-view">
+        <div class="fig"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m16.2 7.8-2 6.3-6.4 2.1 2-6.3z"/></svg></div>
+        <h1 id="errTitle">Sección no disponible</h1>
+        <p id="errMsg">Esta sección del prototipo aún no tiene una vista implementada.</p>
+        <div class="error-actions">
+          <button class="btn btn-ghost" id="btnRetry">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M3 21v-5h5"/></svg>
+            Reintentar
+          </button>
+          <button class="btn btn-primary" id="btnErrHome">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/></svg>
+            Volver al inicio
           </button>
         </div>
       </div>
@@ -633,11 +1116,21 @@ th.c-actions,td.c-actions{width:56px;text-align:right}
   </main>
 </div>
 
-<!-- ═══ MODAL: confirmación de borrado ═══ -->
+<div class="bulkbar glass-deep" id="bulkbar">
+  <span class="bulk-count" id="bulkCount">0 seleccionados</span>
+  <span class="sep-v"></span>
+  <button class="btn btn-ghost btn-sm" id="bulkActivate">Activar</button>
+  <button class="btn btn-ghost btn-sm" id="bulkDeactivate">Desactivar</button>
+  <button class="btn btn-danger btn-sm" id="bulkDelete">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/></svg>
+    Eliminar
+  </button>
+</div>
+
 <div class="ov" id="ovDel">
   <div class="modal glass-deep">
-    <h3>Eliminar categoría</h3>
-    <p class="sub-t">¿Seguro que deseas eliminar <b id="delName" style="color:var(--text)"></b>? Esta acción no se puede deshacer.</p>
+    <h3 id="delTitle">Eliminar registro</h3>
+    <p class="sub-t" id="delSub">¿Seguro? Esta acción no se puede deshacer.</p>
     <div class="modal-foot">
       <button class="btn btn-ghost" onclick="closeOv(ovDel)">Cancelar</button>
       <button class="btn btn-danger" id="btnDel">Sí, eliminar</button>
@@ -648,8 +1141,8 @@ th.c-actions,td.c-actions{width:56px;text-align:right}
 <div class="toasts" id="toasts"></div>
 
 <script>
-/* ═══ PERSISTENCIA ═══ */
-const PREFS_KEY='ui-prefs',root=document.documentElement;
+/* ═══ PERSISTENCIA (v2) ═══ */
+const PREFS_KEY='ui-prefs-v2',root=document.documentElement;
 let curH=parseFloat(getComputedStyle(root).getPropertyValue('--h'))||160;
 let curS=parseFloat(getComputedStyle(root).getPropertyValue('--s'))||84;
 function persist(){try{localStorage.setItem(PREFS_KEY,JSON.stringify({theme:root.dataset.theme,h:curH,s:curS}))}catch(e){}}
@@ -675,18 +1168,66 @@ function applyStrong(){
 }
 applyStrong();
 
-/* ── Datos demo ── */
-let cats=[
-  {id:'CAT-001',name:'Bebidas',       desc:'Gaseosas, jugos, aguas y energizantes', prods:48, st:'ok'},
-  {id:'CAT-002',name:'Lácteos',       desc:'Leche, quesos, yogures y mantequillas', prods:32, st:'ok'},
-  {id:'CAT-003',name:'Panadería',     desc:'Pan fresco, bollería y pasteles',       prods:21, st:'ok'},
-  {id:'CAT-004',name:'Aseo del hogar',desc:'Detergentes, jabones y limpiadores',    prods:27, st:'ok'},
-  {id:'CAT-005',name:'Snacks',        desc:'Papas, galletas, chocolates y dulces',  prods:39, st:'off'},
-  {id:'CAT-006',name:'Carnes y fríos',desc:'Cortes frescos, embutidos y congelados',prods:18, st:'ok'},
-  {id:'CAT-007',name:'Frutas y verduras',desc:'Producción fresca de temporada',     prods:44, st:'ok'},
-  {id:'CAT-008',name:'Limpieza personal',desc:'Jabones, shampus e higiene diaria', prods:26, st:'off'},
+/* ═══ MÓDULOS ═══ */
+const MODULES={
+  cats:{
+    prefix:'CAT', sec:'Inventario', title:'Categorías', desc:'Organiza tu inventario agrupando productos por categoría.',
+    newBtn:'Nueva Categoría', colLabel:'Productos', hasEmail:false,
+    items:[
+      {id:'CAT-001',name:'Bebidas',        desc:'Gaseosas, jugos, aguas y energizantes', col:48, st:true},
+      {id:'CAT-002',name:'Lácteos',        desc:'Leche, quesos, yogures y mantequillas', col:32, st:true},
+      {id:'CAT-003',name:'Panadería',      desc:'Pan fresco, bollería y pasteles',       col:21, st:true},
+      {id:'CAT-004',name:'Aseo del hogar', desc:'Detergentes, jabones y limpiadores',    col:27, st:true},
+      {id:'CAT-005',name:'Snacks',         desc:'Papas, galletas, chocolates y dulces',  col:39, st:false},
+      {id:'CAT-006',name:'Carnes y fríos', desc:'Cortes frescos, embutidos y congelados',col:18, st:true},
+      {id:'CAT-007',name:'Frutas y verduras',desc:'Producción fresca de temporada',      col:44, st:true},
+      {id:'CAT-008',name:'Limpieza personal',desc:'Jabones, shampus e higiene diaria',   col:26, st:false},
+    ]},
+  clientes:{
+    prefix:'CLI', sec:'Operación', title:'Clientes', desc:'Administra los clientes de tu negocio y sus datos de contacto.',
+    newBtn:'Nuevo Cliente', colLabel:'Compras', hasEmail:true,
+    items:[
+      {id:'CLI-001',name:'María González',  desc:'Cliente frecuente desde 2022',   col:24, st:true, email:'maria@correo.com'},
+      {id:'CLI-002',name:'Carlos López',    desc:'Compra mensual al por mayor',    col:11, st:true, email:'carlos@correo.com'},
+      {id:'CLI-003',name:'Ana Torres',      desc:'Cliente enterprise',             col:52, st:true, email:'ana@empresa.com'},
+      {id:'CLI-004',name:'Jorge Fernández', desc:'Cuenta suspendida por mora',     col:3,  st:false,email:'jorge@correo.com'},
+      {id:'CLI-005',name:'Lucía Ramírez',   desc:'Nueva cliente este mes',         col:2,  st:true, email:'lucia@correo.com'},
+      {id:'CLI-006',name:'Pedro Sánchez',   desc:'Cliente mayorista de la zona',   col:18, st:true, email:'pedro@mayorista.com'},
+    ]},
+  usuarios:{
+    prefix:'USR', sec:'Gestión', title:'Usuarios', desc:'Gestiona las cuentas con acceso al sistema.',
+    newBtn:'Nuevo Usuario', colLabel:'Sesiones', hasEmail:true,
+    items:[
+      {id:'USR-001',name:'Alex Rivera',    desc:'Administrador del sistema',        col:214, st:true, email:'alex@tumarca.io'},
+      {id:'USR-002',name:'Carla Méndez',   desc:'Vendedora — Sucursal Centro',      col:98,  st:true, email:'carla@tumarca.io'},
+      {id:'USR-003',name:'Diego Ortiz',    desc:'Bodeguero — Almacén principal',    col:64,  st:true, email:'diego@tumarca.io'},
+      {id:'USR-004',name:'Sofía Vega',     desc:'Contadora — Acceso restringido',   col:41,  st:false,email:'sofia@tumarca.io'},
+      {id:'USR-005',name:'Miguel Ruiz',    desc:'Supervisor de ventas',             col:127, st:true, email:'miguel@tumarca.io'},
+    ]},
+  empleados:{
+    prefix:'EMP', sec:'Gestión', title:'Empleados', desc:'Registro del personal de la organización.',
+    newBtn:'Nuevo Empleado', colLabel:'Años', hasEmail:true,
+    items:[
+      {id:'EMP-001',name:'Rosa Jiménez',  desc:'Gerente general',            col:6, st:true,  email:'rosa@tumarca.io'},
+      {id:'EMP-002',name:'Luis Castro',   desc:'Jefe de almacén',            col:4, st:true,  email:'luis@tumarca.io'},
+      {id:'EMP-003',name:'Elena Paredes', desc:'Contadora senior',           col:8, st:true,  email:'elena@tumarca.io'},
+      {id:'EMP-004',name:'Tomás Herrera', desc:'Vendedor — en vacaciones',   col:2, st:false, email:'tomas@tumarca.io'},
+      {id:'EMP-005',name:'Paula Navarro', desc:'Asistente administrativa',   col:3, st:true,  email:'paula@tumarca.io'},
+      {id:'EMP-006',name:'Andrés Molina', desc:'Repartidor — turno noche',   col:1, st:true,  email:'andres@tumarca.io'},
+    ]},
+};
+let curModule='cats';
+let nextNs={};
+Object.keys(MODULES).forEach(k=>nextNs[k]=MODULES[k].items.length+1);
+
+/* ── Notificaciones ── */
+let notifs=[
+  {title:'Backup completado',   msg:'El respaldo nocturno terminó sin errores.',            time:'hace 12 min', unread:true},
+  {title:'Stock bajo',          msg:'3 productos de Bebidas están por agotarse.',           time:'hace 1 h',    unread:true},
+  {title:'Nuevo usuario',       msg:'Carla Méndez se registró en el sistema.',              time:'hace 3 h',    unread:true},
+  {title:'Factura emitida',     msg:'La factura #0248 se generó correctamente.',            time:'ayer',        unread:false},
 ];
-let nextN=9,editingId=null,deletingId=null;
+const unreadCount=()=>notifs.filter(n=>n.unread).length;
 
 /* ── Iconos de tema ── */
 const icoSun=document.getElementById('icoSun'),icoMoon=document.getElementById('icoMoon');
@@ -700,64 +1241,366 @@ document.querySelectorAll('.swatch').forEach(sw=>{
     sw.classList.add('active')}
 });
 
+/* ═══ TOOLTIP GLOBAL ═══ */
+const tipEl=document.getElementById('tooltip');
+let tipTimer=null,tipCur=null;
+function hideTip(){clearTimeout(tipTimer);tipTimer=null;tipEl.classList.remove('show','below');tipCur=null}
+document.addEventListener('mouseover',e=>{
+  const t=e.target.closest('[data-tip]');
+  if(!t||t===tipCur)return;
+  clearTimeout(tipTimer);
+  tipCur=t;
+  tipTimer=setTimeout(()=>{
+    if(tipCur!==t)return;
+    tipEl.textContent=t.dataset.tip;
+    const r=t.getBoundingClientRect();
+    const below=r.top<64;
+    tipEl.classList.toggle('below',below);
+    tipEl.style.left=(r.left+r.width/2)+'px';
+    tipEl.style.top=(below?r.bottom:r.top)+'px';
+    tipEl.classList.add('show');
+  },300);
+});
+document.addEventListener('mouseout',e=>{if(e.target.closest('[data-tip]'))hideTip()});
+document.addEventListener('click',hideTip);
+document.addEventListener('scroll',hideTip,true);
+
+/* ═══ NOTIFICACIONES ═══ */
+const btnNotif=document.getElementById('btnNotif'),
+      notifMenu=document.getElementById('notifMenu'),
+      notifList=document.getElementById('notifList'),
+      notifEmpty=document.getElementById('notifEmpty'),
+      notifPing=document.getElementById('notifPing'),
+      btnMarkAll=document.getElementById('btnMarkAll'),
+      userBadge=document.getElementById('userBadge');
+
+function syncNotifUI(){
+  const u=unreadCount();
+  notifPing.style.display=u?'block':'none';
+  userBadge.textContent=u;
+  userBadge.classList.toggle('hide',!u);
+  btnMarkAll.style.display=u?'inline-block':'none';
+  notifEmpty.classList.toggle('show',notifs.length===0);
+  notifList.style.display=notifs.length?'block':'none';
+  notifList.innerHTML=notifs.map((n,i)=>`
+    <li class="n-item ${n.unread?'unread':'read'}" data-n="${i}">
+      <span class="n-dot"></span>
+      <div class="n-body"><b>${n.title}</b><p>${n.msg}</p><time>${n.time}</time></div>
+    </li>`).join('');
+}
+syncNotifUI();
+
+btnNotif.addEventListener('click',e=>{
+  e.stopPropagation();
+  userMenu.classList.remove('open');avatarBtn.classList.remove('active');
+  notifMenu.classList.toggle('open');
+  btnNotif.classList.toggle('active',notifMenu.classList.contains('open'));
+});
+notifList.addEventListener('click',e=>{
+  const li=e.target.closest('[data-n]');if(!li)return;
+  notifs[+li.dataset.n].unread=false;
+  syncNotifUI();
+});
+btnMarkAll.addEventListener('click',()=>{
+  notifs.forEach(n=>n.unread=false);
+  syncNotifUI();
+  toast('ok','Notificaciones','Todas fueron marcadas como leídas.');
+});
+
+/* ═══ MENÚ DE USUARIO ═══ */
+const avatarBtn=document.getElementById('avatarBtn'),
+      userMenu=document.getElementById('userMenu');
+avatarBtn.addEventListener('click',e=>{
+  e.stopPropagation();
+  notifMenu.classList.remove('open');btnNotif.classList.remove('active');
+  const open=userMenu.classList.toggle('open');
+  avatarBtn.classList.toggle('active',open);
+});
+document.addEventListener('click',e=>{
+  if(!e.target.closest('.user-wrap')){
+    userMenu.classList.remove('open');avatarBtn.classList.remove('active')}
+  if(!e.target.closest('.notif-wrap')){
+    notifMenu.classList.remove('open');btnNotif.classList.remove('active')}
+  /* Cerrar selects custom al hacer clic fuera */
+  if(!e.target.closest('.fsel'))document.querySelectorAll('.fsel.open').forEach(x=>x.classList.remove('open'));
+});
+document.querySelectorAll('.u-item').forEach(item=>item.addEventListener('click',()=>{
+  userMenu.classList.remove('open');avatarBtn.classList.remove('active');
+  const a=item.dataset.action;
+  if(a==='logout')toast('warn','Sesión cerrada','En el sistema real aquí se destruye la sesión.');
+  else if(a==='notificaciones'){
+    notifMenu.classList.add('open');btnNotif.classList.add('active');
+  }
+  else toast('info',item.textContent.trim(),'Vista del prototipo pendiente.');
+}));
+
+/* ═══ SELECT CUSTOM genérico ═══ */
+function initFsel(id,onChange){
+  const fsel=document.getElementById(id);
+  const btn=fsel.querySelector('.fsel-btn');
+  const lbl=btn.querySelector('.fsel-lbl');
+  btn.addEventListener('click',e=>{
+    e.stopPropagation();
+    document.querySelectorAll('.fsel.open').forEach(x=>{if(x!==fsel)x.classList.remove('open')});
+    fsel.classList.toggle('open');
+  });
+  fsel.querySelectorAll('.fsel-opt').forEach(opt=>opt.addEventListener('click',e=>{
+    e.stopPropagation();
+    fsel.querySelectorAll('.fsel-opt').forEach(o=>o.classList.remove('sel'));
+    opt.classList.add('sel');
+    lbl.textContent=opt.textContent;
+    fsel.classList.remove('open');
+    onChange(opt.dataset.val);
+  }));
+  return {
+    set(val){   /* programático: resincroniza visual + estado */
+      const opt=fsel.querySelector(`.fsel-opt[data-val="${val}"]`);
+      if(!opt)return;
+      fsel.querySelectorAll('.fsel-opt').forEach(o=>o.classList.remove('sel'));
+      opt.classList.add('sel');
+      lbl.textContent=opt.textContent;
+    }
+  };
+}
+
 /* ═══ NAVEGACIÓN ENTRE VISTAS ═══ */
-const viewList=document.getElementById('viewList'),
+const viewDash=document.getElementById('viewDash'),
+      viewList=document.getElementById('viewList'),
       viewForm=document.getElementById('viewForm'),
+      viewError=document.getElementById('viewError'),
       crumbHere=document.getElementById('crumbHere'),
+      crumbSec=document.getElementById('crumbSec'),
       inpSearch=document.getElementById('inpSearch');
 function showList(){
-  viewForm.hidden=true;viewList.hidden=false;
-  crumbHere.textContent='Categorías';
+  viewDash.hidden=true;viewForm.hidden=true;viewError.hidden=true;viewList.hidden=false;
 }
 function showForm(id){
   editingId=id||null;
-  const f=document.getElementById('fName'),d=document.getElementById('fDesc');
+  const M=MODULES[curModule];
+  const f=document.getElementById('fName'),d=document.getElementById('fDesc'),
+        em=document.getElementById('fEmail'),sw=document.getElementById('fActive');
   document.getElementById('fErr').classList.remove('show');f.classList.remove('error');
+  document.getElementById('fEmail').parentElement.style.display=M.hasEmail?'block':'none';
   if(id){
-    const c=cats.find(x=>x.id===id);
-    document.getElementById('formTitle').textContent='Editar categoría';
-    document.getElementById('formSub').textContent=`Modificando ${c.id} — los cambios se aplican al guardar.`;
-    document.getElementById('formNote').textContent=`Editando: ${c.name}`;
-    f.value=c.name;d.value=c.desc;
-    document.querySelector(`input[name="fSt"][value="${c.st}"]`).checked=true;
-    crumbHere.textContent='Editar categoría';
+    const it=M.items.find(x=>x.id===id);
+    document.getElementById('formTitle').textContent=`Editar ${M.title.replace(/s$/,'')}`;
+    document.getElementById('formSub').textContent=`Modificando ${it.id} — los cambios se aplican al guardar.`;
+    document.getElementById('formNote').textContent=`Editando: ${it.name}`;
+    f.value=it.name;d.value=it.desc;sw.checked=it.st;em.value=it.email||'';
+    crumbHere.textContent=`Editar ${M.title.replace(/s$/,'')}`;
   }else{
-    document.getElementById('formTitle').textContent='Nueva categoría';
-    document.getElementById('formSub').textContent='Las categorías agrupan productos con características comunes.';
+    document.getElementById('formTitle').textContent=M.newBtn;
+    document.getElementById('formSub').textContent=M.desc;
     document.getElementById('formNote').textContent='';
-    f.value='';d.value='';
-    document.querySelector('input[name="fSt"][value="ok"]').checked=true;
-    crumbHere.textContent='Nueva categoría';
+    f.value='';d.value='';sw.checked=true;em.value='';
+    crumbHere.textContent=M.newBtn;
   }
-  viewList.hidden=true;viewForm.hidden=false;
+  document.getElementById('btnSaveTxt').textContent=`Guardar ${M.title.replace(/s$/,'')}`;
+  viewDash.hidden=true;viewList.hidden=true;viewError.hidden=true;viewForm.hidden=false;
   window.scrollTo({top:0,behavior:'smooth'});
   setTimeout(()=>f.focus(),150);
 }
-document.getElementById('btnBack').onclick=showList;
-document.getElementById('btnCancel').onclick=showList;
+function showErr(name){
+  viewDash.hidden=true;viewList.hidden=true;viewForm.hidden=true;viewError.hidden=false;
+  crumbHere.textContent=name;
+  document.getElementById('errTitle').textContent=`${name} no está disponible`;
+  document.getElementById('errMsg').textContent='Esta sección del prototipo aún no tiene una vista implementada. Vuelve al inicio o reintenta más tarde.';
+  bulkbar.classList.remove('show');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
 
-/* ═══ FILTROS + TABLA + PAGINACIÓN ═══ */
+function activateSide(btn){
+  document.querySelectorAll('.nav-item,.sub-item,.group-btn').forEach(x=>x.classList.remove('active'));
+  btn.classList.add('active');
+  const grp=btn.closest('.group');
+  if(grp)grp.querySelector('.group-btn').classList.add('active');
+}
+
+/* ── Navegación unificada ── */
+document.querySelectorAll('.nav-item,.sub-item').forEach(b=>b.addEventListener('click',()=>{
+  const name=b.querySelector('span')?.textContent.trim()||'Sección';
+  activateSide(b);
+  /* Dashboard: vista especial */
+  if(b.dataset.view==='dash'){
+    showDash();renderDash();
+    side.classList.remove('open');scrim.classList.remove('show');
+    return;
+  }
+  if(b.classList.contains('nav-item')){
+    document.querySelectorAll('.group.open').forEach(x=>x.classList.remove('open'));
+  }
+  const v=b.dataset.view;
+  if(v){
+    curModule=v;
+    const M=MODULES[v];
+    document.getElementById('listTitle').textContent=M.title;
+    document.getElementById('listDesc').textContent=M.desc;
+    document.getElementById('btnNew').textContent=M.newBtn;
+    document.getElementById('panelTitle').textContent=`Listado de ${M.title.toLowerCase()}`;
+    document.getElementById('thCol').textContent=M.colLabel;
+    inpSearch.placeholder=`Buscar en ${M.title.toLowerCase()}…`;
+    crumbSec.style.display='';crumbSec.textContent=M.sec;
+    crumbHere.textContent=M.title;
+    stFilter='all';page=1;selected.clear();
+    inpSearch.value='';
+    fsOrderSel.set('default');fOrder.value='default';
+    btnClear.hidden=true;
+    showList();
+    renderWithSkeleton(700);
+  }else{
+    showErr(name);
+  }
+  side.classList.remove('open');scrim.classList.remove('show');
+}));
+
+document.getElementById('btnErrHome').onclick=()=>{
+  document.querySelector('[data-view="dash"]').click();
+};
+document.getElementById('btnRetry').onclick=()=>toast('info','Reintentando','Aquí se repetiría la petición al servidor.');
+document.getElementById('btnBack').onclick=()=>showList();
+document.getElementById('btnCancel').onclick=()=>showList();
+
+/* ═══ DASHBOARD: gráfico de línea glass + métricas en vivo ═══ */
+let dashRange={value:7};   /* proxy como fOrder */
+function fmtMoney(n){return '$'+Math.round(n).toLocaleString('es-CO')}
+
+const fsRangeSel=initFsel('fsRange',val=>{
+  dashRange.value=val;
+  renderDash();
+});
+
+function renderDash(){
+  const M=MODULES;
+  const clientesOn=M.clientes.items.filter(c=>c.st).length;
+  const usersOn=M.usuarios.items.filter(u=>u.st).length;
+  const totalProds=M.cats.items.reduce((a,c)=>a+c.col,0);
+
+  document.getElementById('mClientes').textContent=clientesOn;
+  document.getElementById('mClientesTot').textContent=M.clientes.items.length;
+  document.getElementById('mProds').textContent=totalProds;
+  document.getElementById('mCats').textContent=M.cats.items.length;
+  document.getElementById('mUsers').textContent=M.usuarios.items.length;
+  document.getElementById('mUsersOn').textContent=usersOn;
+
+  const days=+dashRange.value;
+  let seed=42*days;
+  const rnd=()=>{seed=(seed*9301+49297)%233280;return seed/233280};
+  const sales=[];
+  for(let i=0;i<days;i++)sales.push(180000+rnd()*620000);
+  const total=sales.reduce((a,b)=>a+b,0);
+  document.getElementById('mVentas').textContent=fmtMoney(total);
+  document.getElementById('chartTotal').innerHTML=`${fmtMoney(total)} <small>total</small>`;
+
+  const half=Math.floor(days/2);
+  const oldH=sales.slice(0,half).reduce((a,b)=>a+b,0);
+  const newH=sales.slice(half).reduce((a,b)=>a+b,0);
+  const delta=oldH?Math.round((newH-oldH)/oldH*100):0;
+  const d1=document.getElementById('chartDelta'),d2=document.getElementById('mVentasDelta');
+  [d1,d2].forEach(el=>{
+    el.textContent=delta>=0?`↗ +${delta}%`:`↘ ${delta}%`;
+    el.className='delta '+(delta>=0?'up':'down');
+  });
+
+  /* Gráfico de línea SVG glass */
+  const W=600,H=170,PAD=12;
+  const max=Math.max(...sales),min=Math.min(...sales);
+  const lo=min-(max-min)*.15, hi=max+(max-min)*.15;
+  const px=i=>days===1?W/2:(i/(days-1))*W;
+  const py=v=>H-PAD-((v-lo)/(hi-lo))*(H-PAD*2);
+
+  let grid='';
+  for(let i=1;i<=3;i++){
+    const y=(H/4)*i;
+    grid+=`<line class="chart-grid-l" x1="0" y1="${y}" x2="${W}" y2="${y}"/>`;
+  }
+  document.getElementById('chartGrid').innerHTML=grid;
+
+  const pts=sales.map((v,i)=>`${px(i).toFixed(1)},${py(v).toFixed(1)}`);
+  document.getElementById('linePath').setAttribute('d','M'+pts.join(' L'));
+  document.getElementById('areaPath').setAttribute('d',`M${pts.join(' L')} L${W},${H} L0,${H} Z`);
+
+  const dots=document.getElementById('chartDots');
+  dots.innerHTML=sales.map((v,i)=>`
+    <div class="chart-dot" data-tip="${fmtMoney(v)}" style="left:${(px(i)/W*100)}%;top:${(py(v)/H*100)}%"></div>`).join('');
+
+  const xl=document.getElementById('chartXLabels');
+  if(days<=7){
+    xl.style.display='flex';
+    xl.innerHTML=['Lun','Mar','Mié','Jue','Vie','Sáb','Dom'].slice(0,days).map(l=>`<span>${l}</span>`).join('');
+  }else{
+    xl.style.display='none';
+  }
+
+  const top=[...M.cats.items].sort((a,b)=>b.col-a.col).slice(0,5);
+  const maxCat=top[0]?.col||1;
+  document.getElementById('topCats').innerHTML=top.map(c=>`
+    <li>
+      <div class="tc-row"><span class="n">${c.name}</span><span class="v">${c.col} productos</span></div>
+      <div class="progress"><i style="width:${Math.round(c.col/maxCat*100)}%"></i></div>
+    </li>`).join('');
+}
+
+/* ═══ TABLA GENÉRICA ═══ */
 const tbody=document.getElementById('tbody'),emptyBox=document.getElementById('emptyBox'),
-      fState=document.getElementById('fState'),
-      fOrder=document.getElementById('fOrder'),
       btnClear=document.getElementById('btnClear'),
-      pillCount=document.getElementById('pillCount'),
       footInfo=document.getElementById('footInfo'),
-      pagerEl=document.getElementById('pager');
+      pagerEl=document.getElementById('pager'),
+      chkAll=document.getElementById('chkAll'),
+      bulkbar=document.getElementById('bulkbar'),
+      bulkCount=document.getElementById('bulkCount'),
+      listTabs=document.getElementById('listTabs');
 const PAGE_SIZE=5;
-let page=1;
+let page=1,stFilter='all',editingId=null,deletingId=null;
+let fOrder={value:'default'};
+let selected=new Set();
 
 function getFiltered(){
-  const q=inpSearch.value.trim().toLowerCase(), st=fState.value;
-  let rows=cats.filter(c=>
-    (c.name.toLowerCase().includes(q)||c.desc.toLowerCase().includes(q)) &&
-    (st==='all'||c.st===st));
+  const M=MODULES[curModule];
+  const q=inpSearch.value.trim().toLowerCase(), st=stFilter;
+  let rows=M.items.filter(it=>
+    (it.name.toLowerCase().includes(q)||it.desc.toLowerCase().includes(q)) &&
+    (st==='all'||(st==='ok'?it.st:!it.st)));
   if(fOrder.value==='name') rows=[...rows].sort((a,b)=>a.name.localeCompare(b.name));
-  if(fOrder.value==='prods')rows=[...rows].sort((a,b)=>b.prods-a.prods);
+  if(fOrder.value==='prods')rows=[...rows].sort((a,b)=>b.col-a.col);
   return rows;
 }
 
+function skeletonRows(){
+  const widths=[['45px','60%','40px','90px','31px'],['52px','75%','36px','90px','31px'],
+    ['40px','55%','44px','90px','31px'],['58px','68%','38px','90px','31px'],['46px','62%','42px','90px','31px']];
+  return widths.map(w=>`
+    <tr class="skel-row">
+      <td class="c-chk"><span class="skel" style="width:16px;height:16px;border-radius:4px;display:block"></span></td>
+      <td class="c-id"><span class="skel" style="width:${w[0]}"></span></td>
+      <td><span class="skel" style="width:${w[1]};display:block"></span><span class="skel" style="width:${w[1]};display:block;margin-top:7px;height:9px;opacity:.6"></span></td>
+      <td class="c-prods"><span class="skel" style="width:${w[2]}"></span></td>
+      <td class="c-state"><span class="skel" style="width:70px;border-radius:8px"></span></td>
+      <td class="c-actions"><span class="skel" style="width:${w[4]};border-radius:8px"></span></td>
+    </tr>`).join('');
+}
+
+function syncBulkbar(){
+  const n=selected.size;
+  bulkCount.textContent=`${n} seleccionado${n!==1?'s':''}`;
+  bulkbar.classList.toggle('show',n>0 && !viewList.hidden);
+  chkAll.checked=pageItems().length>0 && pageItems().every(it=>selected.has(it.id));
+}
+function pageItems(){
+  const rows=getFiltered();
+  const totalPages=Math.max(1,Math.ceil(rows.length/PAGE_SIZE));
+  const p=Math.min(page,totalPages);
+  return rows.slice((p-1)*PAGE_SIZE,p*PAGE_SIZE);
+}
+function syncTabs(){
+  listTabs.querySelectorAll('.tab').forEach(t=>t.classList.toggle('on',t.dataset.tab===stFilter));
+  const M=MODULES[curModule];
+  document.getElementById('tcAll').textContent=M.items.length;
+  document.getElementById('tcOk').textContent=M.items.filter(x=>x.st).length;
+  document.getElementById('tcOff').textContent=M.items.filter(x=>!x.st).length;
+}
+
 function render(){
+  const M=MODULES[curModule];
   const rows=getFiltered();
   const total=rows.length;
   const totalPages=Math.max(1,Math.ceil(total/PAGE_SIZE));
@@ -765,17 +1608,18 @@ function render(){
   const start=(page-1)*PAGE_SIZE;
   const view=rows.slice(start,start+PAGE_SIZE);
 
-  tbody.innerHTML=view.map(c=>`
-    <tr>
-      <td class="id-cell c-id">${c.id}</td>
-      <td class="cell-name"><b>${c.name}</b><span>${c.desc}</span></td>
-      <td class="qty c-prods">${c.prods}</td>
-      <td class="c-state"><span class="status ${c.st}">${c.st==='ok'?'Activa':'Inactiva'}</span></td>
+  tbody.innerHTML=view.map(it=>`
+    <tr class="${selected.has(it.id)?'selected':''}">
+      <td class="c-chk"><input type="checkbox" data-chk="${it.id}" ${selected.has(it.id)?'checked':''}></td>
+      <td class="id-cell c-id">${it.id}</td>
+      <td class="cell-name"><b>${it.name}</b><span>${it.desc}</span></td>
+      <td class="qty c-prods">${it.col}</td>
+      <td class="c-state"><span class="status ${it.st?'ok':'off'}">${it.st?'Activo':'Inactivo'}</span></td>
       <td class="c-actions"><div class="row-actions">
         <button class="kebab" data-kebab><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="1.7"/><circle cx="12" cy="12" r="1.7"/><circle cx="12" cy="19" r="1.7"/></svg></button>
         <div class="dd glass-deep">
-          <button data-edit="${c.id}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.12 2.12 0 0 1 3 3L12 15l-4 1 1-4z"/></svg>Editar</button>
-          <button class="danger" data-del="${c.id}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/></svg>Eliminar</button>
+          <button data-edit="${it.id}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.12 2.12 0 0 1 3 3L12 15l-4 1 1-4z"/></svg>Editar</button>
+          <button class="danger" data-del="${it.id}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/></svg>Eliminar</button>
         </div>
       </div></td>
     </tr>`).join('');
@@ -784,30 +1628,43 @@ function render(){
   emptyBox.classList.toggle('show',noResults);
   document.querySelector('.table-wrap').style.display=noResults?'none':'block';
   if(noResults){
-    const filtered=inpSearch.value.trim()||fState.value!=='all';
-    document.getElementById('emptyTitle').textContent=filtered?'Sin resultados':'No hay categorías creadas aún';
+    const filtered=inpSearch.value.trim()||stFilter!=='all';
+    document.getElementById('emptyTitle').textContent=filtered?'Sin resultados':`No hay ${M.title.toLowerCase()} aún`;
     document.getElementById('emptyMsg').textContent=filtered
-      ?'Ninguna categoría coincide con los filtros aplicados. Prueba con otros términos o límpialos.'
-      :'Crea tu primera categoría para comenzar a organizar los productos de tu inventario.';
+      ?'Ningún registro coincide con los filtros aplicados. Prueba con otros términos o límpialos.'
+      :`Crea el primero para comenzar.`;
   }
 
-  pillCount.textContent=`${total} registro${total!==1?'s':''}`;
   footInfo.textContent=total===0?'Sin resultados'
-    :`Mostrando ${start+1}–${Math.min(start+PAGE_SIZE,total)} de ${total}`;
-  btnClear.hidden=!(inpSearch.value.trim()||fState.value!=='all'||fOrder.value!=='default');
+    :`Mostrando ${start+1}–${Math.min(start+PAGE_SIZE,total)} de ${total} registro${total!==1?'s':''}`;
+  btnClear.hidden=!(inpSearch.value.trim()||stFilter!=='all'||fOrder.value!=='default');
 
   let html=`<button ${page===1?'disabled':''} data-pg="prev" title="Anterior">‹</button>`;
   for(let i=1;i<=totalPages;i++)html+=`<button class="${i===page?'on':''}" data-pg="${i}">${i}</button>`;
   html+=`<button ${page===totalPages?'disabled':''} data-pg="next" title="Siguiente">›</button>`;
   pagerEl.innerHTML=html;
+
+  syncBulkbar();
 }
 
-inpSearch.addEventListener('input',()=>{page=1;render()});
-fState.addEventListener('change',()=>{page=1;render()});
-fOrder.addEventListener('change',()=>{page=1;render()});
+function renderWithSkeleton(delay=700){
+  tbody.innerHTML=skeletonRows();
+  setTimeout(render,delay);
+}
+
+listTabs.addEventListener('click',e=>{
+  const t=e.target.closest('.tab');if(!t||t.classList.contains('on'))return;
+  stFilter=t.dataset.tab;syncTabs();page=1;renderWithSkeleton(500);
+});
+inpSearch.addEventListener('input',()=>{page=1;renderWithSkeleton(500)});
+/* Orden: select custom dispara directamente */
+const fsOrderSel=initFsel('fsOrder',val=>{
+  fOrder.value=val;page=1;renderWithSkeleton(500);
+});
 btnClear.onclick=()=>{
-  inpSearch.value='';fState.value='all';fOrder.value='default';
-  page=1;render();inpSearch.focus();
+  inpSearch.value='';stFilter='all';
+  fOrder.value='default';fsOrderSel.set('default');
+  syncTabs();page=1;selected.clear();renderWithSkeleton(500);inpSearch.focus();
 };
 pagerEl.addEventListener('click',e=>{
   const b=e.target.closest('[data-pg]');if(!b||b.disabled)return;
@@ -816,9 +1673,42 @@ pagerEl.addEventListener('click',e=>{
   if(v==='prev')page=Math.max(1,page-1);
   else if(v==='next')page=Math.min(totalPages,page+1);
   else page=+v;
+  renderWithSkeleton(400);
+});
+
+/* ── Selección múltiple ── */
+chkAll.addEventListener('change',()=>{
+  pageItems().forEach(it=>chkAll.checked?selected.add(it.id):selected.delete(it.id));
   render();
 });
-render();
+tbody.addEventListener('change',e=>{
+  const cb=e.target.closest('[data-chk]');if(!cb)return;
+  cb.checked?selected.add(cb.dataset.chk):selected.delete(cb.dataset.chk);
+  render();
+});
+
+/* ── Acciones masivas ── */
+document.getElementById('bulkActivate').onclick=()=>{
+  let n=0;selected.forEach(id=>{MODULES[curModule].items.forEach(it=>{
+    if(it.id===id&&!it.st){it.st=true;n++}})});
+  if(n)toast('ok','Registros activados',`${n} cambiaron a activo.`);
+  selected.clear();render();
+};
+document.getElementById('bulkDeactivate').onclick=()=>{
+  let n=0;selected.forEach(id=>{MODULES[curModule].items.forEach(it=>{
+    if(it.id===id&&it.st){it.st=false;n++}})});
+  if(n)toast('warn','Registros desactivados',`${n} cambiaron a inactivo.`);
+  selected.clear();render();
+};
+let bulkMode=false;
+document.getElementById('bulkDelete').onclick=()=>{
+  bulkMode=true;
+  const M=MODULES[curModule];
+  document.getElementById('delTitle').textContent=`Eliminar ${M.title.toLowerCase()}`;
+  document.getElementById('delSub').innerHTML=
+    `¿Seguro que deseas eliminar <b style="color:var(--text)">${selected.size} registro${selected.size!==1?'s':''}</b>? Esta acción no se puede deshacer.`;
+  document.getElementById('ovDel').classList.add('show');
+};
 
 /* ── Dropdowns de fila ── */
 document.addEventListener('click',e=>{
@@ -826,8 +1716,14 @@ document.addEventListener('click',e=>{
   document.querySelectorAll('.dd.open').forEach(d=>{if(!kb||d.previousElementSibling!==kb)d.classList.remove('open')});
   if(kb)kb.nextElementSibling.classList.toggle('open');
   const ed=e.target.closest('[data-edit]');if(ed)showForm(ed.dataset.edit);
-  const dl=e.target.closest('[data-del]');if(dl){deletingId=dl.dataset.del;
-    document.getElementById('delName').textContent=cats.find(c=>c.id===deletingId).name;
+  const dl=e.target.closest('[data-del]');if(dl){bulkMode=false;
+    const M=MODULES[curModule];
+    deletingId=dl.dataset.del;
+    const it=M.items.find(x=>x.id===deletingId);
+    document.getElementById('delTitle').textContent=`Eliminar ${M.title.toLowerCase().replace(/s$/,'')}`;
+    document.getElementById('delSub').innerHTML=
+      `¿Seguro que deseas eliminar <b id="delName" style="color:var(--text)"></b>? Esta acción no se puede deshacer.`;
+    document.getElementById('delName').textContent=it.name;
     document.getElementById('ovDel').classList.add('show')}
   if(!e.target.closest('.row-actions'))document.querySelectorAll('.dd.open').forEach(d=>d.classList.remove('open'));
 });
@@ -835,6 +1731,7 @@ document.addEventListener('click',e=>{
 /* ── Guardar ── */
 const fName=document.getElementById('fName');
 document.getElementById('btnSave').onclick=()=>{
+  const M=MODULES[curModule];
   if(!fName.value.trim()){
     fName.classList.add('error');
     document.getElementById('fErr').classList.add('show');
@@ -843,14 +1740,16 @@ document.getElementById('btnSave').onclick=()=>{
   const data={
     name:fName.value.trim(),
     desc:document.getElementById('fDesc').value.trim()||'Sin descripción',
-    st:document.querySelector('input[name="fSt"]:checked').value
+    st:document.getElementById('fActive').checked
   };
+  if(M.hasEmail)data.email=document.getElementById('fEmail').value.trim();
   if(editingId){
-    Object.assign(cats.find(c=>c.id===editingId),data);
+    Object.assign(M.items.find(c=>c.id===editingId),data);
     toast('ok','Cambios guardados',`${data.name} se actualizó correctamente.`);
   }else{
-    cats.push({id:'CAT-'+String(nextN++).padStart(3,'0'),prods:0,...data});
-    toast('ok','Categoría creada',`${data.name} se agregó al inventario.`);
+    const nid=M.prefix+'-'+String(nextNs[curModule]++).padStart(3,'0');
+    M.items.push({id:nid,col:0,...data});
+    toast('ok','Registro creado',`${data.name} se agregó a ${M.title.toLowerCase()}.`);
   }
   showList();render();
 };
@@ -860,10 +1759,20 @@ fName.addEventListener('input',e=>{e.target.classList.remove('error');document.g
 const ovDel=document.getElementById('ovDel');
 function closeOv(ov){ov.classList.remove('show')}
 document.getElementById('btnDel').onclick=()=>{
-  const c=cats.find(x=>x.id===deletingId);
-  cats=cats.filter(x=>x.id!==deletingId);
-  closeOv(ovDel);render();
-  toast('err','Categoría eliminada',`${c.name} fue eliminada del inventario.`);
+  const M=MODULES[curModule];
+  if(bulkMode){
+    const n=selected.size;
+    M.items=M.items.filter(x=>!selected.has(x.id));
+    selected.clear();closeOv(ovDel);render();
+    toast('err','Registros eliminados',`${n} fueron eliminados.`);
+  }else{
+    const it=M.items.find(x=>x.id===deletingId);
+    M.items=M.items.filter(x=>x.id!==deletingId);
+    selected.delete(deletingId);
+    closeOv(ovDel);render();
+    toast('err','Registro eliminado',`${it.name} fue eliminado.`);
+  }
+  bulkMode=false;
 };
 
 /* ── Atajos ── */
@@ -873,8 +1782,11 @@ document.addEventListener('keydown',e=>{
   }
   if(e.key==='Escape'){
     closeOv(ovDel);
-    palettePop.classList.remove('open');
-    if(!viewForm.hidden)showList();
+    userMenu.classList.remove('open');avatarBtn.classList.remove('active');
+    notifMenu.classList.remove('open');btnNotif.classList.remove('active');
+    document.querySelectorAll('.fsel.open').forEach(x=>x.classList.remove('open'));
+    hideTip();
+    if(!viewForm.hidden||!viewError.hidden)showList();
   }
 });
 
@@ -888,13 +1800,7 @@ matchMedia('(prefers-color-scheme: light)').addEventListener('change',e=>{
   if(!saved.theme){root.dataset.theme=e.matches?'light':'dark';syncThemeIcons()}
 });
 
-/* ── Popover de paleta ── */
-const btnPalette=document.getElementById('btnPalette'),palettePop=document.getElementById('palettePop');
-btnPalette.addEventListener('click',e=>{e.stopPropagation();palettePop.classList.toggle('open')});
-document.addEventListener('click',e=>{
-  if(!e.target.closest('.palette-wrap'))palettePop.classList.remove('open')});
-
-/* ── Swatches ── */
+/* ── Puntos de color: cambian + regeneran dashboard ── */
 document.querySelectorAll('.swatch').forEach(sw=>sw.addEventListener('click',()=>{
   curH=+sw.dataset.h;curS=+sw.dataset.s;
   root.style.setProperty('--h',curH);
@@ -902,10 +1808,10 @@ document.querySelectorAll('.swatch').forEach(sw=>sw.addEventListener('click',()=
   document.querySelectorAll('.swatch').forEach(x=>x.classList.remove('active'));
   sw.classList.add('active');
   applyStrong();persist();
-  palettePop.classList.remove('open');
+  if(!viewDash.hidden)renderDash();
 }));
 
-/* ── Gotero personalizado ── */
+/* ── Gotero ── */
 document.getElementById('customColor').addEventListener('input',e=>{
   const hex=e.target.value;
   const r=parseInt(hex.slice(1,3),16)/255,
@@ -927,10 +1833,16 @@ document.getElementById('customColor').addEventListener('input',e=>{
   root.style.setProperty('--s',curS+'%');
   document.querySelectorAll('.swatch').forEach(x=>x.classList.remove('active'));
   applyStrong();persist();
+  if(!viewDash.hidden)renderDash();
 });
 
-/* ── Sidebar ── */
-document.querySelectorAll('[data-group]').forEach(b=>b.addEventListener('click',()=>b.closest('.group').classList.toggle('open')));
+/* ── Sidebar: acordeón exclusivo ── */
+document.querySelectorAll('[data-group]').forEach(b=>b.addEventListener('click',()=>{
+  const g=b.closest('.group');
+  const wasOpen=g.classList.contains('open');
+  document.querySelectorAll('.group.open').forEach(x=>x.classList.remove('open'));
+  if(!wasOpen)g.classList.add('open');
+}));
 document.getElementById('btnCollapse').onclick=()=>document.body.classList.toggle('collapsed');
 const side=document.getElementById('sidebar'),scrim=document.getElementById('scrim'),
       mqMobile=matchMedia('(max-width:900px)'),
@@ -942,19 +1854,22 @@ btnSide.onclick=()=>{
 scrim.onclick=()=>{side.classList.remove('open');scrim.classList.remove('show')};
 mqMobile.addEventListener('change',()=>{side.classList.remove('open');scrim.classList.remove('show')});
 
-/* ── Toasts ── */
+/* ── TOASTS ── */
 const icons={ok:'<circle cx="12" cy="12" r="10"/><path d="m8.5 12.5 2.5 2.5 5-6"/>',
   err:'<circle cx="12" cy="12" r="10"/><path d="M15 9l-6 6M9 9l6 6"/>',
+  warn:'<path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/><path d="M12 9v4M12 17h.01"/>',
   info:'<circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/>'};
 function toast(type,title,msg){
-  const t=document.createElement('div');t.className='toast glass-deep';
-  t.innerHTML=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${icons[type]}</svg>
+  const t=document.createElement('div');
+  t.className='toast glass-deep '+type;
+  t.innerHTML=`<span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">${icons[type]}</svg></span>
     <div><b>${title}</b><p>${msg}</p></div><button class="x">✕</button><span class="bar"></span>`;
   document.getElementById('toasts').appendChild(t);
   const kill=()=>{t.classList.add('out');setTimeout(()=>t.remove(),220)};
-  t.querySelector('.x').onclick=kill;setTimeout(kill,3500);
+  t.querySelector('.x').onclick=kill;setTimeout(kill,4000);
 }
-setTimeout(()=>toast('info','Grid de formularios flexible','Hasta 4 columnas: fw-1, fw-2, fw-3 o fw-full por campo. Colapsa 4→2→1 según pantalla.'),700);
+renderDash();
+setTimeout(()=>toast('info','Selects custom','Los despliegues ahora son paneles glass coherentes con el tema — dark y light idénticos en lenguaje.'),700);
 </script>
 </body>
 </html>
