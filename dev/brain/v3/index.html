@@ -1,0 +1,2644 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Cerebro Empresarial</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap">
+<!-- ===== BLOQUE CSS ===== -->
+<style id="estilos">
+/* ===== 1. TEMA: variables de color (la app las recalcula según modo y color elegido) ===== */
+:root{
+  --bg:hsl(173, 20%, 8%);
+  --side:hsl(173, 20%, 6%);
+  --surface:hsl(173, 20%, 11%);
+  --surface2:hsl(173, 20%, 15%);
+  --border:hsl(173, 20%, 24%);
+  --text:hsl(173, 15%, 94%);
+  --muted:hsl(173, 12%, 70%);
+  --accent:hsl(173, 80%, 60%);
+  --on-accent:hsl(173, 30%, 8%);
+  --accent-soft:hsl(173, 44%, 17%);
+  --accent-text:hsl(173, 80%, 72%);
+}
+
+/* ===== 2. COMPONENTES: una clase por estilo (nombres generados: c1, c2…, se pueden renombrar) ===== */
+.c1{
+  display:flex;
+  flex-direction:row;
+  min-height:1100px;
+  --ac:var(--accent);
+  --soft:var(--accent-soft);
+  --sk1:var(--surface2);
+  --sk2:var(--border);
+  background:var(--bg);
+  font-family:'Manrope',system-ui,sans-serif;
+  color:var(--text);
+}
+.c2{
+  width:248px;
+  flex:none;
+  background:var(--side);
+  border-right:1px solid var(--border);
+  padding:28px 20px;
+  box-sizing:border-box;
+  display:flex;
+  flex-direction:column;
+  gap:28px;
+}
+.c3{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+.c4{
+  width:40px;
+  height:40px;
+  border-radius:12px;
+  background:var(--accent);
+  color:var(--on-accent);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.c5{
+  font-weight:800;
+  font-size:18px;
+  letter-spacing:-0.01em;
+}
+.c6{
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+}
+.c7{
+  width:100%;
+  border:0;
+  text-align:left;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:12px 14px;
+  border-radius:10px;
+  font-size:15px;
+}
+.c8{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:12px 14px;
+  border-radius:10px;
+  color:var(--muted);
+  text-decoration:none;
+  font-weight:500;
+  font-size:15px;
+}
+.c9{
+  height:1px;
+  background:var(--border);
+  margin:10px 0;
+}
+.c10{
+  margin-top:auto;
+  border:1px solid var(--border);
+  background:var(--surface);
+  border-radius:14px;
+  padding:16px;
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+.c11{
+  font-weight:700;
+  font-size:14px;
+}
+.c12{
+  font-size:13px;
+  line-height:1.5;
+  color:var(--muted);
+}
+.c13{
+  flex:1;
+  min-width:0;
+  padding:36px 44px;
+  box-sizing:border-box;
+  display:flex;
+  flex-direction:column;
+  gap:28px;
+}
+.c14{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  font-size:14px;
+}
+.c15{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  color:var(--muted);
+  font-weight:600;
+}
+.c16{
+  color:var(--text);
+}
+.c17{
+  position:relative;
+}
+.c18{
+  position:fixed;
+  inset:0;
+  z-index:25;
+}
+.c19{
+  position:relative;
+  z-index:26;
+  width:44px;
+  height:44px;
+  border-radius:10px;
+  border:1px solid var(--border);
+  background:var(--surface);
+  color:var(--text);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.c20{
+  position:absolute;
+  top:5px;
+  right:5px;
+  min-width:18px;
+  height:18px;
+  border-radius:9px;
+  background:var(--accent);
+  color:var(--on-accent);
+  font-size:11px;
+  font-weight:800;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.c21{
+  position:absolute;
+  right:0;
+  top:52px;
+  width:340px;
+  max-width:86vw;
+  z-index:30;
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:14px;
+  box-shadow:0 14px 34px rgba(0,0,0,0.3);
+  padding:8px;
+}
+.c22{
+  padding:10px 12px;
+  font-size:13px;
+  font-weight:700;
+  letter-spacing:0.08em;
+  text-transform:uppercase;
+  color:var(--muted);
+}
+.c23{
+  display:flex;
+  gap:10px;
+  padding:12px;
+  border-radius:10px;
+}
+.c24{
+  width:8px;
+  height:8px;
+  border-radius:50%;
+  background:var(--accent);
+  margin-top:6px;
+  flex:none;
+}
+.c25{
+  display:flex;
+  flex-direction:column;
+  gap:2px;
+}
+.c26{
+  font-size:13px;
+  font-weight:700;
+  line-height:1.4;
+}
+.c27{
+  font-size:12px;
+  color:var(--muted);
+}
+.c28{
+  text-align:right;
+  line-height:1.3;
+}
+.c29{
+  width:40px;
+  height:40px;
+  border-radius:50%;
+  background:var(--accent-soft);
+  color:var(--accent-text);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:800;
+  font-size:14px;
+}
+.c30{
+  display:flex;
+  flex-direction:column;
+  gap:28px;
+  max-width:860px;
+}
+.c31{
+  margin:0;
+  font-size:30px;
+  font-weight:800;
+  letter-spacing:-0.02em;
+}
+.c32{
+  font-size:15px;
+  color:var(--muted);
+}
+.c33{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:20px;
+  padding:28px;
+  display:flex;
+  flex-direction:column;
+  gap:24px;
+}
+.c34{
+  margin:0;
+  font-size:20px;
+  font-weight:800;
+}
+.c35{
+  display:flex;
+  flex-wrap:wrap;
+  gap:16px;
+  align-items:center;
+  justify-content:space-between;
+}
+.c36{
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+  max-width:360px;
+}
+.c37{
+  font-weight:700;
+  font-size:16px;
+}
+.c38{
+  font-size:14px;
+  color:var(--muted);
+  line-height:1.5;
+}
+.c39{
+  display:flex;
+  background:var(--surface2);
+  border-radius:12px;
+  padding:3px;
+  gap:2px;
+}
+.c40{
+  height:44px;
+  min-width:104px;
+  padding:0 16px;
+  border:0;
+  border-radius:10px;
+  font-weight:700;
+  font-size:14px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+}
+.c41{
+  height:1px;
+  background:var(--border);
+}
+.c42{
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+}
+.c43{
+  width:44px;
+  height:44px;
+  border:0;
+  background:transparent;
+  padding:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.c44{
+  width:26px;
+  height:26px;
+  border-radius:50%;
+  display:block;
+}
+.c45{
+  font-size:13px;
+  font-weight:600;
+  color:var(--muted);
+  margin-left:8px;
+  margin-right:6px;
+}
+.c46{
+  width:44px;
+  height:44px;
+  border:1px solid var(--border);
+  border-radius:10px;
+  background:var(--surface2);
+  padding:4px;
+  cursor:pointer;
+}
+.c47{
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+}
+.c48{
+  font-size:13px;
+  font-weight:700;
+  letter-spacing:0.08em;
+  text-transform:uppercase;
+  color:var(--muted);
+}
+.c49{
+  background:var(--bg);
+  border:1px solid var(--border);
+  border-radius:14px;
+  padding:20px;
+  display:flex;
+  flex-wrap:wrap;
+  gap:16px;
+  align-items:center;
+}
+.c50{
+  background:var(--accent);
+  color:var(--on-accent);
+  border:0;
+  border-radius:12px;
+  height:44px;
+  padding:0 22px;
+  font-size:14px;
+  font-weight:700;
+}
+.c51{
+  font-family:'JetBrains Mono',monospace;
+  font-size:12px;
+  background:var(--accent-soft);
+  color:var(--accent-text);
+  padding:5px 9px;
+  border-radius:7px;
+}
+.c52{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  color:var(--accent-text);
+  font-weight:700;
+  font-size:14px;
+}
+.c53{
+  flex:1 1 160px;
+  height:8px;
+  border-radius:99px;
+  background:var(--border);
+  overflow:hidden;
+}
+.c54{
+  width:62%;
+  height:100%;
+  background:var(--accent);
+}
+.c55{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:20px;
+  padding:28px;
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+}
+.c56{
+  font-size:13px;
+  font-weight:600;
+  color:var(--muted);
+}
+.c57{
+  display:flex;
+  flex-wrap:wrap;
+  background:var(--surface2);
+  border-radius:12px;
+  padding:3px;
+  gap:2px;
+  align-self:flex-start;
+}
+.c58{
+  height:44px;
+  min-width:112px;
+  padding:0 16px;
+  border:0;
+  border-radius:10px;
+  font-weight:700;
+  font-size:14px;
+}
+.c59{
+  display:flex;
+  flex-direction:column;
+  gap:24px;
+  max-width:880px;
+  width:100%;
+}
+.c60{
+  display:flex;
+  justify-content:flex-end;
+}
+.c61{
+  max-width:560px;
+  background:var(--accent);
+  color:var(--on-accent);
+  border-radius:18px 18px 4px 18px;
+  padding:14px 18px;
+  font-size:15px;
+  font-weight:600;
+  line-height:1.5;
+}
+.c62{
+  display:flex;
+  gap:14px;
+  align-items:flex-start;
+}
+.c63{
+  width:40px;
+  height:40px;
+  flex:none;
+  border-radius:12px;
+  background:var(--accent-soft);
+  color:var(--accent-text);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.c64{
+  flex:1;
+  min-width:0;
+  display:flex;
+  flex-direction:column;
+  gap:16px;
+}
+.c65{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:18px 18px 18px 4px;
+  padding:20px 22px;
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+}
+.c66{
+  font-size:16px;
+  line-height:1.7;
+}
+.c67{
+  min-width:24px;
+  height:24px;
+  border:0;
+  border-radius:99px;
+  background:var(--accent-soft);
+  color:var(--accent-text);
+  font-size:12px;
+  font-weight:800;
+  vertical-align:middle;
+  margin:0 2px;
+  padding:0 6px;
+}
+.c68{
+  display:flex;
+  flex-wrap:wrap;
+  gap:12px;
+  align-items:center;
+  justify-content:space-between;
+  border-top:1px solid var(--border);
+  padding-top:14px;
+}
+.c69{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  font-size:13px;
+  color:var(--muted);
+}
+.c70{
+  display:flex;
+  gap:6px;
+}
+.c71{
+  width:44px;
+  height:44px;
+  border-radius:10px;
+  border:1px solid var(--border);
+  background:var(--surface);
+  color:var(--muted);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.c72{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:18px 20px;
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+}
+.c73{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  align-items:center;
+}
+.c74{
+  width:26px;
+  height:26px;
+  border-radius:50%;
+  background:var(--accent);
+  color:var(--on-accent);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:13px;
+  font-weight:800;
+}
+.c75{
+  font-weight:700;
+  font-size:15px;
+}
+.c76{
+  font-family:'JetBrains Mono',monospace;
+  font-size:12px;
+  background:var(--surface2);
+  border:1px solid var(--border);
+  color:var(--muted);
+  padding:4px 8px;
+  border-radius:7px;
+}
+.c77{
+  font-size:13px;
+  color:var(--muted);
+}
+.c78{
+  background:var(--accent-soft);
+  border-left:3px solid var(--accent);
+  border-radius:0 10px 10px 0;
+  padding:12px 16px;
+  font-size:14px;
+  line-height:1.65;
+  font-style:italic;
+}
+.c79{
+  display:flex;
+  gap:10px;
+  align-items:flex-start;
+  border:1px dashed var(--border);
+  border-radius:10px;
+  padding:10px 14px;
+  font-size:13px;
+  line-height:1.5;
+  color:var(--muted);
+}
+.c80{
+  flex:none;
+  margin-top:1px;
+}
+.c81{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+}
+.c82{
+  height:44px;
+  padding:0 18px;
+  border-radius:10px;
+  border:1px solid var(--border);
+  background:var(--surface);
+  color:var(--text);
+  font-size:14px;
+  font-weight:600;
+}
+.c83{
+  height:44px;
+  padding:0 18px;
+  border-radius:10px;
+  border:0;
+  background:var(--accent);
+  color:var(--on-accent);
+  font-size:14px;
+  font-weight:700;
+}
+.c84{
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+  position:sticky;
+  bottom:16px;
+}
+.c85{
+  min-height:44px;
+  padding:0 16px;
+  border-radius:99px;
+  border:1px solid var(--border);
+  background:var(--surface);
+  color:var(--text);
+  font-size:13px;
+  font-weight:600;
+}
+.c86{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  background:var(--surface);
+  border:1px solid var(--accent);
+  border-radius:16px;
+  padding:8px 8px 8px 20px;
+}
+.c87{
+  position:absolute;
+  left:-9999px;
+}
+.c88{
+  flex:1;
+  border:0;
+  outline:0;
+  background:transparent;
+  font-family:inherit;
+  font-size:15px;
+  color:var(--text);
+  height:44px;
+}
+.c89{
+  width:48px;
+  height:48px;
+  border:0;
+  border-radius:12px;
+  background:var(--accent);
+  color:var(--on-accent);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.c90{
+  font-size:12px;
+  color:var(--muted);
+  text-align:center;
+}
+.c91{
+  flex:1;
+  min-height:560px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+}
+.c92{
+  width:100%;
+  max-width:780px;
+  display:flex;
+  flex-direction:column;
+  gap:30px;
+}
+.c93{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+.c94{
+  font-size:13px;
+  font-weight:700;
+  letter-spacing:0.1em;
+  text-transform:uppercase;
+  color:var(--accent-text);
+}
+.c95{
+  margin:0;
+  font-size:34px;
+  line-height:1.2;
+  font-weight:700;
+  letter-spacing:-0.02em;
+}
+.c96{
+  font-size:16px;
+  line-height:1.5;
+  color:var(--muted);
+}
+.c97{
+  display:flex;
+  flex-wrap:wrap;
+  gap:12px;
+}
+.c98{
+  flex:1 1 380px;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  height:56px;
+  box-sizing:border-box;
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:10px;
+  padding:0 8px 0 16px;
+  color:var(--muted);
+}
+.c99{
+  flex:1;
+  min-width:0;
+  border:0;
+  outline:0;
+  background:transparent;
+  font-family:inherit;
+  font-size:15px;
+  color:var(--text);
+}
+.c100{
+  height:40px;
+  padding:0 20px;
+  border:0;
+  border-radius:8px;
+  background:var(--accent-soft);
+  color:var(--accent-text);
+  font-size:14px;
+  font-weight:700;
+}
+.c101{
+  height:56px;
+  padding:0 26px;
+  border:0;
+  border-radius:10px;
+  background:var(--accent);
+  color:var(--on-accent);
+  font-size:15px;
+  font-weight:700;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+}
+.c102{
+  display:flex;
+  flex-wrap:wrap;
+  gap:12px 28px;
+  border-top:1px solid var(--border);
+  padding-top:20px;
+  font-size:13px;
+  color:var(--muted);
+}
+.c103{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+}
+.c104{
+  display:flex;
+  flex-wrap:wrap;
+  gap:20px;
+  align-items:flex-start;
+}
+.c105{
+  flex:0 1 340px;
+  min-width:280px;
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:20px;
+  padding:22px;
+  display:flex;
+  flex-direction:column;
+  gap:20px;
+  box-sizing:border-box;
+}
+.c106{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+.c107{
+  font-size:14px;
+  font-weight:700;
+}
+.c108{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  height:48px;
+  box-sizing:border-box;
+  background:var(--surface2);
+  border:1px solid var(--border);
+  border-radius:10px;
+  padding:0 14px;
+  color:var(--muted);
+}
+.c109{
+  min-height:40px;
+  padding:0 14px;
+  border-radius:99px;
+  font-size:13px;
+  font-weight:700;
+}
+.c110{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+}
+.c111{
+  flex:1 1 120px;
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+}
+.c112{
+  height:44px;
+  box-sizing:border-box;
+  border:1px solid var(--border);
+  border-radius:10px;
+  background:var(--surface2);
+  color:var(--text);
+  padding:0 10px;
+  font-family:inherit;
+}
+.c113{
+  height:46px;
+  border-radius:10px;
+  border:1px solid var(--border);
+  background:var(--surface);
+  color:var(--text);
+  font-size:14px;
+  font-weight:700;
+}
+.c114{
+  flex:1 1 420px;
+  min-width:0;
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+}
+.c115{
+  font-size:14px;
+  font-weight:700;
+  color:var(--muted);
+}
+.c116{
+  width:100%;
+  text-align:left;
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:16px 18px;
+  color:var(--text);
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+.c117{
+  font-weight:800;
+  font-size:16px;
+}
+.c118{
+  font-family:'JetBrains Mono',monospace;
+  font-size:12px;
+  background:var(--surface2);
+  border:1px solid var(--border);
+  color:var(--muted);
+  padding:3px 8px;
+  border-radius:7px;
+}
+.c119{
+  margin-left:auto;
+  font-size:13px;
+  font-weight:700;
+  color:var(--accent-text);
+}
+.c120{
+  font-size:14px;
+  line-height:1.5;
+}
+.c121{
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+}
+.c122{
+  font-size:12px;
+  font-weight:600;
+  background:var(--accent-soft);
+  color:var(--accent-text);
+  padding:3px 10px;
+  border-radius:99px;
+}
+.c123{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:48px 24px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:10px;
+  text-align:center;
+}
+.c124{
+  width:56px;
+  height:56px;
+  border-radius:50%;
+  background:var(--accent-soft);
+  color:var(--accent-text);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.c125{
+  font-weight:800;
+  font-size:18px;
+}
+.c126{
+  font-size:14px;
+  color:var(--muted);
+  max-width:340px;
+  line-height:1.5;
+}
+.c127{
+  margin-top:6px;
+  height:44px;
+  padding:0 20px;
+  border:0;
+  border-radius:10px;
+  background:var(--accent);
+  color:var(--on-accent);
+  font-size:14px;
+  font-weight:700;
+}
+.c128{
+  display:flex;
+  flex-direction:column;
+  gap:20px;
+}
+.c129{
+  display:flex;
+  flex-wrap:wrap;
+  gap:12px;
+  align-items:flex-end;
+  justify-content:space-between;
+}
+.c130{
+  align-self:flex-start;
+  border:0;
+  background:transparent;
+  color:var(--accent-text);
+  font-size:14px;
+  font-weight:700;
+  min-height:44px;
+  padding:0;
+}
+.c131{
+  margin:0;
+  font-size:28px;
+  font-weight:800;
+  letter-spacing:-0.02em;
+  word-break:break-word;
+}
+.c132{
+  font-size:14px;
+  color:var(--muted);
+}
+.c133{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+}
+.c134{
+  padding:8px 14px;
+  border-radius:99px;
+  border:1px solid var(--accent);
+  font-weight:800;
+  font-size:13px;
+}
+.c135{
+  padding:8px 14px;
+  border-radius:99px;
+  border:1px solid var(--border);
+  background:var(--surface);
+  font-weight:700;
+  font-size:13px;
+}
+.c136{
+  display:flex;
+  flex-wrap:wrap;
+  gap:16px;
+  align-items:stretch;
+}
+.c137{
+  flex:1 1 360px;
+  min-width:0;
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:18px;
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+}
+.c138{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  align-items:center;
+  justify-content:space-between;
+}
+.c139{
+  font-weight:800;
+  font-size:15px;
+}
+.c140{
+  font-family:'JetBrains Mono',monospace;
+  font-size:12px;
+  color:var(--muted);
+}
+.c141{
+  background:#FAFAF7;
+  border:1px solid var(--border);
+  border-radius:8px;
+  padding:28px 24px;
+  min-height:330px;
+}
+.c142{
+  height:14px;
+  width:45%;
+  background:#6B716D;
+  border-radius:4px;
+  margin-bottom:22px;
+}
+.c143{
+  height:8px;
+  background:#B8BDB9;
+  border-radius:4px;
+  margin-bottom:11px;
+}
+.c144{
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+}
+.c145{
+  display:flex;
+  justify-content:space-between;
+  font-size:13px;
+  color:var(--muted);
+}
+.c146{
+  font-weight:800;
+  color:var(--text);
+}
+.c147{
+  height:8px;
+  border-radius:99px;
+  background:var(--border);
+  overflow:hidden;
+}
+.c148{
+  height:100%;
+  background:var(--accent);
+}
+.c149{
+  margin:0;
+  flex:1;
+  background:var(--surface2);
+  border:1px solid var(--border);
+  border-radius:10px;
+  padding:14px;
+  font-family:'JetBrains Mono',monospace;
+  font-size:12.5px;
+  line-height:1.6;
+  white-space:pre-wrap;
+  overflow:auto;
+  min-height:240px;
+}
+.c150{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:20px;
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+}
+.c151{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px 28px;
+  font-size:13px;
+  color:var(--muted);
+}
+.c152{
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+  border:1px dashed var(--border);
+  border-radius:10px;
+  padding:12px 14px;
+}
+.c153{
+  font-size:13px;
+  font-weight:800;
+}
+.c154{
+  height:48px;
+  padding:0 20px;
+  border-radius:10px;
+  border:1px solid var(--border);
+  background:var(--surface);
+  color:var(--text);
+  font-size:14px;
+  font-weight:700;
+}
+.c155{
+  height:48px;
+  padding:0 24px;
+  border:0;
+  border-radius:10px;
+  background:var(--accent);
+  color:var(--on-accent);
+  font-size:14px;
+  font-weight:800;
+}
+.c156{
+  display:flex;
+  flex-wrap:wrap;
+  gap:28px;
+}
+.c157{
+  flex:1 1 420px;
+  min-height:220px;
+  border-radius:16px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:12px;
+  padding:24px;
+  text-align:center;
+}
+.c158{
+  width:56px;
+  height:56px;
+  border-radius:50%;
+  background:var(--accent);
+  color:var(--on-accent);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.c159{
+  font-size:20px;
+  font-weight:700;
+}
+.c160{
+  margin-top:4px;
+  background:var(--accent);
+  color:var(--on-accent);
+  border:0;
+  border-radius:12px;
+  height:48px;
+  padding:0 28px;
+  font-size:15px;
+  font-weight:700;
+}
+.c161{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  font-size:13px;
+  color:var(--muted);
+  cursor:pointer;
+}
+.c162{
+  width:20px;
+  height:20px;
+  accent-color:var(--accent);
+}
+.c163{
+  flex:1 1 320px;
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+  justify-content:center;
+}
+.c164{
+  border:1px dashed var(--border);
+  border-radius:12px;
+  padding:18px 16px;
+  font-size:14px;
+  line-height:1.5;
+  color:var(--muted);
+}
+.c165{
+  border:1px solid var(--border);
+  background:var(--surface2);
+  border-radius:12px;
+  padding:14px 16px;
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+.c166{
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+  font-size:14px;
+  font-weight:600;
+}
+.c167{
+  color:var(--accent-text);
+}
+.c168{
+  height:100%;
+  background:var(--accent);
+  transition:width .6s ease;
+}
+.c169{
+  border:1px solid var(--accent);
+  background:var(--surface2);
+  border-radius:12px;
+  padding:16px;
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+.c170{
+  font-size:12px;
+  font-weight:700;
+  letter-spacing:0.08em;
+  text-transform:uppercase;
+  color:var(--muted);
+}
+.c171{
+  font-size:13px;
+  color:var(--muted);
+  line-height:1.6;
+}
+.c172{
+  align-self:flex-start;
+  height:44px;
+  padding:0 20px;
+  border:0;
+  border-radius:10px;
+  background:var(--accent);
+  color:var(--on-accent);
+  font-size:14px;
+  font-weight:700;
+}
+.c173{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:16px;
+}
+.c174{
+  background:var(--surface2);
+  border-radius:14px;
+  padding:18px;
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+.c175{
+  width:32px;
+  height:32px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:800;
+  font-size:14px;
+}
+.c176{
+  font-size:12px;
+  font-weight:700;
+  min-height:16px;
+}
+.c177{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  flex:1;
+  max-width:520px;
+  min-width:260px;
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:14px;
+  padding:0 16px;
+  height:52px;
+  box-sizing:border-box;
+  color:var(--muted);
+}
+.c178{
+  flex:1;
+  border:0;
+  outline:0;
+  background:transparent;
+  font-family:inherit;
+  font-size:15px;
+  color:var(--text);
+}
+.c179{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:20px;
+  padding:28px;
+  display:flex;
+  flex-direction:column;
+  gap:18px;
+}
+.c180{
+  display:flex;
+  flex-wrap:wrap;
+  gap:12px;
+  align-items:center;
+  justify-content:space-between;
+}
+.c181{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+}
+.c182{
+  height:44px;
+  padding:0 18px;
+  border-radius:10px;
+  font-weight:700;
+  font-size:14px;
+}
+.c183{
+  overflow-x:auto;
+}
+.c184{
+  width:100%;
+  min-width:760px;
+  border-collapse:collapse;
+  font-size:14px;
+}
+.c185{
+  text-align:left;
+  color:var(--muted);
+  font-size:12px;
+  letter-spacing:0.08em;
+  text-transform:uppercase;
+}
+.c186{
+  padding:10px 12px;
+  font-weight:700;
+}
+.c187{
+  border-top:1px solid var(--border);
+}
+.c188{
+  padding:4px 12px;
+}
+.c189{
+  min-height:44px;
+  border:0;
+  background:transparent;
+  color:inherit;
+  font:inherit;
+  font-weight:700;
+  padding:0;
+  text-align:left;
+}
+.c190{
+  padding:14px 12px;
+  color:var(--muted);
+}
+.c191{
+  padding:14px 12px;
+}
+.c192{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  color:var(--accent-text);
+  font-weight:700;
+}
+.c193{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  color:var(--muted);
+  font-weight:700;
+}
+.c194{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  color:var(--text);
+  font-weight:800;
+  border:1px solid var(--accent);
+  background:var(--accent-soft);
+  border-radius:99px;
+  padding:3px 10px;
+}
+.c195{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:20px;
+  padding:28px;
+  display:flex;
+  flex-direction:column;
+  gap:16px;
+}
+.c196{
+  height:24px;
+  width:240px;
+}
+.c197{
+  height:48px;
+}
+.c198{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:20px;
+  padding:56px 28px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:14px;
+  text-align:center;
+}
+.c199{
+  width:64px;
+  height:64px;
+  border-radius:50%;
+  background:var(--accent-soft);
+  color:var(--accent-text);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.c200{
+  font-size:20px;
+  font-weight:800;
+}
+.c201{
+  font-size:15px;
+  color:var(--muted);
+  max-width:380px;
+  line-height:1.5;
+}
+.c202{
+  height:48px;
+  padding:0 24px;
+  border:0;
+  border-radius:10px;
+  background:var(--accent);
+  color:var(--on-accent);
+  font-size:15px;
+  font-weight:700;
+}
+.c203{
+  width:340px;
+  flex:none;
+  background:var(--side);
+  border-left:1px solid var(--border);
+  padding:28px 22px;
+  box-sizing:border-box;
+  display:flex;
+  flex-direction:column;
+  gap:22px;
+}
+.c204{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+}
+.c205{
+  height:44px;
+  padding:0 16px;
+  border-radius:10px;
+  border:1px solid var(--border);
+  background:var(--surface);
+  color:var(--text);
+  font-size:14px;
+  font-weight:700;
+  align-items:center;
+}
+.c206{
+  font-size:19px;
+  font-weight:800;
+  line-height:1.3;
+  word-break:break-word;
+}
+.c207{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  align-items:center;
+}
+.c208{
+  font-size:13px;
+  font-weight:700;
+}
+.c209{
+  margin:0;
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:14px;
+  font-family:'JetBrains Mono',monospace;
+  font-size:12.5px;
+  line-height:1.6;
+  color:var(--text);
+  white-space:pre-wrap;
+  max-height:210px;
+  overflow:auto;
+}
+.c210{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:4px 14px;
+}
+.c211{
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+  padding:10px 0;
+  border-bottom:1px solid var(--border);
+  font-size:13px;
+}
+.c212{
+  color:var(--muted);
+}
+.c213{
+  font-weight:600;
+  text-align:right;
+}
+.c214{
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+  padding:12px 0;
+}
+.c215{
+  font-size:12px;
+  font-weight:600;
+  background:var(--surface2);
+  border:1px solid var(--border);
+  color:var(--text);
+  padding:4px 10px;
+  border-radius:99px;
+}
+.c216{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:12px 14px;
+}
+.c217{
+  display:flex;
+  flex-direction:column;
+  min-width:0;
+}
+.c218{
+  font-size:14px;
+  font-weight:700;
+  word-break:break-word;
+}
+.c219{
+  height:46px;
+  border:0;
+  border-radius:12px;
+  background:var(--accent);
+  color:var(--on-accent);
+  font-size:14px;
+  font-weight:700;
+}
+.c220{
+  display:flex;
+  gap:8px;
+}
+.c221{
+  flex:1;
+  height:44px;
+  border-radius:10px;
+  border:1px solid var(--border);
+  background:var(--surface);
+  color:var(--text);
+  font-size:13px;
+  font-weight:600;
+}
+.c222{
+  display:flex;
+  gap:10px;
+  align-items:flex-start;
+  font-size:13px;
+  color:var(--muted);
+  line-height:1.5;
+}
+.c223{
+  position:fixed;
+  right:24px;
+  bottom:24px;
+  z-index:60;
+  max-width:360px;
+  background:var(--surface);
+  border:1px solid var(--accent);
+  border-radius:14px;
+  box-shadow:0 14px 34px rgba(0,0,0,0.3);
+  padding:16px;
+  display:flex;
+  gap:12px;
+  align-items:flex-start;
+}
+.c224{
+  width:32px;
+  height:32px;
+  flex:none;
+  border-radius:50%;
+  background:var(--accent);
+  color:var(--on-accent);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:800;
+}
+.c225{
+  font-size:13px;
+  color:var(--muted);
+  line-height:1.5;
+}
+.c226{
+  height:44px;
+  padding:0 16px;
+  border:0;
+  border-radius:10px;
+  background:var(--accent);
+  color:var(--on-accent);
+  font-size:14px;
+  font-weight:700;
+}
+.c227{
+  height:44px;
+  padding:0 16px;
+  border-radius:10px;
+  border:1px solid var(--border);
+  background:var(--surface);
+  color:var(--text);
+  font-size:14px;
+  font-weight:600;
+}
+.c228{
+  height:44px;
+  padding:0 14px;
+  border-radius:10px;
+  border:1px solid var(--border);
+  background:var(--surface);
+  color:var(--text);
+  font-size:14px;
+  font-weight:600;
+}
+.c229{
+  position:fixed;
+  inset:0;
+  z-index:35;
+  background:rgba(0,0,0,0.5);
+}
+.c230{
+  position:fixed;
+  left:0;
+  right:0;
+  bottom:0;
+  z-index:20;
+  background:var(--side);
+  border-top:1px solid var(--border);
+  padding:6px 4px calc(6px + env(safe-area-inset-bottom,0px));
+  justify-content:space-around;
+}
+.c231{
+  flex:1;
+  min-height:56px;
+  border:0;
+  background:transparent;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:4px;
+  font-size:11px;
+}
+
+/* ===== 3. INTERACCIÓN, ANIMACIONES Y RESPONSIVE ===== */
+body{margin:0}
+*{transition:background-color .2s,color .2s,border-color .2s}
+button{font-family:inherit;cursor:pointer}
+#q::placeholder{color:inherit;opacity:.65}
+@media (max-width:1100px){.panel{display:none !important}}
+@media (max-width:900px){.side{display:none !important}.steps{grid-template-columns:1fr 1fr !important}.main{padding:20px !important}}
+@keyframes sh{to{background-position:-200% 0}}
+@keyframes pop{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.sk{background:linear-gradient(90deg,var(--sk1) 25%,var(--sk2) 50%,var(--sk1) 75%);background-size:200% 100%;animation:sh 1.3s linear infinite;border-radius:8px}
+.toast,.pal{animation:pop .2s ease-out}
+button:not(:disabled):hover{filter:brightness(1.1)}
+button:active{transform:translateY(1px)}
+.nav:hover{background:var(--soft) !important}
+a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(--ac);outline-offset:2px}
+.field:focus-within{border-color:var(--ac) !important;box-shadow:0 0 0 3px var(--soft)}
+tbody tr:hover td{background:var(--soft)}
+.bnav,.sheetbg,.panel .closebtn{display:none}
+@media (max-width:1100px){.panel{display:none !important}.panel.open{display:flex !important;position:fixed;left:0;right:0;bottom:0;width:auto !important;max-height:86vh;overflow:auto;z-index:40;border-left:0 !important;border-radius:20px 20px 0 0}.panel.open .closebtn{display:flex}.sheetbg{display:block}}
+@media (max-width:900px){.bnav{display:flex !important}.main{padding-bottom:100px !important}}
+@media (prefers-reduced-motion:reduce){*{animation:none !important;transition:none !important}}
+</style>
+</head>
+<body>
+<!-- ===== HTML: estructura de las pantallas (sin estilos en línea) ===== -->
+<div id="app"></div>
+<template id="plantilla">
+<div class="c1">
+
+<aside class="side c2">
+<div class="c3">
+<div class="c4">
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4a3 3 0 0 0-3 3 3 3 0 0 0-2 5 3 3 0 0 0 2 5 3 3 0 0 0 6 1V5a2 2 0 0 0-3-1z"></path><path d="M15 4a3 3 0 0 1 3 3 3 3 0 0 1 2 5 3 3 0 0 1-2 5 3 3 0 0 1-6 1"></path></svg>
+</div>
+<div class="c5">Cerebro Empresarial</div>
+</div>
+<nav class="c6">
+<button class="nav c7" data-on-click="{{ goHome }}" data-style="background:{{homeBg}};color:{{homeFg}};font-weight:{{homeW}}">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12l9-8 9 8"></path><path d="M5 10v10h14V10"></path></svg>Inicio</button>
+<button class="nav c7" data-on-click="{{ goAsk }}" data-style="background:{{askBg}};color:{{askFg}};font-weight:{{askW}}">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"></path><path d="M9 10h6M9 14h4"></path></svg>Preguntar al cerebro</button>
+<button class="nav c7" data-on-click="{{ goUpload }}" data-style="background:{{upBg}};color:{{upFg}};font-weight:{{upW}}">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 16V4"></path><path d="M7 9l5-5 5 5"></path><path d="M4 20h16"></path></svg>Subir documentos</button>
+<button class="nav c7" data-on-click="{{ goLibrary }}" data-style="background:{{libBg}};color:{{libFg}};font-weight:{{libW}}">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"></path><path d="M14 3v5h5"></path></svg>Biblioteca</button>
+<button class="nav c7" data-on-click="{{ goSearch }}" data-style="background:{{srBg}};color:{{srFg}};font-weight:{{srW}}">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h10M18 7h2M4 17h2M10 17h10M14 5v4M6 15v4"></path></svg>Búsqueda avanzada</button>
+<a class="c8" href="#">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="5" rx="1"></rect><path d="M5 9v10h14V9"></path><path d="M10 13h4"></path></svg>Archivo original</a>
+<a class="c8" href="#">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><ellipse cx="12" cy="5" rx="8" ry="3"></ellipse><path d="M4 5v14c0 1.7 3.6 3 8 3s8-1.3 8-3V5"></path><path d="M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"></path></svg>Base de datos</a>
+<div class="c9"></div>
+<button class="nav c7" data-on-click="{{ goConfig }}" data-style="background:{{cfgBg}};color:{{cfgFg}};font-weight:{{cfgW}}">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"></path></svg>Configuración</button>
+</nav>
+<div class="c10">
+<div class="c11">Cero papel</div>
+<div class="c12">Cada documento queda digitalizado, consultable y respaldado.</div>
+</div>
+</aside>
+
+<main class="main c13">
+<div class="c14">
+<div class="c15">{{ company }}<span aria-hidden="true">/</span><span class="c16">{{ crumb }}</span></div>
+<div class="c3">
+<div class="c17">
+<template data-if="bell"><div class="c18" data-on-click="{{ closeBell }}"></div></template>
+<button class="c19" data-on-click="{{ toggleBell }}" aria-label="Avisos, 3 nuevos" aria-expanded="{{ bell }}"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9M10.3 21a1.9 1.9 0 0 0 3.4 0"></path></svg><span class="c20">3</span></button>
+<template data-if="bell">
+<div class="pal c21">
+<div class="c22">Avisos</div>
+<template data-for="notifs" data-as="n">
+<div class="c23"><span class="c24"></span><div class="c25"><span class="c26">{{ n.t }}</span><span class="c27">{{ n.d }}</span></div></div>
+</template>
+</div>
+</template>
+</div>
+<div class="c28"><div class="c11">{{ user.name }}</div><div class="c27">{{ user.role }}</div></div>
+<div class="c29" aria-hidden="true">{{ user.initials }}</div>
+</div>
+</div>
+
+
+<template data-if="isConfig">
+<div class="c30">
+<div class="c6">
+<h1 class="c31">Configuración</h1>
+<div class="c32">Ajusta cómo se ve tu cerebro empresarial. Los cambios se aplican al instante.</div>
+</div>
+<section class="c33">
+<h2 class="c34">Apariencia</h2>
+
+<div class="c35">
+<div class="c36">
+<div class="c37">Modo</div>
+<div class="c38">Elige entre fondo claro u oscuro.</div>
+</div>
+<div class="c39" role="group" aria-label="Modo de color">
+<button class="c40" data-on-click="{{ setLight }}" aria-pressed="{{ isLight }}" data-style="background:{{lightBg}};color:{{lightFg}}">
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path></svg>Claro</button>
+<button class="c40" data-on-click="{{ setDark }}" aria-pressed="{{ isDark }}" data-style="background:{{darkBg}};color:{{darkFg}}">
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 13A9 9 0 1 1 11 3a7 7 0 0 0 10 10z"></path></svg>Oscuro</button>
+</div>
+</div>
+
+<div class="c41"></div>
+
+<div class="c35">
+<div class="c36">
+<div class="c37">Color principal</div>
+<div class="c38">Todo el diseño se adapta a este color. Elige uno o crea el tuyo.</div>
+</div>
+<div class="c42" role="group" aria-label="Color principal">
+<template data-for="swatches" data-as="sw">
+<button class="c43" data-on-click="{{ sw.pick }}" aria-label="Color {{ sw.name }}" aria-pressed="{{ sw.selected }}">
+<span class="c44" data-style="background:{{ sw.hex }};border:{{ sw.ring }};box-shadow:{{ sw.glow }}"></span>
+</button>
+</template>
+<label class="c45" for="custom">Otro</label>
+<input class="c46" id="custom" type="color" value="{{ accent }}" data-on-change="{{ onCustom }}">
+</div>
+</div>
+
+<div class="c41"></div>
+
+<div class="c47">
+<div class="c48">Vista previa</div>
+<div class="c49">
+<button class="c50">Seleccionar archivos</button>
+<span class="c51">.md</span>
+<span class="c52"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5 9-10"></path></svg>Archivado</span>
+<div class="c53"><div class="c54"></div></div>
+</div>
+</div>
+</section>
+<section class="c55">
+<h2 class="c34">Estados de la interfaz <span class="c56">· demostración</span></h2>
+<div class="c38">Simula cómo se ve la Biblioteca con datos, cargando o sin documentos.</div>
+<div class="c57" role="group" aria-label="Estado de la biblioteca">
+<template data-for="demOpts" data-as="o">
+<button class="c58" data-on-click="{{ o.pick }}" aria-pressed="{{ o.on }}" data-style="background:{{ o.bg }};color:{{ o.fg }}">{{ o.label }}</button>
+</template>
+</div>
+</section>
+</div>
+</template>
+
+<template data-if="isAsk">
+<div class="c59">
+<div class="c6">
+<h1 class="c31">Pregunta a tu cerebro</h1>
+<div class="c32">Respuestas basadas solo en tus documentos, siempre con la fuente a la vista.</div>
+</div>
+
+<div class="c60">
+<div class="c61">¿Cuántos días de vacaciones le corresponden a un empleado con 6 años de antigüedad?</div>
+</div>
+
+<div class="c62">
+<div class="c63">
+<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4a3 3 0 0 0-3 3 3 3 0 0 0-2 5 3 3 0 0 0 2 5 3 3 0 0 0 6 1V5a2 2 0 0 0-3-1z"></path><path d="M15 4a3 3 0 0 1 3 3 3 3 0 0 1 2 5 3 3 0 0 1-2 5 3 3 0 0 1-6 1"></path></svg>
+</div>
+<div class="c64">
+<div class="c65">
+<div class="c66">Un empleado con 6 años de antigüedad tiene derecho a <strong>18 días hábiles</strong> de vacaciones al año <button class="c67" aria-label="Ver fuente 1">1</button>. Pueden tomarse en hasta dos períodos <button class="c67" aria-label="Ver fuente 1">1</button>. Ten en cuenta que en la reunión directiva del 17 de octubre se acordó <strong>revisar esta política</strong> <button class="c67" aria-label="Ver fuente 2">2</button>, por lo que estas cifras podrían cambiar.</div>
+<div class="c68">
+<div class="c69"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="{{p.accentText}}" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"></path><path d="M9 12l2 2 4-4"></path></svg>Basado en 2 documentos a los que tienes acceso</div>
+<div class="c70">
+<button class="c71" aria-label="Respuesta útil"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 11v9H4v-9zM7 11l4-8c1.7 0 3 1.3 3 3v3h5a2 2 0 0 1 2 2.3l-1.2 7A2 2 0 0 1 17.8 20H7"></path></svg></button>
+<button class="c71" aria-label="Respuesta no útil"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 13V4h3v9zM17 13l-4 8c-1.7 0-3-1.3-3-3v-3H5a2 2 0 0 1-2-2.3l1.2-7A2 2 0 0 1 6.2 4H17"></path></svg></button>
+<button class="c71" aria-label="Copiar respuesta"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M5 15V5a2 2 0 0 1 2-2h8"></path></svg></button>
+</div>
+</div>
+</div>
+
+<div class="c48">Fuentes</div>
+<template data-for="askSources" data-as="src">
+<div class="c72">
+<div class="c73">
+<span class="c74">{{ src.n }}</span>
+<span class="c75">{{ src.name }}</span>
+<span class="c76">{{ src.ext }}</span>
+<span class="c77">· {{ src.section }}</span>
+</div>
+<div class="c78">{{ src.quote }}</div>
+<template data-if="src.warn">
+<div class="c79"><svg class="c80" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="{{p.accentText}}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l10 18H2z"></path><path d="M12 10v5M12 18v.5"></path></svg><span><strong class="c16">Verifica con el original.</strong> {{ src.warnText }}</span></div>
+</template>
+<div class="c81">
+<button class="c82">Ver en el MD</button>
+<button class="c83">Abrir original</button>
+</div>
+</div>
+</template>
+</div>
+</div>
+
+<div class="c84">
+<div class="c81">
+<button class="c85">¿Qué contratos vencen este año?</button>
+<button class="c85">Resume el acta del 17 de octubre</button>
+<button class="c85">¿Qué facturas están pendientes?</button>
+</div>
+<div class="field c86">
+<label class="c87" for="ask">Escribe tu pregunta</label>
+<input class="c88" id="ask" type="text" placeholder="Pregunta lo que quieras sobre tus documentos…">
+<button class="c89" aria-label="Enviar pregunta"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5"></path><path d="M5 12l7-7 7 7"></path></svg></button>
+</div>
+<div class="c90">Solo se consultan los documentos a los que tienes acceso. Las respuestas pueden contener errores: revisa siempre la fuente.</div>
+</div>
+</div>
+</template>
+
+<template data-if="isHome">
+<div class="c91">
+<div class="c92">
+<div class="c93">
+<div class="c94">Cerebro Empresarial</div>
+<h1 class="c95">Encuentra cualquier documento de la empresa</h1>
+<div class="c96">Consulta todo el archivo digital o sube nuevos documentos.</div>
+</div>
+<div class="c97">
+<div class="field c98">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-4-4"></path></svg>
+<label class="c87" for="homeq">Buscar documentos</label>
+<input class="c99" id="homeq" data-on-keydown="{{ homeKey }}" type="text" placeholder="Busca por nombre, contenido o tema…">
+<button class="c100" data-on-click="{{ goAsk }}">Buscar</button>
+</div>
+<button class="c101" data-on-click="{{ goUpload }}">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 16V4"></path><path d="M7 9l5-5 5 5"></path><path d="M4 20h16"></path></svg>Subir documentos</button>
+</div>
+<div class="c102">
+<span class="c103"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="{{p.accentText}}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="5" rx="1"></rect><path d="M5 9v10h14V9"></path></svg>Original archivado de cada documento</span>
+<span class="c103"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="{{p.accentText}}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"></path><path d="M14 3v5h5"></path></svg>Texto convertido a Markdown</span>
+<span class="c103"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="{{p.accentText}}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"></path></svg>Acceso según tus permisos</span>
+</div>
+</div>
+</div>
+</template>
+
+<template data-if="isSearch">
+<div class="c6">
+<h1 class="c31">Búsqueda avanzada</h1>
+<div class="c32">Combina palabras clave, tipo, fecha, autor y estado para afinar los resultados.</div>
+</div>
+<div class="c104">
+<section class="c105">
+<div class="c106">
+<label class="c107" for="sq">Palabras clave</label>
+<div class="field c108">
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-4-4"></path></svg>
+<input class="c99" id="sq" type="text" value="{{ sf.q }}" data-on-change="{{ onSq }}" placeholder="Ej.: vacaciones, contrato…">
+</div>
+</div>
+<template data-for="groups" data-as="g">
+<div class="c106">
+<div class="c107">{{ g.title }}</div>
+<div class="c81">
+<template data-for="g.opts" data-as="o">
+<button class="c109" data-on-click="{{ o.pick }}" aria-pressed="{{ o.on }}" data-style="border:1px solid {{ o.bd }};background:{{ o.bg }};color:{{ o.fg }}">{{ o.label }}</button>
+</template>
+</div>
+</div>
+</template>
+<div class="c106">
+<div class="c107">Rango de fechas</div>
+<div class="c110">
+<div class="c111"><label class="c27" for="sfrom">Desde</label><input class="c112" id="sfrom" type="date" value="{{ sf.from }}" data-on-change="{{ onFrom }}" data-style="color-scheme:{{ scheme }}"></div>
+<div class="c111"><label class="c27" for="sto">Hasta</label><input class="c112" id="sto" type="date" value="{{ sf.to }}" data-on-change="{{ onTo }}" data-style="color-scheme:{{ scheme }}"></div>
+</div>
+</div>
+<button class="c113" data-on-click="{{ srClear }}">Limpiar filtros</button>
+</section>
+<section class="c114">
+<div class="c115" role="status">{{ srCount }}</div>
+<template data-for="results" data-as="r">
+<button class="nav c116" data-on-click="{{ r.open }}">
+<span class="c73"><span class="c117">{{ r.name }}</span><span class="c118">{{ r.ext }}</span><span class="c119">{{ r.status }}</span></span>
+<span class="c77">{{ r.meta }}</span>
+<span class="c120">{{ r.snippet }}</span>
+<span class="c121"><template data-for="r.tags" data-as="t"><span class="c122">{{ t }}</span></template></span>
+</button>
+</template>
+<template data-if="srNone">
+<div class="c123">
+<div class="c124"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-4-4"></path></svg></div>
+<div class="c125">Sin resultados con estos filtros</div>
+<div class="c126">Prueba quitando algún filtro o con otras palabras clave.</div>
+<button class="c127" data-on-click="{{ srClear }}">Limpiar filtros</button>
+</div>
+</template>
+</section>
+</div>
+</template>
+
+<template data-if="isReview">
+<div class="c128">
+<div class="c129">
+<div class="c6">
+<button class="c130" data-on-click="{{ goLibrary }}">← Volver a la Biblioteca</button>
+<h1 class="c131">{{ rv.name }}</h1>
+<div class="c132">{{ rv.meta }}</div>
+</div>
+<div class="c133">
+<span class="c134" data-style="background:{{rv.stBg}};color:{{rv.stFg}}">{{ rv.status }}</span>
+<span class="c135">Confianza {{ rv.conf }}% · {{ rv.lvl }}</span>
+</div>
+</div>
+<div class="c136">
+<section class="c137">
+<div class="c138"><div class="c139">Original <span class="c140">{{ rv.ext }}</span></div>
+<div class="c70"><template data-for="rv.pages" data-as="g"><button class="c109" data-on-click="{{ g.pick }}" aria-pressed="{{ g.on }}" data-style="border:1px solid {{ g.bd }};background:{{ g.bg }};color:{{ g.fg }}">{{ g.label }}</button></template></div></div>
+<div class="c141" data-style="filter:{{ rv.blur }}">
+<div class="c142"></div>
+<template data-for="rv.lines" data-as="w"><div class="c143" data-style="width:{{ w }}%"></div></template>
+</div>
+</section>
+<section class="c137">
+<div class="c139">Texto convertido (MD)</div>
+<div class="c144"><div class="c145"><span>Lectura de esta página</span><span class="c146">{{ rv.pconf }}%</span></div><div class="c147"><div class="c148" data-style="width:{{ rv.pconf }}%"></div></div></div>
+<pre class="c149">{{ rv.preview }}</pre>
+</section>
+</div>
+<section class="c150">
+<div class="c139">Clasificación</div>
+<div class="c151"><span>Ruta en el NAS: <strong class="c16">{{ rv.folder }}</strong></span><span>Integridad: <strong class="c16">{{ rv.hash }}</strong></span><span>Cargado por: <strong class="c16">{{ rv.by }}</strong></span><span>Clasificado por: <strong class="c16">{{ rv.cls }}</strong></span></div>
+<div class="c121"><template data-for="rv.tags" data-as="t"><span class="c122">{{ t }}</span></template></div>
+<template data-if="rv.clas">
+<div class="c152"><div class="c153">Problemas detectados</div><template data-for="rv.problems" data-as="q"><div class="c77">• {{ q }}</div></template></div>
+<div class="c106"><div class="c107">Elige la carpeta (estructura provisional)</div><div class="c81"><template data-for="rv.folders" data-as="o"><button class="c109" data-on-click="{{ o.pick }}" aria-pressed="{{ o.on }}" data-style="border:1px solid {{ o.bd }};background:{{ o.bg }};color:{{ o.fg }}">{{ o.label }}</button></template></div></div>
+<div class="c110">
+<button class="c154" data-on-click="{{ onDiscard }}">Descartar</button>
+<button class="c154" data-on-click="{{ onRescan }}">Volver a escanear</button>
+<button class="c155" data-on-click="{{ onAccept }}">Aceptar y guardar en {{ rv.fSel }}</button>
+</div>
+</template>
+<template data-if="rv.ok">
+<div class="c110"><button class="c155">Descargar original</button><button class="c154">Subir nueva versión</button></div>
+</template>
+</section>
+</div>
+</template>
+
+<template data-if="isUpload">
+<div class="c6">
+<h1 class="c31">Subir documentos</h1>
+<div class="c32">Se convierten a Markdown, se registran y el original queda archivado.</div>
+</div>
+<section class="c33">
+<div class="c156">
+<div class="c157" data-on-dragover="{{ dzOver }}" data-on-dragleave="{{ dzLeave }}" data-on-drop="{{ dzDrop }}" data-style="border:2px {{dz.style}} {{p.accent}};background:{{dz.bg}}">
+<div class="c158">
+<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 16V4"></path><path d="M7 9l5-5 5 5"></path><path d="M4 20h16"></path></svg>
+</div>
+<div class="c159">{{ dz.text }}</div>
+<div class="c132">PDF, Word, Excel, imágenes escaneadas · hasta 50 archivos a la vez</div>
+<button class="c160" data-on-click="{{ startUpload }}" data-style="opacity:{{ confOp }}">Seleccionar archivos</button>
+<label class="c161"><input class="c162" type="checkbox" checked="{{ confOn }}" data-on-change="{{ onConf }}">Confirmo que el escaneo se ve completo y legible</label>
+</div>
+<div class="c163">
+<div class="c48">Procesando ahora</div>
+<template data-if="up.idle">
+<div class="c164">Aún no hay archivos en proceso. Suelta un documento o pulsa “Seleccionar archivos” para ver el flujo completo.</div>
+</template>
+<template data-if="up.active">
+<div class="c165" role="status">
+<div class="c166"><span>{{ up.name }}</span><span class="c167">{{ up.label }}</span></div>
+<div class="c147"><div class="c168" data-style="width:{{ up.pct }}%"></div></div>
+</div>
+</template>
+<template data-if="up.done">
+<div class="c169">
+<div class="c170">Clasificación automática</div>
+<div class="c117">{{ up.title }}</div>
+<div class="c171">Carpeta: <strong class="c16">{{ up.folder }}</strong><br>Confianza: <strong class="c16">{{ up.conf }}%</strong><br>{{ up.reason }}</div>
+<div class="c121"><template data-for="up.tags" data-as="t"><span class="c122">{{ t }}</span></template></div>
+<button class="c172" data-on-click="{{ revLast }}">Revisar documento</button>
+</div>
+</template>
+</div>
+</div>
+
+<div class="steps c173">
+<template data-for="steps" data-as="st">
+<div class="c174" data-style="border:1px solid {{st.border}}">
+<div class="c175" data-style="background:{{st.bg}};color:{{st.fg}};border:1px solid {{st.cb}}">{{ st.mark }}</div>
+<div class="c37">{{ st.title }}</div>
+<div class="c12">{{ st.text }}</div>
+<div class="c176" data-style="color:{{st.tc}}">{{ st.label }}</div>
+</div>
+</template>
+</div>
+</section>
+</template>
+
+<template data-if="isLibrary">
+<header class="c35">
+<div class="c6">
+<h1 class="c31">Biblioteca</h1>
+<div class="c32">Todos tus documentos registrados, con su original archivado.</div>
+</div>
+<div class="field c177">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-4-4"></path></svg>
+<label class="c87" for="q">Buscar en el cerebro</label>
+<input class="c178" id="q" type="text" placeholder="Busca o pregunta: contratos, facturas, políticas…">
+</div>
+</header>
+
+<template data-if="libData">
+<section class="c179">
+<div class="c180">
+<h2 class="c34">Documentos registrados</h2>
+<div class="c181">
+<template data-for="libChips" data-as="c">
+<button class="c182" data-on-click="{{ c.pick }}" aria-pressed="{{ c.on }}" data-style="border:1px solid {{ c.bd }};background:{{ c.bg }};color:{{ c.fg }}">{{ c.label }}</button>
+</template>
+</div>
+</div>
+<div class="c183">
+<table class="c184">
+<thead>
+<tr class="c185">
+<th class="c186">Documento</th>
+<th class="c186">Tipo</th>
+<th class="c186">Fecha</th>
+<th class="c186">Versión MD</th>
+<th class="c186">Original</th>
+<th class="c186">Estado</th>
+</tr>
+</thead>
+<tbody>
+<template data-for="rows" data-as="r">
+<tr class="c187" data-style="background:{{r.bg}}">
+<td class="c188"><button class="c189" data-on-click="{{ r.pick }}" aria-pressed="{{ r.selected }}">{{ r.name }}</button></td>
+<td class="c190">{{ r.type }}</td>
+<td class="c190">{{ r.date }}</td>
+<td class="c191"><span class="c51">.md</span></td>
+<td class="c191"><span class="c76">{{ r.ext }}</span></td>
+<td class="c191">
+<template data-if="r.done">
+<span class="c192"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5 9-10"></path></svg>Archivado</span>
+</template>
+<template data-if="r.pending">
+<span class="c193"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9" stroke-dasharray="3 4"></circle></svg>En proceso</span>
+</template>
+<template data-if="r.clas">
+<span class="c194"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l10 18H2z"></path><path d="M12 10v5M12 18v.5"></path></svg>Por clasificar</span>
+</template>
+</td>
+</tr>
+</template>
+</tbody>
+</table>
+</div>
+</section>
+</template>
+<template data-if="libLoad">
+<section class="c195" aria-busy="true">
+<div class="sk c196"></div>
+<div class="sk c197"></div><div class="sk c197"></div><div class="sk c197"></div><div class="sk c197"></div>
+<div class="c77">Cargando documentos…</div>
+</section>
+</template>
+<template data-if="libEmpty">
+<section class="c198">
+<div class="c199"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="5" rx="1"></rect><path d="M5 9v10h14V9"></path><path d="M10 13h4"></path></svg></div>
+<div class="c200">Aún no hay documentos</div>
+<div class="c201">Sube el primer documento y quedará convertido, registrado y archivado.</div>
+<button class="c202" data-on-click="{{ goUpload }}">Subir documentos</button>
+</section>
+</template>
+</template>
+</main>
+<template data-if="libPanel">
+<aside class="panel {{panelCls}} c203">
+<div class="c204"><div class="c48">Detalle del documento</div><button class="closebtn c205" data-on-click="{{ closeSheet }}">Cerrar</button></div>
+<div class="c93">
+<div class="c206">{{ d.name }}</div>
+<div class="c207">
+<span class="c51">.md</span>
+<span class="c76">{{ d.ext }}</span>
+<span class="c208" data-style="color:{{d.statusFg}}">{{ d.status }}</span>
+</div>
+</div>
+
+<section class="c106">
+<div class="c107">Vista previa (MD)</div>
+<pre class="c209">{{ d.preview }}</pre>
+</section>
+
+<section class="c106">
+<div class="c107">Información</div>
+<div class="c210">
+<template data-for="d.info" data-as="i">
+<div class="c211"><span class="c212">{{ i.k }}</span><span class="c213">{{ i.v }}</span></div>
+</template>
+<div class="c214">
+<template data-for="d.tags" data-as="t">
+<span class="c215">{{ t }}</span>
+</template>
+</div>
+</div>
+</section>
+
+<section class="c106">
+<div class="c107">Original archivado</div>
+<div class="c216">
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="{{p.accentText}}" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"></path><path d="M14 3v5h5"></path></svg>
+<div class="c217"><span class="c218">{{ d.file }}</span><span class="c27">{{ d.size }}</span></div>
+</div>
+<button class="c219">Descargar original</button>
+</section>
+
+<section class="c106">
+<div class="c107">Acciones</div>
+<div class="c220">
+<button class="c221">Compartir</button>
+<button class="c221">Nueva versión</button>
+<button class="c221" data-on-click="{{ d.review }}">Revisar</button>
+</div>
+</section>
+
+<section class="c106">
+<div class="c107">Historial</div>
+<template data-for="d.history" data-as="h">
+<div class="c222"><span class="c24"></span><span>{{ h }}</span></div>
+</template>
+</section>
+</aside>
+</template>
+<template data-if="toast">
+<div class="toast c223" role="status">
+<div class="c224">✓</div>
+<div class="c106"><div class="c139">{{ toastTitle }}</div><div class="c225">{{ toastMsg }}</div><div class="c220"><button class="c226" data-on-click="{{ revLast }}">Revisar</button><button class="c227" data-on-click="{{ toLib }}">Biblioteca</button><button class="c228" data-on-click="{{ closeToast }}">Cerrar</button></div></div>
+</div>
+</template>
+<template data-if="sheetOpen"><div class="sheetbg c229" data-on-click="{{ closeSheet }}"></div></template>
+<nav class="bnav c230" aria-label="Navegación principal">
+<template data-for="bnav" data-as="n">
+<button class="c231" data-on-click="{{ n.go }}" aria-label="{{ n.label }}" data-style="color:{{ n.fg }};font-weight:{{ n.w }}"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{ n.d }}"></path></svg>{{ n.label }}</button>
+</template>
+</nav>
+</div>
+</template>
+
+<!-- ===== BLOQUE JS 1: DATOS DE DEMOSTRACIÓN (se reemplaza por el back) ===== -->
+<script id="demo-data">
+/* =====================================================================
+   DATOS DE DEMOSTRACIÓN
+   Todo lo de este bloque es inventado y se reemplaza con datos del back.
+   La aplicación (bloque siguiente) solo lee window.DEMO.
+   ===================================================================== */
+window.DEMO = {
+  company: 'Empresa S.A.',
+  user: { name: 'Ana Gómez', role: 'Administradora', initials: 'AG' },
+
+  // Documentos registrados (cada uno: MD, original, ruta, estado)
+  docs: [
+      { name: 'Contrato_proveedor_2026', type: 'Contrato', date: '23 oct 2026', ext: '.pdf', done: false, pending: true, by: 'Ana Gómez', size: '1,2 MB', tags: ['Proveedores', 'Legal'], preview: '# Contrato de suministro\n\n**Proveedor:** Ejemplo S.A.\n**Vigencia:** 12 meses\n\n## Cláusula 1\nObjeto del contrato…', history: ['Subido por Ana Gómez · 23 oct', 'Convirtiendo a Markdown…'] },
+      { name: 'Factura_0456', type: 'Factura', date: '22 oct 2026', ext: '.jpg', done: true, pending: false, by: 'Luis Benítez', size: '640 KB', tags: ['Facturas', 'Contabilidad'], preview: '# Factura N.º 0456\n\n**Cliente:** Ejemplo S.A.\n**Fecha:** 22/10/2026\n\n| Concepto | Monto |\n|---|---|\n| Servicio | 1.500.000 |', history: ['Subido por Luis Benítez · 22 oct', 'Texto leído y convertido a MD', 'Registrado en la base de datos', 'Original archivado'] },
+      { name: 'Politica_vacaciones', type: 'Política', date: '20 oct 2026', ext: '.docx', done: true, pending: false, by: 'María Rojas', size: '85 KB', tags: ['RR. HH.', 'Políticas'], preview: '# Política de vacaciones\n\n## Alcance\nAplica a todo el personal.\n\n## Días disponibles\nSegún la antigüedad…', history: ['Subido por María Rojas · 20 oct', 'Convertido a MD', 'Registrado en la base de datos', 'Original archivado'] },
+      { name: 'Acta_reunion_directiva', type: 'Acta', date: '17 oct 2026', ext: '.pdf', done: true, pending: false, by: 'Carlos Díaz', size: '420 KB', tags: ['Directiva', 'Actas'], preview: '# Acta de reunión\n\n**Fecha:** 17/10/2026\n\n## Temas\n1. Presupuesto anual\n2. Nuevas sucursales\n\n## Acuerdos\n…', history: ['Subido por Carlos Díaz · 17 oct', 'Convertido a MD', 'Registrado en la base de datos', 'Original archivado'] },
+      { name: 'Acta_comite_compras', type: 'Acta', date: '5 oct 2026', ext: '.pdf', done: false, pending: false, clasificar: true, suggest: 'Compras', problems: ['Página 2 borrosa', 'No se pudo determinar el tipo de documento'], by: 'Carlos Díaz', size: '380 KB', tags: ['Compras', 'Actas'], preview: '# Acta comité de compras\n\n## Temas\n1. Cotizaciones de papelería\n2. Selección de proveedor\n\n[texto ilegible]', history: ['Subido por Carlos Díaz · 5 oct', 'Convertido a MD', 'Clasificación pendiente'] },
+      { name: 'Factura_0431', type: 'Factura', date: '30 sep 2026', ext: '.pdf', done: true, pending: false, by: 'Luis Benítez', size: '210 KB', tags: ['Facturas', 'Contabilidad'], preview: '# Factura N.º 0431\n\n**Cliente:** Ejemplo S.A.\n**Concepto:** Mantenimiento mensual', history: ['Subido por Luis Benítez · 30 sep', 'Convertido a MD', 'Registrado en la base de datos', 'Original archivado'] },
+      { name: 'Contrato_arriendo_oficina', type: 'Contrato', date: '12 sep 2026', ext: '.pdf', done: true, pending: false, by: 'Ana Gómez', size: '1,8 MB', tags: ['Legal', 'Inmuebles'], preview: '# Contrato de arriendo\n\n**Inmueble:** Oficina central\n**Vigencia:** 24 meses\n\n## Cláusula 1\nCanon mensual y reajuste anual.', history: ['Subido por Ana Gómez · 12 sep', 'Convertido a MD', 'Registrado en la base de datos', 'Original archivado'] },
+      { name: 'Manual_seguridad', type: 'Política', date: '2 sep 2026', ext: '.docx', done: true, pending: false, by: 'María Rojas', size: '120 KB', tags: ['Seguridad', 'RR. HH.'], preview: '# Manual de seguridad\n\n## Alcance\nAplica a todas las sedes.\n\n## Evacuación\nRutas y puntos de encuentro.', history: ['Subido por María Rojas · 2 sep', 'Convertido a MD', 'Registrado en la base de datos', 'Original archivado'] }
+],
+
+  // Fecha ISO de ingreso por documento (para ordenar y filtrar por rango)
+  iso: { Contrato_proveedor_2026: '2026-10-23', Factura_0456: '2026-10-22', Politica_vacaciones: '2026-10-20', Acta_reunion_directiva: '2026-10-17', Acta_comite_compras: '2026-10-05', Factura_0431: '2026-09-30', Contrato_arriendo_oficina: '2026-09-12', Manual_seguridad: '2026-09-02' },
+
+  // Ruta provisional en el NAS según el tipo de documento
+  nas: { Contrato: '/archivo/legal/contratos/2026/', Factura: '/archivo/finanzas/facturas/2026/', 'Política': '/archivo/rrhh/politicas/', Acta: '/archivo/direccion/actas/2026/' },
+
+  // Carpetas ofrecidas al clasificar manualmente (cuadro de clasificación provisional)
+  folders: { 'Legal': '/archivo/legal/', 'Finanzas': '/archivo/finanzas/', 'RR. HH.': '/archivo/rrhh/', 'Compras': '/archivo/compras/', 'Dirección': '/archivo/direccion/' },
+
+  // Respuesta de ejemplo de "Preguntar al cerebro" (fuentes citadas)
+  askSources: [
+      { n: 1, name: 'Politica_vacaciones', ext: '.docx', section: 'Días disponibles', quote: 'El personal con más de 5 y hasta 10 años de antigüedad tendrá derecho a 18 días hábiles de vacaciones por año, divisibles en hasta dos períodos.', warn: false, warnText: '' },
+      { n: 2, name: 'Acta_reunion_directiva', ext: '.pdf', section: 'Acuerdos, punto 3', quote: 'Se acuerda revisar la política de vacaciones vigente y presentar una propuesta en la próxima reunión.', warn: true, warnText: 'Este documento era una imagen escaneada y se leyó con OCR (confianza media).' }
+    ],
+
+  // Avisos de la campana
+  notifs: [{ t: 'Factura_0456 procesada', d: 'Convertida y archivada · hace 5 min' }, { t: 'El contrato con Proveedor Ejemplo vence en 15 días', d: 'Vencimiento próximo · hoy' }, { t: 'Acta_reunion_directiva: revisar lectura OCR', d: 'Confianza media · ayer' }],
+
+  // Resultado simulado de una carga. bad = true -> queda "Por clasificar".
+  makeUpload: function (fileName, bad) {
+    var nm = (fileName || 'Documento').replace(/\.[^.]+$/, ''), m = (fileName || '').match(/\.[^.]+$/);
+    var reason = bad ? 'Página 2 borrosa y no se pudo determinar el tipo de documento.' : 'Tipo y carpeta reconocidos con alta confianza.';
+    var doc = { name: nm, type: 'Factura', date: '25 oct 2026', iso: '2026-10-25', ext: m ? m[0] : '.pdf', by: window.DEMO.user.name, size: '540 KB',
+      tags: bad ? ['Sin clasificar'] : ['Facturas', 'Contabilidad'],
+      preview: '# Factura\n\n**Cliente:** Ejemplo S.A.\n**Monto:** 1.500.000' + (bad ? '\n\n[texto ilegible]' : ''),
+      history: ['Subido por ' + window.DEMO.user.name + ' · hoy', 'Convertido a MD', bad ? 'Clasificación pendiente' : 'Original archivado'],
+      s: bad ? 'clasificar' : 'archivado', suggest: 'Finanzas', conf: bad ? 58 : 94,
+      folder: bad ? '/archivo/_por-clasificar/' : '/archivo/finanzas/facturas/2026/',
+      problems: bad ? ['Página 2 borrosa', 'No se pudo determinar el tipo de documento'] : [] };
+    return { doc: doc, res: { s: doc.s, name: nm, folder: doc.folder, conf: doc.conf, reason: reason, tags: doc.tags } };
+  }
+};
+</script>
+
+<!-- ===== BLOQUE JS 2: FUNCIONAMIENTO DE LA APLICACIÓN (se queda) ===== -->
+<script id="app-js">
+/* =====================================================================
+   FUNCIONAMIENTO DE LA APLICACIÓN
+   Interfaz, estado, filtros, flujo de carga y revisión. No contiene datos:
+   los lee de window.DEMO (o del back cuando se conecte).
+   ===================================================================== */
+
+/* --- Colores del tema: las clases CSS los leen como variables --- */
+const PALETTE = { bg: 'var(--bg)', side: 'var(--side)', surface: 'var(--surface)', surface2: 'var(--surface2)', border: 'var(--border)', text: 'var(--text)', muted: 'var(--muted)', accent: 'var(--accent)', onAccent: 'var(--on-accent)', accentSoft: 'var(--accent-soft)', accentText: 'var(--accent-text)' };
+
+/* --- Motor mínimo de plantillas (data-if, data-for, {{ expresiones }}, data-on-*) --- */
+const _fn = {};
+function ev(expr, scope) { return (_fn[expr] || (_fn[expr] = new Function('__s', 'with(__s){return (' + expr + ')}')))(scope); }
+function one(v) { const m = /^\{\{\s*([\s\S]*?)\s*\}\}$/.exec(v); return m ? m[1] : null; }
+function interp(str, scope) { return str.replace(/\{\{\s*([\s\S]*?)\s*\}\}/g, (_, e) => { const v = ev(e, scope); return v == null ? '' : String(v); }); }
+function kids(from, scope, to) { from.childNodes.forEach((c) => { const n = build(c, scope); if (n) to.appendChild(n); }); }
+function build(node, scope) {
+  if (node.nodeType === 3) return document.createTextNode(node.nodeValue.includes('{{') ? interp(node.nodeValue, scope) : node.nodeValue);
+  if (node.nodeType !== 1) return null;
+  if (node.tagName === 'TEMPLATE') {
+    const frag = document.createDocumentFragment();
+    if (node.hasAttribute('data-if')) { if (ev(node.getAttribute('data-if'), scope)) kids(node.content, scope, frag); }
+    else if (node.hasAttribute('data-for')) {
+      (ev(node.getAttribute('data-for'), scope) || []).forEach((it) => { const sc = Object.create(scope); sc[node.getAttribute('data-as')] = it; kids(node.content, sc, frag); });
+    }
+    return frag;
+  }
+  const el = document.createElementNS(node.namespaceURI, node.localName);
+  Array.from(node.attributes).forEach((a) => {
+    const n = a.name, v = a.value;
+    if (n.startsWith('data-on-')) { const fn = ev(one(v), scope); if (typeof fn === 'function') el.addEventListener(n.slice(8) === 'change' ? 'input' : n.slice(8), fn); return; }
+    if (n === 'data-style') { el.style.cssText = interp(v, scope); return; }
+    const ex = one(v);
+    if (ex !== null) {
+      const val = ev(ex, scope);
+      if (n === 'value') { el.value = val == null ? '' : val; return; }
+      if (n === 'checked') { el.checked = !!val; return; }
+      if (n.startsWith('aria-')) { el.setAttribute(n, String(val)); return; }
+      if (val === false || val == null) return;
+      el.setAttribute(n, String(val)); return;
+    }
+    el.setAttribute(n, v.includes('{{') ? interp(v, scope) : v);
+  });
+  kids(node, scope, el);
+  return el;
+}
+
+/* --- Base de componente: estado + re-render --- */
+class DCLogic {
+  constructor() { this.props = {}; this.state = {}; }
+  setState(patch) { this.state = Object.assign({}, this.state, patch); this.render(); }
+  render() {
+    const root = document.getElementById('app'), a = document.activeElement;
+    const keep = a && a.id ? { id: a.id, s: a.selectionStart, e: a.selectionEnd } : null;
+    const scope = Object.assign(Object.create(null), this.renderVals());
+    const frag = document.createDocumentFragment();
+    kids(document.getElementById('plantilla').content, scope, frag);
+    root.replaceChildren(frag);
+    if (keep) { const el = document.getElementById(keep.id); if (el) { el.focus(); try { el.setSelectionRange(keep.s, keep.e); } catch (x) {} } }
+  }
+}
+
+/* --- Lógica de la aplicación --- */
+class Component extends DCLogic {
+  hexToHsl(hex) {
+    let h = (hex || '#14B8A6').replace('#', '');
+    if (h.length === 3) h = h.split('').map((c) => c + c).join('');
+    const r = parseInt(h.slice(0, 2), 16) / 255, g = parseInt(h.slice(2, 4), 16) / 255, b = parseInt(h.slice(4, 6), 16) / 255;
+    const mx = Math.max(r, g, b), mn = Math.min(r, g, b), d = mx - mn;
+    let hue = 0;
+    if (d) {
+      if (mx === r) hue = ((g - b) / d) % 6;
+      else if (mx === g) hue = (b - r) / d + 2;
+      else hue = (r - g) / d + 4;
+      hue *= 60;
+      if (hue < 0) hue += 360;
+    }
+    const l = (mx + mn) / 2;
+    const s = d === 0 ? 0 : d / (1 - Math.abs(2 * l - 1));
+    return [Math.round(hue), Math.round(s * 100)];
+  }
+  searchVals(p, st, base, view, dark) {
+    const f = Object.assign({ q: '', scope: [], types: [], exts: [], status: 'all', from: '', to: '', by: [], sort: 'recent' }, st.f || {});
+    const set = (patch) => this.setState({ f: Object.assign({}, f, patch) });
+    const tg = (key, v) => () => set({ [key]: f[key].includes(v) ? f[key].filter((x) => x !== v) : f[key].concat(v) });
+    const opt = (label, on, pick) => ({ label: label, on: on, pick: pick, bg: on ? p.accentSoft : p.surface, fg: on ? p.accentText : p.text, bd: on ? p.accent : p.border });
+    const uniq = (k) => Array.from(new Set(base.map((r) => r[k])));
+    const q = f.q.trim().toLowerCase();
+    const sc = f.scope.length ? f.scope : ['nombre', 'contenido', 'etiquetas'];
+    const clean = (t) => t.replace(/[#*|>-]/g, ' ').replace(/\s+/g, ' ').trim();
+    const res = base.map((r, i) => Object.assign({}, r, { i: i })).filter((r) => {
+      if (q) {
+        const hay = (sc.includes('nombre') ? r.name : '') + ' ' + (sc.includes('contenido') ? r.preview : '') + ' ' + (sc.includes('etiquetas') ? r.tags.join(' ') : '');
+        if (!hay.toLowerCase().includes(q)) return false;
+      }
+      if (f.types.length && !f.types.includes(r.type)) return false;
+      if (f.exts.length && !f.exts.includes(r.ext)) return false;
+      if (r.s === 'descartado') return false;
+      if (f.status !== 'all' && r.s !== f.status) return false;
+      if (f.from && r.iso < f.from) return false;
+      if (f.to && r.iso > f.to) return false;
+      if (f.by.length && !f.by.includes(r.by)) return false;
+      return true;
+    });
+    res.sort(f.sort === 'name' ? (a, b) => a.name.localeCompare(b.name) : (a, b) => b.iso.localeCompare(a.iso));
+    const results = res.map((r) => {
+      const ls = r.preview.split('\n').map(clean).filter(Boolean);
+      const hit = q && sc.includes('contenido') ? ls.find((l) => l.toLowerCase().includes(q)) : null;
+      return { name: r.name, ext: r.ext, meta: r.type + ' · ' + r.date + ' · ' + r.by, snippet: hit || ls[1] || ls[0] || '', tags: r.tags, status: (r.s === 'archivado' ? '✓ ' : r.s === 'clasificar' ? '! ' : '◌ ') + r.sl, open: () => this.setState({ view: 'library', dem: 'data', sel: r.i, sheet: true }) };
+    });
+    const groups = [
+      { title: 'Buscar en (vacío = todo)', opts: [['nombre', 'Nombre'], ['contenido', 'Contenido'], ['etiquetas', 'Etiquetas']].map((x) => opt(x[1], f.scope.includes(x[0]), tg('scope', x[0]))) },
+      { title: 'Tipo de documento', opts: uniq('type').map((v) => opt(v, f.types.includes(v), tg('types', v))) },
+      { title: 'Formato original', opts: uniq('ext').map((v) => opt(v, f.exts.includes(v), tg('exts', v))) },
+      { title: 'Estado', opts: [['all', 'Todos'], ['archivado', 'Archivado'], ['clasificar', 'Por clasificar'], ['proceso', 'En proceso']].map((x) => opt(x[1], f.status === x[0], () => set({ status: x[0] }))) },
+      { title: 'Subido por', opts: uniq('by').map((v) => opt(v, f.by.includes(v), tg('by', v))) },
+      { title: 'Ordenar por', opts: [['recent', 'Más recientes'], ['name', 'Nombre']].map((x) => opt(x[1], f.sort === x[0], () => set({ sort: x[0] }))) }
+    ];
+    const act = (q ? 1 : 0) + (f.scope.length ? 1 : 0) + f.types.length + f.exts.length + (f.status !== 'all' ? 1 : 0) + (f.from ? 1 : 0) + (f.to ? 1 : 0) + f.by.length;
+    const on = view === 'search';
+    return {
+      isSearch: on, scheme: dark ? 'dark' : 'light', sf: f, groups: groups, results: results, srNone: results.length === 0,
+      srCount: results.length + (results.length === 1 ? ' resultado' : ' resultados') + (act ? ' · ' + act + (act === 1 ? ' filtro activo' : ' filtros activos') : ''),
+      srBg: on ? p.accentSoft : 'transparent', srFg: on ? p.accentText : p.muted, srW: on ? 700 : 500,
+      goSearch: () => this.setState({ view: 'search' }),
+      onSq: (e) => set({ q: e.target.value }), onFrom: (e) => set({ from: e.target.value }), onTo: (e) => set({ to: e.target.value }),
+      srClear: () => this.setState({ f: null })
+    };
+  }
+  reviewVals(p, st, base, view, sel) {
+    const cur = base[sel] || base[0], clas = cur.s === 'clasificar';
+    const FO = DEMO.folders;
+    const fSel = st.revFolder || cur.suggest || 'Compras', pg = st.revPage ?? 1, bad = clas && pg === 2;
+    const pconf = clas ? (pg === 1 ? 88 : 58) : cur.conf - (pg === 2 ? 2 : 0);
+    const lv = (c) => (c >= 90 ? 'Alta' : c >= 75 ? 'Media' : 'Baja');
+    const ch = (label, on, pick) => ({ label: label, on: on, pick: pick, bg: on ? p.accentSoft : p.surface, fg: on ? p.accentText : p.text, bd: on ? p.accent : p.border });
+    const done = (o) => this.setState({ ov: Object.assign({}, st.ov, { [cur.name]: o }) });
+    return {
+      isReview: view === 'review',
+      rv: { name: cur.name, ext: cur.ext, meta: cur.type + ' · ' + cur.date + ' · cargado por ' + cur.by, status: (clas ? '! ' : '✓ ') + cur.sl, stBg: p.accentSoft, stFg: p.accentText, conf: cur.conf, lvl: lv(cur.conf), pconf: pconf, preview: cur.preview, folder: cur.folder, hash: cur.hash, by: cur.by, cls: cur.cls, tags: cur.tags, problems: cur.problems, clas: clas, ok: !clas, fSel: fSel, blur: bad ? 'blur(1.6px)' : 'none',
+        lines: pg === 1 ? [92, 88, 95, 60, 90, 84, 92, 70, 50, 86] : [90, 96, 78, 92, 85, 94, 62, 88, 74, 40],
+        pages: [1, 2].map((n) => ch('Pág. ' + n, pg === n, () => this.setState({ revPage: n }))),
+        folders: Object.keys(FO).map((k) => ch(k + (k === cur.suggest ? ' (sugerida)' : ''), fSel === k, () => this.setState({ revFolder: k }))) },
+      onAccept: () => { done({ s: 'archivado', done: true, clasificar: false, cls: 'Ana Gómez (manual)', folder: FO[fSel] }); this.setState({ view: 'library' }); },
+      onDiscard: () => { done({ s: 'descartado' }); this.setState({ view: 'library' }); },
+      onRescan: () => { done({ s: 'descartado' }); this.setState({ view: 'upload' }); },
+      revLast: () => this.setState({ view: 'review', sel: base.length - 1, revPage: 1, revFolder: null, toast: false }),
+      confOn: st.conf !== false, confOp: st.conf === false ? 0.5 : 1, onConf: (e) => this.setState({ conf: e.target.checked }),
+      toastTitle: st.lastRes && st.lastRes.s === 'clasificar' ? 'Documento por clasificar' : 'Documento archivado',
+      toastMsg: st.lastRes ? (st.lastRes.s === 'clasificar' ? st.lastRes.name + ': ' + st.lastRes.reason + ' Revísalo para clasificarlo.' : st.lastRes.name + ' se clasificó solo y ya está en el archivo.') : ''
+    };
+  }
+  extraVals(p, st, base, view) {
+    const dem = st.dem ?? 'data', s = st.upStep ?? 0, q = (st.pq || '').trim().toLowerCase();
+    const T = ['Subes el documento', 'Se convierte a MD', 'Se registra en la base', 'Se archiva el original'];
+    const D = ['Desde el computador o el celular.', 'Texto limpio y estructurado en Markdown.', 'Queda indexado para consultarlo cuando quieras.', 'Copia intacta: el archivador sin papel.'];
+    const steps = T.map((t, i) => {
+      const n = i + 1, done = s > n, cur = s === n, on = done || cur;
+      return { n: n, title: t, text: D[i], mark: done ? '✓' : String(n), bg: on ? p.accent : 'transparent', fg: on ? p.onAccent : p.muted, cb: on ? p.accent : p.border, border: cur ? p.accent : p.border, label: done ? 'Listo' : cur ? 'En curso…' : s === 0 ? '' : 'Pendiente', tc: on ? p.accentText : p.muted };
+    });
+    const L = ['Subiendo…', 'Convirtiendo a Markdown…', 'Registrando en la base de datos…', 'Archivando el original…', 'Listo · archivado'];
+    const nv = [['home', 'Inicio', 'M3 12l9-8 9 8M5 10v10h14V10'], ['upload', 'Subir', 'M12 16V4M7 9l5-5 5 5M4 20h16'], ['library', 'Biblioteca', 'M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8zM14 3v5h5'], ['search', 'Búsqueda', 'M11 4a7 7 0 1 0 0 14 7 7 0 0 0 0-14zM20 20l-4-4'], ['ask', 'Preguntar', 'M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z'], ['config', 'Ajustes', 'M4 7h10M18 7h2M4 17h2M10 17h10M14 5v4M6 15v4']];
+    const dm = [['data', 'Con datos'], ['load', 'Cargando'], ['empty', 'Vacía']];
+    return {
+      steps: steps,
+      up: { done: s === 5 && !!st.lastRes, title: st.lastRes ? (st.lastRes.s === 'clasificar' ? 'Por clasificar' : 'Archivado automáticamente') : '', folder: st.lastRes ? st.lastRes.folder : '', conf: st.lastRes ? st.lastRes.conf : 0, reason: st.lastRes ? st.lastRes.reason : '', tags: st.lastRes ? st.lastRes.tags : [], idle: s === 0, active: s > 0, name: st.upName || '', label: L[s - 1] || '', pct: s === 5 ? 100 : (s - 1) * 25 + 12 },
+      dz: { bg: st.drag ? p.surface : p.accentSoft, style: st.drag ? 'solid' : 'dashed', text: st.drag ? 'Suelta para subir' : 'Arrastra tus documentos aquí' },
+      dzOver: (e) => { e.preventDefault(); if (!st.drag) this.setState({ drag: true }); },
+      dzLeave: () => this.setState({ drag: false }),
+      dzDrop: (e) => { e.preventDefault(); const f = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0]; this.startUpload(f ? f.name : null); },
+      startUpload: () => this.startUpload(null),
+      toast: !!st.toast, upName: st.upName || '', closeToast: () => this.setState({ toast: false }), toLib: () => this.setState({ toast: false, view: 'library' }),
+      bell: !!st.bell, toggleBell: () => this.setState({ bell: !st.bell }), closeBell: () => this.setState({ bell: false }),
+      notifs: DEMO.notifs,
+      homeKey: (e) => { if (e.key === 'Enter') this.setState({ view: 'ask' }); },
+      bnav: nv.map((x) => ({ label: x[1], d: x[2], go: () => this.setState({ view: x[0] }), fg: view === x[0] ? p.accentText : p.muted, w: view === x[0] ? 800 : 500 })),
+      demOpts: dm.map((x) => ({ label: x[1], on: dem === x[0], bg: dem === x[0] ? p.accent : 'transparent', fg: dem === x[0] ? p.onAccent : p.muted, pick: () => this.setState({ dem: x[0] }) })),
+      libData: dem === 'data', libLoad: dem === 'load', libEmpty: dem === 'empty', libPanel: view === 'library' && dem === 'data',
+      panelCls: st.sheet ? 'open' : '', sheetOpen: !!st.sheet && view === 'library' && dem === 'data', closeSheet: () => this.setState({ sheet: false })
+    };
+  }
+  startUpload(name) {
+    if (this.state && this.state.conf === false) return;
+    clearTimeout(this._t);
+    this.setState({ upStep: 1, upName: name || 'Factura_0458.pdf', drag: false, toast: false });
+    this._adv(1);
+  }
+  _adv(n) {
+    this._t = setTimeout(() => {
+      const nn = n + 1;
+      if (nn === 5) {
+        const stt = this.state || {}, k = (stt.upN || 0) + 1, u = DEMO.makeUpload(stt.upName, k % 2 === 0);
+        this.setState({ upStep: 5, toast: true, upN: k, added: (stt.added || []).concat(u.doc), lastRes: u.res });
+      } else this.setState({ upStep: nn });
+      if (nn < 5) this._adv(nn);
+    }, 1300);
+  }
+  applyTheme(accent, dark) {
+    const [h, s0] = this.hexToHsl(accent);
+    const s = s0 < 25 ? s0 : Math.min(s0, 85), ns = Math.min(s0, 20);
+    const c = (hh, ss, ll) => 'hsl(' + hh + ', ' + ss + '%, ' + ll + '%)';
+    const v = dark ? { bg: c(h, ns, 8), side: c(h, ns, 6), surface: c(h, ns, 11), surface2: c(h, ns, 15), border: c(h, ns, 24), text: c(h, Math.min(ns, 15), 94), muted: c(h, Math.min(ns, 12), 70), accent: c(h, s, 60), 'on-accent': c(h, Math.min(ns + 10, 30), 8), 'accent-soft': c(h, Math.round(s * 0.55), 17), 'accent-text': c(h, s, 72) }
+      : { bg: c(h, ns, 96), side: c(h, ns, 92), surface: c(h, ns, 99), surface2: c(h, ns, 94), border: c(h, ns, 84), text: c(h, Math.min(ns + 10, 30), 10), muted: c(h, Math.min(ns, 12), 36), accent: c(h, s, 30), 'on-accent': '#FFFFFF', 'accent-soft': c(h, Math.round(s * 0.6), 91), 'accent-text': c(h, s, 24) };
+    Object.keys(v).forEach((k) => document.documentElement.style.setProperty('--' + k, v[k]));
+  }
+  renderVals() {
+    const st = this.state || {};
+    const mode = st.mode ?? (this.props.dark === false ? 'light' : 'dark');
+    const accent = st.accent ?? this.props.accent ?? '#14B8A6';
+    const dark = mode === 'dark';
+    const view = st.view ?? 'home';
+    const sel = st.sel ?? 1;
+    const askSources = DEMO.askSources;
+    this.applyTheme(accent, dark);
+    const p = PALETTE;
+    const swList = [
+      { name: 'Verde azulado', hex: '#14B8A6' }, { name: 'Azul', hex: '#3B82F6' }, { name: 'Violeta', hex: '#8B5CF6' },
+      { name: 'Rosa', hex: '#EC4899' }, { name: 'Naranja', hex: '#F97316' }, { name: 'Verde', hex: '#22C55E' },
+      { name: 'Grafito', hex: '#64748B' }
+    ];
+    const swatches = swList.map((x) => {
+      const selected = x.hex.toLowerCase() === accent.toLowerCase();
+      return {
+        name: x.name, hex: x.hex, selected: selected,
+        ring: selected ? '3px solid ' + p.text : '3px solid transparent',
+        glow: selected ? '0 0 0 2px ' + p.surface : 'none',
+        pick: () => this.setState({ accent: x.hex })
+      };
+    });
+    const steps = [
+      { n: 1, title: 'Subes el documento', text: 'Desde el computador o el celular.' },
+      { n: 2, title: 'Se convierte a MD', text: 'Texto limpio y estructurado en Markdown.' },
+      { n: 3, title: 'Se registra en la base', text: 'Queda indexado para consultarlo cuando quieras.' },
+      { n: 4, title: 'Se archiva el original', text: 'Copia intacta: el archivador sin papel.' }
+    ];
+    const base = JSON.parse(JSON.stringify(DEMO.docs));
+    const ISO = DEMO.iso;
+    base.push(...(st.added || []));
+    const NAS = DEMO.nas;
+    const hx = (t) => { let h = 5381; for (let k = 0; k < t.length; k++) h = ((h * 33) ^ t.charCodeAt(k)) >>> 0; return h.toString(16).padStart(8, '0'); };
+    base.forEach((r) => {
+      r.iso = r.iso || ISO[r.name];
+      const o = (st.ov || {})[r.name]; if (o) Object.assign(r, o);
+      r.s = r.s || (r.clasificar ? 'clasificar' : r.done ? 'archivado' : 'proceso');
+      r.sl = { archivado: 'Archivado', clasificar: 'Por clasificar', proceso: 'En proceso', descartado: 'Descartado' }[r.s];
+      r.conf = r.conf ?? (r.s === 'clasificar' ? 58 : 96);
+      r.folder = r.folder ?? (r.s === 'clasificar' ? '/archivo/_por-clasificar/' : (NAS[r.type] || '/archivo/'));
+      r.hash = 'sha256:' + hx(r.name) + '…' + hx(r.name + '1');
+      r.cls = r.cls ?? (r.s === 'clasificar' ? 'Pendiente' : 'Automático');
+      r.problems = r.problems || [];
+    });
+    const lf = st.lf ?? 'all';
+    const rows = base.map((r, i) => Object.assign({}, r, { i: i, done: r.s === 'archivado', pending: r.s === 'proceso', clas: r.s === 'clasificar', selected: i === sel, bg: i === sel ? p.accentSoft : 'transparent', pick: () => this.setState({ sel: i, sheet: true }) }))
+      .filter((r) => r.s !== 'descartado' && (lf === 'all' || r.s === lf)).sort((a, b) => b.iso.localeCompare(a.iso));
+    const lc = (k) => base.filter((r) => r.s === k).length;
+    const libChips = [['all', 'Todos', base.filter((r) => r.s !== 'descartado').length], ['archivado', 'Archivado', lc('archivado')], ['clasificar', 'Por clasificar', lc('clasificar')], ['proceso', 'En proceso', lc('proceso')]]
+      .map((x) => ({ label: x[1] + ' (' + x[2] + ')', on: lf === x[0], bg: lf === x[0] ? p.accentSoft : p.surface, fg: lf === x[0] ? p.accentText : p.text, bd: lf === x[0] ? p.accent : p.border, pick: () => this.setState({ lf: x[0] }) }));
+    const cur = base[sel] || base[0];
+    const d = {
+      name: cur.name, ext: cur.ext, file: cur.name + cur.ext, size: cur.size, tags: cur.tags, preview: cur.preview, history: cur.history,
+      status: (cur.s === 'archivado' ? '✓ ' : cur.s === 'clasificar' ? '! ' : '◌ ') + cur.sl, statusFg: cur.s === 'archivado' ? p.accentText : p.muted,
+      info: [{ k: 'Tipo', v: cur.type }, { k: 'Ruta en el NAS', v: cur.folder }, { k: 'Integridad', v: '✓ ' + cur.hash }, { k: 'Fecha de ingreso', v: cur.date }, { k: 'Cargado por', v: cur.by }, { k: 'Clasificado por', v: cur.cls }, { k: 'Tamaño original', v: cur.size }],
+      review: () => this.setState({ view: 'review', revPage: 1, revFolder: null })
+    };
+    return {
+      p: p, user: DEMO.user, company: DEMO.company, accent: accent, swatches: swatches, steps: steps, rows: rows, d: d, libChips: libChips,
+      isLight: !dark, isDark: dark,
+      isAsk: view === 'ask', isHome: view === 'home', crumb: { home: 'Inicio', upload: 'Subir documentos', library: 'Biblioteca', ask: 'Preguntar al cerebro', review: 'Revisión', search: 'Búsqueda avanzada', config: 'Configuración' }[view], isUpload: view === 'upload', isLibrary: view === 'library',
+      upBg: view === 'upload' ? p.accentSoft : 'transparent', upFg: view === 'upload' ? p.accentText : p.muted, upW: view === 'upload' ? 700 : 500,
+      libBg: view === 'library' ? p.accentSoft : 'transparent', libFg: view === 'library' ? p.accentText : p.muted, libW: view === 'library' ? 700 : 500,
+      goUpload: () => this.setState({ view: 'upload' }),
+      goLibrary: () => this.setState({ view: 'library' }), isConfig: view === 'config',
+      homeBg: view === 'home' ? p.accentSoft : 'transparent', homeFg: view === 'home' ? p.accentText : p.muted, homeW: view === 'home' ? 700 : 500,
+      cfgBg: view === 'config' ? p.accentSoft : 'transparent', cfgFg: view === 'config' ? p.accentText : p.muted, cfgW: view === 'config' ? 700 : 500,
+      goHome: () => this.setState({ view: 'home' }),
+      goAsk: () => this.setState({ view: 'ask' }),
+      askBg: view === 'ask' ? p.accentSoft : 'transparent', askFg: view === 'ask' ? p.accentText : p.muted, askW: view === 'ask' ? 700 : 500,
+      askSources: askSources,
+      goConfig: () => this.setState({ view: 'config' }),
+      lightBg: dark ? 'transparent' : p.accent, lightFg: dark ? p.muted : p.onAccent,
+      darkBg: dark ? p.accent : 'transparent', darkFg: dark ? p.onAccent : p.muted,
+      setLight: () => this.setState({ mode: 'light' }),
+      setDark: () => this.setState({ mode: 'dark' }),
+      onCustom: (e) => this.setState({ accent: e.target.value }),
+      ...this.extraVals(p, st, base, view),
+      ...this.searchVals(p, st, base, view, dark),
+      ...this.reviewVals(p, st, base, view, sel)
+    };
+  }
+}
+
+
+/* --- Arranque --- */
+new Component().render();
+</script>
+</body>
+</html>
