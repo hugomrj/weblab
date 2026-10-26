@@ -22,8 +22,10 @@
   --accent-text:hsl(173, 80%, 72%);
 }
 
-/* ===== 2. COMPONENTES: una clase por estilo (nombres generados: c1, c2…, se pueden renombrar) ===== */
-.c1{
+/* ===== 2. COMPONENTES: una clase por elemento, agrupadas por pantalla (prefijos: side- top- ui- home- up- lib- det- rev- srch- ask- cfg- toast- bnav-) ===== */
+
+/* --- Estructura general --- */
+.app-shell{
   display:flex;
   flex-direction:row;
   min-height:1100px;
@@ -35,7 +37,9 @@
   font-family:'Manrope',system-ui,sans-serif;
   color:var(--text);
 }
-.c2{
+
+/* --- Menú lateral --- */
+.side-menu{
   width:248px;
   flex:none;
   background:var(--side);
@@ -46,12 +50,7 @@
   flex-direction:column;
   gap:28px;
 }
-.c3{
-  display:flex;
-  align-items:center;
-  gap:12px;
-}
-.c4{
+.side-logo{
   width:40px;
   height:40px;
   border-radius:12px;
@@ -61,17 +60,12 @@
   align-items:center;
   justify-content:center;
 }
-.c5{
+.side-brand{
   font-weight:800;
   font-size:18px;
   letter-spacing:-0.01em;
 }
-.c6{
-  display:flex;
-  flex-direction:column;
-  gap:4px;
-}
-.c7{
+.side-link{
   width:100%;
   border:0;
   text-align:left;
@@ -82,7 +76,7 @@
   border-radius:10px;
   font-size:15px;
 }
-.c8{
+.side-link-anchor{
   display:flex;
   align-items:center;
   gap:12px;
@@ -93,12 +87,12 @@
   font-weight:500;
   font-size:15px;
 }
-.c9{
+.side-divider{
   height:1px;
   background:var(--border);
   margin:10px 0;
 }
-.c10{
+.side-note{
   margin-top:auto;
   border:1px solid var(--border);
   background:var(--surface);
@@ -108,16 +102,9 @@
   flex-direction:column;
   gap:8px;
 }
-.c11{
-  font-weight:700;
-  font-size:14px;
-}
-.c12{
-  font-size:13px;
-  line-height:1.5;
-  color:var(--muted);
-}
-.c13{
+
+/* --- Contenido principal --- */
+.main-content{
   flex:1;
   min-width:0;
   padding:36px 44px;
@@ -126,32 +113,31 @@
   flex-direction:column;
   gap:28px;
 }
-.c14{
+
+/* --- Barra superior (empresa, avisos, usuario) --- */
+.top-bar{
   display:flex;
   align-items:center;
   justify-content:space-between;
   gap:12px;
   font-size:14px;
 }
-.c15{
+.top-crumb{
   display:flex;
   align-items:center;
   gap:8px;
   color:var(--muted);
   font-weight:600;
 }
-.c16{
-  color:var(--text);
-}
-.c17{
+.top-bell{
   position:relative;
 }
-.c18{
+.top-bell-overlay{
   position:fixed;
   inset:0;
   z-index:25;
 }
-.c19{
+.top-bell-btn{
   position:relative;
   z-index:26;
   width:44px;
@@ -164,7 +150,7 @@
   align-items:center;
   justify-content:center;
 }
-.c20{
+.top-bell-badge{
   position:absolute;
   top:5px;
   right:5px;
@@ -179,7 +165,7 @@
   align-items:center;
   justify-content:center;
 }
-.c21{
+.top-bell-menu{
   position:absolute;
   right:0;
   top:52px;
@@ -192,7 +178,7 @@
   box-shadow:0 14px 34px rgba(0,0,0,0.3);
   padding:8px;
 }
-.c22{
+.top-bell-title{
   padding:10px 12px;
   font-size:13px;
   font-weight:700;
@@ -200,13 +186,63 @@
   text-transform:uppercase;
   color:var(--muted);
 }
-.c23{
+.top-bell-item{
   display:flex;
   gap:10px;
   padding:12px;
   border-radius:10px;
 }
-.c24{
+.top-bell-item-text{
+  display:flex;
+  flex-direction:column;
+  gap:2px;
+}
+.top-bell-item-title{
+  font-size:13px;
+  font-weight:700;
+  line-height:1.4;
+}
+.top-user-text{
+  text-align:right;
+  line-height:1.3;
+}
+.top-avatar{
+  width:40px;
+  height:40px;
+  border-radius:50%;
+  background:var(--accent-soft);
+  color:var(--accent-text);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:800;
+  font-size:14px;
+}
+
+/* --- Componentes compartidos (ui-) --- */
+.ui-row-center-12{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+.ui-col-4{
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+}
+.ui-title-14{
+  font-weight:700;
+  font-size:14px;
+}
+.ui-note{
+  font-size:13px;
+  line-height:1.5;
+  color:var(--muted);
+}
+.ui-text-strong{
+  color:var(--text);
+}
+.ui-dot{
   width:8px;
   height:8px;
   border-radius:50%;
@@ -214,182 +250,40 @@
   margin-top:6px;
   flex:none;
 }
-.c25{
-  display:flex;
-  flex-direction:column;
-  gap:2px;
-}
-.c26{
-  font-size:13px;
-  font-weight:700;
-  line-height:1.4;
-}
-.c27{
+.ui-meta-sm{
   font-size:12px;
   color:var(--muted);
 }
-.c28{
-  text-align:right;
-  line-height:1.3;
-}
-.c29{
-  width:40px;
-  height:40px;
-  border-radius:50%;
-  background:var(--accent-soft);
-  color:var(--accent-text);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-weight:800;
-  font-size:14px;
-}
-.c30{
-  display:flex;
-  flex-direction:column;
-  gap:28px;
-  max-width:860px;
-}
-.c31{
+.ui-page-title{
   margin:0;
   font-size:30px;
   font-weight:800;
   letter-spacing:-0.02em;
 }
-.c32{
+.ui-page-subtitle{
   font-size:15px;
   color:var(--muted);
 }
-.c33{
-  background:var(--surface);
-  border:1px solid var(--border);
-  border-radius:20px;
-  padding:28px;
-  display:flex;
-  flex-direction:column;
-  gap:24px;
-}
-.c34{
+.ui-card-title{
   margin:0;
   font-size:20px;
   font-weight:800;
 }
-.c35{
+.ui-row-between{
   display:flex;
   flex-wrap:wrap;
   gap:16px;
   align-items:center;
   justify-content:space-between;
 }
-.c36{
-  display:flex;
-  flex-direction:column;
-  gap:4px;
-  max-width:360px;
-}
-.c37{
-  font-weight:700;
-  font-size:16px;
-}
-.c38{
-  font-size:14px;
-  color:var(--muted);
-  line-height:1.5;
-}
-.c39{
-  display:flex;
-  background:var(--surface2);
-  border-radius:12px;
-  padding:3px;
-  gap:2px;
-}
-.c40{
-  height:44px;
-  min-width:104px;
-  padding:0 16px;
-  border:0;
-  border-radius:10px;
-  font-weight:700;
-  font-size:14px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  gap:8px;
-}
-.c41{
-  height:1px;
-  background:var(--border);
-}
-.c42{
-  display:flex;
-  flex-wrap:wrap;
-  align-items:center;
-}
-.c43{
-  width:44px;
-  height:44px;
-  border:0;
-  background:transparent;
-  padding:0;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-}
-.c44{
-  width:26px;
-  height:26px;
-  border-radius:50%;
-  display:block;
-}
-.c45{
-  font-size:13px;
-  font-weight:600;
-  color:var(--muted);
-  margin-left:8px;
-  margin-right:6px;
-}
-.c46{
-  width:44px;
-  height:44px;
-  border:1px solid var(--border);
-  border-radius:10px;
-  background:var(--surface2);
-  padding:4px;
-  cursor:pointer;
-}
-.c47{
-  display:flex;
-  flex-direction:column;
-  gap:12px;
-}
-.c48{
+.ui-eyebrow{
   font-size:13px;
   font-weight:700;
   letter-spacing:0.08em;
   text-transform:uppercase;
   color:var(--muted);
 }
-.c49{
-  background:var(--bg);
-  border:1px solid var(--border);
-  border-radius:14px;
-  padding:20px;
-  display:flex;
-  flex-wrap:wrap;
-  gap:16px;
-  align-items:center;
-}
-.c50{
-  background:var(--accent);
-  color:var(--on-accent);
-  border:0;
-  border-radius:12px;
-  height:44px;
-  padding:0 22px;
-  font-size:14px;
-  font-weight:700;
-}
-.c51{
+.ui-tag-md{
   font-family:'JetBrains Mono',monospace;
   font-size:12px;
   background:var(--accent-soft);
@@ -397,191 +291,17 @@
   padding:5px 9px;
   border-radius:7px;
 }
-.c52{
-  display:inline-flex;
-  align-items:center;
-  gap:6px;
-  color:var(--accent-text);
-  font-weight:700;
-  font-size:14px;
-}
-.c53{
-  flex:1 1 160px;
-  height:8px;
-  border-radius:99px;
-  background:var(--border);
-  overflow:hidden;
-}
-.c54{
-  width:62%;
-  height:100%;
-  background:var(--accent);
-}
-.c55{
-  background:var(--surface);
-  border:1px solid var(--border);
-  border-radius:20px;
-  padding:28px;
-  display:flex;
-  flex-direction:column;
-  gap:14px;
-}
-.c56{
-  font-size:13px;
-  font-weight:600;
-  color:var(--muted);
-}
-.c57{
-  display:flex;
-  flex-wrap:wrap;
-  background:var(--surface2);
-  border-radius:12px;
-  padding:3px;
-  gap:2px;
-  align-self:flex-start;
-}
-.c58{
-  height:44px;
-  min-width:112px;
-  padding:0 16px;
-  border:0;
-  border-radius:10px;
-  font-weight:700;
-  font-size:14px;
-}
-.c59{
-  display:flex;
-  flex-direction:column;
-  gap:24px;
-  max-width:880px;
-  width:100%;
-}
-.c60{
-  display:flex;
-  justify-content:flex-end;
-}
-.c61{
-  max-width:560px;
-  background:var(--accent);
-  color:var(--on-accent);
-  border-radius:18px 18px 4px 18px;
-  padding:14px 18px;
-  font-size:15px;
-  font-weight:600;
-  line-height:1.5;
-}
-.c62{
-  display:flex;
-  gap:14px;
-  align-items:flex-start;
-}
-.c63{
-  width:40px;
-  height:40px;
-  flex:none;
-  border-radius:12px;
-  background:var(--accent-soft);
-  color:var(--accent-text);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-}
-.c64{
-  flex:1;
-  min-width:0;
-  display:flex;
-  flex-direction:column;
-  gap:16px;
-}
-.c65{
-  background:var(--surface);
-  border:1px solid var(--border);
-  border-radius:18px 18px 18px 4px;
-  padding:20px 22px;
-  display:flex;
-  flex-direction:column;
-  gap:14px;
-}
-.c66{
-  font-size:16px;
-  line-height:1.7;
-}
-.c67{
-  min-width:24px;
-  height:24px;
-  border:0;
-  border-radius:99px;
-  background:var(--accent-soft);
-  color:var(--accent-text);
-  font-size:12px;
-  font-weight:800;
-  vertical-align:middle;
-  margin:0 2px;
-  padding:0 6px;
-}
-.c68{
-  display:flex;
-  flex-wrap:wrap;
-  gap:12px;
-  align-items:center;
-  justify-content:space-between;
-  border-top:1px solid var(--border);
-  padding-top:14px;
-}
-.c69{
-  display:flex;
-  align-items:center;
-  gap:8px;
-  font-size:13px;
-  color:var(--muted);
-}
-.c70{
+.ui-row-gap-6{
   display:flex;
   gap:6px;
 }
-.c71{
-  width:44px;
-  height:44px;
-  border-radius:10px;
-  border:1px solid var(--border);
-  background:var(--surface);
-  color:var(--muted);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-}
-.c72{
-  background:var(--surface);
-  border:1px solid var(--border);
-  border-radius:16px;
-  padding:18px 20px;
-  display:flex;
-  flex-direction:column;
-  gap:12px;
-}
-.c73{
+.ui-row-wrap-10-center{
   display:flex;
   flex-wrap:wrap;
   gap:10px;
   align-items:center;
 }
-.c74{
-  width:26px;
-  height:26px;
-  border-radius:50%;
-  background:var(--accent);
-  color:var(--on-accent);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:13px;
-  font-weight:800;
-}
-.c75{
-  font-weight:700;
-  font-size:15px;
-}
-.c76{
+.ui-tag-ext{
   font-family:'JetBrains Mono',monospace;
   font-size:12px;
   background:var(--surface2);
@@ -590,116 +310,105 @@
   padding:4px 8px;
   border-radius:7px;
 }
-.c77{
+.ui-meta{
   font-size:13px;
   color:var(--muted);
 }
-.c78{
-  background:var(--accent-soft);
-  border-left:3px solid var(--accent);
-  border-radius:0 10px 10px 0;
-  padding:12px 16px;
-  font-size:14px;
-  line-height:1.65;
-  font-style:italic;
-}
-.c79{
-  display:flex;
-  gap:10px;
-  align-items:flex-start;
-  border:1px dashed var(--border);
-  border-radius:10px;
-  padding:10px 14px;
-  font-size:13px;
-  line-height:1.5;
-  color:var(--muted);
-}
-.c80{
-  flex:none;
-  margin-top:1px;
-}
-.c81{
+.ui-row-wrap-8{
   display:flex;
   flex-wrap:wrap;
   gap:8px;
 }
-.c82{
-  height:44px;
-  padding:0 18px;
-  border-radius:10px;
-  border:1px solid var(--border);
-  background:var(--surface);
-  color:var(--text);
-  font-size:14px;
-  font-weight:600;
-}
-.c83{
-  height:44px;
-  padding:0 18px;
-  border-radius:10px;
-  border:0;
-  background:var(--accent);
-  color:var(--on-accent);
-  font-size:14px;
-  font-weight:700;
-}
-.c84{
-  display:flex;
-  flex-direction:column;
-  gap:12px;
-  position:sticky;
-  bottom:16px;
-}
-.c85{
-  min-height:44px;
-  padding:0 16px;
-  border-radius:99px;
-  border:1px solid var(--border);
-  background:var(--surface);
-  color:var(--text);
-  font-size:13px;
-  font-weight:600;
-}
-.c86{
-  display:flex;
-  align-items:center;
-  gap:12px;
-  background:var(--surface);
-  border:1px solid var(--accent);
-  border-radius:16px;
-  padding:8px 8px 8px 20px;
-}
-.c87{
+.ui-visually-hidden{
   position:absolute;
   left:-9999px;
 }
-.c88{
+.ui-col-10{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+.ui-input-bare{
   flex:1;
+  min-width:0;
   border:0;
   outline:0;
   background:transparent;
   font-family:inherit;
   font-size:15px;
   color:var(--text);
-  height:44px;
 }
-.c89{
-  width:48px;
+.ui-col-8{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+.ui-label{
+  font-size:14px;
+  font-weight:700;
+}
+.ui-chip{
+  min-height:40px;
+  padding:0 14px;
+  border-radius:99px;
+  font-size:13px;
+  font-weight:700;
+}
+.ui-row-wrap-10{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+}
+.ui-row-wrap-6{
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+}
+.ui-tag{
+  font-size:12px;
+  font-weight:600;
+  background:var(--accent-soft);
+  color:var(--accent-text);
+  padding:3px 10px;
+  border-radius:99px;
+}
+.ui-text-muted{
+  font-size:14px;
+  color:var(--muted);
+}
+.ui-subtitle{
+  font-weight:800;
+  font-size:15px;
+}
+.ui-progress{
+  height:8px;
+  border-radius:99px;
+  background:var(--border);
+  overflow:hidden;
+}
+.ui-btn-secondary{
   height:48px;
+  padding:0 20px;
+  border-radius:10px;
+  border:1px solid var(--border);
+  background:var(--surface);
+  color:var(--text);
+  font-size:14px;
+  font-weight:700;
+}
+.ui-btn-primary{
+  height:48px;
+  padding:0 24px;
   border:0;
-  border-radius:12px;
+  border-radius:10px;
   background:var(--accent);
   color:var(--on-accent);
-  display:flex;
-  align-items:center;
-  justify-content:center;
+  font-size:14px;
+  font-weight:800;
 }
-.c90{
-  font-size:12px;
-  color:var(--muted);
-  text-align:center;
-}
-.c91{
+
+/* --- Pantalla Inicio --- */
+.home-view{
   flex:1;
   min-height:560px;
   display:flex;
@@ -707,43 +416,38 @@
   align-items:center;
   justify-content:center;
 }
-.c92{
+.home-inner{
   width:100%;
   max-width:780px;
   display:flex;
   flex-direction:column;
   gap:30px;
 }
-.c93{
-  display:flex;
-  flex-direction:column;
-  gap:10px;
-}
-.c94{
+.home-eyebrow{
   font-size:13px;
   font-weight:700;
   letter-spacing:0.1em;
   text-transform:uppercase;
   color:var(--accent-text);
 }
-.c95{
+.home-title{
   margin:0;
   font-size:34px;
   line-height:1.2;
   font-weight:700;
   letter-spacing:-0.02em;
 }
-.c96{
+.home-subtitle{
   font-size:16px;
   line-height:1.5;
   color:var(--muted);
 }
-.c97{
+.home-actions{
   display:flex;
   flex-wrap:wrap;
   gap:12px;
 }
-.c98{
+.home-search{
   flex:1 1 380px;
   display:flex;
   align-items:center;
@@ -756,17 +460,7 @@
   padding:0 8px 0 16px;
   color:var(--muted);
 }
-.c99{
-  flex:1;
-  min-width:0;
-  border:0;
-  outline:0;
-  background:transparent;
-  font-family:inherit;
-  font-size:15px;
-  color:var(--text);
-}
-.c100{
+.home-search-btn{
   height:40px;
   padding:0 20px;
   border:0;
@@ -776,7 +470,7 @@
   font-size:14px;
   font-weight:700;
 }
-.c101{
+.home-upload-btn{
   height:56px;
   padding:0 26px;
   border:0;
@@ -790,7 +484,7 @@
   justify-content:center;
   gap:10px;
 }
-.c102{
+.home-trust{
   display:flex;
   flex-wrap:wrap;
   gap:12px 28px;
@@ -799,388 +493,19 @@
   font-size:13px;
   color:var(--muted);
 }
-.c103{
+.home-trust-item{
   display:inline-flex;
   align-items:center;
   gap:8px;
 }
-.c104{
-  display:flex;
-  flex-wrap:wrap;
-  gap:20px;
-  align-items:flex-start;
-}
-.c105{
-  flex:0 1 340px;
-  min-width:280px;
-  background:var(--surface);
-  border:1px solid var(--border);
-  border-radius:20px;
-  padding:22px;
-  display:flex;
-  flex-direction:column;
-  gap:20px;
-  box-sizing:border-box;
-}
-.c106{
-  display:flex;
-  flex-direction:column;
-  gap:8px;
-}
-.c107{
-  font-size:14px;
-  font-weight:700;
-}
-.c108{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  height:48px;
-  box-sizing:border-box;
-  background:var(--surface2);
-  border:1px solid var(--border);
-  border-radius:10px;
-  padding:0 14px;
-  color:var(--muted);
-}
-.c109{
-  min-height:40px;
-  padding:0 14px;
-  border-radius:99px;
-  font-size:13px;
-  font-weight:700;
-}
-.c110{
-  display:flex;
-  flex-wrap:wrap;
-  gap:10px;
-}
-.c111{
-  flex:1 1 120px;
-  display:flex;
-  flex-direction:column;
-  gap:4px;
-}
-.c112{
-  height:44px;
-  box-sizing:border-box;
-  border:1px solid var(--border);
-  border-radius:10px;
-  background:var(--surface2);
-  color:var(--text);
-  padding:0 10px;
-  font-family:inherit;
-}
-.c113{
-  height:46px;
-  border-radius:10px;
-  border:1px solid var(--border);
-  background:var(--surface);
-  color:var(--text);
-  font-size:14px;
-  font-weight:700;
-}
-.c114{
-  flex:1 1 420px;
-  min-width:0;
-  display:flex;
-  flex-direction:column;
-  gap:12px;
-}
-.c115{
-  font-size:14px;
-  font-weight:700;
-  color:var(--muted);
-}
-.c116{
-  width:100%;
-  text-align:left;
-  background:var(--surface);
-  border:1px solid var(--border);
-  border-radius:16px;
-  padding:16px 18px;
-  color:var(--text);
-  display:flex;
-  flex-direction:column;
-  gap:8px;
-}
-.c117{
-  font-weight:800;
-  font-size:16px;
-}
-.c118{
-  font-family:'JetBrains Mono',monospace;
-  font-size:12px;
-  background:var(--surface2);
-  border:1px solid var(--border);
-  color:var(--muted);
-  padding:3px 8px;
-  border-radius:7px;
-}
-.c119{
-  margin-left:auto;
-  font-size:13px;
-  font-weight:700;
-  color:var(--accent-text);
-}
-.c120{
-  font-size:14px;
-  line-height:1.5;
-}
-.c121{
-  display:flex;
-  flex-wrap:wrap;
-  gap:6px;
-}
-.c122{
-  font-size:12px;
-  font-weight:600;
-  background:var(--accent-soft);
-  color:var(--accent-text);
-  padding:3px 10px;
-  border-radius:99px;
-}
-.c123{
-  background:var(--surface);
-  border:1px solid var(--border);
-  border-radius:16px;
-  padding:48px 24px;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  gap:10px;
-  text-align:center;
-}
-.c124{
-  width:56px;
-  height:56px;
-  border-radius:50%;
-  background:var(--accent-soft);
-  color:var(--accent-text);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-}
-.c125{
-  font-weight:800;
-  font-size:18px;
-}
-.c126{
-  font-size:14px;
-  color:var(--muted);
-  max-width:340px;
-  line-height:1.5;
-}
-.c127{
-  margin-top:6px;
-  height:44px;
-  padding:0 20px;
-  border:0;
-  border-radius:10px;
-  background:var(--accent);
-  color:var(--on-accent);
-  font-size:14px;
-  font-weight:700;
-}
-.c128{
-  display:flex;
-  flex-direction:column;
-  gap:20px;
-}
-.c129{
-  display:flex;
-  flex-wrap:wrap;
-  gap:12px;
-  align-items:flex-end;
-  justify-content:space-between;
-}
-.c130{
-  align-self:flex-start;
-  border:0;
-  background:transparent;
-  color:var(--accent-text);
-  font-size:14px;
-  font-weight:700;
-  min-height:44px;
-  padding:0;
-}
-.c131{
-  margin:0;
-  font-size:28px;
-  font-weight:800;
-  letter-spacing:-0.02em;
-  word-break:break-word;
-}
-.c132{
-  font-size:14px;
-  color:var(--muted);
-}
-.c133{
-  display:flex;
-  gap:10px;
-  flex-wrap:wrap;
-}
-.c134{
-  padding:8px 14px;
-  border-radius:99px;
-  border:1px solid var(--accent);
-  font-weight:800;
-  font-size:13px;
-}
-.c135{
-  padding:8px 14px;
-  border-radius:99px;
-  border:1px solid var(--border);
-  background:var(--surface);
-  font-weight:700;
-  font-size:13px;
-}
-.c136{
-  display:flex;
-  flex-wrap:wrap;
-  gap:16px;
-  align-items:stretch;
-}
-.c137{
-  flex:1 1 360px;
-  min-width:0;
-  background:var(--surface);
-  border:1px solid var(--border);
-  border-radius:16px;
-  padding:18px;
-  display:flex;
-  flex-direction:column;
-  gap:12px;
-}
-.c138{
-  display:flex;
-  flex-wrap:wrap;
-  gap:8px;
-  align-items:center;
-  justify-content:space-between;
-}
-.c139{
-  font-weight:800;
-  font-size:15px;
-}
-.c140{
-  font-family:'JetBrains Mono',monospace;
-  font-size:12px;
-  color:var(--muted);
-}
-.c141{
-  background:#FAFAF7;
-  border:1px solid var(--border);
-  border-radius:8px;
-  padding:28px 24px;
-  min-height:330px;
-}
-.c142{
-  height:14px;
-  width:45%;
-  background:#6B716D;
-  border-radius:4px;
-  margin-bottom:22px;
-}
-.c143{
-  height:8px;
-  background:#B8BDB9;
-  border-radius:4px;
-  margin-bottom:11px;
-}
-.c144{
-  display:flex;
-  flex-direction:column;
-  gap:6px;
-}
-.c145{
-  display:flex;
-  justify-content:space-between;
-  font-size:13px;
-  color:var(--muted);
-}
-.c146{
-  font-weight:800;
-  color:var(--text);
-}
-.c147{
-  height:8px;
-  border-radius:99px;
-  background:var(--border);
-  overflow:hidden;
-}
-.c148{
-  height:100%;
-  background:var(--accent);
-}
-.c149{
-  margin:0;
-  flex:1;
-  background:var(--surface2);
-  border:1px solid var(--border);
-  border-radius:10px;
-  padding:14px;
-  font-family:'JetBrains Mono',monospace;
-  font-size:12.5px;
-  line-height:1.6;
-  white-space:pre-wrap;
-  overflow:auto;
-  min-height:240px;
-}
-.c150{
-  background:var(--surface);
-  border:1px solid var(--border);
-  border-radius:16px;
-  padding:20px;
-  display:flex;
-  flex-direction:column;
-  gap:14px;
-}
-.c151{
-  display:flex;
-  flex-wrap:wrap;
-  gap:8px 28px;
-  font-size:13px;
-  color:var(--muted);
-}
-.c152{
-  display:flex;
-  flex-direction:column;
-  gap:6px;
-  border:1px dashed var(--border);
-  border-radius:10px;
-  padding:12px 14px;
-}
-.c153{
-  font-size:13px;
-  font-weight:800;
-}
-.c154{
-  height:48px;
-  padding:0 20px;
-  border-radius:10px;
-  border:1px solid var(--border);
-  background:var(--surface);
-  color:var(--text);
-  font-size:14px;
-  font-weight:700;
-}
-.c155{
-  height:48px;
-  padding:0 24px;
-  border:0;
-  border-radius:10px;
-  background:var(--accent);
-  color:var(--on-accent);
-  font-size:14px;
-  font-weight:800;
-}
-.c156{
+
+/* --- Pantalla Subir documentos --- */
+.up-top{
   display:flex;
   flex-wrap:wrap;
   gap:28px;
 }
-.c157{
+.up-dropzone{
   flex:1 1 420px;
   min-height:220px;
   border-radius:16px;
@@ -1192,7 +517,7 @@
   padding:24px;
   text-align:center;
 }
-.c158{
+.up-drop-icon{
   width:56px;
   height:56px;
   border-radius:50%;
@@ -1202,11 +527,11 @@
   align-items:center;
   justify-content:center;
 }
-.c159{
+.up-drop-title{
   font-size:20px;
   font-weight:700;
 }
-.c160{
+.up-drop-btn{
   margin-top:4px;
   background:var(--accent);
   color:var(--on-accent);
@@ -1217,7 +542,7 @@
   font-size:15px;
   font-weight:700;
 }
-.c161{
+.up-confirm{
   display:flex;
   align-items:center;
   gap:10px;
@@ -1225,19 +550,19 @@
   color:var(--muted);
   cursor:pointer;
 }
-.c162{
+.up-confirm-check{
   width:20px;
   height:20px;
   accent-color:var(--accent);
 }
-.c163{
+.up-status-col{
   flex:1 1 320px;
   display:flex;
   flex-direction:column;
   gap:12px;
   justify-content:center;
 }
-.c164{
+.up-empty{
   border:1px dashed var(--border);
   border-radius:12px;
   padding:18px 16px;
@@ -1245,7 +570,7 @@
   line-height:1.5;
   color:var(--muted);
 }
-.c165{
+.up-progress-card{
   border:1px solid var(--border);
   background:var(--surface2);
   border-radius:12px;
@@ -1254,22 +579,22 @@
   flex-direction:column;
   gap:10px;
 }
-.c166{
+.up-progress-row{
   display:flex;
   justify-content:space-between;
   gap:12px;
   font-size:14px;
   font-weight:600;
 }
-.c167{
+.up-progress-label{
   color:var(--accent-text);
 }
-.c168{
+.up-progress-fill{
   height:100%;
   background:var(--accent);
   transition:width .6s ease;
 }
-.c169{
+.up-result{
   border:1px solid var(--accent);
   background:var(--surface2);
   border-radius:12px;
@@ -1278,19 +603,19 @@
   flex-direction:column;
   gap:10px;
 }
-.c170{
+.up-result-eyebrow{
   font-size:12px;
   font-weight:700;
   letter-spacing:0.08em;
   text-transform:uppercase;
   color:var(--muted);
 }
-.c171{
+.up-result-text{
   font-size:13px;
   color:var(--muted);
   line-height:1.6;
 }
-.c172{
+.up-result-btn{
   align-self:flex-start;
   height:44px;
   padding:0 20px;
@@ -1301,12 +626,12 @@
   font-size:14px;
   font-weight:700;
 }
-.c173{
+.up-steps{
   display:grid;
   grid-template-columns:repeat(4,1fr);
   gap:16px;
 }
-.c174{
+.up-step{
   background:var(--surface2);
   border-radius:14px;
   padding:18px;
@@ -1314,7 +639,7 @@
   flex-direction:column;
   gap:8px;
 }
-.c175{
+.up-step-mark{
   width:32px;
   height:32px;
   border-radius:50%;
@@ -1324,12 +649,14 @@
   font-weight:800;
   font-size:14px;
 }
-.c176{
+.up-step-label{
   font-size:12px;
   font-weight:700;
   min-height:16px;
 }
-.c177{
+
+/* --- Pantalla Biblioteca --- */
+.lib-search{
   display:flex;
   align-items:center;
   gap:12px;
@@ -1344,7 +671,7 @@
   box-sizing:border-box;
   color:var(--muted);
 }
-.c178{
+.lib-search-input{
   flex:1;
   border:0;
   outline:0;
@@ -1353,7 +680,7 @@
   font-size:15px;
   color:var(--text);
 }
-.c179{
+.lib-card{
   background:var(--surface);
   border:1px solid var(--border);
   border-radius:20px;
@@ -1362,52 +689,52 @@
   flex-direction:column;
   gap:18px;
 }
-.c180{
+.lib-toolbar{
   display:flex;
   flex-wrap:wrap;
   gap:12px;
   align-items:center;
   justify-content:space-between;
 }
-.c181{
+.lib-filters{
   display:flex;
   gap:8px;
   flex-wrap:wrap;
 }
-.c182{
+.lib-filter-btn{
   height:44px;
   padding:0 18px;
   border-radius:10px;
   font-weight:700;
   font-size:14px;
 }
-.c183{
+.lib-table-wrap{
   overflow-x:auto;
 }
-.c184{
+.lib-table{
   width:100%;
   min-width:760px;
   border-collapse:collapse;
   font-size:14px;
 }
-.c185{
+.lib-table-head{
   text-align:left;
   color:var(--muted);
   font-size:12px;
   letter-spacing:0.08em;
   text-transform:uppercase;
 }
-.c186{
+.lib-th{
   padding:10px 12px;
   font-weight:700;
 }
-.c187{
+.lib-row{
   border-top:1px solid var(--border);
 }
-.c188{
+.lib-td-name{
   padding:4px 12px;
 }
-.c189{
+.lib-name-btn{
   min-height:44px;
   border:0;
   background:transparent;
@@ -1417,28 +744,28 @@
   padding:0;
   text-align:left;
 }
-.c190{
+.lib-td-muted{
   padding:14px 12px;
   color:var(--muted);
 }
-.c191{
+.lib-td{
   padding:14px 12px;
 }
-.c192{
+.lib-status-done{
   display:inline-flex;
   align-items:center;
   gap:6px;
   color:var(--accent-text);
   font-weight:700;
 }
-.c193{
+.lib-status-processing{
   display:inline-flex;
   align-items:center;
   gap:6px;
   color:var(--muted);
   font-weight:700;
 }
-.c194{
+.lib-status-pending{
   display:inline-flex;
   align-items:center;
   gap:6px;
@@ -1449,7 +776,7 @@
   border-radius:99px;
   padding:3px 10px;
 }
-.c195{
+.lib-loading{
   background:var(--surface);
   border:1px solid var(--border);
   border-radius:20px;
@@ -1458,14 +785,14 @@
   flex-direction:column;
   gap:16px;
 }
-.c196{
+.lib-skeleton-title{
   height:24px;
   width:240px;
 }
-.c197{
+.lib-skeleton-row{
   height:48px;
 }
-.c198{
+.lib-empty{
   background:var(--surface);
   border:1px solid var(--border);
   border-radius:20px;
@@ -1476,7 +803,7 @@
   gap:14px;
   text-align:center;
 }
-.c199{
+.lib-empty-icon{
   width:64px;
   height:64px;
   border-radius:50%;
@@ -1486,17 +813,17 @@
   align-items:center;
   justify-content:center;
 }
-.c200{
+.lib-empty-title{
   font-size:20px;
   font-weight:800;
 }
-.c201{
+.lib-empty-text{
   font-size:15px;
   color:var(--muted);
   max-width:380px;
   line-height:1.5;
 }
-.c202{
+.lib-empty-btn{
   height:48px;
   padding:0 24px;
   border:0;
@@ -1506,7 +833,9 @@
   font-size:15px;
   font-weight:700;
 }
-.c203{
+
+/* --- Panel de detalle del documento --- */
+.det-panel{
   width:340px;
   flex:none;
   background:var(--side);
@@ -1517,13 +846,13 @@
   flex-direction:column;
   gap:22px;
 }
-.c204{
+.det-head{
   display:flex;
   align-items:center;
   justify-content:space-between;
   gap:12px;
 }
-.c205{
+.det-close{
   height:44px;
   padding:0 16px;
   border-radius:10px;
@@ -1534,23 +863,23 @@
   font-weight:700;
   align-items:center;
 }
-.c206{
+.det-name{
   font-size:19px;
   font-weight:800;
   line-height:1.3;
   word-break:break-word;
 }
-.c207{
+.det-badges{
   display:flex;
   flex-wrap:wrap;
   gap:8px;
   align-items:center;
 }
-.c208{
+.det-status{
   font-size:13px;
   font-weight:700;
 }
-.c209{
+.det-md{
   margin:0;
   background:var(--surface);
   border:1px solid var(--border);
@@ -1564,13 +893,13 @@
   max-height:210px;
   overflow:auto;
 }
-.c210{
+.det-info{
   background:var(--surface);
   border:1px solid var(--border);
   border-radius:12px;
   padding:4px 14px;
 }
-.c211{
+.det-info-row{
   display:flex;
   justify-content:space-between;
   gap:12px;
@@ -1578,20 +907,20 @@
   border-bottom:1px solid var(--border);
   font-size:13px;
 }
-.c212{
+.det-info-key{
   color:var(--muted);
 }
-.c213{
+.det-info-value{
   font-weight:600;
   text-align:right;
 }
-.c214{
+.det-tags{
   display:flex;
   flex-wrap:wrap;
   gap:6px;
   padding:12px 0;
 }
-.c215{
+.det-tag{
   font-size:12px;
   font-weight:600;
   background:var(--surface2);
@@ -1600,7 +929,7 @@
   padding:4px 10px;
   border-radius:99px;
 }
-.c216{
+.det-original{
   display:flex;
   align-items:center;
   gap:12px;
@@ -1609,17 +938,17 @@
   border-radius:12px;
   padding:12px 14px;
 }
-.c217{
+.det-original-text{
   display:flex;
   flex-direction:column;
   min-width:0;
 }
-.c218{
+.det-original-name{
   font-size:14px;
   font-weight:700;
   word-break:break-word;
 }
-.c219{
+.det-download-btn{
   height:46px;
   border:0;
   border-radius:12px;
@@ -1628,11 +957,11 @@
   font-size:14px;
   font-weight:700;
 }
-.c220{
+.det-actions{
   display:flex;
   gap:8px;
 }
-.c221{
+.det-action-btn{
   flex:1;
   height:44px;
   border-radius:10px;
@@ -1642,7 +971,7 @@
   font-size:13px;
   font-weight:600;
 }
-.c222{
+.det-history-item{
   display:flex;
   gap:10px;
   align-items:flex-start;
@@ -1650,7 +979,706 @@
   color:var(--muted);
   line-height:1.5;
 }
-.c223{
+
+/* --- Pantalla Revisión (original + MD) --- */
+.rev-view{
+  display:flex;
+  flex-direction:column;
+  gap:20px;
+}
+.rev-header{
+  display:flex;
+  flex-wrap:wrap;
+  gap:12px;
+  align-items:flex-end;
+  justify-content:space-between;
+}
+.rev-back{
+  align-self:flex-start;
+  border:0;
+  background:transparent;
+  color:var(--accent-text);
+  font-size:14px;
+  font-weight:700;
+  min-height:44px;
+  padding:0;
+}
+.rev-title{
+  margin:0;
+  font-size:28px;
+  font-weight:800;
+  letter-spacing:-0.02em;
+  word-break:break-word;
+}
+.rev-badges{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+}
+.rev-badge-status{
+  padding:8px 14px;
+  border-radius:99px;
+  border:1px solid var(--accent);
+  font-weight:800;
+  font-size:13px;
+}
+.rev-badge-conf{
+  padding:8px 14px;
+  border-radius:99px;
+  border:1px solid var(--border);
+  background:var(--surface);
+  font-weight:700;
+  font-size:13px;
+}
+.rev-panes{
+  display:flex;
+  flex-wrap:wrap;
+  gap:16px;
+  align-items:stretch;
+}
+.rev-pane{
+  flex:1 1 360px;
+  min-width:0;
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:18px;
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+}
+.rev-pane-head{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  align-items:center;
+  justify-content:space-between;
+}
+.rev-ext{
+  font-family:'JetBrains Mono',monospace;
+  font-size:12px;
+  color:var(--muted);
+}
+.rev-paper{
+  background:#FAFAF7;
+  border:1px solid var(--border);
+  border-radius:8px;
+  padding:28px 24px;
+  min-height:330px;
+}
+.rev-paper-title{
+  height:14px;
+  width:45%;
+  background:#6B716D;
+  border-radius:4px;
+  margin-bottom:22px;
+}
+.rev-paper-line{
+  height:8px;
+  background:#B8BDB9;
+  border-radius:4px;
+  margin-bottom:11px;
+}
+.rev-conf{
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+}
+.rev-conf-row{
+  display:flex;
+  justify-content:space-between;
+  font-size:13px;
+  color:var(--muted);
+}
+.rev-conf-value{
+  font-weight:800;
+  color:var(--text);
+}
+.rev-conf-fill{
+  height:100%;
+  background:var(--accent);
+}
+.rev-md{
+  margin:0;
+  flex:1;
+  background:var(--surface2);
+  border:1px solid var(--border);
+  border-radius:10px;
+  padding:14px;
+  font-family:'JetBrains Mono',monospace;
+  font-size:12.5px;
+  line-height:1.6;
+  white-space:pre-wrap;
+  overflow:auto;
+  min-height:240px;
+}
+.rev-class{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:20px;
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+}
+.rev-class-meta{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px 28px;
+  font-size:13px;
+  color:var(--muted);
+}
+.rev-problems{
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+  border:1px dashed var(--border);
+  border-radius:10px;
+  padding:12px 14px;
+}
+.rev-problems-title{
+  font-size:13px;
+  font-weight:800;
+}
+
+/* --- Pantalla Búsqueda avanzada --- */
+.srch-layout{
+  display:flex;
+  flex-wrap:wrap;
+  gap:20px;
+  align-items:flex-start;
+}
+.srch-filters{
+  flex:0 1 340px;
+  min-width:280px;
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:20px;
+  padding:22px;
+  display:flex;
+  flex-direction:column;
+  gap:20px;
+  box-sizing:border-box;
+}
+.srch-field{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  height:48px;
+  box-sizing:border-box;
+  background:var(--surface2);
+  border:1px solid var(--border);
+  border-radius:10px;
+  padding:0 14px;
+  color:var(--muted);
+}
+.srch-date-col{
+  flex:1 1 120px;
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+}
+.srch-date-input{
+  height:44px;
+  box-sizing:border-box;
+  border:1px solid var(--border);
+  border-radius:10px;
+  background:var(--surface2);
+  color:var(--text);
+  padding:0 10px;
+  font-family:inherit;
+}
+.srch-clear-btn{
+  height:46px;
+  border-radius:10px;
+  border:1px solid var(--border);
+  background:var(--surface);
+  color:var(--text);
+  font-size:14px;
+  font-weight:700;
+}
+.srch-results{
+  flex:1 1 420px;
+  min-width:0;
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+}
+.srch-count{
+  font-size:14px;
+  font-weight:700;
+  color:var(--muted);
+}
+.srch-result{
+  width:100%;
+  text-align:left;
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:16px 18px;
+  color:var(--text);
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+.srch-result-name{
+  font-weight:800;
+  font-size:16px;
+}
+.srch-result-ext{
+  font-family:'JetBrains Mono',monospace;
+  font-size:12px;
+  background:var(--surface2);
+  border:1px solid var(--border);
+  color:var(--muted);
+  padding:3px 8px;
+  border-radius:7px;
+}
+.srch-result-status{
+  margin-left:auto;
+  font-size:13px;
+  font-weight:700;
+  color:var(--accent-text);
+}
+.srch-result-snippet{
+  font-size:14px;
+  line-height:1.5;
+}
+.srch-empty{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:48px 24px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:10px;
+  text-align:center;
+}
+.srch-empty-icon{
+  width:56px;
+  height:56px;
+  border-radius:50%;
+  background:var(--accent-soft);
+  color:var(--accent-text);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.srch-empty-title{
+  font-weight:800;
+  font-size:18px;
+}
+.srch-empty-text{
+  font-size:14px;
+  color:var(--muted);
+  max-width:340px;
+  line-height:1.5;
+}
+.srch-empty-btn{
+  margin-top:6px;
+  height:44px;
+  padding:0 20px;
+  border:0;
+  border-radius:10px;
+  background:var(--accent);
+  color:var(--on-accent);
+  font-size:14px;
+  font-weight:700;
+}
+
+/* --- Pantalla Preguntar al cerebro --- */
+.ask-view{
+  display:flex;
+  flex-direction:column;
+  gap:24px;
+  max-width:880px;
+  width:100%;
+}
+.ask-user-row{
+  display:flex;
+  justify-content:flex-end;
+}
+.ask-user-bubble{
+  max-width:560px;
+  background:var(--accent);
+  color:var(--on-accent);
+  border-radius:18px 18px 4px 18px;
+  padding:14px 18px;
+  font-size:15px;
+  font-weight:600;
+  line-height:1.5;
+}
+.ask-bot-row{
+  display:flex;
+  gap:14px;
+  align-items:flex-start;
+}
+.ask-bot-avatar{
+  width:40px;
+  height:40px;
+  flex:none;
+  border-radius:12px;
+  background:var(--accent-soft);
+  color:var(--accent-text);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.ask-bot-col{
+  flex:1;
+  min-width:0;
+  display:flex;
+  flex-direction:column;
+  gap:16px;
+}
+.ask-answer{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:18px 18px 18px 4px;
+  padding:20px 22px;
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+}
+.ask-answer-text{
+  font-size:16px;
+  line-height:1.7;
+}
+.ask-cite{
+  min-width:24px;
+  height:24px;
+  border:0;
+  border-radius:99px;
+  background:var(--accent-soft);
+  color:var(--accent-text);
+  font-size:12px;
+  font-weight:800;
+  vertical-align:middle;
+  margin:0 2px;
+  padding:0 6px;
+}
+.ask-answer-footer{
+  display:flex;
+  flex-wrap:wrap;
+  gap:12px;
+  align-items:center;
+  justify-content:space-between;
+  border-top:1px solid var(--border);
+  padding-top:14px;
+}
+.ask-trust{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  font-size:13px;
+  color:var(--muted);
+}
+.ask-icon-btn{
+  width:44px;
+  height:44px;
+  border-radius:10px;
+  border:1px solid var(--border);
+  background:var(--surface);
+  color:var(--muted);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.ask-source{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:18px 20px;
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+}
+.ask-source-num{
+  width:26px;
+  height:26px;
+  border-radius:50%;
+  background:var(--accent);
+  color:var(--on-accent);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:13px;
+  font-weight:800;
+}
+.ask-source-name{
+  font-weight:700;
+  font-size:15px;
+}
+.ask-quote{
+  background:var(--accent-soft);
+  border-left:3px solid var(--accent);
+  border-radius:0 10px 10px 0;
+  padding:12px 16px;
+  font-size:14px;
+  line-height:1.65;
+  font-style:italic;
+}
+.ask-warning{
+  display:flex;
+  gap:10px;
+  align-items:flex-start;
+  border:1px dashed var(--border);
+  border-radius:10px;
+  padding:10px 14px;
+  font-size:13px;
+  line-height:1.5;
+  color:var(--muted);
+}
+.ask-warning-icon{
+  flex:none;
+  margin-top:1px;
+}
+.ask-btn-secondary{
+  height:44px;
+  padding:0 18px;
+  border-radius:10px;
+  border:1px solid var(--border);
+  background:var(--surface);
+  color:var(--text);
+  font-size:14px;
+  font-weight:600;
+}
+.ask-btn-primary{
+  height:44px;
+  padding:0 18px;
+  border-radius:10px;
+  border:0;
+  background:var(--accent);
+  color:var(--on-accent);
+  font-size:14px;
+  font-weight:700;
+}
+.ask-composer{
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+  position:sticky;
+  bottom:16px;
+}
+.ask-suggestion{
+  min-height:44px;
+  padding:0 16px;
+  border-radius:99px;
+  border:1px solid var(--border);
+  background:var(--surface);
+  color:var(--text);
+  font-size:13px;
+  font-weight:600;
+}
+.ask-input-bar{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  background:var(--surface);
+  border:1px solid var(--accent);
+  border-radius:16px;
+  padding:8px 8px 8px 20px;
+}
+.ask-input{
+  flex:1;
+  border:0;
+  outline:0;
+  background:transparent;
+  font-family:inherit;
+  font-size:15px;
+  color:var(--text);
+  height:44px;
+}
+.ask-send-btn{
+  width:48px;
+  height:48px;
+  border:0;
+  border-radius:12px;
+  background:var(--accent);
+  color:var(--on-accent);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.ask-disclaimer{
+  font-size:12px;
+  color:var(--muted);
+  text-align:center;
+}
+
+/* --- Pantalla Configuración --- */
+.cfg-view{
+  display:flex;
+  flex-direction:column;
+  gap:28px;
+  max-width:860px;
+}
+.cfg-card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:20px;
+  padding:28px;
+  display:flex;
+  flex-direction:column;
+  gap:24px;
+}
+.cfg-label-block{
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+  max-width:360px;
+}
+.cfg-label{
+  font-weight:700;
+  font-size:16px;
+}
+.cfg-hint{
+  font-size:14px;
+  color:var(--muted);
+  line-height:1.5;
+}
+.cfg-segmented{
+  display:flex;
+  background:var(--surface2);
+  border-radius:12px;
+  padding:3px;
+  gap:2px;
+}
+.cfg-segment-btn{
+  height:44px;
+  min-width:104px;
+  padding:0 16px;
+  border:0;
+  border-radius:10px;
+  font-weight:700;
+  font-size:14px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+}
+.cfg-divider{
+  height:1px;
+  background:var(--border);
+}
+.cfg-swatches{
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+}
+.cfg-swatch-btn{
+  width:44px;
+  height:44px;
+  border:0;
+  background:transparent;
+  padding:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.cfg-swatch-dot{
+  width:26px;
+  height:26px;
+  border-radius:50%;
+  display:block;
+}
+.cfg-swatch-label{
+  font-size:13px;
+  font-weight:600;
+  color:var(--muted);
+  margin-left:8px;
+  margin-right:6px;
+}
+.cfg-color-input{
+  width:44px;
+  height:44px;
+  border:1px solid var(--border);
+  border-radius:10px;
+  background:var(--surface2);
+  padding:4px;
+  cursor:pointer;
+}
+.cfg-preview{
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+}
+.cfg-preview-box{
+  background:var(--bg);
+  border:1px solid var(--border);
+  border-radius:14px;
+  padding:20px;
+  display:flex;
+  flex-wrap:wrap;
+  gap:16px;
+  align-items:center;
+}
+.cfg-preview-btn{
+  background:var(--accent);
+  color:var(--on-accent);
+  border:0;
+  border-radius:12px;
+  height:44px;
+  padding:0 22px;
+  font-size:14px;
+  font-weight:700;
+}
+.cfg-preview-status{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  color:var(--accent-text);
+  font-weight:700;
+  font-size:14px;
+}
+.cfg-preview-track{
+  flex:1 1 160px;
+  height:8px;
+  border-radius:99px;
+  background:var(--border);
+  overflow:hidden;
+}
+.cfg-preview-fill{
+  width:62%;
+  height:100%;
+  background:var(--accent);
+}
+.cfg-demo-card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:20px;
+  padding:28px;
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+}
+.cfg-demo-note{
+  font-size:13px;
+  font-weight:600;
+  color:var(--muted);
+}
+.cfg-demo-group{
+  display:flex;
+  flex-wrap:wrap;
+  background:var(--surface2);
+  border-radius:12px;
+  padding:3px;
+  gap:2px;
+  align-self:flex-start;
+}
+.cfg-demo-btn{
+  height:44px;
+  min-width:112px;
+  padding:0 16px;
+  border:0;
+  border-radius:10px;
+  font-weight:700;
+  font-size:14px;
+}
+
+/* --- Aviso de resultado de carga --- */
+.toast-box{
   position:fixed;
   right:24px;
   bottom:24px;
@@ -1665,7 +1693,7 @@
   gap:12px;
   align-items:flex-start;
 }
-.c224{
+.toast-icon{
   width:32px;
   height:32px;
   flex:none;
@@ -1677,12 +1705,12 @@
   justify-content:center;
   font-weight:800;
 }
-.c225{
+.toast-text{
   font-size:13px;
   color:var(--muted);
   line-height:1.5;
 }
-.c226{
+.toast-btn-primary{
   height:44px;
   padding:0 16px;
   border:0;
@@ -1692,7 +1720,7 @@
   font-size:14px;
   font-weight:700;
 }
-.c227{
+.toast-btn-secondary{
   height:44px;
   padding:0 16px;
   border-radius:10px;
@@ -1702,7 +1730,7 @@
   font-size:14px;
   font-weight:600;
 }
-.c228{
+.toast-btn-close{
   height:44px;
   padding:0 14px;
   border-radius:10px;
@@ -1712,13 +1740,17 @@
   font-size:14px;
   font-weight:600;
 }
-.c229{
+
+/* --- Fondo del panel de detalle en celular --- */
+.sheet-backdrop{
   position:fixed;
   inset:0;
   z-index:35;
   background:rgba(0,0,0,0.5);
 }
-.c230{
+
+/* --- Menú inferior (celular) --- */
+.bnav-bar{
   position:fixed;
   left:0;
   right:0;
@@ -1729,7 +1761,7 @@
   padding:6px 4px calc(6px + env(safe-area-inset-bottom,0px));
   justify-content:space-around;
 }
-.c231{
+.bnav-item{
   flex:1;
   min-height:56px;
   border:0;
@@ -1769,120 +1801,120 @@ tbody tr:hover td{background:var(--soft)}
 <!-- ===== HTML: estructura de las pantallas (sin estilos en línea) ===== -->
 <div id="app"></div>
 <template id="plantilla">
-<div class="c1">
+<div class="app-shell">
 
-<aside class="side c2">
-<div class="c3">
-<div class="c4">
+<aside class="side side-menu">
+<div class="ui-row-center-12">
+<div class="side-logo">
 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4a3 3 0 0 0-3 3 3 3 0 0 0-2 5 3 3 0 0 0 2 5 3 3 0 0 0 6 1V5a2 2 0 0 0-3-1z"></path><path d="M15 4a3 3 0 0 1 3 3 3 3 0 0 1 2 5 3 3 0 0 1-2 5 3 3 0 0 1-6 1"></path></svg>
 </div>
-<div class="c5">Cerebro Empresarial</div>
+<div class="side-brand">Cerebro Empresarial</div>
 </div>
-<nav class="c6">
-<button class="nav c7" data-on-click="{{ goHome }}" data-style="background:{{homeBg}};color:{{homeFg}};font-weight:{{homeW}}">
+<nav class="ui-col-4">
+<button class="nav side-link" data-on-click="{{ goHome }}" data-style="background:{{homeBg}};color:{{homeFg}};font-weight:{{homeW}}">
 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12l9-8 9 8"></path><path d="M5 10v10h14V10"></path></svg>Inicio</button>
-<button class="nav c7" data-on-click="{{ goAsk }}" data-style="background:{{askBg}};color:{{askFg}};font-weight:{{askW}}">
+<button class="nav side-link" data-on-click="{{ goAsk }}" data-style="background:{{askBg}};color:{{askFg}};font-weight:{{askW}}">
 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"></path><path d="M9 10h6M9 14h4"></path></svg>Preguntar al cerebro</button>
-<button class="nav c7" data-on-click="{{ goUpload }}" data-style="background:{{upBg}};color:{{upFg}};font-weight:{{upW}}">
+<button class="nav side-link" data-on-click="{{ goUpload }}" data-style="background:{{upBg}};color:{{upFg}};font-weight:{{upW}}">
 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 16V4"></path><path d="M7 9l5-5 5 5"></path><path d="M4 20h16"></path></svg>Subir documentos</button>
-<button class="nav c7" data-on-click="{{ goLibrary }}" data-style="background:{{libBg}};color:{{libFg}};font-weight:{{libW}}">
+<button class="nav side-link" data-on-click="{{ goLibrary }}" data-style="background:{{libBg}};color:{{libFg}};font-weight:{{libW}}">
 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"></path><path d="M14 3v5h5"></path></svg>Biblioteca</button>
-<button class="nav c7" data-on-click="{{ goSearch }}" data-style="background:{{srBg}};color:{{srFg}};font-weight:{{srW}}">
+<button class="nav side-link" data-on-click="{{ goSearch }}" data-style="background:{{srBg}};color:{{srFg}};font-weight:{{srW}}">
 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h10M18 7h2M4 17h2M10 17h10M14 5v4M6 15v4"></path></svg>Búsqueda avanzada</button>
-<a class="c8" href="#">
+<a class="side-link-anchor" href="#">
 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="5" rx="1"></rect><path d="M5 9v10h14V9"></path><path d="M10 13h4"></path></svg>Archivo original</a>
-<a class="c8" href="#">
+<a class="side-link-anchor" href="#">
 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><ellipse cx="12" cy="5" rx="8" ry="3"></ellipse><path d="M4 5v14c0 1.7 3.6 3 8 3s8-1.3 8-3V5"></path><path d="M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"></path></svg>Base de datos</a>
-<div class="c9"></div>
-<button class="nav c7" data-on-click="{{ goConfig }}" data-style="background:{{cfgBg}};color:{{cfgFg}};font-weight:{{cfgW}}">
+<div class="side-divider"></div>
+<button class="nav side-link" data-on-click="{{ goConfig }}" data-style="background:{{cfgBg}};color:{{cfgFg}};font-weight:{{cfgW}}">
 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"></path></svg>Configuración</button>
 </nav>
-<div class="c10">
-<div class="c11">Cero papel</div>
-<div class="c12">Cada documento queda digitalizado, consultable y respaldado.</div>
+<div class="side-note">
+<div class="ui-title-14">Cero papel</div>
+<div class="ui-note">Cada documento queda digitalizado, consultable y respaldado.</div>
 </div>
 </aside>
 
-<main class="main c13">
-<div class="c14">
-<div class="c15">{{ company }}<span aria-hidden="true">/</span><span class="c16">{{ crumb }}</span></div>
-<div class="c3">
-<div class="c17">
-<template data-if="bell"><div class="c18" data-on-click="{{ closeBell }}"></div></template>
-<button class="c19" data-on-click="{{ toggleBell }}" aria-label="Avisos, 3 nuevos" aria-expanded="{{ bell }}"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9M10.3 21a1.9 1.9 0 0 0 3.4 0"></path></svg><span class="c20">3</span></button>
+<main class="main main-content">
+<div class="top-bar">
+<div class="top-crumb">{{ company }}<span aria-hidden="true">/</span><span class="ui-text-strong">{{ crumb }}</span></div>
+<div class="ui-row-center-12">
+<div class="top-bell">
+<template data-if="bell"><div class="top-bell-overlay" data-on-click="{{ closeBell }}"></div></template>
+<button class="top-bell-btn" data-on-click="{{ toggleBell }}" aria-label="Avisos, 3 nuevos" aria-expanded="{{ bell }}"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9M10.3 21a1.9 1.9 0 0 0 3.4 0"></path></svg><span class="top-bell-badge">3</span></button>
 <template data-if="bell">
-<div class="pal c21">
-<div class="c22">Avisos</div>
+<div class="pal top-bell-menu">
+<div class="top-bell-title">Avisos</div>
 <template data-for="notifs" data-as="n">
-<div class="c23"><span class="c24"></span><div class="c25"><span class="c26">{{ n.t }}</span><span class="c27">{{ n.d }}</span></div></div>
+<div class="top-bell-item"><span class="ui-dot"></span><div class="top-bell-item-text"><span class="top-bell-item-title">{{ n.t }}</span><span class="ui-meta-sm">{{ n.d }}</span></div></div>
 </template>
 </div>
 </template>
 </div>
-<div class="c28"><div class="c11">{{ user.name }}</div><div class="c27">{{ user.role }}</div></div>
-<div class="c29" aria-hidden="true">{{ user.initials }}</div>
+<div class="top-user-text"><div class="ui-title-14">{{ user.name }}</div><div class="ui-meta-sm">{{ user.role }}</div></div>
+<div class="top-avatar" aria-hidden="true">{{ user.initials }}</div>
 </div>
 </div>
 
 
 <template data-if="isConfig">
-<div class="c30">
-<div class="c6">
-<h1 class="c31">Configuración</h1>
-<div class="c32">Ajusta cómo se ve tu cerebro empresarial. Los cambios se aplican al instante.</div>
+<div class="cfg-view">
+<div class="ui-col-4">
+<h1 class="ui-page-title">Configuración</h1>
+<div class="ui-page-subtitle">Ajusta cómo se ve tu cerebro empresarial. Los cambios se aplican al instante.</div>
 </div>
-<section class="c33">
-<h2 class="c34">Apariencia</h2>
+<section class="cfg-card">
+<h2 class="ui-card-title">Apariencia</h2>
 
-<div class="c35">
-<div class="c36">
-<div class="c37">Modo</div>
-<div class="c38">Elige entre fondo claro u oscuro.</div>
+<div class="ui-row-between">
+<div class="cfg-label-block">
+<div class="cfg-label">Modo</div>
+<div class="cfg-hint">Elige entre fondo claro u oscuro.</div>
 </div>
-<div class="c39" role="group" aria-label="Modo de color">
-<button class="c40" data-on-click="{{ setLight }}" aria-pressed="{{ isLight }}" data-style="background:{{lightBg}};color:{{lightFg}}">
+<div class="cfg-segmented" role="group" aria-label="Modo de color">
+<button class="cfg-segment-btn" data-on-click="{{ setLight }}" aria-pressed="{{ isLight }}" data-style="background:{{lightBg}};color:{{lightFg}}">
 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path></svg>Claro</button>
-<button class="c40" data-on-click="{{ setDark }}" aria-pressed="{{ isDark }}" data-style="background:{{darkBg}};color:{{darkFg}}">
+<button class="cfg-segment-btn" data-on-click="{{ setDark }}" aria-pressed="{{ isDark }}" data-style="background:{{darkBg}};color:{{darkFg}}">
 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 13A9 9 0 1 1 11 3a7 7 0 0 0 10 10z"></path></svg>Oscuro</button>
 </div>
 </div>
 
-<div class="c41"></div>
+<div class="cfg-divider"></div>
 
-<div class="c35">
-<div class="c36">
-<div class="c37">Color principal</div>
-<div class="c38">Todo el diseño se adapta a este color. Elige uno o crea el tuyo.</div>
+<div class="ui-row-between">
+<div class="cfg-label-block">
+<div class="cfg-label">Color principal</div>
+<div class="cfg-hint">Todo el diseño se adapta a este color. Elige uno o crea el tuyo.</div>
 </div>
-<div class="c42" role="group" aria-label="Color principal">
+<div class="cfg-swatches" role="group" aria-label="Color principal">
 <template data-for="swatches" data-as="sw">
-<button class="c43" data-on-click="{{ sw.pick }}" aria-label="Color {{ sw.name }}" aria-pressed="{{ sw.selected }}">
-<span class="c44" data-style="background:{{ sw.hex }};border:{{ sw.ring }};box-shadow:{{ sw.glow }}"></span>
+<button class="cfg-swatch-btn" data-on-click="{{ sw.pick }}" aria-label="Color {{ sw.name }}" aria-pressed="{{ sw.selected }}">
+<span class="cfg-swatch-dot" data-style="background:{{ sw.hex }};border:{{ sw.ring }};box-shadow:{{ sw.glow }}"></span>
 </button>
 </template>
-<label class="c45" for="custom">Otro</label>
-<input class="c46" id="custom" type="color" value="{{ accent }}" data-on-change="{{ onCustom }}">
+<label class="cfg-swatch-label" for="custom">Otro</label>
+<input class="cfg-color-input" id="custom" type="color" value="{{ accent }}" data-on-change="{{ onCustom }}">
 </div>
 </div>
 
-<div class="c41"></div>
+<div class="cfg-divider"></div>
 
-<div class="c47">
-<div class="c48">Vista previa</div>
-<div class="c49">
-<button class="c50">Seleccionar archivos</button>
-<span class="c51">.md</span>
-<span class="c52"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5 9-10"></path></svg>Archivado</span>
-<div class="c53"><div class="c54"></div></div>
+<div class="cfg-preview">
+<div class="ui-eyebrow">Vista previa</div>
+<div class="cfg-preview-box">
+<button class="cfg-preview-btn">Seleccionar archivos</button>
+<span class="ui-tag-md">.md</span>
+<span class="cfg-preview-status"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5 9-10"></path></svg>Archivado</span>
+<div class="cfg-preview-track"><div class="cfg-preview-fill"></div></div>
 </div>
 </div>
 </section>
-<section class="c55">
-<h2 class="c34">Estados de la interfaz <span class="c56">· demostración</span></h2>
-<div class="c38">Simula cómo se ve la Biblioteca con datos, cargando o sin documentos.</div>
-<div class="c57" role="group" aria-label="Estado de la biblioteca">
+<section class="cfg-demo-card">
+<h2 class="ui-card-title">Estados de la interfaz <span class="cfg-demo-note">· demostración</span></h2>
+<div class="cfg-hint">Simula cómo se ve la Biblioteca con datos, cargando o sin documentos.</div>
+<div class="cfg-demo-group" role="group" aria-label="Estado de la biblioteca">
 <template data-for="demOpts" data-as="o">
-<button class="c58" data-on-click="{{ o.pick }}" aria-pressed="{{ o.on }}" data-style="background:{{ o.bg }};color:{{ o.fg }}">{{ o.label }}</button>
+<button class="cfg-demo-btn" data-on-click="{{ o.pick }}" aria-pressed="{{ o.on }}" data-style="background:{{ o.bg }};color:{{ o.fg }}">{{ o.label }}</button>
 </template>
 </div>
 </section>
@@ -1890,147 +1922,147 @@ tbody tr:hover td{background:var(--soft)}
 </template>
 
 <template data-if="isAsk">
-<div class="c59">
-<div class="c6">
-<h1 class="c31">Pregunta a tu cerebro</h1>
-<div class="c32">Respuestas basadas solo en tus documentos, siempre con la fuente a la vista.</div>
+<div class="ask-view">
+<div class="ui-col-4">
+<h1 class="ui-page-title">Pregunta a tu cerebro</h1>
+<div class="ui-page-subtitle">Respuestas basadas solo en tus documentos, siempre con la fuente a la vista.</div>
 </div>
 
-<div class="c60">
-<div class="c61">¿Cuántos días de vacaciones le corresponden a un empleado con 6 años de antigüedad?</div>
+<div class="ask-user-row">
+<div class="ask-user-bubble">¿Cuántos días de vacaciones le corresponden a un empleado con 6 años de antigüedad?</div>
 </div>
 
-<div class="c62">
-<div class="c63">
+<div class="ask-bot-row">
+<div class="ask-bot-avatar">
 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4a3 3 0 0 0-3 3 3 3 0 0 0-2 5 3 3 0 0 0 2 5 3 3 0 0 0 6 1V5a2 2 0 0 0-3-1z"></path><path d="M15 4a3 3 0 0 1 3 3 3 3 0 0 1 2 5 3 3 0 0 1-2 5 3 3 0 0 1-6 1"></path></svg>
 </div>
-<div class="c64">
-<div class="c65">
-<div class="c66">Un empleado con 6 años de antigüedad tiene derecho a <strong>18 días hábiles</strong> de vacaciones al año <button class="c67" aria-label="Ver fuente 1">1</button>. Pueden tomarse en hasta dos períodos <button class="c67" aria-label="Ver fuente 1">1</button>. Ten en cuenta que en la reunión directiva del 17 de octubre se acordó <strong>revisar esta política</strong> <button class="c67" aria-label="Ver fuente 2">2</button>, por lo que estas cifras podrían cambiar.</div>
-<div class="c68">
-<div class="c69"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="{{p.accentText}}" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"></path><path d="M9 12l2 2 4-4"></path></svg>Basado en 2 documentos a los que tienes acceso</div>
-<div class="c70">
-<button class="c71" aria-label="Respuesta útil"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 11v9H4v-9zM7 11l4-8c1.7 0 3 1.3 3 3v3h5a2 2 0 0 1 2 2.3l-1.2 7A2 2 0 0 1 17.8 20H7"></path></svg></button>
-<button class="c71" aria-label="Respuesta no útil"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 13V4h3v9zM17 13l-4 8c-1.7 0-3-1.3-3-3v-3H5a2 2 0 0 1-2-2.3l1.2-7A2 2 0 0 1 6.2 4H17"></path></svg></button>
-<button class="c71" aria-label="Copiar respuesta"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M5 15V5a2 2 0 0 1 2-2h8"></path></svg></button>
+<div class="ask-bot-col">
+<div class="ask-answer">
+<div class="ask-answer-text">Un empleado con 6 años de antigüedad tiene derecho a <strong>18 días hábiles</strong> de vacaciones al año <button class="ask-cite" aria-label="Ver fuente 1">1</button>. Pueden tomarse en hasta dos períodos <button class="ask-cite" aria-label="Ver fuente 1">1</button>. Ten en cuenta que en la reunión directiva del 17 de octubre se acordó <strong>revisar esta política</strong> <button class="ask-cite" aria-label="Ver fuente 2">2</button>, por lo que estas cifras podrían cambiar.</div>
+<div class="ask-answer-footer">
+<div class="ask-trust"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="{{p.accentText}}" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"></path><path d="M9 12l2 2 4-4"></path></svg>Basado en 2 documentos a los que tienes acceso</div>
+<div class="ui-row-gap-6">
+<button class="ask-icon-btn" aria-label="Respuesta útil"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 11v9H4v-9zM7 11l4-8c1.7 0 3 1.3 3 3v3h5a2 2 0 0 1 2 2.3l-1.2 7A2 2 0 0 1 17.8 20H7"></path></svg></button>
+<button class="ask-icon-btn" aria-label="Respuesta no útil"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 13V4h3v9zM17 13l-4 8c-1.7 0-3-1.3-3-3v-3H5a2 2 0 0 1-2-2.3l1.2-7A2 2 0 0 1 6.2 4H17"></path></svg></button>
+<button class="ask-icon-btn" aria-label="Copiar respuesta"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M5 15V5a2 2 0 0 1 2-2h8"></path></svg></button>
 </div>
 </div>
 </div>
 
-<div class="c48">Fuentes</div>
+<div class="ui-eyebrow">Fuentes</div>
 <template data-for="askSources" data-as="src">
-<div class="c72">
-<div class="c73">
-<span class="c74">{{ src.n }}</span>
-<span class="c75">{{ src.name }}</span>
-<span class="c76">{{ src.ext }}</span>
-<span class="c77">· {{ src.section }}</span>
+<div class="ask-source">
+<div class="ui-row-wrap-10-center">
+<span class="ask-source-num">{{ src.n }}</span>
+<span class="ask-source-name">{{ src.name }}</span>
+<span class="ui-tag-ext">{{ src.ext }}</span>
+<span class="ui-meta">· {{ src.section }}</span>
 </div>
-<div class="c78">{{ src.quote }}</div>
+<div class="ask-quote">{{ src.quote }}</div>
 <template data-if="src.warn">
-<div class="c79"><svg class="c80" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="{{p.accentText}}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l10 18H2z"></path><path d="M12 10v5M12 18v.5"></path></svg><span><strong class="c16">Verifica con el original.</strong> {{ src.warnText }}</span></div>
+<div class="ask-warning"><svg class="ask-warning-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="{{p.accentText}}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l10 18H2z"></path><path d="M12 10v5M12 18v.5"></path></svg><span><strong class="ui-text-strong">Verifica con el original.</strong> {{ src.warnText }}</span></div>
 </template>
-<div class="c81">
-<button class="c82">Ver en el MD</button>
-<button class="c83">Abrir original</button>
+<div class="ui-row-wrap-8">
+<button class="ask-btn-secondary">Ver en el MD</button>
+<button class="ask-btn-primary">Abrir original</button>
 </div>
 </div>
 </template>
 </div>
 </div>
 
-<div class="c84">
-<div class="c81">
-<button class="c85">¿Qué contratos vencen este año?</button>
-<button class="c85">Resume el acta del 17 de octubre</button>
-<button class="c85">¿Qué facturas están pendientes?</button>
+<div class="ask-composer">
+<div class="ui-row-wrap-8">
+<button class="ask-suggestion">¿Qué contratos vencen este año?</button>
+<button class="ask-suggestion">Resume el acta del 17 de octubre</button>
+<button class="ask-suggestion">¿Qué facturas están pendientes?</button>
 </div>
-<div class="field c86">
-<label class="c87" for="ask">Escribe tu pregunta</label>
-<input class="c88" id="ask" type="text" placeholder="Pregunta lo que quieras sobre tus documentos…">
-<button class="c89" aria-label="Enviar pregunta"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5"></path><path d="M5 12l7-7 7 7"></path></svg></button>
+<div class="field ask-input-bar">
+<label class="ui-visually-hidden" for="ask">Escribe tu pregunta</label>
+<input class="ask-input" id="ask" type="text" placeholder="Pregunta lo que quieras sobre tus documentos…">
+<button class="ask-send-btn" aria-label="Enviar pregunta"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5"></path><path d="M5 12l7-7 7 7"></path></svg></button>
 </div>
-<div class="c90">Solo se consultan los documentos a los que tienes acceso. Las respuestas pueden contener errores: revisa siempre la fuente.</div>
+<div class="ask-disclaimer">Solo se consultan los documentos a los que tienes acceso. Las respuestas pueden contener errores: revisa siempre la fuente.</div>
 </div>
 </div>
 </template>
 
 <template data-if="isHome">
-<div class="c91">
-<div class="c92">
-<div class="c93">
-<div class="c94">Cerebro Empresarial</div>
-<h1 class="c95">Encuentra cualquier documento de la empresa</h1>
-<div class="c96">Consulta todo el archivo digital o sube nuevos documentos.</div>
+<div class="home-view">
+<div class="home-inner">
+<div class="ui-col-10">
+<div class="home-eyebrow">Cerebro Empresarial</div>
+<h1 class="home-title">Encuentra cualquier documento de la empresa</h1>
+<div class="home-subtitle">Consulta todo el archivo digital o sube nuevos documentos.</div>
 </div>
-<div class="c97">
-<div class="field c98">
+<div class="home-actions">
+<div class="field home-search">
 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-4-4"></path></svg>
-<label class="c87" for="homeq">Buscar documentos</label>
-<input class="c99" id="homeq" data-on-keydown="{{ homeKey }}" type="text" placeholder="Busca por nombre, contenido o tema…">
-<button class="c100" data-on-click="{{ goAsk }}">Buscar</button>
+<label class="ui-visually-hidden" for="homeq">Buscar documentos</label>
+<input class="ui-input-bare" id="homeq" data-on-keydown="{{ homeKey }}" type="text" placeholder="Busca por nombre, contenido o tema…">
+<button class="home-search-btn" data-on-click="{{ goAsk }}">Buscar</button>
 </div>
-<button class="c101" data-on-click="{{ goUpload }}">
+<button class="home-upload-btn" data-on-click="{{ goUpload }}">
 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 16V4"></path><path d="M7 9l5-5 5 5"></path><path d="M4 20h16"></path></svg>Subir documentos</button>
 </div>
-<div class="c102">
-<span class="c103"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="{{p.accentText}}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="5" rx="1"></rect><path d="M5 9v10h14V9"></path></svg>Original archivado de cada documento</span>
-<span class="c103"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="{{p.accentText}}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"></path><path d="M14 3v5h5"></path></svg>Texto convertido a Markdown</span>
-<span class="c103"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="{{p.accentText}}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"></path></svg>Acceso según tus permisos</span>
+<div class="home-trust">
+<span class="home-trust-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="{{p.accentText}}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="5" rx="1"></rect><path d="M5 9v10h14V9"></path></svg>Original archivado de cada documento</span>
+<span class="home-trust-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="{{p.accentText}}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"></path><path d="M14 3v5h5"></path></svg>Texto convertido a Markdown</span>
+<span class="home-trust-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="{{p.accentText}}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"></path></svg>Acceso según tus permisos</span>
 </div>
 </div>
 </div>
 </template>
 
 <template data-if="isSearch">
-<div class="c6">
-<h1 class="c31">Búsqueda avanzada</h1>
-<div class="c32">Combina palabras clave, tipo, fecha, autor y estado para afinar los resultados.</div>
+<div class="ui-col-4">
+<h1 class="ui-page-title">Búsqueda avanzada</h1>
+<div class="ui-page-subtitle">Combina palabras clave, tipo, fecha, autor y estado para afinar los resultados.</div>
 </div>
-<div class="c104">
-<section class="c105">
-<div class="c106">
-<label class="c107" for="sq">Palabras clave</label>
-<div class="field c108">
+<div class="srch-layout">
+<section class="srch-filters">
+<div class="ui-col-8">
+<label class="ui-label" for="sq">Palabras clave</label>
+<div class="field srch-field">
 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-4-4"></path></svg>
-<input class="c99" id="sq" type="text" value="{{ sf.q }}" data-on-change="{{ onSq }}" placeholder="Ej.: vacaciones, contrato…">
+<input class="ui-input-bare" id="sq" type="text" value="{{ sf.q }}" data-on-change="{{ onSq }}" placeholder="Ej.: vacaciones, contrato…">
 </div>
 </div>
 <template data-for="groups" data-as="g">
-<div class="c106">
-<div class="c107">{{ g.title }}</div>
-<div class="c81">
+<div class="ui-col-8">
+<div class="ui-label">{{ g.title }}</div>
+<div class="ui-row-wrap-8">
 <template data-for="g.opts" data-as="o">
-<button class="c109" data-on-click="{{ o.pick }}" aria-pressed="{{ o.on }}" data-style="border:1px solid {{ o.bd }};background:{{ o.bg }};color:{{ o.fg }}">{{ o.label }}</button>
+<button class="ui-chip" data-on-click="{{ o.pick }}" aria-pressed="{{ o.on }}" data-style="border:1px solid {{ o.bd }};background:{{ o.bg }};color:{{ o.fg }}">{{ o.label }}</button>
 </template>
 </div>
 </div>
 </template>
-<div class="c106">
-<div class="c107">Rango de fechas</div>
-<div class="c110">
-<div class="c111"><label class="c27" for="sfrom">Desde</label><input class="c112" id="sfrom" type="date" value="{{ sf.from }}" data-on-change="{{ onFrom }}" data-style="color-scheme:{{ scheme }}"></div>
-<div class="c111"><label class="c27" for="sto">Hasta</label><input class="c112" id="sto" type="date" value="{{ sf.to }}" data-on-change="{{ onTo }}" data-style="color-scheme:{{ scheme }}"></div>
+<div class="ui-col-8">
+<div class="ui-label">Rango de fechas</div>
+<div class="ui-row-wrap-10">
+<div class="srch-date-col"><label class="ui-meta-sm" for="sfrom">Desde</label><input class="srch-date-input" id="sfrom" type="date" value="{{ sf.from }}" data-on-change="{{ onFrom }}" data-style="color-scheme:{{ scheme }}"></div>
+<div class="srch-date-col"><label class="ui-meta-sm" for="sto">Hasta</label><input class="srch-date-input" id="sto" type="date" value="{{ sf.to }}" data-on-change="{{ onTo }}" data-style="color-scheme:{{ scheme }}"></div>
 </div>
 </div>
-<button class="c113" data-on-click="{{ srClear }}">Limpiar filtros</button>
+<button class="srch-clear-btn" data-on-click="{{ srClear }}">Limpiar filtros</button>
 </section>
-<section class="c114">
-<div class="c115" role="status">{{ srCount }}</div>
+<section class="srch-results">
+<div class="srch-count" role="status">{{ srCount }}</div>
 <template data-for="results" data-as="r">
-<button class="nav c116" data-on-click="{{ r.open }}">
-<span class="c73"><span class="c117">{{ r.name }}</span><span class="c118">{{ r.ext }}</span><span class="c119">{{ r.status }}</span></span>
-<span class="c77">{{ r.meta }}</span>
-<span class="c120">{{ r.snippet }}</span>
-<span class="c121"><template data-for="r.tags" data-as="t"><span class="c122">{{ t }}</span></template></span>
+<button class="nav srch-result" data-on-click="{{ r.open }}">
+<span class="ui-row-wrap-10-center"><span class="srch-result-name">{{ r.name }}</span><span class="srch-result-ext">{{ r.ext }}</span><span class="srch-result-status">{{ r.status }}</span></span>
+<span class="ui-meta">{{ r.meta }}</span>
+<span class="srch-result-snippet">{{ r.snippet }}</span>
+<span class="ui-row-wrap-6"><template data-for="r.tags" data-as="t"><span class="ui-tag">{{ t }}</span></template></span>
 </button>
 </template>
 <template data-if="srNone">
-<div class="c123">
-<div class="c124"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-4-4"></path></svg></div>
-<div class="c125">Sin resultados con estos filtros</div>
-<div class="c126">Prueba quitando algún filtro o con otras palabras clave.</div>
-<button class="c127" data-on-click="{{ srClear }}">Limpiar filtros</button>
+<div class="srch-empty">
+<div class="srch-empty-icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-4-4"></path></svg></div>
+<div class="srch-empty-title">Sin resultados con estos filtros</div>
+<div class="srch-empty-text">Prueba quitando algún filtro o con otras palabras clave.</div>
+<button class="srch-empty-btn" data-on-click="{{ srClear }}">Limpiar filtros</button>
 </div>
 </template>
 </section>
@@ -2038,99 +2070,99 @@ tbody tr:hover td{background:var(--soft)}
 </template>
 
 <template data-if="isReview">
-<div class="c128">
-<div class="c129">
-<div class="c6">
-<button class="c130" data-on-click="{{ goLibrary }}">← Volver a la Biblioteca</button>
-<h1 class="c131">{{ rv.name }}</h1>
-<div class="c132">{{ rv.meta }}</div>
+<div class="rev-view">
+<div class="rev-header">
+<div class="ui-col-4">
+<button class="rev-back" data-on-click="{{ goLibrary }}">← Volver a la Biblioteca</button>
+<h1 class="rev-title">{{ rv.name }}</h1>
+<div class="ui-text-muted">{{ rv.meta }}</div>
 </div>
-<div class="c133">
-<span class="c134" data-style="background:{{rv.stBg}};color:{{rv.stFg}}">{{ rv.status }}</span>
-<span class="c135">Confianza {{ rv.conf }}% · {{ rv.lvl }}</span>
+<div class="rev-badges">
+<span class="rev-badge-status" data-style="background:{{rv.stBg}};color:{{rv.stFg}}">{{ rv.status }}</span>
+<span class="rev-badge-conf">Confianza {{ rv.conf }}% · {{ rv.lvl }}</span>
 </div>
 </div>
-<div class="c136">
-<section class="c137">
-<div class="c138"><div class="c139">Original <span class="c140">{{ rv.ext }}</span></div>
-<div class="c70"><template data-for="rv.pages" data-as="g"><button class="c109" data-on-click="{{ g.pick }}" aria-pressed="{{ g.on }}" data-style="border:1px solid {{ g.bd }};background:{{ g.bg }};color:{{ g.fg }}">{{ g.label }}</button></template></div></div>
-<div class="c141" data-style="filter:{{ rv.blur }}">
-<div class="c142"></div>
-<template data-for="rv.lines" data-as="w"><div class="c143" data-style="width:{{ w }}%"></div></template>
+<div class="rev-panes">
+<section class="rev-pane">
+<div class="rev-pane-head"><div class="ui-subtitle">Original <span class="rev-ext">{{ rv.ext }}</span></div>
+<div class="ui-row-gap-6"><template data-for="rv.pages" data-as="g"><button class="ui-chip" data-on-click="{{ g.pick }}" aria-pressed="{{ g.on }}" data-style="border:1px solid {{ g.bd }};background:{{ g.bg }};color:{{ g.fg }}">{{ g.label }}</button></template></div></div>
+<div class="rev-paper" data-style="filter:{{ rv.blur }}">
+<div class="rev-paper-title"></div>
+<template data-for="rv.lines" data-as="w"><div class="rev-paper-line" data-style="width:{{ w }}%"></div></template>
 </div>
 </section>
-<section class="c137">
-<div class="c139">Texto convertido (MD)</div>
-<div class="c144"><div class="c145"><span>Lectura de esta página</span><span class="c146">{{ rv.pconf }}%</span></div><div class="c147"><div class="c148" data-style="width:{{ rv.pconf }}%"></div></div></div>
-<pre class="c149">{{ rv.preview }}</pre>
+<section class="rev-pane">
+<div class="ui-subtitle">Texto convertido (MD)</div>
+<div class="rev-conf"><div class="rev-conf-row"><span>Lectura de esta página</span><span class="rev-conf-value">{{ rv.pconf }}%</span></div><div class="ui-progress"><div class="rev-conf-fill" data-style="width:{{ rv.pconf }}%"></div></div></div>
+<pre class="rev-md">{{ rv.preview }}</pre>
 </section>
 </div>
-<section class="c150">
-<div class="c139">Clasificación</div>
-<div class="c151"><span>Ruta en el NAS: <strong class="c16">{{ rv.folder }}</strong></span><span>Integridad: <strong class="c16">{{ rv.hash }}</strong></span><span>Cargado por: <strong class="c16">{{ rv.by }}</strong></span><span>Clasificado por: <strong class="c16">{{ rv.cls }}</strong></span></div>
-<div class="c121"><template data-for="rv.tags" data-as="t"><span class="c122">{{ t }}</span></template></div>
+<section class="rev-class">
+<div class="ui-subtitle">Clasificación</div>
+<div class="rev-class-meta"><span>Ruta en el NAS: <strong class="ui-text-strong">{{ rv.folder }}</strong></span><span>Integridad: <strong class="ui-text-strong">{{ rv.hash }}</strong></span><span>Cargado por: <strong class="ui-text-strong">{{ rv.by }}</strong></span><span>Clasificado por: <strong class="ui-text-strong">{{ rv.cls }}</strong></span></div>
+<div class="ui-row-wrap-6"><template data-for="rv.tags" data-as="t"><span class="ui-tag">{{ t }}</span></template></div>
 <template data-if="rv.clas">
-<div class="c152"><div class="c153">Problemas detectados</div><template data-for="rv.problems" data-as="q"><div class="c77">• {{ q }}</div></template></div>
-<div class="c106"><div class="c107">Elige la carpeta (estructura provisional)</div><div class="c81"><template data-for="rv.folders" data-as="o"><button class="c109" data-on-click="{{ o.pick }}" aria-pressed="{{ o.on }}" data-style="border:1px solid {{ o.bd }};background:{{ o.bg }};color:{{ o.fg }}">{{ o.label }}</button></template></div></div>
-<div class="c110">
-<button class="c154" data-on-click="{{ onDiscard }}">Descartar</button>
-<button class="c154" data-on-click="{{ onRescan }}">Volver a escanear</button>
-<button class="c155" data-on-click="{{ onAccept }}">Aceptar y guardar en {{ rv.fSel }}</button>
+<div class="rev-problems"><div class="rev-problems-title">Problemas detectados</div><template data-for="rv.problems" data-as="q"><div class="ui-meta">• {{ q }}</div></template></div>
+<div class="ui-col-8"><div class="ui-label">Elige la carpeta (estructura provisional)</div><div class="ui-row-wrap-8"><template data-for="rv.folders" data-as="o"><button class="ui-chip" data-on-click="{{ o.pick }}" aria-pressed="{{ o.on }}" data-style="border:1px solid {{ o.bd }};background:{{ o.bg }};color:{{ o.fg }}">{{ o.label }}</button></template></div></div>
+<div class="ui-row-wrap-10">
+<button class="ui-btn-secondary" data-on-click="{{ onDiscard }}">Descartar</button>
+<button class="ui-btn-secondary" data-on-click="{{ onRescan }}">Volver a escanear</button>
+<button class="ui-btn-primary" data-on-click="{{ onAccept }}">Aceptar y guardar en {{ rv.fSel }}</button>
 </div>
 </template>
 <template data-if="rv.ok">
-<div class="c110"><button class="c155">Descargar original</button><button class="c154">Subir nueva versión</button></div>
+<div class="ui-row-wrap-10"><button class="ui-btn-primary">Descargar original</button><button class="ui-btn-secondary">Subir nueva versión</button></div>
 </template>
 </section>
 </div>
 </template>
 
 <template data-if="isUpload">
-<div class="c6">
-<h1 class="c31">Subir documentos</h1>
-<div class="c32">Se convierten a Markdown, se registran y el original queda archivado.</div>
+<div class="ui-col-4">
+<h1 class="ui-page-title">Subir documentos</h1>
+<div class="ui-page-subtitle">Se convierten a Markdown, se registran y el original queda archivado.</div>
 </div>
-<section class="c33">
-<div class="c156">
-<div class="c157" data-on-dragover="{{ dzOver }}" data-on-dragleave="{{ dzLeave }}" data-on-drop="{{ dzDrop }}" data-style="border:2px {{dz.style}} {{p.accent}};background:{{dz.bg}}">
-<div class="c158">
+<section class="cfg-card">
+<div class="up-top">
+<div class="up-dropzone" data-on-dragover="{{ dzOver }}" data-on-dragleave="{{ dzLeave }}" data-on-drop="{{ dzDrop }}" data-style="border:2px {{dz.style}} {{p.accent}};background:{{dz.bg}}">
+<div class="up-drop-icon">
 <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 16V4"></path><path d="M7 9l5-5 5 5"></path><path d="M4 20h16"></path></svg>
 </div>
-<div class="c159">{{ dz.text }}</div>
-<div class="c132">PDF, Word, Excel, imágenes escaneadas · hasta 50 archivos a la vez</div>
-<button class="c160" data-on-click="{{ startUpload }}" data-style="opacity:{{ confOp }}">Seleccionar archivos</button>
-<label class="c161"><input class="c162" type="checkbox" checked="{{ confOn }}" data-on-change="{{ onConf }}">Confirmo que el escaneo se ve completo y legible</label>
+<div class="up-drop-title">{{ dz.text }}</div>
+<div class="ui-text-muted">PDF, Word, Excel, imágenes escaneadas · hasta 50 archivos a la vez</div>
+<button class="up-drop-btn" data-on-click="{{ startUpload }}" data-style="opacity:{{ confOp }}">Seleccionar archivos</button>
+<label class="up-confirm"><input class="up-confirm-check" type="checkbox" checked="{{ confOn }}" data-on-change="{{ onConf }}">Confirmo que el escaneo se ve completo y legible</label>
 </div>
-<div class="c163">
-<div class="c48">Procesando ahora</div>
+<div class="up-status-col">
+<div class="ui-eyebrow">Procesando ahora</div>
 <template data-if="up.idle">
-<div class="c164">Aún no hay archivos en proceso. Suelta un documento o pulsa “Seleccionar archivos” para ver el flujo completo.</div>
+<div class="up-empty">Aún no hay archivos en proceso. Suelta un documento o pulsa “Seleccionar archivos” para ver el flujo completo.</div>
 </template>
 <template data-if="up.active">
-<div class="c165" role="status">
-<div class="c166"><span>{{ up.name }}</span><span class="c167">{{ up.label }}</span></div>
-<div class="c147"><div class="c168" data-style="width:{{ up.pct }}%"></div></div>
+<div class="up-progress-card" role="status">
+<div class="up-progress-row"><span>{{ up.name }}</span><span class="up-progress-label">{{ up.label }}</span></div>
+<div class="ui-progress"><div class="up-progress-fill" data-style="width:{{ up.pct }}%"></div></div>
 </div>
 </template>
 <template data-if="up.done">
-<div class="c169">
-<div class="c170">Clasificación automática</div>
-<div class="c117">{{ up.title }}</div>
-<div class="c171">Carpeta: <strong class="c16">{{ up.folder }}</strong><br>Confianza: <strong class="c16">{{ up.conf }}%</strong><br>{{ up.reason }}</div>
-<div class="c121"><template data-for="up.tags" data-as="t"><span class="c122">{{ t }}</span></template></div>
-<button class="c172" data-on-click="{{ revLast }}">Revisar documento</button>
+<div class="up-result">
+<div class="up-result-eyebrow">Clasificación automática</div>
+<div class="srch-result-name">{{ up.title }}</div>
+<div class="up-result-text">Carpeta: <strong class="ui-text-strong">{{ up.folder }}</strong><br>Confianza: <strong class="ui-text-strong">{{ up.conf }}%</strong><br>{{ up.reason }}</div>
+<div class="ui-row-wrap-6"><template data-for="up.tags" data-as="t"><span class="ui-tag">{{ t }}</span></template></div>
+<button class="up-result-btn" data-on-click="{{ revLast }}">Revisar documento</button>
 </div>
 </template>
 </div>
 </div>
 
-<div class="steps c173">
+<div class="steps up-steps">
 <template data-for="steps" data-as="st">
-<div class="c174" data-style="border:1px solid {{st.border}}">
-<div class="c175" data-style="background:{{st.bg}};color:{{st.fg}};border:1px solid {{st.cb}}">{{ st.mark }}</div>
-<div class="c37">{{ st.title }}</div>
-<div class="c12">{{ st.text }}</div>
-<div class="c176" data-style="color:{{st.tc}}">{{ st.label }}</div>
+<div class="up-step" data-style="border:1px solid {{st.border}}">
+<div class="up-step-mark" data-style="background:{{st.bg}};color:{{st.fg}};border:1px solid {{st.cb}}">{{ st.mark }}</div>
+<div class="cfg-label">{{ st.title }}</div>
+<div class="ui-note">{{ st.text }}</div>
+<div class="up-step-label" data-style="color:{{st.tc}}">{{ st.label }}</div>
 </div>
 </template>
 </div>
@@ -2138,57 +2170,57 @@ tbody tr:hover td{background:var(--soft)}
 </template>
 
 <template data-if="isLibrary">
-<header class="c35">
-<div class="c6">
-<h1 class="c31">Biblioteca</h1>
-<div class="c32">Todos tus documentos registrados, con su original archivado.</div>
+<header class="ui-row-between">
+<div class="ui-col-4">
+<h1 class="ui-page-title">Biblioteca</h1>
+<div class="ui-page-subtitle">Todos tus documentos registrados, con su original archivado.</div>
 </div>
-<div class="field c177">
+<div class="field lib-search">
 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-4-4"></path></svg>
-<label class="c87" for="q">Buscar en el cerebro</label>
-<input class="c178" id="q" type="text" placeholder="Busca o pregunta: contratos, facturas, políticas…">
+<label class="ui-visually-hidden" for="q">Buscar en el cerebro</label>
+<input class="lib-search-input" id="q" type="text" placeholder="Busca o pregunta: contratos, facturas, políticas…">
 </div>
 </header>
 
 <template data-if="libData">
-<section class="c179">
-<div class="c180">
-<h2 class="c34">Documentos registrados</h2>
-<div class="c181">
+<section class="lib-card">
+<div class="lib-toolbar">
+<h2 class="ui-card-title">Documentos registrados</h2>
+<div class="lib-filters">
 <template data-for="libChips" data-as="c">
-<button class="c182" data-on-click="{{ c.pick }}" aria-pressed="{{ c.on }}" data-style="border:1px solid {{ c.bd }};background:{{ c.bg }};color:{{ c.fg }}">{{ c.label }}</button>
+<button class="lib-filter-btn" data-on-click="{{ c.pick }}" aria-pressed="{{ c.on }}" data-style="border:1px solid {{ c.bd }};background:{{ c.bg }};color:{{ c.fg }}">{{ c.label }}</button>
 </template>
 </div>
 </div>
-<div class="c183">
-<table class="c184">
+<div class="lib-table-wrap">
+<table class="lib-table">
 <thead>
-<tr class="c185">
-<th class="c186">Documento</th>
-<th class="c186">Tipo</th>
-<th class="c186">Fecha</th>
-<th class="c186">Versión MD</th>
-<th class="c186">Original</th>
-<th class="c186">Estado</th>
+<tr class="lib-table-head">
+<th class="lib-th">Documento</th>
+<th class="lib-th">Tipo</th>
+<th class="lib-th">Fecha</th>
+<th class="lib-th">Versión MD</th>
+<th class="lib-th">Original</th>
+<th class="lib-th">Estado</th>
 </tr>
 </thead>
 <tbody>
 <template data-for="rows" data-as="r">
-<tr class="c187" data-style="background:{{r.bg}}">
-<td class="c188"><button class="c189" data-on-click="{{ r.pick }}" aria-pressed="{{ r.selected }}">{{ r.name }}</button></td>
-<td class="c190">{{ r.type }}</td>
-<td class="c190">{{ r.date }}</td>
-<td class="c191"><span class="c51">.md</span></td>
-<td class="c191"><span class="c76">{{ r.ext }}</span></td>
-<td class="c191">
+<tr class="lib-row" data-style="background:{{r.bg}}">
+<td class="lib-td-name"><button class="lib-name-btn" data-on-click="{{ r.pick }}" aria-pressed="{{ r.selected }}">{{ r.name }}</button></td>
+<td class="lib-td-muted">{{ r.type }}</td>
+<td class="lib-td-muted">{{ r.date }}</td>
+<td class="lib-td"><span class="ui-tag-md">.md</span></td>
+<td class="lib-td"><span class="ui-tag-ext">{{ r.ext }}</span></td>
+<td class="lib-td">
 <template data-if="r.done">
-<span class="c192"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5 9-10"></path></svg>Archivado</span>
+<span class="lib-status-done"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5 9-10"></path></svg>Archivado</span>
 </template>
 <template data-if="r.pending">
-<span class="c193"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9" stroke-dasharray="3 4"></circle></svg>En proceso</span>
+<span class="lib-status-processing"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9" stroke-dasharray="3 4"></circle></svg>En proceso</span>
 </template>
 <template data-if="r.clas">
-<span class="c194"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l10 18H2z"></path><path d="M12 10v5M12 18v.5"></path></svg>Por clasificar</span>
+<span class="lib-status-pending"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l10 18H2z"></path><path d="M12 10v5M12 18v.5"></path></svg>Por clasificar</span>
 </template>
 </td>
 </tr>
@@ -2199,89 +2231,89 @@ tbody tr:hover td{background:var(--soft)}
 </section>
 </template>
 <template data-if="libLoad">
-<section class="c195" aria-busy="true">
-<div class="sk c196"></div>
-<div class="sk c197"></div><div class="sk c197"></div><div class="sk c197"></div><div class="sk c197"></div>
-<div class="c77">Cargando documentos…</div>
+<section class="lib-loading" aria-busy="true">
+<div class="sk lib-skeleton-title"></div>
+<div class="sk lib-skeleton-row"></div><div class="sk lib-skeleton-row"></div><div class="sk lib-skeleton-row"></div><div class="sk lib-skeleton-row"></div>
+<div class="ui-meta">Cargando documentos…</div>
 </section>
 </template>
 <template data-if="libEmpty">
-<section class="c198">
-<div class="c199"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="5" rx="1"></rect><path d="M5 9v10h14V9"></path><path d="M10 13h4"></path></svg></div>
-<div class="c200">Aún no hay documentos</div>
-<div class="c201">Sube el primer documento y quedará convertido, registrado y archivado.</div>
-<button class="c202" data-on-click="{{ goUpload }}">Subir documentos</button>
+<section class="lib-empty">
+<div class="lib-empty-icon"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="5" rx="1"></rect><path d="M5 9v10h14V9"></path><path d="M10 13h4"></path></svg></div>
+<div class="lib-empty-title">Aún no hay documentos</div>
+<div class="lib-empty-text">Sube el primer documento y quedará convertido, registrado y archivado.</div>
+<button class="lib-empty-btn" data-on-click="{{ goUpload }}">Subir documentos</button>
 </section>
 </template>
 </template>
 </main>
 <template data-if="libPanel">
-<aside class="panel {{panelCls}} c203">
-<div class="c204"><div class="c48">Detalle del documento</div><button class="closebtn c205" data-on-click="{{ closeSheet }}">Cerrar</button></div>
-<div class="c93">
-<div class="c206">{{ d.name }}</div>
-<div class="c207">
-<span class="c51">.md</span>
-<span class="c76">{{ d.ext }}</span>
-<span class="c208" data-style="color:{{d.statusFg}}">{{ d.status }}</span>
+<aside class="panel {{panelCls}} det-panel">
+<div class="det-head"><div class="ui-eyebrow">Detalle del documento</div><button class="closebtn det-close" data-on-click="{{ closeSheet }}">Cerrar</button></div>
+<div class="ui-col-10">
+<div class="det-name">{{ d.name }}</div>
+<div class="det-badges">
+<span class="ui-tag-md">.md</span>
+<span class="ui-tag-ext">{{ d.ext }}</span>
+<span class="det-status" data-style="color:{{d.statusFg}}">{{ d.status }}</span>
 </div>
 </div>
 
-<section class="c106">
-<div class="c107">Vista previa (MD)</div>
-<pre class="c209">{{ d.preview }}</pre>
+<section class="ui-col-8">
+<div class="ui-label">Vista previa (MD)</div>
+<pre class="det-md">{{ d.preview }}</pre>
 </section>
 
-<section class="c106">
-<div class="c107">Información</div>
-<div class="c210">
+<section class="ui-col-8">
+<div class="ui-label">Información</div>
+<div class="det-info">
 <template data-for="d.info" data-as="i">
-<div class="c211"><span class="c212">{{ i.k }}</span><span class="c213">{{ i.v }}</span></div>
+<div class="det-info-row"><span class="det-info-key">{{ i.k }}</span><span class="det-info-value">{{ i.v }}</span></div>
 </template>
-<div class="c214">
+<div class="det-tags">
 <template data-for="d.tags" data-as="t">
-<span class="c215">{{ t }}</span>
+<span class="det-tag">{{ t }}</span>
 </template>
 </div>
 </div>
 </section>
 
-<section class="c106">
-<div class="c107">Original archivado</div>
-<div class="c216">
+<section class="ui-col-8">
+<div class="ui-label">Original archivado</div>
+<div class="det-original">
 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="{{p.accentText}}" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"></path><path d="M14 3v5h5"></path></svg>
-<div class="c217"><span class="c218">{{ d.file }}</span><span class="c27">{{ d.size }}</span></div>
+<div class="det-original-text"><span class="det-original-name">{{ d.file }}</span><span class="ui-meta-sm">{{ d.size }}</span></div>
 </div>
-<button class="c219">Descargar original</button>
+<button class="det-download-btn">Descargar original</button>
 </section>
 
-<section class="c106">
-<div class="c107">Acciones</div>
-<div class="c220">
-<button class="c221">Compartir</button>
-<button class="c221">Nueva versión</button>
-<button class="c221" data-on-click="{{ d.review }}">Revisar</button>
+<section class="ui-col-8">
+<div class="ui-label">Acciones</div>
+<div class="det-actions">
+<button class="det-action-btn">Compartir</button>
+<button class="det-action-btn">Nueva versión</button>
+<button class="det-action-btn" data-on-click="{{ d.review }}">Revisar</button>
 </div>
 </section>
 
-<section class="c106">
-<div class="c107">Historial</div>
+<section class="ui-col-8">
+<div class="ui-label">Historial</div>
 <template data-for="d.history" data-as="h">
-<div class="c222"><span class="c24"></span><span>{{ h }}</span></div>
+<div class="det-history-item"><span class="ui-dot"></span><span>{{ h }}</span></div>
 </template>
 </section>
 </aside>
 </template>
 <template data-if="toast">
-<div class="toast c223" role="status">
-<div class="c224">✓</div>
-<div class="c106"><div class="c139">{{ toastTitle }}</div><div class="c225">{{ toastMsg }}</div><div class="c220"><button class="c226" data-on-click="{{ revLast }}">Revisar</button><button class="c227" data-on-click="{{ toLib }}">Biblioteca</button><button class="c228" data-on-click="{{ closeToast }}">Cerrar</button></div></div>
+<div class="toast toast-box" role="status">
+<div class="toast-icon">✓</div>
+<div class="ui-col-8"><div class="ui-subtitle">{{ toastTitle }}</div><div class="toast-text">{{ toastMsg }}</div><div class="det-actions"><button class="toast-btn-primary" data-on-click="{{ revLast }}">Revisar</button><button class="toast-btn-secondary" data-on-click="{{ toLib }}">Biblioteca</button><button class="toast-btn-close" data-on-click="{{ closeToast }}">Cerrar</button></div></div>
 </div>
 </template>
-<template data-if="sheetOpen"><div class="sheetbg c229" data-on-click="{{ closeSheet }}"></div></template>
-<nav class="bnav c230" aria-label="Navegación principal">
+<template data-if="sheetOpen"><div class="sheetbg sheet-backdrop" data-on-click="{{ closeSheet }}"></div></template>
+<nav class="bnav bnav-bar" aria-label="Navegación principal">
 <template data-for="bnav" data-as="n">
-<button class="c231" data-on-click="{{ n.go }}" aria-label="{{ n.label }}" data-style="color:{{ n.fg }};font-weight:{{ n.w }}"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{ n.d }}"></path></svg>{{ n.label }}</button>
+<button class="bnav-item" data-on-click="{{ n.go }}" aria-label="{{ n.label }}" data-style="color:{{ n.fg }};font-weight:{{ n.w }}"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{ n.d }}"></path></svg>{{ n.label }}</button>
 </template>
 </nav>
 </div>
