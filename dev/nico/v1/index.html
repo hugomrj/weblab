@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Nico ERP - Completo</title>
+<title>Nico ERP - Inspector Contextual</title>
 <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
 <style>
 /* ============ 1. VARIABLES + ESTADOS GLOBALES ============ */
@@ -28,6 +28,7 @@
   --radius: 6px;
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
   --main-pad: 1rem;
+  --panel-w: 21.25rem;
 }
 [data-theme="dark"] {
   --bg: oklch(16% 0.015 var(--nico-hue));
@@ -95,7 +96,7 @@ nav [role="menu"] [role="submenu"] li:hover > a { background: var(--accent-soft)
 #openUserSidebar:hover { transform: scale(1.08); box-shadow: 0 0 0 3px var(--accent-soft); }
 #openUserSidebar .avatar { width: 34px; height: 34px; border-radius: 50%; background: var(--accent); color: var(--on-accent); display: grid; place-items: center; font-weight: 700; font-size: .8rem; }
 
-/* ============ 4. SIDEBAR ============ */
+/* ============ 4. SIDEBAR USUARIO ============ */
 .scrim { position: fixed; inset: 0; background: oklch(0% 0 0 / .45); backdrop-filter: blur(3px); z-index: 199; opacity: 0; pointer-events: none; transition: opacity .4s var(--ease); }
 .scrim.active { opacity: 1; pointer-events: auto; }
 .sidebar { position: fixed; top: 0; bottom: 0; width: min(320px, 88vw); background: var(--surface); z-index: 200; display: flex; flex-direction: column; box-shadow: var(--shadow); transition: transform .5s var(--ease), background-color .5s var(--ease); }
@@ -127,20 +128,65 @@ nav [role="menu"] [role="submenu"] li:hover > a { background: var(--accent-soft)
 .sb-item.danger, .sb-item.danger i { color: var(--st-error); }
 .sb-item.danger:hover { background: color-mix(in srgb, var(--st-error) 14%, transparent); }
 
-/* ============ 5. VISTAS + COMPONENTES ============ */
+/* ============ 5. VISTAS + INSPECTOR ============ */
 main { flex: 1; width: 100%; padding-block: 2rem; padding-inline: var(--main-pad); }
 .view { display: none; }
-.view.active { display: flex; flex-wrap: wrap; gap: 1rem; animation: viewIn .45s var(--ease); }
+.view.active { display: flex; gap: 1rem; align-items: flex-start; animation: viewIn .45s var(--ease); }
 @keyframes viewIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+.view-body { flex: 1 1 0; min-width: 0; display: flex; flex-wrap: wrap; gap: 1rem; }
 [span="1"]{flex:0 0 12.5%} [span="2"]{flex:0 0 25%} [span="3"]{flex:0 0 37.5%} [span="4"]{flex:0 0 50%}
 [span="5"]{flex:0 0 62.5%} [span="6"]{flex:0 0 75%} [span="7"]{flex:0 0 87.5%} [span="8"]{flex:0 0 100%}
-.view > [span] { min-width: 0; }
-@media (max-width:1023px){ [span="1"],[span="2"]{flex:0 0 50%} [span="3"],[span="4"],[span="5"],[span="6"],[span="7"]{flex:0 0 100%} }
-@media (max-width:767px){ .view > [span]{flex:0 0 100% !important} main{padding-block:1.25rem} }
+.view-body > [span] { min-width: 0; }
+@media (max-width:1023px){ .view-body > [span="1"], .view-body > [span="2"]{flex:0 0 50%} .view-body > [span="3"], .view-body > [span="4"], .view-body > [span="5"], .view-body > [span="6"], .view-body > [span="7"]{flex:0 0 100%} }
+@media (max-width:767px){ .view-body > [span]{flex:0 0 100% !important} main{padding-block:1.25rem} }
+
+/* --- INSPECTOR: columna en desktop, drawer en <1280 --- */
+.util-panel { width: var(--panel-w); flex: 0 0 auto; transition: width .45s var(--ease); }
+.util-panel-inner { width: var(--panel-w); position: sticky; top: 5rem; display: flex; flex-direction: column; gap: 1rem; max-height: calc(100vh - 7rem); overflow-y: auto; padding-bottom: .5rem; transition: opacity .25s var(--ease); }
+section.panel-collapsed .util-panel { width: 0; }
+section.panel-collapsed .util-panel-inner { opacity: 0; pointer-events: none; }
+@media (max-width: 1279px) {
+  .util-panel { position: fixed; top: 0; right: 0; bottom: 0; width: min(var(--panel-w), 88vw); z-index: 200; background: var(--surface); border-left: 1px solid var(--border); box-shadow: var(--shadow); transform: translateX(0); transition: transform .45s var(--ease); }
+  section.panel-collapsed .util-panel { width: min(var(--panel-w), 88vw); transform: translateX(100%); }
+  .util-panel-inner { position: static; width: 100%; max-height: none; height: 100%; padding: 1rem; }
+  section.panel-collapsed .util-panel-inner { opacity: 1; }
+}
+
+.up-card { background: var(--surface); border: 1px solid var(--border); border-radius: calc(var(--radius) + 2px); padding: 1rem; transition: background-color .5s var(--ease), border-color .5s var(--ease); }
+.up-title { font-size: .6875rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin-bottom: .75rem; }
+.up-empty { display: flex; flex-direction: column; align-items: center; text-align: center; padding: 1.5rem .5rem; color: var(--muted); }
+.up-empty i { font-size: 1.6rem; margin-bottom: .5rem; opacity: .6; }
+.up-empty p { font-size: .8125rem; line-height: 1.5; }
+.ficha-head { display: flex; align-items: center; justify-content: space-between; gap: .5rem; margin-bottom: .6rem; }
+.ficha-name { font-weight: 700; font-size: .95rem; margin-bottom: .75rem; }
+.ficha-dl { display: flex; flex-direction: column; gap: .45rem; margin-bottom: .9rem; }
+.ficha-dl div { display: flex; justify-content: space-between; gap: .75rem; font-size: .8125rem; }
+.ficha-dl dt { color: var(--muted); flex-shrink: 0; }
+.ficha-dl dd { text-align: right; overflow: hidden; text-overflow: ellipsis; }
+.ficha-actions { display: flex; gap: .5rem; }
+.btn-sm { padding: .45rem .85rem; font-size: .78rem; }
+.btn-ghost.danger, .btn-ghost.danger:hover { color: var(--st-error); }
+.btn-ghost.danger:hover { background: color-mix(in srgb, var(--st-error) 12%, transparent); border-color: var(--st-error); }
+
+.chk { display: flex; align-items: center; gap: .55rem; padding: .38rem 0; font-size: .8125rem; }
+.chk i { font-size: .95rem; }
+.chk .ok   { color: var(--st-success); }
+.chk .err  { color: var(--st-error); }
+.chk .pend { color: var(--muted); opacity: .55; }
+.chk .opt  { color: var(--muted); opacity: .35; }
+.chk span small { color: var(--muted); }
+
+.preview-row { display: flex; align-items: center; gap: .75rem; padding: .7rem .85rem; border: 1px dashed var(--border); border-radius: var(--radius); background: var(--bg); }
+.preview-row .cell-name { flex: 1; min-width: 0; }
+
+.panel-toggle { display: inline-flex; align-items: center; justify-content: center; width: 2.375rem; height: 2.375rem; border-radius: var(--radius); border: 1px solid var(--border); background: transparent; color: var(--muted); cursor: pointer; transition: all .25s var(--ease); }
+.panel-toggle:hover { color: var(--accent-text); border-color: var(--accent-text); background: var(--accent-soft); }
+section.panel-collapsed .panel-toggle { color: var(--muted); opacity: .7; }
 
 .view-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
 .view-head h1 { font-size: 1.5rem; font-weight: 800; letter-spacing: -.02em; }
 .view-head p { color: var(--muted); font-size: .875rem; margin-top: .3rem; }
+.view-head .actions { display: flex; gap: .6rem; align-items: center; }
 
 .card { background: var(--surface); border: 1px solid var(--border); border-radius: calc(var(--radius) + 2px); padding: 1.25rem; transition: background-color .5s var(--ease), border-color .5s var(--ease); }
 .card h3 { font-size: .95rem; font-weight: 700; margin-bottom: 1rem; }
@@ -196,6 +242,7 @@ th.c-estado, td.c-estado { width: 10rem; }
 th.c-actions, td.c-actions { width: 5.5rem; text-align: right; }
 tbody tr { transition: background-color .25s var(--ease); }
 tbody tr:hover { background: color-mix(in srgb, var(--accent-soft), transparent 40%); cursor: pointer; }
+tbody tr.selected { background: var(--accent-soft); box-shadow: inset 3px 0 0 var(--accent); }
 tbody tr:last-child td { border-bottom: none; }
 tr.row-new { animation: rowIn .5s var(--ease); }
 @keyframes rowIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: none; } }
@@ -267,28 +314,24 @@ ul[data-paginaactual] li span.active-page { background: var(--accent); color: va
   td.c-actions { justify-content: flex-end; }
 }
 
-/* =========================================================
-   7. CORTES DE PANTALLA: SOLO padding lateral
-   (sin escala tipográfica: en 1080p de 22" ya está bien)
-   ========================================================= */
+/* ============ 7. CORTES: solo padding lateral ============ */
 @media (min-width: 768px)  { :root { --main-pad: 2rem; } }
 @media (min-width: 1024px) { :root { --main-pad: 3rem; } }
-@media (min-width: 1440px) { :root { --main-pad: 5rem; } }
+@media (min-width: 1440px) { :root { --main-pad: 4rem; } }
+@media (min-width: 1920px) { :root { --main-pad: 5rem; } }
 @media (min-width: 2560px) { :root { --main-pad: 7rem; } }
 
-/* Columnas de tabla en % para repartir en cualquier ancho */
 th.c-id, td.c-id           { width: 7%; }
 th.c-tel, td.c-tel         { width: 15%; }
 th.c-rfc, td.c-rfc         { width: 15%; }
 th.c-estado, td.c-estado   { width: 15%; }
 th.c-actions, td.c-actions { width: 7%; }
 
-/* Tablet: grilla de 4 columnas */
 @media (max-width: 1023px) {
-  [span="1"] { flex: 0 0 25%; }
-  [span="2"] { flex: 0 0 50%; }
-  [span="3"] { flex: 0 0 75%; }
-  [span="4"], [span="5"], [span="6"], [span="7"], [span="8"] { flex: 0 0 100%; }
+  .view-body > [span="1"] { flex: 0 0 25%; }
+  .view-body > [span="2"] { flex: 0 0 50%; }
+  .view-body > [span="3"] { flex: 0 0 75%; }
+  .view-body > [span="4"], .view-body > [span="5"], .view-body > [span="6"], .view-body > [span="7"], .view-body > [span="8"] { flex: 0 0 100%; }
 }
 </style>
 </head>
@@ -380,128 +423,161 @@ th.c-actions, td.c-actions { width: 7%; }
 </aside>
 
 <main>
-  <!-- DASHBOARD -->
+  <!-- DASHBOARD: sin panel (estado "ausente") -->
   <section class="view active" data-view="dashboard">
-    <div span="8" class="view-head">
-      <div><h1>Dashboard</h1><p>Resumen general de tu operación.</p></div>
-      <button class="btn btn-ghost"><i class="ri-download-2-line"></i> Exportar resumen</button>
-    </div>
-    <div span="2" class="card kpi"><div class="lbl">Clientes activos</div><div class="val">128</div><div class="delta up">▲ 12% este mes</div></div>
-    <div span="2" class="card kpi"><div class="lbl">Pedidos del mes</div><div class="val">342</div><div class="delta up">▲ 8% vs. anterior</div></div>
-    <div span="2" class="card kpi"><div class="lbl">Facturación</div><div class="val">€ 48.2K</div><div class="delta up">▲ 4.5%</div></div>
-    <div span="2" class="card kpi"><div class="lbl">Stock crítico</div><div class="val">7</div><div class="delta down">▼ requiere atención</div></div>
-    <div span="5" class="card">
-      <h3>Facturación últimos 6 meses</h3>
-      <div class="bars">
-        <div class="bar-col"><i style="height:45%"></i><span>May</span></div>
-        <div class="bar-col"><i style="height:62%"></i><span>Jun</span></div>
-        <div class="bar-col"><i style="height:38%"></i><span>Jul</span></div>
-        <div class="bar-col"><i style="height:74%"></i><span>Ago</span></div>
-        <div class="bar-col"><i style="height:58%"></i><span>Sep</span></div>
-        <div class="bar-col"><i style="height:88%"></i><span>Oct</span></div>
+    <div class="view-body">
+      <div span="8" class="view-head">
+        <div><h1>Dashboard</h1><p>Resumen general de tu operación. Esta vista no declara panel: el ancho es 100%.</p></div>
+        <button class="btn btn-ghost"><i class="ri-download-2-line"></i> Exportar resumen</button>
       </div>
-    </div>
-    <div span="3" class="card">
-      <h3>Actividad reciente</h3>
-      <ul class="activity">
-        <li><span class="dot"></span><div>Nuevo cliente <b>Globex Corp</b><time>hace 12 min</time></div></li>
-        <li><span class="dot"></span><div>Factura <b>#F-2210</b> emitida<time>hace 1 h</time></div></li>
-        <li><span class="dot"></span><div>Pedido <b>#P-9031</b> enviado<time>hace 3 h</time></div></li>
-        <li><span class="dot"></span><div>Stock ajustado en <b>Almacén Norte</b><time>ayer</time></div></li>
-      </ul>
+      <div span="2" class="card kpi"><div class="lbl">Clientes activos</div><div class="val">128</div><div class="delta up">▲ 12% este mes</div></div>
+      <div span="2" class="card kpi"><div class="lbl">Pedidos del mes</div><div class="val">342</div><div class="delta up">▲ 8% vs. anterior</div></div>
+      <div span="2" class="card kpi"><div class="lbl">Facturación</div><div class="val">€ 48.2K</div><div class="delta up">▲ 4.5%</div></div>
+      <div span="2" class="card kpi"><div class="lbl">Stock crítico</div><div class="val">7</div><div class="delta down">▼ requiere atención</div></div>
+      <div span="5" class="card">
+        <h3>Facturación últimos 6 meses</h3>
+        <div class="bars">
+          <div class="bar-col"><i style="height:45%"></i><span>May</span></div>
+          <div class="bar-col"><i style="height:62%"></i><span>Jun</span></div>
+          <div class="bar-col"><i style="height:38%"></i><span>Jul</span></div>
+          <div class="bar-col"><i style="height:74%"></i><span>Ago</span></div>
+          <div class="bar-col"><i style="height:58%"></i><span>Sep</span></div>
+          <div class="bar-col"><i style="height:88%"></i><span>Oct</span></div>
+        </div>
+      </div>
+      <div span="3" class="card">
+        <h3>Actividad reciente</h3>
+        <ul class="activity">
+          <li><span class="dot"></span><div>Nuevo cliente <b>Globex Corp</b><time>hace 12 min</time></div></li>
+          <li><span class="dot"></span><div>Factura <b>#F-2210</b> emitida<time>hace 1 h</time></div></li>
+          <li><span class="dot"></span><div>Pedido <b>#P-9031</b> enviado<time>hace 3 h</time></div></li>
+          <li><span class="dot"></span><div>Stock ajustado en <b>Almacén Norte</b><time>ayer</time></div></li>
+        </ul>
+      </div>
     </div>
   </section>
 
-  <!-- CLIENTES -->
-  <section class="view" data-view="clientes">
-    <div span="8" class="view-head">
-      <div><h1>Clientes</h1><p>Administra los datos de los clientes de tu empresa.</p></div>
-      <button class="btn btn-primary" id="btnNewClient"><i class="ri-add-line"></i> Nuevo cliente</button>
-    </div>
-    <div span="8" class="toolbar">
-      <label class="search"><i class="ri-search-line"></i><input type="search" id="clientSearch" placeholder="Buscar en clientes…"><kbd>/</kbd></label>
-      <button class="btn btn-ghost" id="btnClear"><i class="ri-close-line"></i> Limpiar</button>
-    </div>
-    <div span="8" class="panel">
-      <div class="panel-tabs" id="clientTabs">
-        <button class="ptab active" data-filter="todos">Todos <span class="t-count"></span></button>
-        <button class="ptab" data-filter="ok">Activos <span class="t-count"></span></button>
-        <button class="ptab" data-filter="warn">Pendientes <span class="t-count"></span></button>
-        <button class="ptab" data-filter="ghost">Inactivos <span class="t-count"></span></button>
+  <!-- CLIENTES: con inspector (ficha de registro) -->
+  <section class="view" data-view="clientes" data-panel="tabla">
+    <div class="view-body">
+      <div span="8" class="view-head">
+        <div><h1>Clientes</h1><p>Administra los datos de los clientes de tu empresa.</p></div>
+        <div class="actions">
+          <button class="panel-toggle" aria-label="Mostrar u ocultar panel"><i class="ri-side-bar-line"></i></button>
+          <button class="btn btn-primary" id="btnNewClient"><i class="ri-add-line"></i> Nuevo cliente</button>
+        </div>
       </div>
-      <div class="table-scroll">
-        <table id="clientsTable">
-          <thead>
-            <tr><th class="c-id">ID</th><th>Cliente</th><th class="c-tel">Teléfono</th><th class="c-rfc">RFC</th><th class="c-estado">Estado</th><th class="c-actions">Acciones</th></tr>
-          </thead>
-          <tbody></tbody>
-        </table>
+      <div span="8" class="toolbar">
+        <label class="search"><i class="ri-search-line"></i><input type="search" id="clientSearch" placeholder="Buscar en clientes…"><kbd>/</kbd></label>
+        <button class="btn btn-ghost" id="btnClear"><i class="ri-close-line"></i> Limpiar</button>
       </div>
+      <div span="8" class="panel">
+        <div class="panel-tabs" id="clientTabs">
+          <button class="ptab active" data-filter="todos">Todos <span class="t-count"></span></button>
+          <button class="ptab" data-filter="ok">Activos <span class="t-count"></span></button>
+          <button class="ptab" data-filter="warn">Pendientes <span class="t-count"></span></button>
+          <button class="ptab" data-filter="ghost">Inactivos <span class="t-count"></span></button>
+        </div>
+        <div class="table-scroll">
+          <table id="clientsTable">
+            <thead>
+              <tr><th class="c-id">ID</th><th>Cliente</th><th class="c-tel">Teléfono</th><th class="c-rfc">RFC</th><th class="c-estado">Estado</th><th class="c-actions">Acciones</th></tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+      <div span="8" id="clientsPag"></div>
     </div>
-    <div span="8" id="clientsPag"></div>
+    <aside class="util-panel">
+      <div class="util-panel-inner" id="upTabla"></div>
+    </aside>
   </section>
 
-  <!-- ALTA DE CLIENTE -->
-  <section class="view" data-view="alta">
-    <div span="8" class="view-head">
-      <div><h1>Nuevo cliente</h1><p>Los campos marcados con * son obligatorios.</p></div>
-      <button class="btn btn-ghost" id="btnBackList"><i class="ri-arrow-left-line"></i> Volver al listado</button>
-    </div>
-    <div span="8" class="panel">
-      <div class="panel-body">
-        <form id="altaForm" novalidate>
-          <div class="form-grid">
-            <div class="field">
-              <label for="fNombre">Nombre comercial *</label>
-              <input class="input" id="fNombre" type="text" placeholder="Ej. Acme Corporation">
-              <span class="err-msg" id="eNombre">El nombre es obligatorio.</span>
+  <!-- ALTA: con inspector (checklist + preview) -->
+  <section class="view" data-view="alta" data-panel="form">
+    <div class="view-body">
+      <div span="8" class="view-head">
+        <div><h1>Nuevo cliente</h1><p>Los campos marcados con * son obligatorios.</p></div>
+        <div class="actions">
+          <button class="panel-toggle" aria-label="Mostrar u ocultar panel"><i class="ri-side-bar-line"></i></button>
+          <button class="btn btn-ghost" id="btnBackList"><i class="ri-arrow-left-line"></i> Volver al listado</button>
+        </div>
+      </div>
+      <div span="8" class="panel">
+        <div class="panel-body">
+          <form id="altaForm" novalidate>
+            <div class="form-grid">
+              <div class="field">
+                <label for="fNombre">Nombre comercial *</label>
+                <input class="input" id="fNombre" type="text" placeholder="Ej. Acme Corporation">
+                <span class="err-msg" id="eNombre">El nombre es obligatorio.</span>
+              </div>
+              <div class="field">
+                <label for="fEmail">Correo electrónico *</label>
+                <input class="input" id="fEmail" type="email" placeholder="contacto@empresa.com">
+                <span class="err-msg" id="eEmail">Introduce un correo válido.</span>
+              </div>
+              <div class="field">
+                <label for="fTel">Teléfono <span class="opt">(opcional)</span></label>
+                <input class="input" id="fTel" type="tel" placeholder="555-0000">
+              </div>
+              <div class="field">
+                <label for="fRfc">RFC / Cédula <span class="opt">(opcional)</span></label>
+                <input class="input" id="fRfc" type="text" placeholder="XAXX010101000">
+              </div>
+              <div class="field">
+                <label for="fEstado">Estado inicial</label>
+                <select class="input" id="fEstado">
+                  <option value="ok">Activo</option>
+                  <option value="warn">Pendiente</option>
+                  <option value="info">En revisión</option>
+                  <option value="ghost">Inactivo</option>
+                </select>
+              </div>
+              <div class="field fw-full">
+                <label for="fNotas">Notas internas <span class="opt">(opcional)</span></label>
+                <textarea class="input" id="fNotas" placeholder="Condiciones comerciales, contacto principal…"></textarea>
+              </div>
             </div>
-            <div class="field">
-              <label for="fEmail">Correo electrónico *</label>
-              <input class="input" id="fEmail" type="email" placeholder="contacto@empresa.com">
-              <span class="err-msg" id="eEmail">Introduce un correo válido.</span>
+            <div class="form-sep"></div>
+            <div class="form-actions">
+              <button type="submit" class="btn btn-primary"><i class="ri-save-line"></i> Guardar cliente</button>
+              <button type="button" class="btn btn-ghost" id="btnCancelAlta">Cancelar</button>
+              <span class="spacer"></span>
+              <span class="form-note">Se añadirá al principio del listado.</span>
             </div>
-            <div class="field">
-              <label for="fTel">Teléfono <span class="opt">(opcional)</span></label>
-              <input class="input" id="fTel" type="tel" placeholder="555-0000">
-            </div>
-            <div class="field">
-              <label for="fRfc">RFC / Cédula <span class="opt">(opcional)</span></label>
-              <input class="input" id="fRfc" type="text" placeholder="XAXX010101000">
-            </div>
-            <div class="field">
-              <label for="fEstado">Estado inicial</label>
-              <select class="input" id="fEstado">
-                <option value="ok">Activo</option>
-                <option value="warn">Pendiente</option>
-                <option value="info">En revisión</option>
-                <option value="ghost">Inactivo</option>
-              </select>
-            </div>
-            <div class="field fw-full">
-              <label for="fNotas">Notas internas <span class="opt">(opcional)</span></label>
-              <textarea class="input" id="fNotas" placeholder="Condiciones comerciales, contacto principal…"></textarea>
-            </div>
-          </div>
-          <div class="form-sep"></div>
-          <div class="form-actions">
-            <button type="submit" class="btn btn-primary"><i class="ri-save-line"></i> Guardar cliente</button>
-            <button type="button" class="btn btn-ghost" id="btnCancelAlta">Cancelar</button>
-            <span class="spacer"></span>
-            <span class="form-note">Se añadirá al principio del listado.</span>
-          </div>
-        </form>
+          </form>
+        </div>
       </div>
     </div>
+    <aside class="util-panel">
+      <div class="util-panel-inner">
+        <div class="up-card">
+          <div class="up-title">Checklist de validación</div>
+          <div id="upChecklist"></div>
+        </div>
+        <div class="up-card">
+          <div class="up-title">Vista previa en la tabla</div>
+          <div class="preview-row">
+            <span class="id-badge">#nuevo</span>
+            <span class="cell-name"><b id="pvName">Sin nombre</b><span id="pvEmail">—</span></span>
+            <span class="pill ok" id="pvPill">Activo</span>
+          </div>
+        </div>
+      </div>
+    </aside>
   </section>
 
   <!-- PLACEHOLDER -->
   <section class="view" data-view="placeholder">
-    <div span="8" class="empty">
-      <div class="fig"><i class="ri-hammer-line"></i></div>
-      <h2 id="phTitle">Módulo en construcción</h2>
-      <p>Este módulo no está incluido en la demo de Nico ERP, pero la navegación y el layout ya funcionan.</p>
-      <button class="btn btn-ghost" id="phBack"><i class="ri-home-4-line"></i> Volver al inicio</button>
+    <div class="view-body">
+      <div span="8" class="empty">
+        <div class="fig"><i class="ri-hammer-line"></i></div>
+        <h2 id="phTitle">Módulo en construcción</h2>
+        <p>Este módulo no está incluido en la demo de Nico ERP, pero la navegación y el layout ya funcionan.</p>
+        <button class="btn btn-ghost" id="phBack"><i class="ri-home-4-line"></i> Volver al inicio</button>
+      </div>
     </div>
   </section>
 </main>
@@ -538,15 +614,43 @@ const UI = (() => {
     });
   }
 
+  /* ===== Scrim compartido (sidebar usuario + drawer del inspector) ===== */
+  const scrim = document.getElementById('scrim');
+  const mqDrawer = window.matchMedia('(max-width: 1279px)');
+  function panelDrawerOpen() {
+    return mqDrawer.matches && !!document.querySelector('section[data-panel]:not(.panel-collapsed)');
+  }
+  function syncScrim() {
+    scrim.classList.toggle('active', !!document.querySelector('.sidebar.active') || panelDrawerOpen());
+  }
+
   function initSidebar() {
-    const scrim = document.getElementById('scrim');
-    const open = sb => { sb.classList.add('active'); scrim.classList.add('active'); sb.setAttribute('aria-hidden','false'); };
-    const closeAll = () => document.querySelectorAll('.sidebar.active').forEach(sb => { sb.classList.remove('active'); scrim.classList.remove('active'); sb.setAttribute('aria-hidden','true'); });
+    const open = sb => { sb.classList.add('active'); syncScrim(); sb.setAttribute('aria-hidden','false'); };
+    const closeAll = () => { document.querySelectorAll('.sidebar.active').forEach(sb => { sb.classList.remove('active'); sb.setAttribute('aria-hidden','true'); }); syncScrim(); };
     document.getElementById('openUserSidebar').addEventListener('click', () => open(document.getElementById('userSidebar')));
     document.querySelectorAll('[data-close-sidebar]').forEach(b => b.addEventListener('click', closeAll));
-    scrim.addEventListener('click', closeAll);
-    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeAll(); });
+    scrim.addEventListener('click', () => { closeAll(); if (panelDrawerOpen()) togglePanel(document.querySelector('section[data-panel]:not(.panel-collapsed)'), true); });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeAll(); if (panelDrawerOpen()) togglePanel(document.querySelector('section[data-panel]:not(.panel-collapsed)'), true); } });
     document.getElementById('sbLogout').addEventListener('click', () => { closeAll(); loader.start(); setTimeout(() => { loader.stop(); showAlert('Sesión cerrada (demo)', 'info'); }, 900); });
+  }
+
+  /* ===== INSPECTOR: colapso persistente + contenido por vista ===== */
+  function togglePanel(section, forceCollapse) {
+    if (!section) return;
+    const collapse = forceCollapse === true ? true : !section.classList.contains('panel-collapsed');
+    section.classList.toggle('panel-collapsed', collapse);
+    localStorage.setItem('nico-panel', collapse ? 'collapsed' : 'open');
+    syncScrim();
+  }
+  function initPanel() {
+    const stored = localStorage.getItem('nico-panel');
+    document.querySelectorAll('section[data-panel]').forEach(section => {
+      const defaultCollapsed = window.innerWidth < 1440;
+      const collapsed = stored ? stored === 'collapsed' : defaultCollapsed;
+      section.classList.toggle('panel-collapsed', collapsed);
+      section.querySelector('.panel-toggle').addEventListener('click', () => togglePanel(section));
+    });
+    mqDrawer.addEventListener('change', syncScrim);
   }
 
   function showView(name, title) {
@@ -597,9 +701,9 @@ const UI = (() => {
     });
   }
 
-  /* ===== CLIENTES ===== */
+  /* ===== CLIENTES + FICHA EN INSPECTOR ===== */
   const STATUSES = { ok: ['Activo','ok'], warn: ['Pendiente','warn'], info: ['En revisión','info'], err: ['Moroso','err'], ghost: ['Inactivo','ghost'] };
-  const SEED = [
+  const CLIENTS = [
     { id: 169, name: 'Daniela Acosta', email: 'daniela169@correo.com', tel: '555-1078', rfc: '9306413', st: 'ok' },
     { id: 66,  name: 'Fabiola Acosta', email: 'fabiola65@correo.com',  tel: '555-2150', rfc: '9273861', st: 'ok' },
     { id: 40,  name: 'Gabriel Ruiz',   email: 'gabriel39@correo.com',  tel: '555-7998', rfc: '2558665', st: 'warn' },
@@ -629,6 +733,31 @@ const UI = (() => {
         </span>
       </td>`;
   }
+  function renderFicha(c) {
+    const box = document.getElementById('upTabla');
+    if (!c) {
+      box.innerHTML = `<div class="up-card"><div class="up-title">Ficha de registro</div>
+        <div class="up-empty"><i class="ri-cursor-line"></i><p>Selecciona un registro de la tabla para ver su ficha completa aquí.</p></div></div>`;
+      return;
+    }
+    const [label, cls] = STATUSES[c.st];
+    box.innerHTML = `<div class="up-card">
+      <div class="up-title">Ficha de registro</div>
+      <div class="ficha-head"><span class="id-badge">#${c.id}</span><span class="pill ${cls}">${label}</span></div>
+      <div class="ficha-name">${c.name}</div>
+      <dl class="ficha-dl">
+        <div><dt>Email</dt><dd>${c.email}</dd></div>
+        <div><dt>Teléfono</dt><dd>${c.tel || '—'}</dd></div>
+        <div><dt>RFC</dt><dd>${c.rfc || '—'}</dd></div>
+      </dl>
+      <div class="ficha-actions">
+        <button class="btn btn-ghost btn-sm" data-ficha="edit"><i class="ri-edit-line"></i> Editar</button>
+        <button class="btn btn-ghost btn-sm danger" data-ficha="del"><i class="ri-delete-bin-line"></i> Eliminar</button>
+      </div>
+    </div>`;
+    box.querySelector('[data-ficha="edit"]').addEventListener('click', () => showAlert(`(demo) Editar #${c.id}`, 'info'));
+    box.querySelector('[data-ficha="del"]').addEventListener('click', () => showAlert(`(demo) Eliminar #${c.id}`, 'warning'));
+  }
   function updateCounts() {
     const rows = [...document.querySelectorAll('#clientsTable tbody tr')];
     document.querySelectorAll('#clientTabs .ptab').forEach(tab => {
@@ -645,19 +774,27 @@ const UI = (() => {
     });
   }
   function addClientRow(c) {
+    CLIENTS.unshift(c);
     const tr = document.createElement('tr');
-    tr.dataset.status = c.st;
+    tr.dataset.status = c.st; tr.dataset.id = c.id;
     tr.className = 'row-new';
     tr.innerHTML = rowHTML(c);
     document.querySelector('#clientsTable tbody').prepend(tr);
-    updateCounts();
-    applyFilters();
+    updateCounts(); applyFilters();
   }
 
   function initClients() {
     const tbody = document.querySelector('#clientsTable tbody');
-    tbody.innerHTML = SEED.map(c => `<tr data-status="${c.st}">${rowHTML(c)}</tr>`).join('');
+    tbody.innerHTML = CLIENTS.map(c => `<tr data-status="${c.st}" data-id="${c.id}">${rowHTML(c)}</tr>`).join('');
     updateCounts();
+    renderFicha(null);
+
+    tbody.addEventListener('click', e => {
+      const tr = e.target.closest('tr'); if (!tr || e.target.closest('.row-actions')) return;
+      tbody.querySelectorAll('tr.selected').forEach(r => r.classList.remove('selected'));
+      tr.classList.add('selected');
+      renderFicha(CLIENTS.find(c => c.id == tr.dataset.id));
+    });
 
     document.querySelectorAll('#clientTabs .ptab').forEach(tab => tab.addEventListener('click', () => {
       currentFilter = tab.dataset.filter;
@@ -681,8 +818,42 @@ const UI = (() => {
 
     document.getElementById('btnNewClient').addEventListener('click', () => showView('alta'));
     document.getElementById('btnBackList').addEventListener('click', () => showView('clientes'));
-    document.getElementById('btnCancelAlta').addEventListener('click', () => showView('clientes'));
+    document.getElementById('btnCancelAlta').addEventListener('click', () => { showView('clientes'); updateFormPanel(); });
+  }
 
+  /* ===== Checklist + preview en vivo (inspector del formulario) ===== */
+  const emailOk = v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+  function updateFormPanel() {
+    const nombre = document.getElementById('fNombre').value.trim();
+    const email  = document.getElementById('fEmail').value.trim();
+    const tel    = document.getElementById('fTel').value.trim();
+    const rfc    = document.getElementById('fRfc').value.trim();
+    const st     = document.getElementById('fEstado').value;
+
+    const items = [
+      ['Nombre comercial', nombre ? ['ok','completo'] : ['pend','pendiente'], true],
+      ['Correo electrónico', !email ? ['pend','pendiente'] : (emailOk(email) ? ['ok','válido'] : ['err','formato inválido']), true],
+      ['Teléfono', tel ? ['ok','completo'] : ['opt','opcional'], false],
+      ['RFC / Cédula', rfc ? ['ok','completo'] : ['opt','opcional'], false],
+    ];
+    const icons = { ok:'ri-checkbox-circle-fill', err:'ri-error-warning-fill', pend:'ri-circle-line', opt:'ri-subtract-line' };
+    document.getElementById('upChecklist').innerHTML = items.map(([lbl, [state, note]]) =>
+      `<div class="chk"><i class="${icons[state]} ${state}"></i><span>${lbl} <small>· ${note}</small></span></div>`).join('');
+
+    document.getElementById('pvName').textContent = nombre || 'Sin nombre';
+    document.getElementById('pvEmail').textContent = email || '—';
+    const [plabel, pcls] = STATUSES[st];
+    const pill = document.getElementById('pvPill');
+    pill.className = `pill ${pcls}`; pill.textContent = plabel;
+  }
+  function initFormPanel() {
+    document.getElementById('altaForm').addEventListener('input', updateFormPanel);
+    document.getElementById('altaForm').addEventListener('change', updateFormPanel);
+    updateFormPanel();
+  }
+
+  /* ===== Guardado con validación ===== */
+  function initAlta() {
     document.getElementById('altaForm').addEventListener('submit', e => {
       e.preventDefault();
       const nombre = document.getElementById('fNombre');
@@ -694,7 +865,7 @@ const UI = (() => {
         if (bad) ok = false;
       };
       mark(nombre, 'eNombre', !nombre.value.trim());
-      mark(email, 'eEmail', !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value.trim()));
+      mark(email, 'eEmail', !emailOk(email.value.trim()));
       if (!ok) { showAlert('Revisa los campos marcados en rojo', 'error'); return; }
 
       loader.start();
@@ -710,6 +881,7 @@ const UI = (() => {
           st: document.getElementById('fEstado').value,
         });
         e.target.reset();
+        updateFormPanel();
         showView('clientes');
         showAlert(`Cliente "${name}" guardado correctamente`, 'success');
       }, 700);
@@ -773,7 +945,9 @@ const UI = (() => {
   }
 
   document.addEventListener('DOMContentLoaded', () => {
-    initBrand(); initSidebar(); initDesktopMenu(); initThemeToggle(); initClients(); initKebabs();
+    initBrand(); initPanel(); initSidebar(); initDesktopMenu(); initThemeToggle();
+    initClients(); initFormPanel(); initAlta(); initKebabs();
+    syncScrim();
   });
 
   return { showAlert, loader, genePaginacion, showView, applyBrand };
