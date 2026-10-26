@@ -1,0 +1,1168 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Archivo Central</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap">
+<style id="estilos">
+/* ===== 1. TOKENS ===== */
+:root{
+  --bg:hsl(173, 20%, 8%); --side:hsl(173, 20%, 6%); --surface:hsl(173, 20%, 11%);
+  --surface2:hsl(173, 20%, 15%); --border:hsl(173, 20%, 24%); --text:hsl(173, 15%, 94%);
+  --muted:hsl(173, 12%, 70%); --accent:hsl(175, 77%, 29%); --on-accent:#FFFFFF;
+  --accent-soft:hsl(173, 44%, 17%); --accent-text:hsl(173, 80%, 72%);
+  --r-sm:8px; --r-md:10px; --r-lg:12px; --r-xl:14px; --r-2xl:16px; --r-3xl:20px;
+  --shadow:0 14px 34px rgba(0,0,0,0.3); --gap:12px;
+}
+
+/* ===== 2. BASE ===== */
+body{margin:0}
+button{font-family:inherit;cursor:pointer}
+input::placeholder{color:inherit;opacity:.65}
+
+/* ===== 3. UTILIDADES ===== */
+.row{display:flex;gap:var(--gap)} .col{display:flex;flex-direction:column;gap:var(--gap)}
+.wrap{flex-wrap:wrap} .between{justify-content:space-between}
+.row--center{align-items:center} .row--top{align-items:flex-start} .row--end{justify-content:flex-end}
+.g2{--gap:2px}.g4{--gap:4px}.g6{--gap:6px}.g8{--gap:8px}.g10{--gap:10px}
+.g12{--gap:12px}.g14{--gap:14px}.g16{--gap:16px}.g18{--gap:18px}.g20{--gap:20px}
+.g24{--gap:24px}.g28{--gap:28px}.g30{--gap:30px}
+
+.t-h1{margin:0;font-size:30px;font-weight:800;letter-spacing:-0.02em;word-break:break-word}
+.t-h2{margin:0;font-size:20px;font-weight:800}
+.t-hero{margin:0;font-size:34px;line-height:1.2;font-weight:700;letter-spacing:-0.02em}
+.t-lead{font-size:15px;line-height:1.5;color:var(--muted)}
+.t-sub{font-weight:800;font-size:15px} .t-title{font-size:16px;font-weight:700}
+.t-label{font-size:14px;font-weight:700} .t-name{font-size:16px;font-weight:800}
+.t-strong{color:var(--text)} .t-muted{font-size:14px;line-height:1.5;color:var(--muted)}
+.t-meta{font-size:13px;line-height:1.5;color:var(--muted)} .t-meta-sm{font-size:12px;color:var(--muted)}
+.t-eyebrow{font-size:13px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted)}
+.t-eyebrow--accent{color:var(--accent-text);letter-spacing:0.1em}
+.t-mono{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--muted)}
+.sr-only{position:absolute;left:-9999px}
+
+/* ===== 4. COMPONENTES ===== */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:44px;padding:0 18px;border:1px solid transparent;border-radius:var(--r-md);font-family:inherit;font-size:14px;font-weight:700;color:var(--text);background:transparent}
+.btn--accent{background:var(--accent);color:var(--on-accent);border-color:var(--accent)}
+.btn--ghost{background:var(--surface);border-color:var(--border)}
+.btn--soft{background:var(--accent-soft);color:var(--accent-text);border-radius:var(--r-sm)}
+.btn--bare{background:transparent;border-color:transparent}
+.btn--link{border:0;padding:0;min-height:44px;color:var(--accent-text)}
+.btn--icon{width:44px;height:44px;padding:0;color:var(--muted)}
+.btn--pill{border-radius:99px;padding:0 16px;font-size:13px;font-weight:600}
+.btn--sm{height:40px;padding:0 16px;font-size:13px;border-radius:var(--r-sm)}
+.btn--lg{height:48px;padding:0 24px} .btn--xl{height:56px;padding:0 26px;font-size:15px}
+
+.chip{min-height:40px;padding:0 14px;border:0;border-radius:99px;font-family:inherit;font-size:13px;font-weight:700;color:var(--text);background:transparent}
+.tag{display:inline-block;font-size:12px;font-weight:600;background:var(--accent-soft);color:var(--accent-text);padding:3px 10px;border-radius:99px}
+.tag--mono{font-family:'JetBrains Mono',monospace;font-weight:400;padding:5px 9px;border-radius:7px}
+.tag--outline{font-family:'JetBrains Mono',monospace;font-weight:400;background:var(--surface2);border:1px solid var(--border);color:var(--muted);padding:4px 10px}
+
+.ico{display:flex;align-items:center;justify-content:center;flex:none;border-radius:50%;font-weight:800}
+.ico--rounded{border-radius:var(--r-lg)} .ico--accent{background:var(--accent);color:var(--on-accent)}
+.ico--soft{background:var(--accent-soft);color:var(--accent-text)}
+.ico--26{width:26px;height:26px;font-size:13px} .ico--32{width:32px;height:32px;font-size:14px}
+.ico--40{width:40px;height:40px;font-size:14px} .ico--56{width:56px;height:56px} .ico--64{width:64px;height:64px}
+
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-3xl);padding:24px;display:flex;flex-direction:column;gap:18px}
+.card--wide{padding:28px;gap:24px}
+.box{border:1px solid var(--border);border-radius:var(--r-lg);padding:14px 16px}
+.box--flat{background:var(--surface)} .box--soft{background:var(--surface2)}
+.box--accent{background:var(--surface2);border-color:var(--accent)} .box--dashed{border-style:dashed;background:transparent}
+
+.code{margin:0;font-family:'JetBrains Mono',monospace;font-size:12.5px;line-height:1.6;color:var(--text);white-space:pre-wrap;overflow:auto}
+.field:focus-within{border-color:var(--ac)!important;box-shadow:0 0 0 3px var(--soft)}
+.input{flex:1;min-width:0;min-height:44px;border:0;outline:0;background:transparent;font-family:inherit;font-size:15px;color:var(--text)}
+.input--date{flex:none;height:44px;border:1px solid var(--border);border-radius:var(--r-md);background:var(--surface2);color:var(--text);padding:0 10px;font-family:inherit}
+
+.status{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:700}
+.status--ok{color:var(--accent-text)} .status--muted{color:var(--muted)}
+.status--alert{color:var(--text);font-weight:800;border:1px solid var(--accent);background:var(--accent-soft);border-radius:99px;padding:3px 10px}
+
+.progress{height:8px;border-radius:99px;background:var(--border);overflow:hidden}
+.progress--grow{flex:1 1 160px} .progress__fill{height:100%;background:var(--accent);transition:width .6s ease}
+
+.seg{display:inline-flex;gap:2px;background:var(--surface2);border-radius:var(--r-lg);padding:3px}
+.seg__btn{height:44px;min-width:104px;padding:0 16px;border:0;border-radius:var(--r-md);font-family:inherit;font-size:14px;font-weight:700;color:var(--text);background:transparent;display:flex;align-items:center;justify-content:center;gap:8px}
+
+.divider{height:1px;background:var(--border)}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--accent);margin-top:6px;flex:none}
+.sk{background:linear-gradient(90deg,var(--sk1) 25%,var(--sk2) 50%,var(--sk1) 75%);background-size:200% 100%;animation:shimmer 1.3s linear infinite;border-radius:var(--r-sm)}
+.anim-pop{animation:pop .2s ease-out}
+
+/* ===== 5. BLOQUES ===== */
+.app{min-height:100vh;display:flex;flex-direction:row;--ac:var(--accent);--soft:var(--accent-soft);--sk1:var(--surface2);--sk2:var(--border);background:var(--bg);font-family:'Manrope',system-ui,sans-serif;color:var(--text)}
+.main{flex:1;min-width:0;padding:36px 44px;box-sizing:border-box;display:flex;flex-direction:column;gap:28px}
+.main__row{display:flex;gap:20px;align-items:stretch;flex:1;min-height:0}
+.main__content{flex:1;min-width:0;display:flex;flex-direction:column;gap:28px}
+
+.sidebar{width:248px;flex:none;background:var(--side);border-right:1px solid var(--border);padding:28px 20px;box-sizing:border-box;display:flex;flex-direction:column;gap:28px}
+.sidebar__brand{font-weight:800;font-size:18px;letter-spacing:-0.01em}
+.sidebar__link{width:100%;border:0;background:transparent;color:inherit;font-family:inherit;text-align:left;display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:var(--r-md);font-size:15px}
+.sidebar__note{margin-top:auto;display:flex;flex-direction:column;gap:8px;border:1px solid var(--border);background:var(--surface);border-radius:var(--r-xl);padding:16px}
+
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;font-size:14px}
+.topbar__crumb{display:flex;align-items:center;gap:8px;color:var(--muted);font-weight:600}
+.topbar__bell{position:relative} .topbar__overlay{position:fixed;inset:0;z-index:25}
+.topbar__bell-btn{position:relative;z-index:26;color:var(--text)}
+.topbar__badge{position:absolute;top:5px;right:5px;min-width:18px;height:18px;border-radius:9px;background:var(--accent);color:var(--on-accent);font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center}
+.topbar__menu{position:absolute;right:0;top:52px;width:340px;max-width:86vw;z-index:30;background:var(--surface);border:1px solid var(--border);border-radius:var(--r-xl);box-shadow:var(--shadow);padding:8px}
+.topbar__menu-title{padding:10px 12px} .topbar__notif{display:flex;gap:10px;padding:12px;border-radius:var(--r-md)}
+.topbar__notif-body{display:flex;flex-direction:column;gap:2px} .topbar__notif-title{font-size:13px;font-weight:700;line-height:1.4}
+.topbar__user{text-align:right;line-height:1.3}
+
+.home{flex:1;min-height:auto;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 0}
+.home__inner{width:100%;max-width:780px;display:flex;flex-direction:column;align-items:center;gap:30px;text-align:center}
+.home__inner>.col{align-items:center} .home__inner>.row{justify-content:center;width:100%}
+.home__ask{display:flex;align-items:center;gap:10px;width:100%;max-width:640px;box-sizing:border-box;background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:10px 10px 10px 18px;box-shadow:var(--shadow);transition:border-color .15s}
+.home__ask:focus-within{border-color:var(--accent)}
+.home__ask-ico{flex:none;display:inline-flex;color:var(--muted)}
+.home__ask-input{flex:1;min-width:0;min-height:40px;border:0;outline:0;background:transparent;font-family:inherit;font-size:16px;color:var(--text)}
+.home__sugg{display:flex;flex-wrap:wrap;justify-content:center;gap:8px}
+.home__sugg-btn{height:36px;padding:0 14px;border:1px solid var(--border);border-radius:99px;background:var(--surface);color:var(--muted);font-family:inherit;font-size:12.5px;font-weight:600}
+.home__sugg-btn:hover{border-color:var(--accent);color:var(--accent-text)}
+@media (max-width:640px){.home__ask{flex-wrap:wrap;padding:12px;border-radius:16px}.home__ask-input{flex:1 1 100%}}
+.home__trust{display:flex;flex-wrap:wrap;justify-content:center;gap:12px 28px;border-top:1px solid var(--border);padding-top:20px;font-size:13px;color:var(--muted)}
+.home__trust-item{display:inline-flex;align-items:center;gap:8px}
+
+.upload__dropzone{flex:1 1 420px;min-height:220px;border-radius:var(--r-2xl);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:24px;text-align:center}
+.upload__drop-btn{margin-top:4px} .upload__confirm{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--muted);cursor:pointer}
+.upload__check{width:20px;height:20px;accent-color:var(--accent)}
+.upload__status{flex:1 1 320px;display:flex;flex-direction:column;gap:12px;justify-content:center}
+.upload__empty{padding:18px 16px;font-size:14px;line-height:1.5;color:var(--muted)}
+.upload__progress{display:flex;flex-direction:column;gap:10px}
+.upload__progress-row{display:flex;justify-content:space-between;gap:12px;font-size:14px;font-weight:600}
+.upload__progress-label{color:var(--accent-text)}
+.upload__result{display:flex;flex-direction:column;gap:10px;padding:16px} .upload__result-btn{align-self:flex-start}
+.upload__steps{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.upload__step{background:var(--surface2);border-radius:var(--r-xl);padding:18px;display:flex;flex-direction:column;gap:8px}
+.upload__step-label{font-size:12px;font-weight:700;min-height:16px}
+
+.library__search{flex:1;max-width:520px;min-width:260px;height:52px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r-xl);padding:0 16px;color:var(--muted)}
+.library__loading{gap:16px} .library__sk-title{height:24px;width:240px} .library__sk-row{height:48px}
+.library__empty{padding:56px 28px;align-items:center;gap:14px;text-align:center} .library__empty-text{max-width:380px}
+.table-wrap{overflow-x:auto} .table{width:100%;min-width:720px;border-collapse:collapse;font-size:14px}
+.table__head{text-align:left;color:var(--muted);font-size:12px;letter-spacing:0.08em;text-transform:uppercase}
+.table__th{padding:10px 12px;font-weight:700;white-space:nowrap} .table td{border-top:1px solid var(--border)}
+.table__td{padding:14px 12px} .table__td--name{padding:4px 12px} .table__td--muted{color:var(--muted);white-space:nowrap}
+.table__name-btn{min-height:44px;border:0;background:transparent;color:inherit;font:inherit;font-weight:700;padding:0;text-align:left;cursor:pointer}
+
+.detail{width:320px;flex:none;align-self:stretch;background:var(--side);border:1px solid var(--border);border-radius:var(--r-xl);padding:28px 22px;box-sizing:border-box;display:flex;flex-direction:column;gap:22px}
+.detail__head{display:flex;align-items:center;justify-content:space-between;gap:12px} .detail__close{display:none}
+.detail__name{font-size:19px;font-weight:800;line-height:1.3;word-break:break-word} .detail__md{max-height:210px;padding:14px}
+.detail__info{padding:4px 14px} .detail__info-row{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px solid var(--border);font-size:13px}
+.detail__info-value{font-weight:600;text-align:right} .detail__tags{display:flex;flex-wrap:wrap;gap:6px;padding:12px 0}
+.detail__original{display:flex;align-items:center;gap:12px;padding:12px 14px}
+.detail__original-text{display:flex;flex-direction:column;min-width:0} .detail__original-name{font-size:14px;font-weight:700;word-break:break-word}
+.detail__action{flex:1} .detail__history-item{display:flex;gap:10px;align-items:flex-start}
+
+.review{display:flex;flex-direction:column;gap:20px}
+.review__header{display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end;justify-content:space-between}
+.review__back{align-self:flex-start}
+.review__badge-status{padding:8px 14px;border-radius:99px;border:1px solid var(--accent);font-weight:800;font-size:13px}
+.review__badge-conf{padding:8px 14px;border-radius:99px;border:1px solid var(--border);background:var(--surface);font-weight:700;font-size:13px}
+.review__pane{flex:1 1 360px;min-width:0;padding:18px;gap:12px;border-radius:var(--r-2xl)}
+.review__paper{background:#FAFAF7;border:1px solid var(--border);border-radius:var(--r-sm);padding:28px 24px;min-height:330px}
+.review__paper-title{height:14px;width:45%;background:#6B716D;border-radius:4px;margin-bottom:22px}
+.review__paper-line{height:8px;background:#B8BDB9;border-radius:4px;margin-bottom:11px}
+.review__conf{display:flex;flex-direction:column;gap:6px} .review__conf-row{display:flex;justify-content:space-between}
+.review__conf-value{font-weight:800;color:var(--text)} .review__md{flex:1;min-height:240px;padding:14px;border-radius:var(--r-md)}
+.review__class{padding:20px;gap:14px;border-radius:var(--r-2xl)} .review__meta{display:flex;flex-wrap:wrap;gap:8px 28px}
+.review__problems{display:flex;flex-direction:column;gap:6px;padding:12px 14px} .review__problems-title{font-size:13px;font-weight:800}
+
+.search__filters{flex:0 1 340px;min-width:280px;padding:22px;gap:20px}
+.search__field{height:48px;background:var(--surface2);border-radius:var(--r-md);padding:0 14px;color:var(--muted)}
+.search__date{flex:1 1 120px;display:flex;flex-direction:column;gap:4px}
+.search__results{flex:1 1 420px;min-width:0;display:flex;flex-direction:column;gap:12px}
+.search__count{font-size:14px;font-weight:700;color:var(--muted)}
+.search__result{width:100%;text-align:left;padding:16px 18px;gap:8px;font:inherit;color:var(--text)}
+.search__result-status{margin-left:auto} .search__snippet{font-size:14px;line-height:1.5}
+.search__empty{align-items:center;text-align:center;padding:48px 24px;gap:10px} .search__empty-text{max-width:340px}
+.search__empty-btn{margin-top:6px}
+
+.qa{width:100%;max-width:860px;margin:0 auto;display:flex;flex-direction:column;gap:26px}
+.qa__intro{flex:1;min-height:300px;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:18px;text-align:center;padding:16px 0}
+.qa__askbox{display:flex;align-items:center;gap:10px;width:100%;max-width:680px;box-sizing:border-box;background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:10px 10px 10px 20px;box-shadow:var(--shadow);transition:border-color .15s}
+.qa__askbox:focus-within{border-color:var(--accent)}
+.qa__input{flex:1;min-width:0;min-height:40px;border:0;outline:0;background:transparent;font-family:inherit;font-size:16px;color:var(--text)}
+.qa__sr{position:absolute;left:-9999px}
+.qa__send{display:inline-flex;align-items:center;justify-content:center;gap:8px;flex:none;height:48px;padding:0 20px;border:1px solid var(--accent);border-radius:12px;background:var(--accent);color:var(--on-accent);font-family:inherit;font-size:14px;font-weight:700}
+.qa__send:hover{filter:brightness(1.1)} .qa__send--icon{width:48px;padding:0}
+.qa__chips{display:flex;flex-wrap:wrap;justify-content:center;gap:8px}
+.qa__chip{height:38px;padding:0 16px;border:1px solid var(--border);border-radius:99px;background:var(--surface);color:var(--text);font-family:inherit;font-size:13px;font-weight:600}
+.qa__chip:hover{border-color:var(--accent);color:var(--accent-text)}
+.qa__note{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--muted)} .qa__note svg{flex:none}
+.qa__res{display:flex;flex-direction:column;gap:22px}
+.qa__qcard{display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--r-2xl);padding:16px 20px}
+.qa__qlabel{font-size:12px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;color:var(--accent-text)}
+.qa__qtext{flex:1 1 320px;min-width:0;font-size:15.5px;font-weight:700;line-height:1.5}
+.qa__answer{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-3xl);padding:26px 28px;display:flex;flex-direction:column;gap:16px}
+.qa__ahead{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px}
+.qa__atitle{display:flex;align-items:center;gap:10px;font-size:18px;font-weight:800}
+.qa__badge{font-size:12px;font-weight:700;color:var(--accent-text);background:var(--accent-soft);border-radius:99px;padding:6px 12px}
+.qa__direct{background:var(--accent-soft);border-left:3px solid var(--accent);border-radius:0 var(--r-md) var(--r-md) 0;padding:16px 18px;font-size:16.5px;line-height:1.65;font-weight:600}
+.qa__h{margin:6px 0 0;font-size:13px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted)}
+.qa__p{margin:0;font-size:15.5px;line-height:1.75}
+.qa__warn{display:flex;gap:10px;align-items:flex-start;background:var(--surface2);border:1px dashed var(--border);border-radius:var(--r-lg);padding:14px 16px;font-size:14px;line-height:1.6;color:var(--muted)}
+.qa__warn svg{flex:none;margin-top:2px} .qa__warn strong{color:var(--text)}
+.qa__cite{min-width:24px;height:24px;border:0;border-radius:99px;background:var(--accent);color:var(--on-accent);font-family:inherit;font-size:12px;font-weight:800;padding:0 6px;vertical-align:middle;margin:0 2px}
+.qa__cite:hover{filter:brightness(1.1)}
+.qa__source{display:flex;flex-direction:column;gap:10px;border:1px solid var(--border);border-radius:var(--r-2xl);padding:16px 18px}
+.qa__shead{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+.qa__snum{display:inline-flex;align-items:center;justify-content:center;min-width:26px;height:26px;border-radius:99px;background:var(--accent);color:var(--on-accent);font-size:13px;font-weight:800}
+.qa__sname{font-weight:700;font-size:15px} .qa__stag{font-size:12px;font-weight:700;color:var(--muted);border:1px solid var(--border);border-radius:99px;padding:3px 10px}
+.qa__ssec{font-size:13px;color:var(--muted)}
+.qa__quote{background:var(--surface2);border-left:3px solid var(--accent);border-radius:0 var(--r-md) var(--r-md) 0;padding:12px 16px;font-size:14px;line-height:1.65;font-style:italic;color:var(--muted)}
+.qa__actions{display:flex;flex-wrap:wrap;align-items:center;gap:10px}
+.qa__btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:42px;padding:0 16px;border:1px solid var(--border);border-radius:var(--r-md);background:var(--surface2);color:var(--text);font-family:inherit;font-size:13.5px;font-weight:700}
+.qa__btn:hover{border-color:var(--accent);color:var(--accent-text)}
+.qa__btn--primary{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+.qa__btn--primary:hover{filter:brightness(1.1);color:var(--on-accent)}
+.qa__btn--icon{width:42px;padding:0;color:var(--muted)} .qa__spacer{flex:1} .qa__feedback{display:flex;align-items:center;gap:8px}
+
+@media (max-width:640px){
+  .qa__askbox{flex-wrap:wrap;padding:12px;border-radius:16px} .qa__input{flex:1 1 100%;min-height:30px}
+  .qa__send{width:100%} .qa__answer{padding:20px 18px}
+}
+
+.config{display:flex;flex-direction:column;gap:28px;max-width:860px}
+.config__setting{display:flex;flex-direction:column;gap:4px;max-width:360px}
+.config__swatches{display:flex;flex-wrap:wrap;align-items:center}
+.config__swatch{width:44px;height:44px;padding:0;flex:none}
+.config__swatch-dot{width:26px;height:26px;border-radius:50%;display:block;flex:none}
+.config__swatch-label{font-size:13px;font-weight:600;color:var(--muted);margin-left:8px;margin-right:6px}
+.config__color{width:44px;height:44px;border:1px solid var(--border);border-radius:var(--r-md);background:var(--surface2);padding:4px;cursor:pointer}
+.config__preview{display:flex;flex-direction:column;gap:12px}
+.config__preview-box{background:var(--bg);border:1px solid var(--border);border-radius:var(--r-xl);padding:20px}
+.config .seg{align-self:flex-start}
+
+.toast{position:fixed;right:24px;bottom:24px;z-index:60;max-width:360px;background:var(--surface);border:1px solid var(--accent);border-radius:var(--r-xl);box-shadow:var(--shadow);padding:16px}
+.backdrop{display:none;position:fixed;inset:0;z-index:35;background:rgba(0,0,0,0.5)}
+
+.bottomnav{display:none;position:fixed;left:0;right:0;bottom:0;z-index:20;background:var(--side);border-top:1px solid var(--border);padding:6px 4px calc(6px + env(safe-area-inset-bottom,0px));justify-content:space-around}
+.bottomnav__item{flex:1;min-height:56px;border:0;background:transparent;color:inherit;font-family:inherit;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;font-size:11px}
+
+/* ===== 6. INTERACCIÓN, ANIMACIONES Y RESPONSIVE ===== */
+*{transition:background-color .2s,color .2s,border-color .2s}
+@keyframes shimmer{to{background-position:-200% 0}}
+@keyframes pop{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+button:not(:disabled):hover{filter:brightness(1.1)} button:active{transform:translateY(1px)}
+.nav:hover{background:var(--soft)!important}
+a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(--ac);outline-offset:2px}
+.table tbody tr:hover td{background:var(--soft)}
+@media (max-width:1100px){
+  .detail{display:none!important}
+  .detail.open{display:flex!important;position:fixed;left:0;right:0;bottom:0;width:auto!important;max-height:86vh;overflow:auto;z-index:40;border:0!important;border-radius:20px 20px 0 0}
+  .detail.open .detail__close{display:inline-flex} .backdrop{display:block}
+}
+@media (max-width:900px){
+  .sidebar{display:none!important} .upload__steps{grid-template-columns:1fr 1fr!important}
+  .main{padding:20px!important;padding-bottom:100px!important} .bottomnav{display:flex!important}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+
+<div id="app"></div>
+<template id="plantilla">
+<div class="app">
+
+<aside class="sidebar">
+<div class="row row--center">
+<div class="ico ico--accent ico--40 ico--rounded">
+<!-- Icono de carpeta/archivo profesional en lugar de cerebro -->
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
+</div>
+<div class="sidebar__brand">Archivo Central</div>
+</div>
+<nav class="col g4">
+<button class="nav sidebar__link" data-on-click="{{ nav.home.go }}" data-style="background:{{nav.home.bg}};color:{{nav.home.fg}};font-weight:{{nav.home.w}}">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12l9-8 9 8"></path><path d="M5 10v10h14V10"></path></svg>Inicio</button>
+<button class="nav sidebar__link" data-on-click="{{ nav.ask.go }}" data-style="background:{{nav.ask.bg}};color:{{nav.ask.fg}};font-weight:{{nav.ask.w}}">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"></path><path d="M9 10h6M9 14h4"></path></svg>Asistente</button>
+<button class="nav sidebar__link" data-on-click="{{ nav.upload.go }}" data-style="background:{{nav.upload.bg}};color:{{nav.upload.fg}};font-weight:{{nav.upload.w}}">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 16V4"></path><path d="M7 9l5-5 5 5"></path><path d="M4 20h16"></path></svg>Subir documentos</button>
+<button class="nav sidebar__link" data-on-click="{{ nav.library.go }}" data-style="background:{{nav.library.bg}};color:{{nav.library.fg}};font-weight:{{nav.library.w}}">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"></path><path d="M14 3v5h5"></path></svg>Biblioteca</button>
+<!-- CAMBIO: Nombre simplificado e icono de lupa universal -->
+<button class="nav sidebar__link" data-on-click="{{ nav.search.go }}" data-style="background:{{nav.search.bg}};color:{{nav.search.fg}};font-weight:{{nav.search.w}}">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-4-4"></path></svg>Búsqueda</button>
+<div class="divider"></div>
+<button class="nav sidebar__link" data-on-click="{{ nav.config.go }}" data-style="background:{{nav.config.bg}};color:{{nav.config.fg}};font-weight:{{nav.config.w}}">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"></path></svg>Configuración</button>
+</nav>
+<div class="sidebar__note">
+<div class="t-label">Cero papel</div>
+<div class="t-meta">Cada documento queda digitalizado, consultable y respaldado.</div>
+</div>
+</aside>
+
+<main class="main">
+<div class="topbar">
+<div class="topbar__crumb">{{ company }}<span aria-hidden="true">/</span><span class="t-strong">{{ crumb }}</span></div>
+<div class="row row--center">
+<div class="topbar__bell">
+<template data-if="bell"><div class="topbar__overlay" data-on-click="{{ closeBell }}"></div></template>
+<button class="btn btn--ghost btn--icon topbar__bell-btn" data-on-click="{{ toggleBell }}" aria-label="Avisos, 3 nuevos" aria-expanded="{{ bell }}"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9M10.3 21a1.9 1.9 0 0 0 3.4 0"></path></svg><span class="topbar__badge">3</span></button>
+<template data-if="bell">
+<div class="anim-pop topbar__menu">
+<div class="t-eyebrow topbar__menu-title">Avisos</div>
+<template data-for="notifs" data-as="n">
+<div class="topbar__notif"><span class="dot"></span><div class="topbar__notif-body"><span class="topbar__notif-title">{{ n.t }}</span><span class="t-meta-sm">{{ n.d }}</span></div></div>
+</template>
+</div>
+</template>
+</div>
+<div class="topbar__user"><div class="t-label">{{ user.name }}</div><div class="t-meta-sm">{{ user.role }}</div></div>
+<div class="ico ico--soft ico--40" aria-hidden="true">{{ user.initials }}</div>
+</div>
+</div>
+
+<div class="main__row">
+<div class="main__content">
+
+<template data-if="isConfig">
+<div class="config">
+<div class="col g4">
+<h1 class="t-h1">Configuración</h1>
+<div class="t-lead">Ajusta cómo se ve tu archivo central. Los cambios se aplican al instante.</div>
+</div>
+<section class="card card--wide">
+<h2 class="t-h2">Apariencia</h2>
+<div class="row wrap row--center between g16">
+<div class="config__setting">
+<div class="t-title">Modo</div>
+<div class="t-muted">Elige entre fondo claro u oscuro.</div>
+</div>
+<div class="seg" role="group" aria-label="Modo de color">
+<button class="seg__btn" data-on-click="{{ setLight }}" aria-pressed="{{ isLight }}" data-style="background:{{lightBg}};color:{{lightFg}}">
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path></svg>Claro</button>
+<button class="seg__btn" data-on-click="{{ setDark }}" aria-pressed="{{ isDark }}" data-style="background:{{darkBg}};color:{{darkFg}}">
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 13A9 9 0 1 1 11 3a7 7 0 0 0 10 10z"></path></svg>Oscuro</button>
+</div>
+</div>
+<div class="divider"></div>
+<div class="row wrap row--center between g16">
+<div class="config__setting">
+<div class="t-title">Color principal</div>
+<div class="t-muted">Elige uno o crea el tuyo. Ajustamos el tono automáticamente para que el texto blanco de los botones se lea bien en ambos temas.</div>
+</div>
+<div class="config__swatches" role="group" aria-label="Color principal">
+<template data-for="swatches" data-as="sw">
+<button class="btn btn--bare config__swatch" data-on-click="{{ sw.pick }}" aria-label="Color {{ sw.name }}" aria-pressed="{{ sw.selected }}">
+<span class="config__swatch-dot" data-style="background:{{ sw.hex }};border:{{ sw.ring }};box-shadow:{{ sw.glow }}"></span>
+</button>
+</template>
+<label class="config__swatch-label" for="custom">Otro</label>
+<input class="config__color" id="custom" type="color" value="{{ accent }}" data-on-change="{{ onCustom }}">
+</div>
+</div>
+<div class="divider"></div>
+<div class="config__preview">
+<div class="t-eyebrow">Vista previa</div>
+<div class="row wrap row--center g16 config__preview-box">
+<button class="btn btn--accent">Seleccionar archivos</button>
+<span class="tag tag--mono">.md</span>
+<span class="status status--ok"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5 9-10"></path></svg>Archivado</span>
+<div class="progress progress--grow"><div class="progress__fill" data-style="width:62%"></div></div>
+</div>
+</div>
+</section>
+<section class="card card--wide">
+<h2 class="t-h2">Estados de la interfaz <span class="t-meta">· demostración</span></h2>
+<div class="t-muted">Simula cómo se ve la Biblioteca con datos, cargando o sin documentos.</div>
+<div class="seg" role="group" aria-label="Estado de la biblioteca">
+<template data-for="demOpts" data-as="o">
+<button class="seg__btn" data-on-click="{{ o.pick }}" aria-pressed="{{ o.on }}" data-style="background:{{ o.bg }};color:{{ o.fg }}">{{ o.label }}</button>
+</template>
+</div>
+</section>
+</div>
+</template>
+
+<template data-if="isAsk">
+<div class="qa">
+<template data-if="qa.idle">
+<div class="qa__intro">
+<div class="qa__askbox">
+<label class="qa__sr" for="ask">Escribe tu pregunta</label>
+<input class="qa__input" id="ask" type="text" placeholder="Ej.: ¿Cuántos días de vacaciones corresponden con 6 años de antigüedad?" data-on-keydown="{{ qa.key }}">
+<button class="qa__send" data-on-click="{{ qa.ask }}">Preguntar</button>
+</div>
+<div class="qa__chips">
+<template data-for="qa.sugg" data-as="s">
+<button class="qa__chip" data-on-click="{{ s.ask }}">{{ s.label }}</button>
+</template>
+</div>
+<div class="qa__note"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"></path><path d="M9 12l2 2 4-4"></path></svg>Una pregunta, una respuesta elaborada. Solo se consultan los documentos a los que tienes acceso.</div>
+</div>
+</template>
+
+<template data-if="qa.loading">
+<div class="qa__intro">
+  <div class="sk" style="width: 140px; height: 24px; border-radius: 12px; margin-bottom: 16px;"></div>
+  <div class="t-muted">Analizando documentos y elaborando la respuesta…</div>
+</div>
+</template>
+
+<template data-if="qa.result">
+<div class="qa__res">
+<div class="qa__qcard">
+<span class="qa__qlabel">Tu pregunta</span>
+<span class="qa__qtext">{{ qa.qEcho }}</span>
+<button class="qa__btn" data-on-click="{{ qa.again }}">Nueva consulta</button>
+</div>
+<article class="qa__answer">
+<div class="qa__ahead">
+<div class="qa__atitle"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4a3 3 0 0 0-3 3 3 3 0 0 0-2 5 3 3 0 0 0 2 5 3 3 0 0 0 6 1V5a2 2 0 0 0-3-1z"></path><path d="M15 4a3 3 0 0 1 3 3 3 3 0 0 1 2 5 3 3 0 0 1-2 5 3 3 0 0 1-6 1"></path></svg>Respuesta elaborada</div>
+<span class="qa__badge">Basada en {{ qa.n }} documentos con acceso</span>
+</div>
+<div class="qa__direct">Un empleado con 6 años de antigüedad tiene derecho a <strong>18 días hábiles</strong> de vacaciones por año<button class="qa__cite" data-on-click="{{ qa.cite(1) }}" aria-label="Ver fuente 1">1</button>, divisibles en hasta dos períodos<button class="qa__cite" data-on-click="{{ qa.cite(1) }}" aria-label="Ver fuente 1">1</button>.</div>
+<div class="qa__h">Detalles de la respuesta</div>
+<p class="qa__p">La <strong>Política de vacaciones</strong> define tramos según la antigüedad: el personal con más de 5 y hasta 10 años acumula 18 días hábiles anuales<button class="qa__cite" data-on-click="{{ qa.cite(1) }}" aria-label="Ver fuente 1">1</button>. Con 6 años cumplidos, el empleado queda completamente dentro de ese tramo, por lo que le corresponden los 18 días completos, sin prorrateos ni descuentos. Si aún no los hubiera tomado, puede solicitarlos a partir de la fecha en que cumpla la antigüedad.</p>
+<p class="qa__p">Los días pueden gozarse de forma continua o dividirse en hasta dos períodos dentro del mismo año<button class="qa__cite" data-on-click="{{ qa.cite(1) }}" aria-label="Ver fuente 1">1</button>. Para programarlos, la solicitud se presenta al jefe directo con al menos 30 días de anticipación y, una vez aprobada, queda registrada en el expediente del empleado junto con el documento de aprobación.</p>
+<div class="qa__h">Ten en cuenta</div>
+<div class="qa__warn"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="{{p.accentText}}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l10 18H2z"></path><path d="M12 10v5M12 18v.5"></path></svg><span><strong>Puede cambiar pronto.</strong> En la reunión directiva del 17 de octubre se acordó revisar la política de vacaciones vigente y presentar una propuesta en la próxima reunión<button class="qa__cite" data-on-click="{{ qa.cite(2) }}" aria-label="Ver fuente 2">2</button>. El acta es una imagen escaneada leída con OCR (confianza media): confirma el punto exacto en el PDF original antes de comunicar cualquier cambio.</span></div>
+<div class="qa__h">Fuentes citadas</div>
+<template data-for="qa.sources" data-as="src">
+<div class="qa__source" id="fuente-{{ src.n }}">
+<div class="qa__shead">
+<span class="qa__snum">{{ src.n }}</span>
+<span class="qa__sname">{{ src.name }}</span>
+<span class="qa__stag">{{ src.ext }}</span>
+<span class="qa__ssec">· {{ src.section }}</span>
+</div>
+<div class="qa__quote">{{ src.quote }}</div>
+<template data-if="src.warn">
+<div class="qa__warn"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="{{p.accentText}}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l10 18H2z"></path><path d="M12 10v5M12 18v.5"></path></svg><span><strong>Verifica con el original.</strong> {{ src.warnText }}</span></div>
+</template>
+<div class="qa__actions">
+<button class="qa__btn">Ver en el MD</button>
+<button class="qa__btn qa__btn--primary">Abrir original</button>
+</div>
+</div>
+</template>
+<div class="qa__actions">
+<div class="qa__feedback">
+<button class="qa__btn qa__btn--icon" aria-label="Respuesta útil"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 11v9H4v-9zM7 11l4-8c1.7 0 3 1.3 3 3v3h5a2 2 0 0 1 2 2.3l-1.2 7A2 2 0 0 1 17.8 20H7"></path></svg></button>
+<button class="qa__btn qa__btn--icon" aria-label="Respuesta no útil"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 13V4h3v9zM17 13l-4 8c-1.7 0-3-1.3-3-3v-3H5a2 2 0 0 1-2-2.3l1.2-7A2 2 0 0 1 6.2 4H17"></path></svg></button>
+<button class="qa__btn qa__btn--icon" aria-label="Copiar respuesta"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M5 15V5a2 2 0 0 1 2-2h8"></path></svg></button>
+</div>
+<span class="qa__spacer"></span>
+<button class="qa__btn qa__btn--primary" data-on-click="{{ qa.again }}">Hacer otra pregunta</button>
+</div>
+</article>
+<div class="qa__askbox">
+<label class="qa__sr" for="ask">Escribe otra pregunta</label>
+<input class="qa__input" id="ask" type="text" placeholder="Haz otra pregunta sobre tus documentos…" data-on-keydown="{{ qa.key }}">
+<button class="qa__send qa__send--icon" aria-label="Enviar pregunta" data-on-click="{{ qa.ask }}"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5"></path><path d="M5 12l7-7 7 7"></path></svg></button>
+</div>
+</div>
+</template>
+</div>
+</template>
+
+<template data-if="isHome">
+<div class="home">
+<div class="home__inner">
+<div class="col g10">
+<div class="t-eyebrow t-eyebrow--accent">Archivo Central</div>
+<h1 class="t-hero">Encuentra cualquier documento de la empresa</h1>
+<div class="t-lead">Pregunta al asistente, consulta todo el archivo o sube nuevos documentos.</div>
+</div>
+<div class="home__ask">
+<span class="home__ask-ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"></path><path d="M9 10h6M9 14h4"></path></svg></span>
+<label class="sr-only" for="homeq">Pregunta al asistente</label>
+<input class="home__ask-input" id="homeq" data-on-keydown="{{ homeKey }}" type="text" placeholder="Ej.: ¿Cuántos días de vacaciones corresponden con 6 años de antigüedad?">
+<button class="btn btn--accent" data-on-click="{{ qa.ask }}">Preguntar</button>
+</div>
+<div class="home__sugg">
+<template data-for="qa.sugg" data-as="s">
+<button class="home__sugg-btn" data-on-click="{{ s.ask }}">{{ s.label }}</button>
+</template>
+</div>
+<div class="row wrap">
+<button class="btn btn--ghost btn--lg" data-on-click="{{ nav.upload.go }}">
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 16V4"></path><path d="M7 9l5-5 5 5"></path><path d="M4 20h16"></path></svg>Subir documentos</button>
+<button class="btn btn--ghost btn--lg" data-on-click="{{ nav.library.go }}">Ir a la biblioteca</button>
+</div>
+<div class="home__trust">
+<span class="home__trust-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="{{p.accentText}}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="5" rx="1"></rect><path d="M5 9v10h14V9"></path></svg>Original archivado de cada documento</span>
+<span class="home__trust-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="{{p.accentText}}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"></path><path d="M14 3v5h5"></path></svg>Texto convertido a Markdown</span>
+<span class="home__trust-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="{{p.accentText}}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"></path></svg>Acceso según tus permisos</span>
+</div>
+</div>
+</div>
+</template>
+
+<template data-if="isSearch">
+<div class="col g4">
+<!-- CAMBIO: Título simplificado -->
+<h1 class="t-h1">Búsqueda</h1>
+<div class="t-lead">Combina palabras clave, tipo, fecha, autor y estado para afinar los resultados.</div>
+</div>
+<div class="row wrap g20 row--top">
+<section class="card search__filters">
+<div class="col g8">
+<label class="t-label" for="sq">Palabras clave</label>
+<div class="field row row--center search__field">
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-4-4"></path></svg>
+<input class="input" id="sq" type="text" value="{{ sf.q }}" data-on-change="{{ onSq }}" placeholder="Ej.: vacaciones, contrato…">
+</div>
+</div>
+<template data-for="groups" data-as="g">
+<div class="col g8">
+<div class="t-label">{{ g.title }}</div>
+<div class="row wrap g8">
+<template data-for="g.opts" data-as="o">
+<button class="chip" data-on-click="{{ o.pick }}" aria-pressed="{{ o.on }}" data-style="border:1px solid {{ o.bd }};background:{{ o.bg }};color:{{ o.fg }}">{{ o.label }}</button>
+</template>
+</div>
+</div>
+</template>
+<div class="col g8">
+<div class="t-label">Rango de fechas</div>
+<div class="row wrap g10">
+<div class="search__date"><label class="t-meta-sm" for="sfrom">Desde</label><input class="input input--date" id="sfrom" type="date" value="{{ sf.from }}" data-on-change="{{ onFrom }}" data-style="color-scheme:{{ scheme }}"></div>
+<div class="search__date"><label class="t-meta-sm" for="sto">Hasta</label><input class="input input--date" id="sto" type="date" value="{{ sf.to }}" data-on-change="{{ onTo }}" data-style="color-scheme:{{ scheme }}"></div>
+</div>
+</div>
+<button class="btn btn--ghost" data-on-click="{{ srClear }}">Limpiar filtros</button>
+</section>
+<section class="search__results">
+<div class="search__count" role="status">{{ srCount }}</div>
+<template data-for="results" data-as="r">
+<button class="nav card search__result" data-on-click="{{ r.open }}">
+<span class="row wrap row--center g10"><span class="t-name">{{ r.name }}</span><span class="tag tag--outline">{{ r.ext }}</span><span class="status status--ok search__result-status">{{ r.status }}</span></span>
+<span class="t-meta">{{ r.meta }}</span>
+<span class="search__snippet">{{ r.snippet }}</span>
+<span class="row wrap g6"><template data-for="r.tags" data-as="t"><span class="tag">{{ t }}</span></template></span>
+</button>
+</template>
+<template data-if="srNone">
+<div class="card search__empty">
+<div class="ico ico--soft ico--56"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-4-4"></path></svg></div>
+<div class="t-h2">Sin resultados con estos filtros</div>
+<div class="t-lead search__empty-text">Prueba quitando algún filtro o con otras palabras clave.</div>
+<button class="btn btn--accent search__empty-btn" data-on-click="{{ srClear }}">Limpiar filtros</button>
+</div>
+</template>
+</section>
+</div>
+</template>
+
+<template data-if="isReview">
+<div class="review">
+<div class="review__header">
+<div class="col g4">
+<button class="btn btn--link review__back" data-on-click="{{ nav.library.go }}">← Volver a la Biblioteca</button>
+<h1 class="t-h1">{{ rv.name }}</h1>
+<div class="t-muted">{{ rv.meta }}</div>
+</div>
+<div class="row wrap g10">
+<span class="review__badge-status" data-style="background:{{rv.stBg}};color:{{rv.stFg}}">{{ rv.status }}</span>
+<span class="review__badge-conf">Confianza {{ rv.conf }}% · {{ rv.lvl }}</span>
+</div>
+</div>
+<div class="row wrap g16">
+<section class="card review__pane">
+<div class="row wrap row--center between g8"><div class="t-sub">Original <span class="t-mono">{{ rv.ext }}</span></div>
+<div class="row g6"><template data-for="rv.pages" data-as="g"><button class="chip" data-on-click="{{ g.pick }}" aria-pressed="{{ g.on }}" data-style="border:1px solid {{ g.bd }};background:{{ g.bg }};color:{{ g.fg }}">{{ g.label }}</button></template></div></div>
+<div class="review__paper" data-style="filter:{{ rv.blur }}">
+<div class="review__paper-title"></div>
+<template data-for="rv.lines" data-as="w"><div class="review__paper-line" data-style="width:{{ w }}%"></div></template>
+</div>
+</section>
+<section class="card review__pane">
+<div class="t-sub">Texto convertido (MD)</div>
+<div class="review__conf"><div class="t-meta review__conf-row"><span>Lectura de esta página</span><span class="review__conf-value">{{ rv.pconf }}%</span></div><div class="progress"><div class="progress__fill" data-style="width:{{ rv.pconf }}%"></div></div></div>
+<pre class="code box box--soft review__md">{{ rv.preview }}</pre>
+</section>
+</div>
+<section class="card review__class">
+<div class="t-sub">Clasificación</div>
+<div class="t-meta review__meta"><span>Ruta en el NAS: <strong class="t-strong">{{ rv.folder }}</strong></span><span>Integridad: <strong class="t-strong">{{ rv.hash }}</strong></span><span>Cargado por: <strong class="t-strong">{{ rv.by }}</strong></span><span>Clasificado por: <strong class="t-strong">{{ rv.cls }}</strong></span></div>
+<div class="row wrap g6"><template data-for="rv.tags" data-as="t"><span class="tag">{{ t }}</span></template></div>
+<template data-if="rv.clas">
+<div class="col g8">
+<div class="box box--dashed review__problems"><div class="review__problems-title">Problemas detectados</div><template data-for="rv.problems" data-as="q"><div class="t-meta">• {{ q }}</div></template></div>
+<div class="col g8"><div class="t-label">Elige la carpeta (estructura provisional)</div><div class="row wrap g8"><template data-for="rv.folders" data-as="o"><button class="chip" data-on-click="{{ o.pick }}" aria-pressed="{{ o.on }}" data-style="border:1px solid {{ o.bd }};background:{{ o.bg }};color:{{ o.fg }}">{{ o.label }}</button></template></div></div>
+<div class="row wrap g10">
+<button class="btn btn--ghost btn--lg" data-on-click="{{ onDiscard }}">Descartar</button>
+<button class="btn btn--ghost btn--lg" data-on-click="{{ onRescan }}">Volver a escanear</button>
+<button class="btn btn--accent btn--lg" data-on-click="{{ onAccept }}">Aceptar y guardar en {{ rv.fSel }}</button>
+</div>
+</div>
+</template>
+<template data-if="rv.ok">
+<div class="row wrap g10"><button class="btn btn--accent btn--lg">Descargar original</button><button class="btn btn--ghost btn--lg">Subir nueva versión</button></div>
+</template>
+</section>
+</div>
+</template>
+
+<template data-if="isUpload">
+<div class="col g4">
+<h1 class="t-h1">Subir documentos</h1>
+<div class="t-lead">Se convierten a Markdown, se registran y el original queda archivado.</div>
+</div>
+<section class="card card--wide">
+<div class="row wrap g28">
+<div class="upload__dropzone" data-on-dragover="{{ dzOver }}" data-on-dragleave="{{ dzLeave }}" data-on-drop="{{ dzDrop }}" data-style="border:2px {{dz.style}} {{p.accent}};background:{{dz.bg}}">
+<div class="ico ico--accent ico--56">
+<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 16V4"></path><path d="M7 9l5-5 5 5"></path><path d="M4 20h16"></path></svg>
+</div>
+<div class="t-h2">{{ dz.text }}</div>
+<div class="t-muted">PDF, Word, Excel, imágenes escaneadas · hasta 50 archivos a la vez</div>
+<button class="btn btn--accent btn--xl upload__drop-btn" data-on-click="{{ startUpload }}" data-style="opacity:{{ confOp }}">Seleccionar archivos</button>
+<label class="upload__confirm"><input class="upload__check" type="checkbox" checked="{{ confOn }}" data-on-change="{{ onConf }}">Confirmo que el escaneo se ve completo y legible</label>
+</div>
+<div class="upload__status">
+<div class="t-eyebrow">Procesando ahora</div>
+<template data-if="up.idle">
+<div class="box box--dashed upload__empty">Aún no hay archivos en proceso. Suelta un documento o pulsa “Seleccionar archivos” para ver el flujo completo.</div>
+</template>
+<template data-if="up.active">
+<div class="box box--soft upload__progress" role="status">
+<div class="upload__progress-row"><span>{{ up.name }}</span><span class="upload__progress-label">{{ up.label }}</span></div>
+<div class="progress"><div class="progress__fill" data-style="width:{{ up.pct }}%"></div></div>
+</div>
+</template>
+<template data-if="up.done">
+<div class="box box--accent upload__result">
+<div class="t-eyebrow">Clasificación automática</div>
+<div class="t-name">{{ up.title }}</div>
+<div class="t-meta">Carpeta: <strong class="t-strong">{{ up.folder }}</strong><br>Confianza: <strong class="t-strong">{{ up.conf }}%</strong><br>{{ up.reason }}</div>
+<div class="row wrap g6"><template data-for="up.tags" data-as="t"><span class="tag">{{ t }}</span></template></div>
+<button class="btn btn--accent upload__result-btn" data-on-click="{{ revLast }}">Revisar documento</button>
+</div>
+</template>
+</div>
+</div>
+<div class="upload__steps">
+<template data-for="steps" data-as="st">
+<div class="upload__step" data-style="border:1px solid {{st.border}}">
+<div class="ico ico--32" data-style="background:{{st.bg}};color:{{st.fg}};border:1px solid {{st.cb}}">{{ st.mark }}</div>
+<div class="t-title">{{ st.title }}</div>
+<div class="t-meta">{{ st.text }}</div>
+<div class="upload__step-label" data-style="color:{{st.tc}}">{{ st.label }}</div>
+</div>
+</template>
+</div>
+</section>
+</template>
+
+<template data-if="isLibrary">
+<header class="row wrap row--center between g16">
+<div class="col g4">
+<h1 class="t-h1">Biblioteca</h1>
+<div class="t-lead">Todos tus documentos registrados, con su original archivado.</div>
+</div>
+<div class="field row row--center library__search">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-4-4"></path></svg>
+<label class="sr-only" for="q">Buscar en la biblioteca</label>
+<input class="input" id="q" type="text" placeholder="Busca por nombre, contenido o etiquetas: contratos, facturas…">
+</div>
+</header>
+
+<template data-if="libData">
+<section class="card">
+<div class="row wrap row--center between g12">
+<h2 class="t-h2">Documentos registrados</h2>
+<div class="row wrap g8">
+<template data-for="libChips" data-as="c">
+<button class="chip" data-on-click="{{ c.pick }}" aria-pressed="{{ c.on }}" data-style="border:1px solid {{ c.bd }};background:{{ c.bg }};color:{{ c.fg }}">{{ c.label }}</button>
+</template>
+</div>
+</div>
+<div class="table-wrap">
+<table class="table">
+<thead>
+<tr class="table__head">
+<th class="table__th">Documento</th>
+<th class="table__th">Tipo</th>
+<th class="table__th">Fecha</th>
+<th class="table__th">Versión MD</th>
+<th class="table__th">Original</th>
+<th class="table__th">Estado</th>
+</tr>
+</thead>
+<tbody>
+<template data-for="rows" data-as="r">
+<tr data-style="background:{{r.bg}}">
+<td class="table__td table__td--name"><button class="table__name-btn" data-on-click="{{ r.pick }}" aria-pressed="{{ r.selected }}">{{ r.name }}</button></td>
+<td class="table__td table__td--muted">{{ r.type }}</td>
+<td class="table__td table__td--muted">{{ r.date }}</td>
+<td class="table__td"><span class="tag tag--mono">.md</span></td>
+<td class="table__td"><span class="tag tag--outline">{{ r.ext }}</span></td>
+<td class="table__td">
+<template data-if="r.done">
+<span class="status status--ok"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5 9-10"></path></svg>Archivado</span>
+</template>
+<template data-if="r.pending">
+<span class="status status--muted"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9" stroke-dasharray="3 4"></circle></svg>En proceso</span>
+</template>
+<template data-if="r.clas">
+<span class="status status--alert"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l10 18H2z"></path><path d="M12 10v5M12 18v.5"></path></svg>Por clasificar</span>
+</template>
+</td>
+</tr>
+</template>
+</tbody>
+</table>
+</div>
+</section>
+</template>
+<template data-if="libLoad">
+<section class="card library__loading" aria-busy="true">
+<div class="sk library__sk-title"></div>
+<div class="sk library__sk-row"></div><div class="sk library__sk-row"></div><div class="sk library__sk-row"></div><div class="sk library__sk-row"></div>
+<div class="t-meta">Cargando documentos…</div>
+</section>
+</template>
+<template data-if="libEmpty">
+<section class="card library__empty">
+<div class="ico ico--soft ico--64"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="5" rx="1"></rect><path d="M5 9v10h14V9"></path><path d="M10 13h4"></path></svg></div>
+<div class="t-h2">Aún no hay documentos</div>
+<div class="t-lead library__empty-text">Sube el primer documento (contratos, facturas, actas, políticas, manuales…) y quedará convertido, registrado y archivado.</div>
+<button class="btn btn--accent btn--lg" data-on-click="{{ nav.upload.go }}">Subir documentos</button>
+</section>
+</template>
+</template>
+</div>
+
+<template data-if="libPanel">
+<aside class="detail {{panelCls}}">
+<div class="detail__head"><div class="t-eyebrow">Detalle del documento</div><button class="btn btn--ghost detail__close" data-on-click="{{ closeSheet }}">Cerrar</button></div>
+<div class="col g10">
+<div class="detail__name">{{ d.name }}</div>
+<div class="row wrap row--center g8">
+<span class="tag tag--mono">.md</span>
+<span class="tag tag--outline">{{ d.ext }}</span>
+<span class="status" data-style="color:{{d.statusFg}}">{{ d.status }}</span>
+</div>
+</div>
+<section class="col g8">
+<div class="t-label">Vista previa (MD)</div>
+<pre class="code box box--flat detail__md">{{ d.preview }}</pre>
+</section>
+<section class="col g8">
+<div class="t-label">Información</div>
+<div class="box box--flat detail__info">
+<template data-for="d.info" data-as="i">
+<div class="detail__info-row"><span class="t-meta">{{ i.k }}</span><span class="detail__info-value">{{ i.v }}</span></div>
+</template>
+<div class="detail__tags">
+<template data-for="d.tags" data-as="t">
+<span class="tag tag--outline">{{ t }}</span>
+</template>
+</div>
+</div>
+</section>
+<section class="col g8">
+<div class="t-label">Original archivado</div>
+<div class="box box--flat detail__original">
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="{{p.accentText}}" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"></path><path d="M14 3v5h5"></path></svg>
+<div class="detail__original-text"><span class="detail__original-name">{{ d.file }}</span><span class="t-meta-sm">{{ d.size }}</span></div>
+</div>
+<button class="btn btn--accent">Descargar original</button>
+</section>
+<section class="col g8">
+<div class="t-label">Acciones</div>
+<div class="row wrap g8">
+<button class="btn btn--ghost detail__action">Compartir</button>
+<button class="btn btn--ghost detail__action">Nueva versión</button>
+<button class="btn btn--ghost detail__action" data-on-click="{{ d.review }}">Revisar</button>
+</div>
+</section>
+<section class="col g8">
+<div class="t-label">Historial</div>
+<template data-for="d.history" data-as="h">
+<div class="detail__history-item"><span class="dot"></span><span class="t-meta">{{ h }}</span></div>
+</template>
+</section>
+</aside>
+</template>
+</div>
+</main>
+
+<template data-if="toast">
+<div class="toast anim-pop row row--top g12" role="status">
+<div class="ico ico--accent ico--32">✓</div>
+<div class="col g8"><div class="t-sub">{{ toastTitle }}</div><div class="t-meta">{{ toastMsg }}</div><div class="row g8"><button class="btn btn--accent" data-on-click="{{ revLast }}">Revisar</button><button class="btn btn--ghost" data-on-click="{{ toLib }}">Biblioteca</button><button class="btn btn--ghost" data-on-click="{{ closeToast }}">Cerrar</button></div></div>
+</div>
+</template>
+<template data-if="sheetOpen"><div class="backdrop" data-on-click="{{ closeSheet }}"></div></template>
+<nav class="bottomnav" aria-label="Navegación principal">
+<template data-for="bnav" data-as="n">
+<button class="bottomnav__item" data-on-click="{{ n.go }}" aria-label="{{ n.label }}" data-style="color:{{ n.fg }};font-weight:{{ n.w }}"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{ n.d }}"></path></svg>{{ n.label }}</button>
+</template>
+</nav>
+</div>
+</template>
+
+<script id="demo-data">
+window.DEMO = {
+  company: 'Empresa S.A.',
+  user: { name: 'Ana Gómez', role: 'Administradora', initials: 'AG' },
+  docs: [
+      { name: 'Contrato_proveedor_2026', type: 'Contrato', date: '23 oct 2026', ext: '.pdf', done: false, pending: true, by: 'Ana Gómez', size: '1,2 MB', tags: ['Proveedores', 'Legal'], preview: '# Contrato de suministro\n\n**Proveedor:** Ejemplo S.A.\n**Vigencia:** 12 meses\n\n## Cláusula 1\nObjeto del contrato…', history: ['Subido por Ana Gómez · 23 oct', 'Convirtiendo a Markdown…'] },
+      { name: 'Factura_0456', type: 'Factura', date: '22 oct 2026', ext: '.jpg', done: true, pending: false, by: 'Luis Benítez', size: '640 KB', tags: ['Facturas', 'Contabilidad'], preview: '# Factura N.º 0456\n\n**Cliente:** Ejemplo S.A.\n**Fecha:** 22/10/2026\n\n| Concepto | Monto |\n|---|---|\n| Servicio | 1.500.000 |', history: ['Subido por Luis Benítez · 22 oct', 'Texto leído y convertido a MD', 'Registrado en la base de datos', 'Original archivado'] },
+      { name: 'Politica_vacaciones', type: 'Política', date: '20 oct 2026', ext: '.docx', done: true, pending: false, by: 'María Rojas', size: '85 KB', tags: ['RR. HH.', 'Políticas'], preview: '# Política de vacaciones\n\n## Alcance\nAplica a todo el personal.\n\n## Días disponibles\nSegún la antigüedad…', history: ['Subido por María Rojas · 20 oct', 'Convertido a MD', 'Registrado en la base de datos', 'Original archivado'] },
+      { name: 'Acta_reunion_directiva', type: 'Acta', date: '17 oct 2026', ext: '.pdf', done: true, pending: false, by: 'Carlos Díaz', size: '420 KB', tags: ['Directiva', 'Actas'], preview: '# Acta de reunión\n\n**Fecha:** 17/10/2026\n\n## Temas\n1. Presupuesto anual\n2. Nuevas sucursales\n\n## Acuerdos\n…', history: ['Subido por Carlos Díaz · 17 oct', 'Convertido a MD', 'Registrado en la base de datos', 'Original archivado'] },
+      { name: 'Acta_comite_compras', type: 'Acta', date: '5 oct 2026', ext: '.pdf', done: false, pending: false, clasificar: true, suggest: 'Compras', problems: ['Página 2 borrosa', 'No se pudo determinar el tipo de documento'], by: 'Carlos Díaz', size: '380 KB', tags: ['Compras', 'Actas'], preview: '# Acta comité de compras\n\n## Temas\n1. Cotizaciones de papelería\n2. Selección de proveedor\n\n[texto ilegible]', history: ['Subido por Carlos Díaz · 5 oct', 'Convertido a MD', 'Clasificación pendiente'] },
+      { name: 'Factura_0431', type: 'Factura', date: '30 sep 2026', ext: '.pdf', done: true, pending: false, by: 'Luis Benítez', size: '210 KB', tags: ['Facturas', 'Contabilidad'], preview: '# Factura N.º 0431\n\n**Cliente:** Ejemplo S.A.\n**Concepto:** Mantenimiento mensual', history: ['Subido por Luis Benítez · 30 sep', 'Convertido a MD', 'Registrado en la base de datos', 'Original archivado'] },
+      { name: 'Contrato_arriendo_oficina', type: 'Contrato', date: '12 sep 2026', ext: '.pdf', done: true, pending: false, by: 'Ana Gómez', size: '1,8 MB', tags: ['Legal', 'Inmuebles'], preview: '# Contrato de arriendo\n\n**Inmueble:** Oficina central\n**Vigencia:** 24 meses\n\n## Cláusula 1\nCanon mensual y reajuste anual.', history: ['Subido por Ana Gómez · 12 sep', 'Convertido a MD', 'Registrado en la base de datos', 'Original archivado'] },
+      { name: 'Manual_seguridad', type: 'Política', date: '2 sep 2026', ext: '.docx', done: true, pending: false, by: 'María Rojas', size: '120 KB', tags: ['Seguridad', 'RR. HH.'], preview: '# Manual de seguridad\n\n## Alcance\nAplica a todas las sedes.\n\n## Evacuación\nRutas y puntos de encuentro.', history: ['Subido por María Rojas · 2 sep', 'Convertido a MD', 'Registrado en la base de datos', 'Original archivado'] }
+],
+  iso: { Contrato_proveedor_2026: '2026-10-23', Factura_0456: '2026-10-22', Politica_vacaciones: '2026-10-20', Acta_reunion_directiva: '2026-10-17', Acta_comite_compras: '2026-10-05', Factura_0431: '2026-09-30', Contrato_arriendo_oficina: '2026-09-12', Manual_seguridad: '2026-09-02' },
+  nas: { Contrato: '/archivo/legal/contratos/2026/', Factura: '/archivo/finanzas/facturas/2026/', 'Política': '/archivo/rrhh/politicas/', Acta: '/archivo/direccion/actas/2026/' },
+  folders: { 'Legal': '/archivo/legal/', 'Finanzas': '/archivo/finanzas/', 'RR. HH.': '/archivo/rrhh/', 'Compras': '/archivo/compras/', 'Dirección': '/archivo/direccion/' },
+  ask: {
+    q: '¿Cuántos días de vacaciones le corresponden a un empleado con 6 años de antigüedad?',
+    suggestions: ['¿Qué contratos vencen este año?', 'Resume el acta del 17 de octubre', '¿Qué facturas están pendientes?'],
+    sources: [
+      { n: 1, name: 'Politica_vacaciones', ext: '.docx', section: 'Días disponibles', quote: 'El personal con más de 5 y hasta 10 años de antigüedad tendrá derecho a 18 días hábiles de vacaciones por año, divisibles en hasta dos períodos.', warn: false, warnText: '' },
+      { n: 2, name: 'Acta_reunion_directiva', ext: '.pdf', section: 'Acuerdos, punto 3', quote: 'Se acuerda revisar la política de vacaciones vigente y presentar una propuesta en la próxima reunión.', warn: true, warnText: 'Este documento era una imagen escaneada y se leyó con OCR (confianza media).' }
+    ]
+  },
+  notifs: [{ t: 'Factura_0456 procesada', d: 'Convertida y archivada · hace 5 min' }, { t: 'El contrato con Proveedor Ejemplo vence en 15 días', d: 'Vencimiento próximo · hoy' }, { t: 'Acta_reunion_directiva: revisar lectura OCR', d: 'Confianza media · ayer' }],
+  makeUpload: function (fileName, bad) {
+    var nm = (fileName || 'Documento').replace(/\.[^.]+$/, ''), m = (fileName || '').match(/\.[^.]+$/);
+    var reason = bad ? 'Página 2 borrosa y no se pudo determinar el tipo de documento.' : 'Tipo y carpeta reconocidos con alta confianza.';
+    var doc = { name: nm, type: 'Factura', date: '25 oct 2026', iso: '2026-10-25', ext: m ? m[0] : '.pdf', by: window.DEMO.user.name, size: '540 KB',
+      tags: bad ? ['Sin clasificar'] : ['Facturas', 'Contabilidad'],
+      preview: '# Factura\n\n**Cliente:** Ejemplo S.A.\n**Monto:** 1.500.000' + (bad ? '\n\n[texto ilegible]' : ''),
+      history: ['Subido por ' + window.DEMO.user.name + ' · hoy', 'Convertido a MD', bad ? 'Clasificación pendiente' : 'Original archivado'],
+      s: bad ? 'clasificar' : 'archivado', suggest: 'Finanzas', conf: bad ? 58 : 94,
+      folder: bad ? '/archivo/_por-clasificar/' : '/archivo/finanzas/facturas/2026/',
+      problems: bad ? ['Página 2 borrosa', 'No se pudo determinar el tipo de documento'] : [] };
+    return { doc: doc, res: { s: doc.s, name: nm, folder: doc.folder, conf: doc.conf, reason: reason, tags: doc.tags } };
+  }
+};
+</script>
+
+<script id="app-js">
+const PALETTE = { bg: 'var(--bg)', side: 'var(--side)', surface: 'var(--surface)', surface2: 'var(--surface2)', border: 'var(--border)', text: 'var(--text)', muted: 'var(--muted)', accent: 'var(--accent)', onAccent: 'var(--on-accent)', accentSoft: 'var(--accent-soft)', accentText: 'var(--accent-text)' };
+const STATUS = { archivado: { icon: '✓ ', label: 'Archivado' }, clasificar: { icon: '! ', label: 'Por clasificar' }, proceso: { icon: '◌ ', label: 'En proceso' }, descartado: { icon: '◌ ', label: 'Descartado' } };
+
+const _fn = {};
+function ev(expr, scope) { return (_fn[expr] || (_fn[expr] = new Function('__s', 'with(__s){return (' + expr + ')}')))(scope); }
+function one(v) { const m = /^\{\{\s*([\s\S]*?)\s*\}\}$/.exec(v); return m ? m[1] : null; }
+function interp(str, scope) { return str.replace(/\{\{\s*([\s\S]*?)\s*\}\}/g, (_, e) => { const v = ev(e, scope); return v == null ? '' : String(v); }); }
+function kids(from, scope, to) { from.childNodes.forEach((c) => { const n = build(c, scope); if (n) to.appendChild(n); }); }
+function build(node, scope) {
+  if (node.nodeType === 3) return document.createTextNode(node.nodeValue.includes('{{') ? interp(node.nodeValue, scope) : node.nodeValue);
+  if (node.nodeType !== 1) return null;
+  if (node.tagName === 'TEMPLATE') {
+    const frag = document.createDocumentFragment();
+    if (node.hasAttribute('data-if')) { if (ev(node.getAttribute('data-if'), scope)) kids(node.content, scope, frag); }
+    else if (node.hasAttribute('data-for')) {
+      (ev(node.getAttribute('data-for'), scope) || []).forEach((it) => { const sc = Object.create(scope); sc[node.getAttribute('data-as')] = it; kids(node.content, sc, frag); });
+    }
+    return frag;
+  }
+  const el = document.createElementNS(node.namespaceURI, node.localName);
+  Array.from(node.attributes).forEach((a) => {
+    const n = a.name, v = a.value;
+    if (n.startsWith('data-on-')) { const fn = ev(one(v), scope); if (typeof fn === 'function') el.addEventListener(n.slice(8) === 'change' ? 'input' : n.slice(8), fn); return; }
+    if (n === 'data-style') { el.style.cssText = interp(v, scope); return; }
+    const ex = one(v);
+    if (ex !== null) {
+      const val = ev(ex, scope);
+      if (n === 'value') { el.value = val == null ? '' : val; return; }
+      if (n === 'checked') { el.checked = !!val; return; }
+      if (n.startsWith('aria-')) { el.setAttribute(n, String(val)); return; }
+      if (val === false || val == null) return;
+      el.setAttribute(n, String(val)); return;
+    }
+    el.setAttribute(n, v.includes('{{') ? interp(v, scope) : v);
+  });
+  kids(node, scope, el);
+  return el;
+}
+
+class AppModel {
+  constructor() { this.props = {}; this.state = {}; }
+  setState(patch) { this.state = Object.assign({}, this.state, patch); this.render(); }
+  render() {
+    const root = document.getElementById('app'), a = document.activeElement;
+    const keep = a && a.id ? { id: a.id, s: a.selectionStart, e: a.selectionEnd } : null;
+    const scope = Object.assign(Object.create(null), this.renderVals());
+    const frag = document.createDocumentFragment();
+    kids(document.getElementById('plantilla').content, scope, frag);
+    root.replaceChildren(frag);
+    if (keep) { const el = document.getElementById(keep.id); if (el) { el.focus(); try { el.setSelectionRange(keep.s, keep.e); } catch (x) {} } }
+  }
+}
+
+class App extends AppModel {
+  hexToHsl(hex) {
+    let h = (hex || '#0F766E').replace('#', '');
+    if (h.length === 3) h = h.split('').map((c) => c + c).join('');
+    const r = parseInt(h.slice(0, 2), 16) / 255, g = parseInt(h.slice(2, 4), 16) / 255, b = parseInt(h.slice(4, 6), 16) / 255;
+    const mx = Math.max(r, g, b), mn = Math.min(r, g, b), d = mx - mn;
+    let hue = 0;
+    if (d) {
+      if (mx === r) hue = ((g - b) / d) % 6;
+      else if (mx === g) hue = (b - r) / d + 2;
+      else hue = (r - g) / d + 4;
+      hue *= 60; if (hue < 0) hue += 360;
+    }
+    const l = (mx + mn) / 2;
+    const s = d === 0 ? 0 : d / (1 - Math.abs(2 * l - 1));
+    return [Math.round(hue), Math.round(s * 100)];
+  }
+  hslToHex(h, s, l) {
+    s /= 100; l /= 100;
+    const k = (n) => (n + h / 30) % 12, a = s * Math.min(l, 1 - l);
+    const f = (n) => l - a * Math.max(-1, Math.min(k(n) - 3, Math.min(9 - k(n), 1)));
+    const to = (v) => Math.round(255 * v).toString(16).padStart(2, '0');
+    return '#' + to(f(0)) + to(f(8)) + to(f(4));
+  }
+  lum(hex) {
+    const n = (hex || '#0F766E').replace('#', '');
+    const ch = (i) => { const v = parseInt(n.slice(i, i + 2), 16) / 255; return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4); };
+    return 0.2126 * ch(0) + 0.7152 * ch(2) + 0.0722 * ch(4);
+  }
+  accessibleAccent(hex) {
+    const ok = (x) => 1.05 / (this.lum(x) + 0.05) >= 4.6;
+    if (hex && ok(hex)) return hex.toLowerCase();
+    const [h, s0] = this.hexToHsl(hex);
+    const s = s0 < 25 ? s0 : Math.min(s0, 85);
+    for (let l = 45; l >= 12; l--) { const hx = this.hslToHex(h, s, l); if (ok(hx)) return hx; }
+    return this.hslToHex(h, s, 12);
+  }
+  applyTheme(accent, dark) {
+    const [h, s0] = this.hexToHsl(accent);
+    const s = s0 < 25 ? s0 : Math.min(s0, 85), ns = Math.min(s0, 20);
+    const c = (hh, ss, ll) => 'hsl(' + hh + ', ' + ss + '%, ' + ll + '%)';
+    const v = dark ? { bg: c(h, ns, 8), side: c(h, ns, 6), surface: c(h, ns, 11), surface2: c(h, ns, 15), border: c(h, ns, 24), text: c(h, Math.min(ns, 15), 94), muted: c(h, Math.min(ns, 12), 70), 'accent-soft': c(h, Math.round(s * 0.55), 17), 'accent-text': c(h, s, 72) }
+      : { bg: c(h, ns, 96), side: c(h, ns, 92), surface: c(h, ns, 99), surface2: c(h, ns, 94), border: c(h, ns, 84), text: c(h, Math.min(ns + 10, 30), 10), muted: c(h, Math.min(ns, 12), 36), 'accent-soft': c(h, Math.round(s * 0.6), 91), 'accent-text': c(h, s, 24) };
+    v.accent = this.accessibleAccent(accent); v['on-accent'] = '#FFFFFF';
+    Object.keys(v).forEach((k) => document.documentElement.style.setProperty('--' + k, v[k]));
+  }
+
+  chip(label, on, pick) {
+    const p = PALETTE;
+    return { label: label, on: on, pick: pick, bg: on ? p.accentSoft : p.surface, fg: on ? p.accentText : p.text, bd: on ? p.accent : p.border };
+  }
+  navVals(view) {
+    const p = PALETTE, nav = {};
+    ['home', 'ask', 'upload', 'library', 'search', 'config'].forEach((v) => {
+      nav[v] = { go: () => this.setState({ view: v }), bg: view === v ? p.accentSoft : 'transparent', fg: view === v ? p.accentText : p.muted, w: view === v ? 700 : 500 };
+    });
+    return nav;
+  }
+  swatchVals(accent) {
+    const p = PALETTE;
+    return [
+      { name: 'Verde azulado', hex: '#0F766E' }, { name: 'Azul', hex: '#2563EB' }, { name: 'Violeta', hex: '#7C3AED' },
+      { name: 'Rosa', hex: '#C4216B' }, { name: 'Naranja', hex: '#C2410C' }, { name: 'Verde', hex: '#15803D' }, { name: 'Grafito', hex: '#64748B' }
+    ].map((x) => {
+      const hex = this.accessibleAccent(x.hex); const selected = hex.toLowerCase() === accent.toLowerCase();
+      return { name: x.name, hex: hex, selected: selected, ring: selected ? '3px solid ' + p.text : '3px solid transparent', glow: selected ? '0 0 0 2px ' + p.surface : 'none', pick: () => this.setState({ accent: hex }) };
+    });
+  }
+
+  libraryVals(p, st, base, sel) {
+    const lf = st.lf ?? 'all';
+    const rows = base.map((r, i) => Object.assign({}, r, { i: i, done: r.s === 'archivado', pending: r.s === 'proceso', clas: r.s === 'clasificar', selected: i === sel, bg: i === sel ? p.accentSoft : 'transparent', pick: () => this.setState({ sel: i, sheet: true }) }))
+      .filter((r) => r.s !== 'descartado' && (lf === 'all' || r.s === lf)).sort((a, b) => b.iso.localeCompare(a.iso));
+    const count = (k) => base.filter((r) => r.s === k).length;
+    const libChips = [['all', 'Todos', base.filter((r) => r.s !== 'descartado').length], ['archivado', 'Archivado', count('archivado')], ['clasificar', 'Por clasificar', count('clasificar')], ['proceso', 'En proceso', count('proceso')]]
+      .map((x) => this.chip(x[1] + ' (' + x[2] + ')', lf === x[0], () => this.setState({ lf: x[0] })));
+    const cur = base[sel] || base[0];
+    const d = { name: cur.name, ext: cur.ext, file: cur.name + cur.ext, size: cur.size, tags: cur.tags, preview: cur.preview, history: cur.history,
+      status: (STATUS[cur.s] || STATUS.proceso).icon + cur.sl, statusFg: cur.s === 'archivado' ? p.accentText : p.muted,
+      info: [{ k: 'Tipo', v: cur.type }, { k: 'Ruta en el NAS', v: cur.folder }, { k: 'Integridad', v: '✓ ' + cur.hash }, { k: 'Fecha de ingreso', v: cur.date }, { k: 'Cargado por', v: cur.by }, { k: 'Clasificado por', v: cur.cls }, { k: 'Tamaño original', v: cur.size }],
+      review: () => this.setState({ view: 'review', revPage: 1, revFolder: null }) };
+    return { rows: rows, libChips: libChips, d: d };
+  }
+
+  uploadVals(p, st) {
+    const s = st.upStep ?? 0;
+    const T = ['Subes el documento', 'Se convierte a MD', 'Se registra en la base', 'Se archiva el original'];
+    const D = ['Desde el computador o el celular.', 'Texto limpio y estructurado en Markdown.', 'Queda indexado para consultarlo cuando quieras.', 'Copia intacta: el archivador sin papel.'];
+    const steps = T.map((t, i) => {
+      const n = i + 1, done = s > n, cur = s === n, on = done || cur;
+      return { n: n, title: t, text: D[i], mark: done ? '✓' : String(n), bg: on ? p.accent : 'transparent', fg: on ? p.onAccent : p.muted, cb: on ? p.accent : p.border, border: cur ? p.accent : p.border, label: done ? 'Listo' : cur ? 'En curso…' : s === 0 ? '' : 'Pendiente', tc: on ? p.accentText : p.muted };
+    });
+    const L = ['Subiendo…', 'Convirtiendo a Markdown…', 'Registrando en la base de datos…', 'Archivando el original…', 'Listo · archivado'];
+    return {
+      steps: steps,
+      up: { done: s === 5 && !!st.lastRes, title: st.lastRes ? (st.lastRes.s === 'clasificar' ? 'Por clasificar' : 'Archivado automáticamente') : '', folder: st.lastRes ? st.lastRes.folder : '', conf: st.lastRes ? st.lastRes.conf : 0, reason: st.lastRes ? st.lastRes.reason : '', tags: st.lastRes ? st.lastRes.tags : [], idle: s === 0, active: s > 0, name: st.upName || '', label: L[s - 1] || '', pct: s === 5 ? 100 : (s - 1) * 25 + 12 },
+      dz: { bg: st.drag ? p.surface : p.accentSoft, style: st.drag ? 'solid' : 'dashed', text: st.drag ? 'Suelta para subir' : 'Arrastra tus documentos aquí' },
+      dzOver: (e) => { e.preventDefault(); if (!st.drag) this.setState({ drag: true }); },
+      dzLeave: () => this.setState({ drag: false }),
+      dzDrop: (e) => { e.preventDefault(); const f = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0]; this.startUpload(f ? f.name : null); },
+      startUpload: () => this.startUpload(null),
+      confOn: st.conf !== false, confOp: st.conf === false ? 0.5 : 1, onConf: (e) => this.setState({ conf: e.target.checked }),
+      toast: !!st.toast, upName: st.upName || '', closeToast: () => this.setState({ toast: false }), toLib: () => this.setState({ toast: false, view: 'library' }),
+      toastTitle: st.lastRes && st.lastRes.s === 'clasificar' ? 'Documento por clasificar' : 'Documento archivado',
+      toastMsg: st.lastRes ? (st.lastRes.s === 'clasificar' ? st.lastRes.name + ': ' + st.lastRes.reason + ' Revísalo para clasificarlo.' : st.lastRes.name + ' se clasificó solo y ya está en el archivo.') : ''
+    };
+  }
+  startUpload(name) {
+    if (this.state && this.state.conf === false) return;
+    clearTimeout(this._t);
+    this.setState({ upStep: 1, upName: name || 'Factura_0458.pdf', drag: false, toast: false });
+    this._adv(1);
+  }
+  _adv(n) {
+    this._t = setTimeout(() => {
+      const nn = n + 1;
+      if (nn === 5) {
+        const stt = this.state || {}, k = (stt.upN || 0) + 1, u = DEMO.makeUpload(stt.upName, k % 2 === 0);
+        this.setState({ upStep: 5, toast: true, upN: k, added: (stt.added || []).concat(u.doc), lastRes: u.res });
+      } else this.setState({ upStep: nn });
+      if (nn < 5) this._adv(nn);
+    }, 1300);
+  }
+
+  shellVals(p, st, view) {
+    const dem = st.dem ?? 'data';
+    // CAMBIO: Menú móvil actualizado a "Búsqueda" con path de lupa
+    const nv = [['home', 'Inicio', 'M3 12l9-8 9 8M5 10v10h14V10'], ['upload', 'Subir', 'M12 16V4M7 9l5-5 5 5M4 20h16'], ['library', 'Biblioteca', 'M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8zM14 3v5h5'], ['search', 'Búsqueda', 'M11 4a7 7 0 1 0 0 14 7 7 0 0 0 0-14zM20 20l-4-4'], ['ask', 'Asistente', 'M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z'], ['config', 'Ajustes', 'M4 7h10M18 7h2M4 17h2M10 17h10M14 5v4M6 15v4']];
+    const dm = [['data', 'Con datos'], ['load', 'Cargando'], ['empty', 'Vacía']];
+    return {
+      bell: !!st.bell, toggleBell: () => this.setState({ bell: !st.bell }), closeBell: () => this.setState({ bell: false }),
+      notifs: DEMO.notifs,
+      homeKey: (e) => { if (e.key === 'Enter') this.doAsk(e.target.value); },
+      bnav: nv.map((x) => ({ label: x[1], d: x[2], go: () => this.setState({ view: x[0] }), fg: view === x[0] ? p.accentText : p.muted, w: view === x[0] ? 800 : 500 })),
+      demOpts: dm.map((x) => ({ label: x[1], on: dem === x[0], bg: dem === x[0] ? p.accent : 'transparent', fg: dem === x[0] ? p.onAccent : p.muted, pick: () => this.setState({ dem: x[0] }) })),
+      libData: dem === 'data', libLoad: dem === 'load', libEmpty: dem === 'empty', libPanel: view === 'library' && dem === 'data',
+      panelCls: st.sheet ? 'open' : '', sheetOpen: !!st.sheet && view === 'library' && dem === 'data', closeSheet: () => this.setState({ sheet: false })
+    };
+  }
+
+  searchVals(p, st, base, view, dark) {
+    const f = Object.assign({ q: '', scope: [], types: [], exts: [], status: 'all', from: '', to: '', by: [], sort: 'recent' }, st.f || {});
+    const set = (patch) => this.setState({ f: Object.assign({}, f, patch) });
+    const tg = (key, v) => () => set({ [key]: f[key].includes(v) ? f[key].filter((x) => x !== v) : f[key].concat(v) });
+    const uniq = (k) => Array.from(new Set(base.map((r) => r[k])));
+    const q = f.q.trim().toLowerCase();
+    const sc = f.scope.length ? f.scope : ['nombre', 'contenido', 'etiquetas'];
+    const clean = (t) => t.replace(/[#*|>-]/g, ' ').replace(/\s+/g, ' ').trim();
+    const res = base.map((r, i) => Object.assign({}, r, { i: i })).filter((r) => {
+      if (q) { const hay = (sc.includes('nombre') ? r.name : '') + ' ' + (sc.includes('contenido') ? r.preview : '') + ' ' + (sc.includes('etiquetas') ? r.tags.join(' ') : ''); if (!hay.toLowerCase().includes(q)) return false; }
+      if (f.types.length && !f.types.includes(r.type)) return false;
+      if (f.exts.length && !f.exts.includes(r.ext)) return false;
+      if (r.s === 'descartado') return false;
+      if (f.status !== 'all' && r.s !== f.status) return false;
+      if (f.from && r.iso < f.from) return false;
+      if (f.to && r.iso > f.to) return false;
+      if (f.by.length && !f.by.includes(r.by)) return false;
+      return true;
+    });
+    res.sort(f.sort === 'name' ? (a, b) => a.name.localeCompare(b.name) : (a, b) => b.iso.localeCompare(a.iso));
+    const results = res.map((r) => {
+      const ls = r.preview.split('\n').map(clean).filter(Boolean);
+      const hit = q && sc.includes('contenido') ? ls.find((l) => l.toLowerCase().includes(q)) : null;
+      return { name: r.name, ext: r.ext, meta: r.type + ' · ' + r.date + ' · ' + r.by, snippet: hit || ls[1] || ls[0] || '', tags: r.tags, status: (STATUS[r.s] || STATUS.proceso).icon + r.sl, open: () => this.setState({ view: 'library', dem: 'data', sel: r.i, sheet: true }) };
+    });
+    const groups = [
+      { title: 'Buscar en (vacío = todo)', opts: [['nombre', 'Nombre'], ['contenido', 'Contenido'], ['etiquetas', 'Etiquetas']].map((x) => this.chip(x[1], f.scope.includes(x[0]), tg('scope', x[0]))) },
+      { title: 'Tipo de documento', opts: uniq('type').map((v) => this.chip(v, f.types.includes(v), tg('types', v))) },
+      { title: 'Formato original', opts: uniq('ext').map((v) => this.chip(v, f.exts.includes(v), tg('exts', v))) },
+      { title: 'Estado', opts: [['all', 'Todos'], ['archivado', 'Archivado'], ['clasificar', 'Por clasificar'], ['proceso', 'En proceso']].map((x) => this.chip(x[1], f.status === x[0], () => set({ status: x[0] }))) },
+      { title: 'Subido por', opts: uniq('by').map((v) => this.chip(v, f.by.includes(v), tg('by', v))) },
+      { title: 'Ordenar por', opts: [['recent', 'Más recientes'], ['name', 'Nombre']].map((x) => this.chip(x[1], f.sort === x[0], () => set({ sort: x[0] }))) }
+    ];
+    const act = (q ? 1 : 0) + (f.scope.length ? 1 : 0) + f.types.length + f.exts.length + (f.status !== 'all' ? 1 : 0) + (f.from ? 1 : 0) + (f.to ? 1 : 0) + f.by.length;
+    return {
+      isSearch: view === 'search', scheme: dark ? 'dark' : 'light', sf: f, groups: groups, results: results, srNone: results.length === 0,
+      srCount: results.length + (results.length === 1 ? ' resultado' : ' resultados') + (act ? ' · ' + act + (act === 1 ? ' filtro activo' : ' filtros activos') : ''),
+      onSq: (e) => set({ q: e.target.value }), onFrom: (e) => set({ from: e.target.value }), onTo: (e) => set({ to: e.target.value }), srClear: () => this.setState({ f: null })
+    };
+  }
+
+  reviewVals(p, st, base, view, sel) {
+    const cur = base[sel] || base[0], clas = cur.s === 'clasificar';
+    const FO = DEMO.folders;
+    const fSel = st.revFolder || cur.suggest || 'Compras', pg = st.revPage ?? 1, bad = clas && pg === 2;
+    const pconf = clas ? (pg === 1 ? 88 : 58) : cur.conf - (pg === 2 ? 2 : 0);
+    const lv = (c) => (c >= 90 ? 'Alta' : c >= 75 ? 'Media' : 'Baja');
+    const done = (o) => this.setState({ ov: Object.assign({}, st.ov, { [cur.name]: o }) });
+    return {
+      isReview: view === 'review',
+      rv: { name: cur.name, ext: cur.ext, meta: cur.type + ' · ' + cur.date + ' · cargado por ' + cur.by, status: (clas ? STATUS.clasificar.icon : STATUS.archivado.icon) + cur.sl, stBg: p.accentSoft, stFg: p.accentText, conf: cur.conf, lvl: lv(cur.conf), pconf: pconf, preview: cur.preview, folder: cur.folder, hash: cur.hash, by: cur.by, cls: cur.cls, tags: cur.tags, problems: cur.problems, clas: clas, ok: !clas, fSel: fSel, blur: bad ? 'blur(1.6px)' : 'none',
+        lines: pg === 1 ? [92, 88, 95, 60, 90, 84, 92, 70, 50, 86] : [90, 96, 78, 92, 85, 94, 62, 88, 74, 40],
+        pages: [1, 2].map((n) => this.chip('Pág. ' + n, pg === n, () => this.setState({ revPage: n }))),
+        folders: Object.keys(FO).map((k) => this.chip(k + (k === cur.suggest ? ' (sugerida)' : ''), fSel === k, () => this.setState({ revFolder: k }))) },
+      onAccept: () => { done({ s: 'archivado', done: true, clasificar: false, cls: 'Ana Gómez (manual)', folder: FO[fSel] }); this.setState({ view: 'library' }); },
+      onDiscard: () => { if (confirm('¿Estás seguro de descartar este documento? Esta acción no se puede deshacer.')) { done({ s: 'descartado' }); this.setState({ view: 'library' }); } },
+      onRescan: () => { if (confirm('¿Volver a escanear? Se reiniciará el proceso de subida.')) { done({ s: 'descartado' }); this.setState({ view: 'upload' }); } },
+      revLast: () => this.setState({ view: 'review', sel: base.length - 1, revPage: 1, revFolder: null, toast: false })
+    };
+  }
+
+  qaVals(p, st) {
+    const a = DEMO.ask, asked = st.qaAsked === true, loading = st.qaLoading === true;
+    return {
+      idle: !asked && !loading, loading: loading, result: asked, qEcho: st.qaQ || a.q, n: a.sources.length, sources: a.sources,
+      sugg: a.suggestions.map((s) => ({ label: s, ask: () => this.doAsk(s) })),
+      ask: () => this.doAsk(null),
+      key: (e) => { if (e.key === 'Enter') this.doAsk(null); },
+      again: () => this.setState({ qaAsked: false, qaLoading: false, qaQ: '' }),
+      cite: (n) => () => { const el = document.getElementById('fuente-' + n); if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
+    };
+  }
+  
+  doAsk(q) {
+    const input = document.getElementById('ask') || document.getElementById('homeq');
+    const text = (q != null ? q : (input ? input.value : '')).trim();
+    if (!text) { if (input) input.focus(); return; }
+    this.setState({ qaLoading: true, qaQ: text, view: 'ask' });
+    setTimeout(() => {
+      this.setState({ qaLoading: false, qaAsked: true });
+    }, 1200);
+  }
+
+  renderVals() {
+    const st = this.state || {};
+    const mode = st.mode ?? (this.props.dark === false ? 'light' : 'dark');
+    const accent = this.accessibleAccent(st.accent ?? this.props.accent ?? '#0F766E');
+    const dark = mode === 'dark';
+    const view = st.view ?? 'home';
+    const sel = st.sel ?? 1;
+    this.applyTheme(accent, dark);
+    const p = PALETTE;
+
+    const base = JSON.parse(JSON.stringify(DEMO.docs));
+    base.push(...(st.added || []));
+    const hx = (t) => { let h = 5381; for (let k = 0; k < t.length; k++) h = ((h * 33) ^ t.charCodeAt(k)) >>> 0; return h.toString(16).padStart(8, '0'); };
+    base.forEach((r) => {
+      r.iso = r.iso || DEMO.iso[r.name];
+      const o = (st.ov || {})[r.name]; if (o) Object.assign(r, o);
+      r.s = r.s || (r.clasificar ? 'clasificar' : r.done ? 'archivado' : 'proceso');
+      r.sl = (STATUS[r.s] || STATUS.proceso).label;
+      r.conf = r.conf ?? (r.s === 'clasificar' ? 58 : 96);
+      r.folder = r.folder ?? (r.s === 'clasificar' ? '/archivo/_por-clasificar/' : (DEMO.nas[r.type] || '/archivo/'));
+      r.hash = 'sha256:' + hx(r.name) + '…' + hx(r.name + '1');
+      r.cls = r.cls ?? (r.s === 'clasificar' ? 'Pendiente' : 'Automático');
+      r.problems = r.problems || [];
+    });
+
+    return {
+      p: p, user: DEMO.user, company: DEMO.company, accent: accent,
+      isLight: !dark, isDark: dark,
+      lightBg: dark ? 'transparent' : p.accent, lightFg: dark ? p.muted : p.onAccent,
+      darkBg: dark ? p.accent : 'transparent', darkFg: dark ? p.onAccent : p.muted,
+      setLight: () => this.setState({ mode: 'light' }), setDark: () => this.setState({ mode: 'dark' }),
+      onCustom: (e) => this.setState({ accent: this.accessibleAccent(e.target.value) }),
+      isAsk: view === 'ask', isHome: view === 'home', isUpload: view === 'upload', isLibrary: view === 'library', isConfig: view === 'config',
+      // CAMBIO: Breadcrumb actualizado
+      crumb: { home: 'Inicio', upload: 'Subir documentos', library: 'Biblioteca', ask: 'Asistente', review: 'Revisión', search: 'Búsqueda', config: 'Configuración' }[view],
+      nav: this.navVals(view), swatches: this.swatchVals(accent), qa: this.qaVals(p, st),
+      ...this.shellVals(p, st, view), ...this.libraryVals(p, st, base, sel),
+      ...this.uploadVals(p, st), ...this.searchVals(p, st, base, view, dark), ...this.reviewVals(p, st, base, view, sel)
+    };
+  }
+}
+new App().render();
+</script>
+</body>
+</html>
