@@ -164,6 +164,8 @@ input::placeholder{color:inherit;opacity:.65}
 /* --- 5.1 App: caparazón general --- */
 .app{min-height:1100px;display:flex;flex-direction:row;--ac:var(--accent);--soft:var(--accent-soft);--sk1:var(--surface2);--sk2:var(--border);background:var(--bg);font-family:'Manrope',system-ui,sans-serif;color:var(--text)}
 .main{flex:1;min-width:0;padding:36px 44px;box-sizing:border-box;display:flex;flex-direction:column;gap:28px}
+.main__row{display:flex;gap:20px;align-items:stretch;flex:1;min-height:0}
+.main__content{flex:1;min-width:0;display:flex;flex-direction:column;gap:28px}
 
 /* --- 5.2 Menú lateral --- */
 .sidebar{width:248px;flex:none;background:var(--side);border-right:1px solid var(--border);padding:28px 20px;box-sizing:border-box;display:flex;flex-direction:column;gap:28px}
@@ -188,9 +190,11 @@ input::placeholder{color:inherit;opacity:.65}
 
 /* --- 5.4 Inicio --- */
 .home{flex:1;min-height:560px;display:flex;flex-direction:column;align-items:center;justify-content:center}
-.home__inner{width:100%;max-width:780px;display:flex;flex-direction:column;gap:30px}
-.home__search{flex:1 1 380px;height:56px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r-md);padding:0 8px 0 16px;color:var(--muted)}
-.home__trust{display:flex;flex-wrap:wrap;gap:12px 28px;border-top:1px solid var(--border);padding-top:20px;font-size:13px;color:var(--muted)}
+.home__inner{width:100%;max-width:780px;display:flex;flex-direction:column;align-items:center;gap:30px;text-align:center}
+.home__inner>.col{align-items:center}
+.home__inner>.row{justify-content:center;width:100%}
+.home__search{flex:1 1 380px;max-width:520px;height:56px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r-md);padding:0 8px 0 16px;color:var(--muted)}
+.home__trust{display:flex;flex-wrap:wrap;justify-content:center;gap:12px 28px;border-top:1px solid var(--border);padding-top:20px;font-size:13px;color:var(--muted)}
 .home__trust-item{display:inline-flex;align-items:center;gap:8px}
 
 /* --- 5.5 Subir documentos --- */
@@ -217,17 +221,17 @@ input::placeholder{color:inherit;opacity:.65}
 .library__empty{padding:56px 28px;align-items:center;gap:14px;text-align:center}
 .library__empty-text{max-width:380px}
 .table-wrap{overflow-x:auto}
-.table{width:100%;min-width:760px;border-collapse:collapse;font-size:14px}
+.table{width:100%;min-width:720px;border-collapse:collapse;font-size:14px}
 .table__head{text-align:left;color:var(--muted);font-size:12px;letter-spacing:0.08em;text-transform:uppercase}
-.table__th{padding:10px 12px;font-weight:700}
+.table__th{padding:10px 12px;font-weight:700;white-space:nowrap}
 .table td{border-top:1px solid var(--border)}
 .table__td{padding:14px 12px}
 .table__td--name{padding:4px 12px}
-.table__td--muted{color:var(--muted)}
+.table__td--muted{color:var(--muted);white-space:nowrap}
 .table__name-btn{min-height:44px;border:0;background:transparent;color:inherit;font:inherit;font-weight:700;padding:0;text-align:left;cursor:pointer}
 
 /* --- 5.7 Panel de detalle --- */
-.detail{width:340px;flex:none;background:var(--side);border-left:1px solid var(--border);padding:28px 22px;box-sizing:border-box;display:flex;flex-direction:column;gap:22px}
+.detail{width:320px;flex:none;align-self:stretch;background:var(--side);border:1px solid var(--border);border-radius:var(--r-xl);padding:28px 22px;box-sizing:border-box;display:flex;flex-direction:column;gap:22px}
 .detail__head{display:flex;align-items:center;justify-content:space-between;gap:12px}
 .detail__close{display:none}
 .detail__name{font-size:19px;font-weight:800;line-height:1.3;word-break:break-word}
@@ -324,7 +328,7 @@ a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(-
 .table tbody tr:hover td{background:var(--soft)}
 @media (max-width:1100px){
   .detail{display:none!important}
-  .detail.open{display:flex!important;position:fixed;left:0;right:0;bottom:0;width:auto!important;max-height:86vh;overflow:auto;z-index:40;border-left:0!important;border-radius:20px 20px 0 0}
+  .detail.open{display:flex!important;position:fixed;left:0;right:0;bottom:0;width:auto!important;max-height:86vh;overflow:auto;z-index:40;border:0!important;border-radius:20px 20px 0 0}
   .detail.open .detail__close{display:inline-flex}
   .backdrop{display:block}
 }
@@ -396,6 +400,9 @@ a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(-
 <div class="ico ico--soft ico--40" aria-hidden="true">{{ user.initials }}</div>
 </div>
 </div>
+
+<div class="main__row">
+<div class="main__content">
 
 <template data-if="isConfig">
 <div class="config">
@@ -527,7 +534,7 @@ a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(-
 </div>
 </template>
 
-<template data-if="isHome">
+
 <div class="home">
 <div class="home__inner">
 <div class="col g10">
@@ -552,7 +559,7 @@ a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(-
 </div>
 </div>
 </div>
-</template>
+
 
 <template data-if="isSearch">
 <div class="col g4">
@@ -788,7 +795,7 @@ a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(-
 </section>
 </template>
 </template>
-</main>
+</div>
 
 <template data-if="libPanel">
 <aside class="detail {{panelCls}}">
@@ -832,7 +839,7 @@ a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(-
 
 <section class="col g8">
 <div class="t-label">Acciones</div>
-<div class="row g8">
+<div class="row wrap g8">
 <button class="btn btn--ghost detail__action">Compartir</button>
 <button class="btn btn--ghost detail__action">Nueva versión</button>
 <button class="btn btn--ghost detail__action" data-on-click="{{ d.review }}">Revisar</button>
@@ -847,6 +854,9 @@ a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(-
 </section>
 </aside>
 </template>
+</div>
+</main>
+
 <template data-if="toast">
 <div class="toast anim-pop row row--top g12" role="status">
 <div class="ico ico--accent ico--32">✓</div>
