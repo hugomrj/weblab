@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="auto">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Cobros · Prototipo</title>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--p:#1f4d45;--s:#b9894a;--onp:#fff;--danger:#b3261e;
+--bg:color-mix(in srgb,var(--p) 3%,#fdfcfa);--card:color-mix(in srgb,var(--p) 7%,#fdfcfa);--soft:color-mix(in srgb,var(--p) 13%,#fdfcfa);--line:color-mix(in srgb,var(--p) 16%,#d6d3cd);
+--ink:#1d1b1a;--mute:color-mix(in srgb,var(--p) 18%,#625f5a);
+--pc:color-mix(in srgb,var(--p) 20%,#fff);--onpc:color-mix(in srgb,var(--p) 78%,#000);--sc:color-mix(in srgb,var(--s) 26%,#fff);--onsc:color-mix(in srgb,var(--s) 60%,#000);
+--r:24px;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);color-scheme:light}
+:root[data-eff="dark"]{--bg:color-mix(in srgb,var(--p) 6%,#121110);--card:color-mix(in srgb,var(--p) 11%,#1b1a19);--soft:color-mix(in srgb,var(--p) 18%,#1b1a19);--line:color-mix(in srgb,var(--p) 20%,#3a3835);
+--ink:#ebe8e3;--mute:color-mix(in srgb,var(--p) 15%,#a09c95);--pc:color-mix(in srgb,var(--p) 42%,#1a1918);--onpc:color-mix(in srgb,var(--p) 25%,#fff);--sc:color-mix(in srgb,var(--s) 36%,#1a1918);--onsc:color-mix(in srgb,var(--s) 30%,#fff);--danger:#f2b8b5;color-scheme:dark}
+*,*::before,*::after{box-sizing:inherit}
+html{height:100%}
+body{margin:0;min-height:100%;background:var(--bg);color:var(--ink);font-family:'Roboto',system-ui,sans-serif;font-size:15px;-webkit-tap-highlight-color:transparent}
+.app{max-width:1100px;margin:0 auto;padding:12px 16px calc(104px + env(safe-area-inset-bottom,0px))}
+header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;position:relative}
+.biz{display:flex;align-items:center;gap:12px;background:none;border:0;color:var(--ink);font:inherit;cursor:pointer;padding:4px 8px 4px 0;border-radius:99px}
+.logo{width:40px;height:40px;border-radius:14px;background:var(--p);color:var(--onp);display:grid;place-items:center;font-weight:500;font-size:18px}
+.biz b{display:block;font-weight:500;line-height:1.15}.biz small{color:var(--mute);font-size:12px}
+.avatar{width:40px;height:40px;border-radius:50%;border:0;background:var(--sc);color:var(--onsc);display:grid;place-items:center;font-weight:500;font-size:14px;cursor:pointer;font-family:inherit}
+h1{font-weight:400;font-size:32px;line-height:1.15;margin:8px 0 20px;letter-spacing:-.01em}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.card{background:var(--card);border-radius:var(--r);padding:20px}
+.span2{grid-column:span 2}
+.hero{background:var(--pc);color:var(--onpc)}
+.hero .lbl{color:inherit;opacity:.78}
+.hero .bar{background:color-mix(in srgb,var(--onpc) 20%,transparent)}
+.hero .bar span{background:var(--onpc)}
+.lbl{color:var(--mute);font-size:13px;margin:0 0 6px;letter-spacing:.01em}
+.big{font-weight:400;font-size:52px;line-height:1;letter-spacing:-.02em}
+.med{font-weight:400;font-size:30px;line-height:1.05}
+.bar{height:8px;border-radius:8px;background:var(--soft);margin:18px 0 10px;overflow:hidden}
+.bar span{display:block;height:100%;background:var(--p);border-radius:8px;transition:width .5s}
+.row{display:flex;align-items:center;gap:14px;padding:12px 0}
+.row:first-child{padding-top:0}.row:last-child{padding-bottom:0}
+.dot{width:40px;height:40px;border-radius:50%;background:var(--sc);color:var(--onsc);display:grid;place-items:center;font-size:14px;font-weight:500;flex:none}
+.grow{flex:1;min-width:0}.grow b{display:block;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.grow small,.right small{color:var(--mute);font-size:12.5px}
+.right{text-align:right}.right b{font-weight:500;display:block}
+.st{display:inline-flex;align-items:center;gap:6px}
+.st::before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor}
+.ok{color:var(--p)}.wait{color:color-mix(in srgb,var(--s) 80%,#000)}.late{color:var(--danger)}
+:root[data-eff="dark"] .ok{color:color-mix(in srgb,var(--p) 50%,#fff)}
+:root[data-eff="dark"] .wait{color:var(--s)}
+.chips{display:flex;gap:8px;overflow-x:auto;padding-bottom:16px;scrollbar-width:none}
+.chip{flex:none;border:1px solid var(--line);background:none;color:var(--ink);font:inherit;font-weight:500;padding:8px 16px;border-radius:10px;cursor:pointer}
+.chip.on{background:var(--sc);color:var(--onsc);border-color:transparent}
+.view{display:none}.view.on{display:block}
+.price{font-size:28px;margin-top:16px;color:var(--p)}
+:root[data-eff="dark"] .price{color:color-mix(in srgb,var(--p) 50%,#fff)}
+.add{border:1px dashed var(--line);background:none;border-radius:var(--r);color:var(--mute);font:inherit;min-height:112px;cursor:pointer}
+nav{position:fixed;left:0;right:0;bottom:0;z-index:5;display:flex;align-items:center;justify-content:space-around;padding:10px 8px calc(10px + env(safe-area-inset-bottom,0px));background:var(--card)}
+nav .t{flex:1;border:0;background:none;color:var(--mute);font:inherit;font-size:12px;font-weight:500;padding:0;cursor:pointer;display:grid;gap:4px;justify-items:center}
+nav .t svg{width:24px;height:24px;padding:4px 18px;box-sizing:content-box;border-radius:16px;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;transition:background .2s}
+nav .t.on{color:var(--ink)}nav .t.on svg{background:var(--pc);color:var(--onpc)}
+.fab{width:56px;height:56px;border-radius:18px;border:0;background:var(--pc);color:var(--onpc);font-size:28px;cursor:pointer;flex:none;margin:0 6px;box-shadow:0 2px 6px rgba(0,0,0,.18)}
+.bg{position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:8;opacity:0;pointer-events:none;transition:opacity .25s}
+.bg.on{opacity:1;pointer-events:auto}
+.sheet{position:fixed;left:50%;bottom:0;transform:translate(-50%,105%);width:min(100%,520px);z-index:9;padding:24px 20px calc(20px + env(safe-area-inset-bottom,0px));border-radius:28px 28px 0 0;background:var(--card);transition:transform .3s cubic-bezier(.2,.8,.2,1)}
+.sheet.on{transform:translate(-50%,0)}
+.sheet h2{font-weight:400;margin:0 0 18px;font-size:24px}
+.f{display:grid;gap:6px;margin-bottom:12px;font-size:13px;color:var(--mute)}
+.f select,.f input{width:100%;background:var(--bg);border:1px solid var(--line);color:var(--ink);border-radius:12px;padding:14px;font:inherit;font-size:16px}
+.btn{width:100%;border:0;border-radius:99px;padding:15px;font:inherit;font-size:15px;font-weight:500;background:var(--p);color:var(--onp);cursor:pointer}
+.toast{position:fixed;top:calc(12px + env(safe-area-inset-top,0px));left:50%;transform:translate(-50%,-130%);z-index:20;padding:12px 20px;background:var(--ink);color:var(--bg);border-radius:14px;transition:transform .3s}
+.toast.on{transform:translate(-50%,0)}
+.menu{position:absolute;top:52px;left:0;z-index:7;padding:8px;display:none;min-width:250px;background:var(--card);border-radius:20px;box-shadow:0 8px 28px rgba(0,0,0,.18)}
+.menu.on{display:block}
+.menu button{display:flex;gap:12px;align-items:center;width:100%;border:0;background:none;color:var(--ink);font:inherit;padding:10px;border-radius:14px;cursor:pointer}
+.menu button:hover{background:var(--soft)}
+.seg{display:grid;grid-template-columns:repeat(3,1fr);border:1px solid var(--line);border-radius:99px;overflow:hidden}
+.seg button{border:0;border-left:1px solid var(--line);background:none;color:var(--ink);font:inherit;font-weight:500;padding:11px 0;cursor:pointer}
+.seg button:first-child{border-left:0}
+.seg button.on{background:var(--sc);color:var(--onsc)}
+.sec{margin:26px 0 12px;font-weight:500}
+.pals{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.pal{display:flex;align-items:center;gap:10px;border:1px solid var(--line);background:none;color:var(--ink);font:inherit;padding:12px;border-radius:16px;cursor:pointer;text-align:left}
+.pal.on{background:var(--pc);color:var(--onpc);border-color:transparent}
+.sw{display:flex}.sw i{width:26px;height:26px;border-radius:50%;border:2px solid var(--bg)}.sw i+i{margin-left:-8px}
+.custom{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+.pick{display:flex;align-items:center;justify-content:space-between;border:1px solid var(--line);border-radius:16px;padding:10px 14px}
+.pick input{width:40px;height:30px;border:0;padding:0;background:none;cursor:pointer}
+.mini{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.mini .b{padding:10px 20px;border-radius:99px;background:var(--p);color:var(--onp);font-weight:500}
+.mini .t2{padding:10px 20px;border-radius:99px;background:var(--sc);color:var(--onsc);font-weight:500}
+button:focus-visible,select:focus-visible,input:focus-visible{outline:2px solid var(--p);outline-offset:2px}
+.set{max-width:640px}
+@media (min-width:840px){
+ .app{margin-left:256px;margin-right:auto;max-width:1240px;padding:28px 40px 48px}
+ nav{top:0;right:auto;width:256px;flex-direction:column;align-items:stretch;justify-content:flex-start;gap:6px;padding:28px 16px;background:var(--bg)}
+ nav .t{flex:none;display:flex;flex-direction:row;align-items:center;justify-content:flex-start;gap:14px;height:52px;padding:0 20px;border-radius:99px;font-size:14.5px}
+ nav .t svg{padding:0;border-radius:0}
+ nav .t.on{background:var(--pc);color:var(--onpc)}nav .t.on svg{background:none}
+ nav .t:not(.on):hover{background:var(--soft)}
+ .fab{order:-1;margin:0 0 22px;width:auto;height:56px;padding:0 24px;display:flex;align-items:center;gap:14px;justify-content:flex-start;font-size:26px;line-height:1}
+ .fab::after{content:"Crear";font-size:14.5px;font-weight:500}
+ .grid{grid-template-columns:repeat(4,1fr);gap:16px}
+ .span2{grid-column:span 2}.s4{grid-column:span 4}
+ .pals{grid-template-columns:repeat(4,1fr)}
+ h1{font-size:40px}
+ .big{font-size:60px}
+ #people{columns:2;column-gap:40px}
+ #people .row{break-inside:avoid;padding:12px 0}
+}
+@media (min-width:840px) and (max-width:1100px){.app{padding:24px}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+.deb{border-top:1px solid var(--line);padding:12px 0}.deb:first-child{border-top:0;padding-top:0}.deb:last-child{padding-bottom:0}
+.deb .row{padding:0}
+.acts{display:flex;gap:8px;margin:10px 0 0 54px}
+.sm{border:0;border-radius:99px;padding:8px 16px;font:inherit;font-size:13px;font-weight:500;cursor:pointer}
+.sm.f{background:var(--p);color:var(--onp)}.sm.t{background:var(--sc);color:var(--onsc)}
+.tap{cursor:pointer}.rcl{color:var(--mute);font-size:12px}
+.back{border:0;background:none;color:var(--ink);font:inherit;font-weight:500;cursor:pointer;padding:6px 0;margin-bottom:6px}
+.tag{font-size:12px;font-weight:500;background:var(--sc);color:var(--onsc);padding:3px 10px;border-radius:8px}
+.big2{font-size:44px;line-height:1;font-weight:400}
+.stack>*+*{margin-top:12px}
+.rc{background:var(--bg);border-radius:20px;padding:18px;margin-bottom:16px}
+.rc .ln{display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px dashed var(--line);gap:12px}
+.rc .ln:last-child{border:0}.rc .ln span:first-child{color:var(--mute)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.btn.t{background:var(--sc);color:var(--onsc)}
+nav .t.stuo{display:none}.stu nav .t.stuo{display:grid}.stu nav .adm{display:none!important}
+.sel{width:100%;background:var(--bg);border:1px solid var(--line);color:var(--ink);border-radius:12px;padding:14px;font:inherit;font-size:16px}
+@media (min-width:840px){.debtors{grid-row:span 2}.stu nav .t.stuo{display:flex}.stu .grid.st2{grid-template-columns:repeat(2,1fr)}}
+[hidden]{display:none!important}
+.mi{width:44px;height:44px;border-radius:14px;background:var(--pc);color:var(--onpc);display:grid;place-items:center;font-weight:500;margin-bottom:14px}
+.mrow{display:flex;justify-content:space-between;align-items:center}
+.tg{width:50px;height:30px;border-radius:99px;background:var(--line);border:0;position:relative;cursor:pointer;transition:background .2s}
+.tg::after{content:"";position:absolute;top:4px;left:4px;width:22px;height:22px;border-radius:50%;background:#fff;transition:transform .2s;box-shadow:0 1px 3px rgba(0,0,0,.3)}
+.tg.on{background:var(--p)}.tg.on::after{transform:translateX(20px)}
+.soon{opacity:.6}.sm:disabled{opacity:.5;cursor:default}
+.time{width:56px;font-weight:500;color:var(--p);flex:none}
+:root[data-eff="dark"] .time{color:color-mix(in srgb,var(--p) 50%,#fff)}
+.tag.low{background:color-mix(in srgb,var(--danger) 18%,transparent);color:var(--danger)}
+.qrow{display:flex;gap:14px;align-items:center;width:100%;border:0;background:var(--soft);color:var(--ink);font:inherit;padding:14px;border-radius:18px;margin-bottom:8px;cursor:pointer;text-align:left}
+.qrow .mi{margin:0}.qrow small{display:block;color:var(--mute)}
+[data-look="vivo"] .hero{background:var(--p);color:var(--onp)}
+[data-look="vivo"] .hero .lbl{opacity:.85}
+[data-look="vivo"] .hero .bar{background:rgba(255,255,255,.25)}
+[data-look="vivo"] .hero .bar span{background:var(--onp)}
+[data-look="vivo"] .card{box-shadow:0 1px 2px rgba(0,0,0,.07),0 8px 20px rgba(0,0,0,.06)}
+[data-look="vivo"] .fab{background:var(--p);color:var(--onp);box-shadow:0 8px 20px color-mix(in srgb,var(--p) 50%,transparent)}
+[data-look="vivo"] nav .t.on svg{background:var(--p);color:var(--onp)}
+[data-look="vivo"] .mi{background:var(--p);color:var(--onp)}
+[data-look="vivo"] .chip.on,[data-look="vivo"] .seg button.on{background:var(--p);color:var(--onp)}
+@media (min-width:840px){[data-look="vivo"] nav .t.on{background:var(--p);color:var(--onp)}[data-look="vivo"] nav .t.on svg{background:none;color:inherit}}
+</style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <button class="biz" id="bizBtn"><span class="logo" id="logo">L</span><span><b id="bizName"></b><small>Cambiar negocio</small></span></button>
+    <button class="avatar" id="avatar" aria-label="Ajustes">MR</button>
+    <div class="menu" id="menu"></div>
+  </header>
+
+  <section class="view on" id="v-inicio">
+    <h1 id="hello"></h1>
+    <div class="grid">
+      <div class="card span2 debtors" data-mod="cobros"><p class="lbl" style="margin-bottom:14px">Quién debe</p><div id="debs"></div></div>
+      <div class="card span2 hero" data-mod="cobros"><p class="lbl">Cobrado en octubre</p><div class="big" id="collected"></div><div class="bar"><span id="barFill"></span></div><small class="lbl" id="goal"></small></div>
+      <div class="card" data-mod="cobros"><p class="lbl">Por cobrar</p><div class="med" id="pending"></div><p class="lbl" style="margin:8px 0 0" id="pendingN"></p></div>
+      <div class="card" data-mod="cobros"><p class="lbl">Con deuda</p><div class="med" id="late"></div><p class="lbl" style="margin:8px 0 0">vencidos</p></div>
+      <div class="card span2" data-mod="agenda"><p class="lbl" style="margin-bottom:14px">Agenda de hoy</p><div id="agH"></div></div>
+      <div class="card span2" data-mod="inv"><p class="lbl" style="margin-bottom:14px">Stock bajo</p><div id="invH"></div></div>
+      <div class="card span2 s4" data-mod="cobros"><p class="lbl" style="margin-bottom:14px">Últimos pagos</p><div id="recent"></div></div>
+    </div>
+  </section>
+
+  <section class="view" id="v-clientes"><h1 id="peopleTitle"></h1>
+    <div class="chips" id="filters"><button class="chip on" data-f="all">Todos</button><button class="chip" data-f="ok">Al día</button><button class="chip" data-f="wait">Pendientes</button><button class="chip" data-f="late">Con deuda</button></div>
+    <div class="card" id="people"></div>
+  </section>
+
+  <section class="view" id="v-detalle"></section>
+
+  <section class="view" id="v-conceptos"><button class="back" data-act="backm">← Módulos</button><h1>Cobros · Conceptos</h1><div class="grid" id="concepts"></div></section>
+
+  <section class="view" id="v-modulos"><h1>Módulos</h1><p class="lbl" style="margin:-10px 0 18px">Activa solo lo que tu negocio necesita.</p><div class="grid" id="mods"></div></section>
+  <section class="view" id="v-agenda"><button class="back" data-act="backm">← Módulos</button><h1>Agenda</h1><div class="card" id="agL"></div></section>
+  <section class="view" id="v-inv"><button class="back" data-act="backm">← Módulos</button><h1>Inventario</h1><div class="card" id="invL"></div></section>
+  <section class="view" id="v-alumno"></section>
+
+  <section class="view set" id="v-ajustes">
+    <h1>Ajustes</h1>
+    <div class="card" style="display:flex;gap:12px;align-items:center"><div class="dot" style="width:46px;height:46px">MR</div><div class="grow"><b>Marta Ríos</b><small>Administradora · marta@lumbre.com</small></div></div>
+    <p class="sec">Tema</p>
+    <div class="seg" id="theme"><button data-t="light">Claro</button><button data-t="dark">Oscuro</button><button data-t="auto">Sistema</button></div>
+    <p class="sec">Estilo</p>
+    <div class="seg" style="grid-template-columns:1fr 1fr" id="look"><button data-l="vivo">Vivo</button><button data-l="suave">Suave</button></div>
+    <p class="sec">Colores de tu negocio</p>
+    <div class="pals" id="pals"></div>
+    <p class="sec">Moneda</p>
+    <select class="sel" id="cur"><option value="$">Dólar ($)</option><option value="Gs. ">Guaraní (Gs.)</option><option value="S/ ">Sol (S/)</option><option value="€">Euro (€)</option></select>
+    <p class="sec">Ver la app como</p>
+    <div class="seg" style="grid-template-columns:1fr 1fr" id="mode"><button data-m="admin" class="on">Administrador</button><button data-m="alumno">Alumno / socio</button></div>
+    <p class="lbl" style="margin-top:8px">Así ve la app la persona que paga.</p>
+  </section>
+</div>
+
+<nav aria-label="Principal">
+  <button class="t adm on" data-v="inicio"><svg viewBox="0 0 24 24"><path d="M3 11l9-8 9 8v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg>Inicio</button>
+  <button class="t adm" data-v="clientes"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c0-3.6 2.9-6 6.5-6s6.5 2.4 6.5 6M16 4.5a3.5 3.5 0 0 1 0 7M18 14c2.2.6 3.5 2.4 3.5 5"/></svg><span id="navPeople">Alumnos</span></button>
+  <button class="fab adm" id="fab" aria-label="Registrar pago">+</button>
+  <button class="t adm" data-v="modulos"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7.5" height="7.5" rx="2"/><rect x="13.5" y="3" width="7.5" height="7.5" rx="2"/><rect x="3" y="13.5" width="7.5" height="7.5" rx="2"/><rect x="13.5" y="13.5" width="7.5" height="7.5" rx="2"/></svg>Módulos</button>
+  <button class="t stuo" data-v="alumno"><svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18"/></svg>Mi cuenta</button>
+  <button class="t" data-v="ajustes"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1L7 17M17 7l2.1-2.1"/></svg>Ajustes</button>
+</nav>
+
+<div class="bg" id="bg"></div>
+<div class="sheet" id="sheet" role="dialog" aria-label="Registrar pago">
+  <h2>Registrar pago</h2>
+  <label class="f">Quién paga<select id="fWho"></select></label>
+  <label class="f">Concepto<select id="fConcept"></select></label>
+  <label class="f">Monto<input id="fAmt" inputmode="decimal"></label>
+  <label class="f">Forma de pago<select id="fMeth"><option>Efectivo</option><option>Transferencia</option><option>Yape / Plin</option></select></label>
+  <button class="btn" id="save">Guardar y ver recibo</button>
+</div>
+<div class="sheet" id="sheetC" role="dialog" aria-label="Nuevo concepto">
+  <h2>Nuevo concepto</h2>
+  <label class="f">Nombre<input id="cN" placeholder="Ej. Clase de yoga"></label>
+  <label class="f">Monto<input id="cA" inputmode="decimal"></label>
+  <label class="f">Se cobra<select id="cT"><option value="rec">Cada mes (recurrente)</option><option value="uni">Una sola vez</option></select></label>
+  <button class="btn" id="saveC">Crear concepto</button>
+</div>
+<div class="sheet" id="sheetR" role="dialog" aria-label="Recibo"><h2>Recibo</h2><div id="rcBody"></div></div>
+<div class="sheet" id="sheetQ" role="dialog" aria-label="Acción rápida"><h2>¿Qué quieres hacer?</h2><div id="qa"></div></div>
+<div class="toast" id="toast"></div>
+
+<script>
+const PAL=[['Índigo + coral','#4338ca','#ff6b5b'],['Turquesa + naranja','#0f9d8f','#ff9f1c'],['Magenta + ámbar','#c2185b','#ffb300'],['Azul eléctrico + menta','#1a56f0','#22c9a0'],['Verde bosque + arena','#1f4d45','#b9894a'],['Azul marino + salvia','#1e3a5f','#7d9a7e'],['Vino + dorado','#6e2a3a','#c19a4b'],['Grafito + cobre','#2b2b2e','#b4673c']];
+const L={ok:'Al día',wait:'Pendiente',late:'Con deuda'};
+let rn=1050,sn=1049;
+const mk=(n,ass,hc)=>({n,ass,hist:[0,1].map(i=>({d:['3 oct','3 sep'][i],c:hc,m:i?'Efectivo':'Transferencia',r:'R-'+(sn--)}))});
+const A=(c,s,due)=>({c,s,due});
+const D={
+ academia:{n:'Academia Lumbre',l:'L',who:'Alumnos',goal:12000,col:8460,ag:[['09:00','Inglés A2','Aula 2 · 12 alumnos'],['11:00','Matemática 5.º','Aula 1 · 9 alumnos'],['15:00','Inglés B1','Aula 2 · 14 alumnos'],['17:30','Taller de arte','Patio · 8 alumnos']],inv:[['Uniformes talla M',4,10],['Cuadernos',32,10],['Remeras del festival',6,8]],
+  concepts:[{n:'Cuota mensual',a:120,t:'rec'},{n:'Festival de fin de año',a:45,t:'uni'},{n:'Matrícula',a:80,t:'uni'},{n:'Uniforme',a:65,t:'uni'}],
+  people:[mk('Valeria Ríos',[A(0,'ok','5 nov'),A(1,'wait','15 dic')],0),mk('Mateo Quispe',[A(0,'ok','5 nov'),A(1,'wait','15 dic')],0),mk('Camila Paz',[A(0,'late','5 oct')],0),mk('Diego Salas',[A(0,'ok','5 nov')],0),mk('Lucía Vega',[A(2,'wait','30 oct')],2),mk('Andrés Mora',[A(0,'late','5 oct')],0)]},
+ gimnasio:{n:'Gimnasio Pulso',l:'P',who:'Socios',goal:9000,col:6120,ag:[['07:00','Musculación libre','Sala principal'],['18:00','CrossFit','Box · 14 cupos'],['19:30','Spinning','Sala 2 · 9 cupos']],inv:[['Proteína 1 kg',3,5],['Toallas',25,10],['Botellas',18,6]],
+  concepts:[{n:'Mensualidad máquinas',a:90,t:'rec'},{n:'Clases de CrossFit',a:130,t:'rec'},{n:'Pase diario',a:15,t:'uni'},{n:'Locker',a:20,t:'rec'}],
+  people:[mk('Javier Luna',[A(1,'ok','1 nov'),A(3,'wait','1 nov')],1),mk('Sofía Cano',[A(0,'wait','1 nov')],0),mk('Bruno Díaz',[A(0,'late','1 oct')],0),mk('Elena Ruiz',[A(1,'ok','1 nov')],1),mk('Tomás Gil',[A(3,'wait','1 nov')],3)]}
+};
+let cur='academia',filt='all',det=0,S={theme:'auto',look:'vivo',p:PAL[0][1],s:PAL[0][2],cur:'$'},M={cobros:1,agenda:1,inv:1},stu=false;
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+const fmt=v=>S.cur+String(v).replace(/\B(?=(\d{3})+(?!\d))/g,'.');
+const ini=s=>s.split(' ').map(w=>w[0]).join('');
+const mq=matchMedia('(prefers-color-scheme: dark)');
+const st=p=>p.ass.some(x=>x.s==='late')?'late':p.ass.some(x=>x.s==='wait')?'wait':'ok';
+const D_=()=>D[cur];
+function lum(h){const c=[1,3,5].map(i=>{let v=parseInt(h.substr(i,2),16)/255;return v<=.03928?v/12.92:Math.pow((v+.055)/1.055,2.4)});return .2126*c[0]+.7152*c[1]+.0722*c[2]}
+function applyTheme(){
+ const r=document.documentElement,eff=S.theme==='auto'?(mq.matches?'dark':'light'):S.theme;
+ r.dataset.eff=eff;r.style.setProperty('--p',S.p);r.style.setProperty('--s',S.s);r.style.setProperty('--onp',lum(S.p)>.45?'#1c1b19':'#fff');
+ $$('#theme button').forEach(b=>b.classList.toggle('on',b.dataset.t===S.theme));
+ $$('.pal').forEach((b,i)=>b.classList.toggle('on',PAL[i][1]===S.p&&PAL[i][2]===S.s));
+ $('#cur').value=S.cur;r.dataset.look=S.look;$$('#look button').forEach(b=>b.classList.toggle('on',b.dataset.l===S.look));
+ try{localStorage.setItem('cobros-theme',JSON.stringify(S))}catch(e){}
+}
+mq.addEventListener('change',applyTheme);
+const avatarRow=(p,sub,right,small,attrs='')=>`<div class="row ${attrs?'tap':''}" ${attrs}><div class="dot">${ini(p)}</div><div class="grow"><b>${p}</b><small>${sub}</small></div><div class="right"><b>${right}</b>${small}</div></div>`;
+const badge=s=>`<small class="st ${s}">${L[s]}</small>`;
+function histRow(d,pi,hi){const p=d.people[pi],h=p.hist[hi],c=d.concepts[h.c];return `<div class="row tap" data-rc="${pi}-${hi}"><div class="dot">${ini(c.n)}</div><div class="grow"><b>${c.n}</b><small>${h.d} · ${h.m}</small></div><div class="right"><b>${fmt(h.a??c.a)}</b><small class="rcl">Ver recibo</small></div></div>`}
+function render(){
+ const d=D_(),pc=Math.round(d.col/d.goal*100),P=d.people;
+ $('#bizName').textContent=d.n;$('#logo').textContent=d.l;$('#hello').textContent='Hola, Marta';
+ $('#avatar').textContent=stu?ini(P[0].n):'MR';
+ $('#collected').textContent=fmt(d.col);$('#barFill').style.width=pc+'%';$('#goal').textContent=pc+'% de la meta de '+fmt(d.goal);
+ const items=[];P.forEach((p,pi)=>p.ass.forEach((a,ai)=>{if(a.s!=='ok')items.push([pi,ai,a])}));
+ items.sort((x,y)=>(y[2].s==='late')-(x[2].s==='late'));
+ $('#pending').textContent=fmt(items.reduce((t,i)=>t+d.concepts[i[2].c].a,0));$('#pendingN').textContent=items.length+' cobros esperando';
+ const lateN=P.filter(p=>st(p)==='late').length;$('#late').textContent=lateN+' '+d.who.toLowerCase();
+ $('#debs').innerHTML=items.length?items.map(([pi,ai,a])=>{const p=P[pi],c=d.concepts[a.c];return `<div class="deb">${avatarRow(p.n,c.n+' · vence '+a.due,fmt(c.a),badge(a.s),'data-p="'+pi+'"')}<div class="acts"><button class="sm t" data-act="rem" data-p="${pi}" data-a="${ai}">Recordar</button><button class="sm f" data-act="pay" data-p="${pi}" data-c="${a.c}">Cobrar</button></div></div>`}).join(''):'<p class="lbl">Todo al día. Nadie debe nada.</p>';
+ $('#recent').innerHTML=P.slice(0,4).map((p,i)=>histRow(d,i,0)).join('');
+ $('#peopleTitle').textContent=d.who;$('#navPeople').textContent=d.who;
+ const l=P.map((p,i)=>[p,i]).filter(x=>filt==='all'||st(x[0])===filt);
+ $('#people').innerHTML=l.length?l.map(([p,i])=>avatarRow(p.n,p.ass.map(a=>d.concepts[a.c].n).join(', '),fmt(p.ass.filter(a=>a.s!=='ok').reduce((t,a)=>t+d.concepts[a.c].a,0)),badge(st(p)),'data-p="'+i+'"')).join(''):'<p class="lbl">Nadie en este grupo.</p>';
+ $('#concepts').innerHTML=d.concepts.map((c,i)=>`<div class="card"><p class="lbl"><span class="tag">${c.t==='rec'?'Mensual':'Pago único'}</span></p><b style="font-weight:500;font-size:16px">${c.n}</b><p class="lbl" style="margin:4px 0 0">${P.filter(p=>p.ass.some(a=>a.c===i)).length} asignados</p><div class="price">${fmt(c.a)}</div></div>`).join('')+'<button class="add" data-act="newc">+ Nuevo concepto</button>';
+ $('#fWho').innerHTML=P.map((p,i)=>`<option value="${i}">${p.n}</option>`).join('');
+ $('#fConcept').innerHTML=d.concepts.map((c,i)=>`<option value="${i}">${c.n}</option>`).join('');
+ $('#menu').innerHTML=Object.keys(D).map(k=>`<button data-k="${k}"><span class="logo" style="width:28px;height:28px;font-size:14px">${D[k].l}</span>${D[k].n}</button>`).join('');
+ drawDet();drawStu();drawMods();
+}
+function drawDet(){
+ const d=D_(),p=d.people[det];if(!p)return;
+ const free=d.concepts.map((c,i)=>[c,i]).filter(x=>!p.ass.some(a=>a.c===x[1]));
+ $('#v-detalle').innerHTML=`<button class="back" data-act="back">← ${d.who}</button>
+ <div class="stack"><div class="card" style="display:flex;gap:14px;align-items:center;flex-wrap:wrap"><div class="dot" style="width:56px;height:56px;font-size:18px">${ini(p.n)}</div><div class="grow"><b style="font-size:20px;font-weight:500">${p.n}</b><small>${badge(st(p))}</small></div><div class="acts" style="margin:0"><button class="sm t" data-act="rem" data-p="${det}" data-a="-1">WhatsApp</button><button class="sm f" data-act="pay" data-p="${det}" data-c="${(p.ass.find(a=>a.s!=='ok')||p.ass[0]).c}">Cobrar</button></div></div>
+ <div class="card"><p class="lbl" style="margin-bottom:12px">Conceptos asignados</p>${p.ass.map(a=>{const c=d.concepts[a.c];return avatarRow(c.n,(c.t==='rec'?'Mensual':'Único')+' · vence '+a.due,fmt(c.a),badge(a.s),a.s!=='ok'?`data-act="pay" data-p="${det}" data-c="${a.c}"`:'')}).join('')}
+ ${free.length?`<div class="two" style="margin-top:14px"><select class="sel" id="asg">${free.map(x=>`<option value="${x[1]}">${x[0].n}</option>`).join('')}</select><button class="sm t" data-act="asg">Asignar</button></div>`:''}</div>
+ <div class="card"><p class="lbl" style="margin-bottom:12px">Historial de pagos</p>${p.hist.map((h,i)=>histRow(d,det,i)).join('')||'<p class="lbl">Sin pagos aún.</p>'}</div></div>`;
+}
+function drawStu(){
+ const d=D_(),p=d.people[0],pend=p.ass.filter(a=>a.s!=='ok'),tot=pend.reduce((t,a)=>t+d.concepts[a.c].a,0);
+ $('#v-alumno').innerHTML=`<h1>Hola, ${p.n.split(' ')[0]}</h1><div class="grid st2"><div class="card span2 hero"><p class="lbl">${tot?'Tienes pendiente':'Estás al día'}</p><div class="big">${fmt(tot)}</div><p class="lbl" style="margin:12px 0 0">${tot?pend.length+' pagos por hacer':'Gracias por tu pago'}</p></div>
+ <div class="card"><p class="lbl" style="margin-bottom:12px">Por pagar</p>${pend.map(a=>{const c=d.concepts[a.c];return avatarRow(c.n,'Vence '+a.due,fmt(c.a),badge(a.s))}).join('')||'<p class="lbl">Nada pendiente.</p>'}</div>
+ <div class="card"><p class="lbl">Cómo pagar</p><p style="margin:0 0 6px"><b style="font-weight:500">Transferencia:</b> alias ${d.n.split(' ')[1].toLowerCase()}.pagos</p><p style="margin:0 0 14px"><b style="font-weight:500">Efectivo:</b> en recepción</p><button class="btn" data-act="paid">Avisar que ya pagué</button></div>
+ <div class="card span2"><p class="lbl" style="margin-bottom:12px">Mis recibos</p>${p.hist.map((h,i)=>histRow(d,0,i)).join('')}</div></div>`;
+}
+const MOD=[['cobros','Cobros','Conceptos, pagos y recibos','conceptos'],['agenda','Agenda','Turnos y clases del día','agenda'],['inv','Inventario','Productos y alertas de stock','inv'],['ventas','Ventas','Punto de venta rápido',0],['gastos','Gastos','Control de egresos',0]];
+const QA=[['cobros','Registrar pago','Cobrar y emitir recibo','pay'],['agenda','Nuevo turno','Agendar clase o cita','turno'],['inv','Ajustar stock','Entradas y salidas','stock']];
+const agRow=x=>`<div class="row"><div class="time">${x[0]}</div><div class="grow"><b>${x[1]}</b><small>${x[2]}</small></div></div>`;
+function drawMods(){
+ const d=D_();
+ $$('[data-mod]').forEach(e=>e.hidden=!M[e.dataset.mod]);
+ $('#mods').innerHTML=MOD.map(([k,n,s,v])=>`<div class="card${v?'':' soon'}"><div class="mi">${n[0]}</div><b style="font-weight:500;font-size:16px">${n}</b><p class="lbl" style="margin:2px 0 14px">${s}</p>${v?`<div class="mrow"><button class="sm ${M[k]?'f':'t'}" data-act="openm" data-v="${v}" ${M[k]?'':'disabled'}>Abrir</button><button class="tg ${M[k]?'on':''}" data-act="tog" data-k="${k}" role="switch" aria-checked="${!!M[k]}" aria-label="Activar ${n}"></button></div>`:'<span class="tag">Próximamente</span>'}</div>`).join('');
+ $('#agH').innerHTML=d.ag.slice(0,3).map(agRow).join('');
+ $('#agL').innerHTML=d.ag.map(agRow).join('');
+ const low=d.inv.filter(x=>x[1]<=x[2]);
+ $('#invH').innerHTML=low.length?low.map(x=>`<div class="row"><div class="grow"><b>${x[0]}</b><small>Quedan ${x[1]} · mínimo ${x[2]}</small></div><span class="tag low">Reponer</span></div>`).join(''):'<p class="lbl">Todo en orden.</p>';
+ $('#invL').innerHTML=d.inv.map(x=>{const lw=x[1]<=x[2];return `<div class="row"><div class="grow"><b>${x[0]}</b><small>${x[1]} en stock · mínimo ${x[2]}</small><div class="bar" style="margin:8px 0 0"><span style="width:${Math.min(100,x[1]/(x[2]*3)*100)}%${lw?';background:var(--danger)':''}"></span></div></div>${lw?'<span class="tag low">Bajo</span>':''}</div>`}).join('');
+ $('#qa').innerHTML=QA.filter(q=>M[q[0]]).map(q=>`<button class="qrow" data-act="qa" data-k="${q[3]}"><span class="mi">${q[1][0]}</span><span><b style="font-weight:500">${q[1]}</b><small>${q[2]}</small></span></button>`).join('')||'<p class="lbl">Activa un módulo para ver acciones.</p>';
+}
+function go(v){$$('.view').forEach(x=>x.classList.toggle('on',x.id==='v-'+v));const nv={detalle:'clientes',conceptos:'modulos',agenda:'modulos',inv:'modulos'}[v]||v;$$('nav .t').forEach(x=>x.classList.toggle('on',x.dataset.v===nv));scrollTo(0,0)}
+const open=id=>{$$('.sheet').forEach(s=>s.classList.toggle('on',s.id===id));$('#bg').classList.toggle('on',!!id)};
+function toast(t){const e=$('#toast');e.textContent=t;e.classList.add('on');setTimeout(()=>e.classList.remove('on'),2000)}
+function wa(t){try{window.open('https://wa.me/?text='+encodeURIComponent(t),'_blank')}catch(e){}toast('Abriendo WhatsApp…')}
+function openPay(pi,ci){const d=D_();$('#fWho').value=pi;$('#fConcept').value=ci;$('#fAmt').value=d.concepts[ci].a;open('sheet')}
+function showRc(pi,hi){
+ const d=D_(),p=d.people[pi],h=p.hist[hi],c=d.concepts[h.c],a=h.a??c.a;
+ $('#rcBody').innerHTML=`<div class="rc"><div class="ln"><b style="font-weight:500">${d.n}</b><span>${h.r}</span></div><div class="ln"><span>Recibido de</span><span>${p.n}</span></div><div class="ln"><span>Concepto</span><span>${c.n}</span></div><div class="ln"><span>Fecha</span><span>${h.d}</span></div><div class="ln"><span>Forma de pago</span><span>${h.m}</span></div><div class="ln"><span>Total</span><b style="font-size:20px;font-weight:500">${fmt(a)}</b></div></div>
+ <div class="two"><button class="btn t" data-act="close">Cerrar</button><button class="btn" data-act="wr" data-t="${encodeURIComponent(`Recibo ${h.r} · ${d.n}\n${p.n} pagó ${fmt(a)} por ${c.n} (${h.d}). ¡Gracias!`)}">Enviar</button></div>`;
+ open('sheetR');
+}
+document.addEventListener('click',e=>{
+ const t=e.target,b=t.closest('[data-act]'),d=D_();
+ if(b){const k=b.dataset.act,pi=+b.dataset.p;
+  if(k==='pay')openPay(pi,+b.dataset.c);
+  else if(k==='rem'){const p=d.people[pi],a=p.ass[+b.dataset.a]||p.ass.find(x=>x.s!=='ok')||p.ass[0],c=d.concepts[a.c];wa(`Hola ${p.n.split(' ')[0]}, te recordamos que tienes pendiente ${c.n} (${fmt(c.a)}), vence ${a.due}. — ${d.n}`)}
+  else if(k==='back')go('clientes');
+  else if(k==='newc')open('sheetC');
+  else if(k==='close')open(null);
+  else if(k==='wr'){open(null);wa(decodeURIComponent(b.dataset.t))}
+  else if(k==='paid')toast('Aviso enviado al negocio');
+  else if(k==='backm')go('modulos');
+  else if(k==='openm')go(b.dataset.v);
+  else if(k==='tog'){M[b.dataset.k]=M[b.dataset.k]?0:1;drawMods()}
+  else if(k==='qa'){if(b.dataset.k==='pay')openPay(0,0);else{open(null);toast('Maqueta: '+b.dataset.k)}}
+  else if(k==='asg'){d.people[det].ass.push({c:+$('#asg').value,s:'wait',due:'5 nov'});render();toast('Concepto asignado')}
+  return}
+ const r=t.closest('[data-rc]');if(r){const [pi,hi]=r.dataset.rc.split('-').map(Number);showRc(pi,hi);return}
+ const pr=t.closest('.tap[data-p]');if(pr&&!stu){det=+pr.dataset.p;drawDet();go('detalle')}
+});
+$$('nav .t').forEach(b=>b.onclick=()=>go(b.dataset.v));
+$('#avatar').onclick=()=>go('ajustes');
+$('#filters').onclick=e=>{const c=e.target.closest('.chip');if(!c)return;filt=c.dataset.f;$$('.chip').forEach(x=>x.classList.toggle('on',x===c));render()};
+$('#bizBtn').onclick=()=>$('#menu').classList.toggle('on');
+$('#menu').onclick=e=>{const b=e.target.closest('button');if(!b)return;cur=b.dataset.k;filt='all';$$('.chip').forEach((x,i)=>x.classList.toggle('on',!i));$('#menu').classList.remove('on');render()};
+$('#fab').onclick=()=>open('sheetQ');$('#bg').onclick=()=>open(null);
+$('#fConcept').onchange=e=>$('#fAmt').value=D_().concepts[+e.target.value].a;
+$('#fWho').onchange=e=>{const p=D_().people[+e.target.value],a=p.ass.find(x=>x.s!=='ok');if(a){$('#fConcept').value=a.c;$('#fAmt').value=D_().concepts[a.c].a}};
+$('#save').onclick=()=>{const d=D_(),pi=+$('#fWho').value,ci=+$('#fConcept').value,a=parseFloat($('#fAmt').value)||0,p=d.people[pi],x=p.ass.find(x=>x.c===ci&&x.s!=='ok');
+ if(x)x.s='ok';else if(!p.ass.some(x=>x.c===ci))p.ass.push({c:ci,s:'ok',due:'—'});
+ p.hist.unshift({d:'26 oct',c:ci,a,m:$('#fMeth').value,r:'R-'+(++rn)});d.col+=a;render();showRc(pi,0)};
+$('#saveC').onclick=()=>{const n=$('#cN').value.trim(),a=parseFloat($('#cA').value)||0;if(!n){toast('Escribe un nombre');return}D_().concepts.push({n,a,t:$('#cT').value});$('#cN').value='';$('#cA').value='';open(null);render();toast('Concepto creado')};
+$('#theme').onclick=e=>{const b=e.target.closest('button');if(!b)return;S.theme=b.dataset.t;applyTheme()};
+$('#pals').innerHTML=PAL.map((p,i)=>`<button class="pal" data-i="${i}"><span class="sw"><i style="background:${p[1]}"></i><i style="background:${p[2]}"></i></span>${p[0]}</button>`).join('');
+$('#pals').onclick=e=>{const b=e.target.closest('.pal');if(!b)return;S.p=PAL[b.dataset.i][1];S.s=PAL[b.dataset.i][2];applyTheme()};
+$('#cur').onchange=e=>{S.cur=e.target.value;applyTheme();render()};
+$('#mode').onclick=e=>{const b=e.target.closest('button');if(!b)return;stu=b.dataset.m==='alumno';document.body.classList.toggle('stu',stu);$$('#mode button').forEach(x=>x.classList.toggle('on',x===b));$$('nav .t').forEach(x=>x.classList.remove('on'));render();go(stu?'alumno':'inicio')};
+$('#look').onclick=e=>{const b=e.target.closest('button');if(!b)return;S.look=b.dataset.l;applyTheme()};
+try{const x=JSON.parse(localStorage.getItem('cobros-theme'));if(x&&x.p)S=Object.assign(S,x)}catch(e){}
+applyTheme();render();
+</script>
+</body>
+</html>
