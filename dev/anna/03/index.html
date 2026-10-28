@@ -1,0 +1,1118 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Demo de gestión de cobros en guaraníes: navbar + sidebar + ABM de personas y pagos (datos simulados).">
+<meta name="theme-color" content="#f4f6fb" id="metaTheme">
+<title>Cobros · Panel de cobros</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='24' fill='%234f46e5'/%3E%3Ctext x='50' y='70' font-size='58' text-anchor='middle' fill='white' font-family='Arial' font-weight='bold'%3EC%3C/text%3E%3C/svg%3E">
+<style>
+  /* ---------- Tokens ---------- */
+  :root{
+    --topbar-h:60px;
+    --sidebar-w:300px;
+    --radius:16px;
+    --ease:cubic-bezier(.2,.8,.2,1);
+    --bg:#f4f6fb; --surface:#ffffff; --surface-2:#edf0f7;
+    --text:#1a1d26; --muted:#5e6572; --outline:#e3e7ef;
+    --primary:#4f46e5; --on-primary:#ffffff;
+    --primary-soft:rgba(79,70,229,.12);
+    --ok:#177a3d;  --ok-soft:rgba(23,122,61,.12);
+    --warn:#8a5a00;--warn-soft:rgba(217,119,6,.15);
+    --bad:#b3261e; --bad-soft:rgba(179,38,30,.12);
+    --ripple:rgba(79,70,229,.20);
+    --shadow-1:0 1px 2px rgba(16,20,30,.05),0 2px 10px rgba(16,20,30,.06);
+    --shadow-2:0 6px 24px rgba(16,20,30,.18);
+  }
+  [data-theme="dark"]{
+    --bg:#0f1220; --surface:#171b2c; --surface-2:#202640;
+    --text:#e7eaf3; --muted:#9aa3b8; --outline:#2a3149;
+    --primary:#8f96ff; --on-primary:#121438;
+    --primary-soft:rgba(143,150,255,.16);
+    --ok:#7fd39b;  --ok-soft:rgba(127,211,155,.14);
+    --warn:#f2c078;--warn-soft:rgba(242,192,120,.14);
+    --bad:#f2a196; --bad-soft:rgba(242,161,150,.14);
+    --ripple:rgba(231,234,243,.14);
+    --shadow-1:0 1px 2px rgba(0,0,0,.45),0 2px 12px rgba(0,0,0,.35);
+    --shadow-2:0 8px 28px rgba(0,0,0,.55);
+  }
+
+  /* ---------- Base ---------- */
+  *,*::before,*::after{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%; scrollbar-gutter:stable}
+  body{
+    margin:0; background:var(--bg); color:var(--text);
+    font:15px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  }
+  a{color:inherit;text-decoration:none;-webkit-tap-highlight-color:transparent}
+  button{font:inherit;color:inherit}
+  [hidden]{display:none!important}
+  ::selection{background:var(--primary-soft)}
+
+  /* ---------- Topbar (navbar) ---------- */
+  .topbar{
+    position:fixed; top:0; left:0; right:0; height:var(--topbar-h); z-index:30;
+    display:flex; align-items:center; gap:4px; padding:0 10px;
+    background:var(--surface); box-shadow:var(--shadow-1);
+    user-select:none;
+  }
+  .brand{display:flex; align-items:center; gap:10px; margin-left:4px; font-size:17px; font-weight:800; letter-spacing:-.01em}
+  .logo{
+    width:34px; height:34px; border-radius:11px; flex:none;
+    background:var(--primary); color:var(--on-primary);
+    display:grid; place-items:center; font-size:16px; font-weight:800;
+  }
+  .top-actions{margin-left:auto; display:flex; align-items:center; gap:6px}
+  .ab-btn{
+    height:40px; padding:0 16px; border:0; border-radius:999px; cursor:pointer;
+    background:var(--primary); color:var(--on-primary);
+    display:inline-flex; align-items:center; gap:7px;
+    font-weight:700; font-size:13.5px; letter-spacing:.01em;
+  }
+  .ab-btn svg{width:18px; height:18px; fill:currentColor; flex:none}
+  @media (hover:hover){ .ab-btn:hover{filter:brightness(1.08)} }
+  .ab-btn:focus-visible{outline:2px solid var(--primary); outline-offset:2px}
+  /* Acción contextual junto al título de la vista (solo PC; en móvil vive en la barra inferior) */
+  .va{display:none; flex:none}
+  @media (min-width:900px){ .va{display:flex; align-items:center} }
+
+  .icon-btn{
+    width:42px; height:42px; border:0; border-radius:50%;
+    background:transparent; cursor:pointer;
+    display:grid; place-items:center;
+  }
+  .icon-btn svg{width:22px; height:22px; fill:currentColor}
+  .icon-btn.sm{width:36px; height:36px}
+  .icon-btn.sm svg{width:18px; height:18px}
+  .icon-btn.del{color:var(--bad)}
+  .icon-btn.voz-pc{display:none}   /* en móvil el micrófono vive en la barra inferior */
+  @media (min-width:900px){ .icon-btn.voz-pc{display:grid} }
+  .ava-sm{
+    width:36px; height:36px; border-radius:50%; margin-left:4px; flex:none;
+    background:var(--primary-soft); color:var(--primary);
+    display:grid; place-items:center; font-size:12.5px; font-weight:700;
+  }
+
+  /* Hamburguesa (3 líneas → X en móvil al abrir) */
+  .burger{display:flex; flex-direction:column; gap:5px; width:20px}
+  .burger i{display:block; height:2px; border-radius:2px; background:currentColor; transition:transform .25s var(--ease),opacity .2s}
+  @media (max-width:899.98px){
+    body.nav-open .burger i:nth-child(1){transform:translateY(7px) rotate(45deg)}
+    body.nav-open .burger i:nth-child(2){opacity:0}
+    body.nav-open .burger i:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+  }
+
+  /* ---------- Sidebar (drawer móvil / fija en PC) ---------- */
+  .sidebar{
+    position:fixed; top:var(--topbar-h); bottom:0; left:0; z-index:26;
+    width:min(84vw,320px);
+    background:var(--surface);
+    display:flex; flex-direction:column; overflow-y:auto;
+    transform:translateX(-105%); visibility:hidden;
+    transition:transform .3s var(--ease), visibility 0s .3s;
+    user-select:none;
+  }
+  body.nav-open .sidebar{
+    transform:none; visibility:visible;
+    transition:transform .3s var(--ease);
+    box-shadow:var(--shadow-2);
+  }
+  .sidebar::-webkit-scrollbar{width:8px}
+  .sidebar::-webkit-scrollbar-thumb{background:var(--outline); border-radius:8px}
+
+  .side-head{display:flex; align-items:center; gap:12px; padding:18px 20px 10px}
+  .side-head .ava{width:44px; height:44px; font-size:14px}
+  .side-head b{display:block; font-size:15px; line-height:1.25}
+  .side-head small{color:var(--muted); font-size:12.5px}
+  .ava{
+    width:40px; height:40px; border-radius:50%; flex:none;
+    background:var(--primary-soft); color:var(--primary);
+    display:grid; place-items:center; font-weight:700; font-size:13px;
+  }
+
+  .side-label{
+    font-size:11px; font-weight:700; letter-spacing:.1em; text-transform:uppercase;
+    color:var(--muted); margin:16px 28px 6px;
+  }
+  .nav-item{
+    display:flex; align-items:center; gap:14px;
+    height:48px; margin:3px 12px; padding:0 16px;
+    border-radius:999px; color:var(--muted); font-weight:500; font-size:14.5px;
+  }
+  .nav-item svg{width:21px; height:21px; fill:currentColor; flex:none}
+  .nav-item.active{background:var(--primary-soft); color:var(--primary); font-weight:700}
+  .side-foot{margin-top:auto; padding:18px 22px; font-size:12px; color:var(--muted)}
+
+  /* Fondo atenuado tras el drawer en móvil */
+  .scrim{
+    position:fixed; inset:0; z-index:25;
+    background:rgba(8,10,18,.45);
+    opacity:0; pointer-events:none; transition:opacity .25s;
+  }
+  body.nav-open .scrim{opacity:1; pointer-events:auto}
+
+  /* ---------- Contenido ---------- */
+  .content{padding:calc(var(--topbar-h) + 18px) 14px calc(32px + env(safe-area-inset-bottom)); transition:padding .3s var(--ease)}
+  .wrap{max-width:1060px; margin:0 auto}
+  .wrap > * + *{margin-top:14px}
+  .view-head{margin-bottom:4px}
+  .view-head.has-va{display:flex; align-items:center; justify-content:space-between; gap:24px; flex-wrap:wrap}
+  .view-head.has-va > div{min-width:0}
+
+  .kicker{margin:0 0 2px; font-size:12px; font-weight:800; letter-spacing:.12em; text-transform:uppercase; color:var(--primary)}
+  h1{margin:0 0 6px; font-size:26px; letter-spacing:-.02em}
+  .sub{margin:0; color:var(--muted); font-size:14.5px; max-width:60ch}
+
+  .card{
+    background:var(--surface); border:1px solid var(--outline);
+    border-radius:var(--radius); padding:18px; box-shadow:var(--shadow-1);
+  }
+  .card h2{margin:0 0 6px; font-size:15px}
+
+  .stats{display:grid; gap:12px; grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
+  .stat{display:flex; flex-direction:column; gap:2px}
+  .stat-label{font-size:12.5px; color:var(--muted); font-weight:600}
+  .stat-value{font-size:21px; font-weight:800; letter-spacing:-.01em; font-variant-numeric:tabular-nums}
+  .stat-hint{font-size:12.5px; color:var(--muted)}
+
+  .row{display:flex; align-items:center; gap:12px; padding:12px 2px}
+  .row + .row{border-top:1px solid var(--outline)}
+  .row-main{flex:1; min-width:0; display:flex; flex-direction:column; gap:3px}
+  .row-main b{font-size:14.5px}
+  .row-end{display:flex; flex-direction:column; align-items:flex-end; gap:5px}
+  .row-actions{display:flex; gap:2px}
+  .amt{font-weight:700; font-variant-numeric:tabular-nums; font-size:14.5px; white-space:nowrap}
+  .mini{font-size:12px; color:var(--muted)}
+  .prog{height:4px; border-radius:4px; background:var(--surface-2); overflow:hidden; max-width:220px; width:100%}
+  .prog i{display:block; height:100%; background:var(--primary); border-radius:4px}
+
+  .tg{align-self:flex-start; padding:2px 10px; border-radius:999px; font-size:12px; font-weight:600}
+  .row-end .tg{align-self:flex-end}
+  .tg.ok{color:var(--ok); background:var(--ok-soft)}
+  .tg.wait{color:var(--warn); background:var(--warn-soft)}
+  .tg.late{color:var(--bad); background:var(--bad-soft)}
+
+  .empty{padding:26px 12px; text-align:center; color:var(--muted); font-size:14px}
+  .empty p{margin:0 0 14px}
+
+  /* ---------- Formularios (píldora) ---------- */
+  .field{display:flex; flex-direction:column; gap:6px; margin-bottom:14px}
+  .field .fl{font-size:13px; font-weight:600; color:var(--muted)}
+  .field input,.field select{
+    height:48px; border:1.5px solid var(--outline); border-radius:999px;
+    background:var(--surface); color:var(--text);
+    padding:0 16px; font-size:15px; font-family:inherit; width:100%;
+  }
+  .field select{appearance:none; -webkit-appearance:none;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%235e6572'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+    background-repeat:no-repeat; background-position:right 14px center; background-size:20px;
+    padding-right:42px;
+  }
+  .field input:focus,.field select:focus{outline:none; border-color:var(--primary); box-shadow:0 0 0 3px var(--primary-soft)}
+  .search{position:relative; margin-bottom:0}
+  .search svg{position:absolute; left:14px; top:50%; transform:translateY(-50%); width:20px; height:20px; fill:var(--muted); pointer-events:none}
+  .search input{padding-left:44px}
+  input[type=search]::-webkit-search-cancel-button{-webkit-appearance:none}
+
+  /* ---------- Botones ---------- */
+  .btn{
+    height:44px; padding:0 20px; border-radius:999px; border:0;
+    font-weight:700; font-size:14.5px; cursor:pointer;
+    display:inline-flex; align-items:center; justify-content:center; gap:8px;
+  }
+  .btn.primary{background:var(--primary); color:var(--on-primary)}
+  .btn.ghost{background:transparent; color:var(--primary)}
+  .btn.danger{background:#b3261e; color:#fff}
+  .btn svg{width:20px; height:20px; fill:currentColor}
+  @media (hover:hover){
+    .btn.primary:hover{filter:brightness(1.08)}
+    .btn.ghost:hover{background:var(--primary-soft)}
+    .btn.danger:hover{filter:brightness(1.12)}
+  }
+  .btn:focus-visible{outline:2px solid var(--primary); outline-offset:2px}
+
+  /* ---------- Formularios: pantalla completa en móvil / modal en PC ---------- */
+  .modal-wrap{position:fixed; top:var(--topbar-h); left:0; right:0; bottom:0; z-index:40; display:flex; justify-content:center}
+  .modal-scrim{position:absolute; inset:0; background:rgba(8,10,18,.5)}
+  .modal{
+    position:relative; width:min(560px,100%);
+    background:var(--surface); box-shadow:var(--shadow-2);
+    display:flex; flex-direction:column;
+    animation:sheetUp .3s var(--ease);
+  }
+  .modal h2{margin:0; padding:16px 20px 10px; font-size:18px; flex:none}
+  .modal-body{flex:1; min-height:0; overflow-y:auto; overscroll-behavior:contain; padding:2px 20px 8px}
+  .modal-actions{
+    flex:none; display:flex; gap:10px;
+    padding:12px 20px calc(12px + env(safe-area-inset-bottom));
+    background:var(--surface); border-top:1px solid var(--outline);
+  }
+  .modal-actions .btn{flex:1}
+  .confirm-msg{margin:0; color:var(--muted); font-size:14.5px}
+  @keyframes sheetUp{from{transform:translateY(48px); opacity:0}}
+  @media (min-width:900px){
+    .modal-wrap{inset:0; align-items:center; padding:24px}
+    .modal{border-radius:22px; max-height:88vh; animation:pop .25s var(--ease)}
+    .modal h2{padding:20px 22px 8px}
+    .modal-body{padding:2px 22px 8px}
+    .modal-actions{padding:14px 22px; border-radius:0 0 22px 22px; justify-content:flex-end}
+    .modal-actions .btn{flex:none}
+    @keyframes pop{from{transform:translateY(14px) scale(.98); opacity:0}}
+  }
+
+  /* ---------- Toast ---------- */
+  #toast{
+    position:fixed; left:50%; bottom:calc(24px + env(safe-area-inset-bottom)); z-index:60;
+    transform:translate(-50%,12px); opacity:0; pointer-events:none;
+    background:#22263a; color:#fff;
+    padding:11px 18px; border-radius:12px; font-size:14px;
+    box-shadow:var(--shadow-2); max-width:min(90vw,440px); text-align:center;
+    transition:transform .25s var(--ease), opacity .25s;
+  }
+  #toast.show{opacity:1; transform:translate(-50%,0)}
+  [data-theme="dark"] #toast{background:#e7eaf3; color:#14162a}
+
+  /* ---------- Appbar inferior (solo móvil, minimalista) ----------
+     Fijo: micrófono (comandos de voz). Contextuales: solo cuando son necesarios. */
+  .bottombar{
+    position:fixed; left:0; right:0; bottom:0; z-index:30;
+    background:var(--surface); border-top:1px solid var(--outline);
+    box-shadow:0 -2px 14px rgba(16,20,30,.08);
+    display:flex; align-items:center; user-select:none;
+    min-height:64px;
+    padding:8px 10px calc(8px + env(safe-area-inset-bottom));
+  }
+  .bb-actions{display:flex; align-items:center; gap:4px}
+  .bb-btn{
+    width:44px; height:44px; border:0; border-radius:50%; cursor:pointer;
+    background:transparent; color:var(--primary);
+    display:grid; place-items:center;
+  }
+  .bb-btn svg{width:22px; height:22px; fill:currentColor}
+  .bb-btn span{display:none}   /* minimalista: solo ícono (la etiqueta queda para aria-label y PC) */
+  .bb-btn:focus-visible{outline:2px solid var(--primary); outline-offset:2px}
+  .bb-mic{
+    width:48px; height:48px; border:0; border-radius:50%; cursor:pointer; flex:none;
+    margin-left:auto;   /* siempre a la derecha, aunque no haya contextuales */
+    background:var(--primary); color:var(--on-primary);
+    display:grid; place-items:center;
+    box-shadow:0 2px 10px rgba(16,20,30,.22);
+  }
+  .bb-mic svg{width:22px; height:22px; fill:currentColor}
+  .bb-mic:focus-visible{outline:2px solid var(--primary); outline-offset:2px}
+  @media (min-width:900px){ .bottombar{display:none} }
+  @media (max-width:899.98px){
+    .content{padding-bottom:calc(100px + env(safe-area-inset-bottom))}
+    #toast{bottom:calc(80px + env(safe-area-inset-bottom))}
+  }
+
+  /* ---------- Estados interactivos ---------- */
+  .ripple-host{position:relative; overflow:hidden}
+  .ripple{
+    position:absolute; border-radius:50%; background:var(--ripple);
+    transform:scale(0); opacity:.9; pointer-events:none;
+    animation:ripple .55s var(--ease) forwards;
+  }
+  @keyframes ripple{to{transform:scale(1); opacity:0}}
+  @media (hover:hover){
+    .icon-btn:hover{background:var(--surface-2)}
+    .bb-btn:hover{background:var(--primary-soft)}
+    .bb-mic:hover{filter:brightness(1.08)}
+    .nav-item:hover{background:var(--surface-2)}
+    .nav-item.active:hover{background:var(--primary-soft)}
+  }
+  .icon-btn:focus-visible,.nav-item:focus-visible{outline:2px solid var(--primary); outline-offset:2px}
+
+  /* ---------- PC ≥ 900px: sidebar fija ---------- */
+  @media (min-width:900px){
+    :root{--topbar-h:64px}
+    .sidebar{
+      transform:none; visibility:visible;
+      width:var(--sidebar-w); border-right:1px solid var(--outline); box-shadow:none;
+      transition:transform .3s var(--ease), visibility 0s;
+    }
+    body.nav-collapsed .sidebar{
+      transform:translateX(-105%); visibility:hidden;
+      transition:transform .3s var(--ease), visibility 0s .3s;
+    }
+    body.nav-open .sidebar{box-shadow:none}
+    .scrim{display:none}
+    .content{padding-top:calc(var(--topbar-h) + 28px); padding-left:calc(var(--sidebar-w) + 40px); padding-right:40px; padding-bottom:40px}
+    body.nav-collapsed .content{padding-left:40px}
+    h1{font-size:30px}
+  }
+
+  /* Bloquear scroll del fondo mientras el drawer está abierto (solo móvil) */
+  @media (max-width:899.98px){
+    body.nav-open{overflow:hidden}
+  }
+
+  /* Doble scroll, no: con un modal abierto la página de atrás queda congelada;
+     el único scroll posible es el interno del formulario (.modal-body).
+     hidden = bloquea el gesto del usuario; clip (si el navegador lo soporta)
+     ni siquiera permite scroll programático. */
+  body.modal-open{overflow:hidden; overflow:clip}
+
+  @media (prefers-reduced-motion:reduce){
+    *{transition:none!important; animation:none!important}
+    .ripple{display:none}
+  }
+</style>
+</head>
+<body>
+
+  <!-- ============ NAVBAR ============ -->
+  <header class="topbar">
+    <button id="btnMenu" class="icon-btn ripple-host" aria-label="Abrir menú" aria-expanded="false" aria-controls="sidebar">
+      <span class="burger" aria-hidden="true"><i></i><i></i><i></i></span>
+    </button>
+    <div class="brand">
+      <span class="logo" aria-hidden="true">C</span>
+      <b>Cobros</b>
+    </div>
+    <div class="top-actions">
+      <button id="btnVozPc" class="icon-btn voz-pc ripple-host" type="button" aria-label="Comandos de voz">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm5.91-3c-.49 0-.9.36-.98.85C16.52 14.2 14.47 16 12 16s-4.52-1.8-4.93-4.15c-.08-.49-.49-.85-.98-.85-.61 0-1.09.54-1 1.14.49 3 2.89 5.35 5.91 5.78V20c0 .55.45 1 1 1s1-.45 1-1v-2.08c3.02-.43 5.42-2.78 5.91-5.78.1-.6-.39-1.14-1-1.14z"/></svg>
+      </button>
+      <span class="ava-sm" aria-hidden="true">MG</span>
+    </div>
+  </header>
+
+  <!-- ============ SIDEBAR ============ -->
+  <nav id="sidebar" class="sidebar" aria-label="Menú principal">
+    <div class="side-head">
+      <span class="ava" aria-hidden="true">MG</span>
+      <div><b>María García</b><small>maria@correo.com</small></div>
+    </div>
+
+    <div class="side-label">Principal</div>
+    <a href="#" class="nav-item ripple-host active" data-view="inicio" aria-current="page">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8h5z"/></svg>
+      <span>Inicio</span>
+    </a>
+    <a href="#" class="nav-item ripple-host" data-view="pagos">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 14V6c0-1.1-.9-2-2-2H3c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zm-9-1c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm13-6v11c0 1.1-.9 2-2 2H4v-2h17V7h2z"/></svg>
+      <span>Pagos</span>
+    </a>
+    <a href="#" class="nav-item ripple-host" data-view="personas">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
+      <span>Personas</span>
+    </a>
+    <a href="#" class="nav-item ripple-host" data-view="reportes">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 9.2h3V19H5V9.2zm5.6-4.2h2.8v14h-2.8V5zm5.6 8H19v6h-2.8v-6z"/></svg>
+      <span>Reportes</span>
+    </a>
+
+    <div class="side-label">Sistema</div>
+    <a href="#" class="nav-item ripple-host" data-view="ajustes">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>
+      <span>Ajustes</span>
+    </a>
+    <a href="#" class="nav-item ripple-host" data-view="ayuda">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 18h2v-2h-2v2zm1-16C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-14c-2.21 0-4 1.79-4 4h2c0-1.1.9-2 2-2s2 .9 2 2c0 2-3 1.75-3 5h2c0-2.25 3-2.5 3-5 0-2.21-1.79-4-4-4z"/></svg>
+      <span>Ayuda</span>
+    </a>
+
+    <div class="side-foot">v0.7 · acciones en título (PC)</div>
+  </nav>
+
+  <!-- Fondo atenuado (solo móvil) -->
+  <div class="scrim" id="scrim" aria-hidden="true"></div>
+
+  <!-- ============ CONTENIDO ============ -->
+  <main class="content">
+    <div class="wrap">
+
+      <!-- Vista: Inicio -->
+      <section class="view" id="view-inicio">
+        <header class="view-head">
+          <p class="kicker">Panel</p>
+          <h1>Inicio</h1>
+          <p class="sub">Resumen de tu cartera en guaraníes (Gs.). Datos simulados: se reinician al recargar.</p>
+        </header>
+        <div class="stats" id="inicioStats"></div>
+        <section class="card">
+          <h2>Últimos pagos</h2>
+          <div id="inicioPagos"></div>
+        </section>
+      </section>
+
+      <!-- Vista: Personas (ABM) -->
+      <section class="view" id="view-personas" hidden>
+        <header class="view-head has-va">
+          <div>
+            <p class="kicker">ABM</p>
+            <h1>Personas</h1>
+            <p class="sub" id="subPersonas"></p>
+          </div>
+          <div class="va" id="va-personas"></div>
+        </header>
+        <div class="field search">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+          <input id="buscar" type="search" placeholder="Buscar por nombre…" autocomplete="off" aria-label="Buscar persona">
+        </div>
+        <section class="card">
+          <div id="listaPersonas"></div>
+        </section>
+      </section>
+
+      <!-- Vista: Pagos -->
+      <section class="view" id="view-pagos" hidden>
+        <header class="view-head has-va">
+          <div>
+            <p class="kicker">Movimientos</p>
+            <h1>Pagos</h1>
+            <p class="sub" id="subPagos"></p>
+          </div>
+          <div class="va" id="va-pagos"></div>
+        </header>
+        <section class="card">
+          <h2>Historial</h2>
+          <div id="listaPagos"></div>
+        </section>
+      </section>
+
+      <!-- Vista: Reportes -->
+      <section class="view" id="view-reportes" hidden>
+        <header class="view-head">
+          <p class="kicker">Resumen</p>
+          <h1>Reportes</h1>
+          <p class="sub">Totales de la cartera y situación por estado de cobro.</p>
+        </header>
+        <div class="stats" id="repStats"></div>
+        <section class="card">
+          <h2>Por estado</h2>
+          <div id="tablaEstados"></div>
+        </section>
+      </section>
+
+      <!-- Vista: Ajustes -->
+      <section class="view" id="view-ajustes" hidden>
+        <header class="view-head">
+          <p class="kicker">Sistema</p>
+          <h1>Ajustes</h1>
+          <p class="sub">Preferencias de la demo.</p>
+        </header>
+        <section class="card">
+          <h2>Moneda</h2>
+          <p class="sub">Guaraníes (Gs.) — montos enteros, sin decimales.</p>
+        </section>
+        <section class="card">
+          <h2>Tema</h2>
+          <p class="sub" style="margin-bottom:12px">Claro u oscuro, según tu preferencia.</p>
+          <button class="btn ghost" id="btnTemaOscuro" type="button">Cambiar tema</button>
+        </section>
+        <section class="card">
+          <h2>Datos de demostración</h2>
+          <p class="sub" style="margin-bottom:12px">Los datos son simulados y viven solo en memoria. Podés restablecerlos cuando quieras.</p>
+          <button class="btn ghost" id="btnReset" type="button">Restablecer datos</button>
+        </section>
+      </section>
+
+      <!-- Vista: Ayuda -->
+      <section class="view" id="view-ayuda" hidden>
+        <header class="view-head">
+          <p class="kicker">Sistema</p>
+          <h1>Ayuda</h1>
+          <p class="sub">Cómo usar el ABM en esta demo.</p>
+        </header>
+        <section class="card note">
+          <ul>
+            <li><b>Acciones:</b> appbar inferior minimalista en móvil: el micrófono es fijo (comandos de voz) y los botones contextuales aparecen solo cuando son necesarios — en Personas agrega una persona; en Pagos registra un pago. En PC van junto al título de la sección.</li>
+            <li><b>Formularios:</b> mientras uno está abierto, la página de atrás queda congelada (no hay doble scroll); si el contenido es más alto que la pantalla, scrollea solo el formulario.</li>
+            <li><b>Personas:</b> el lápiz modifica los datos; el tachito elimina a la persona junto con sus pagos.</li>
+            <li><b>Pagos:</b> elegí la persona, el monto se sugiere con lo pendiente; el tachito anula el pago y lo devuelve al pendiente.</li>
+            <li><b>Búsqueda:</b> en Personas podés filtrar por nombre, con o sin tildes.</li>
+            <li><b>Montos:</b> enteros en guaraníes (Gs.), separador de miles con punto.</li>
+          </ul>
+        </section>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- Appbar inferior (solo móvil): minimalista — contextuales + micrófono fijo -->
+  <nav class="bottombar" id="bottombar" aria-label="Barra de acciones">
+    <div class="bb-actions" id="bbActions"></div>
+    <button class="bb-mic ripple-host" id="btnVoz" type="button" aria-label="Comandos de voz">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm5.91-3c-.49 0-.9.36-.98.85C16.52 14.2 14.47 16 12 16s-4.52-1.8-4.93-4.15c-.08-.49-.49-.85-.98-.85-.61 0-1.09.54-1 1.14.49 3 2.89 5.35 5.91 5.78V20c0 .55.45 1 1 1s1-.45 1-1v-2.08c3.02-.43 5.42-2.78 5.91-5.78.1-.6-.39-1.14-1-1.14z"/></svg>
+    </button>
+  </nav>
+
+  <!-- Modal: Nueva / Modificar persona -->
+  <div class="modal-wrap" id="modalPersona" hidden>
+    <div class="modal-scrim" data-close></div>
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="tPersona">
+      <h2 id="tPersona">Nueva persona</h2>
+      <form id="formPersona" class="modal-body" novalidate>
+        <label class="field">
+          <span class="fl">Nombre y apellido</span>
+          <input id="fNombre" type="text" autocomplete="off" maxlength="60" placeholder="Ej: Ana Rojas">
+        </label>
+        <label class="field">
+          <span class="fl">Monto a cobrar (Gs.)</span>
+          <input id="fMonto" type="text" inputmode="numeric" autocomplete="off" placeholder="Ej: 250.000">
+        </label>
+        <label class="field">
+          <span class="fl">Vencimiento</span>
+          <input id="fVenc" type="date">
+        </label>
+      </form>
+      <div class="modal-actions">
+        <button type="button" class="btn ghost" data-close>Cancelar</button>
+        <button type="submit" class="btn primary" form="formPersona">Guardar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Registrar pago -->
+  <div class="modal-wrap" id="modalPago" hidden>
+    <div class="modal-scrim" data-close></div>
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="tPago">
+      <h2 id="tPago">Registrar pago</h2>
+      <form id="formPago" class="modal-body" novalidate>
+        <label class="field">
+          <span class="fl">Persona</span>
+          <select id="fPagoPersona"></select>
+        </label>
+        <label class="field">
+          <span class="fl">Monto recibido (Gs.)</span>
+          <input id="fPagoMonto" type="text" inputmode="numeric" autocomplete="off" placeholder="Ej: 100.000">
+        </label>
+        <label class="field">
+          <span class="fl">Fecha</span>
+          <input id="fPagoFecha" type="date">
+        </label>
+        <p class="confirm-msg" id="pagoHelper"></p>
+      </form>
+      <div class="modal-actions">
+        <button type="button" class="btn ghost" data-close>Cancelar</button>
+        <button type="submit" class="btn primary" form="formPago">Registrar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Confirmación -->
+  <div class="modal-wrap" id="modalConfirm" hidden>
+    <div class="modal-scrim" data-close></div>
+    <div class="modal" role="alertdialog" aria-modal="true" aria-labelledby="confirmText">
+      <h2>Confirmar</h2>
+      <p class="confirm-msg modal-body" id="confirmText"></p>
+      <div class="modal-actions">
+        <button type="button" class="btn ghost" data-close>Cancelar</button>
+        <button type="button" class="btn danger" id="confirmOk">Eliminar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(function(){
+  'use strict';
+  var d = document, body = d.body;
+  var $ = function(s){ return d.querySelector(s); };
+  var $$ = function(s,c){ return Array.prototype.slice.call((c||d).querySelectorAll(s)); };
+  var btn = $('#btnMenu'), scrim = $('#scrim');
+  var mq = window.matchMedia('(min-width: 900px)');
+  var isDesktop = function(){ return mq.matches; };
+
+  /* ================= Utilidades ================= */
+  function pad(n){ return (n < 10 ? '0' : '') + n; }
+  function iso(t){ return t.getFullYear() + '-' + pad(t.getMonth()+1) + '-' + pad(t.getDate()); }
+  function hoyISO(){ return iso(new Date()); }
+  function dOff(n){ var t = new Date(); t.setDate(t.getDate() + n); return iso(t); }
+  function ahoraHM(){ var t = new Date(); return pad(t.getHours()) + ':' + pad(t.getMinutes()); }
+  function fmtNum(n){ return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, '.'); }
+  function fmtG(n){ return 'Gs. ' + fmtNum(n || 0); }
+  function parseG(v){ return parseInt(String(v).replace(/\D+/g, ''), 10) || 0; }
+  function norm(s){ return (s || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, ''); }
+  function esc(s){ return String(s).replace(/[&<>"']/g, function(c){
+    return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];
+  }); }
+  function fmtFech(isoStr){
+    try {
+      var s = new Date(isoStr + 'T12:00:00').toLocaleDateString('es', {day:'numeric', month:'short'});
+      return s.replace('.', '');
+    } catch(e){ return isoStr; }
+  }
+  function etiquetaFech(f){
+    if (f === hoyISO()) return 'Hoy';
+    if (f === dOff(-1)) return 'Ayer';
+    return fmtFech(f);
+  }
+  function iniciales(nombre){
+    return nombre.trim().split(/\s+/).slice(0,2).map(function(w){ return w[0]; }).join('').toUpperCase();
+  }
+
+  /* ================= Datos simulados ================= */
+  var state = { personas: [], pagos: [] };
+  var nextId = 1;
+
+  function seed(){
+    nextId = 1;
+    state.personas = [
+      { id:nextId++, nombre:'Carolina Díaz',   monto:1200000, pagado:1200000, venc:dOff(10) },
+      { id:nextId++, nombre:'Pedro Gómez',     monto:450000,  pagado:150000,  venc:dOff(5)  },
+      { id:nextId++, nombre:'Lucía Fernández', monto:890000,  pagado:240000,  venc:dOff(-3) },
+      { id:nextId++, nombre:'Marta Ruiz',      monto:125000,  pagado:125000,  venc:dOff(2)  },
+      { id:nextId++, nombre:'Ramón Villalba',  monto:2400000, pagado:800000,  venc:dOff(-1) },
+      { id:nextId++, nombre:'Teresa Aquino',   monto:300000,  pagado:0,       venc:dOff(15) },
+      { id:nextId++, nombre:'Jorge Benítez',   monto:750000,  pagado:750000,  venc:dOff(20) },
+      { id:nextId++, nombre:'Silvia Cáceres',  monto:150000,  pagado:50000,   venc:dOff(7)  }
+    ];
+    state.pagos = [
+      { id:nextId++, personaId:1, monto:400000, fecha:dOff(-6), hora:'09:15' },
+      { id:nextId++, personaId:1, monto:400000, fecha:dOff(-3), hora:'11:40' },
+      { id:nextId++, personaId:5, monto:500000, fecha:dOff(-9), hora:'10:00' },
+      { id:nextId++, personaId:3, monto:240000, fecha:dOff(-4), hora:'16:00' },
+      { id:nextId++, personaId:8, monto:50000,  fecha:dOff(-5), hora:'09:50' },
+      { id:nextId++, personaId:5, monto:300000, fecha:dOff(-2), hora:'17:30' },
+      { id:nextId++, personaId:1, monto:400000, fecha:hoyISO(), hora:'08:05' },
+      { id:nextId++, personaId:4, monto:125000, fecha:hoyISO(), hora:'10:22' },
+      { id:nextId++, personaId:2, monto:150000, fecha:hoyISO(), hora:'12:45' }
+    ];
+  }
+
+  function byId(id){ return state.personas.find(function(p){ return p.id === id; }); }
+  function nombreDe(personaId){
+    var p = byId(personaId);
+    return p ? p.nombre : '(persona eliminada)';
+  }
+  function pendienteDe(p){ return Math.max(0, p.monto - p.pagado); }
+  function estadoDe(p){
+    if (pendienteDe(p) <= 0) return 'ok';
+    if (p.venc && p.venc < hoyISO()) return 'late';
+    return 'wait';
+  }
+  var ESTADO = { ok:'Al día', wait:'Pendiente', late:'Atrasado' };
+  var SEV = { late:0, wait:1, ok:2 };
+
+  /* ================= Navegación (navbar / sidebar) ================= */
+  function syncAria(){
+    var open = isDesktop()
+      ? !body.classList.contains('nav-collapsed')
+      : body.classList.contains('nav-open');
+    btn.setAttribute('aria-expanded', String(open));
+    btn.setAttribute('aria-label', open ? 'Cerrar menú' : 'Abrir menú');
+  }
+  function openNav(){ body.classList.add('nav-open'); syncAria(); }
+  function closeNav(){ body.classList.remove('nav-open'); syncAria(); }
+
+  btn.addEventListener('click', function(){
+    if (isDesktop()) body.classList.toggle('nav-collapsed');
+    else if (body.classList.contains('nav-open')) closeNav();
+    else openNav();
+    syncAria();
+  });
+  scrim.addEventListener('click', closeNav);
+  d.addEventListener('keydown', function(e){
+    if (e.key !== 'Escape') return;
+    var openModalEl = $('.modal-wrap:not([hidden])');
+    if (openModalEl) closeModal(openModalEl);
+    else closeNav();
+  });
+
+  function onBreakpoint(){ body.classList.remove('nav-open','nav-collapsed'); syncAria(); }
+  if (mq.addEventListener) mq.addEventListener('change', onBreakpoint);
+  else if (mq.addListener) mq.addListener(onBreakpoint);
+  syncAria();
+
+  /* ================= Router de vistas ================= */
+  var currentView = 'inicio';
+  var items = $$('.nav-item');
+  items.forEach(function(item){
+    item.addEventListener('click', function(e){
+      e.preventDefault();
+      showView(item.getAttribute('data-view'));
+      if (!isDesktop()) closeNav();
+    });
+  });
+  function showView(v){
+    currentView = v;
+    $$('.view').forEach(function(s){ s.hidden = (s.id !== 'view-' + v); });
+    items.forEach(function(i){
+      var on = i.getAttribute('data-view') === v;
+      i.classList.toggle('active', on);
+      if (on) i.setAttribute('aria-current','page'); else i.removeAttribute('aria-current');
+    });
+    updateAppbar();
+    refresh();
+  }
+
+  /* ================= Acciones contextuales (junto al título en PC / barra inferior móvil) ================= */
+  var ICON_PLUS = '<path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>';
+  var ICON_PERSON_ADD = '<path d="M15 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm-9-2V7H4v3H1v2h3v3h2v-3h3v-2H6zm9 4c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>';
+  var ACTIONS = {
+    pagos:    [{ label:'Registrar pago', icon:ICON_PLUS,       act:function(){ openPago(); } }],
+    personas: [{ label:'Nueva persona',  icon:ICON_PERSON_ADD, act:function(){ openPersona(null); } }]
+  };
+  function actionBtn(a, i, cls){
+    return '<button class="' + cls + ' ripple-host" data-ab="' + i + '" aria-label="' + a.label + '">' +
+      '<svg viewBox="0 0 24 24" aria-hidden="true">' + a.icon + '</svg><span>' + a.label + '</span>' +
+    '</button>';
+  }
+  function updateAppbar(){
+    var list = ACTIONS[currentView] || [];
+    d.querySelectorAll('.va').forEach(function(c){ c.innerHTML = ''; });
+    var va = $('#va-' + currentView);
+    if (va) va.innerHTML = list.map(function(a,i){ return actionBtn(a,i,'ab-btn'); }).join('');
+    $('#bbActions').innerHTML     = list.map(function(a,i){ return actionBtn(a,i,'bb-btn'); }).join('');
+  }
+  d.addEventListener('click', function(e){
+    var b = e.target.closest('[data-ab]');
+    if (!b) return;
+    var a = (ACTIONS[currentView] || [])[+b.dataset.ab];
+    if (a) a.act();
+  });
+
+  /* Micrófono fijo: punto de enganche para los comandos de voz predeterminados */
+  function comandoVoz(){ toast('Comandos de voz: próximamente'); }
+  $('#btnVoz').addEventListener('click', comandoVoz);
+  $('#btnVozPc').addEventListener('click', comandoVoz);
+
+  /* ================= Modales ================= */
+  var openCount = 0;
+  function openModal(m){
+    m.hidden = false;
+    openCount++;
+    if (openCount === 1) body.classList.add('modal-open');
+    var f = m.querySelector('input, select');
+    if (f) setTimeout(function(){ f.focus(); }, 60);
+  }
+  function closeModal(m){
+    if (m.hidden) return;
+    m.hidden = true;
+    openCount = Math.max(0, openCount - 1);
+    if (!openCount) body.classList.remove('modal-open');
+  }
+  $$('.modal-wrap').forEach(function(m){
+    m.addEventListener('click', function(e){
+      if (e.target.hasAttribute('data-close') || e.target.closest('[data-close]')) closeModal(m);
+    });
+  });
+
+  var confirmCb = null;
+  function askConfirm(msg, cb){
+    $('#confirmText').textContent = msg;
+    confirmCb = cb;
+    openModal($('#modalConfirm'));
+  }
+  $('#confirmOk').addEventListener('click', function(){
+    closeModal($('#modalConfirm'));
+    if (confirmCb){ var cb = confirmCb; confirmCb = null; cb(); }
+  });
+
+  /* ================= Toast ================= */
+  var toastTimer = null;
+  function toast(msg){
+    var t = $('#toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function(){ t.classList.remove('show'); }, 2600);
+  }
+
+  /* ================= ABM Personas ================= */
+  var editId = null;
+  function openPersona(p){
+    editId = p ? p.id : null;
+    $('#tPersona').textContent = p ? 'Modificar persona' : 'Nueva persona';
+    $('#fNombre').value = p ? p.nombre : '';
+    $('#fMonto').value = p ? fmtNum(p.monto) : '';
+    $('#fVenc').value = p ? p.venc : dOff(30);
+    openModal($('#modalPersona'));
+  }
+  $('#formPersona').addEventListener('submit', function(e){
+    e.preventDefault();
+    var nombre = $('#fNombre').value.trim();
+    var monto = parseG($('#fMonto').value);
+    var venc = $('#fVenc').value || dOff(30);
+    if (!nombre){ toast('Ingresá el nombre de la persona'); return; }
+    if (!monto){ toast('Ingresá un monto válido en guaraníes'); return; }
+    if (editId){
+      var p = byId(editId);
+      p.nombre = nombre; p.monto = monto; p.venc = venc;
+      if (p.pagado > monto) p.pagado = monto;
+      toast('Cambios guardados');
+    } else {
+      state.personas.push({ id:nextId++, nombre:nombre, monto:monto, pagado:0, venc:venc });
+      toast('Persona agregada: ' + nombre);
+    }
+    closeModal($('#modalPersona'));
+    refresh();
+  });
+
+  function eliminarPersona(id){
+    state.personas = state.personas.filter(function(p){ return p.id !== id; });
+    state.pagos = state.pagos.filter(function(g){ return g.personaId !== id; });
+    toast('Persona eliminada');
+    refresh();
+  }
+
+  function rowPersona(p){
+    var est = estadoDe(p), pend = pendienteDe(p);
+    var pct = p.monto > 0 ? Math.min(100, Math.round(p.pagado * 100 / p.monto)) : 0;
+    var mini = (est === 'late' ? 'Venció ' : 'Vence ') + fmtFech(p.venc);
+    return '<div class="row">' +
+      '<span class="ava" aria-hidden="true">' + esc(iniciales(p.nombre)) + '</span>' +
+      '<div class="row-main">' +
+        '<b>' + esc(p.nombre) + '</b>' +
+        '<span class="mini">Monto: ' + fmtG(p.monto) + ' · ' + mini + '</span>' +
+        '<span class="prog"><i style="width:' + pct + '%"></i></span>' +
+      '</div>' +
+      '<div class="row-end">' +
+        '<span class="tg ' + est + '">' + ESTADO[est] + '</span>' +
+        '<span class="amt">' + (pend > 0 ? fmtG(pend) : 'Cobrado') + '</span>' +
+        '<span class="row-actions">' +
+          '<button class="icon-btn sm ripple-host" data-act="edit" data-id="' + p.id + '" aria-label="Modificar ' + esc(p.nombre) + '">' +
+            '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 19c0 1.1.9 2 2 2h2v-4.3L6.7 13H6v6zM19.9 4.6l-2.5-2.5c-.2-.2-.5-.3-.7-.3-.3 0-.5.1-.7.3l-1.8 1.8 3.9 3.9 1.8-1.8c.4-.3.4-.9 0-1.4zM12.5 6.4l-8 8V18h3.6l8-8-3.6-3.6z"/></svg>' +
+          '</button>' +
+          '<button class="icon-btn sm ripple-host del" data-act="del" data-id="' + p.id + '" aria-label="Eliminar ' + esc(p.nombre) + '">' +
+            '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>' +
+          '</button>' +
+        '</span>' +
+      '</div>' +
+    '</div>';
+  }
+
+  function renderPersonas(){
+    var q = norm($('#buscar').value);
+    var list = state.personas.filter(function(p){ return norm(p.nombre).indexOf(q) >= 0; });
+    list.sort(function(a,b){
+      return SEV[estadoDe(a)] - SEV[estadoDe(b)] || a.nombre.localeCompare(b.nombre);
+    });
+    var nLate = state.personas.filter(function(p){ return estadoDe(p) === 'late'; }).length;
+    var nWait = state.personas.filter(function(p){ return estadoDe(p) === 'wait'; }).length;
+    $('#subPersonas').textContent =
+      state.personas.length + ' personas · ' + nWait + ' pendientes · ' + nLate + ' atrasadas';
+    var el = $('#listaPersonas');
+    if (!list.length){
+      el.innerHTML = q
+        ? '<div class="empty">No hay personas que coincidan con la búsqueda.</div>'
+        : '<div class="empty"><p>No hay personas cargadas</p><button class="btn primary ripple-host" data-act="new">Agregar persona</button></div>';
+      return;
+    }
+    el.innerHTML = list.map(rowPersona).join('');
+  }
+
+  $('#listaPersonas').addEventListener('click', function(e){
+    var b = e.target.closest('[data-act]');
+    if (!b) return;
+    if (b.dataset.act === 'new'){ openPersona(null); return; }
+    var p = byId(+b.dataset.id);
+    if (!p) return;
+    if (b.dataset.act === 'edit') openPersona(p);
+    else askConfirm('¿Eliminar a ' + p.nombre + '? También se borrarán sus pagos registrados.', function(){
+      eliminarPersona(p.id);
+    });
+  });
+  $('#buscar').addEventListener('input', renderPersonas);
+
+  /* ================= ABM Pagos ================= */
+  function openPago(){
+    if (!state.personas.length){
+      toast('Primero cargá una persona');
+      openPersona(null);
+      return;
+    }
+    var sel = $('#fPagoPersona');
+    sel.innerHTML = state.personas.map(function(p){
+      return '<option value="' + p.id + '">' + esc(p.nombre) + '</option>';
+    }).join('');
+    $('#fPagoFecha').value = hoyISO();
+    $('#fPagoMonto').value = '';
+    updatePagoHelper();
+    openModal($('#modalPago'));
+  }
+  function updatePagoHelper(){
+    var p = byId(+$('#fPagoPersona').value);
+    if (!p){ $('#pagoHelper').textContent = ''; return; }
+    $('#pagoHelper').textContent = 'Pendiente de ' + p.nombre + ': ' + fmtG(pendienteDe(p)) +
+      ' (pagado ' + fmtG(p.pagado) + ')';
+  }
+  $('#fPagoPersona').addEventListener('change', function(){
+    var p = byId(+$('#fPagoPersona').value);
+    $('#fPagoMonto').value = p && pendienteDe(p) > 0 ? fmtNum(pendienteDe(p)) : '';
+    updatePagoHelper();
+  });
+  $('#formPago').addEventListener('submit', function(e){
+    e.preventDefault();
+    var p = byId(+$('#fPagoPersona').value);
+    var monto = parseG($('#fPagoMonto').value);
+    if (!p){ toast('Elegí una persona'); return; }
+    if (!monto){ toast('Ingresá un monto válido en guaraníes'); return; }
+    var fecha = $('#fPagoFecha').value || hoyISO();
+    p.pagado += monto;
+    state.pagos.unshift({ id:nextId++, personaId:p.id, monto:monto, fecha:fecha, hora:ahoraHM() });
+    toast('Pago registrado: ' + fmtG(monto) + ' — pendiente ' + fmtG(pendienteDe(p)));
+    closeModal($('#modalPago'));
+    refresh();
+  });
+
+  function anularPago(id){
+    var i = state.pagos.findIndex(function(g){ return g.id === id; });
+    if (i < 0) return;
+    var g = state.pagos[i];
+    var p = byId(g.personaId);
+    if (p) p.pagado = Math.max(0, p.pagado - g.monto);
+    state.pagos.splice(i, 1);
+    toast('Pago anulado: ' + fmtG(g.monto));
+    refresh();
+  }
+
+  function rowPago(g, acciones){
+    return '<div class="row">' +
+      '<span class="ava" aria-hidden="true">' + esc(iniciales(nombreDe(g.personaId))) + '</span>' +
+      '<div class="row-main">' +
+        '<b>' + esc(nombreDe(g.personaId)) + '</b>' +
+        '<span class="mini">' + etiquetaFech(g.fecha) + ' · ' + g.hora + '</span>' +
+      '</div>' +
+      '<span class="amt">+' + fmtG(g.monto) + '</span>' +
+      (acciones
+        ? '<button class="icon-btn sm ripple-host del" data-act="anular" data-id="' + g.id + '" aria-label="Anular pago de ' + esc(nombreDe(g.personaId)) + '">' +
+            '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>' +
+          '</button>'
+        : '') +
+    '</div>';
+  }
+
+  function renderPagos(){
+    var list = state.pagos.slice().sort(function(a,b){
+      return b.fecha.localeCompare(a.fecha) || b.hora.localeCompare(a.hora);
+    });
+    var hoy = state.pagos.filter(function(g){ return g.fecha === hoyISO(); });
+    $('#subPagos').textContent = hoy.length + ' pagos hoy · total ' +
+      fmtG(hoy.reduce(function(s,g){ return s + g.monto; }, 0));
+    var el = $('#listaPagos');
+    el.innerHTML = list.length
+      ? list.map(function(g){ return rowPago(g, true); }).join('')
+      : '<div class="empty"><p>No hay pagos registrados</p><button class="btn primary ripple-host" data-act="new">Registrar pago</button></div>';
+  }
+  $('#listaPagos').addEventListener('click', function(e){
+    var b = e.target.closest('[data-act]');
+    if (!b) return;
+    if (b.dataset.act === 'new'){ openPago(); return; }
+    if (b.dataset.act !== 'anular') return;
+    var g = state.pagos.find(function(x){ return x.id === +b.dataset.id; });
+    if (!g) return;
+    askConfirm('¿Anular el pago de ' + fmtG(g.monto) + ' de ' + nombreDe(g.personaId) + '?', function(){
+      anularPago(g.id);
+    });
+  });
+
+  /* ================= Inicio ================= */
+  function statCard(label, value, hint){
+    return '<div class="card stat">' +
+      '<span class="stat-label">' + label + '</span>' +
+      '<span class="stat-value">' + value + '</span>' +
+      '<span class="stat-hint">' + hint + '</span>' +
+    '</div>';
+  }
+  function renderInicio(){
+    var porCobrar = state.personas.reduce(function(s,p){ return s + pendienteDe(p); }, 0);
+    var hoy = state.pagos.filter(function(g){ return g.fecha === hoyISO(); });
+    var cobradoHoy = hoy.reduce(function(s,g){ return s + g.monto; }, 0);
+    var nLate = state.personas.filter(function(p){ return estadoDe(p) === 'late'; }).length;
+    $('#inicioStats').innerHTML =
+      statCard('Por cobrar', fmtG(porCobrar), state.personas.length + ' personas') +
+      statCard('Cobrado hoy', fmtG(cobradoHoy), hoy.length + ' pagos') +
+      statCard('Atrasados', String(nLate), nLate === 1 ? 'persona con atraso' : 'personas con atraso');
+    var recientes = state.pagos.slice().sort(function(a,b){
+      return b.fecha.localeCompare(a.fecha) || b.hora.localeCompare(a.hora);
+    }).slice(0, 5);
+    $('#inicioPagos').innerHTML = recientes.length
+      ? recientes.map(function(g){ return rowPago(g, false); }).join('')
+      : '<div class="empty">Todavía no hay pagos registrados.</div>';
+  }
+
+  /* ================= Reportes ================= */
+  function renderReportes(){
+    var cartera = state.personas.reduce(function(s,p){ return s + p.monto; }, 0);
+    var cobrado = state.personas.reduce(function(s,p){ return s + p.pagado; }, 0);
+    $('#repStats').innerHTML =
+      statCard('Cartera total', fmtG(cartera), state.personas.length + ' personas') +
+      statCard('Cobrado', fmtG(cobrado), Math.round(cartera ? cobrado * 100 / cartera : 0) + '% de la cartera') +
+      statCard('Pendiente', fmtG(cartera - cobrado), 'saldo por cobrar');
+    var rows = ['late','wait','ok'].map(function(est){
+      var grupo = state.personas.filter(function(p){ return estadoDe(p) === est; });
+      var monto = grupo.reduce(function(s,p){ return s + pendienteDe(p); }, 0);
+      return '<div class="row">' +
+        '<span class="tg ' + est + '">' + ESTADO[est] + '</span>' +
+        '<div class="row-main"></div>' +
+        '<span class="mini">' + grupo.length + (grupo.length === 1 ? ' persona' : ' personas') + '</span>' +
+        '<span class="amt">' + (est === 'ok' && monto === 0 ? 'Sin deuda' : fmtG(monto)) + '</span>' +
+      '</div>';
+    }).join('');
+    $('#tablaEstados').innerHTML = rows ||
+      '<div class="empty">Sin datos todavía.</div>';
+  }
+
+  /* ================= Ajustes ================= */
+  $('#btnReset').addEventListener('click', function(){
+    askConfirm('¿Restablecer los datos de demostración? Se perderán los cambios que hiciste.', function(){
+      seed();
+      refresh();
+      toast('Datos restablecidos');
+    });
+  });
+
+  /* ================= Tema claro / oscuro ================= */
+  var root = d.documentElement, meta = $('#metaTheme');
+  var COLORS = { light:'#f4f6fb', dark:'#0f1220' };
+  function applyTheme(t){
+    root.setAttribute('data-theme', t);
+    if (meta) meta.setAttribute('content', COLORS[t]);
+    try { localStorage.setItem('ui-theme', t); } catch(e){}
+  }
+  var saved = null;
+  try { saved = localStorage.getItem('ui-theme'); } catch(e){}
+  applyTheme(saved || (window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'));
+  $('#btnTemaOscuro').addEventListener('click', function(){
+    applyTheme(root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
+    toast('Tema cambiado');
+  });
+
+  /* ================= Formato de montos al tipear ================= */
+  function bindMonto(input){
+    input.addEventListener('input', function(){
+      var digits = input.value.replace(/\D+/g, '').slice(0, 12);
+      input.value = digits ? fmtNum(digits) : '';
+    });
+  }
+  bindMonto($('#fMonto'));
+  bindMonto($('#fPagoMonto'));
+  $('#fPagoMonto').addEventListener('input', updatePagoHelper);
+
+  /* ================= Render general ================= */
+  function refresh(){
+    renderInicio();
+    renderPersonas();
+    renderPagos();
+    renderReportes();
+  }
+
+  /* ================= Ripple Material ================= */
+  d.addEventListener('pointerdown', function(e){
+    var host = e.target.closest('.ripple-host');
+    if (!host) return;
+    var r = host.getBoundingClientRect();
+    var size = Math.max(r.width, r.height) * 2;
+    var x = (e.clientX || (r.left + r.width / 2)) - r.left - size / 2;
+    var y = (e.clientY || (r.top + r.height / 2)) - r.top - size / 2;
+    var s = d.createElement('span');
+    s.className = 'ripple';
+    s.style.cssText = 'width:' + size + 'px;height:' + size + 'px;left:' + x + 'px;top:' + y + 'px';
+    host.appendChild(s);
+    s.addEventListener('animationend', function(){ s.remove(); });
+  });
+
+  /* ================= Init ================= */
+  seed();
+  showView('inicio');
+})();
+</script>
+</body>
+</html>
