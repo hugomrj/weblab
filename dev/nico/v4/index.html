@@ -1,0 +1,1168 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nico ERP - Definitivo</title>
+<link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+<style>
+/* ============ 1. VARIABLES + ESTADOS GLOBALES ============ */
+:root {
+  --nico-hue: 155; --nico-chroma: 0.13;
+  --bg: oklch(98% 0.005 var(--nico-hue));
+  --surface: oklch(100% 0 0);
+  --surface-2: oklch(100% 0 0);
+  --border: oklch(90% 0.01 var(--nico-hue));
+  --text: oklch(22% 0.02 var(--nico-hue));
+  --muted: oklch(48% 0.02 var(--nico-hue));
+  --accent: oklch(48% var(--nico-chroma) var(--nico-hue));
+  --accent-text: oklch(45% var(--nico-chroma) var(--nico-hue));
+  --accent-soft: oklch(95% 0.03 var(--nico-hue));
+  --on-accent: #ffffff;
+  --shadow: 0 8px 24px oklch(0% 0 0 / 0.10);
+  --st-success: oklch(50% 0.14 150);
+  --st-info: oklch(50% 0.13 220);
+  --st-warn: oklch(52% 0.14 80);
+  --st-error: oklch(55% 0.16 25);
+  --st-ghost: oklch(50% 0.02 var(--nico-hue));
+  /* Variantes "sólidas" para alertas high-emphasis (texto blanco). L fijo 46-50% da contraste AA en ambos temas. */
+  --st-success-solid: oklch(46% 0.16 150);
+  --st-info-solid:    oklch(46% 0.14 220);
+  --st-warn-solid:    oklch(48% 0.15 80);
+  --st-error-solid:   oklch(48% 0.18 25);
+  /* Escala de 5 tonos del color de marca (--accent-3 = primario).
+     Mismo hue + mismo croma, variando solo L: 72→60→48→40→32.
+     Uso: series de gráficos, categorías, diferenciar jerarquías visuales. */
+  --accent-1: oklch(72% var(--nico-chroma) var(--nico-hue));
+  --accent-2: oklch(60% var(--nico-chroma) var(--nico-hue));
+  --accent-3: var(--accent);
+  --accent-4: oklch(40% var(--nico-chroma) var(--nico-hue));
+  --accent-5: oklch(32% var(--nico-chroma) var(--nico-hue));
+  --radius: 6px;
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+[data-theme="dark"] {
+  --bg: oklch(16% 0.015 var(--nico-hue));
+  --surface: oklch(20% 0.018 var(--nico-hue));
+  --surface-2: oklch(24% 0.02 var(--nico-hue));
+  --border: oklch(30% 0.02 var(--nico-hue));
+  --text: oklch(94% 0.01 var(--nico-hue));
+  --muted: oklch(70% 0.02 var(--nico-hue));
+  --accent: oklch(50% var(--nico-chroma) var(--nico-hue));
+  --accent-text: oklch(75% var(--nico-chroma) var(--nico-hue));
+  --accent-soft: oklch(28% 0.04 var(--nico-hue));
+  --shadow: 0 8px 24px oklch(0% 0 0 / 0.40);
+  --st-success: oklch(76% 0.13 150);
+  --st-info: oklch(76% 0.12 220);
+  --st-warn: oklch(80% 0.13 85);
+  --st-error: oklch(72% 0.15 25);
+  --st-ghost: oklch(72% 0.02 var(--nico-hue));
+  /* Los --st-*-solid NO se sobrescriben en dark: se mantienen con L=46-50% para contraste con blanco */
+  /* Escala --accent-* en dark: misma lógica, L: 76→63→50→40→30 */
+  --accent-1: oklch(76% var(--nico-chroma) var(--nico-hue));
+  --accent-2: oklch(63% var(--nico-chroma) var(--nico-hue));
+  --accent-3: var(--accent);
+  --accent-4: oklch(40% var(--nico-chroma) var(--nico-hue));
+  --accent-5: oklch(30% var(--nico-chroma) var(--nico-hue));
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: "Inter", system-ui, -apple-system, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; display: flex; flex-direction: column; transition: background-color .5s var(--ease), color .5s var(--ease); }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
+
+/* ============ 2. PÍLDORAS + ALERTAS (estados globales) ============ */
+.pill { display: inline-flex; align-items: center; padding: .22rem .7rem; border-radius: var(--radius); font-size: .72rem; font-weight: 700; border: 1px solid; }
+.pill.ok    { color: var(--st-success); background: color-mix(in srgb, var(--st-success) 16%, transparent); border-color: color-mix(in srgb, var(--st-success) 45%, transparent); }
+.pill.info  { color: var(--st-info);    background: color-mix(in srgb, var(--st-info) 16%, transparent);    border-color: color-mix(in srgb, var(--st-info) 45%, transparent); }
+.pill.warn  { color: var(--st-warn);    background: color-mix(in srgb, var(--st-warn) 16%, transparent);    border-color: color-mix(in srgb, var(--st-warn) 45%, transparent); }
+.pill.err   { color: var(--st-error);   background: color-mix(in srgb, var(--st-error) 16%, transparent);   border-color: color-mix(in srgb, var(--st-error) 45%, transparent); }
+.pill.ghost { color: var(--st-ghost);   background: color-mix(in srgb, var(--st-ghost) 14%, transparent);   border-color: color-mix(in srgb, var(--st-ghost) 40%, transparent); }
+/* Variante D aplicada a las alertas reales de producción:
+   - error:   sólido + texto blanco (alta énfasis)
+   - warning: superficie + acento lateral (media énfasis, soporta texto largo)
+   - info:    superficie con tinte (baja énfasis)
+   - success: superficie con tinte + icono (confirmación)
+   Todas llevan icono líder (Alt C) para mejor reconocimiento. */
+.alert-wrapper { position: fixed; top: 1.5rem; right: 1.5rem; z-index: 9999; display: flex; flex-direction: column; align-items: flex-end; gap: .75rem; pointer-events: none; }
+.alert { display: flex; align-items: center; gap: .55rem; padding: .9rem 1.25rem; border-radius: var(--radius); font-weight: 700; font-size: .9rem; border: 1px solid; pointer-events: auto; animation: alertIn .45s var(--ease); transition: opacity .4s var(--ease), transform .4s var(--ease); backdrop-filter: blur(6px); box-shadow: 0 4px 16px oklch(0% 0 0 / 0.18); max-width: min(440px, 88vw); }
+.alert i { font-size: 1.15rem; flex-shrink: 0; }
+@keyframes alertIn { from { transform: translateX(110%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+
+/* INFO + SUCCESS: superficie sólida con tinte del estado (baja énfasis) */
+.alert.success { color: var(--st-success); background: color-mix(in srgb, var(--surface-2) 82%, var(--st-success)); border-color: color-mix(in srgb, var(--st-success) 55%, transparent); }
+.alert.info    { color: var(--st-info);    background: color-mix(in srgb, var(--surface-2) 82%, var(--st-info));    border-color: color-mix(in srgb, var(--st-info) 55%, transparent); }
+
+/* WARNING: superficie + borde izquierdo coloreado (media énfasis, soporta texto largo) */
+.alert.warning { color: var(--text); background: var(--surface-2); border-color: var(--border); border-left: 4px solid var(--st-warn); padding-left: calc(1.25rem - 3px); }
+.alert.warning i { color: var(--st-warn); }
+
+/* ERROR: sólido + texto blanco (alta énfasis, requiere acción) */
+.alert.error { color: #fff; background: var(--st-error-solid); border-color: color-mix(in srgb, var(--st-error-solid) 75%, #000); }
+
+/* ============ DEMO: estilos para la vista comparativa de alertas ============ */
+.demo-row { display: grid; grid-template-columns: 160px 1fr; gap: 1rem; align-items: start; padding: 1rem 0; border-bottom: 1px solid var(--border); }
+.demo-row:last-child { border-bottom: none; }
+.demo-row .demo-label { font-weight: 700; font-size: .85rem; color: var(--text); padding-top: .55rem; }
+.demo-row .demo-label small { display: block; font-weight: 400; font-size: .72rem; color: var(--muted); margin-top: .15rem; }
+.demo-row .demo-cards { display: flex; flex-direction: column; gap: .5rem; }
+.demo-card { display: flex; align-items: center; gap: .55rem; padding: .75rem 1rem; border-radius: var(--radius); font-weight: 700; font-size: .85rem; border: 1px solid; }
+.demo-card i { font-size: 1.1rem; flex-shrink: 0; }
+
+/* Alt A: Sólido + texto blanco */
+.demo-a { color: #fff; border: none; }
+.demo-a.success { background: var(--st-success-solid); }
+.demo-a.info    { background: var(--st-info-solid); }
+.demo-a.warning { background: var(--st-warn-solid); }
+.demo-a.error   { background: var(--st-error-solid); }
+
+/* Alt B: Acento lateral */
+.demo-b { color: var(--text); background: var(--surface-2); border-color: var(--border); border-left: 4px solid; padding-left: calc(1rem - 3px); }
+.demo-b.success { border-left-color: var(--st-success); }
+.demo-b.success i { color: var(--st-success); }
+.demo-b.info    { border-left-color: var(--st-info); }
+.demo-b.info i    { color: var(--st-info); }
+.demo-b.warning { border-left-color: var(--st-warn); }
+.demo-b.warning i { color: var(--st-warn); }
+.demo-b.error   { border-left-color: var(--st-error); }
+.demo-b.error i   { color: var(--st-error); }
+
+/* Alt C: Superficie con tinte + icono (igual que info/success en producción) */
+.demo-c.success { color: var(--st-success); background: color-mix(in srgb, var(--surface-2) 82%, var(--st-success)); border-color: color-mix(in srgb, var(--st-success) 55%, transparent); }
+.demo-c.success i { color: var(--st-success); }
+.demo-c.info    { color: var(--st-info);    background: color-mix(in srgb, var(--surface-2) 82%, var(--st-info));    border-color: color-mix(in srgb, var(--st-info) 55%, transparent); }
+.demo-c.info i    { color: var(--st-info); }
+.demo-c.warning { color: var(--st-warn);    background: color-mix(in srgb, var(--surface-2) 82%, var(--st-warn));    border-color: color-mix(in srgb, var(--st-warn) 55%, transparent); }
+.demo-c.warning i { color: var(--st-warn); }
+.demo-c.error   { color: var(--st-error);   background: color-mix(in srgb, var(--surface-2) 82%, var(--st-error));   border-color: color-mix(in srgb, var(--st-error) 55%, transparent); }
+.demo-c.error i   { color: var(--st-error); }
+
+/* Alt D: Variante por severidad (la aplicada en producción) */
+.demo-d.success { color: var(--st-success); background: color-mix(in srgb, var(--surface-2) 82%, var(--st-success)); border-color: color-mix(in srgb, var(--st-success) 55%, transparent); }
+.demo-d.success i { color: var(--st-success); }
+.demo-d.info    { color: var(--st-info);    background: color-mix(in srgb, var(--surface-2) 82%, var(--st-info));    border-color: color-mix(in srgb, var(--st-info) 55%, transparent); }
+.demo-d.info i    { color: var(--st-info); }
+.demo-d.warning { color: var(--text); background: var(--surface-2); border-color: var(--border); border-left: 4px solid var(--st-warn); padding-left: calc(1rem - 3px); }
+.demo-d.warning i { color: var(--st-warn); }
+.demo-d.error   { color: #fff; background: var(--st-error-solid); border: none; }
+
+.demo-trigger-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: .65rem; margin-top: 1.25rem; }
+
+
+/* ============ 3. HEADER + MENÚ ============ */
+.logo { font-weight: 800; font-size: 1.15rem; color: var(--accent-text); letter-spacing: -.5px; white-space: nowrap; text-decoration: none; display: inline-flex; align-items: center; gap: .35rem; }
+.logo:hover { opacity: .85; }
+.logo i { font-size: 1.1rem; }
+.logo[aria-current="page"]::before { content: ''; display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--accent-text); margin-right: .15rem; }
+header { background: var(--bg); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100; transition: background-color .5s var(--ease), border-color .5s var(--ease); }
+nav { max-width: 1280px; margin: 0 auto; padding: 0 1.5rem; display: flex; align-items: center; justify-content: space-between; height: 60px; gap: 1rem; }
+nav [role="menu"] ul { list-style: none; margin: 0; padding: 0; }
+nav [role="menu"] { position: relative; height: 100%; display: flex; align-items: center; flex: 1; }
+nav [role="menu"] #mainMenu { height: 100%; display: flex; }
+nav [role="menu"] [role="toggle"] { display: none; background: none; border: none; cursor: pointer; color: var(--muted); font-size: 1.3rem; padding: .4rem; }
+nav [role="menu"] [role="list"] { display: flex; align-items: stretch; gap: .25rem; height: 100%; }
+nav [role="menu"] [role="list"] > li { position: relative; display: flex; align-items: center; }
+nav [role="menu"] [role="list"] > li > a { display: flex; align-items: center; gap: .35rem; padding: .5rem .9rem; color: var(--muted); font-size: .9rem; font-weight: 600; text-decoration: none; white-space: nowrap; border-radius: var(--radius); transition: color .3s var(--ease); }
+nav [role="menu"] [role="list"] > li > a i { font-size: .85rem; opacity: .6; }
+nav [role="menu"] [role="list"] > li > a:hover, nav [role="menu"] [role="list"] > li.open > a, nav [role="menu"] [role="list"] > li > a.active { color: var(--accent-text); }
+nav [role="menu"] [role="submenu"] { position: absolute; top: calc(100% + 6px); left: 0; min-width: 200px; padding: .4rem; background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow); z-index: 101; opacity: 0; visibility: hidden; transform: translateY(10px) scale(.98); transition: opacity .3s var(--ease), transform .3s var(--ease), visibility .3s; pointer-events: none; }
+nav [role="menu"] [role="submenu"]::before { content: ''; position: absolute; top: -6px; left: 0; right: 0; height: 6px; }
+nav [role="menu"] [role="submenu"] [role="submenu"] { top: -.4rem; left: calc(100% + 6px); }
+nav [role="menu"] [role="submenu"] [role="submenu"]::before { top: 0; bottom: 0; left: -6px; right: auto; width: 6px; height: auto; }
+nav [role="menu"] [role="list"] > li.open > [role="submenu"] { opacity: 1; visibility: visible; transform: none; pointer-events: auto; }
+nav [role="menu"] [role="submenu"] li { position: relative; }
+nav [role="menu"] [role="submenu"] li:hover > [role="submenu"], nav [role="menu"] [role="submenu"] li:focus-within > [role="submenu"] { opacity: 1; visibility: visible; transform: none; pointer-events: auto; }
+nav [role="menu"] [role="submenu"] li > a { display: flex; justify-content: space-between; align-items: center; gap: 1rem; padding: .55rem .8rem; color: var(--muted); font-size: .875rem; text-decoration: none; border-radius: 4px; white-space: nowrap; transition: background-color .25s var(--ease), color .25s var(--ease); }
+nav [role="menu"] [role="submenu"] li > a i { font-size: .85rem; opacity: .6; }
+nav [role="menu"] [role="submenu"] li:hover > a { background: var(--accent-soft); color: var(--accent-text); }
+.nav-controls { display: flex; align-items: center; gap: .75rem; }
+#themeToggle { background: none; border: none; cursor: pointer; color: var(--muted); font-size: 1.15rem; padding: .45rem; border-radius: var(--radius); transition: color .3s var(--ease), background-color .3s var(--ease), transform .5s var(--ease); }
+#themeToggle:hover { color: var(--accent-text); background: var(--accent-soft); }
+#openUserSidebar { background: none; border: none; cursor: pointer; padding: 0; border-radius: 50%; display: grid; place-items: center; transition: transform .3s var(--ease), box-shadow .3s var(--ease); }
+#openUserSidebar:hover { transform: scale(1.08); box-shadow: 0 0 0 3px var(--accent-soft); }
+#openUserSidebar .avatar { width: 34px; height: 34px; border-radius: 50%; background: var(--accent); color: var(--on-accent); display: grid; place-items: center; font-weight: 700; font-size: .8rem; }
+
+/* ============ 4. SIDEBAR ============ */
+.scrim { position: fixed; inset: 0; background: oklch(0% 0 0 / .45); backdrop-filter: blur(3px); z-index: 199; opacity: 0; pointer-events: none; transition: opacity .4s var(--ease); }
+.scrim.active { opacity: 1; pointer-events: auto; }
+.sidebar { position: fixed; top: 0; bottom: 0; width: min(320px, 88vw); background: var(--surface); z-index: 200; display: flex; flex-direction: column; box-shadow: var(--shadow); transition: transform .5s var(--ease), background-color .5s var(--ease); }
+.sidebar[data-side="right"] { right: 0; border-left: 1px solid var(--border); transform: translateX(100%); }
+.sidebar[data-side="left"]  { left: 0; border-right: 1px solid var(--border); transform: translateX(-100%); }
+.sidebar.active { transform: translateX(0); }
+.sb-head { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 1.1rem 1.25rem; border-bottom: 1px solid var(--border); }
+.sb-user { display: flex; align-items: center; gap: .75rem; min-width: 0; }
+.sb-user .avatar { width: 40px; height: 40px; border-radius: 50%; background: var(--accent); color: var(--on-accent); display: grid; place-items: center; font-weight: 700; flex-shrink: 0; }
+.sb-user b { display: block; font-size: .9rem; }
+.sb-user span { display: block; font-size: .75rem; color: var(--muted); }
+.sb-close { background: none; border: none; font-size: 1.4rem; line-height: 1; color: var(--muted); cursor: pointer; padding: .25rem .5rem; border-radius: var(--radius); transition: background-color .25s, color .25s; }
+.sb-close:hover { background: var(--accent-soft); color: var(--text); }
+.sb-body { padding: 1.25rem; overflow-y: auto; flex: 1; }
+.sb-label { display: block; font-size: .6875rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin-bottom: .75rem; }
+.swatches { display: grid; grid-template-columns: repeat(7, 1fr); gap: .5rem; margin-bottom: .9rem; }
+.swatch { width: 100%; aspect-ratio: 1; border-radius: 50%; border: 2px solid transparent; cursor: pointer; transition: transform .3s var(--ease), border-color .3s var(--ease); }
+.swatch:hover { transform: scale(1.15); }
+.swatch.active { border-color: var(--text); transform: scale(1.08); }
+.custom-row { display: flex; align-items: center; gap: .75rem; padding: .6rem; background: var(--accent-soft); border-radius: var(--radius); cursor: pointer; }
+.custom-row input[type="color"] { width: 34px; height: 34px; border: 1px solid var(--border); border-radius: 50%; background: none; cursor: pointer; padding: 2px; }
+.custom-row span { font-size: .8125rem; color: var(--muted); }
+.sb-note { display: flex; align-items: flex-start; gap: .4rem; margin-top: .7rem; font-size: .72rem; color: var(--muted); line-height: 1.5; }
+.sb-sep { height: 1px; background: var(--border); margin: 1.25rem 0; }
+.sb-item { display: flex; align-items: center; gap: .7rem; width: 100%; padding: .65rem .75rem; border: none; border-radius: var(--radius); background: none; color: var(--text); font: inherit; font-size: .875rem; font-weight: 500; cursor: pointer; text-align: left; transition: background-color .25s var(--ease), color .25s var(--ease); }
+.sb-item i { font-size: 1.05rem; color: var(--muted); }
+.sb-item:hover { background: var(--accent-soft); color: var(--accent-text); }
+.sb-item:hover i { color: var(--accent-text); }
+.sb-item.danger, .sb-item.danger i { color: var(--st-error); }
+.sb-item.danger:hover { background: color-mix(in srgb, var(--st-error) 14%, transparent); }
+
+/* ============ 5. VISTAS + COMPONENTES ============ */
+main { flex: 1; width: 100%; max-width: 1280px; margin: 0 auto; padding: 2rem 1.5rem; }
+.view { display: none; }
+.view.active { display: flex; flex-wrap: wrap; gap: 1rem; animation: viewIn .45s var(--ease); }
+@keyframes viewIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+[span="1"]{flex:0 0 12.5%} [span="2"]{flex:0 0 25%} [span="3"]{flex:0 0 37.5%} [span="4"]{flex:0 0 50%}
+[span="5"]{flex:0 0 62.5%} [span="6"]{flex:0 0 75%} [span="7"]{flex:0 0 87.5%} [span="8"]{flex:0 0 100%}
+.view > [span] { min-width: 0; }
+@media (max-width:1023px){ [span="1"],[span="2"]{flex:0 0 50%} [span="3"],[span="4"],[span="5"],[span="6"],[span="7"]{flex:0 0 100%} }
+@media (max-width:767px){ .view > [span]{flex:0 0 100% !important} main{padding:1.25rem 1rem} }
+
+.view-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+.view-head h1 { font-size: 1.5rem; font-weight: 800; letter-spacing: -.02em; }
+.view-head p { color: var(--muted); font-size: .875rem; margin-top: .3rem; }
+
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: calc(var(--radius) + 2px); padding: 1.25rem; transition: background-color .5s var(--ease), border-color .5s var(--ease); }
+.card h3 { font-size: .95rem; font-weight: 700; margin-bottom: 1rem; }
+.kpi .lbl { font-size: .6875rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.kpi .val { font-size: 1.7rem; font-weight: 800; letter-spacing: -.02em; margin: .25rem 0; }
+.kpi .delta { font-size: .75rem; font-weight: 600; }
+.kpi .delta.up { color: var(--st-success); }
+.kpi .delta.down { color: var(--st-error); }
+.bars { display: flex; align-items: flex-end; gap: .6rem; height: 150px; }
+.bar-col { flex: 1; display: flex; flex-direction: column; justify-content: flex-end; gap: .4rem; height: 100%; }
+.bar-col > i { background: var(--accent); opacity: .9; border-radius: 5px 5px 0 0; transition: opacity .25s var(--ease); }
+.bar-col:hover > i { opacity: 1; }
+.bar-col span { font-size: .6875rem; color: var(--muted); text-align: center; }
+/* Multi-serie: grupos de barras lado a lado dentro de cada columna */
+.bar-group { display: flex; gap: 3px; align-items: flex-end; height: 100%; width: 100%; }
+.bar-group i { flex: 1; border-radius: 5px 5px 0 0; transition: opacity .25s var(--ease); opacity: .9; min-width: 0; }
+.bar-group:hover i { opacity: 1; }
+/* Clases de serie s1..s5: funcionan tanto en .bar-col > i como en .bar-group i */
+i.s1 { background: var(--accent-1); }  /* más claro */
+i.s2 { background: var(--accent-2); }
+i.s3 { background: var(--accent-3); }  /* primario */
+i.s4 { background: var(--accent-4); }
+i.s5 { background: var(--accent-5); }  /* más oscuro */
+.legend { display: flex; gap: 1rem; margin-top: 1rem; flex-wrap: wrap; align-items: center; }
+.legend span { display: inline-flex; align-items: center; gap: .4rem; font-size: .75rem; color: var(--muted); }
+.legend i { width: 12px; height: 12px; border-radius: 3px; display: inline-block; }
+.legend .l1 { background: var(--accent-1); }
+.legend .l2 { background: var(--accent-2); }
+.legend .l3 { background: var(--accent-3); }
+.legend .l4 { background: var(--accent-4); }
+.legend .l5 { background: var(--accent-5); }
+.activity { list-style: none; }
+.activity li { display: flex; gap: .7rem; padding: .6rem 0; border-bottom: 1px solid var(--border); font-size: .8125rem; }
+.activity li:last-child { border-bottom: none; }
+.activity .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent-text); margin-top: .45rem; flex-shrink: 0; }
+.activity time { display: block; font-size: .6875rem; color: var(--muted); }
+
+.toolbar { display: flex; gap: .75rem; align-items: center; flex-wrap: wrap; }
+.search { flex: 1; min-width: 220px; display: flex; align-items: center; gap: .6rem; height: 44px; padding: 0 .9rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); transition: border-color .3s var(--ease), box-shadow .3s var(--ease); }
+.search:focus-within { border-color: var(--accent-text); box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-text), transparent 78%); }
+.search i { color: var(--muted); }
+.search input { border: none; outline: none; background: none; color: var(--text); font: inherit; font-size: .875rem; width: 100%; }
+.search kbd { font-family: inherit; font-size: .65rem; color: var(--muted); border: 1px solid var(--border); border-radius: 4px; padding: .1rem .45rem; }
+
+.btn { display: inline-flex; align-items: center; gap: .5rem; padding: .6875rem 1.1875rem; border-radius: var(--radius); border: none; font: inherit; font-size: .84375rem; font-weight: 600; cursor: pointer; white-space: nowrap; transition: transform .3s var(--ease), box-shadow .3s var(--ease), filter .3s var(--ease), background-color .3s var(--ease), border-color .3s var(--ease), color .3s var(--ease); }
+.btn-primary { background: var(--accent); color: var(--on-accent); box-shadow: 0 4px 16px oklch(var(--nico-hue) var(--nico-chroma) 40% / .25), inset 0 1px 0 oklch(100% 0 0 / .15); }
+.btn-primary:hover { filter: brightness(1.1); transform: translateY(-2px); }
+.btn-primary:active { transform: translateY(0); }
+.btn-ghost { background: transparent; color: var(--text); border: 1px solid var(--border); }
+.btn-ghost:hover { background: var(--accent-soft); border-color: var(--accent-text); }
+
+/* PANEL + TABS INTERNAS */
+.panel { background: var(--surface); border: 1px solid var(--border); border-radius: calc(var(--radius) + 2px); overflow: hidden; transition: background-color .5s var(--ease), border-color .5s var(--ease); }
+.panel-tabs { display: flex; gap: 1.5rem; padding: 0 1.25rem; border-bottom: 1px solid var(--border); overflow-x: auto; scrollbar-width: none; }
+.panel-tabs::-webkit-scrollbar { display: none; }
+.ptab { position: relative; background: none; border: none; padding: .85rem .1rem; font: inherit; font-size: .84rem; font-weight: 600; color: var(--muted); cursor: pointer; display: flex; align-items: center; gap: .4rem; white-space: nowrap; transition: color .25s var(--ease); }
+.ptab .t-count { font-size: .65rem; font-weight: 700; opacity: .75; }
+.ptab::after { content: ''; position: absolute; left: 0; right: 0; bottom: -1px; height: 2px; border-radius: 2px 2px 0 0; background: var(--accent-text); transform: scaleX(0); transition: transform .3s var(--ease); }
+.ptab:hover { color: var(--text); }
+.ptab.active { color: var(--accent-text); }
+.ptab.active::after { transform: scaleX(1); }
+.panel-body { padding: 1.5rem; }
+
+/* TABLA: layout fixed con anchos de columna + headers ordenables */
+.table-scroll { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: .875rem; table-layout: fixed; }
+th, td { padding: .85rem 1.25rem; text-align: left; border-bottom: 1px solid var(--border); vertical-align: middle; overflow: hidden; text-overflow: ellipsis; transition: background-color .25s var(--ease); }
+th { font-size: .6875rem; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); font-weight: 700; }
+/* Headers ordenables: el cambio visual es SOLO en el icono flecha. Texto y fondo del th no cambian al hover. */
+th.sortable { cursor: pointer; user-select: none; }
+th.sortable .th-inner { display: flex; align-items: center; gap: .35rem; }
+th.sortable .sort-ind { font-size: .75rem; opacity: .15; transform: rotate(0deg); transition: opacity .25s var(--ease), transform .25s var(--ease); }
+th.sortable:hover .sort-ind { opacity: .45; }                       /* sutil: solo la flecha un poco más visible */
+th.sortable.asc  .sort-ind { opacity: 1; transform: rotate(0deg); }   /* orden asc: flecha arriba */
+th.sortable.desc .sort-ind { opacity: 1; transform: rotate(180deg); }  /* orden desc: flecha abajo */
+th.c-id, td.c-id { width: 6rem; }
+th.c-tel, td.c-tel { width: 10rem; }
+th.c-rfc, td.c-rfc { width: 10rem; }
+th.c-estado, td.c-estado { width: 10rem; }
+th.c-actions, td.c-actions { width: 5.5rem; text-align: right; }
+tbody tr { transition: background-color .25s var(--ease); }
+tbody tr:hover { background: color-mix(in srgb, var(--accent-soft), transparent 40%); cursor: pointer; }
+tbody tr:last-child td { border-bottom: none; }
+tr.row-new { animation: rowIn .5s var(--ease); }
+@keyframes rowIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: none; } }
+.id-badge { font-family: ui-monospace, SFMono-Regular, monospace; font-size: .75rem; font-weight: 700; color: var(--accent-text); background: var(--accent-soft); padding: .3rem .55rem; border-radius: var(--radius); display: inline-block; }
+.cell-name b { display: block; font-weight: 600; overflow: hidden; text-overflow: ellipsis; }
+.cell-name span { display: block; font-size: .75rem; color: var(--muted); margin-top: .15rem; overflow: hidden; text-overflow: ellipsis; }
+
+/* KEBAB + DROPDOWN (position absolute: fuera del flujo) */
+.row-actions { position: relative; display: inline-block; }
+.kebab { width: 32px; height: 32px; border-radius: var(--radius); border: 1px solid transparent; background: none; color: var(--muted); cursor: pointer; display: grid; place-items: center; transition: background-color .25s, color .25s; }
+.kebab:hover { background: var(--accent-soft); color: var(--accent-text); }
+.dd {
+  position: absolute; top: calc(100% + 6px); right: 0;
+  min-width: 170px; background: var(--surface-2); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: .35rem; box-shadow: var(--shadow); z-index: 300;
+  opacity: 0; visibility: hidden; transform: translateY(6px) scale(.98);
+  transition: opacity .25s var(--ease), transform .25s var(--ease), visibility .25s;
+  pointer-events: none; text-align: left;
+}
+.row-actions.open .dd { opacity: 1; visibility: visible; transform: none; pointer-events: auto; }
+.dd button { display: flex; align-items: center; gap: .6rem; width: 100%; padding: .5rem .7rem; border: none; background: none; color: var(--text); font: inherit; font-size: .8125rem; border-radius: 4px; cursor: pointer; text-align: left; transition: background-color .2s, color .2s; }
+.dd button i { color: var(--muted); }
+.dd button:hover { background: var(--accent-soft); color: var(--accent-text); }
+.dd button:hover i { color: var(--accent-text); }
+.dd button.danger, .dd button.danger i { color: var(--st-error); }
+.dd button.danger:hover { background: color-mix(in srgb, var(--st-error) 14%, transparent); }
+.dd .sep { height: 1px; background: var(--border); margin: .3rem .2rem; }
+
+/* FORMULARIOS (alta de cliente) — grid hasta 6 columnas con utilidades de span */
+.form-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 1.1rem 1.25rem; }
+.field        { grid-column: span 3; }  /* default: 2 por fila */
+.field.fw-1   { grid-column: span 1; }   /* hasta 6 por fila en anchos */
+.field.fw-2   { grid-column: span 2; }   /* hasta 3 por fila */
+.field.fw-4   { grid-column: span 4; }   /* ancho medio */
+.field.fw-full{ grid-column: 1 / -1; }   /* fila completa */
+@media (max-width:1023px){
+  .form-grid { grid-template-columns: repeat(4, 1fr); }
+  .field { grid-column: span 2; }
+  .field.fw-1 { grid-column: span 1; }
+  .field.fw-2 { grid-column: span 2; }
+  .field.fw-4 { grid-column: span 4; }
+}
+@media (max-width:767px){
+  .form-grid { grid-template-columns: 1fr; }
+  .field, .field.fw-1, .field.fw-2, .field.fw-4, .field.fw-full { grid-column: 1 / -1; }
+}
+.field label { display: block; font-size: .78rem; font-weight: 600; margin-bottom: .4rem; }
+.field label .opt { font-weight: 400; color: var(--muted); }
+.input { width: 100%; height: 42px; padding: 0 .8125rem; border-radius: var(--radius); border: 1px solid var(--border); background: var(--bg); color: var(--text); font: inherit; font-size: .875rem; outline: none; transition: border-color .25s var(--ease), box-shadow .25s var(--ease), background-color .4s var(--ease); }
+textarea.input { height: auto; min-height: 96px; padding: .6rem .8125rem; resize: vertical; }
+.input:focus { border-color: var(--accent-text); box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-text), transparent 78%); }
+.input.error { border-color: var(--st-error); box-shadow: 0 0 0 3px color-mix(in srgb, var(--st-error), transparent 78%); }
+/* SELECT personalizado: quita el estilo nativo del navegador y aplica el del tema */
+select.input {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  padding-right: 2.5rem;
+  cursor: pointer;
+}
+select.input::-ms-expand { display: none; }  /* IE/Edge legacy */
+select.input option { background-color: var(--surface-2); color: var(--text); }
+.select-wrap { position: relative; }
+.select-wrap::after {
+  content: '\\ea4e';  /* ri-arrow-down-s-fill */
+  font-family: 'remixicon' !important;
+  font-size: 1.1rem;
+  color: var(--muted);
+  position: absolute;
+  right: 0.85rem;
+  top: calc(50% + .35rem);  /* compensar el label arriba */
+  transform: translateY(-50%);
+  pointer-events: none;
+  transition: color .25s var(--ease);
+}
+.select-wrap:has(select.input:focus)::after { color: var(--accent-text); }
+.err-msg { display: none; font-size: .72rem; color: var(--st-error); margin-top: .35rem; font-weight: 600; }
+.err-msg.show { display: block; }
+.form-sep { height: 1px; background: var(--border); margin: 1.4rem 0; }
+.form-actions { display: flex; gap: .75rem; align-items: center; }
+.form-actions .spacer { flex: 1; }
+.form-note { font-size: .75rem; color: var(--muted); }
+
+ul[data-paginaactual] { display: flex; justify-content: flex-start; gap: 4px; list-style: none; margin: 0; }
+ul[data-paginaactual] li a, ul[data-paginaactual] li span.active-page { display: flex; align-items: center; justify-content: center; min-width: 34px; height: 34px; padding: 0 .4rem; border-radius: var(--radius); font-size: .8125rem; font-weight: 600; text-decoration: none; color: var(--muted); transition: background-color .25s var(--ease), color .25s var(--ease); }
+ul[data-paginaactual] li a:hover { background: var(--accent-soft); color: var(--accent-text); }
+ul[data-paginaactual] li span.active-page { background: var(--accent); color: var(--on-accent); }
+/* Wrapper de paginación: paginación a la izquierda, info extra (futura) a la derecha */
+.pag-row { display: flex; justify-content: space-between; align-items: center; gap: 1rem; margin-top: 1.25rem; flex-wrap: wrap; }
+.pag-row-side { display: flex; align-items: center; }
+.pag-row-extra { flex: 1; min-height: 34px; display: flex; align-items: center; justify-content: flex-end; color: var(--muted); font-size: .8125rem; }
+
+.empty { flex: 1; display: flex; flex-direction: column; align-items: center; text-align: center; padding: 4rem 1rem; }
+.empty .fig { width: 72px; height: 72px; border-radius: 18px; display: grid; place-items: center; background: var(--accent-soft); color: var(--accent-text); font-size: 2rem; margin-bottom: 1rem; }
+.empty h2 { font-size: 1.1rem; margin-bottom: .4rem; }
+.empty p { color: var(--muted); font-size: .875rem; max-width: 40ch; margin-bottom: 1.25rem; }
+
+.spinner { width: 2.75rem; height: 2.75rem; border-radius: 50%; border: .35rem solid color-mix(in srgb, var(--accent-text), transparent 85%); border-top-color: var(--accent-text); border-right-color: var(--accent-text); animation: spin 1s cubic-bezier(.55,.2,.3,.9) infinite, glow 2s ease-in-out infinite alternate; }
+@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes glow { from { box-shadow: 0 0 .25rem color-mix(in srgb, var(--accent-text), transparent 70%); } to { box-shadow: 0 0 .9rem color-mix(in srgb, var(--accent-text), transparent 35%); } }
+.spinner-container { position: fixed; inset: 0; z-index: 9999; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,.20); backdrop-filter: blur(2px); }
+
+/* MÓVIL */
+@media (max-width: 768px) {
+  nav [role="menu"] [role="toggle"] { display: block; }
+  nav [role="menu"] #mainMenu { position: absolute; top: 100%; left: 0; right: 0; height: auto; }
+  nav [role="menu"] [role="list"] { display: none; flex-direction: column; align-items: stretch; height: auto; background: var(--surface); border-bottom: 1px solid var(--border); padding: .5rem; box-shadow: var(--shadow); }
+  nav [role="menu"] [role="list"].active { display: flex; }
+  nav [role="menu"] [role="list"] > li { display: block; }
+  nav [role="menu"] [role="submenu"] { position: static; opacity: 1; visibility: visible; transform: none; display: none; box-shadow: none; border: none; background: transparent; padding-left: 1rem; min-width: 0; pointer-events: auto; }
+  nav [role="menu"] [role="submenu"]::before { display: none; }
+  nav [role="menu"] li.open > [role="submenu"] { display: block; }
+  table { table-layout: auto; }
+  table, thead, tbody, th, td, tr { display: block; }
+  thead tr { position: absolute; top: -9999px; left: -9999px; }
+  tbody tr { border: 1px solid var(--border); margin: .75rem; border-radius: var(--radius); overflow: hidden; }
+  td { display: flex; justify-content: space-between; align-items: center; gap: 1rem; border: none; border-bottom: 1px solid var(--border); padding: .7rem 1rem; overflow: visible; }
+  td:last-child { border-bottom: none; }
+  td::before { content: attr(data-label); font-weight: 700; color: var(--muted); font-size: .65rem; text-transform: uppercase; letter-spacing: .05em; }
+  td.c-actions { justify-content: flex-end; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <nav>
+    <a href="#" class="logo" id="navLogo" data-view="dashboard" aria-current="page"><i class="ri-flashlight-line"></i> Nico ERP</a>
+    <div role="menu">
+      <button role="toggle" id="menuToggle" aria-label="Abrir menú"><i class="ri-menu-line"></i></button>
+      <div id="mainMenu">
+        <ul role="list">
+          <li><a href="#" class="active" data-view="dashboard">Inicio</a></li>
+          <li>
+            <a href="#">Sistema <i class="ri-arrow-down-s-line"></i></a>
+            <ul role="submenu">
+              <li><a href="#" data-view="placeholder" data-title="Usuarios">Usuarios</a></li>
+              <li><a href="#" data-view="placeholder" data-title="Roles y permisos">Roles y permisos</a></li>
+              <li><a href="#" data-view="demo-alertas">Demo de alertas</a></li>
+              <li>
+                <a href="#">Catálogos <i class="ri-arrow-right-s-line"></i></a>
+                <ul role="submenu">
+                  <li><a href="#" data-view="placeholder" data-title="Productos">Productos</a></li>
+                  <li><a href="#" data-view="placeholder" data-title="Unidades de Medida">Unidades de Medida</a></li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+          <li>
+            <a href="#">Comercial <i class="ri-arrow-down-s-line"></i></a>
+            <ul role="submenu">
+              <li><a href="#" data-view="clientes">Clientes</a></li>
+              <li><a href="#" data-view="placeholder" data-title="Pedidos">Pedidos</a></li>
+              <li>
+                <a href="#">Facturación <i class="ri-arrow-right-s-line"></i></a>
+                <ul role="submenu">
+                  <li><a href="#" data-view="placeholder" data-title="Facturas emitidas">Facturas emitidas</a></li>
+                  <li><a href="#" data-view="placeholder" data-title="Notas de crédito">Notas de crédito</a></li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+          <li>
+            <a href="#">Inventario <i class="ri-arrow-down-s-line"></i></a>
+            <ul role="submenu">
+              <li><a href="#" data-view="placeholder" data-title="Almacenes">Almacenes</a></li>
+              <li><a href="#" data-view="placeholder" data-title="Movimientos">Movimientos</a></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="nav-controls">
+      <button id="themeToggle" aria-label="Cambiar tema"><i class="ri-contrast-2-line"></i></button>
+      <button id="openUserSidebar" aria-label="Menú de usuario"><span class="avatar">AD</span></button>
+    </div>
+  </nav>
+</header>
+
+<div class="scrim" id="scrim"></div>
+<aside class="sidebar" data-side="right" id="userSidebar" aria-hidden="true">
+  <div class="sb-head">
+    <div class="sb-user">
+      <div class="avatar">AD</div>
+      <div><b>Administrador</b><span>admin@nico-erp.com</span></div>
+    </div>
+    <button class="sb-close" data-close-sidebar aria-label="Cerrar">&times;</button>
+  </div>
+  <div class="sb-body">
+    <span class="sb-label">Color de marca</span>
+    <div class="swatches">
+      <button class="swatch active" data-h="155" data-c="0.13" data-hex="#009865" style="background: oklch(48% 0.13 155)" title="Esmeralda"></button>
+      <button class="swatch" data-h="262" data-c="0.13" data-hex="#3b82f6" style="background: oklch(48% 0.13 262)" title="Azul"></button>
+      <button class="swatch" data-h="295" data-c="0.13" data-hex="#8b5cf6" style="background: oklch(48% 0.13 295)" title="Violeta"></button>
+      <button class="swatch" data-h="340" data-c="0.12" data-hex="#ec4899" style="background: oklch(48% 0.12 340)" title="Rosa"></button>
+      <button class="swatch" data-h="85"  data-c="0.13" data-hex="#84cc16" style="background: oklch(48% 0.13 85)"  title="Lima"></button>
+      <button class="swatch" data-h="27"  data-c="0.14" data-hex="#ef4444" style="background: oklch(48% 0.14 27)"  title="Rojo"></button>
+      <button class="swatch" data-h="195" data-c="0.11" data-hex="#06b6d4" style="background: oklch(48% 0.11 195)" title="Cian"></button>
+    </div>
+    <label class="custom-row">
+      <input type="color" id="brandColorPicker" value="#009865">
+      <span>Color personalizado…</span>
+    </label>
+    <p class="sb-note"><i class="ri-shield-check-line"></i> Solo se aplican tonos con contraste garantizado para texto blanco. Se guarda en este navegador.</p>
+    <div class="sb-sep"></div>
+    <button class="sb-item"><i class="ri-user-3-line"></i> Mi perfil</button>
+    <button class="sb-item"><i class="ri-settings-3-line"></i> Preferencias</button>
+    <button class="sb-item danger" id="sbLogout"><i class="ri-logout-box-r-line"></i> Cerrar sesión</button>
+  </div>
+</aside>
+
+<main>
+  <!-- DASHBOARD -->
+  <section class="view active" data-view="dashboard">
+    <div span="8" class="view-head">
+      <div><h1>Dashboard</h1><p>Resumen general de tu operación.</p></div>
+      <button class="btn btn-ghost" id="btnExportDash"><i class="ri-download-2-line"></i> Exportar resumen</button>
+    </div>
+    <div span="2" class="card kpi"><div class="lbl">Clientes activos</div><div class="val">128</div><div class="delta up">▲ 12% este mes</div></div>
+    <div span="2" class="card kpi"><div class="lbl">Pedidos del mes</div><div class="val">342</div><div class="delta up">▲ 8% vs. anterior</div></div>
+    <div span="2" class="card kpi"><div class="lbl">Facturación</div><div class="val">€ 48.2K</div><div class="delta up">▲ 4.5%</div></div>
+    <div span="2" class="card kpi"><div class="lbl">Stock crítico</div><div class="val">7</div><div class="delta down">▼ requiere atención</div></div>
+    <div span="5" class="card">
+      <h3>Ventas por categoría</h3>
+      <div class="bars">
+        <div class="bar-col"><i class="s1" style="height:55%" title="Electrónica: 21K"></i><span>Electrónica</span></div>
+        <div class="bar-col"><i class="s2" style="height:72%" title="Hogar: 28K"></i><span>Hogar</span></div>
+        <div class="bar-col"><i class="s3" style="height:90%" title="Ropa: 36K"></i><span>Ropa</span></div>
+        <div class="bar-col"><i class="s4" style="height:48%" title="Libros: 18K"></i><span>Libros</span></div>
+        <div class="bar-col"><i class="s5" style="height:62%" title="Otros: 24K"></i><span>Otros</span></div>
+      </div>
+      <div class="legend">
+        <span><i class="l1"></i> S1 <small style="opacity:.6">claro</small></span>
+        <span><i class="l2"></i> S2</span>
+        <span><i class="l3"></i> S3 <small style="opacity:.6">primario</small></span>
+        <span><i class="l4"></i> S4</span>
+        <span><i class="l5"></i> S5 <small style="opacity:.6">oscuro</small></span>
+      </div>
+    </div>
+    <div span="3" class="card">
+      <h3>Actividad reciente</h3>
+      <ul class="activity">
+        <li><span class="dot"></span><div>Nuevo cliente <b>Globex Corp</b><time>hace 12 min</time></div></li>
+        <li><span class="dot"></span><div>Factura <b>#F-2210</b> emitida<time>hace 1 h</time></div></li>
+        <li><span class="dot"></span><div>Pedido <b>#P-9031</b> enviado<time>hace 3 h</time></div></li>
+        <li><span class="dot"></span><div>Stock ajustado en <b>Almacén Norte</b><time>ayer</time></div></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- LISTADO DE CLIENTES -->
+  <section class="view" data-view="clientes">
+    <div span="8" class="view-head">
+      <div><h1>Clientes</h1><p>Administra los datos de los clientes de tu empresa.</p></div>
+      <div style="display:flex; gap:.5rem;">
+        <button class="btn btn-ghost" id="btnExportClients"><i class="ri-file-download-line"></i> Exportar CSV</button>
+        <button class="btn btn-primary" id="btnNewClient"><i class="ri-add-line"></i> Nuevo cliente</button>
+      </div>
+    </div>
+    <div span="8" class="toolbar">
+      <label class="search"><i class="ri-search-line"></i><input type="search" id="clientSearch" placeholder="Buscar en clientes…"><kbd>/</kbd></label>
+      <button class="btn btn-ghost" id="btnClear"><i class="ri-close-line"></i> Limpiar</button>
+    </div>
+    <div span="8" class="panel">
+      <div class="panel-tabs" id="clientTabs">
+        <button class="ptab active" data-filter="todos">Todos <span class="t-count"></span></button>
+        <button class="ptab" data-filter="ok">Activos <span class="t-count"></span></button>
+        <button class="ptab" data-filter="warn">Pendientes <span class="t-count"></span></button>
+        <button class="ptab" data-filter="ghost">Inactivos <span class="t-count"></span></button>
+      </div>
+      <div class="table-scroll">
+        <table id="clientsTable">
+          <thead>
+            <tr>
+              <th class="c-id sortable" data-sort="id"><span class="th-inner">ID <i class="ri-arrow-up-s-fill sort-ind"></i></span></th>
+              <th class="sortable" data-sort="name"><span class="th-inner">Cliente <i class="ri-arrow-up-s-fill sort-ind"></i></span></th>
+              <th class="c-tel sortable" data-sort="tel"><span class="th-inner">Teléfono <i class="ri-arrow-up-s-fill sort-ind"></i></span></th>
+              <th class="c-rfc sortable" data-sort="rfc"><span class="th-inner">RFC <i class="ri-arrow-up-s-fill sort-ind"></i></span></th>
+              <th class="c-estado sortable" data-sort="st"><span class="th-inner">Estado <i class="ri-arrow-up-s-fill sort-ind"></i></span></th>
+              <th class="c-actions">Acciones</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+    <div span="8" class="pag-row">
+      <div id="clientsPag" class="pag-row-side"></div>
+      <div class="pag-row-extra"><!-- Espacio reservado para info futura (totales, filtros activos, etc.) --></div>
+    </div>
+  </section>
+
+  <!-- ALTA DE CLIENTE -->
+  <section class="view" data-view="alta">
+    <div span="8" class="view-head">
+      <div><h1>Nuevo cliente</h1><p>Los campos marcados con * son obligatorios.</p></div>
+      <button class="btn btn-ghost" id="btnBackList"><i class="ri-arrow-left-line"></i> Volver al listado</button>
+    </div>
+    <div span="8" class="panel">
+      <div class="panel-body">
+        <form id="altaForm" novalidate>
+          <div class="form-grid">
+            <div class="field fw-2">
+              <label for="fNombre">Nombre comercial *</label>
+              <input class="input" id="fNombre" type="text" placeholder="Ej. Acme Corporation">
+              <span class="err-msg" id="eNombre">El nombre es obligatorio.</span>
+            </div>
+            <div class="field fw-2">
+              <label for="fEmail">Correo electrónico *</label>
+              <input class="input" id="fEmail" type="email" placeholder="contacto@empresa.com">
+              <span class="err-msg" id="eEmail">Introduce un correo válido.</span>
+            </div>
+            <div class="field fw-2">
+              <label for="fTel">Teléfono <span class="opt">(opcional)</span></label>
+              <input class="input" id="fTel" type="tel" placeholder="555-0000">
+            </div>
+            <div class="field fw-2">
+              <label for="fRfc">RFC / Cédula <span class="opt">(opcional)</span></label>
+              <input class="input" id="fRfc" type="text" placeholder="XAXX010101000">
+            </div>
+            <div class="field fw-2 select-wrap">
+              <label for="fEstado">Estado inicial</label>
+              <select class="input" id="fEstado">
+                <option value="ok">Activo</option>
+                <option value="warn">Pendiente</option>
+                <option value="info">En revisión</option>
+                <option value="ghost">Inactivo</option>
+              </select>
+            </div>
+            <div class="field fw-full">
+              <label for="fNotas">Notas internas <span class="opt">(opcional)</span></label>
+              <textarea class="input" id="fNotas" placeholder="Condiciones comerciales, contacto principal…"></textarea>
+            </div>
+          </div>
+          <div class="form-sep"></div>
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary"><i class="ri-save-line"></i> Guardar cliente</button>
+            <button type="button" class="btn btn-ghost" id="btnCancelAlta">Cancelar</button>
+            <span class="spacer"></span>
+            <span class="form-note">Se añadirá al principio del listado.</span>
+          </div>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- PLACEHOLDER -->
+  <section class="view" data-view="placeholder">
+    <div span="8" class="empty">
+      <div class="fig"><i class="ri-hammer-line"></i></div>
+      <h2 id="phTitle">Módulo en construcción</h2>
+      <p>Este módulo no está incluido en la demo de Nico ERP, pero la navegación y el layout ya funcionan.</p>
+      <button class="btn btn-ghost" id="phBack"><i class="ri-home-4-line"></i> Volver al inicio</button>
+    </div>
+  </section>
+
+  <!-- DEMO DE ALERTAS -->
+  <section class="view" data-view="demo-alertas">
+    <div span="8" class="view-head">
+      <div><h1>Demo de alertas</h1><p>Compara los 4 estilos de notificación y pruébalos como toasts reales.</p></div>
+      <button class="btn btn-ghost" id="btnBackFromDemo"><i class="ri-arrow-left-line"></i> Volver</button>
+    </div>
+
+    <div span="8" class="card">
+      <h3>Probar como toast real</h3>
+      <p style="font-size:.875rem; color:var(--muted); margin-bottom:.5rem;">Pulsa un botón para disparar la alerta correspondiente en la esquina superior derecha.</p>
+      <div class="demo-trigger-grid" id="demoTriggers">
+        <button class="btn btn-ghost" data-trigger="success"><i class="ri-check-line"></i> Success</button>
+        <button class="btn btn-ghost" data-trigger="info"><i class="ri-information-line"></i> Info</button>
+        <button class="btn btn-ghost" data-trigger="warning"><i class="ri-alert-line"></i> Warning</button>
+        <button class="btn btn-ghost" data-trigger="error"><i class="ri-error-warning-line"></i> Error</button>
+      </div>
+    </div>
+
+    <div span="4" class="card">
+      <div class="demo-row">
+        <div class="demo-label">A. Sólido<small>fondo + texto blanco</small></div>
+        <div class="demo-cards">
+          <div class="demo-card demo-a success"><i class="ri-check-line"></i> Operación exitosa</div>
+          <div class="demo-card demo-a info"><i class="ri-information-line"></i> Información</div>
+          <div class="demo-card demo-a warning"><i class="ri-alert-line"></i> Atención requerida</div>
+          <div class="demo-card demo-a error"><i class="ri-error-warning-line"></i> Error crítico</div>
+        </div>
+      </div>
+    </div>
+
+    <div span="4" class="card">
+      <div class="demo-row">
+        <div class="demo-label">B. Acento lateral<small>estilo Notion/Linear</small></div>
+        <div class="demo-cards">
+          <div class="demo-card demo-b success"><i class="ri-check-line"></i> Operación exitosa</div>
+          <div class="demo-card demo-b info"><i class="ri-information-line"></i> Información</div>
+          <div class="demo-card demo-b warning"><i class="ri-alert-line"></i> Atención requerida</div>
+          <div class="demo-card demo-b error"><i class="ri-error-warning-line"></i> Error crítico</div>
+        </div>
+      </div>
+    </div>
+
+    <div span="4" class="card">
+      <div class="demo-row">
+        <div class="demo-label">C. Tinte + icono<small>superficie con color</small></div>
+        <div class="demo-cards">
+          <div class="demo-card demo-c success"><i class="ri-check-line"></i> Operación exitosa</div>
+          <div class="demo-card demo-c info"><i class="ri-information-line"></i> Información</div>
+          <div class="demo-card demo-c warning"><i class="ri-alert-line"></i> Atención requerida</div>
+          <div class="demo-card demo-c error"><i class="ri-error-warning-line"></i> Error crítico</div>
+        </div>
+      </div>
+    </div>
+
+    <div span="4" class="card" style="border-color: var(--accent-text); box-shadow: 0 0 0 1px var(--accent-soft);">
+      <div class="demo-row">
+        <div class="demo-label">D. Variante por severidad <small>★ aplicada en producción</small></div>
+        <div class="demo-cards">
+          <div class="demo-card demo-d success"><i class="ri-check-line"></i> Operación exitosa</div>
+          <div class="demo-card demo-d info"><i class="ri-information-line"></i> Información</div>
+          <div class="demo-card demo-d warning"><i class="ri-alert-line"></i> Atención requerida</div>
+          <div class="demo-card demo-d error"><i class="ri-error-warning-line"></i> Error crítico</div>
+        </div>
+      </div>
+    </div>
+
+    <div span="8" class="card">
+      <h3>Resumen de la variante D (en producción)</h3>
+      <table style="margin-top:.75rem;">
+        <thead><tr><th>Tipo</th><th>Estilo</th><th>Cuándo usarlo</th></tr></thead>
+        <tbody>
+          <tr><td><span class="pill err">Error</span></td><td>Sólido + texto blanco</td><td>Requiere acción inmediata del usuario</td></tr>
+          <tr><td><span class="pill warn">Warning</span></td><td>Acento lateral + texto base</td><td>Persistente, soporta texto largo sin gritar</td></tr>
+          <tr><td><span class="pill info">Info</span></td><td>Superficie con tinte</td><td>Informativo breve, baja interrupción</td></tr>
+          <tr><td><span class="pill ok">Success</span></td><td>Superficie con tinte + icono</td><td>Confirmación rápida de acción completada</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+</main>
+
+<script>
+const UI = (() => {
+
+  function hexToOklch(hex) {
+    const p = x => parseInt(x, 16) / 255;
+    const lin = c => c <= 0.04045 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
+    const R = lin(p(hex.substr(1,2))), G = lin(p(hex.substr(3,2))), B = lin(p(hex.substr(5,2)));
+    const l = Math.cbrt(0.4122214708*R + 0.5363325363*G + 0.0514459929*B);
+    const m = Math.cbrt(0.2119034982*R + 0.6806995451*G + 0.1073969566*B);
+    const s = Math.cbrt(0.0883024619*R + 0.2817188376*G + 0.6299787005*B);
+    const A = 1.9779984951*l - 2.4285922050*m + 0.4505937099*s;
+    const Bb = 0.0259040371*l + 0.7827717662*m - 0.8086757660*s;
+    let H = Math.atan2(Bb, A) * 180 / Math.PI; if (H < 0) H += 360;
+    return { C: Math.hypot(A, Bb), H };
+  }
+  function applyBrand(h, c, hex, save = true) {
+    document.documentElement.style.setProperty('--nico-hue', h);
+    document.documentElement.style.setProperty('--nico-chroma', Math.min(Math.max(c, 0.08), 0.16));
+    document.querySelectorAll('.swatch').forEach(s => s.classList.toggle('active', s.dataset.h == h && s.dataset.c == c));
+    if (hex) document.getElementById('brandColorPicker').value = hex;
+    if (save) localStorage.setItem('nico-brand', JSON.stringify({ h, c, hex }));
+  }
+  function initBrand() {
+    const saved = JSON.parse(localStorage.getItem('nico-brand') || 'null');
+    if (saved) applyBrand(saved.h, saved.c, saved.hex, false);
+    document.querySelectorAll('.swatch').forEach(sw => sw.addEventListener('click', () => applyBrand(+sw.dataset.h, +sw.dataset.c, sw.dataset.hex)));
+    document.getElementById('brandColorPicker').addEventListener('input', e => {
+      const { C, H } = hexToOklch(e.target.value);
+      applyBrand(Math.round(H), C, e.target.value);
+    });
+  }
+
+  function initSidebar() {
+    const scrim = document.getElementById('scrim');
+    const open = sb => { sb.classList.add('active'); scrim.classList.add('active'); sb.setAttribute('aria-hidden','false'); };
+    const closeAll = () => document.querySelectorAll('.sidebar.active').forEach(sb => { sb.classList.remove('active'); scrim.classList.remove('active'); sb.setAttribute('aria-hidden','true'); });
+    document.getElementById('openUserSidebar').addEventListener('click', () => open(document.getElementById('userSidebar')));
+    document.querySelectorAll('[data-close-sidebar]').forEach(b => b.addEventListener('click', closeAll));
+    scrim.addEventListener('click', closeAll);
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeAll(); });
+    document.getElementById('sbLogout').addEventListener('click', () => { closeAll(); loader.start(); setTimeout(() => { loader.stop(); showAlert('Sesión cerrada (demo)', 'info'); }, 900); });
+  }
+
+  function showView(name, title) {
+    document.querySelectorAll('.view').forEach(v => v.classList.toggle('active', v.dataset.view === name));
+    if (name === 'placeholder' && title) document.getElementById('phTitle').textContent = title;
+    syncNavState(name);
+  }
+
+  /* Sincroniza aria-current del logo y .active del item de menú correspondiente a la vista activa */
+  function syncNavState(viewName) {
+    const logo = document.getElementById('navLogo');
+    if (logo) logo.setAttribute('aria-current', viewName === 'dashboard' ? 'page' : 'false');
+    document.querySelectorAll('nav [role="list"] a[data-view]').forEach(a => {
+      const isActive = a.dataset.view === viewName;
+      a.classList.toggle('active', isActive);
+      if (isActive) a.setAttribute('aria-current', 'page');
+      else a.removeAttribute('aria-current');
+    });
+  }
+
+  function initDesktopMenu() {
+    const menu = document.querySelector('nav [role="menu"]');
+    if (!menu) return;
+    const mqDesktop = window.matchMedia('(min-width: 769px)');
+    const topItems = [...menu.querySelectorAll('[role="list"] > li')];
+    const closeAll = () => menu.querySelectorAll('li.open').forEach(li => li.classList.remove('open'));
+    const openTop = li => { topItems.forEach(x => x.classList.remove('open')); li.classList.add('open'); };
+    const hasSub = li => !!li.querySelector(':scope > [role="submenu"]');
+    topItems.forEach(li => li.addEventListener('mouseenter', () => { if (!mqDesktop.matches) return; hasSub(li) ? openTop(li) : closeAll(); }));
+    menu.addEventListener('click', e => {
+      const link = e.target.closest('a'); if (!link) return;
+      e.preventDefault();
+      const parentLi = link.parentElement;
+      if (hasSub(parentLi)) { mqDesktop.matches ? openTop(parentLi) : parentLi.classList.toggle('open'); return; }
+      closeAll();
+      topItems.forEach(li => li.querySelector(':scope > a')?.classList.remove('active'));
+      parentLi.closest('[role="list"] > li').querySelector(':scope > a').classList.add('active');
+      showView(link.dataset.view || 'placeholder', link.dataset.title);
+    });
+    document.addEventListener('click', e => { if (!e.target.closest('nav [role="menu"]')) closeAll(); });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeAll(); menu.querySelector('[role="list"]')?.classList.remove('active'); } });
+    menu.addEventListener('focusin', e => { if (mqDesktop.matches) { const li = e.target.closest('[role="list"] > li'); if (li && hasSub(li)) openTop(li); } });
+    mqDesktop.addEventListener('change', closeAll);
+    document.getElementById('menuToggle').addEventListener('click', () => menu.querySelector('[role="list"]').classList.toggle('active'));
+  }
+
+  function initThemeToggle() {
+    const btn = document.getElementById('themeToggle');
+    const icon = btn.querySelector('i');
+    const saved = localStorage.getItem('nico-theme');
+    if (saved) document.documentElement.setAttribute('data-theme', saved);
+    const sync = () => { const t = document.documentElement.getAttribute('data-theme'); icon.className = t === 'dark' ? 'ri-moon-line' : 'ri-sun-line'; document.documentElement.style.colorScheme = t; };
+    sync();
+    btn.addEventListener('click', () => {
+      btn.style.transform = 'rotate(180deg)';
+      setTimeout(() => btn.style.transform = '', 500);
+      const next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', next);
+      localStorage.setItem('nico-theme', next);
+      sync();
+    });
+  }
+
+  /* ========== CLIENTES: datos, tabs, filtros, alta ========== */
+  const STATUSES = { ok: ['Activo','ok'], warn: ['Pendiente','warn'], info: ['En revisión','info'], err: ['Moroso','err'], ghost: ['Inactivo','ghost'] };
+  const SEED = [
+    { id: 169, name: 'Daniela Acosta', email: 'daniela169@correo.com', tel: '555-1078', rfc: '9306413', st: 'ok' },
+    { id: 66,  name: 'Fabiola Acosta', email: 'fabiola65@correo.com',  tel: '555-2150', rfc: '9273861', st: 'ok' },
+    { id: 40,  name: 'Gabriel Ruiz',   email: 'gabriel39@correo.com',  tel: '555-7998', rfc: '2558665', st: 'warn' },
+    { id: 31,  name: 'Gloria Méndez',  email: 'gloria21@correo.com',   tel: '555-4203', rfc: '7949986', st: 'info' },
+    { id: 18,  name: 'Héctor Salas',   email: 'hector8@correo.com',    tel: '555-9911', rfc: '1029384', st: 'err' },
+    { id: 7,   name: 'Isabela Torres', email: 'isabela7@correo.com',   tel: '555-3344', rfc: '5647382', st: 'ghost' },
+  ];
+  let currentFilter = 'todos';
+  let currentSort = { field: 'id', dir: 'desc' };  /* estado del sort (simula parámetro de API) */
+
+  /* Simula llamada a API paginada con parámetros sort/filter/page.
+     En producción se reemplazaría por fetch(`/api/clientes?sort=${field}&dir=${dir}&filter=${filter}&page=${page}`) */
+  function fetchClients({ sort = currentSort, filter = currentFilter, page = 1 } = {}) {
+    return new Promise(resolve => {
+      const filtered = filter === 'todos' ? [...SEED] : SEED.filter(c => c.st === filter);
+      const sorted = [...filtered].sort((a, b) => {
+        const dir = sort.dir === 'asc' ? 1 : -1;
+        const av = a[sort.field], bv = b[sort.field];
+        if (typeof av === 'number' && typeof bv === 'number') return (av - bv) * dir;
+        return String(av).localeCompare(String(bv), 'es') * dir;
+      });
+      setTimeout(() => resolve(sorted), 350);
+    });
+  }
+
+  function updateSortIndicators() {
+    document.querySelectorAll('#clientsTable th.sortable').forEach(th => {
+      const isSorted = th.dataset.sort === currentSort.field;
+      th.classList.toggle('asc', isSorted && currentSort.dir === 'asc');
+      th.classList.toggle('desc', isSorted && currentSort.dir === 'desc');
+    });
+  }
+
+  function renderClients(clients) {
+    const tbody = document.querySelector('#clientsTable tbody');
+    tbody.innerHTML = clients.map(c => `<tr data-status="${c.st}">${rowHTML(c)}</tr>`).join('');
+    updateCounts();
+    applyFilters();
+  }
+
+  async function reloadClients() {
+    loader.start();
+    const data = await fetchClients();
+    loader.stop();
+    renderClients(data);
+  }
+
+  function rowHTML(c) {
+    const [label, cls] = STATUSES[c.st];
+    return `
+      <td class="c-id" data-label="ID"><span class="id-badge">#${c.id}</span></td>
+      <td data-label="Cliente" class="cell-name"><b>${c.name}</b><span>${c.email}</span></td>
+      <td class="c-tel" data-label="Teléfono">${c.tel || '—'}</td>
+      <td class="c-rfc" data-label="RFC">${c.rfc || '—'}</td>
+      <td class="c-estado" data-label="Estado"><span class="pill ${cls}">${label}</span></td>
+      <td class="c-actions" data-label="Acciones">
+        <span class="row-actions">
+          <button class="kebab" aria-label="Acciones"><i class="ri-more-2-fill"></i></button>
+          <span class="dd">
+            <button><i class="ri-eye-line"></i> Ver ficha</button>
+            <button><i class="ri-edit-line"></i> Editar</button>
+            <span class="sep"></span>
+            <button class="danger"><i class="ri-delete-bin-line"></i> Eliminar</button>
+          </span>
+        </span>
+      </td>`;
+  }
+  function updateCounts() {
+    const rows = [...document.querySelectorAll('#clientsTable tbody tr')];
+    document.querySelectorAll('#clientTabs .ptab').forEach(tab => {
+      const f = tab.dataset.filter;
+      tab.querySelector('.t-count').textContent = f === 'todos' ? rows.length : rows.filter(r => r.dataset.status === f).length;
+    });
+  }
+  function applyFilters() {
+    const term = (document.getElementById('clientSearch').value || '').toLowerCase();
+    document.querySelectorAll('#clientsTable tbody tr').forEach(tr => {
+      const okS = currentFilter === 'todos' || tr.dataset.status === currentFilter;
+      const okT = tr.textContent.toLowerCase().includes(term);
+      tr.style.display = (okS && okT) ? '' : 'none';
+    });
+  }
+  function addClientRow(c) {
+    const tr = document.createElement('tr');
+    tr.dataset.status = c.st;
+    tr.className = 'row-new';
+    tr.innerHTML = rowHTML(c);
+    document.querySelector('#clientsTable tbody').prepend(tr);
+    updateCounts();
+    applyFilters();
+  }
+
+  function initClients() {
+    const tbody = document.querySelector('#clientsTable tbody');
+    tbody.innerHTML = SEED.map(c => `<tr data-status="${c.st}">${rowHTML(c)}</tr>`).join('');
+    updateCounts();
+    updateSortIndicators();
+
+    /* Sort: clic en cabecera alterna asc/desc y dispara recarga simulada (API paginada) */
+    document.querySelectorAll('#clientsTable th.sortable').forEach(th => th.addEventListener('click', async () => {
+      const field = th.dataset.sort;
+      if (currentSort.field === field) currentSort.dir = currentSort.dir === 'asc' ? 'desc' : 'asc';
+      else { currentSort.field = field; currentSort.dir = 'asc'; }
+      updateSortIndicators();
+      await reloadClients();
+      showAlert(`Ordenado por "${th.querySelector('.th-inner').firstChild.textContent.trim()}" (${currentSort.dir.toUpperCase()})`, 'info', 1800);
+    }));
+
+    document.querySelectorAll('#clientTabs .ptab').forEach(tab => tab.addEventListener('click', async () => {
+      currentFilter = tab.dataset.filter;
+      document.querySelectorAll('#clientTabs .ptab').forEach(t => t.classList.toggle('active', t === tab));
+      await reloadClients();
+    }));
+    document.getElementById('clientSearch').addEventListener('input', applyFilters);
+    document.getElementById('btnClear').addEventListener('click', () => {
+      document.getElementById('clientSearch').value = '';
+      currentFilter = 'todos';
+      currentSort = { field: 'id', dir: 'desc' };
+      document.querySelectorAll('#clientTabs .ptab').forEach(t => t.classList.toggle('active', t.dataset.filter === 'todos'));
+      updateSortIndicators();
+      reloadClients();
+    });
+    document.addEventListener('keydown', e => {
+      if (e.key === '/' && !/input|textarea/i.test(document.activeElement.tagName) &&
+          document.querySelector('[data-view="clientes"]').classList.contains('active')) {
+        e.preventDefault(); document.getElementById('clientSearch').focus();
+      }
+    });
+    document.getElementById('clientsPag').innerHTML = genePaginacion({ total_registros: 48, pagina: 2 });
+
+    /* Navegación al alta */
+    document.getElementById('btnNewClient').addEventListener('click', () => showView('alta'));
+    document.getElementById('btnBackList').addEventListener('click', () => showView('clientes'));
+    document.getElementById('btnCancelAlta').addEventListener('click', () => showView('clientes'));
+
+    /* Guardar con validación */
+    document.getElementById('altaForm').addEventListener('submit', e => {
+      e.preventDefault();
+      const nombre = document.getElementById('fNombre');
+      const email  = document.getElementById('fEmail');
+      let ok = true;
+      const mark = (input, errId, bad) => {
+        input.classList.toggle('error', bad);
+        document.getElementById(errId).classList.toggle('show', bad);
+        if (bad) ok = false;
+      };
+      mark(nombre, 'eNombre', !nombre.value.trim());
+      mark(email, 'eEmail', !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value.trim()));
+      if (!ok) { showAlert('Revisa los campos marcados en rojo', 'error'); return; }
+
+      loader.start();
+      setTimeout(() => {
+        loader.stop();
+        addClientRow({
+          id: Math.floor(100 + Math.random() * 900),
+          name: nombre.value.trim(),
+          email: email.value.trim(),
+          tel: document.getElementById('fTel').value.trim(),
+          rfc: document.getElementById('fRfc').value.trim(),
+          st: document.getElementById('fEstado').value,
+        });
+        e.target.reset();
+        showView('clientes');
+        showAlert(`Cliente "${nombre.value.trim()}" guardado correctamente`, 'success');
+      }, 700);
+    });
+    document.getElementById('phBack').addEventListener('click', () => showView('dashboard'));
+  }
+
+  /* ========== EXPORTACIÓN CSV ========== */
+  function downloadCSV(filename, rows) {
+    const csv = rows.map(r => r.map(v => {
+      const s = String(v ?? '');
+      return /[",\n;]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
+    }).join(',')).join('\n');
+    const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = filename;
+    document.body.appendChild(a); a.click(); a.remove();
+    URL.revokeObjectURL(url);
+  }
+
+  function initExports() {
+    const ts = () => new Date().toISOString().slice(0, 19).replace(/[:T]/g, '-');
+
+    /* Exportar resumen del dashboard: KPIs + actividad reciente */
+    document.getElementById('btnExportDash').addEventListener('click', () => {
+      loader.start();
+      setTimeout(() => {
+        loader.stop();
+        const rows = [
+          ['Métrica', 'Valor', 'Variación'],
+          ['Clientes activos', '128', '+12% este mes'],
+          ['Pedidos del mes', '342', '+8% vs. anterior'],
+          ['Facturación', '€ 48.2K', '+4.5%'],
+          ['Stock crítico', '7', 'requiere atención'],
+          [],
+          ['Actividad reciente', '', ''],
+          ['Nuevo cliente Globex Corp', '', 'hace 12 min'],
+          ['Factura #F-2210 emitida', '', 'hace 1 h'],
+          ['Pedido #P-9031 enviado', '', 'hace 3 h'],
+          ['Stock ajustado en Almacén Norte', '', 'ayer'],
+        ];
+        downloadCSV(`nico-resumen-${ts()}.csv`, rows);
+        showAlert('Resumen exportado a CSV', 'success', 2000);
+      }, 400);
+    });
+
+    /* Exportar listado de clientes a CSV */
+    document.getElementById('btnExportClients').addEventListener('click', () => {
+      loader.start();
+      setTimeout(() => {
+        loader.stop();
+        const rows = [
+          ['ID', 'Nombre comercial', 'Correo', 'Teléfono', 'RFC', 'Estado'],
+          ...SEED.map(c => {
+            const [label] = STATUSES[c.st];
+            return [c.id, c.name, c.email, c.tel || '', c.rfc || '', label];
+          }),
+        ];
+        downloadCSV(`nico-clientes-${ts()}.csv`, rows);
+        showAlert(`${SEED.length} clientes exportados`, 'success', 2000);
+      }, 400);
+    });
+  }
+
+  /* ========== DEMO DE ALERTAS ========== */
+  function initDemoAlerts() {
+    const grid = document.getElementById('demoTriggers');
+    if (!grid) return;
+    const messages = {
+      success: 'Operación completada correctamente',
+      info: 'Actualización disponible',
+      warning: 'Tu sesión expira en 5 minutos',
+      error: 'No se pudo guardar el registro',
+    };
+    grid.querySelectorAll('button[data-trigger]').forEach(btn => btn.addEventListener('click', () => {
+      const type = btn.dataset.trigger;
+      showAlert(messages[type], type, 3500);
+    }));
+    const back = document.getElementById('btnBackFromDemo');
+    if (back) back.addEventListener('click', () => showView('dashboard'));
+  }
+
+  /* Kebab dropdown */
+  function initKebabs() {
+    const closeDds = () => document.querySelectorAll('.row-actions.open').forEach(ra => ra.classList.remove('open'));
+    document.addEventListener('click', e => {
+      const kebab = e.target.closest('.kebab');
+      if (kebab) {
+        e.stopPropagation();
+        const ra = kebab.closest('.row-actions');
+        const wasOpen = ra.classList.contains('open');
+        closeDds();
+        if (!wasOpen) {
+          const dd = ra.querySelector('.dd');
+          const r = kebab.getBoundingClientRect();
+          dd.style.position = 'fixed';
+          dd.style.top = (r.bottom + 6) + 'px';
+          dd.style.right = (window.innerWidth - r.right) + 'px';
+          dd.style.left = 'auto';
+          ra.classList.add('open');
+        }
+        return;
+      }
+      const ddBtn = e.target.closest('.dd button');
+      if (ddBtn) { showAlert(`Acción "${ddBtn.textContent.trim()}" (demo)`, 'info'); closeDds(); return; }
+      if (!e.target.closest('.row-actions')) closeDds();
+    });
+    window.addEventListener('scroll', closeDds, true);
+  }
+
+  const ALERT_ICONS = { success: 'ri-check-line', info: 'ri-information-line', warning: 'ri-alert-line', error: 'ri-error-warning-line' };
+  function showAlert(message, type = 'info', duration = 3000) {
+    let w = document.querySelector('.alert-wrapper');
+    if (!w) { w = document.createElement('div'); w.className = 'alert-wrapper'; document.body.appendChild(w); }
+    const el = document.createElement('div');
+    el.className = `alert ${type}`;
+    const icon = ALERT_ICONS[type] || ALERT_ICONS.info;
+    el.innerHTML = `<i class="${icon}"></i><span>${message}</span>`;
+    w.appendChild(el);
+    setTimeout(() => { el.style.opacity = '0'; el.style.transform = 'translateX(110%)'; setTimeout(() => el.remove(), 400); }, duration);
+  }
+  const loader = {
+    count: 0, dom: null,
+    start() { this.count++; if (this.count > 1) return; const c = document.createElement('div'); c.className = 'spinner-container'; c.innerHTML = '<div class="spinner"></div>'; document.body.appendChild(c); this.dom = c; },
+    stop() { if (!this.count) return; this.count--; if (!this.count && this.dom) { this.dom.remove(); this.dom = null; } }
+  };
+  function genePaginacion({ total_registros, pagina, lineas = 10 }) {
+    const bloques = 5, tot = Math.ceil(total_registros / lineas);
+    if (!total_registros) return '';
+    let ini, fin;
+    if (tot <= bloques) { ini = 1; fin = tot; }
+    else { const m = Math.floor(bloques / 2);
+      if (pagina <= m) { ini = 1; fin = bloques; }
+      else if (pagina + m >= tot) { ini = tot - bloques + 1; fin = tot; }
+      else { ini = pagina - m; fin = pagina + m; } }
+    let h = `<ul data-paginaactual="${pagina}">`;
+    if (pagina > 1) h += `<li><a href="#" data-page="${pagina-1}">«</a></li>`;
+    for (let i = ini; i <= fin; i++) h += i === pagina ? `<li><span class="active-page">${i}</span></li>` : `<li><a href="#" data-page="${i}">${i}</a></li>`;
+    if (pagina < tot) h += `<li><a href="#" data-page="${pagina+1}">»</a></li>`;
+    return h + '</ul>';
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    initBrand(); initSidebar(); initDesktopMenu(); initThemeToggle(); initClients(); initKebabs(); initExports(); initDemoAlerts();
+  });
+
+  return { showAlert, loader, genePaginacion, showView, applyBrand, reloadClients };
+})();
+</script>
+</body>
+</html>
