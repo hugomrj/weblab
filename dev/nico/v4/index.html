@@ -161,9 +161,15 @@ nav [role="menu"] [role="toggle"] { display: none; background: none; border: non
 nav [role="menu"] [role="list"] { display: flex; align-items: stretch; gap: .25rem; height: 100%; }
 nav [role="menu"] [role="list"] > li { position: relative; display: flex; align-items: center; }
 nav [role="menu"] [role="list"] > li > a { display: flex; align-items: center; gap: .35rem; padding: .5rem .9rem; color: var(--muted); font-size: .9rem; font-weight: 600; text-decoration: none; white-space: nowrap; border-radius: var(--radius); transition: color .3s var(--ease); }
-nav [role="menu"] [role="list"] > li > a i { font-size: .85rem; opacity: .6; }
+nav [role="menu"] [role="list"] > li > a i { font-size: .85rem; opacity: .6; transition: transform .2s var(--ease), opacity .2s var(--ease); }
+nav [role="menu"] [role="list"] > li.open > a i, nav [role="menu"] [role="list"] > li > a:hover i { opacity: 1; }
+nav [role="menu"] [role="list"] > li.open > a i { transform: rotate(180deg); }
 nav [role="menu"] [role="list"] > li > a:hover, nav [role="menu"] [role="list"] > li.open > a, nav [role="menu"] [role="list"] > li > a.active { color: var(--accent-text); }
+/* Submenu top-level: pegado al borde inferior del nav (sin gap). Esquinas superiores rectas para empalmar con el border-bottom del nav. */
+nav [role="menu"] [role="list"] > li > [role="submenu"] { top: 100%; border-radius: 0 0 var(--radius) var(--radius); border-top-color: var(--border); }
 nav [role="menu"] [role="submenu"] { position: absolute; top: calc(100% + 6px); left: 0; min-width: 200px; padding: .4rem; background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow); z-index: 101; opacity: 0; visibility: hidden; transform: translateY(10px) scale(.98); transition: opacity .3s var(--ease), transform .3s var(--ease), visibility .3s; pointer-events: none; }
+/* El ::before cubre el gap de 6px SOLO en submenus laterales anidados (que tienen gap horizontal). El top-level ya no lo necesita porque está pegado al nav. */
+nav [role="menu"] [role="list"] > li > [role="submenu"]::before { display: none; }
 nav [role="menu"] [role="submenu"]::before { content: ''; position: absolute; top: -6px; left: 0; right: 0; height: 6px; }
 nav [role="menu"] [role="submenu"] [role="submenu"] { top: -.4rem; left: calc(100% + 6px); }
 nav [role="menu"] [role="submenu"] [role="submenu"]::before { top: 0; bottom: 0; left: -6px; right: auto; width: 6px; height: auto; }
