@@ -1,0 +1,1678 @@
+<!DOCTYPE html>
+<!--
+  ============================================================
+  Selector de Temas — Clay TechRevX  ·  v1.2
+  ------------------------------------------------------------
+  Archivo único con 3 bloques:
+    1. CSS  → copiar a clay-techrevx.css
+    2. HTML → estructura de la página
+    3. JS   → copiar a clay-techrevx.js
+
+  v1.2 — Agregado Amber Sand (5ª paleta) y relieve en TODOS los botones.
+  ============================================================
+-->
+<html lang="es" class="tx-light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Selector de Temas — Clay TechRevX</title>
+
+  <link rel="stylesheet" href="https://static.oracle.com/cdn/apex/26.2.1/libraries/font-apex/2.5.1/css/font-apex.min.css">
+  <link rel="stylesheet" href="https://static.oracle.com/cdn/apex/26.2.1/libraries/oracle-fonts/oraclesans-apex.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Familjen+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+
+  <!--
+    ============================================================
+    BLOQUE 1 · CSS  →  copiar a clay-techrevx.css
+    ============================================================
+  -->
+  <style>
+    /* ============================================================
+       clay-techrevx.css  ·  v1.2
+       5 paletas: Teal Clay, Blue Soft, Soft Grey, Rose Clay, Amber Sand
+       Light + dark para cada una · Formas Blue Soft · Todos los botones con relieve
+       ============================================================ */
+
+    /* ---------- 1. Shared shape & typography tokens ---------- */
+    :root {
+      --clay-r-xl: 40px;
+      --clay-r-lg: 30px;
+      --clay-r: 22px;
+      --clay-r-sm: 16px;
+      --clay-r-pill: 999px;
+      --clay-display: "Familjen Grotesk", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+      --clay-font: "Oracle Sans", "Helvetica Neue", Arial, sans-serif;
+      --clay-mono: "SF Mono", Monaco, Consolas, monospace;
+    }
+
+    /* ---------- 2.1 Teal Clay · Light (default) ---------- */
+    :root {
+      color-scheme: light;
+      --clay-bg: #e8eeec;
+      --clay-surface: #f4f8f7;
+      --clay-raised: #fafcfc;
+      --clay-sunk: #e0e8e6;
+      --clay-ink: #12302d;
+      --clay-ink-2: #4c6966;
+      --clay-ink-3: #7d9592;
+      --clay-line: rgba(18, 48, 45, .1);
+      --clay-teal: #0e7c76;
+      --clay-teal-hover: #0a6964;
+      --clay-on-teal: #fff;
+      --clay-teal-ink: #0b6560;
+      --clay-teal-tint: #d3ebe7;
+      --clay-peach: #f2c7ab;
+      --clay-sand: #ecdcc8;
+      --clay-hover: rgba(18, 48, 45, .05);
+      --clay-fill: var(--clay-teal);
+      --clay-fill-hover: var(--clay-teal-hover);
+
+      --clay-out: 10px 12px 26px -8px rgba(46, 86, 80, .22), -8px -8px 20px -6px rgba(255, 255, 255, .9), inset 1px 1px 0 rgba(255, 255, 255, .8), inset -1px -2px 3px rgba(46, 86, 80, .06);
+      --clay-out-sm: 4px 5px 12px -4px rgba(46, 86, 80, .25), -4px -4px 10px -3px rgba(255, 255, 255, .95), inset 1px 1px 0 rgba(255, 255, 255, .85);
+      --clay-in: inset 3px 3px 7px rgba(46, 86, 80, .14), inset -3px -3px 7px rgba(255, 255, 255, .8);
+      --clay-teal-puff: 4px 6px 14px -4px rgba(14, 124, 118, .45), inset 1px 1px 0 rgba(255, 255, 255, .35), inset -2px -3px 6px rgba(0, 40, 37, .22);
+    }
+    html.tx-dark {
+      color-scheme: dark;
+      --clay-bg: #121a1b;
+      --clay-surface: #192325;
+      --clay-raised: #1f2b2d;
+      --clay-sunk: #0f1618;
+      --clay-ink: #e1eeec;
+      --clay-ink-2: #9cb3b0;
+      --clay-ink-3: #6e8784;
+      --clay-line: rgba(225, 238, 236, .09);
+      --clay-teal: #3cbdb1;
+      --clay-teal-hover: #55cdc2;
+      --clay-on-teal: #052220;
+      --clay-teal-ink: #72d8ce;
+      --clay-teal-tint: rgba(60, 189, 177, .16);
+      --clay-peach: #d9987a;
+      --clay-sand: #3a3229;
+      --clay-hover: rgba(225, 238, 236, .05);
+      --clay-fill: var(--clay-teal);
+      --clay-fill-hover: var(--clay-teal-hover);
+      --clay-out: 10px 12px 26px -8px rgba(0, 0, 0, .6), -6px -6px 18px -8px rgba(255, 255, 255, .05), inset 1px 1px 0 rgba(255, 255, 255, .06), inset -1px -2px 3px rgba(0, 0, 0, .25);
+      --clay-out-sm: 4px 5px 12px -4px rgba(0, 0, 0, .6), -3px -3px 9px -4px rgba(255, 255, 255, .05), inset 1px 1px 0 rgba(255, 255, 255, .07);
+      --clay-in: inset 3px 3px 7px rgba(0, 0, 0, .45), inset -2px -2px 6px rgba(255, 255, 255, .035);
+      --clay-teal-puff: 4px 6px 14px -4px rgba(0, 0, 0, .6), inset 1px 1px 0 rgba(255, 255, 255, .35), inset -2px -3px 6px rgba(0, 40, 37, .3);
+    }
+
+    /* ---------- 2.2 Blue Soft · Light ---------- */
+    html.tx-blue {
+      --clay-bg: #e6ebf1;
+      --clay-surface: #eef2f7;
+      --clay-raised: #f5f7fb;
+      --clay-sunk: #e0e6ee;
+      --clay-ink: #1f2638;
+      --clay-ink-2: #515c72;
+      --clay-ink-3: #7c869a;
+      --clay-line: rgba(31, 38, 56, .1);
+      --clay-teal: #3b47ee;
+      --clay-teal-hover: #2f39d4;
+      --clay-on-teal: #fff;
+      --clay-teal-ink: #3340d8;
+      --clay-teal-tint: #dfe4fc;
+      --clay-peach: #f6c2b0;
+      --clay-sand: #dfe4ee;
+      --clay-hover: rgba(31, 38, 56, .05);
+      --clay-fill: linear-gradient(100deg, #2f8cea, #3b2ef2);
+      --clay-fill-hover: linear-gradient(100deg, #2a7fd6, #3326dc);
+      --clay-out: 12px 12px 28px -4px rgba(166, 180, 200, .55), -12px -12px 28px -4px rgba(255, 255, 255, .95);
+      --clay-out-sm: 6px 6px 14px -2px rgba(166, 180, 200, .55), -6px -6px 14px -2px rgba(255, 255, 255, .95);
+      --clay-in: inset 4px 4px 9px rgba(166, 180, 200, .5), inset -4px -4px 9px rgba(255, 255, 255, .9);
+      --clay-teal-puff: 6px 10px 22px -6px rgba(59, 46, 242, .5), inset 1px 1px 0 rgba(255, 255, 255, .3);
+    }
+    html.tx-blue.tx-dark {
+      --clay-bg: #171b26;
+      --clay-surface: #1d2230;
+      --clay-raised: #232937;
+      --clay-sunk: #131722;
+      --clay-ink: #e6e9f2;
+      --clay-ink-2: #a6aec2;
+      --clay-ink-3: #747e95;
+      --clay-line: rgba(230, 233, 242, .09);
+      --clay-teal: #6b78ff;
+      --clay-teal-hover: #8591ff;
+      --clay-on-teal: #fff;
+      --clay-teal-ink: #a3acff;
+      --clay-teal-tint: rgba(125, 136, 255, .16);
+      --clay-peach: #d99a85;
+      --clay-sand: #2a3040;
+      --clay-hover: rgba(230, 233, 242, .05);
+      --clay-fill: linear-gradient(100deg, #3a8ff0, #4f43f5);
+      --clay-fill-hover: linear-gradient(100deg, #4c9bf3, #6257f7);
+      --clay-out: 10px 10px 24px -6px rgba(0, 0, 0, .65), -8px -8px 20px -8px rgba(255, 255, 255, .06);
+      --clay-out-sm: 5px 5px 12px -3px rgba(0, 0, 0, .6), -4px -4px 10px -4px rgba(255, 255, 255, .06);
+      --clay-in: inset 4px 4px 9px rgba(0, 0, 0, .5), inset -3px -3px 8px rgba(255, 255, 255, .04);
+      --clay-teal-puff: 6px 10px 22px -6px rgba(0, 0, 0, .6), inset 1px 1px 0 rgba(255, 255, 255, .25);
+    }
+
+    /* ---------- 2.3 Soft Grey · Light ---------- */
+    html.tx-grey {
+      --clay-bg: #e3e3e3;
+      --clay-surface: #e8e8e8;
+      --clay-raised: #eeeeee;
+      --clay-sunk: #dcdcdc;
+      --clay-ink: #2f2f2f;
+      --clay-ink-2: #5a5a5a;
+      --clay-ink-3: #858585;
+      --clay-line: rgba(0, 0, 0, .09);
+      --clay-teal: #3d3d3d;
+      --clay-teal-hover: #2a2a2a;
+      --clay-on-teal: #fff;
+      --clay-teal-ink: #2f2f2f;
+      --clay-teal-tint: #d5d5d5;
+      --clay-peach: #d6c4b8;
+      --clay-sand: #d8d8d8;
+      --clay-hover: rgba(0, 0, 0, .04);
+      --clay-fill: linear-gradient(145deg, #555, #333);
+      --clay-fill-hover: linear-gradient(145deg, #4a4a4a, #262626);
+      --clay-out: 10px 10px 24px -4px rgba(163, 163, 163, .6), -10px -10px 24px -4px rgba(255, 255, 255, .9);
+      --clay-out-sm: 5px 5px 12px -2px rgba(163, 163, 163, .6), -5px -5px 12px -2px rgba(255, 255, 255, .9);
+      --clay-in: inset 4px 4px 8px rgba(170, 170, 170, .55), inset -4px -4px 8px rgba(255, 255, 255, .85);
+      --clay-teal-puff: 6px 8px 18px -6px rgba(0, 0, 0, .45), inset 1px 1px 0 rgba(255, 255, 255, .18);
+    }
+    html.tx-grey.tx-dark {
+      --clay-bg: #1e1e1e;
+      --clay-surface: #242424;
+      --clay-raised: #2b2b2b;
+      --clay-sunk: #191919;
+      --clay-ink: #e6e6e6;
+      --clay-ink-2: #a8a8a8;
+      --clay-ink-3: #7a7a7a;
+      --clay-line: rgba(255, 255, 255, .08);
+      --clay-teal: #d4d4d4;
+      --clay-teal-hover: #ececec;
+      --clay-on-teal: #1a1a1a;
+      --clay-teal-ink: #e6e6e6;
+      --clay-teal-tint: rgba(255, 255, 255, .1);
+      --clay-peach: #b9a294;
+      --clay-sand: #333;
+      --clay-hover: rgba(255, 255, 255, .05);
+      --clay-fill: linear-gradient(145deg, #f0f0f0, #c8c8c8);
+      --clay-fill-hover: linear-gradient(145deg, #fff, #d8d8d8);
+      --clay-out: 10px 10px 24px -6px rgba(0, 0, 0, .7), -8px -8px 20px -8px rgba(255, 255, 255, .06);
+      --clay-out-sm: 5px 5px 12px -3px rgba(0, 0, 0, .65), -4px -4px 10px -4px rgba(255, 255, 255, .06);
+      --clay-in: inset 4px 4px 9px rgba(0, 0, 0, .55), inset -3px -3px 8px rgba(255, 255, 255, .04);
+      --clay-teal-puff: 6px 10px 22px -6px rgba(0, 0, 0, .7), inset 1px 1px 0 rgba(255, 255, 255, .5);
+    }
+
+    /* ---------- 2.4 Rose Clay · Light ---------- */
+    html.tx-rose {
+      --clay-bg: #f5e8e8;
+      --clay-surface: #fbf0f0;
+      --clay-raised: #fff7f7;
+      --clay-sunk: #eedede;
+      --clay-ink: #3d1f24;
+      --clay-ink-2: #7a4d52;
+      --clay-ink-3: #a87e83;
+      --clay-line: rgba(61, 31, 36, .1);
+      --clay-teal: #d64560;
+      --clay-teal-hover: #c93a54;
+      --clay-on-teal: #fff;
+      --clay-teal-ink: #b8324a;
+      --clay-teal-tint: #fbdde2;
+      --clay-peach: #f2c7ab;
+      --clay-sand: #ecdcc8;
+      --clay-hover: rgba(61, 31, 36, .05);
+      --clay-fill: linear-gradient(135deg, #ff8fa3, #d64560);
+      --clay-fill-hover: linear-gradient(135deg, #ff7a92, #c93a54);
+      --clay-out: 10px 12px 26px -8px rgba(122, 77, 82, .22), -8px -8px 20px -6px rgba(255, 255, 255, .9), inset 1px 1px 0 rgba(255, 255, 255, .8), inset -1px -2px 3px rgba(122, 77, 82, .06);
+      --clay-out-sm: 4px 5px 12px -4px rgba(122, 77, 82, .25), -4px -4px 10px -3px rgba(255, 255, 255, .95), inset 1px 1px 0 rgba(255, 255, 255, .85);
+      --clay-in: inset 3px 3px 7px rgba(122, 77, 82, .14), inset -3px -3px 7px rgba(255, 255, 255, .8);
+      --clay-teal-puff: 4px 6px 14px -4px rgba(214, 69, 96, .45), inset 1px 1px 0 rgba(255, 255, 255, .35), inset -2px -3px 6px rgba(80, 15, 30, .22);
+    }
+    html.tx-rose.tx-dark {
+      --clay-bg: #1a1215;
+      --clay-surface: #251a1e;
+      --clay-raised: #2c1f24;
+      --clay-sunk: #150f12;
+      --clay-ink: #f5e0e4;
+      --clay-ink-2: #b89399;
+      --clay-ink-3: #82666c;
+      --clay-line: rgba(245, 224, 228, .09);
+      --clay-teal: #ff7a92;
+      --clay-teal-hover: #ff95a8;
+      --clay-on-teal: #2a0a14;
+      --clay-teal-ink: #ff95a8;
+      --clay-teal-tint: rgba(255, 122, 146, .16);
+      --clay-peach: #d9987a;
+      --clay-sand: #3a2229;
+      --clay-hover: rgba(245, 224, 228, .05);
+      --clay-fill: linear-gradient(135deg, #ff8fa3, #d64560);
+      --clay-fill-hover: linear-gradient(135deg, #ffa1b3, #e0506a);
+      --clay-out: 10px 12px 26px -8px rgba(0, 0, 0, .6), -6px -6px 18px -8px rgba(255, 255, 255, .05), inset 1px 1px 0 rgba(255, 255, 255, .06), inset -1px -2px 3px rgba(0, 0, 0, .25);
+      --clay-out-sm: 4px 5px 12px -4px rgba(0, 0, 0, .6), -3px -3px 9px -4px rgba(255, 255, 255, .05), inset 1px 1px 0 rgba(255, 255, 255, .07);
+      --clay-in: inset 3px 3px 7px rgba(0, 0, 0, .45), inset -2px -2px 6px rgba(255, 255, 255, .035);
+      --clay-teal-puff: 4px 6px 14px -4px rgba(0, 0, 0, .6), inset 1px 1px 0 rgba(255, 255, 255, .35), inset -2px -3px 6px rgba(80, 15, 30, .3);
+    }
+
+    /* ---------- 2.5 Amber Sand · Light (NUEVO) ---------- */
+    html.tx-amber {
+      --clay-bg: #f0e8d8;
+      --clay-surface: #f7f0e0;
+      --clay-raised: #fbf5e8;
+      --clay-sunk: #e8dec8;
+      --clay-ink: #3d2e15;
+      --clay-ink-2: #7a6440;
+      --clay-ink-3: #a89066;
+      --clay-line: rgba(61, 46, 21, .1);
+      --clay-teal: #c2820a;
+      --clay-teal-hover: #a86f08;
+      --clay-on-teal: #fff;
+      --clay-teal-ink: #8b5d08;
+      --clay-teal-tint: #f5e4c2;
+      --clay-peach: #f2c7ab;
+      --clay-sand: #ecdcc8;
+      --clay-hover: rgba(61, 46, 21, .05);
+      --clay-fill: linear-gradient(135deg, #f5b942, #c2820a);
+      --clay-fill-hover: linear-gradient(135deg, #f0a828, #a86f08);
+
+      --clay-out: 10px 12px 26px -8px rgba(122, 100, 64, .22), -8px -8px 20px -6px rgba(255, 255, 255, .9), inset 1px 1px 0 rgba(255, 255, 255, .8), inset -1px -2px 3px rgba(122, 100, 64, .06);
+      --clay-out-sm: 4px 5px 12px -4px rgba(122, 100, 64, .25), -4px -4px 10px -3px rgba(255, 255, 255, .95), inset 1px 1px 0 rgba(255, 255, 255, .85);
+      --clay-in: inset 3px 3px 7px rgba(122, 100, 64, .14), inset -3px -3px 7px rgba(255, 255, 255, .8);
+      --clay-teal-puff: 4px 6px 14px -4px rgba(194, 130, 10, .45), inset 1px 1px 0 rgba(255, 255, 255, .35), inset -2px -3px 6px rgba(60, 40, 5, .22);
+
+      --clay-r-xl: 40px;
+      --clay-r-lg: 30px;
+      --clay-r: 22px;
+      --clay-r-sm: 16px;
+    }
+    html.tx-amber.tx-dark {
+      --clay-bg: #1a1610;
+      --clay-surface: #251f15;
+      --clay-raised: #2c2418;
+      --clay-sunk: #150f08;
+      --clay-ink: #f0e4cc;
+      --clay-ink-2: #b8a070;
+      --clay-ink-3: #80684a;
+      --clay-line: rgba(240, 228, 204, .09);
+      --clay-teal: #f5b942;
+      --clay-teal-hover: #ffc855;
+      --clay-on-teal: #2a1a08;
+      --clay-teal-ink: #ffd066;
+      --clay-teal-tint: rgba(245, 185, 66, .16);
+      --clay-peach: #d9987a;
+      --clay-sand: #3a2e1f;
+      --clay-hover: rgba(240, 228, 204, .05);
+      --clay-fill: linear-gradient(135deg, #f5b942, #e09010);
+      --clay-fill-hover: linear-gradient(135deg, #ffc855, #f0a828);
+
+      --clay-out: 10px 12px 26px -8px rgba(0, 0, 0, .6), -6px -6px 18px -8px rgba(255, 255, 255, .05), inset 1px 1px 0 rgba(255, 255, 255, .06), inset -1px -2px 3px rgba(0, 0, 0, .25);
+      --clay-out-sm: 4px 5px 12px -4px rgba(0, 0, 0, .6), -3px -3px 9px -4px rgba(255, 255, 255, .05), inset 1px 1px 0 rgba(255, 255, 255, .07);
+      --clay-in: inset 3px 3px 7px rgba(0, 0, 0, .45), inset -2px -2px 6px rgba(255, 255, 255, .035);
+      --clay-teal-puff: 4px 6px 14px -4px rgba(0, 0, 0, .6), inset 1px 1px 0 rgba(255, 255, 255, .35), inset -2px -3px 6px rgba(60, 40, 5, .3);
+    }
+
+    /* ---------- 2.6 Violet Mist · Light (NUEVO) ---------- */
+    html.tx-violet {
+      --clay-bg: #ece8f5;
+      --clay-surface: #f3f0fb;
+      --clay-raised: #faf8ff;
+      --clay-sunk: #e2ddf0;
+      --clay-ink: #2d1f4d;
+      --clay-ink-2: #5e4d80;
+      --clay-ink-3: #8c7aab;
+      --clay-line: rgba(45, 31, 77, .1);
+      --clay-teal: #7c3aed;
+      --clay-teal-hover: #6d28d9;
+      --clay-on-teal: #fff;
+      --clay-teal-ink: #6d28d9;
+      --clay-teal-tint: #ede4ff;
+      --clay-peach: #f2c7ab;
+      --clay-sand: #ecdcc8;
+      --clay-hover: rgba(45, 31, 77, .05);
+      --clay-fill: linear-gradient(135deg, #a78bfa, #7c3aed);
+      --clay-fill-hover: linear-gradient(135deg, #957af8, #6d28d9);
+
+      --clay-out: 10px 12px 26px -8px rgba(94, 77, 128, .22), -8px -8px 20px -6px rgba(255, 255, 255, .9), inset 1px 1px 0 rgba(255, 255, 255, .8), inset -1px -2px 3px rgba(94, 77, 128, .06);
+      --clay-out-sm: 4px 5px 12px -4px rgba(94, 77, 128, .25), -4px -4px 10px -3px rgba(255, 255, 255, .95), inset 1px 1px 0 rgba(255, 255, 255, .85);
+      --clay-in: inset 3px 3px 7px rgba(94, 77, 128, .14), inset -3px -3px 7px rgba(255, 255, 255, .8);
+      --clay-teal-puff: 4px 6px 14px -4px rgba(124, 58, 237, .45), inset 1px 1px 0 rgba(255, 255, 255, .35), inset -2px -3px 6px rgba(40, 15, 80, .22);
+
+      --clay-r-xl: 40px;
+      --clay-r-lg: 30px;
+      --clay-r: 22px;
+      --clay-r-sm: 16px;
+    }
+    html.tx-violet.tx-dark {
+      --clay-bg: #16121f;
+      --clay-surface: #1f1a2d;
+      --clay-raised: #26203a;
+      --clay-sunk: #110d1a;
+      --clay-ink: #e6e0f5;
+      --clay-ink-2: #b0a3c8;
+      --clay-ink-3: #806f9a;
+      --clay-line: rgba(230, 224, 245, .09);
+      --clay-teal: #a78bfa;
+      --clay-teal-hover: #c4b5fd;
+      --clay-on-teal: #1a0f30;
+      --clay-teal-ink: #c4b5fd;
+      --clay-teal-tint: rgba(167, 139, 250, .16);
+      --clay-peach: #d9987a;
+      --clay-sand: #2e2540;
+      --clay-hover: rgba(230, 224, 245, .05);
+      --clay-fill: linear-gradient(135deg, #a78bfa, #7c3aed);
+      --clay-fill-hover: linear-gradient(135deg, #c4b5fd, #9061f9);
+
+      --clay-out: 10px 12px 26px -8px rgba(0, 0, 0, .6), -6px -6px 18px -8px rgba(255, 255, 255, .05), inset 1px 1px 0 rgba(255, 255, 255, .06), inset -1px -2px 3px rgba(0, 0, 0, .25);
+      --clay-out-sm: 4px 5px 12px -4px rgba(0, 0, 0, .6), -3px -3px 9px -4px rgba(255, 255, 255, .05), inset 1px 1px 0 rgba(255, 255, 255, .07);
+      --clay-in: inset 3px 3px 7px rgba(0, 0, 0, .45), inset -2px -2px 6px rgba(255, 255, 255, .035);
+      --clay-teal-puff: 4px 6px 14px -4px rgba(0, 0, 0, .6), inset 1px 1px 0 rgba(255, 255, 255, .35), inset -2px -3px 6px rgba(40, 15, 80, .3);
+    }
+
+    /* ============================================================
+       3. Base elements & layout
+       ============================================================ */
+    *, *::before, *::after { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background: var(--clay-bg);
+      color: var(--clay-ink);
+      font-family: var(--clay-font);
+      -webkit-font-smoothing: antialiased;
+      transition: background-color .28s ease, color .28s ease;
+    }
+    ::selection { background: color-mix(in srgb, var(--clay-teal) 30%, transparent); }
+
+    h1, h2, h3, h4, h5, h6 {
+      font-family: var(--clay-display);
+      letter-spacing: -.01em;
+      color: var(--clay-ink);
+    }
+    a { color: var(--clay-teal-ink); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    code {
+      padding: 1px 6px;
+      border-radius: 6px;
+      background: var(--clay-surface);
+      color: var(--clay-teal-ink);
+      font-family: var(--clay-mono);
+      font-size: .92em;
+      font-weight: 700;
+    }
+
+    /* ============================================================
+       4. Components — TODOS los botones con relieve clay
+       ============================================================ */
+
+    /* ---------- Card ---------- */
+    .clay-card {
+      background: var(--clay-surface);
+      border: 0;
+      border-radius: var(--clay-r-lg);
+      box-shadow: var(--clay-out);
+      padding: 24px;
+      transition: background-color .28s ease, box-shadow .28s ease;
+    }
+    .clay-card--raised { background: var(--clay-raised); }
+    .clay-card--sunken { background: var(--clay-sunk); box-shadow: var(--clay-in); }
+    .clay-card--lg { border-radius: var(--clay-r-xl); padding: 32px; }
+    .clay-card--sm { border-radius: var(--clay-r-sm); padding: 14px; }
+    .clay-card-title {
+      margin: 0 0 6px;
+      font: 700 18px/1.2 var(--clay-display);
+      letter-spacing: -.005em;
+    }
+    .clay-card-subtitle {
+      margin: 0 0 16px;
+      color: var(--clay-ink-2);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    /* ---------- Buttons — TODOS con relieve ---------- */
+    .clay-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 10px 20px;
+      border: 0;
+      border-radius: var(--clay-r-pill);
+      background: var(--clay-raised);
+      color: var(--clay-ink);
+      box-shadow: var(--clay-out-sm);     /* relieve clay */
+      cursor: pointer;
+      font: 600 14px/1 var(--clay-font);
+      font-family: inherit;
+      text-decoration: none;
+      transition: box-shadow .15s, color .15s, transform .12s;
+      white-space: nowrap;
+    }
+    .clay-btn:hover { color: var(--clay-teal-ink); text-decoration: none; }
+    .clay-btn:active { box-shadow: var(--clay-in); transform: scale(.98); }
+    .clay-btn:focus-visible { outline: 2px solid var(--clay-teal); outline-offset: 3px; }
+
+    /* Primary — relieve con acento coloreado */
+    .clay-btn--primary {
+      background: var(--clay-fill);
+      color: var(--clay-on-teal);
+      box-shadow: var(--clay-teal-puff);
+    }
+    .clay-btn--primary:hover {
+      background: var(--clay-fill-hover);
+      color: var(--clay-on-teal);
+    }
+    .clay-btn--primary:active { box-shadow: var(--clay-in); transform: scale(.98); }
+
+    /* Ghost — AHORA CON RELIEVE: sombra clay + borde acento */
+    .clay-btn--ghost {
+      background: transparent;
+      color: var(--clay-teal-ink);
+      box-shadow: var(--clay-out-sm), inset 0 0 0 1.5px var(--clay-line);
+    }
+    .clay-btn--ghost:hover {
+      color: var(--clay-teal);
+      box-shadow: var(--clay-out-sm), inset 0 0 0 1.5px var(--clay-teal);
+    }
+    .clay-btn--ghost:active {
+      box-shadow: var(--clay-in), inset 0 0 0 1.5px var(--clay-teal);
+    }
+
+    /* Dark venom — relieve glossy negro */
+    .clay-btn--dark {
+      background: #050506;
+      color: rgba(255, 255, 255, .85);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, .16), inset 0 12px 14px -12px rgba(255, 255, 255, .09), 0 12px 24px -12px rgba(0, 0, 0, .55);
+    }
+    html.tx-dark .clay-btn--dark {
+      box-shadow: 0 0 0 1px rgba(255, 255, 255, .14), inset 0 1px 0 rgba(255, 255, 255, .16), 0 12px 24px -12px rgba(0, 0, 0, .8);
+    }
+    .clay-btn--dark:hover {
+      color: rgba(255, 255, 255, .92);
+      background: #050506;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, .2), 0 14px 28px -10px rgba(0, 0, 0, .6);
+    }
+    .clay-btn--dark:active {
+      box-shadow: inset 0 3px 6px rgba(0, 0, 0, .6);
+    }
+
+    /* Icon-only */
+    .clay-btn--icon {
+      padding: 0;
+      width: 40px;
+      height: 40px;
+      border-radius: 14px;
+    }
+    .clay-btn--icon .fa, .clay-btn--icon svg { font-size: 16px; width: 16px; height: 16px; }
+    .clay-btn--sm { padding: 7px 14px; font-size: 12px; }
+    .clay-btn--lg { padding: 13px 26px; font-size: 15px; }
+    .clay-btn--block { display: flex; width: 100%; }
+
+    /* ---------- Inputs ---------- */
+    .clay-input, .clay-select, .clay-textarea {
+      display: block;
+      width: 100%;
+      padding: 11px 16px;
+      border: 0;
+      border-radius: var(--clay-r-sm);
+      background: var(--clay-sunk);
+      box-shadow: var(--clay-in);
+      color: var(--clay-ink);
+      font: 500 14px/1.4 var(--clay-font);
+      font-family: inherit;
+      outline: none;
+      transition: box-shadow .15s, background-color .15s;
+    }
+    .clay-input::placeholder, .clay-textarea::placeholder { color: var(--clay-ink-3); }
+    .clay-input:focus, .clay-select:focus, .clay-textarea:focus {
+      background: var(--clay-raised);
+      box-shadow: var(--clay-in), 0 0 0 3px color-mix(in srgb, var(--clay-teal) 22%, transparent);
+    }
+    .clay-textarea { min-height: 100px; resize: vertical; line-height: 1.5; }
+
+    .clay-input-group {
+      display: flex;
+      align-items: stretch;
+      border-radius: var(--clay-r-sm);
+      background: var(--clay-sunk);
+      box-shadow: var(--clay-in);
+      transition: background-color .15s, box-shadow .15s;
+    }
+    .clay-input-group .clay-input {
+      flex: 1 1 auto;
+      background: transparent;
+      box-shadow: none;
+      border-radius: var(--clay-r-sm) 0 0 var(--clay-r-sm);
+    }
+    .clay-input-group .clay-btn {
+      border-radius: 0 var(--clay-r-sm) var(--clay-r-sm) 0;
+      box-shadow: none;
+      border-inline-start: 1px solid var(--clay-line);
+      background: transparent;
+      color: var(--clay-ink-2);
+    }
+    .clay-input-group .clay-btn:hover { color: var(--clay-teal); background: transparent; }
+    .clay-input-group:focus-within {
+      background: var(--clay-raised);
+      box-shadow: var(--clay-in), 0 0 0 3px color-mix(in srgb, var(--clay-teal) 22%, transparent);
+    }
+
+    /* ---------- Label & form ---------- */
+    .clay-label { display: block; margin: 0 0 6px; color: var(--clay-ink); font: 600 13px/1.2 var(--clay-font); }
+    .clay-field { margin-bottom: 16px; }
+    .clay-help { margin: 4px 0 0; color: var(--clay-ink-3); font-size: 12px; }
+
+    /* ---------- Checkbox ---------- */
+    .clay-checkbox {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      font-size: 14px;
+      color: var(--clay-ink);
+    }
+    .clay-checkbox input { position: absolute; opacity: 0; pointer-events: none; }
+    .clay-checkbox .clay-checkbox-box {
+      display: inline-grid;
+      place-items: center;
+      width: 22px; height: 22px;
+      border-radius: 7px;
+      background: var(--clay-sunk);
+      box-shadow: var(--clay-in);
+      color: transparent;
+      transition: background-color .15s, color .15s;
+    }
+    .clay-checkbox input:checked + .clay-checkbox-box {
+      background: var(--clay-fill);
+      color: var(--clay-on-teal);
+      box-shadow: var(--clay-teal-puff);
+    }
+    .clay-checkbox input:focus-visible + .clay-checkbox-box {
+      outline: 2px solid var(--clay-teal);
+      outline-offset: 2px;
+    }
+
+    /* ---------- Badge & chip ---------- */
+    .clay-badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 4px 12px;
+      border-radius: var(--clay-r-pill);
+      background: var(--clay-teal-tint);
+      color: var(--clay-teal-ink);
+      font: 700 11px/1.4 var(--clay-font);
+      text-transform: uppercase;
+      letter-spacing: .5px;
+      box-shadow: var(--clay-in);
+    }
+    .clay-badge--solid {
+      background: var(--clay-fill);
+      color: var(--clay-on-teal);
+      box-shadow: var(--clay-teal-puff);
+    }
+    .clay-badge--outline {
+      background: transparent;
+      box-shadow: var(--clay-out-sm), inset 0 0 0 1.5px var(--clay-line);
+    }
+    .clay-badge--success { background: rgba(92, 198, 138, .18); color: #15803d; }
+    html.tx-dark .clay-badge--success { background: rgba(92, 198, 138, .16); color: #5cc68a; }
+    .clay-badge--warning { background: rgba(226, 163, 86, .18); color: #b45309; }
+    html.tx-dark .clay-badge--warning { background: rgba(226, 163, 86, .14); color: #efbd7f; }
+    .clay-badge--danger  { background: rgba(236, 119, 101, .18); color: #b42318; }
+    html.tx-dark .clay-badge--danger  { background: rgba(236, 119, 101, .14); color: #f39a8b; }
+
+    .clay-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      border-radius: var(--clay-r-pill);
+      background: var(--clay-raised);
+      color: var(--clay-ink);
+      font: 600 12px/1.4 var(--clay-font);
+      box-shadow: var(--clay-out-sm);
+      cursor: pointer;
+      transition: color .15s, box-shadow .15s;
+    }
+    .clay-chip:hover { color: var(--clay-teal-ink); }
+    .clay-chip:active { box-shadow: var(--clay-in); }
+    .clay-chip.is-active {
+      background: var(--clay-fill);
+      color: var(--clay-on-teal);
+      box-shadow: var(--clay-teal-puff);
+    }
+
+    /* ---------- Alert ---------- */
+    .clay-alert {
+      padding: 14px 18px;
+      border-radius: var(--clay-r);
+      background: var(--clay-raised);
+      box-shadow: var(--clay-out-sm);
+      color: var(--clay-ink);
+      font-size: 14px;
+      line-height: 1.55;
+    }
+    .clay-alert--info    { background: var(--clay-teal-tint); color: var(--clay-teal-ink); }
+    .clay-alert--success { background: rgba(92, 198, 138, .14); }
+    .clay-alert--warning { background: rgba(226, 163, 86, .14); }
+    .clay-alert--danger  { background: rgba(236, 119, 101, .14); }
+    .clay-alert strong { color: inherit; }
+
+    /* ---------- Avatar ---------- */
+    .clay-avatar {
+      display: inline-grid;
+      place-items: center;
+      width: 36px; height: 36px;
+      border-radius: var(--clay-r-sm);
+      background: var(--clay-teal-tint);
+      color: var(--clay-teal-ink);
+      font: 800 13px/1 var(--clay-display);
+      letter-spacing: .02em;
+      box-shadow: var(--clay-in);
+    }
+    .clay-avatar--lg { width: 48px; height: 48px; font-size: 16px; border-radius: var(--clay-r); }
+    .clay-avatar--sm { width: 28px; height: 28px; font-size: 11px; border-radius: 8px; }
+    .clay-avatar--peach { background: var(--clay-peach); color: #4a2412; }
+    .clay-avatar--sand  { background: var(--clay-sand); color: var(--clay-ink); }
+
+    /* ---------- Code block ---------- */
+    .clay-code {
+      padding: 14px 16px;
+      border-radius: var(--clay-r);
+      background: var(--clay-sunk);
+      box-shadow: var(--clay-in);
+      font-family: var(--clay-mono);
+      font-size: 12.5px;
+      color: var(--clay-ink);
+      overflow-x: auto;
+      line-height: 1.7;
+    }
+
+    /* ---------- Brand mark ---------- */
+    .clay-brand-mark {
+      display: inline-grid;
+      place-items: center;
+      width: 40px; height: 40px;
+      border-radius: 13px;
+      background: var(--clay-fill);
+      color: var(--clay-on-teal);
+      box-shadow: var(--clay-teal-puff);
+      font: 700 15px/1 var(--clay-display);
+      letter-spacing: .03em;
+      flex: none;
+    }
+
+    /* ---------- Progress bar ---------- */
+    .clay-progress {
+      height: 14px;
+      border-radius: var(--clay-r-pill);
+      background: var(--clay-sunk);
+      box-shadow: var(--clay-in);
+      overflow: hidden;
+    }
+    .clay-progress-bar {
+      height: 100%;
+      background: var(--clay-fill);
+      box-shadow: var(--clay-teal-puff);
+      border-radius: var(--clay-r-pill);
+      transition: width .3s ease;
+    }
+
+    /* ---------- Switch / toggle ---------- */
+    .clay-switch { display: inline-flex; align-items: center; gap: 10px; cursor: pointer; }
+    .clay-switch input { position: absolute; opacity: 0; pointer-events: none; }
+    .clay-switch-track {
+      width: 44px; height: 24px;
+      border-radius: var(--clay-r-pill);
+      background: var(--clay-sunk);
+      box-shadow: var(--clay-in);
+      position: relative;
+      transition: background-color .15s;
+    }
+    .clay-switch-track::after {
+      content: "";
+      position: absolute;
+      top: 3px; left: 3px;
+      width: 18px; height: 18px;
+      border-radius: 50%;
+      background: var(--clay-raised);
+      box-shadow: var(--clay-out-sm);
+      transition: transform .2s cubic-bezier(.4, 0, .2, 1);
+    }
+    .clay-switch input:checked + .clay-switch-track {
+      background: var(--clay-fill);
+      box-shadow: var(--clay-teal-puff);
+    }
+    .clay-switch input:checked + .clay-switch-track::after {
+      transform: translateX(20px);
+      background: var(--clay-on-teal);
+      box-shadow: none;
+    }
+
+    /* ---------- Divider & utilities ---------- */
+    .clay-divider { border: 0; height: 1px; background: var(--clay-line); margin: 24px 0; }
+    .clay-stack { display: flex; flex-direction: column; gap: 12px; }
+    .clay-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+    .clay-spacer { flex: 1 1 auto; }
+    .clay-muted { color: var(--clay-ink-2); }
+    .clay-text-sm { font-size: 13px; }
+    .clay-text-lg { font-size: 18px; }
+
+    /* ---------- Smooth theme transition ---------- */
+    html.clay-theming body,
+    html.clay-theming body *:not(svg *) {
+      transition: background-color .28s ease, color .28s ease, border-color .28s ease, box-shadow .28s ease !important;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { transition: none !important; animation: none !important; }
+    }
+
+    /* ============================================================
+       FIN BLOQUE 1 · CSS
+       ============================================================ */
+
+
+    /* ============================================================
+       BLOQUE 1b · CSS del demo (no copiar a tu sistema)
+       ============================================================ */
+    .demo-shell {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 32px 24px 80px;
+    }
+    .demo-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+      padding-bottom: 24px;
+      margin-bottom: 32px;
+    }
+    .demo-brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 11px;
+      text-decoration: none;
+      color: var(--clay-ink);
+    }
+    .demo-brand-text { display: flex; flex-direction: column; gap: 3px; line-height: 1; }
+    .demo-brand-name { font: 700 18px/1 var(--clay-display); letter-spacing: -.01em; }
+    .demo-brand-tag { color: var(--clay-ink-2); font-size: 12px; font-weight: 500; }
+
+    .demo-section { margin-bottom: 40px; }
+    .demo-section-title {
+      font: 700 13px/1 var(--clay-font);
+      text-transform: uppercase;
+      letter-spacing: .8px;
+      color: var(--clay-ink-2);
+      margin: 0 0 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .demo-section-title .count {
+      background: var(--clay-surface);
+      color: var(--clay-ink);
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-size: 11px;
+      box-shadow: var(--clay-in);
+    }
+
+    .demo-grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+    .demo-grid-6 { display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px; }
+    @media (max-width: 1200px) { .demo-grid-6 { grid-template-columns: repeat(3, 1fr); } }
+    @media (max-width: 760px)  { .demo-grid-6 { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 460px)  { .demo-grid-6 { grid-template-columns: 1fr; } .demo-grid-2 { grid-template-columns: 1fr; } }
+
+    .demo-option {
+      position: relative;
+      background: var(--clay-raised);
+      border: 0;
+      border-radius: var(--clay-r-lg);
+      padding: 16px;
+      cursor: pointer;
+      box-shadow: var(--clay-out-sm);
+      transition: box-shadow .2s, color .15s;
+      font-family: inherit;
+      color: var(--clay-ink);
+      text-align: left;
+      overflow: hidden;
+      display: block;
+    }
+    .demo-option:hover { color: var(--clay-teal-ink); }
+    .demo-option:active { box-shadow: var(--clay-in); }
+    .demo-option.is-active { color: var(--clay-teal-ink); }
+    .demo-option input[type="radio"] { position: absolute; opacity: 0; pointer-events: none; }
+    .demo-option-label {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font: 700 14px/1.2 var(--clay-display);
+      margin-bottom: 6px;
+    }
+    .demo-option-label .fa {
+      width: 32px; height: 32px;
+      display: inline-grid;
+      place-items: center;
+      background: var(--clay-sunk);
+      color: var(--clay-teal);
+      border-radius: 10px;
+      box-shadow: var(--clay-in);
+    }
+    .demo-option-desc { font-size: 12px; color: var(--clay-ink-2); margin: 0; line-height: 1.5; }
+    .demo-check {
+      position: absolute;
+      top: 12px; right: 12px;
+      width: 22px; height: 22px;
+      border-radius: 50%;
+      background: var(--clay-fill);
+      color: var(--clay-on-teal);
+      box-shadow: var(--clay-teal-puff);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+    }
+    .demo-option.is-active .demo-check { display: inline-flex; }
+
+    .demo-mode-icon {
+      width: 34px; height: 34px;
+      display: inline-grid;
+      place-items: center;
+      background: var(--clay-sunk);
+      color: var(--clay-teal);
+      border-radius: 11px;
+      box-shadow: var(--clay-in);
+    }
+
+    /* ============================================================
+       Galería comparativa — 6 paletas en vivo
+       ============================================================ */
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 12px;
+    }
+    @media (max-width: 1200px) { .gallery { grid-template-columns: repeat(3, 1fr); } }
+    @media (max-width: 760px)  { .gallery { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 460px)  { .gallery { grid-template-columns: 1fr; } }
+
+    .gallery-card {
+      border-radius: var(--clay-r-lg);
+      padding: 14px;
+      box-shadow: 10px 12px 26px -8px rgba(0,0,0,.18), -6px -6px 18px -8px rgba(255,255,255,.85);
+      border: 2px solid transparent;
+      cursor: pointer;
+      transition: transform .2s, box-shadow .2s, border-color .2s;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .gallery-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 12px 16px 32px -6px rgba(0,0,0,.22), -8px -8px 22px -6px rgba(255,255,255,.9);
+    }
+    .gallery-card.is-active { border-color: currentColor; }
+
+    .gallery-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .gallery-name { font: 700 13px/1.2 var(--clay-display); letter-spacing: -.005em; }
+    .gallery-dot {
+      width: 14px; height: 14px;
+      border-radius: 50%;
+      box-shadow: inset 0 0 0 1px rgba(0,0,0,.1), inset 0 -2px 3px rgba(0,0,0,.18);
+    }
+    .gallery-mini-card {
+      border-radius: 10px;
+      padding: 10px;
+      box-shadow: inset 2px 2px 5px rgba(0,0,0,.1), inset -2px -2px 5px rgba(255,255,255,.6);
+    }
+    .gallery-mini-title { font: 700 11px/1.2 var(--clay-display); margin: 0 0 3px; }
+    .gallery-mini-text { font-size: 10px; line-height: 1.4; margin: 0 0 8px; opacity: .75; }
+    .gallery-mini-row { display: flex; gap: 5px; align-items: center; flex-wrap: wrap; }
+    .gallery-pill {
+      padding: 5px 10px;
+      border-radius: 999px;
+      font: 700 10px/1 var(--clay-display);
+      color: #fff;
+      box-shadow: 2px 4px 8px -2px rgba(0,0,0,.2), inset 1px 1px 0 rgba(255,255,255,.3);
+    }
+    .gallery-pill--ghost {
+      padding: 5px 10px;
+      border-radius: 999px;
+      font: 600 10px/1 var(--clay-display);
+      background: transparent;
+      color: inherit;
+      box-shadow: inset 0 0 0 1.2px currentColor, 2px 3px 6px -2px rgba(0,0,0,.15), -2px -2px 5px rgba(255,255,255,.7);
+    }
+    .gallery-chip {
+      padding: 3px 7px;
+      border-radius: 999px;
+      font: 700 9px/1.4 var(--clay-font);
+      text-transform: uppercase;
+      letter-spacing: .4px;
+    }
+    .gallery-mini-progress {
+      height: 5px;
+      border-radius: 999px;
+      box-shadow: inset 2px 2px 4px rgba(0,0,0,.12), inset -2px -2px 4px rgba(255,255,255,.5);
+      overflow: hidden;
+    }
+    .gallery-mini-progress-bar { height: 100%; border-radius: 999px; }
+    .gallery-swatch-row { display: flex; gap: 3px; }
+    .gallery-swatch {
+      flex: 1;
+      height: 18px;
+      border-radius: 5px;
+      box-shadow: inset 0 0 0 1px rgba(0,0,0,.08);
+    }
+
+    /* ===== Teal Clay gallery ===== */
+    .gallery-teal { background: #e8eeec; color: #12302d; }
+    .gallery-teal .gallery-mini-card { background: #fafcfc; }
+    .gallery-teal .gallery-mini-text { color: #4c6966; }
+    .gallery-teal .gallery-pill { background: #0e7c76; }
+    .gallery-teal .gallery-pill--ghost { color: #0b6560; }
+    .gallery-teal .gallery-chip { background: #d3ebe7; color: #0b6560; }
+    .gallery-teal .gallery-mini-progress { background: #e0e8e6; }
+    .gallery-teal .gallery-mini-progress-bar { background: #0e7c76; }
+    .gallery-teal .gallery-dot { background: #0e7c76; }
+
+    /* ===== Blue Soft gallery ===== */
+    .gallery-blue { background: #eef2f7; color: #1f2638; }
+    .gallery-blue .gallery-mini-card { background: #f5f7fb; }
+    .gallery-blue .gallery-mini-text { color: #515c72; }
+    .gallery-blue .gallery-pill { background: linear-gradient(100deg, #2f8cea, #3b2ef2); }
+    .gallery-blue .gallery-pill--ghost { color: #3340d8; }
+    .gallery-blue .gallery-chip { background: #dfe4fc; color: #3340d8; }
+    .gallery-blue .gallery-mini-progress { background: #e0e6ee; }
+    .gallery-blue .gallery-mini-progress-bar { background: linear-gradient(100deg, #2f8cea, #3b2ef2); }
+    .gallery-blue .gallery-dot { background: linear-gradient(100deg, #2f8cea, #3b2ef2); }
+
+    /* ===== Soft Grey gallery ===== */
+    .gallery-grey { background: #e8e8e8; color: #2f2f2f; }
+    .gallery-grey .gallery-mini-card { background: #eeeeee; }
+    .gallery-grey .gallery-mini-text { color: #5a5a5a; }
+    .gallery-grey .gallery-pill { background: linear-gradient(145deg, #555, #333); }
+    .gallery-grey .gallery-pill--ghost { color: #2f2f2f; }
+    .gallery-grey .gallery-chip { background: #d5d5d5; color: #2f2f2f; }
+    .gallery-grey .gallery-mini-progress { background: #dcdcdc; }
+    .gallery-grey .gallery-mini-progress-bar { background: linear-gradient(145deg, #555, #333); }
+    .gallery-grey .gallery-dot { background: linear-gradient(145deg, #555, #333); }
+
+    /* ===== Rose Clay gallery ===== */
+    .gallery-rose { background: #f5e8e8; color: #3d1f24; }
+    .gallery-rose .gallery-mini-card { background: #fff7f7; }
+    .gallery-rose .gallery-mini-text { color: #7a4d52; }
+    .gallery-rose .gallery-pill { background: linear-gradient(135deg, #ff8fa3, #d64560); }
+    .gallery-rose .gallery-pill--ghost { color: #b8324a; }
+    .gallery-rose .gallery-chip { background: #fbdde2; color: #b8324a; }
+    .gallery-rose .gallery-mini-progress { background: #eedede; }
+    .gallery-rose .gallery-mini-progress-bar { background: linear-gradient(135deg, #ff8fa3, #d64560); }
+    .gallery-rose .gallery-dot { background: linear-gradient(135deg, #ff8fa3, #d64560); }
+
+    /* ===== Amber Sand gallery (NUEVO) ===== */
+    .gallery-amber { background: #f0e8d8; color: #3d2e15; }
+    .gallery-amber .gallery-mini-card { background: #fbf5e8; }
+    .gallery-amber .gallery-mini-text { color: #7a6440; }
+    .gallery-amber .gallery-pill { background: linear-gradient(135deg, #f5b942, #c2820a); }
+    .gallery-amber .gallery-pill--ghost { color: #8b5d08; }
+    .gallery-amber .gallery-chip { background: #f5e4c2; color: #8b5d08; }
+    .gallery-amber .gallery-mini-progress { background: #e8dec8; }
+    .gallery-amber .gallery-mini-progress-bar { background: linear-gradient(135deg, #f5b942, #c2820a); }
+    .gallery-amber .gallery-dot { background: linear-gradient(135deg, #f5b942, #c2820a); }
+
+    /* ===== Violet Mist gallery (NUEVO) ===== */
+    .gallery-violet { background: #ece8f5; color: #2d1f4d; }
+    .gallery-violet .gallery-mini-card { background: #faf8ff; }
+    .gallery-violet .gallery-mini-text { color: #5e4d80; }
+    .gallery-violet .gallery-pill { background: linear-gradient(135deg, #a78bfa, #7c3aed); }
+    .gallery-violet .gallery-pill--ghost { color: #6d28d9; }
+    .gallery-violet .gallery-chip { background: #ede4ff; color: #6d28d9; }
+    .gallery-violet .gallery-mini-progress { background: #e2ddf0; }
+    .gallery-violet .gallery-mini-progress-bar { background: linear-gradient(135deg, #a78bfa, #7c3aed); }
+    .gallery-violet .gallery-dot { background: linear-gradient(135deg, #a78bfa, #7c3aed); }
+
+    /* Demo preview */
+    .demo-preview-title { margin: 0 0 8px; font: 700 22px/1.2 var(--clay-display); }
+    .demo-preview-desc { margin: 0 0 20px; color: var(--clay-ink-2); font-size: 14px; line-height: 1.6; }
+
+    .demo-toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(120%);
+      background: var(--clay-raised);
+      color: var(--clay-ink);
+      padding: 12px 20px;
+      border-radius: var(--clay-r-pill);
+      font: 600 13px/1 var(--clay-font);
+      box-shadow: var(--clay-out);
+      transition: transform .3s cubic-bezier(.4,0,.2,1), background-color .28s;
+      z-index: 1000;
+      pointer-events: none;
+      max-width: 90vw;
+      text-align: center;
+    }
+    .demo-toast.show { transform: translateX(-50%) translateY(0); }
+
+    .demo-foot {
+      margin-top: 48px;
+      text-align: center;
+      font-size: 12px;
+      color: var(--clay-ink-2);
+    }
+    .demo-foot a { color: var(--clay-teal-ink); text-decoration: none; font-weight: 600; }
+    .demo-foot a:hover { text-decoration: underline; }
+    .demo-foot .fa-heart { color: #e0245e; margin: 0 2px; }
+    html.tx-dark .demo-foot .fa-heart { color: #ff5c8a; }
+
+    .demo-form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    @media (max-width: 640px) { .demo-form-grid { grid-template-columns: 1fr; } }
+
+    .demo-title-block { margin-bottom: 32px; }
+    .demo-title-block h1 {
+      margin: 0 0 8px;
+      font: 700 clamp(26px, 3.4vw, 34px)/1.1 var(--clay-display);
+      letter-spacing: -.02em;
+    }
+    .demo-title-block p { margin: 0; color: var(--clay-ink-2); font-size: 15px; max-width: 760px; line-height: 1.6; }
+    .demo-title-block p strong { color: var(--clay-ink); font-weight: 700; }
+    /* ============================================================
+       FIN BLOQUE 1b · CSS del demo
+       ============================================================ */
+  </style>
+</head>
+<body>
+
+  <!--
+    ============================================================
+    BLOQUE 2 · HTML
+    ============================================================
+  -->
+  <div class="demo-shell">
+    <!-- Header -->
+    <header class="demo-header">
+      <a class="demo-brand" href="#">
+        <span class="clay-brand-mark">TX</span>
+        <span class="demo-brand-text">
+          <span class="demo-brand-name">UI Kits and Plugins</span>
+          <span class="demo-brand-tag">by TechRevX</span>
+        </span>
+      </a>
+      <div class="clay-row">
+        <button type="button" class="clay-btn clay-btn--icon" id="quickTheme" aria-label="Cambiar modo claro/oscuro">
+          <span class="fa fa-moon-o" id="qtIcon"></span>
+        </button>
+        <button type="button" class="clay-btn clay-btn--icon" id="quickStyle" aria-label="Cambiar estilo de color">
+          <span class="fa fa-paint-brush" id="qsIcon"></span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Title -->
+    <div class="demo-title-block">
+      <h1>Selector de temas — Clay</h1>
+      <p>Dos dimensiones: <strong>modo</strong> (claro/oscuro) y <strong>color</strong> (5 paletas). Las formas son Blue Soft. <strong>Todos los botones tienen relieve clay</strong> (incluido el ghost). Compatible con tu app: clases <code>tx-light</code>/<code>tx-dark</code> en <code>&lt;html&gt;</code> y <code>tx-blue</code>/<code>tx-grey</code>/<code>tx-rose</code>/<code>tx-amber</code> (Teal = sin clase).</p>
+    </div>
+
+    <!-- Mode -->
+    <section class="demo-section">
+      <h2 class="demo-section-title">Modo <span class="count">2</span></h2>
+      <div class="demo-grid-2" role="radiogroup" aria-label="Modo claro u oscuro">
+        <label class="demo-option" data-group="theme" data-value="light">
+          <input type="radio" name="theme" value="light">
+          <span class="demo-check"><i class="fa fa-check"></i></span>
+          <div class="demo-option-label"><span class="fa fa-sun-o demo-mode-icon"></span> Claro</div>
+          <p class="demo-option-desc">Fondo claro con texto oscuro. Ideal para entornos luminosos y uso durante el día.</p>
+        </label>
+        <label class="demo-option" data-group="theme" data-value="dark">
+          <input type="radio" name="theme" value="dark">
+          <span class="demo-check"><i class="fa fa-check"></i></span>
+          <div class="demo-option-label"><span class="fa fa-moon-o demo-mode-icon"></span> Oscuro</div>
+          <p class="demo-option-desc">Fondo oscuro con texto claro. Reduce la fatiga visual en entornos con poca luz.</p>
+        </label>
+      </div>
+    </section>
+
+    <!-- Color (6 paletas) -->
+    <section class="demo-section">
+      <h2 class="demo-section-title">Color <span class="count">6</span></h2>
+      <div class="demo-grid-6" role="radiogroup" aria-label="Color palette">
+
+        <label class="demo-option" data-group="style" data-value="teal">
+          <input type="radio" name="style" value="teal">
+          <span class="demo-check"><i class="fa fa-check"></i></span>
+          <div class="demo-option-label"><span class="fa fa-tint demo-mode-icon" style="color:#0e7c76"></span> Teal Clay</div>
+          <p class="demo-option-desc">Verde azulado sólido (#0e7c76).</p>
+        </label>
+
+        <label class="demo-option" data-group="style" data-value="blue">
+          <input type="radio" name="style" value="blue">
+          <span class="demo-check"><i class="fa fa-check"></i></span>
+          <div class="demo-option-label"><span class="fa fa-tint demo-mode-icon" style="color:#3b47ee"></span> Blue Soft</div>
+          <p class="demo-option-desc">Azul-violeta con gradiente (#2f8cea → #3b2ef2).</p>
+        </label>
+
+        <label class="demo-option" data-group="style" data-value="violet">
+          <input type="radio" name="style" value="violet">
+          <span class="demo-check"><i class="fa fa-check"></i></span>
+          <div class="demo-option-label"><span class="fa fa-tint demo-mode-icon" style="color:#7c3aed"></span> Violet Mist</div>
+          <p class="demo-option-desc">Violeta premium (#a78bfa → #7c3aed).</p>
+        </label>
+
+        <label class="demo-option" data-group="style" data-value="rose">
+          <input type="radio" name="style" value="rose">
+          <span class="demo-check"><i class="fa fa-check"></i></span>
+          <div class="demo-option-label"><span class="fa fa-tint demo-mode-icon" style="color:#d64560"></span> Rose Clay</div>
+          <p class="demo-option-desc">Rosa-coral cálido (#ff8fa3 → #d64560).</p>
+        </label>
+
+        <label class="demo-option" data-group="style" data-value="amber">
+          <input type="radio" name="style" value="amber">
+          <span class="demo-check"><i class="fa fa-check"></i></span>
+          <div class="demo-option-label"><span class="fa fa-tint demo-mode-icon" style="color:#c2820a"></span> Amber Sand</div>
+          <p class="demo-option-desc">Dorado terroso (#f5b942 → #c2820a).</p>
+        </label>
+
+        <label class="demo-option" data-group="style" data-value="grey">
+          <input type="radio" name="style" value="grey">
+          <span class="demo-check"><i class="fa fa-check"></i></span>
+          <div class="demo-option-label"><span class="fa fa-tint demo-mode-icon" style="color:#555"></span> Soft Grey</div>
+          <p class="demo-option-desc">Monocromo con acento charcoal (#555 → #333).</p>
+        </label>
+
+      </div>
+    </section>
+
+    <!-- Galería comparativa -->
+    <section class="demo-section">
+      <h2 class="demo-section-title">Galería comparativa <span class="count">6</span></h2>
+      <p style="margin: 0 0 16px; color: var(--clay-ink-2); font-size: 13px;">Las 6 paletas en modo claro, lado a lado. Clic en cualquiera para aplicarla. Todos los botones (incluido el ghost) tienen relieve clay.</p>
+      <div class="gallery">
+
+        <div class="gallery-card gallery-teal" data-gallery="teal">
+          <div class="gallery-header">
+            <span class="gallery-name">Teal Clay</span>
+            <span class="gallery-dot"></span>
+          </div>
+          <div class="gallery-mini-card">
+            <h4 class="gallery-mini-title">Release notes</h4>
+            <p class="gallery-mini-text">Kanban, Gantt, signatures y más.</p>
+            <div class="gallery-mini-row">
+              <span class="gallery-pill">Sign in</span>
+              <span class="gallery-pill gallery-pill--ghost">Ghost</span>
+            </div>
+          </div>
+          <div class="gallery-mini-row">
+            <span class="gallery-chip">New</span>
+          </div>
+          <div class="gallery-mini-progress"><div class="gallery-mini-progress-bar" style="width:68%"></div></div>
+          <div class="gallery-swatch-row">
+            <div class="gallery-swatch" style="background:#0e7c76"></div>
+            <div class="gallery-swatch" style="background:#0a6964"></div>
+            <div class="gallery-swatch" style="background:#d3ebe7"></div>
+            <div class="gallery-swatch" style="background:#12302d"></div>
+          </div>
+        </div>
+
+        <div class="gallery-card gallery-blue" data-gallery="blue">
+          <div class="gallery-header">
+            <span class="gallery-name">Blue Soft</span>
+            <span class="gallery-dot"></span>
+          </div>
+          <div class="gallery-mini-card">
+            <h4 class="gallery-mini-title">Release notes</h4>
+            <p class="gallery-mini-text">Kanban, Gantt, signatures y más.</p>
+            <div class="gallery-mini-row">
+              <span class="gallery-pill">Sign in</span>
+              <span class="gallery-pill gallery-pill--ghost">Ghost</span>
+            </div>
+          </div>
+          <div class="gallery-mini-row">
+            <span class="gallery-chip">New</span>
+          </div>
+          <div class="gallery-mini-progress"><div class="gallery-mini-progress-bar" style="width:68%"></div></div>
+          <div class="gallery-swatch-row">
+            <div class="gallery-swatch" style="background:#2f8cea"></div>
+            <div class="gallery-swatch" style="background:#3b2ef2"></div>
+            <div class="gallery-swatch" style="background:#dfe4fc"></div>
+            <div class="gallery-swatch" style="background:#1f2638"></div>
+          </div>
+        </div>
+
+        <div class="gallery-card gallery-grey" data-gallery="grey">
+          <div class="gallery-header">
+            <span class="gallery-name">Soft Grey</span>
+            <span class="gallery-dot"></span>
+          </div>
+          <div class="gallery-mini-card">
+            <h4 class="gallery-mini-title">Release notes</h4>
+            <p class="gallery-mini-text">Kanban, Gantt, signatures y más.</p>
+            <div class="gallery-mini-row">
+              <span class="gallery-pill">Sign in</span>
+              <span class="gallery-pill gallery-pill--ghost">Ghost</span>
+            </div>
+          </div>
+          <div class="gallery-mini-row">
+            <span class="gallery-chip">New</span>
+          </div>
+          <div class="gallery-mini-progress"><div class="gallery-mini-progress-bar" style="width:68%"></div></div>
+          <div class="gallery-swatch-row">
+            <div class="gallery-swatch" style="background:#555"></div>
+            <div class="gallery-swatch" style="background:#333"></div>
+            <div class="gallery-swatch" style="background:#d5d5d5"></div>
+            <div class="gallery-swatch" style="background:#2f2f2f"></div>
+          </div>
+        </div>
+
+        <div class="gallery-card gallery-rose" data-gallery="rose">
+          <div class="gallery-header">
+            <span class="gallery-name">Rose Clay</span>
+            <span class="gallery-dot"></span>
+          </div>
+          <div class="gallery-mini-card">
+            <h4 class="gallery-mini-title">Release notes</h4>
+            <p class="gallery-mini-text">Kanban, Gantt, signatures y más.</p>
+            <div class="gallery-mini-row">
+              <span class="gallery-pill">Sign in</span>
+              <span class="gallery-pill gallery-pill--ghost">Ghost</span>
+            </div>
+          </div>
+          <div class="gallery-mini-row">
+            <span class="gallery-chip">New</span>
+          </div>
+          <div class="gallery-mini-progress"><div class="gallery-mini-progress-bar" style="width:68%"></div></div>
+          <div class="gallery-swatch-row">
+            <div class="gallery-swatch" style="background:#ff8fa3"></div>
+            <div class="gallery-swatch" style="background:#d64560"></div>
+            <div class="gallery-swatch" style="background:#fbdde2"></div>
+            <div class="gallery-swatch" style="background:#3d1f24"></div>
+          </div>
+        </div>
+
+        <div class="gallery-card gallery-violet" data-gallery="violet">
+          <div class="gallery-header">
+            <span class="gallery-name">Violet Mist</span>
+            <span class="gallery-dot"></span>
+          </div>
+          <div class="gallery-mini-card">
+            <h4 class="gallery-mini-title">Release notes</h4>
+            <p class="gallery-mini-text">Kanban, Gantt, signatures y más.</p>
+            <div class="gallery-mini-row">
+              <span class="gallery-pill">Sign in</span>
+              <span class="gallery-pill gallery-pill--ghost">Ghost</span>
+            </div>
+          </div>
+          <div class="gallery-mini-row">
+            <span class="gallery-chip">New</span>
+          </div>
+          <div class="gallery-mini-progress"><div class="gallery-mini-progress-bar" style="width:68%"></div></div>
+          <div class="gallery-swatch-row">
+            <div class="gallery-swatch" style="background:#a78bfa"></div>
+            <div class="gallery-swatch" style="background:#7c3aed"></div>
+            <div class="gallery-swatch" style="background:#ede4ff"></div>
+            <div class="gallery-swatch" style="background:#2d1f4d"></div>
+          </div>
+        </div>
+
+        <div class="gallery-card gallery-amber" data-gallery="amber">
+          <div class="gallery-header">
+            <span class="gallery-name">Amber Sand</span>
+            <span class="gallery-dot"></span>
+          </div>
+          <div class="gallery-mini-card">
+            <h4 class="gallery-mini-title">Release notes</h4>
+            <p class="gallery-mini-text">Kanban, Gantt, signatures y más.</p>
+            <div class="gallery-mini-row">
+              <span class="gallery-pill">Sign in</span>
+              <span class="gallery-pill gallery-pill--ghost">Ghost</span>
+            </div>
+          </div>
+          <div class="gallery-mini-row">
+            <span class="gallery-chip">New</span>
+          </div>
+          <div class="gallery-mini-progress"><div class="gallery-mini-progress-bar" style="width:68%"></div></div>
+          <div class="gallery-swatch-row">
+            <div class="gallery-swatch" style="background:#f5b942"></div>
+            <div class="gallery-swatch" style="background:#c2820a"></div>
+            <div class="gallery-swatch" style="background:#f5e4c2"></div>
+            <div class="gallery-swatch" style="background:#3d2e15"></div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Live preview -->
+    <section class="demo-section">
+      <h2 class="demo-section-title">Vista previa activa</h2>
+
+      <div class="clay-card clay-card--lg">
+        <h3 class="demo-preview-title">Ready-made plugins for Oracle APEX.</h3>
+        <p class="demo-preview-desc">Esta tarjeta usa la paleta y modo actualmente seleccionados. Todos los botones (primary, ghost, dark, icon) tienen relieve clay.</p>
+
+        <div class="clay-card clay-card--raised">
+          <h4 class="clay-card-title">Release notes for 1.0</h4>
+          <p class="clay-card-subtitle">Kanban, Gantt, signatures, barcode scanning y más. Cada plugin viene con demo en vivo, referencia completa y descarga en un solo archivo.</p>
+
+          <div class="clay-row" style="margin-bottom: 16px;">
+            <button class="clay-btn clay-btn--primary"><span class="fa fa-download"></span> Descargar</button>
+            <button class="clay-btn clay-btn--ghost">Ver demo</button>
+            <button class="clay-btn clay-btn--dark">Demo account</button>
+            <button class="clay-btn clay-btn--icon"><span class="fa fa-ellipsis-h"></span></button>
+            <span class="clay-badge clay-badge--solid">New</span>
+            <span class="clay-badge">v1.0</span>
+          </div>
+
+          <div class="clay-row" style="margin-bottom: 16px;">
+            <span class="clay-chip is-active">Kanban</span>
+            <span class="clay-chip">Gantt</span>
+            <span class="clay-chip">Signature</span>
+            <span class="clay-chip">Barcode</span>
+          </div>
+
+          <div class="clay-progress" style="margin-bottom: 16px;">
+            <div class="clay-progress-bar" style="width: 68%"></div>
+          </div>
+
+          <div class="clay-row">
+            <span class="clay-avatar clay-avatar--peach">SK</span>
+            <span class="clay-avatar clay-avatar--sand">AB</span>
+            <span class="clay-avatar">+3</span>
+            <span class="clay-spacer"></span>
+            <label class="clay-switch"><input type="checkbox" checked><span class="clay-switch-track"></span><span>Notificarme</span></label>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Buttons showcase (relieve visible en todos) -->
+    <section class="demo-section">
+      <h2 class="demo-section-title">Botones — todos con relieve</h2>
+      <div class="clay-card">
+        <div class="clay-row" style="margin-bottom: 16px;">
+          <button class="clay-btn clay-btn--primary">Primary</button>
+          <button class="clay-btn">Default</button>
+          <button class="clay-btn clay-btn--ghost">Ghost</button>
+          <button class="clay-btn clay-btn--dark">Dark</button>
+        </div>
+        <div class="clay-row" style="margin-bottom: 16px;">
+          <button class="clay-btn clay-btn--primary clay-btn--sm">Small</button>
+          <button class="clay-btn clay-btn--ghost clay-btn--sm">Small ghost</button>
+          <button class="clay-btn clay-btn--lg">Large</button>
+          <button class="clay-btn clay-btn--lg clay-btn--ghost">Large ghost</button>
+        </div>
+        <div class="clay-row">
+          <button class="clay-btn clay-btn--icon"><span class="fa fa-search"></span></button>
+          <button class="clay-btn clay-btn--icon clay-btn--ghost"><span class="fa fa-cog"></span></button>
+          <button class="clay-btn clay-btn--icon clay-btn--dark"><span class="fa fa-user"></span></button>
+          <button class="clay-btn clay-btn--primary clay-btn--icon"><span class="fa fa-plus"></span></button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Form components -->
+    <section class="demo-section">
+      <h2 class="demo-section-title">Formularios</h2>
+      <div class="clay-card">
+        <div class="demo-form-grid">
+          <div class="clay-field">
+            <label class="clay-label" for="user">Usuario</label>
+            <div class="clay-input-group">
+              <input class="clay-input" id="user" placeholder="username">
+              <button class="clay-btn clay-btn--icon" type="button"><span class="fa fa-user"></span></button>
+            </div>
+            <p class="clay-help">Tu nombre de usuario o email.</p>
+          </div>
+
+          <div class="clay-field">
+            <label class="clay-label" for="pass">Contraseña</label>
+            <div class="clay-input-group">
+              <input class="clay-input" id="pass" type="password" placeholder="••••••••">
+              <button class="clay-btn clay-btn--icon" type="button" id="togglePass"><span class="fa fa-eye"></span></button>
+            </div>
+            <p class="clay-help">Mínimo 8 caracteres.</p>
+          </div>
+
+          <div class="clay-field">
+            <label class="clay-label" for="plan">Plan</label>
+            <select class="clay-select" id="plan">
+              <option>Free</option>
+              <option>Pro</option>
+              <option>Enterprise</option>
+            </select>
+          </div>
+
+          <div class="clay-field">
+            <label class="clay-label" for="notes">Notas</label>
+            <textarea class="clay-textarea" id="notes" placeholder="Algo sobre tu cuenta..."></textarea>
+          </div>
+        </div>
+
+        <hr class="clay-divider">
+
+        <div class="clay-row">
+          <label class="clay-checkbox"><input type="checkbox" checked><span class="clay-checkbox-box"><i class="fa fa-check"></i></span><span>Recordar usuario</span></label>
+          <span class="clay-spacer"></span>
+          <button class="clay-btn clay-btn--ghost">Cancelar</button>
+          <button class="clay-btn clay-btn--primary"><span class="fa fa-sign-in"></span> Sign in</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Alerts & badges -->
+    <section class="demo-section">
+      <h2 class="demo-section-title">Alertas y badges</h2>
+      <div class="clay-stack">
+        <div class="clay-alert clay-alert--info"><strong>Just looking?</strong> Sign in as <code>demo</code> with the password <code>Demo</code>.</div>
+        <div class="clay-alert clay-alert--success">Tu plugin se descargó correctamente.</div>
+        <div class="clay-alert clay-alert--warning">Tu sesión expira en 10 minutos.</div>
+        <div class="clay-alert clay-alert--danger">No se pudo conectar con el servidor.</div>
+      </div>
+      <div class="clay-row" style="margin-top: 16px;">
+        <span class="clay-badge clay-badge--success">Activo</span>
+        <span class="clay-badge clay-badge--warning">Pendiente</span>
+        <span class="clay-badge clay-badge--danger">Error</span>
+        <span class="clay-badge clay-badge--outline">Outline</span>
+        <span class="clay-badge clay-badge--solid">Solid</span>
+      </div>
+    </section>
+
+    <!-- Code box -->
+    <section class="demo-section">
+      <h2 class="demo-section-title">Cómo integrarlo en tu sistema</h2>
+      <div class="clay-code">
+&lt;!-- 1. Incluye el CSS --&gt;<br>
+&lt;link rel=<span style="color: var(--clay-teal)">"stylesheet"</span> href=<span style="color: var(--clay-teal)">"clay-techrevx.css"</span>&gt;<br><br>
+&lt;!-- 2. Set mode + color on &lt;html&gt; --&gt;<br>
+&lt;html class=<span style="color: var(--clay-teal)">"<span id="cbClass">tx-light</span>"</span>&gt;<br><br>
+&lt;!-- 3. Usa las clases .clay-* --&gt;<br>
+&lt;button class=<span style="color: var(--clay-teal)">"clay-btn clay-btn--primary"</span>&gt;Sign in&lt;/button&gt;<br>
+&lt;input class=<span style="color: var(--clay-teal)">"clay-input"</span> placeholder=<span style="color: var(--clay-teal)">"Username"</span>&gt;<br>
+&lt;div class=<span style="color: var(--clay-teal)">"clay-card"</span>&gt;...&lt;/div&gt;<br><br>
+&lt;script src=<span style="color: var(--clay-teal)">"clay-techrevx.js"</span> defer&gt;&lt;/script&gt;<br>
+&lt;script&gt;<br>
+// 4. Persistencia (compat con tu app APEX)<br>
+clayTheme.apply(<span style="color: var(--clay-teal)">"light"</span>, <span style="color: var(--clay-teal)">"teal"</span>);<br>
+&lt;/script&gt;
+      </div>
+    </section>
+
+    <p class="demo-foot">Built with <span class="fa fa-heart"></span> using Oracle APEX &amp; Claude</p>
+  </div>
+
+  <div class="demo-toast" id="toast" role="status" aria-live="polite"></div>
+
+  <!--
+    ============================================================
+    BLOQUE 3 · JS  →  copiar a clay-techrevx.js
+    ============================================================
+  -->
+  <script>
+    /* ============================================================
+       clay-techrevx.js  ·  v1.2
+       API global `clayTheme`:
+         clayTheme.apply(theme, style)
+         clayTheme.toggleMode()
+         clayTheme.toggleStyle()
+         clayTheme.init()
+         clayTheme.currentTheme()
+         clayTheme.currentStyle()
+       ============================================================ */
+
+    (function () {
+      const VALID_THEMES = ['light', 'dark'];
+      const VALID_STYLES = ['teal', 'blue', 'violet', 'rose', 'amber', 'grey'];
+      const STYLE_TO_CLASS = { teal: null, blue: 'tx-blue', violet: 'tx-violet', rose: 'tx-rose', amber: 'tx-amber', grey: 'tx-grey' };
+      const STYLE_LABELS = {
+        teal: 'Teal Clay',
+        blue: 'Blue Soft',
+        violet: 'Violet Mist',
+        rose: 'Rose Clay',
+        amber: 'Amber Sand',
+        grey: 'Soft Grey'
+      };
+      const STYLE_ORDER = ['teal', 'blue', 'violet', 'rose', 'amber', 'grey'];
+
+      const root = document.documentElement;
+
+      function apply(theme, style, silent) {
+        if (!VALID_THEMES.includes(theme)) theme = 'light';
+        if (!VALID_STYLES.includes(style)) style = 'teal';
+
+        root.classList.add('clay-theming');
+        setTimeout(() => root.classList.remove('clay-theming'), 320);
+
+        root.classList.remove('tx-light', 'tx-dark', 'tx-blue', 'tx-violet', 'tx-grey', 'tx-rose', 'tx-amber');
+        root.classList.add('tx-' + theme);
+        const cls = STYLE_TO_CLASS[style];
+        if (cls) root.classList.add(cls);
+
+        try {
+          localStorage.setItem('tx-theme', theme);
+          if (style === 'teal') localStorage.removeItem('tx-style');
+          else localStorage.setItem('tx-style', style);
+        } catch (e) {}
+
+        document.querySelectorAll('[data-group]').forEach(opt => {
+          const g = opt.dataset.group;
+          const v = opt.dataset.value;
+          let isActive = false;
+          if (g === 'theme' && v === theme) isActive = true;
+          if (g === 'style' && v === style) isActive = true;
+          opt.classList.toggle('is-active', isActive);
+          const input = opt.querySelector('input');
+          if (input) input.checked = isActive;
+        });
+
+        document.querySelectorAll('.gallery-card').forEach(card => {
+          card.classList.toggle('is-active', card.dataset.gallery === style);
+        });
+
+        const qtIcon = document.getElementById('qtIcon');
+        if (qtIcon) qtIcon.className = 'fa ' + (theme === 'light' ? 'fa-moon-o' : 'fa-sun-o');
+
+        const cbClass = document.getElementById('cbClass');
+        if (cbClass) {
+          let htmlClass = 'tx-' + theme;
+          if (cls) htmlClass += ' ' + cls;
+          cbClass.textContent = htmlClass;
+        }
+
+        document.dispatchEvent(new CustomEvent('claytheme:change', {
+          detail: { theme, style, themeClass: 'tx-' + theme, styleClass: cls || null }
+        }));
+
+        if (!silent) {
+          const toast = document.getElementById('toast');
+          if (toast) {
+            toast.textContent = 'Modo: ' + (theme === 'light' ? 'Claro' : 'Oscuro') + ' · Color: ' + STYLE_LABELS[style];
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 1800);
+          }
+        }
+
+        return { theme, style };
+      }
+
+      function currentTheme() { return root.classList.contains('tx-dark') ? 'dark' : 'light'; }
+      function currentStyle() {
+        if (root.classList.contains('tx-amber')) return 'amber';
+        if (root.classList.contains('tx-rose')) return 'rose';
+        if (root.classList.contains('tx-violet')) return 'violet';
+        if (root.classList.contains('tx-grey')) return 'grey';
+        if (root.classList.contains('tx-blue')) return 'blue';
+        return 'teal';
+      }
+      function toggleMode() { return apply(currentTheme() === 'light' ? 'dark' : 'light', currentStyle()); }
+      function toggleStyle() {
+        const cur = STYLE_ORDER.indexOf(currentStyle());
+        return apply(currentTheme(), STYLE_ORDER[(cur + 1) % STYLE_ORDER.length]);
+      }
+      function init() {
+        let theme, style;
+        try {
+          const t = localStorage.getItem('tx-theme');
+          theme = VALID_THEMES.includes(t) ? t
+                  : (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+          const s = localStorage.getItem('tx-style');
+          style = VALID_STYLES.includes(s) ? s : 'teal';
+        } catch (e) { theme = 'light'; style = 'teal'; }
+        apply(theme, style, true);
+      }
+
+      window.clayTheme = {
+        apply, toggleMode, toggleStyle, currentTheme, currentStyle, init,
+        VALID_THEMES, VALID_STYLES, STYLE_ORDER, STYLE_LABELS
+      };
+
+      /* ===== DEMO-ONLY ===== */
+      document.querySelectorAll('[data-group]').forEach(opt => {
+        opt.addEventListener('click', () => {
+          const g = opt.dataset.group;
+          const v = opt.dataset.value;
+          if (g === 'theme') apply(v, currentStyle());
+          else if (g === 'style') apply(currentTheme(), v);
+        });
+      });
+
+      document.querySelectorAll('.gallery-card').forEach(card => {
+        card.addEventListener('click', () => {
+          apply(currentTheme(), card.dataset.gallery);
+        });
+      });
+
+      const quickThemeBtn = document.getElementById('quickTheme');
+      if (quickThemeBtn) quickThemeBtn.addEventListener('click', toggleMode);
+      const quickStyleBtn = document.getElementById('quickStyle');
+      if (quickStyleBtn) quickStyleBtn.addEventListener('click', toggleStyle);
+
+      const togglePass = document.getElementById('togglePass');
+      if (togglePass) {
+        togglePass.addEventListener('click', function () {
+          const inp = document.getElementById('pass');
+          const icon = this.querySelector('.fa');
+          if (inp.type === 'password') {
+            inp.type = 'text';
+            icon.className = 'fa fa-eye-slash';
+          } else {
+            inp.type = 'password';
+            icon.className = 'fa fa-eye';
+          }
+        });
+      }
+
+      document.addEventListener('keydown', (e) => {
+        if (e.target.matches('input, textarea, select')) return;
+        if (e.key === 't' || e.key === 'T') toggleMode();
+        else if (e.key === 's' || e.key === 'S') toggleStyle();
+      });
+
+      init();
+    })();
+    /* ============================================================
+       FIN BLOQUE 3 · JS
+       ============================================================ */
+  </script>
+</body>
+</html>
