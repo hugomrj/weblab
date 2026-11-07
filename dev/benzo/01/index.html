@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Aromas PY · Catálogo en Venzo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,500;0,6..96,700;1,6..96,500&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com/3.4.17"></script>
+<script>
+tailwind.config = { theme: { extend: { fontFamily: {
+  display: ['"Bodoni Moda"', 'Georgia', 'serif'],
+  sans: ['Manrope', 'system-ui', 'sans-serif'] } } } };
+</script>
+<style>
+:root{
+  --bg:#F6F3FA; --surface:#FFFFFF; --ink:#24172F; --muted:#6B5F78; --line:#E3DCEC;
+  --plum:#3B2058; --plum-ink:#F6F1FB; --brass:#B8862F; --wa:#128C4A; --wa-ink:#FFFFFF;
+  box-sizing:border-box; padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#151020; --surface:#1F1830; --ink:#F1ECF7; --muted:#A99DB8; --line:#33294A;
+    --plum:#2B1745; --brass:#D9A84C;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#151020; --surface:#1F1830; --ink:#F1ECF7; --muted:#A99DB8; --line:#33294A;
+  --plum:#2B1745; --brass:#D9A84C;
+}
+html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 72px);scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font-family:Manrope,system-ui,sans-serif}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--bg)}
+.surface{background:var(--surface)} .line{border-color:var(--line)} .muted{color:var(--muted)}
+.hdr{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.btn-wa{background:var(--wa);color:var(--wa-ink);transition:filter .15s}
+.btn-wa:hover{filter:brightness(1.1)}
+.btn-wa:focus-visible,.btn-ghost:focus-visible,a:focus-visible{outline:3px solid var(--brass);outline-offset:2px}
+.btn-ghost{border:1.5px solid color-mix(in srgb,var(--plum-ink) 45%,transparent);color:var(--plum-ink)}
+.hero{background:var(--plum);color:var(--plum-ink)}
+.price{font-variant-numeric:tabular-nums}
+.soldout .media img{filter:grayscale(1);opacity:.45}
+.soldout .media svg.ph{opacity:.35}
+.btn-off{background:var(--line);color:var(--muted);cursor:not-allowed}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}}
+</style>
+</head>
+<body class="font-sans antialiased">
+
+<!-- Iconos reutilizables -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="bottle" viewBox="0 0 100 140">
+    <rect x="38" y="4" width="24" height="18" rx="3" fill="currentColor" opacity=".9"/>
+    <rect x="44" y="22" width="12" height="10" fill="currentColor" opacity=".6"/>
+    <rect x="14" y="32" width="72" height="100" rx="16" fill="currentColor" opacity=".22"/>
+    <rect x="14" y="32" width="72" height="100" rx="16" fill="none" stroke="currentColor" stroke-width="2.5"/>
+    <rect x="26" y="48" width="8" height="64" rx="4" fill="currentColor" opacity=".35"/>
+  </symbol>
+  <symbol id="jar" viewBox="0 0 100 100">
+    <rect x="14" y="14" width="72" height="24" rx="6" fill="currentColor" opacity=".85"/>
+    <rect x="18" y="40" width="64" height="48" rx="10" fill="currentColor" opacity=".22"/>
+    <rect x="18" y="40" width="64" height="48" rx="10" fill="none" stroke="currentColor" stroke-width="2.5"/>
+  </symbol>
+  <symbol id="wa" viewBox="0 0 24 24">
+    <path fill="currentColor" d="M17.47 14.38c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.17-.17.2-.35.22-.65.07-.3-.15-1.26-.46-2.4-1.48-.89-.79-1.49-1.77-1.66-2.07-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.08-.15-.67-1.62-.92-2.22-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.8.37-.27.3-1.04 1.02-1.04 2.48s1.07 2.88 1.22 3.08c.15.2 2.1 3.2 5.08 4.49.71.31 1.26.49 1.69.63.71.23 1.36.2 1.87.12.57-.08 1.76-.72 2.01-1.41.25-.69.25-1.29.17-1.41-.07-.12-.27-.2-.57-.35zM12.05 21.5h-.01a9.45 9.45 0 0 1-4.82-1.32l-.35-.2-3.58.94.96-3.49-.22-.36a9.44 9.44 0 0 1-1.45-5.03c0-5.21 4.24-9.45 9.46-9.45 2.52 0 4.9.98 6.68 2.77a9.4 9.4 0 0 1 2.77 6.68c0 5.21-4.24 9.46-9.45 9.46zM20.52 3.45A11.4 11.4 0 0 0 12.05 0C5.73 0 .59 5.14.59 11.46c0 2.02.53 3.99 1.53 5.73L.5 23.5l6.46-1.69a11.44 11.44 0 0 0 5.09 1.2h.01c6.32 0 11.46-5.14 11.46-11.46 0-3.06-1.19-5.94-3.35-8.1z"/>
+  </symbol>
+</svg>
+
+<!-- 1. Header -->
+<header class="hdr">
+  <div class="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-3 sm:px-6">
+    <a href="#top" class="flex items-center gap-2.5">
+      <span class="grid h-9 w-9 place-items-center rounded-full font-display text-lg font-bold" style="background:var(--plum);color:var(--plum-ink)">A</span>
+      <span class="font-display text-xl font-bold leading-none">Aromas PY</span>
+    </a>
+    <a id="waGeneral" target="_blank" rel="noopener" class="btn-wa inline-flex items-center gap-2 rounded-full px-4 py-2.5 text-sm font-semibold">
+      <svg class="h-5 w-5" aria-hidden="true"><use href="#wa"/></svg>
+      <span>Escribinos</span>
+    </a>
+  </div>
+</header>
+
+<main id="top">
+<!-- 2. Hero -->
+<section class="mx-auto max-w-6xl px-4 pt-5 sm:px-6 sm:pt-8">
+  <div class="hero relative overflow-hidden rounded-[2rem] px-6 py-12 sm:px-12 sm:py-16">
+    <svg class="pointer-events-none absolute -right-6 -bottom-8 h-72 w-72 sm:right-10 sm:h-96 sm:w-96" style="color:var(--brass);opacity:.35" aria-hidden="true"><use href="#bottle"/></svg>
+    <svg class="pointer-events-none absolute right-24 top-6 hidden h-32 w-32 sm:block" style="color:var(--plum-ink);opacity:.12" aria-hidden="true"><use href="#jar"/></svg>
+    <div class="relative max-w-xl">
+      <p class="text-sm font-medium" style="color:var(--brass)">Perfumes y cosmética importada · Asunción</p>
+      <h1 class="font-display mt-4 text-4xl font-medium leading-[1.08] sm:text-6xl">Fragancias originales, a un mensaje de distancia.</h1>
+      <p class="mt-5 max-w-md text-base leading-relaxed" style="opacity:.82">Elegí tu perfume o producto de belleza en el catálogo y consultá directo por WhatsApp. Respondemos el mismo día y hacemos envíos a todo el país.</p>
+      <div class="mt-8 flex flex-wrap gap-3">
+        <a href="#catalogo" class="btn-wa inline-flex items-center rounded-full px-6 py-3 text-sm font-semibold">Ver catálogo</a>
+        <a id="waHero" target="_blank" rel="noopener" class="btn-ghost inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm font-semibold">
+          <svg class="h-5 w-5" aria-hidden="true"><use href="#wa"/></svg>Hablar con Aromas PY
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 3. Catálogo -->
+<section id="catalogo" class="mx-auto max-w-6xl px-4 pb-16 pt-14 sm:px-6">
+  <div class="mb-6 flex items-end justify-between gap-4">
+    <h2 class="font-display text-3xl font-medium sm:text-4xl">Catálogo</h2>
+    <p id="count" class="muted text-sm"></p>
+  </div>
+  <div id="grid" class="grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-3"></div>
+</section>
+
+<!-- 4. CTA de cierre -->
+<section class="mx-auto max-w-6xl px-4 pb-16 sm:px-6">
+  <div class="surface line flex flex-col items-start gap-5 rounded-[2rem] border p-7 sm:flex-row sm:items-center sm:justify-between sm:p-10">
+    <div class="max-w-lg">
+      <h2 class="font-display text-2xl font-medium sm:text-3xl">¿No ves el perfume que buscás?</h2>
+      <p class="muted mt-2 text-sm leading-relaxed sm:text-base">Decinos la marca y el nombre. Si no lo tenemos, lo incluimos en la próxima importación.</p>
+    </div>
+    <a id="waCta" target="_blank" rel="noopener" class="btn-wa inline-flex shrink-0 items-center gap-2 rounded-full px-6 py-3.5 text-sm font-semibold">
+      <svg class="h-5 w-5" aria-hidden="true"><use href="#wa"/></svg>Pedir por WhatsApp
+    </a>
+  </div>
+</section>
+</main>
+
+<!-- 5. Footer -->
+<footer class="line border-t">
+  <div class="mx-auto flex max-w-6xl flex-col gap-4 px-4 py-8 text-sm sm:flex-row sm:items-center sm:justify-between sm:px-6">
+    <div>
+      <p class="font-semibold">Aromas PY</p>
+      <p class="muted">Asunción, Paraguay · +595 981 123456</p>
+    </div>
+    <a href="#" class="flex items-center gap-2 rounded-full border line px-4 py-2 font-medium">
+      <span class="font-display text-lg font-bold" style="color:var(--brass)">V</span>
+      <span>Catálogo hecho con <strong>Venzo</strong>. Creá el tuyo gratis</span>
+    </a>
+  </div>
+</footer>
+
+<script>
+const STORE = { name: 'Aromas PY', phone: '595981123456' };
+const wa = (text) => `https://wa.me/${STORE.phone}?text=${encodeURIComponent(text)}`;
+const gs = (n) => 'Gs. ' + String(n).replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+
+const PRODUCTS = [
+  { brand: 'Dior', name: 'Sauvage Eau de Toilette 100 ml', price: 689000, stock: true, icon: 'bottle', tint: ['#CFE0F2', '#7FA3C9'], img: 'photo-1541643600914-78b084683601' },
+  { brand: 'Carolina Herrera', name: 'Good Girl Eau de Parfum 80 ml', price: 745000, stock: true, icon: 'bottle', tint: ['#F6D3DE', '#D58AA6'], img: 'photo-1594035910387-fea47794261f' },
+  { brand: 'Lancôme', name: 'La Vie Est Belle 75 ml', price: 820000, stock: false, icon: 'bottle', tint: ['#F3E3D0', '#D9B48A'], img: 'photo-1592945403244-b3fbafd7f539' },
+  { brand: 'Paco Rabanne', name: '1 Million Eau de Toilette 100 ml', price: 590000, stock: true, icon: 'bottle', tint: ['#F1DFA8', '#C99A2E'], img: 'photo-1523293182086-7651a899d37f' },
+  { brand: 'Yves Saint Laurent', name: 'Libre Eau de Parfum 50 ml', price: 780000, stock: true, icon: 'bottle', tint: ['#E2D6F2', '#9A7BC4'], img: 'photo-1615634260167-c8cdede054de' },
+  { brand: 'The Ordinary', name: 'Niacinamida 10% + Zinc 30 ml', price: 119000, stock: true, icon: 'bottle', tint: ['#DDEBDD', '#8FB48F'], img: 'photo-1556228720-195a672e8a03' },
+  { brand: 'CeraVe', name: 'Crema hidratante 454 g', price: 145000, stock: false, icon: 'jar', tint: ['#D5E8EE', '#86B5C4'], img: 'photo-1596462502278-27bfdc403348' },
+  { brand: 'Maybelline', name: 'Sky High, máscara de pestañas', price: 79000, stock: true, icon: 'jar', tint: ['#E6DCE9', '#A688B3'], img: 'photo-1522335789203-aabd1fc54bc9' }
+];
+
+const WA_ICON = '<svg class="h-5 w-5" aria-hidden="true"><use href="#wa"/></svg>';
+
+function card(p) {
+  const msg = `Hola ${STORE.name}! Quiero consultar por: ${p.name} (${p.brand})`;
+  const action = p.stock
+    ? `<a href="${wa(msg)}" target="_blank" rel="noopener" class="btn-wa mt-4 flex items-center justify-center gap-2 rounded-full px-4 py-2.5 text-sm font-semibold">${WA_ICON}Consultar</a>`
+    : `<button type="button" disabled aria-disabled="true" class="btn-off mt-4 flex w-full items-center justify-center rounded-full px-4 py-2.5 text-sm font-semibold">Sin stock</button>`;
+  const badge = p.stock ? '' : `<span class="absolute left-3 top-3 z-10 rounded-full px-3 py-1 text-xs font-semibold" style="background:var(--ink);color:var(--bg)">Agotado</span>`;
+  return `
+  <article class="${p.stock ? '' : 'soldout'} surface line flex flex-col overflow-hidden rounded-3xl border">
+    <div class="media relative aspect-[4/5] w-full overflow-hidden" style="background:linear-gradient(160deg,${p.tint[0]},${p.tint[1]});color:#fff">
+      <svg class="ph absolute left-1/2 top-1/2 h-1/2 w-1/2 -translate-x-1/2 -translate-y-1/2" aria-hidden="true"><use href="#${p.icon}"/></svg>
+      <img src="https://images.unsplash.com/${p.img}?auto=format&fit=crop&w=600&h=750&q=70" alt="${p.brand} ${p.name}" loading="lazy" class="absolute inset-0 h-full w-full object-cover" onerror="this.style.display='none'">
+      ${badge}
+    </div>
+    <div class="flex flex-1 flex-col p-4 sm:p-5">
+      <p class="muted text-xs font-semibold">${p.brand}</p>
+      <h3 class="mt-1 flex-1 text-[15px] font-semibold leading-snug sm:text-base">${p.name}</h3>
+      <p class="price font-display mt-3 text-xl font-bold sm:text-2xl" style="${p.stock ? '' : 'color:var(--muted)'}">${gs(p.price)}</p>
+      ${action}
+    </div>
+  </article>`;
+}
+
+document.getElementById('grid').innerHTML = PRODUCTS.map(card).join('');
+const out = PRODUCTS.filter(p => !p.stock).length;
+document.getElementById('count').textContent = `${PRODUCTS.length} productos, ${out} agotados`;
+
+const hello = `Hola ${STORE.name}! Quiero hacer una consulta`;
+['waGeneral', 'waHero', 'waCta'].forEach(id => document.getElementById(id).href = wa(hello));
+</script>
+</body>
+</html>
