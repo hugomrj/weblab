@@ -1,0 +1,1297 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>EcoTrack · Prototipo demostrativo</title>
+<meta name="description" content="Prototipo demostrativo de EcoTrack: app de gestión y recompensas por reciclaje comunitario.">
+<style>
+/* ============ Variables y base ============ */
+:root{
+  --g-950:#0b2e1c;
+  --g-900:#123d26;
+  --g-800:#175137;
+  --g-700:#1e6b3e;
+  --g-600:#27894a;
+  --g-500:#2fa457;
+  --g-btn1:#4cc066;
+  --g-btn2:#3aa956;
+  --g-300:#86d69a;
+  --g-200:#b7e6c3;
+  --g-100:#e3f4e8;
+  --g-50:#f2faf4;
+  --star:#f6b41d;
+  --ink:#17301f;
+  --muted:#5b7263;
+  --line:#dcebe0;
+  --danger:#c74444;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%}
+body{
+  margin:0;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  color:var(--ink);
+  background:#eef6f0;
+}
+button{font-family:inherit}
+h1,h2,h3,p{margin:0}
+:focus-visible{outline:3px solid var(--g-500);outline-offset:2px;border-radius:8px}
+.ic{width:22px;height:22px;display:block}
+.ic.xs{width:14px;height:14px}
+.ic.big{width:44px;height:44px}
+.ic.sm{width:18px;height:18px}
+
+/* ============ Escenario (computadora) ============ */
+.stage{
+  min-height:100vh;min-height:100dvh;
+  display:flex;align-items:center;justify-content:center;gap:64px;
+  padding:36px 24px;
+  background:
+    radial-gradient(55% 45% at 88% 10%, #ddefe1 0%, rgba(221,239,225,0) 65%),
+    radial-gradient(45% 40% at 6% 92%, #e7f4e9 0%, rgba(231,244,233,0) 60%),
+    linear-gradient(160deg,#f4faf5 0%,#e7f2ea 100%);
+}
+.side{max-width:300px;display:none}
+@media (min-width:1100px){ .side{display:block} }
+.side-logo{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.side-logo .logo{width:40px;height:40px}
+.side-logo b{font-size:24px;color:var(--g-800);letter-spacing:-.3px}
+.side p{font-size:14px;color:var(--muted);line-height:1.55;margin-bottom:18px}
+.steps{list-style:none;counter-reset:st;padding:0;margin:0 0 18px;display:grid;gap:9px}
+.steps li{
+  counter-increment:st;display:flex;align-items:flex-start;gap:11px;
+  font-size:13.5px;color:#284634;line-height:1.35;background:#fff;
+  border:1px solid var(--line);border-radius:14px;padding:10px 12px;
+  box-shadow:0 3px 10px rgba(23,64,42,.05);
+}
+.steps li::before{
+  content:counter(st);flex:none;width:24px;height:24px;border-radius:50%;
+  background:var(--g-100);color:var(--g-700);font-weight:800;font-size:12.5px;
+  display:grid;place-items:center;margin-top:-1px;
+}
+.side-note{font-size:12.5px;color:var(--muted);background:#fff;border:1px dashed #bfe3c9;border-radius:12px;padding:10px 12px;line-height:1.5}
+
+/* ============ Marco del teléfono ============ */
+.phone{
+  position:relative;flex:none;
+  width:400px;height:min(92vh,860px);min-height:600px;
+  background:#101418;border-radius:50px;padding:11px;
+  box-shadow:0 44px 90px rgba(10,40,24,.34),0 10px 26px rgba(10,40,24,.20);
+}
+.notch{
+  position:absolute;top:10px;left:50%;transform:translateX(-50%);
+  width:118px;height:25px;background:#101418;border-radius:15px;z-index:45;
+}
+.viewport{
+  position:relative;width:100%;height:100%;
+  border-radius:40px;overflow:hidden;background:#f5faf6;
+}
+.statusbar{
+  position:absolute;top:0;left:0;right:0;height:34px;z-index:35;
+  display:flex;justify-content:space-between;align-items:center;
+  padding:0 20px;font-size:13.5px;font-weight:700;color:#122a1b;
+  pointer-events:none;
+}
+.statusbar.light{color:#fff}
+.sb-right{display:flex;align-items:center;gap:5px}
+.sb-i{height:11px;width:auto;display:block}
+
+/* ============ Pantallas ============ */
+.screen{
+  position:absolute;inset:0;display:none;flex-direction:column;
+  overflow-y:auto;overflow-x:hidden;padding-top:34px;
+  background:#f5faf6;scrollbar-width:none;
+}
+.screen::-webkit-scrollbar{display:none}
+.screen.active{display:flex;animation:fadeUp .28s ease}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+
+.page{padding:6px 16px 26px;display:flex;flex-direction:column;gap:14px}
+.page.with-tab{padding-bottom:calc(88px + env(safe-area-inset-bottom))}
+#s-home .page.with-tab{flex:1;padding-bottom:calc(54px + env(safe-area-inset-bottom))}
+
+/* ============ Barra superior ============ */
+.bar{
+  display:grid;grid-template-columns:44px 1fr auto;align-items:center;gap:6px;
+  padding:8px 12px 6px;min-height:54px;color:var(--ink);
+}
+.bar.dark{background:var(--g-800);color:#fff;border-radius:0 0 0 0}
+.bar.center .bar-t{text-align:center}
+.bar-t{font-size:17px;font-weight:800;letter-spacing:-.2px}
+.bar-sub{font-size:12px;font-weight:500;opacity:.85}
+.brand{display:flex;align-items:center;gap:9px;grid-column:1}
+.brand .logo{width:32px;height:32px}
+.brand b{font-size:20px;color:var(--g-800);letter-spacing:-.4px}
+.bar-actions{display:flex;align-items:center;gap:6px;grid-column:3}
+.bar.split{grid-template-columns:1fr auto}
+.bar.split .brand{grid-column:1}
+.ib{
+  width:38px;height:38px;border:none;border-radius:12px;background:transparent;
+  color:inherit;display:grid;place-items:center;cursor:pointer;
+}
+.ib:hover{background:rgba(23,64,42,.08)}
+.bar.dark .ib:hover{background:rgba(255,255,255,.14)}
+.demo-pill{
+  font-size:9.5px;font-weight:800;letter-spacing:1px;color:var(--g-700);
+  background:var(--g-100);border:1px solid #bfe3c9;padding:4px 8px;border-radius:999px;white-space:nowrap;
+}
+.bar.dark .demo-pill{color:#dff2e4;background:rgba(255,255,255,.14);border-color:rgba(255,255,255,.28)}
+
+/* ============ Logo ============ */
+.logo{position:relative;display:inline-block;width:34px;height:34px;flex:none}
+.logo .lg-a{width:100%;height:100%;color:var(--g-600);display:block}
+.logo .lg-l{
+  position:absolute;width:52%;height:52%;right:-3px;bottom:-1px;
+  color:#8bc34a;display:block;transform:rotate(10deg);
+  filter:drop-shadow(0 1px 1px rgba(0,0,0,.18));
+}
+.logo.xl{width:112px;height:112px;margin-bottom:6px}
+.logo.xl .lg-a{color:#fff}
+.logo.xl .lg-l{color:#a5d6a7}
+
+/* ============ Botones ============ */
+.btn-primary{
+  display:inline-flex;align-items:center;justify-content:center;gap:9px;
+  background:linear-gradient(180deg,var(--g-btn1),var(--g-btn2));
+  color:#fff;border:none;border-radius:16px;padding:16px 22px;
+  font-size:16.5px;font-weight:700;letter-spacing:.2px;cursor:pointer;
+  box-shadow:0 10px 22px rgba(58,169,86,.30);
+  transition:transform .15s ease,box-shadow .15s ease,filter .15s ease;
+  width:100%;
+}
+.btn-primary:hover{filter:brightness(1.05)}
+.btn-primary:active{transform:scale(.97)}
+.btn-primary:disabled{
+  background:#b9d5c1;box-shadow:none;cursor:not-allowed;color:#eef6f0;
+}
+.btn-primary.sm{padding:10px 18px;font-size:14.5px;border-radius:12px;width:auto}
+.btn-primary.danger{background:linear-gradient(180deg,#e25b5b,var(--danger));box-shadow:0 10px 22px rgba(199,68,68,.28)}
+.btn-ghost{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  background:rgba(255,255,255,.06);border:1.8px solid rgba(255,255,255,.8);
+  color:#fff;border-radius:16px;padding:13px 22px;font-weight:650;font-size:15px;cursor:pointer;
+  transition:background .15s ease,transform .15s ease;width:100%;
+}
+.btn-ghost:active{transform:scale(.97)}
+.btn-ghost.dark{background:#fff;border-color:#cfe3d4;color:var(--g-700)}
+.btn-row{display:flex;flex-direction:column;gap:10px;margin-top:2px}
+
+/* ============ Bienvenida ============ */
+#s-welcome{
+  background:
+    radial-gradient(80% 55% at 85% 8%, rgba(90,190,120,.28) 0%, rgba(90,190,120,0) 60%),
+    radial-gradient(70% 50% at 10% 95%, rgba(74,160,100,.35) 0%, rgba(74,160,100,0) 60%),
+    linear-gradient(165deg,#1c6b3d 0%,#14532d 55%,#0e3d24 100%);
+  color:#fff;
+}
+.wl-leaf{position:absolute;pointer-events:none;opacity:.5}
+.wl-leaf.a{width:210px;height:210px;top:-40px;right:-60px;transform:rotate(28deg);color:#2f8f52}
+.wl-leaf.b{width:180px;height:180px;bottom:-30px;left:-50px;transform:rotate(-140deg);color:#26814a}
+.wl-leaf.c{width:120px;height:120px;top:38%;left:-46px;transform:rotate(95deg);color:#1f7440}
+.wl-center{
+  flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;padding:24px 30px;gap:8px;position:relative;z-index:2;
+}
+.wl-name{font-size:clamp(34px,9vw,44px);font-weight:800;letter-spacing:-.8px;text-shadow:0 3px 14px rgba(0,0,0,.25)}
+.wl-slogan{
+  font-size:16.5px;line-height:1.5;color:#d7ecd9;font-weight:500;
+  margin:6px 0 30px;max-width:280px;
+}
+.wl-btns{width:100%;max-width:300px;display:flex;flex-direction:column;gap:12px;align-items:stretch}
+.wl-foot{
+  text-align:center;font-size:12px;color:#a9cfb2;padding:0 20px 20px;position:relative;z-index:2;
+}
+.wl-mini{font-size:11px;color:#8fc39d;margin-top:2px}
+
+/* ============ Inicio ============ */
+.home-head{display:flex;align-items:center;gap:8px;padding:6px 18px 0}
+.home-head h2{font-size:22.5px;font-weight:800;letter-spacing:-.3px}
+.home-head .ic{color:var(--g-600)}
+.pcard{
+  display:flex;align-items:center;gap:13px;width:100%;text-align:left;
+  background:linear-gradient(135deg,#eaf7ee,#dcf1e3);
+  border:1px solid #cde6d5;border-radius:20px;padding:14px 16px;cursor:pointer;
+  box-shadow:0 6px 16px rgba(23,64,42,.07);transition:transform .15s ease;
+}
+.pcard:active{transform:scale(.98)}
+.pcard-star{
+  flex:none;width:42px;height:42px;border-radius:50%;background:var(--star);
+  display:grid;place-items:center;color:#fff;box-shadow:0 4px 10px rgba(246,180,29,.4);
+}
+.pcard-b{flex:1;display:flex;flex-direction:column;gap:1px}
+.pcard-b span{font-size:12.5px;color:var(--muted);font-weight:600}
+.pcard-b b{font-size:26px;font-weight:800;color:var(--g-800);letter-spacing:-.5px}
+.pcard-chev{color:var(--g-600)}
+.tiles{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.tile{
+  background:#fff;border:1px solid var(--line);border-radius:20px;
+  padding:16px 10px 14px;display:flex;flex-direction:column;align-items:center;gap:9px;
+  cursor:pointer;box-shadow:0 4px 14px rgba(23,64,42,.06);
+  transition:transform .15s ease,box-shadow .15s ease;
+}
+.tile:hover{transform:translateY(-2px);box-shadow:0 10px 22px rgba(23,64,42,.10)}
+.tile:active{transform:scale(.96)}
+.tile-ic{width:48px;height:48px;border-radius:15px;background:var(--g-100);color:var(--g-600);display:grid;place-items:center}
+.tile b{font-size:14.5px;color:var(--ink);text-align:center;line-height:1.25}
+.home-illu{margin:auto -16px -6px;pointer-events:none}
+.home-illu svg{width:100%;height:auto;display:block}
+.section-title{font-size:13px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;color:var(--muted);margin-top:4px}
+
+/* ============ Escanear ============ */
+#s-scan{background:#0f2718}
+.cam{
+  position:relative;flex:1;min-height:250px;margin:8px 16px 0;border-radius:22px;overflow:hidden;
+  background:
+    radial-gradient(110% 70% at 72% 18%, rgba(178,186,124,.85) 0%, rgba(178,186,124,0) 55%),
+    radial-gradient(110% 80% at 18% 85%, rgba(64,80,52,.9) 0%, rgba(64,80,52,0) 60%),
+    linear-gradient(115deg,#68784f 0%,#8a9265 48%,#4e5e3c 100%);
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.08);
+}
+.cam-sil{position:absolute;left:50%;top:4%;width:150px;transform:translateX(-50%);filter:blur(2.5px) brightness(.85);opacity:.9}
+.cam-sil svg{width:100%;height:auto;display:block}
+.cam-label{
+  position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+  background:#fff;padding:10px 14px 7px;border-radius:8px;
+  box-shadow:0 10px 28px rgba(0,0,0,.4);text-align:center;
+}
+#barcode-svg{width:196px;height:46px;display:block}
+#barcode-svg rect{fill:#141414}
+.bc-num{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;letter-spacing:3.5px;color:#222;font-weight:600;white-space:nowrap}
+.corn{position:absolute;width:36px;height:36px;border:0 solid #c9f5d4}
+.corn.tl{top:14%;left:8%;border-top-width:4px;border-left-width:4px;border-top-left-radius:12px}
+.corn.tr{top:14%;right:8%;border-top-width:4px;border-right-width:4px;border-top-right-radius:12px}
+.corn.bl{bottom:14%;left:8%;border-bottom-width:4px;border-left-width:4px;border-bottom-left-radius:12px}
+.corn.br{bottom:14%;right:8%;border-bottom-width:4px;border-right-width:4px;border-bottom-right-radius:12px}
+.scanline{
+  position:absolute;left:9%;right:9%;top:16%;height:3px;border-radius:3px;
+  background:linear-gradient(90deg,rgba(214,255,224,0),#d9ffe2 50%,rgba(214,255,224,0));
+  box-shadow:0 0 14px #7bf0a0;animation:sweep 2.3s ease-in-out infinite;
+}
+@keyframes sweep{0%,100%{top:16%}50%{top:76%}}
+.cam.scanning .scanline{animation-duration:.65s}
+.cam.scanning .corn{animation:pulse .65s ease-in-out infinite alternate}
+@keyframes pulse{from{opacity:1}to{opacity:.45}}
+.cam-dim{position:absolute;inset:0;background:radial-gradient(92% 72% at 50% 46%, rgba(0,0,0,0) 52%, rgba(8,22,13,.5) 100%);pointer-events:none}
+.cam-hint{text-align:center;color:#cfe6d4;font-size:14.5px;font-weight:600;margin:16px 0 4px}
+.cam-actions{position:relative;display:flex;align-items:center;justify-content:center;gap:34px;padding:10px 0 2px}
+.shutter{
+  width:74px;height:74px;border-radius:50%;border:none;cursor:pointer;
+  background:radial-gradient(circle at 32% 30%,#f2fbf4,#d8ead9);color:var(--g-800);
+  display:grid;place-items:center;box-shadow:0 0 0 5px rgba(255,255,255,.28),0 12px 26px rgba(0,0,0,.4);
+  transition:transform .15s ease;
+}
+.shutter:active{transform:scale(.92)}
+.shutter .ic{width:30px;height:30px}
+.shutter-label{text-align:center;color:#9fc3ab;font-size:12px;font-weight:700;letter-spacing:.4px;margin-top:6px}
+.gal{
+  position:absolute;right:26px;top:16px;width:44px;height:44px;border:none;border-radius:12px;
+  background:rgba(255,255,255,.12);color:#e6f2e9;display:grid;place-items:center;cursor:pointer;
+}
+.mini-note{text-align:center;color:#7ea98c;font-size:11.5px;padding:2px 18px 18px}
+.scan-cta{padding:12px 16px 0}
+
+/* ============ Tarjetas / resultado ============ */
+.card{background:#fff;border:1px solid var(--line);border-radius:20px;padding:16px;box-shadow:0 4px 14px rgba(23,64,42,.05)}
+.res-hero{display:flex;align-items:center;gap:15px}
+.res-ic{
+  flex:none;width:86px;height:110px;border-radius:16px;background:linear-gradient(160deg,#eef6fb,#dff0fa);
+  border:1px solid #d5e8f4;display:grid;place-items:center;
+}
+.res-ic svg{width:44px;height:96px}
+.res-b{display:flex;flex-direction:column;gap:5px;align-items:flex-start}
+.res-b b{font-size:19px;font-weight:800;letter-spacing:-.3px}
+.res-b .matn{font-size:14px;color:var(--muted);font-weight:600}
+.chip{
+  display:inline-flex;align-items:center;gap:6px;background:var(--g-100);color:var(--g-700);
+  font-size:12px;font-weight:700;padding:5px 10px;border-radius:999px;
+}
+.chip .ic{width:13px;height:13px}
+.how-head{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.how-head .ic{color:var(--g-600)}
+.how-head h3{font-size:16.5px;font-weight:800}
+.how ol{list-style:none;padding:0;margin:0;display:grid;gap:11px}
+.how li{display:flex;gap:11px;align-items:flex-start;font-size:14.5px;line-height:1.5;color:#2c4636}
+.how .n{
+  flex:none;width:24px;height:24px;border-radius:50%;background:var(--g-500);color:#fff;
+  font-size:12.5px;font-weight:800;display:grid;place-items:center;margin-top:1px;
+}
+.info-pts{display:flex;gap:11px;align-items:flex-start;background:#fff8e6;border:1px solid #f2dfad;border-radius:20px;padding:14px 16px}
+.info-pts .ic{flex:none;color:var(--star);margin-top:1px}
+.info-pts p{font-size:13.5px;line-height:1.5;color:#5c4a14}
+.btn-title{font-size:15px;font-weight:800;margin-top:6px;color:var(--g-800)}
+
+/* ============ Cómo reciclar ============ */
+.mat{display:flex;gap:13px;align-items:flex-start}
+.mat-ic{flex:none;width:46px;height:46px;border-radius:14px;background:var(--g-100);color:var(--g-600);display:grid;place-items:center}
+.mat-b{display:flex;flex-direction:column;gap:6px}
+.mat-b b{font-size:15.5px;font-weight:800}
+.mat-b .tips{display:grid;gap:4px}
+.mat-b .tips span{font-size:13.5px;color:#3d5a49;line-height:1.45;display:flex;gap:7px;align-items:flex-start}
+.mat-b .tips .ic{width:14px;height:14px;color:var(--g-500);margin-top:2.5px;flex:none}
+.why-card{background:linear-gradient(135deg,var(--g-800),#1e6b3e);color:#fff;border:none}
+.why-card h3{font-size:15.5px;font-weight:800;margin-bottom:6px;display:flex;gap:9px;align-items:center}
+.why-card h3 .ic{color:#a5d6a7}
+.why-card p{font-size:13.5px;line-height:1.55;color:#d7ecd9}
+
+/* ============ Puntos limpios ============ */
+.place{display:flex;flex-direction:column;gap:12px}
+.place-top{display:flex;gap:12px;align-items:flex-start}
+.place-ic{flex:none;width:44px;height:44px;border-radius:50%;background:var(--g-100);color:var(--g-600);display:grid;place-items:center}
+.place-b{display:flex;flex-direction:column;gap:3px}
+.place-b b{font-size:15.5px;font-weight:800}
+.place-b span{font-size:13px;color:var(--muted)}
+.chips{display:flex;flex-wrap:wrap;gap:7px}
+.chip.gray{background:#eef3ef;color:#41614e;border:1px solid var(--line)}
+.demo-tag{
+  display:flex;align-items:center;gap:8px;background:var(--g-100);border:1px dashed #b3dcc0;
+  color:var(--g-700);border-radius:14px;padding:10px 13px;font-size:12.5px;font-weight:600;
+}
+.demo-tag .ic{width:16px;height:16px;flex:none}
+
+/* ============ Entrega verificada ============ */
+#s-verified{background:linear-gradient(170deg,#f2faf4 0%,#e2f3e6 100%)}
+.center-wrap{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:28px 26px;gap:12px}
+.check-anim{
+  width:96px;height:96px;border-radius:50%;background:linear-gradient(180deg,var(--g-btn1),var(--g-btn2));
+  display:grid;place-items:center;color:#fff;box-shadow:0 16px 36px rgba(63,180,95,.4);
+  animation:pop .55s cubic-bezier(.2,1.5,.4,1);
+}
+.check-anim .ic{width:46px;height:46px}
+.check-anim.small{width:72px;height:72px;box-shadow:0 10px 24px rgba(63,180,95,.35);animation:none}
+.check-anim.small .ic{width:34px;height:34px}
+@keyframes pop{0%{transform:scale(.3);opacity:0}70%{transform:scale(1.08)}100%{transform:scale(1);opacity:1}}
+.center-wrap h2{font-size:23px;font-weight:800;letter-spacing:-.4px}
+.v-place{font-size:14px;color:var(--muted);font-weight:600}
+.v-plus{
+  display:inline-flex;align-items:center;gap:9px;background:#fff;border:1.6px solid #f0d98f;
+  color:#8a6a10;border-radius:999px;padding:10px 20px;font-size:19px;font-weight:800;
+  box-shadow:0 8px 20px rgba(246,180,29,.18);animation:pop .6s .15s cubic-bezier(.2,1.5,.4,1) backwards;
+}
+.v-plus .ic{color:var(--star);width:22px;height:22px}
+.v-saldo{background:#fff;border:1px solid var(--line);border-radius:18px;padding:13px 22px;font-size:14px;color:var(--muted);font-weight:600;box-shadow:0 4px 14px rgba(23,64,42,.05)}
+.v-saldo b{color:var(--g-800);font-size:20px;font-weight:800;margin-left:6px}
+.v-note{font-size:12.5px;color:var(--muted);max-width:260px;line-height:1.5}
+.center-wrap .btn-row{width:100%;max-width:300px;margin-top:10px}
+
+/* ============ Recompensas ============ */
+.saldo-line{
+  display:flex;align-items:center;gap:9px;background:linear-gradient(135deg,#eaf7ee,#dcf1e3);
+  border:1px solid #cde6d5;border-radius:16px;padding:12px 15px;font-size:14px;font-weight:700;color:var(--g-800);
+}
+.saldo-line .ic{color:var(--star)}
+.saldo-line b{font-size:18px;font-weight:800}
+.rw{display:flex;flex-direction:column;gap:11px}
+.rw-top{display:flex;gap:12px;align-items:flex-start}
+.rw-ic{flex:none;width:46px;height:46px;border-radius:14px;background:var(--g-100);color:var(--g-600);display:grid;place-items:center}
+.rw-b{flex:1;display:flex;flex-direction:column;gap:2px;min-width:0}
+.rw-b b{font-size:15px;font-weight:800}
+.rw-t{font-size:13.5px;color:var(--g-700);font-weight:700}
+.rw-d{font-size:12.5px;color:var(--muted);line-height:1.45;margin-top:3px}
+.cost{
+  display:inline-flex;align-items:center;gap:6px;align-self:flex-start;
+  background:#fdf3d8;color:#8a6a10;font-size:12.5px;font-weight:800;padding:5px 11px;border-radius:999px;
+}
+.cost .ic{width:13px;height:13px;color:var(--star)}
+.rw.done{opacity:.72}
+.rw-done{
+  display:inline-flex;align-items:center;justify-content:center;gap:7px;
+  background:var(--g-100);color:var(--g-700);border:1.6px dashed #9fd4ae;
+  border-radius:12px;padding:11px;font-weight:800;font-size:14px;
+}
+.rw-done .ic{width:16px;height:16px}
+
+/* ============ Historial ============ */
+.h-item{display:flex;gap:12px;align-items:flex-start;background:#fff;border:1px solid var(--line);border-radius:16px;padding:12px 14px}
+.h-ic{flex:none;width:38px;height:38px;border-radius:12px;background:var(--g-100);color:var(--g-600);display:grid;place-items:center}
+.h-b{flex:1;display:flex;flex-direction:column;gap:2px;min-width:0}
+.h-b b{font-size:14px;font-weight:800}
+.h-b span{font-size:12.5px;color:var(--muted);line-height:1.4}
+.h-b time{font-size:11px;color:#9ab3a2;font-weight:600;margin-top:1px}
+.delta{flex:none;font-size:12.5px;font-weight:800;padding:4px 9px;border-radius:999px;background:#eef3ef;color:#5b7263;white-space:nowrap}
+.delta.plus{background:var(--g-100);color:var(--g-700)}
+.delta.minus{background:#fbeaea;color:var(--danger)}
+.empty{text-align:center;color:var(--muted);font-size:14px;padding:30px 0}
+
+/* ============ Perfil ============ */
+.prof-head{display:flex;align-items:center;gap:14px}
+.avatar{
+  flex:none;width:62px;height:62px;border-radius:50%;
+  background:linear-gradient(160deg,var(--g-600),var(--g-800));color:#fff;
+  display:grid;place-items:center;font-size:22px;font-weight:800;
+  box-shadow:0 8px 18px rgba(30,107,62,.3);
+}
+.prof-b{display:flex;flex-direction:column;gap:3px}
+.prof-b b{font-size:17.5px;font-weight:800}
+.prof-b span{font-size:12.5px;color:var(--muted)}
+.level{
+  display:inline-flex;align-items:center;gap:6px;align-self:flex-start;
+  background:linear-gradient(135deg,#eaf7ee,#dcf1e3);border:1px solid #cde6d5;color:var(--g-700);
+  font-size:12.5px;font-weight:800;padding:5px 12px;border-radius:999px;
+}
+.level .ic{width:14px;height:14px;color:var(--g-500)}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.stat{background:#fff;border:1px solid var(--line);border-radius:18px;padding:14px;display:flex;flex-direction:column;gap:3px;box-shadow:0 4px 14px rgba(23,64,42,.05)}
+.stat b{font-size:21px;font-weight:800;color:var(--g-800);letter-spacing:-.4px}
+.stat span{font-size:11.5px;color:var(--muted);font-weight:600;line-height:1.3}
+.impact-card{background:#fff;border:1px solid var(--line);border-radius:20px;padding:16px;display:flex;gap:13px;align-items:flex-start}
+.impact-card .ic{flex:none;width:26px;height:26px;color:var(--g-600);margin-top:2px}
+.impact-card p{font-size:13px;color:#3d5a49;line-height:1.55}
+.impact-card b{color:var(--g-800)}
+
+/* ============ Tab bar ============ */
+.tabbar{
+  position:absolute;left:0;right:0;bottom:0;z-index:30;
+  display:flex;background:#fff;border-top:1px solid var(--line);
+  padding:7px 8px calc(7px + env(safe-area-inset-bottom));
+}
+.tabbar.hidden{display:none}
+.tab{
+  flex:1;border:none;background:transparent;cursor:pointer;
+  display:flex;flex-direction:column;align-items:center;gap:3px;
+  color:#8aa392;font-size:10.5px;font-weight:700;padding:4px 0;border-radius:10px;
+}
+.tab .ic{width:22px;height:22px}
+.tab.on{color:var(--g-700)}
+.tab.on .ic{color:var(--g-600)}
+
+/* ============ Toast ============ */
+.toast{
+  position:absolute;left:50%;bottom:96px;transform:translate(-50%,12px);
+  background:var(--g-900);color:#fff;padding:11px 17px;border-radius:14px;
+  display:flex;gap:9px;align-items:center;font-size:13.5px;font-weight:650;
+  opacity:0;pointer-events:none;transition:all .25s ease;z-index:50;
+  box-shadow:0 14px 30px rgba(0,0,0,.35);max-width:86%;
+}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+.toast .ic{width:18px;height:18px;color:#8fe3a5;flex:none}
+
+/* ============ Modal ============ */
+#modal-root .ovl{
+  position:fixed;inset:0;background:rgba(9,30,18,.55);backdrop-filter:blur(3px);
+  display:grid;place-items:center;padding:22px;z-index:70;opacity:0;transition:opacity .18s ease;
+}
+#modal-root .ovl.on{opacity:1}
+.modal{
+  background:#fff;border-radius:24px;padding:22px;max-width:370px;width:100%;
+  box-shadow:0 30px 60px rgba(0,0,0,.35);transform:translateY(12px) scale(.97);
+  transition:transform .18s ease;max-height:82vh;overflow-y:auto;
+}
+.ovl.on .modal{transform:none}
+.m-head{display:flex;align-items:center;gap:13px;margin-bottom:10px}
+.m-head .ic{flex:none;color:var(--g-600)}
+.m-head .ic.warn{color:#e2a93b}
+.m-head h3{font-size:18px;font-weight:800;letter-spacing:-.3px}
+.modal p{font-size:14px;line-height:1.55;color:#33513f}
+.modal p + p{margin-top:8px}
+.m-note{font-size:12.5px !important;color:var(--muted) !important;background:var(--g-50);border-radius:12px;padding:9px 12px;margin-top:10px}
+.m-actions{display:flex;gap:10px;margin-top:18px}
+.m-actions .btn-primary,.m-actions .btn-ghost{flex:1;width:auto}
+.modal .btn-ghost{border-color:#cfe3d4;color:var(--g-700);background:#fff}
+.m-steps{padding-left:0;list-style:none;counter-reset:ms;display:grid;gap:8px;margin:12px 0 2px}
+.m-steps li{counter-increment:ms;display:flex;gap:10px;align-items:flex-start;font-size:13.5px;color:#2c4636;line-height:1.4}
+.m-steps li::before{
+  content:counter(ms);flex:none;width:22px;height:22px;border-radius:50%;
+  background:var(--g-100);color:var(--g-700);font-weight:800;font-size:11.5px;display:grid;place-items:center;
+}
+.m-center{text-align:center;display:flex;flex-direction:column;align-items:center;gap:8px}
+.m-center p{color:#33513f}
+.code{
+  font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:23px;font-weight:800;
+  letter-spacing:2.5px;background:var(--g-100);color:var(--g-800);
+  border:1.6px dashed #9fd4ae;border-radius:14px;padding:11px 20px;margin:4px 0;
+}
+.noti{background:var(--g-50);border:1px solid var(--line);border-radius:14px;padding:11px 13px;display:flex;flex-direction:column;gap:2px}
+.noti + .noti{margin-top:8px}
+.noti b{font-size:13.5px}
+.noti span{font-size:12.5px;color:var(--muted)}
+
+/* ============ Adaptación móvil ============ */
+@media (max-width:760px){
+  .stage{padding:0;gap:0;background:#0e2718}
+  .side{display:none !important}
+  .phone{width:100%;height:100vh;height:100dvh;min-height:100dvh;border-radius:0;padding:0;box-shadow:none}
+  .viewport{border-radius:0}
+  .notch{display:none}
+  .statusbar{display:none}
+  .screen{padding-top:0}
+  .bar{padding-top:calc(10px + env(safe-area-inset-top))}
+  .toast{bottom:calc(92px + env(safe-area-inset-bottom))}
+  .home-illu{margin-bottom:0}
+}
+@media (min-width:761px) and (max-height:700px){
+  .phone{height:min(94vh,700px);min-height:540px}
+}
+</style>
+</head>
+<body>
+
+<!-- ============ Iconos SVG ============ -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-recycle" viewBox="0 0 48 48">
+      <g fill="currentColor">
+        <path d="M6 4 H20 V0 L32 8 L20 16 V12 H6 Z"/>
+        <path d="M6 4 H20 V0 L32 8 L20 16 V12 H6 Z" transform="rotate(120 24 24)"/>
+        <path d="M6 4 H20 V0 L32 8 L20 16 V12 H6 Z" transform="rotate(240 24 24)"/>
+      </g>
+    </symbol>
+    <symbol id="i-leaf" viewBox="0 0 48 48">
+      <path d="M8 40 C8 20 22 6 42 6 C42 26 28 42 10 42 Z" fill="currentColor"/>
+      <path d="M13 36 C21 27 29 19 37 11" stroke="rgba(255,255,255,.85)" stroke-width="2.6" fill="none" stroke-linecap="round"/>
+    </symbol>
+    <symbol id="i-bottle" viewBox="0 0 40 88">
+      <rect x="13" y="0" width="14" height="9" rx="2.5" fill="#4a90d9"/>
+      <rect x="13" y="9" width="14" height="3" fill="#3a76b3"/>
+      <path d="M15 12 h10 v6 c0 2 5 5 5 10 v52 a4 4 0 0 1 -4 4 h-12 a4 4 0 0 1 -4 -4 v-52 c0 -5 5 -8 5 -10 z" fill="#cfe7f7" stroke="#9cc4e0" stroke-width="1"/>
+      <rect x="10.5" y="38" width="19" height="20" rx="2.5" fill="#eaf5fc" stroke="#9cc4e0"/>
+      <line x1="14" y1="44" x2="26" y2="44" stroke="#b7d6ea" stroke-width="1.6"/>
+      <line x1="14" y1="49" x2="24" y2="49" stroke="#b7d6ea" stroke-width="1.6"/>
+      <path d="M12.5 21 q-4.5 4 -4.5 10" stroke="#ffffff" stroke-width="2.2" fill="none" opacity=".85" stroke-linecap="round"/>
+    </symbol>
+    <symbol id="i-barcode" viewBox="0 0 24 24">
+      <g fill="currentColor">
+        <rect x="3" y="5" width="2" height="14" rx=".5"/>
+        <rect x="6.4" y="5" width="1.2" height="14" rx=".5"/>
+        <rect x="9" y="5" width="2.6" height="14" rx=".5"/>
+        <rect x="13" y="5" width="1.2" height="14" rx=".5"/>
+        <rect x="15.6" y="5" width="2" height="14" rx=".5"/>
+        <rect x="19" y="5" width="2" height="14" rx=".5"/>
+      </g>
+    </symbol>
+    <symbol id="i-back" viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-chev" viewBox="0 0 24 24"><path d="M9.5 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-bell" viewBox="0 0 24 24"><path d="M18 15v-4a6 6 0 1 0-12 0v4l-1.8 2.6c-.4.6 0 1.4.7 1.4h14.2c.7 0 1.1-.8.7-1.4Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M10 20a2.2 2.2 0 0 0 4 0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+    <symbol id="i-home" viewBox="0 0 24 24"><path d="M4 10.5 12 4l8 6.5V20a1 1 0 0 1-1 1h-4.5v-5h-5v5H5a1 1 0 0 1-1-1Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></symbol>
+    <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 7.5V12l3 2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+    <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4" fill="none" stroke="currentColor" stroke-width="2"/><path d="M4.5 20c1.6-3.2 4.3-5 7.5-5s5.9 1.8 7.5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="M4.5 12.5l5 5L19.5 7" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-reset" viewBox="0 0 24 24"><path d="M20 12a8 8 0 1 1-2.7-6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><path d="M20 3v4.5h-4.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 10.8V17" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/><circle cx="12" cy="7.4" r="1.3" fill="currentColor"/></symbol>
+    <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21s-7-6.1-7-11a7 7 0 1 1 14 0c0 4.9-7 11-7 11Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><circle cx="12" cy="10" r="2.6" fill="currentColor"/></symbol>
+    <symbol id="i-gift" viewBox="0 0 24 24"><rect x="3.5" y="8" width="17" height="4.5" rx="1.2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M5 12.5V20a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-7.5M12 8v13" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 8c-4.5 0-6-1.5-6-3a2 2 0 0 1 4-.6c.6 1.2 2 3.6 2 3.6s1.4-2.4 2-3.6A2 2 0 0 1 18 5c0 1.5-1.5 3-6 3Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></symbol>
+    <symbol id="i-star" viewBox="0 0 24 24"><path d="M12 2.8l2.6 5.6 6.1.8-4.5 4.2 1.2 6-5.4-3-5.4 3 1.2-6L3.3 9.2l6.1-.8Z" fill="currentColor"/></symbol>
+    <symbol id="i-coffee" viewBox="0 0 24 24"><path d="M5 9h11v6.5A4.5 4.5 0 0 1 11.5 20h-2A4.5 4.5 0 0 1 5 15.5Z" fill="none" stroke="currentColor" stroke-width="2"/><path d="M16 10.5h1.8a2.4 2.4 0 0 1 0 4.8H16M8 3.5v2M11.5 3v2.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+    <symbol id="i-tag" viewBox="0 0 24 24"><path d="M3.5 12.6V5A1.5 1.5 0 0 1 5 3.5h7.6c.4 0 .8.16 1.06.44l7 7a1.5 1.5 0 0 1 0 2.12l-7.6 7.6a1.5 1.5 0 0 1-2.12 0l-7-7a1.5 1.5 0 0 1-.44-1.06Z" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="8.5" cy="8.5" r="1.6" fill="currentColor"/></symbol>
+    <symbol id="i-ticket" viewBox="0 0 24 24"><path d="M4 8a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v1.5a2.5 2.5 0 0 0 0 5V16a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-1.5a2.5 2.5 0 0 0 0-5Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M13.5 7v10" stroke="currentColor" stroke-width="2" stroke-dasharray="2.4 2.6" stroke-linecap="round"/></symbol>
+    <symbol id="i-image" viewBox="0 0 24 24"><rect x="3.5" y="4.5" width="17" height="15" rx="2.5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="9" cy="10" r="1.8" fill="currentColor"/><path d="M4.5 17.5 10 12l4 4 3-3 2.5 2.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></symbol>
+    <symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path d="M3 12h18M12 3c2.6 2.5 4 5.6 4 9s-1.4 6.5-4 9c-2.6-2.5-4-5.6-4-9s1.4-6.5 4-9Z" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
+  </defs>
+</svg>
+
+<div class="stage">
+
+  <!-- Panel lateral (solo pantallas grandes) -->
+  <aside class="side">
+    <div class="side-logo">
+      <span class="logo"><svg class="lg-a"><use href="#i-recycle"/></svg><svg class="lg-l"><use href="#i-leaf"/></svg></span>
+      <b>EcoTrack</b>
+    </div>
+    <p>Prototipo demostrativo del MVP de reciclaje comunitario con recompensas. Todo funciona simulado: no hay cámara, GPS ni pagos reales.</p>
+    <ol class="steps">
+      <li>Entrar como usuario demo</li>
+      <li>Escanear un envase (simulado)</li>
+      <li>Aprender cómo reciclarlo</li>
+      <li>Buscar un punto limpio</li>
+      <li>Simular la entrega verificada (+50 puntos)</li>
+      <li>Elegir una recompensa</li>
+      <li>Canjearla y descontar los puntos</li>
+    </ol>
+    <div class="side-note">💡 Consejo para la exposición: seguís el recorrido de arriba hacia abajo. El botón <b>⟳ Reiniciar</b> (esquina superior) devuelve la app al estado inicial en cualquier momento.</div>
+  </aside>
+
+  <!-- Teléfono -->
+  <div class="phone">
+    <div class="notch"></div>
+    <div class="viewport" id="viewport">
+
+      <div class="statusbar" id="statusbar">
+        <span class="sb-time">10:24</span>
+        <span class="sb-right">
+          <svg class="sb-i" viewBox="0 0 18 12"><g fill="currentColor"><rect x="0" y="7" width="3" height="5" rx="1"/><rect x="4.5" y="4.5" width="3" height="7.5" rx="1"/><rect x="9" y="2.5" width="3" height="9.5" rx="1"/><rect x="13.5" y="0" width="3" height="12" rx="1" opacity=".35"/></g></svg>
+          <svg class="sb-i" viewBox="0 0 17 12"><path d="M8.5 10.8 6.4 8.7a3.4 3.4 0 0 1 4.2 0Zm0 0M5 6.2a5.9 5.9 0 0 1 7 0M2.4 3.6a9.4 9.4 0 0 1 12.2 0" stroke="currentColor" stroke-width="1.7" fill="none" stroke-linecap="round"/></svg>
+          <svg class="sb-i" viewBox="0 0 26 12"><rect x="0.5" y="0.5" width="21" height="11" rx="3.2" fill="none" stroke="currentColor" opacity=".4"/><rect x="2" y="2" width="15.5" height="8" rx="1.8" fill="currentColor"/><rect x="23" y="4" width="2.2" height="4" rx="1" fill="currentColor" opacity=".4"/></svg>
+        </span>
+      </div>
+
+      <!-- ==================== 1. BIENVENIDA ==================== -->
+      <section class="screen active" id="s-welcome" data-status="light">
+        <svg class="wl-leaf a"><use href="#i-leaf"/></svg>
+        <svg class="wl-leaf b"><use href="#i-leaf"/></svg>
+        <svg class="wl-leaf c"><use href="#i-leaf"/></svg>
+        <div class="wl-center">
+          <span class="logo xl"><svg class="lg-a"><use href="#i-recycle"/></svg><svg class="lg-l"><use href="#i-leaf"/></svg></span>
+          <h1 class="wl-name">EcoTrack</h1>
+          <p class="wl-slogan">«Reciclá, acumulá puntos<br>y recibí recompensas»</p>
+          <div class="wl-btns">
+            <button class="btn-primary" onclick="go('home')">Entrar como usuario demo</button>
+            <button class="btn-ghost" onclick="showHow()">¿Cómo funciona la demo?</button>
+          </div>
+        </div>
+        <p class="wl-foot">Prototipo demostrativo · Los datos son simulados<br><span class="wl-mini">EcoTrack — MVP de reciclaje comunitario</span></p>
+      </section>
+
+      <!-- ==================== 2. INICIO ==================== -->
+      <section class="screen" id="s-home" data-status="dark">
+        <header class="bar split">
+          <span class="brand"><span class="logo"><svg class="lg-a"><use href="#i-recycle"/></svg><svg class="lg-l"><use href="#i-leaf"/></svg></span><b>EcoTrack</b></span>
+          <span class="bar-actions">
+            <span class="demo-pill">DEMO</span>
+            <button class="ib" onclick="askReset()" aria-label="Reiniciar demo" title="Reiniciar demo"><svg class="ic"><use href="#i-reset"/></svg></button>
+            <button class="ib" onclick="showBell()" aria-label="Notificaciones" title="Notificaciones"><svg class="ic"><use href="#i-bell"/></svg></button>
+          </span>
+        </header>
+        <div class="page with-tab">
+          <div class="home-head">
+            <h2>¡Hola, Rodrigo!</h2>
+            <svg class="ic"><use href="#i-leaf"/></svg>
+          </div>
+          <button class="pcard" onclick="go('history')" aria-label="Ver historial de puntos">
+            <span class="pcard-star"><svg class="ic"><use href="#i-star"/></svg></span>
+            <span class="pcard-b"><span>Tus puntos</span><b id="saldo-home">1.250</b></span>
+            <svg class="ic pcard-chev"><use href="#i-chev"/></svg>
+          </button>
+          <div class="tiles">
+            <button class="tile" onclick="go('scan')">
+              <span class="tile-ic"><svg class="ic"><use href="#i-barcode"/></svg></span>
+              <b>Escanear envase</b>
+            </button>
+            <button class="tile" onclick="go('guide')">
+              <span class="tile-ic"><svg class="ic"><use href="#i-recycle"/></svg></span>
+              <b>¿Cómo reciclar?</b>
+            </button>
+            <button class="tile" onclick="go('points')">
+              <span class="tile-ic"><svg class="ic"><use href="#i-pin"/></svg></span>
+              <b>Puntos limpios</b>
+            </button>
+            <button class="tile" onclick="go('rewards')">
+              <span class="tile-ic"><svg class="ic"><use href="#i-gift"/></svg></span>
+              <b>Recompensas</b>
+            </button>
+          </div>
+          <div class="home-illu" aria-hidden="true">
+            <svg viewBox="0 0 368 112">
+              <g fill="#cfe9d6">
+                <rect x="150" y="36" width="26" height="48" rx="2"/>
+                <rect x="182" y="24" width="30" height="60" rx="2"/>
+                <rect x="218" y="42" width="24" height="42" rx="2"/>
+                <rect x="246" y="32" width="18" height="52" rx="2"/>
+              </g>
+              <g fill="#b9dfc5">
+                <rect x="156" y="42" width="5" height="6" rx="1"/><rect x="165" y="42" width="5" height="6" rx="1"/>
+                <rect x="156" y="52" width="5" height="6" rx="1"/><rect x="165" y="52" width="5" height="6" rx="1"/>
+                <rect x="188" y="30" width="5" height="6" rx="1"/><rect x="197" y="30" width="5" height="6" rx="1"/>
+                <rect x="188" y="40" width="5" height="6" rx="1"/><rect x="197" y="40" width="5" height="6" rx="1"/>
+                <rect x="224" y="48" width="5" height="6" rx="1"/><rect x="233" y="48" width="5" height="6" rx="1"/>
+              </g>
+              <path d="M0 92 Q92 76 184 88 T368 84 V112 H0 Z" fill="#a5d6a7"/>
+              <circle cx="40" cy="62" r="16" fill="#4caf50"/><rect x="37" y="72" width="6" height="20" rx="2.5" fill="#8d6e4a"/>
+              <circle cx="88" cy="52" r="20" fill="#66bb6a"/><rect x="84" y="66" width="7" height="26" rx="2.5" fill="#8d6e4a"/>
+              <circle cx="300" cy="56" r="18" fill="#4caf50"/><rect x="296" y="68" width="7" height="24" rx="2.5" fill="#8d6e4a"/>
+              <circle cx="338" cy="64" r="13" fill="#81c784"/><rect x="335" y="72" width="5" height="20" rx="2" fill="#8d6e4a"/>
+              <path d="M0 102 Q120 90 240 100 T368 98 V112 H0 Z" fill="#8bc98f"/>
+            </svg>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== 3. ESCANEAR ENVASE ==================== -->
+      <section class="screen" id="s-scan" data-status="light">
+        <header class="bar dark center">
+          <button class="ib" onclick="go('home')" aria-label="Volver"><svg class="ic"><use href="#i-back"/></svg></button>
+          <b class="bar-t">Escanear envase</b>
+          <span class="bar-actions">
+            <span class="demo-pill">DEMO</span>
+            <button class="ib" onclick="askReset()" aria-label="Reiniciar demo"><svg class="ic"><use href="#i-reset"/></svg></button>
+          </span>
+        </header>
+        <div class="cam" id="cam">
+          <div class="cam-sil"><svg viewBox="0 0 40 88"><use href="#i-bottle"/></svg></div>
+          <div class="cam-label">
+            <svg id="barcode-svg" viewBox="0 0 210 46" preserveAspectRatio="none"></svg>
+            <div class="bc-num">7 801234 567893</div>
+          </div>
+          <span class="corn tl"></span><span class="corn tr"></span><span class="corn bl"></span><span class="corn br"></span>
+          <div class="scanline"></div>
+          <div class="cam-dim"></div>
+        </div>
+        <p class="cam-hint" id="cam-hint">Enfocá el código de barras del envase</p>
+        <div class="cam-actions">
+          <button class="shutter" onclick="simulateScan()" aria-label="Simular escaneo"><svg class="ic"><use href="#i-barcode"/></svg></button>
+          <button class="gal" onclick="galleryToast()" aria-label="Galería"><svg class="ic"><use href="#i-image"/></svg></button>
+        </div>
+        <div class="shutter-label">SIMULAR ESCANEO</div>
+        <div class="scan-cta">
+          <button class="btn-primary" onclick="simulateScan()">Simular escaneo</button>
+        </div>
+        <p class="mini-note">Simulación: no se usa la cámara real del dispositivo.</p>
+      </section>
+
+      <!-- ==================== 4. RESULTADO ==================== -->
+      <section class="screen" id="s-result" data-status="dark">
+        <header class="bar center">
+          <button class="ib" onclick="go('scan')" aria-label="Volver"><svg class="ic"><use href="#i-back"/></svg></button>
+          <b class="bar-t">Resultado</b>
+          <span class="bar-actions">
+            <span class="demo-pill">DEMO</span>
+            <button class="ib" onclick="askReset()" aria-label="Reiniciar demo"><svg class="ic"><use href="#i-reset"/></svg></button>
+          </span>
+        </header>
+        <div class="page">
+          <div class="card res-hero">
+            <span class="res-ic"><svg><use href="#i-bottle"/></svg></span>
+            <span class="res-b">
+              <span class="chip"><svg class="ic"><use href="#i-check"/></svg> Material identificado</span>
+              <b>Botella PET</b>
+              <span class="matn">Plástico #1 · Código 7 801234 567893</span>
+            </span>
+          </div>
+          <div class="card how">
+            <div class="how-head">
+              <svg class="ic"><use href="#i-recycle"/></svg>
+              <h3>¿Cómo reciclarlo?</h3>
+            </div>
+            <ol>
+              <li><span class="n">1</span><span><b>Enjuagá el envase</b> para eliminar restos de líquido o comida.</span></li>
+              <li><span class="n">2</span><span><b>Retirá la tapa</b>: es de otro plástico y se recicla por separado.</span></li>
+              <li><span class="n">3</span><span><b>Llevalo a un punto limpio</b> que reciba plásticos (PET).</span></li>
+            </ol>
+          </div>
+          <div class="info-pts">
+            <svg class="ic"><use href="#i-star"/></svg>
+            <p>El escaneo <b>no suma puntos</b>. Verificá tu entrega en un punto limpio para sumar <b>50 puntos</b>.</p>
+          </div>
+          <div class="btn-row">
+            <button class="btn-primary" onclick="go('points')">Ver puntos limpios cercanos</button>
+            <button class="btn-ghost dark" onclick="go('home')">Volver al inicio</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== CÓMO RECICLAR (guía) ==================== -->
+      <section class="screen" id="s-guide" data-status="dark">
+        <header class="bar center">
+          <button class="ib" onclick="go('home')" aria-label="Volver"><svg class="ic"><use href="#i-back"/></svg></button>
+          <b class="bar-t">¿Cómo reciclar?</b>
+          <span class="bar-actions">
+            <span class="demo-pill">DEMO</span>
+            <button class="ib" onclick="askReset()" aria-label="Reiniciar demo"><svg class="ic"><use href="#i-reset"/></svg></button>
+          </span>
+        </header>
+        <div class="page">
+          <p style="font-size:13.5px;color:var(--muted);line-height:1.5">Separá en la fuente: cada material va limpio y seco a su contenedor o punto limpio.</p>
+          <div class="card mat">
+            <span class="mat-ic"><svg class="ic"><use href="#i-bottle"/></svg></span>
+            <span class="mat-b">
+              <b>Plástico PET (#1)</b>
+              <span class="tips">
+                <span><svg class="ic"><use href="#i-check"/></svg> Botellas y envases de bebidas o alimentos.</span>
+                <span><svg class="ic"><use href="#i-check"/></svg> Enjuagá y aplastá para ocupar menos espacio.</span>
+                <span><svg class="ic"><use href="#i-check"/></svg> La tapa va aparte: es de otro plástico.</span>
+              </span>
+            </span>
+          </div>
+          <div class="card mat">
+            <span class="mat-ic"><svg class="ic"><use href="#i-recycle"/></svg></span>
+            <span class="mat-b">
+              <b>Vidrio</b>
+              <span class="tips">
+                <span><svg class="ic"><use href="#i-check"/></svg> Frascos y botellas. Enjuagá antes de llevar.</span>
+                <span><svg class="ic"><use href="#i-check"/></svg> No mezcles con espejos ni cerámica.</span>
+              </span>
+            </span>
+          </div>
+          <div class="card mat">
+            <span class="mat-ic"><svg class="ic"><use href="#i-tag"/></svg></span>
+            <span class="mat-b">
+              <b>Papel y cartón</b>
+              <span class="tips">
+                <span><svg class="ic"><use href="#i-check"/></svg> Cajas, diarios y envolventes limpias.</span>
+                <span><svg class="ic"><use href="#i-check"/></svg> Mantené seco y plegá las cajas.</span>
+              </span>
+            </span>
+          </div>
+          <div class="card mat">
+            <span class="mat-ic"><svg class="ic"><use href="#i-info"/></svg></span>
+            <span class="mat-b">
+              <b>Latas (aluminio / hojalata)</b>
+              <span class="tips">
+                <span><svg class="ic"><use href="#i-check"/></svg> Enjuagá y aplastá si es posible.</span>
+              </span>
+            </span>
+          </div>
+          <div class="card why-card">
+            <h3><svg class="ic"><use href="#i-leaf"/></svg> ¿Por qué separar en origen?</h3>
+            <p>Cuando separás en tu casa, el material llega limpio al reciclaje: menos residuos terminan en vertederos y el reciclado se vuelve más eficiente para toda la comunidad.</p>
+          </div>
+          <button class="btn-primary" onclick="go('points')">Ver puntos limpios cercanos</button>
+        </div>
+      </section>
+
+      <!-- ==================== 5. PUNTOS LIMPIOS ==================== -->
+      <section class="screen" id="s-points" data-status="dark">
+        <header class="bar center">
+          <button class="ib" onclick="go('home')" aria-label="Volver"><svg class="ic"><use href="#i-back"/></svg></button>
+          <b class="bar-t">Puntos limpios</b>
+          <span class="bar-actions">
+            <span class="demo-pill">DEMO</span>
+            <button class="ib" onclick="askReset()" aria-label="Reiniciar demo"><svg class="ic"><use href="#i-reset"/></svg></button>
+          </span>
+        </header>
+        <div class="page">
+          <div class="demo-tag"><svg class="ic"><use href="#i-info"/></svg> Ubicaciones ficticias para la demo (sin GPS real).</div>
+          <div id="places-list" style="display:flex;flex-direction:column;gap:13px"></div>
+        </div>
+      </section>
+
+      <!-- ==================== 6. ENTREGA VERIFICADA ==================== -->
+      <section class="screen" id="s-verified" data-status="dark">
+        <header class="bar center">
+          <button class="ib" onclick="go('points')" aria-label="Volver"><svg class="ic"><use href="#i-back"/></svg></button>
+          <b class="bar-t">Entrega verificada</b>
+          <span class="bar-actions">
+            <span class="demo-pill">DEMO</span>
+            <button class="ib" onclick="askReset()" aria-label="Reiniciar demo"><svg class="ic"><use href="#i-reset"/></svg></button>
+          </span>
+        </header>
+        <div class="center-wrap">
+          <div class="check-anim"><svg class="ic"><use href="#i-check"/></svg></div>
+          <h2>¡Entrega verificada!</h2>
+          <span class="v-place" id="v-place">EcoPunto Plaza Central</span>
+          <span class="v-plus"><svg class="ic"><use href="#i-star"/></svg> +50 puntos</span>
+          <span class="v-saldo">Nuevo saldo<b id="v-saldo">1.300</b> puntos</span>
+          <p class="v-note">Los puntos se acreditan al verificar la entrega en el punto limpio, no al escanear el envase.</p>
+          <div class="btn-row">
+            <button class="btn-primary" onclick="go('rewards')">Ver recompensas</button>
+            <button class="btn-ghost dark" onclick="go('home')">Volver al inicio</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== 7. RECOMPENSAS ==================== -->
+      <section class="screen" id="s-rewards" data-status="dark">
+        <header class="bar center">
+          <button class="ib" onclick="go('home')" aria-label="Volver"><svg class="ic"><use href="#i-back"/></svg></button>
+          <b class="bar-t">Recompensas</b>
+          <span class="bar-actions">
+            <span class="demo-pill">DEMO</span>
+            <button class="ib" onclick="askReset()" aria-label="Reiniciar demo"><svg class="ic"><use href="#i-reset"/></svg></button>
+          </span>
+        </header>
+        <div class="page with-tab">
+          <div class="saldo-line">
+            <svg class="ic"><use href="#i-star"/></svg>
+            Tu saldo: <b id="saldo-rewards">1.250</b>&nbsp;puntos
+          </div>
+          <div id="rewards-list" style="display:flex;flex-direction:column;gap:13px"></div>
+          <p style="font-size:11.5px;color:var(--muted);text-align:center;line-height:1.5">Beneficios ficticios de comercios aliados, solo para la demostración.</p>
+        </div>
+      </section>
+
+      <!-- ==================== HISTORIAL ==================== -->
+      <section class="screen" id="s-history" data-status="dark">
+        <header class="bar center">
+          <button class="ib" onclick="go('home')" aria-label="Volver"><svg class="ic"><use href="#i-back"/></svg></button>
+          <b class="bar-t">Historial</b>
+          <span class="bar-actions">
+            <span class="demo-pill">DEMO</span>
+            <button class="ib" onclick="askReset()" aria-label="Reiniciar demo"><svg class="ic"><use href="#i-reset"/></svg></button>
+          </span>
+        </header>
+        <div class="page with-tab" id="history-list"></div>
+      </section>
+
+      <!-- ==================== PERFIL ==================== -->
+      <section class="screen" id="s-profile" data-status="dark">
+        <header class="bar center">
+          <button class="ib" onclick="go('home')" aria-label="Volver"><svg class="ic"><use href="#i-back"/></svg></button>
+          <b class="bar-t">Perfil</b>
+          <span class="bar-actions">
+            <span class="demo-pill">DEMO</span>
+            <button class="ib" onclick="askReset()" aria-label="Reiniciar demo"><svg class="ic"><use href="#i-reset"/></svg></button>
+          </span>
+        </header>
+        <div class="page with-tab">
+          <div class="prof-head">
+            <span class="avatar">RG</span>
+            <span class="prof-b">
+              <b>Rodrigo Gutiérrez</b>
+              <span>Usuario demo · desde marzo 2026</span>
+            </span>
+          </div>
+          <span class="level"><svg class="ic"><use href="#i-leaf"/></svg> Nivel: Eco-Héroe</span>
+          <div class="stats">
+            <div class="stat"><b id="stat-puntos">1.250</b><span>Puntos actuales</span></div>
+            <div class="stat"><b id="stat-entregas">0</b><span>Entregas verificadas</span></div>
+            <div class="stat"><b id="stat-escaneos">0</b><span>Envases escaneados</span></div>
+            <div class="stat"><b id="stat-canjes">0</b><span>Recompensas canjeadas</span></div>
+          </div>
+          <div class="impact-card">
+            <svg class="ic"><use href="#i-leaf"/></svg>
+            <p><b>Impacto estimado:</b> <span id="impact-kg">0</span> kg de material recuperado y <span id="impact-co2">0</span> kg de CO<sub>2</sub> evitado gracias a tus entregas verificadas. <em>(Estimación simulada de la demo.)</em></p>
+          </div>
+          <button class="btn-ghost dark" onclick="askReset()">⟳ Reiniciar demo</button>
+        </div>
+      </section>
+
+      <!-- ==================== TAB BAR ==================== -->
+      <nav class="tabbar hidden" id="tabbar">
+        <button class="tab on" data-go="home" onclick="go('home')"><svg class="ic"><use href="#i-home"/></svg><span>Inicio</span></button>
+        <button class="tab" data-go="history" onclick="go('history')"><svg class="ic"><use href="#i-clock"/></svg><span>Historial</span></button>
+        <button class="tab" data-go="rewards" onclick="go('rewards')"><svg class="ic"><use href="#i-gift"/></svg><span>Recompensas</span></button>
+        <button class="tab" data-go="profile" onclick="go('profile')"><svg class="ic"><use href="#i-user"/></svg><span>Perfil</span></button>
+      </nav>
+
+      <div class="toast" id="toast" role="status"></div>
+    </div>
+  </div>
+</div>
+
+<div id="modal-root"></div>
+
+<script>
+'use strict';
+
+/* ==================== Datos de la demo ==================== */
+var SALDO_INICIAL = 1250;
+var PUNTOS_ENTREGA = 50;
+
+var PLACES = [
+  { id:'p1', name:'EcoPunto Plaza Central', addr:'Av. de los Cedros 1234', dist:'a 400 m', hours:'Lun a Sáb · 8 a 20 h', mats:['PET','Vidrio','Papel','Latas'] },
+  { id:'p2', name:'Centro Verde Municipal', addr:'Pasaje del Arroyo 456', dist:'a 1,2 km', hours:'Lun a Vie · 9 a 17 h', mats:['PET','Papel','Cartón'] },
+  { id:'p3', name:'Punto Limpio Las Acacias', addr:'Av. Las Acacias 2300', dist:'a 2,5 km', hours:'Abierto 24 h', mats:['PET','Vidrio','Latas'] }
+];
+
+var REWARDS = [
+  { id:'r1', icon:'coffee', partner:'Café del Parque', title:'2x1 en cafés', desc:'Pedí dos cafés y pagá uno. Válido todos los días en el local de Av. de los Cedros 850.', cost:200 },
+  { id:'r2', icon:'tag', partner:'Dietética Hoja Verde', title:'15% de descuento', desc:'En compras superiores a $3.000. Productos dietéticos y a granel.', cost:300 },
+  { id:'r3', icon:'ticket', partner:'Cine Municipal Los Cedros', title:'Entrada gratis', desc:'Una entrada gratis los martes, en funciones antes de las 18 h.', cost:500 }
+];
+
+/* ==================== Estado ==================== */
+function nowHM(){
+  return new Date().toLocaleTimeString('es-AR',{hour:'2-digit',minute:'2-digit'});
+}
+function fmt(n){ return n.toLocaleString('es-AR'); }
+
+function freshState(){
+  return {
+    saldo: SALDO_INICIAL,
+    escaneos: 0,
+    entregas: 0,
+    canjes: 0,
+    redeemed: {},
+    created: Date.now(),
+    historial: [
+      { icon:'star', t:'Bienvenido a EcoTrack', d:'Saldo inicial de demostración', delta:SALDO_INICIAL, time:nowHM() }
+    ]
+  };
+}
+var state = loadState() || freshState();
+
+function saveState(){
+  try { localStorage.setItem('ecotrack-demo-v1', JSON.stringify(state)); } catch(e){}
+}
+function loadState(){
+  try {
+    var raw = localStorage.getItem('ecotrack-demo-v1');
+    if(!raw) return null;
+    var s = JSON.parse(raw);
+    if(typeof s.saldo !== 'number' || !s.historial) return null;
+    return s;
+  } catch(e){ return null; }
+}
+
+/* ==================== Navegación ==================== */
+var TAB_SCREENS = ['home','history','rewards','profile'];
+function go(name){
+  var el = document.getElementById('s-' + name);
+  if(!el) return;
+  var all = document.querySelectorAll('.screen');
+  for(var i=0;i<all.length;i++) all[i].classList.remove('active');
+  el.classList.add('active');
+  el.scrollTop = 0;
+  document.getElementById('statusbar').classList.toggle('light', el.dataset.status === 'light');
+  var showTab = TAB_SCREENS.indexOf(name) !== -1;
+  document.getElementById('tabbar').classList.toggle('hidden', !showTab);
+  var tabs = document.querySelectorAll('.tab');
+  for(var j=0;j<tabs.length;j++) tabs[j].classList.toggle('on', tabs[j].dataset.go === name);
+}
+
+/* ==================== Toast y modal ==================== */
+var toastTimer = null;
+function toast(msg, icon){
+  var t = document.getElementById('toast');
+  t.innerHTML = '<svg class="ic"><use href="#i-' + (icon || 'check') + '"/></svg><span>' + msg + '</span>';
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(function(){ t.classList.remove('show'); }, 2400);
+}
+
+var modalClearTimer = null;
+function openModal(html){
+  var root = document.getElementById('modal-root');
+  clearTimeout(modalClearTimer);
+  root.innerHTML = '<div class="ovl" onclick="if(event.target===this)closeModal()"><div class="modal" role="dialog" aria-modal="true">' + html + '</div></div>';
+  requestAnimationFrame(function(){
+    if(root.firstElementChild) root.firstElementChild.classList.add('on');
+  });
+}
+function closeModal(){
+  var root = document.getElementById('modal-root');
+  var o = root.firstElementChild;
+  if(o){
+    o.classList.remove('on');
+    clearTimeout(modalClearTimer);
+    modalClearTimer = setTimeout(function(){ root.innerHTML = ''; }, 180);
+  }
+}
+
+/* ==================== Renderizado ==================== */
+function renderSaldo(){
+  ['saldo-home','saldo-rewards','stat-puntos'].forEach(function(id){
+    var el = document.getElementById(id);
+    if(el) el.textContent = fmt(state.saldo);
+  });
+}
+function renderPlaces(){
+  var box = document.getElementById('places-list');
+  box.innerHTML = PLACES.map(function(p){
+    var chips = p.mats.map(function(m){ return '<span class="chip gray">' + m + '</span>'; }).join('');
+    return '<div class="card place">' +
+      '<div class="place-top">' +
+        '<span class="place-ic"><svg class="ic"><use href="#i-pin"/></svg></span>' +
+        '<span class="place-b"><b>' + p.name + '</b><span>' + p.addr + '</span></span>' +
+      '</div>' +
+      '<div class="chips">' +
+        '<span class="chip"><svg class="ic"><use href="#i-pin"/></svg> ' + p.dist + '</span>' +
+        '<span class="chip gray">' + p.hours + '</span>' +
+        chips +
+      '</div>' +
+      '<button class="btn-primary sm" onclick="verifyDelivery(\'' + p.id + '\')">Simular entrega verificada</button>' +
+    '</div>';
+  }).join('');
+}
+function renderRewards(){
+  var box = document.getElementById('rewards-list');
+  box.innerHTML = REWARDS.map(function(r){
+    var done = !!state.redeemed[r.id];
+    var can = state.saldo >= r.cost;
+    var footer = done
+      ? '<span class="rw-done"><svg class="ic"><use href="#i-check"/></svg> Canjeado</span>'
+      : '<button class="btn-primary sm" ' + (can ? '' : 'disabled') + ' onclick="tryRedeem(\'' + r.id + '\')">Canjear' + (can ? '' : ' · puntos insuficientes') + '</button>';
+    return '<div class="card rw' + (done ? ' done' : '') + '">' +
+      '<div class="rw-top">' +
+        '<span class="rw-ic"><svg class="ic"><use href="#i-' + r.icon + '"/></svg></span>' +
+        '<span class="rw-b"><b>' + r.partner + '</b><span class="rw-t">' + r.title + '</span><span class="rw-d">' + r.desc + '</span></span>' +
+      '</div>' +
+      '<div style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap">' +
+        '<span class="cost"><svg class="ic"><use href="#i-star"/></svg> ' + fmt(r.cost) + ' puntos</span>' +
+        footer +
+      '</div>' +
+    '</div>';
+  }).join('');
+}
+function renderHistory(){
+  var box = document.getElementById('history-list');
+  if(!state.historial.length){
+    box.innerHTML = '<p class="empty">Todavía no hay movimientos registrados.</p>';
+    return;
+  }
+  box.innerHTML = state.historial.map(function(h){
+    var cls = h.delta > 0 ? 'plus' : (h.delta < 0 ? 'minus' : 'zero');
+    var txt = h.delta === 0 ? '—' : ((h.delta > 0 ? '+' : '') + fmt(h.delta) + ' pts');
+    return '<div class="h-item">' +
+      '<span class="h-ic"><svg class="ic"><use href="#i-' + h.icon + '"/></svg></span>' +
+      '<span class="h-b"><b>' + h.t + '</b><span>' + h.d + (h.note ? ' · ' + h.note : '') + '</span><time>' + (h.time || '') + '</time></span>' +
+      '<span class="delta ' + cls + '">' + txt + '</span>' +
+    '</div>';
+  }).join('');
+}
+function renderStats(){
+  ['stat-entregas','stat-escaneos','stat-canjes'].forEach(function(id, i){
+    var el = document.getElementById(id);
+    if(el) el.textContent = fmt(i === 0 ? state.entregas : i === 1 ? state.escaneos : state.canjes);
+  });
+  var kg = document.getElementById('impact-kg');
+  var co2 = document.getElementById('impact-co2');
+  if(kg) kg.textContent = (state.entregas * 0.4).toFixed(1).replace('.', ',');
+  if(co2) co2.textContent = (state.entregas * 1.1).toFixed(1).replace('.', ',');
+}
+function renderAll(){
+  renderSaldo(); renderPlaces(); renderRewards(); renderHistory(); renderStats();
+}
+
+/* ==================== Acciones de la demo ==================== */
+var scanning = false;
+function simulateScan(){
+  if(scanning) return;
+  scanning = true;
+  var cam = document.getElementById('cam');
+  var hint = document.getElementById('cam-hint');
+  cam.classList.add('scanning');
+  hint.textContent = 'Analizando código de barras…';
+  setTimeout(function(){
+    state.escaneos++;
+    state.historial.unshift({
+      icon:'barcode', t:'Envase escaneado', d:'Botella PET (Plástico #1)',
+      delta:0, time:nowHM(), note:'El escaneo no suma puntos'
+    });
+    saveState();
+    renderHistory(); renderStats();
+    cam.classList.remove('scanning');
+    hint.textContent = 'Enfocá el código de barras del envase';
+    scanning = false;
+    toast('Código detectado: 7 801234 567893', 'barcode');
+    go('result');
+  }, 1400);
+}
+function galleryToast(){
+  toast('La galería no está disponible en la demo', 'info');
+}
+
+function verifyDelivery(id){
+  var p = null;
+  for(var i=0;i<PLACES.length;i++) if(PLACES[i].id === id) p = PLACES[i];
+  if(!p) return;
+  state.saldo += PUNTOS_ENTREGA;
+  state.entregas++;
+  state.historial.unshift({
+    icon:'check', t:'Entrega verificada', d:p.name, delta:PUNTOS_ENTREGA, time:nowHM()
+  });
+  saveState();
+  renderAll();
+  document.getElementById('v-place').textContent = p.name;
+  document.getElementById('v-saldo').textContent = fmt(state.saldo);
+  go('verified');
+  toast('+' + PUNTOS_ENTREGA + ' puntos acreditados', 'star');
+}
+
+function tryRedeem(id){
+  var r = null;
+  for(var i=0;i<REWARDS.length;i++) if(REWARDS[i].id === id) r = REWARDS[i];
+  if(!r) return;
+  if(state.redeemed[id]){ toast('Esta recompensa ya fue canjeada', 'info'); return; }
+  if(state.saldo < r.cost){
+    openModal(
+      '<div class="m-head"><svg class="ic big warn"><use href="#i-info"/></svg><h3>Puntos insuficientes</h3></div>' +
+      '<p>Te faltan <b>' + fmt(r.cost - state.saldo) + ' puntos</b> para canjear «' + r.title + '».</p>' +
+      '<p class="m-note">Simulá una entrega verificada en un punto limpio para sumar ' + PUNTOS_ENTREGA + ' puntos.</p>' +
+      '<div class="m-actions">' +
+        '<button class="btn-ghost" onclick="closeModal()">Entendido</button>' +
+        '<button class="btn-primary" onclick="closeModal();go(\'points\')">Ir a puntos limpios</button>' +
+      '</div>'
+    );
+    return;
+  }
+  openModal(
+    '<div class="m-head"><svg class="ic big"><use href="#i-gift"/></svg><h3>¿Confirmar canje?</h3></div>' +
+    '<p><b>' + r.title + '</b> · ' + r.partner + '</p>' +
+    '<p class="m-note">Costo: <b>' + fmt(r.cost) + ' puntos</b>. Tu saldo pasará de <b>' + fmt(state.saldo) + '</b> a <b>' + fmt(state.saldo - r.cost) + '</b> puntos.</p>' +
+    '<div class="m-actions">' +
+      '<button class="btn-ghost" onclick="closeModal()">Cancelar</button>' +
+      '<button class="btn-primary" onclick="doRedeem(\'' + id + '\')">Confirmar canje</button>' +
+    '</div>'
+  );
+}
+function doRedeem(id){
+  var r = null;
+  for(var i=0;i<REWARDS.length;i++) if(REWARDS[i].id === id) r = REWARDS[i];
+  if(!r || state.redeemed[id] || state.saldo < r.cost) return;
+  state.saldo -= r.cost;
+  state.redeemed[id] = true;
+  state.canjes++;
+  var code = 'ECO-' + Math.floor(1000 + Math.random() * 9000);
+  state.historial.unshift({
+    icon:'gift', t:'Canje realizado', d:r.partner + ' · ' + r.title,
+    delta:-r.cost, time:nowHM(), note:'Código ' + code
+  });
+  saveState();
+  renderAll();
+  closeModal();
+  setTimeout(function(){
+    openModal(
+      '<div class="m-center">' +
+        '<div class="check-anim small"><svg class="ic"><use href="#i-check"/></svg></div>' +
+        '<h3 style="font-size:19px;font-weight:800">¡Canje realizado!</h3>' +
+        '<p>' + r.title + ' · ' + r.partner + '</p>' +
+        '<div class="code">' + code + '</div>' +
+        '<p class="m-note">Mostrá este código en el comercio. (Código ficticio de la demo)</p>' +
+      '</div>' +
+      '<div class="m-actions"><button class="btn-primary" onclick="closeModal()">Listo</button></div>'
+    );
+  }, 200);
+}
+
+function askReset(){
+  openModal(
+    '<div class="m-head"><svg class="ic big warn"><use href="#i-reset"/></svg><h3>¿Reiniciar la demo?</h3></div>' +
+    '<p>Se restaurará el saldo inicial de <b>' + fmt(SALDO_INICIAL) + ' puntos</b> y se borrará todo el progreso simulado.</p>' +
+    '<div class="m-actions">' +
+      '<button class="btn-ghost" onclick="closeModal()">Cancelar</button>' +
+      '<button class="btn-primary danger" onclick="doReset()">Reiniciar</button>' +
+    '</div>'
+  );
+}
+function doReset(){
+  state = freshState();
+  saveState();
+  renderAll();
+  closeModal();
+  go('welcome');
+  toast('Demo reiniciada', 'reset');
+}
+
+function showBell(){
+  openModal(
+    '<div class="m-head"><svg class="ic big"><use href="#i-bell"/></svg><h3>Notificaciones</h3></div>' +
+    '<div class="noti"><b>¡Bienvenido a la demo!</b><span>Recibiste ' + fmt(SALDO_INICIAL) + ' puntos de bienvenida.</span></div>' +
+    '<div class="noti"><b>Nueva recompensa</b><span>2x1 en cafés disponible en Café del Parque.</span></div>' +
+    '<p class="m-note">Las notificaciones son simuladas.</p>' +
+    '<div class="m-actions"><button class="btn-primary" onclick="closeModal()">Cerrar</button></div>'
+  );
+}
+function showHow(){
+  openModal(
+    '<div class="m-head"><svg class="ic big"><use href="#i-info"/></svg><h3>¿Cómo funciona la demo?</h3></div>' +
+    '<ol class="m-steps">' +
+      '<li>Entrar como usuario demo</li>' +
+      '<li>Escanear un envase (simulado)</li>' +
+      '<li>Aprender cómo reciclarlo</li>' +
+      '<li>Elegir un punto limpio</li>' +
+      '<li>Simular la entrega verificada (+' + PUNTOS_ENTREGA + ' puntos)</li>' +
+      '<li>Elegir una recompensa</li>' +
+      '<li>Canjearla y descontar los puntos</li>' +
+    '</ol>' +
+    '<p class="m-note">Prototipo demostrativo: no hay cámara, GPS ni pagos reales.</p>' +
+    '<div class="m-actions"><button class="btn-primary" onclick="closeModal();go(\'home\')">Entrar como usuario demo</button></div>'
+  );
+}
+
+/* ==================== Código de barras simulado ==================== */
+(function buildBarcode(){
+  var svg = document.getElementById('barcode-svg');
+  if(!svg) return;
+  var seq = [2,1,1,3,2,1,1,2,1,3,1,1,2,1,1,2,3,1,1,1,2,1,3,1,2,1,1,2,1,1];
+  var H = 46;
+  var x = 6;
+  var out = '';
+  for(var i=0;i<seq.length;i++){
+    if(i % 2 === 0){
+      var guard = (i < 2 || i >= seq.length - 2);
+      var h = guard ? H : 34;
+      var y = (H - h) / 2;
+      out += '<rect x="' + x + '" y="' + y + '" width="' + seq[i] + '" height="' + h + '"/>';
+    }
+    x += seq[i] + 1.6;
+  }
+  svg.setAttribute('viewBox', '0 0 ' + Math.ceil(x + 4) + ' 46');
+  svg.innerHTML = out;
+})();
+
+/* ==================== Inicio ==================== */
+renderAll();
+go('welcome');
+</script>
+</body>
+</html>
