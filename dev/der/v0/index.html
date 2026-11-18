@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DER Interactivo - Ventas, Cuentas por Cobrar y Caja</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #141b2d;
+            color: #e2e8f0;
+            overflow: hidden;
+            user-select: none;
+        }
+        .mono {
+            font-family: 'JetBrains Mono', monospace;
+        }
+        /* Patrón de cuadrícula sutil para el lienzo */
+        .canvas-grid {
+            background-image: 
+                radial-gradient(rgba(148, 163, 184, 0.15) 1px, transparent 1px);
+            background-size: 24px 24px;
+        }
+        .table-card {
+            background-color: #1f2940;
+            transition: box-shadow 0.2s ease, transform 0.05s ease, opacity 0.25s ease;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.4), 0 8px 10px -6px rgba(0, 0, 0, 0.2);
+        }
+        .table-card:hover {
+            z-index: 30;
+        }
+        .table-card.active-highlight {
+            box-shadow: 0 0 0 2px #38bdf8, 0 20px 25px -5px rgba(0, 0, 0, 0.6);
+            z-index: 40;
+        }
+        .table-card.dimmed {
+            opacity: 0.3;
+        }
+        svg path {
+            transition: stroke 0.25s ease, stroke-width 0.25s ease, opacity 0.25s ease;
+        }
+        svg text, svg rect.badge-bg {
+            transition: opacity 0.25s ease;
+        }
+    </style>
+</head>
+<body class="h-screen w-screen flex flex-col">
+
+    <!-- Barra Superior de Herramientas y Leyenda -->
+    <header class="bg-[#1a2236] border-b border-slate-700/70 px-4 py-3 flex flex-wrap items-center justify-between gap-4 z-50 shadow-md">
+        <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-lg bg-indigo-500/20 border border-indigo-400/40 flex items-center justify-center text-indigo-400 font-bold">
+                ER
+            </div>
+            <div>
+                <h1 class="text-sm sm:text-base font-bold text-white tracking-tight">Arquitectura DER: Ventas, Cobranzas y Caja</h1>
+                <p class="text-xs text-slate-400 hidden sm:block">Arrastra las tarjetas • Rueda del mouse para Zoom • Pasa el cursor para resaltar relaciones</p>
+            </div>
+        </div>
+
+        <!-- Leyenda de Módulos -->
+        <div class="flex flex-wrap items-center gap-3 sm:gap-5 text-xs">
+            <div class="flex items-center gap-1.5">
+                <span class="w-3 h-3 rounded-sm bg-indigo-500 inline-block"></span>
+                <span class="text-slate-300 font-medium">Ventas y Deudas</span>
+            </div>
+            <div class="flex items-center gap-1.5">
+                <span class="w-3 h-3 rounded-sm bg-emerald-500 inline-block"></span>
+                <span class="text-slate-300 font-medium">Cobros y Bancos</span>
+            </div>
+            <div class="flex items-center gap-1.5">
+                <span class="w-3 h-3 rounded-sm bg-slate-500 inline-block"></span>
+                <span class="text-slate-300 font-medium">Caja</span>
+            </div>
+            <div class="h-4 w-[1px] bg-slate-700 hidden md:block"></div>
+            <div class="hidden md:flex items-center gap-3 text-slate-400 mono text-[11px]">
+                <span><strong class="text-amber-400">PK</strong> Primary Key</span>
+                <span><strong class="text-cyan-400">FK</strong> Foreign Key</span>
+            </div>
+        </div>
+
+        <!-- Controles de Vista -->
+        <div class="flex items-center gap-2">
+            <button onclick="zoomOut()" class="p-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition" title="Alejar">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"/></svg>
+            </button>
+            <span id="zoom-level" class="text-xs mono text-slate-300 w-12 text-center">100%</span>
+            <button onclick="zoomIn()" class="p-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition" title="Acercar">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+            </button>
+            <button onclick="resetView()" class="px-3 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-medium transition shadow-sm ml-1">
+                Centrar Vista
+            </button>
+        </div>
+    </header>
+
+    <!-- Área Principal del Lienzo Interactivo -->
+    <main id="viewport" class="flex-1 relative overflow-hidden canvas-grid cursor-grab active:cursor-grabbing">
+        <div id="canvas-world" class="absolute top-0 left-0 origin-top-left" style="width: 2400px; height: 1600px;">
+            <!-- Capa SVG para las líneas de relación -->
+            <svg id="connections-svg" class="w-full h-full pointer-events-none absolute top-0 left-0 z-10">
+                <defs>
+                    <!-- Marcadores de flecha para el lado "Muchos" (N) -->
+                    <marker id="arrow-n" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                        <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#64748b" />
+                    </marker>
+                    <marker id="arrow-n-active" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                        <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#38bdf8" />
+                    </marker>
+                    <!-- Marcador circular para el lado "Uno" (1) -->
+                    <marker id="dot-1" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="5" markerHeight="5">
+                        <circle cx="5" cy="5" r="3.5" fill="#94a3b8" />
+                    </marker>
+                    <marker id="dot-1-active" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="5" markerHeight="5">
+                        <circle cx="5" cy="5" r="3.5" fill="#38bdf8" />
+                    </marker>
+                </defs>
+                <g id="edges-layer"></g>
+            </svg>
+
+            <!-- Capa HTML para las tarjetas de las tablas -->
+            <div id="tables-layer" class="relative z-20 w-full h-full"></div>
+        </div>
+
+        <!-- Nota flotante explicativa -->
+        <div class="absolute bottom-4 left-4 max-w-md bg-[#1a2236]/95 backdrop-blur-md border border-slate-700/80 rounded-xl p-3.5 shadow-xl z-40 text-xs text-slate-300 pointer-events-auto">
+            <div class="flex items-center justify-between mb-1.5">
+                <span class="font-semibold text-emerald-400 flex items-center gap-1.5">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    Mejora clave integrada: Tabla Puente
+                </span>
+                <button onclick="this.parentElement.parentElement.style.display='none'" class="text-slate-500 hover:text-slate-300">✕</button>
+            </div>
+            <p class="leading-relaxed text-slate-400">
+                Se incorporó <strong class="text-emerald-300 mono">cobro_aplicacion</strong> entre <span class="mono text-slate-200">plan_pago</span> y <span class="mono text-slate-200">cobro</span>. Esto permite cancelar múltiples cuotas (o facturas al contado) en un solo recibo, manteniendo la trazabilidad exacta del dinero que entra a caja o banco.
+            </p>
+        </div>
+    </main>
+
+    <script>
+        // Definición de las tablas, módulos, posiciones iniciales y campos
+        const tablesData = [
+            // MÓDULO 1: VENTAS Y DEUDAS (Azul/Índigo)
+            {
+                id: 'cliente',
+                name: 'cliente',
+                module: 'ventas',
+                x: 60, y: 60,
+                fields: [
+                    { name: 'id', type: 'INT', key: 'PK' },
+                    { name: 'razon_social', type: 'VARCHAR(150)' },
+                    { name: 'ruc_ci', type: 'VARCHAR(20)' },
+                    { name: 'telefono', type: 'VARCHAR(30)' },
+                    { name: 'estado', type: 'BOOLEAN' }
+                ]
+            },
+            {
+                id: 'factura',
+                name: 'factura',
+                module: 'ventas',
+                x: 60, y: 290,
+                fields: [
+                    { name: 'id', type: 'INT', key: 'PK' },
+                    { name: 'cliente_id', type: 'INT', key: 'FK' },
+                    { name: 'numero_factura', type: 'VARCHAR(20)' },
+                    { name: 'condicion', type: 'ENUM(CONT,CRED)' },
+                    { name: 'fecha_emision', type: 'DATETIME' },
+                    { name: 'total', type: 'DECIMAL(12,2)' },
+                    { name: 'estado', type: 'VARCHAR(20)' }
+                ]
+            },
+            {
+                id: 'factura_detalle',
+                name: 'factura_detalle',
+                module: 'ventas',
+                x: 380, y: 290,
+                fields: [
+                    { name: 'id', type: 'INT', key: 'PK' },
+                    { name: 'factura_id', type: 'INT', key: 'FK' },
+                    { name: 'producto_id', type: 'INT', key: 'FK' },
+                    { name: 'cantidad', type: 'DECIMAL(10,2)' },
+                    { name: 'precio_unitario', type: 'DECIMAL(12,2)' },
+                    { name: 'subtotal', type: 'DECIMAL(12,2)' }
+                ]
+            },
+            {
+                id: 'cuenta_cobrar',
+                name: 'cuenta_cobrar',
+                module: 'ventas',
+                x: 60, y: 580,
+                fields: [
+                    { name: 'id', type: 'INT', key: 'PK' },
+                    { name: 'factura_id', type: 'INT', key: 'FK' },
+                    { name: 'monto_total', type: 'DECIMAL(12,2)' },
+                    { name: 'saldo_pendiente', type: 'DECIMAL(12,2)' },
+                    { name: 'estado', type: 'ENUM(PEND,PAG)' }
+                ]
+            },
+            {
+                id: 'plan_pago',
+                name: 'plan_pago',
+                module: 'ventas',
+                x: 60, y: 820,
+                fields: [
+                    { name: 'id', type: 'INT', key: 'PK' },
+                    { name: 'cuenta_cobrar_id', type: 'INT', key: 'FK' },
+                    { name: 'numero_cuota', type: 'INT' },
+                    { name: 'fecha_vencimiento', type: 'DATE' },
+                    { name: 'monto_cuota', type: 'DECIMAL(12,2)' },
+                    { name: 'saldo_cuota', type: 'DECIMAL(12,2)' },
+                    { name: 'estado', type: 'ENUM(PEND,PAG)' }
+                ]
+            },
+
+            // MÓDULO 2: COBROS Y BANCOS (Verde Esmeralda)
+            {
+                id: 'cobro_aplicacion',
+                name: 'cobro_aplicacion',
+                module: 'cobros',
+                badge: 'TABLA PUENTE',
+                x: 420, y: 835,
+                fields: [
+                    { name: 'id', type: 'INT', key: 'PK' },
+                    { name: 'cobro_id', type: 'INT', key: 'FK' },
+                    { name: 'plan_pago_id', type: 'INT', key: 'FK' },
+                    { name: 'monto_aplicado', type: 'DECIMAL(12,2)' }
+                ]
+            },
+            {
+                id: 'cobro',
+                name: 'cobro',
+                module: 'cobros',
+                x: 780, y: 820,
+                fields: [
+                    { name: 'id', type: 'INT', key: 'PK' },
+                    { name: 'caja_sesion_id', type: 'INT', key: 'FK' },
+                    { name: 'cliente_id', type: 'INT', key: 'FK' },
+                    { name: 'numero_recibo', type: 'VARCHAR(20)' },
+                    { name: 'fecha_cobro', type: 'DATETIME' },
+                    { name: 'monto_total', type: 'DECIMAL(12,2)' }
+                ]
+            },
+            {
+                id: 'cobro_detalle',
+                name: 'cobro_detalle',
+                module: 'cobros',
+                x: 1140, y: 820,
+                fields: [
+                    { name: 'id', type: 'INT', key: 'PK' },
+                    { name: 'cobro_id', type: 'INT', key: 'FK' },
+                    { name: 'forma_pago_id', type: 'INT', key: 'FK' },
+                    { name: 'banco_id', type: 'INT (NULL)', key: 'FK' },
+                    { name: 'monto', type: 'DECIMAL(12,2)' },
+                    { name: 'referencia_doc', type: 'VARCHAR(50)' }
+                ]
+            },
+            {
+                id: 'banco',
+                name: 'banco',
+                module: 'cobros',
+                x: 840, y: 540,
+                fields: [
+                    { name: 'id', type: 'INT', key: 'PK' },
+                    { name: 'nombre', type: 'VARCHAR(100)' },
+                    { name: 'numero_cuenta', type: 'VARCHAR(40)' },
+                    { name: 'activo', type: 'BOOLEAN' }
+                ]
+            },
+            {
+                id: 'forma_pago',
+                name: 'forma_pago',
+                module: 'cobros',
+                x: 1140, y: 540,
+                fields: [
+                    { name: 'id', type: 'INT', key: 'PK' },
+                    { name: 'descripcion', type: 'VARCHAR(60)' },
+                    { name: 'afecta_caja', type: 'BOOLEAN' },
+                    { name: 'requiere_banco', type: 'BOOLEAN' }
+                ]
+            },
+
+            // MÓDULO 3: CAJA (Gris Pizarra)
+            {
+                id: 'caja',
+                name: 'caja',
+                module: 'caja',
+                x: 420, y: 1120,
+                fields: [
+                    { name: 'id', type: 'INT', key: 'PK' },
+                    { name: 'nombre', type: 'VARCHAR(60)' },
+                    { name: 'sucursal_id', type: 'INT' },
+                    { name: 'estado', type: 'BOOLEAN' }
+                ]
+            },
+            {
+                id: 'caja_sesion',
+                name: 'caja_sesion',
+                module: 'caja',
+                x: 780, y: 1110,
+                fields: [
+                    { name: 'id', type: 'INT', key: 'PK' },
+                    { name: 'caja_id', type: 'INT', key: 'FK' },
+                    { name: 'usuario_id', type: 'INT' },
+                    { name: 'fecha_apertura', type: 'DATETIME' },
+                    { name: 'monto_inicial', type: 'DECIMAL(12,2)' },
+                    { name: 'fecha_cierre', type: 'DATETIME' },
+                    { name: 'estado', type: 'ENUM(ABI,CER)' }
+                ]
+            },
+            {
+                id: 'caja_movimiento',
+                name: 'caja_movimiento',
+                module: 'caja',
+                x: 1140, y: 1110,
+                fields: [
+                    { name: 'id', type: 'INT', key: 'PK' },
+                    { name: 'caja_sesion_id', type: 'INT', key: 'FK' },
+                    { name: 'cobro_detalle_id', type: 'INT (NULL)', key: 'FK' },
+                    { name: 'tipo', type: 'ENUM(ING,EGR)' },
+                    { name: 'concepto', type: 'VARCHAR(150)' },
+                    { name: 'monto', type: 'DECIMAL(12,2)' }
+                ]
+            }
+        ];
+
+        // Definición de relaciones exactas solicitadas
+        const relationsData = [
+            { from: 'cliente', to: 'factura', label: '1 : N' },
+            { from: 'factura', to: 'factura_detalle', label: '1 : N' },
+            { from: 'factura', to: 'cuenta_cobrar', label: '1 : 1' },
+            { from: 'cuenta_cobrar', to: 'plan_pago', label: '1 : N' },
+            { from: 'plan_pago', to: 'cobro_aplicacion', label: '1 : N' },
+            { from: 'cobro', to: 'cobro_aplicacion', label: '1 : N' },
+            { from: 'cobro', to: 'cobro_detalle', label: '1 : N' },
+            { from: 'forma_pago', to: 'cobro_detalle', label: '1 : N' },
+            { from: 'banco', to: 'cobro_detalle', label: '1 : N' },
+            { from: 'caja', to: 'caja_sesion', label: '1 : N' },
+            { from: 'caja_sesion', to: 'cobro', label: '1 : N' },
+            { from: 'caja_sesion', to: 'caja_movimiento', label: '1 : N' },
+            { from: 'cobro_detalle', to: 'caja_movimiento', label: '1 : 0..1', dashed: true }
+        ];
+
+        // Estilos por módulo
+        const moduleThemes = {
+            ventas: {
+                headerBg: 'bg-indigo-600',
+                border: 'border-indigo-500/40',
+                badgeBg: 'bg-indigo-900/80 text-indigo-200'
+            },
+            cobros: {
+                headerBg: 'bg-emerald-600',
+                border: 'border-emerald-500/40',
+                badgeBg: 'bg-emerald-950/90 text-emerald-200 border border-emerald-400/30'
+            },
+            caja: {
+                headerBg: 'bg-slate-600',
+                border: 'border-slate-500/40',
+                badgeBg: 'bg-slate-800 text-slate-200'
+            }
+        };
+
+        const tablesLayer = document.getElementById('tables-layer');
+        const edgesLayer = document.getElementById('edges-layer');
+        const canvasWorld = document.getElementById('canvas-world');
+        const viewport = document.getElementById('viewport');
+
+        let scale = 0.85;
+        let panX = 20;
+        let panY = 10;
+        let activeTableId = null;
+
+        // Renderizar tarjetas de tablas
+        function renderTables() {
+            tablesLayer.innerHTML = '';
+            tablesData.forEach(table => {
+                const theme = moduleThemes[table.module];
+                const card = document.createElement('div');
+                card.id = `table-${table.id}`;
+                card.className = `table-card absolute rounded-xl border ${theme.border} w-64 overflow-hidden cursor-move`;
+                card.style.left = `${table.x}px`;
+                card.style.top = `${table.y}px`;
+
+                // Cabecera de la tabla
+                let badgeHtml = table.badge 
+                    ? `<span class="text-[9px] font-bold px-1.5 py-0.5 rounded ${theme.badgeBg} tracking-wider">${table.badge}</span>` 
+                    : '';
+
+                let html = `
+                    <div class="${theme.headerBg} px-3.5 py-2 flex items-center justify-between">
+                        <span class="font-bold text-white text-sm mono tracking-tight">${table.name}</span>
+                        ${badgeHtml}
+                    </div>
+                    <div class="divide-y divide-slate-700/50 py-1 bg-[#1f2940]">
+                `;
+
+                // Filas de campos
+                table.fields.forEach(f => {
+                    let keyBadge = '';
+                    let nameColor = 'text-slate-200';
+                    if (f.key === 'PK') {
+                        keyBadge = `<span class="text-[10px] font-bold text-amber-400 bg-amber-400/10 border border-amber-400/30 px-1 rounded mono w-6 text-center">PK</span>`;
+                        nameColor = 'text-amber-200 font-semibold';
+                    } else if (f.key === 'FK') {
+                        keyBadge = `<span class="text-[10px] font-bold text-cyan-400 bg-cyan-400/10 border border-cyan-400/30 px-1 rounded mono w-6 text-center">FK</span>`;
+                        nameColor = 'text-cyan-200';
+                    } else {
+                        keyBadge = `<span class="w-6 inline-block"></span>`;
+                    }
+
+                    html += `
+                        <div class="px-3 py-1.5 flex items-center justify-between text-xs hover:bg-slate-800/60 transition-colors">
+                            <div class="flex items-center gap-2 overflow-hidden">
+                                ${keyBadge}
+                                <span class="mono truncate ${nameColor}">${f.name}</span>
+                            </div>
+                            <span class="mono text-[10px] text-slate-400 ml-2 shrink-0">${f.type}</span>
+                        </div>
+                    `;
+                });
+
+                html += `</div>`;
+                card.innerHTML = html;
+
+                // Eventos de arrastre de tarjeta
+                makeDraggable(card, table);
+
+                // Eventos de resaltado al pasar el mouse
+                card.addEventListener('mouseenter', () => {
+                    activeTableId = table.id;
+                    updateHighlights();
+                });
+                card.addEventListener('mouseleave', () => {
+                    activeTableId = null;
+                    updateHighlights();
+                });
+
+                tablesLayer.appendChild(card);
+            });
+        }
+
+        // Calcular puntos de conexión óptimos entre dos rectángulos
+        function getAnchorPoints(rectA, rectB) {
+            const centerA = { x: rectA.x + rectA.w / 2, y: rectA.y + rectA.h / 2 };
+            const centerB = { x: rectB.x + rectB.w / 2, y: rectB.y + rectB.h / 2 };
+
+            const dx = centerB.x - centerA.x;
+            const dy = centerB.y - centerA.y;
+
+            let p1 = {}, p2 = {}, dir1 = '', dir2 = '';
+
+            if (Math.abs(dx) > Math.abs(dy)) {
+                // Conexión horizontal predominante
+                if (dx > 0) {
+                    p1 = { x: rectA.x + rectA.w, y: centerA.y };
+                    p2 = { x: rectB.x, y: centerB.y };
+                    dir1 = 'right'; dir2 = 'left';
+                } else {
+                    p1 = { x: rectA.x, y: centerA.y };
+                    p2 = { x: rectB.x + rectB.w, y: centerB.y };
+                    dir1 = 'left'; dir2 = 'right';
+                }
+            } else {
+                // Conexión vertical predominante
+                if (dy > 0) {
+                    p1 = { x: centerA.x, y: rectA.y + rectA.h };
+                    p2 = { x: centerB.x, y: rectB.y };
+                    dir1 = 'bottom'; dir2 = 'top';
+                } else {
+                    p1 = { x: centerA.x, y: rectA.y };
+                    p2 = { x: centerB.x, y: rectB.y + rectB.h };
+                    dir1 = 'top'; dir2 = 'bottom';
+                }
+            }
+            return { p1, p2, dir1, dir2 };
+        }
+
+        // Renderizar líneas SVG con curvas Bézier suaves y etiquetas
+        function renderEdges() {
+            edgesLayer.innerHTML = '';
+
+            relationsData.forEach((rel, idx) => {
+                const elFrom = document.getElementById(`table-${rel.from}`);
+                const elTo = document.getElementById(`table-${rel.to}`);
+                if (!elFrom || !elTo) return;
+
+                const dataFrom = tablesData.find(t => t.id === rel.from);
+                const dataTo = tablesData.find(t => t.id === rel.to);
+
+                const rectA = { x: dataFrom.x, y: dataFrom.y, w: elFrom.offsetWidth, h: elFrom.offsetHeight };
+                const rectB = { x: dataTo.x, y: dataTo.y, w: elTo.offsetWidth, h: elTo.offsetHeight };
+
+                const { p1, p2, dir1, dir2 } = getAnchorPoints(rectA, rectB);
+
+                // Puntos de control para curva Bézier suave
+                const dist = Math.hypot(p2.x - p1.x, p2.y - p1.y) * 0.45;
+                let cp1 = { x: p1.x, y: p1.y };
+                let cp2 = { x: p2.x, y: p2.y };
+
+                if (dir1 === 'right') cp1.x += dist;
+                if (dir1 === 'left') cp1.x -= dist;
+                if (dir1 === 'bottom') cp1.y += dist;
+                if (dir1 === 'top') cp1.y -= dist;
+
+                if (dir2 === 'right') cp2.x += dist;
+                if (dir2 === 'left') cp2.x -= dist;
+                if (dir2 === 'bottom') cp2.y += dist;
+                if (dir2 === 'top') cp2.y -= dist;
+
+                const pathD = `M ${p1.x} ${p1.y} C ${cp1.x} ${cp1.y}, ${cp2.x} ${cp2.y}, ${p2.x} ${p2.y}`;
+
+                // Punto medio aproximado de la curva Bézier cúbica (t = 0.5)
+                const midX = 0.125 * p1.x + 0.375 * cp1.x + 0.375 * cp2.x + 0.125 * p2.x;
+                const midY = 0.125 * p1.y + 0.375 * cp1.y + 0.375 * cp2.y + 0.125 * p2.y;
+
+                const isHighlighted = activeTableId && (rel.from === activeTableId || rel.to === activeTableId);
+                const isDimmed = activeTableId && !isHighlighted;
+
+                const strokeColor = isHighlighted ? '#38bdf8' : '#64748b';
+                const strokeWidth = isHighlighted ? '2.5' : '1.75';
+                const opacity = isDimmed ? '0.2' : '1';
+
+                const group = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+                group.setAttribute('data-from', rel.from);
+                group.setAttribute('data-to', rel.to);
+
+                const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                path.setAttribute('d', pathD);
+                path.setAttribute('fill', 'none');
+                path.setAttribute('stroke', strokeColor);
+                path.setAttribute('stroke-width', strokeWidth);
+                path.setAttribute('opacity', opacity);
+                if (rel.dashed) {
+                    path.setAttribute('stroke-dasharray', '6,5');
+                }
+                path.setAttribute('marker-start', isHighlighted ? 'url(#dot-1-active)' : 'url(#dot-1)');
+                path.setAttribute('marker-end', isHighlighted ? 'url(#arrow-n-active)' : 'url(#arrow-n)');
+
+                // Etiqueta de cardinalidad (Badge)
+                const badgeW = rel.label.length * 7 + 14;
+                const badgeH = 20;
+                const rectBg = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+                rectBg.setAttribute('x', midX - badgeW / 2);
+                rectBg.setAttribute('y', midY - badgeH / 2);
+                rectBg.setAttribute('width', badgeW);
+                rectBg.setAttribute('height', badgeH);
+                rectBg.setAttribute('rx', '6');
+                rectBg.setAttribute('fill', isHighlighted ? '#0284c7' : '#1e293b');
+                rectBg.setAttribute('stroke', isHighlighted ? '#38bdf8' : '#475569');
+                rectBg.setAttribute('stroke-width', '1');
+                rectBg.setAttribute('opacity', opacity);
+
+                const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                text.setAttribute('x', midX);
+                text.setAttribute('y', midY + 4);
+                text.setAttribute('text-anchor', 'middle');
+                text.setAttribute('fill', isHighlighted ? '#ffffff' : '#cbd5e1');
+                text.setAttribute('font-size', '11');
+                text.setAttribute('font-family', 'JetBrains Mono, monospace');
+                text.setAttribute('font-weight', '600');
+                text.setAttribute('opacity', opacity);
+                text.textContent = rel.label;
+
+                group.appendChild(path);
+                group.appendChild(rectBg);
+                group.appendChild(text);
+                edgesLayer.appendChild(group);
+            });
+        }
+
+        // Actualizar estados visuales al pasar el cursor sobre una tabla
+        function updateHighlights() {
+            const relatedIds = new Set();
+            if (activeTableId) {
+                relatedIds.add(activeTableId);
+                relationsData.forEach(r => {
+                    if (r.from === activeTableId) relatedIds.add(r.to);
+                    if (r.to === activeTableId) relatedIds.add(r.from);
+                });
+            }
+
+            tablesData.forEach(t => {
+                const el = document.getElementById(`table-${t.id}`);
+                if (!el) return;
+                if (!activeTableId) {
+                    el.classList.remove('active-highlight', 'dimmed');
+                } else if (relatedIds.has(t.id)) {
+                    el.classList.add('active-highlight');
+                    el.classList.remove('dimmed');
+                } else {
+                    el.classList.remove('active-highlight');
+                    el.classList.add('dimmed');
+                }
+            });
+
+            renderEdges();
+        }
+
+        // Lógica para arrastrar tarjetas individualmente
+        function makeDraggable(element, tableObj) {
+            let isDragging = false;
+            let startX, startY, initialX, initialY;
+
+            const onStart = (clientX, clientY) => {
+                isDragging = true;
+                startX = clientX;
+                startY = clientY;
+                initialX = tableObj.x;
+                initialY = tableObj.y;
+                element.style.zIndex = 50;
+            };
+
+            const onMove = (clientX, clientY) => {
+                if (!isDragging) return;
+                const dx = (clientX - startX) / scale;
+                const dy = (clientY - startY) / scale;
+                tableObj.x = Math.max(0, initialX + dx);
+                tableObj.y = Math.max(0, initialY + dy);
+                element.style.left = `${tableObj.x}px`;
+                element.style.top = `${tableObj.y}px`;
+                renderEdges();
+            };
+
+            const onEnd = () => {
+                if (isDragging) {
+                    isDragging = false;
+                    element.style.zIndex = '';
+                }
+            };
+
+            element.addEventListener('mousedown', (e) => {
+                e.stopPropagation();
+                onStart(e.clientX, e.clientY);
+            });
+            window.addEventListener('mousemove', (e) => onMove(e.clientX, e.clientY));
+            window.addEventListener('mouseup', onEnd);
+
+            // Soporte táctil
+            element.addEventListener('touchstart', (e) => {
+                if (e.touches.length === 1) {
+                    e.stopPropagation();
+                    onStart(e.touches[0].clientX, e.touches[0].clientY);
+                }
+            }, { passive: true });
+            window.addEventListener('touchmove', (e) => {
+                if (isDragging && e.touches.length === 1) {
+                    onMove(e.touches[0].clientX, e.touches[0].clientY);
+                }
+            }, { passive: true });
+            window.addEventListener('touchend', onEnd);
+        }
+
+        // Lógica de Pan & Zoom del Lienzo
+        function applyTransform() {
+            canvasWorld.style.transform = `translate(${panX}px, ${panY}px) scale(${scale})`;
+            document.getElementById('zoom-level').textContent = `${Math.round(scale * 100)}%`;
+        }
+
+        let isPanning = false;
+        let panStartX, panStartY;
+
+        viewport.addEventListener('mousedown', (e) => {
+            isPanning = true;
+            panStartX = e.clientX - panX;
+            panStartY = e.clientY - panY;
+        });
+
+        window.addEventListener('mousemove', (e) => {
+            if (!isPanning) return;
+            panX = e.clientX - panStartX;
+            panY = e.clientY - panStartY;
+            applyTransform();
+        });
+
+        window.addEventListener('mouseup', () => {
+            isPanning = false;
+        });
+
+        viewport.addEventListener('wheel', (e) => {
+            e.preventDefault();
+            const zoomFactor = 0.08;
+            const delta = e.deltaY < 0 ? 1 : -1;
+            const newScale = Math.min(Math.max(0.4, scale + delta * zoomFactor), 1.6);
+
+            // Zoom hacia el cursor
+            const rect = viewport.getBoundingClientRect();
+            const mouseX = e.clientX - rect.left;
+            const mouseY = e.clientY - rect.top;
+
+            panX = mouseX - (mouseX - panX) * (newScale / scale);
+            panY = mouseY - (mouseY - panY) * (newScale / scale);
+            scale = newScale;
+            applyTransform();
+        }, { passive: false });
+
+        function zoomIn() {
+            scale = Math.min(1.6, scale + 0.1);
+            applyTransform();
+        }
+
+        function zoomOut() {
+            scale = Math.max(0.4, scale - 0.1);
+            applyTransform();
+        }
+
+        function resetView() {
+            // Ajustar escala inicial según el ancho de pantalla
+            const vw = window.innerWidth;
+            scale = vw < 768 ? 0.52 : (vw < 1280 ? 0.72 : 0.85);
+            panX = 20;
+            panY = 10;
+            applyTransform();
+        }
+
+        // Inicialización
+        window.addEventListener('DOMContentLoaded', () => {
+            renderTables();
+            resetView();
+            // Esperar un frame para que el DOM calcule alturas reales de tarjetas antes de trazar líneas
+            requestAnimationFrame(() => {
+                renderEdges();
+            });
+        });
+
+        window.addEventListener('resize', renderEdges);
+    </script>
+</body>
+</html>
