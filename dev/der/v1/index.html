@@ -1,0 +1,883 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DER Interactivo - Ventas, Cuentas por Cobrar y Caja</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #141b2d;
+            color: #e2e8f0;
+            overflow: hidden;
+            user-select: none;
+        }
+        .mono {
+            font-family: 'JetBrains Mono', monospace;
+        }
+        /* Patrón de cuadrícula sutil para el lienzo */
+        .canvas-grid {
+            background-image: 
+                radial-gradient(rgba(148, 163, 184, 0.15) 1px, transparent 1px);
+            background-size: 24px 24px;
+        }
+        .table-card {
+            background-color: #1f2940;
+            transition: box-shadow 0.2s ease, transform 0.05s ease, opacity 0.25s ease;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.4), 0 8px 10px -6px rgba(0, 0, 0, 0.2);
+        }
+        .table-card:hover {
+            z-index: 30;
+        }
+        .table-card.active-highlight {
+            box-shadow: 0 0 0 2px #38bdf8, 0 20px 25px -5px rgba(0, 0, 0, 0.6);
+            z-index: 40;
+        }
+        .table-card.dimmed {
+            opacity: 0.3;
+        }
+        svg path {
+            transition: stroke 0.25s ease, stroke-width 0.25s ease, opacity 0.25s ease;
+        }
+        svg text, svg rect.badge-bg {
+            transition: opacity 0.25s ease;
+        }
+    </style>
+</head>
+<body class="h-screen w-screen flex flex-col">
+
+    <!-- Barra Superior de Herramientas y Leyenda -->
+    <header class="bg-[#1a2236] border-b border-slate-700/70 px-4 py-3 flex flex-wrap items-center justify-between gap-4 z-50 shadow-md">
+        <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-lg bg-indigo-500/20 border border-indigo-400/40 flex items-center justify-center text-indigo-400 font-bold">
+                ER
+            </div>
+            <div>
+                <h1 class="text-sm sm:text-base font-bold text-white tracking-tight">Arquitectura DER: Ventas, Cobranzas y Caja</h1>
+                <p class="text-xs text-slate-400 hidden sm:block">Arrastra las tarjetas • Rueda del mouse para Zoom • Pasa el cursor para resaltar relaciones</p>
+            </div>
+        </div>
+
+        <!-- Leyenda de Módulos -->
+        <div class="flex flex-wrap items-center gap-3 sm:gap-5 text-xs">
+            <div class="flex items-center gap-1.5">
+                <span class="w-3 h-3 rounded-sm bg-indigo-500 inline-block"></span>
+                <span class="text-slate-300 font-medium">Ventas y Deudas</span>
+            </div>
+            <div class="flex items-center gap-1.5">
+                <span class="w-3 h-3 rounded-sm bg-emerald-500 inline-block"></span>
+                <span class="text-slate-300 font-medium">Cobros y Bancos</span>
+            </div>
+            <div class="flex items-center gap-1.5">
+                <span class="w-3 h-3 rounded-sm bg-slate-500 inline-block"></span>
+                <span class="text-slate-300 font-medium">Caja</span>
+            </div>
+            <div class="h-4 w-[1px] bg-slate-700 hidden md:block"></div>
+            <div class="hidden md:flex items-center gap-3 text-slate-400 mono text-[11px]">
+                <span><strong class="text-amber-400">PK</strong> Primary Key</span>
+                <span><strong class="text-cyan-400">FK</strong> Foreign Key</span>
+                <span><strong class="text-rose-400">NULL</strong> Opcional</span>
+            </div>
+        </div>
+
+        <!-- Filtros de Flujo y Controles de Vista -->
+        <div class="flex flex-wrap items-center gap-2">
+            <div class="hidden xl:flex items-center bg-slate-900/80 p-1 rounded-lg border border-slate-700/70 gap-1 mr-2">
+                <button onclick="setFocusMode('all')" id="btn-mode-all" class="mode-btn px-2.5 py-1 rounded text-xs font-medium bg-indigo-600 text-white transition">Vista Completa</button>
+                <button onclick="setFocusMode('contado')" id="btn-mode-contado" class="mode-btn px-2.5 py-1 rounded text-xs font-medium text-slate-300 hover:bg-slate-800 transition">Flujo Contado/Crédito</button>
+                <button onclick="setFocusMode('caja')" id="btn-mode-caja" class="mode-btn px-2.5 py-1 rounded text-xs font-medium text-slate-300 hover:bg-slate-800 transition">Auditoría de Caja</button>
+            </div>
+            <button onclick="zoomOut()" class="p-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition" title="Alejar">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"/></svg>
+            </button>
+            <span id="zoom-level" class="text-xs mono text-slate-300 w-12 text-center">100%</span>
+            <button onclick="zoomIn()" class="p-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition" title="Acercar">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+            </button>
+            <button onclick="resetLayout()" class="px-3 py-1.5 rounded-lg bg-slate-700 hover:bg-slate-600 text-white text-xs font-medium transition shadow-sm ml-1">
+                Resetear
+            </button>
+        </div>
+    </header>
+
+    <!-- Área Principal del Lienzo Interactivo -->
+    <main id="viewport" class="flex-1 relative overflow-hidden canvas-grid cursor-grab active:cursor-grabbing">
+        <div id="canvas-world" class="absolute top-0 left-0 origin-top-left" style="width: 2400px; height: 1600px;">
+            <!-- Capa SVG para las líneas de relación -->
+            <svg id="connections-svg" class="w-full h-full pointer-events-none absolute top-0 left-0 z-10">
+                <defs>
+                    <!-- Marcadores de flecha para el lado "Muchos" (N) -->
+                    <marker id="arrow-n" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                        <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#64748b" />
+                    </marker>
+                    <marker id="arrow-n-active" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                        <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#38bdf8" />
+                    </marker>
+                    <!-- Marcador circular para el lado "Uno" (1) -->
+                    <marker id="dot-1" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="5" markerHeight="5">
+                        <circle cx="5" cy="5" r="3.5" fill="#94a3b8" />
+                    </marker>
+                    <marker id="dot-1-active" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="5" markerHeight="5">
+                        <circle cx="5" cy="5" r="3.5" fill="#38bdf8" />
+                    </marker>
+                </defs>
+                <g id="edges-layer"></g>
+            </svg>
+
+            <!-- Capa HTML para las tarjetas de las tablas -->
+            <div id="tables-layer" class="relative z-20 w-full h-full"></div>
+        </div>
+
+        <!-- Leyenda de líneas y Panel Inspector de Reglas de Negocio -->
+        <div class="absolute bottom-4 left-4 right-4 flex flex-col md:flex-row items-start md:items-end justify-between gap-4 pointer-events-none z-40">
+            <!-- Leyenda de relaciones -->
+            <div class="bg-[#1a2236]/95 backdrop-blur-md border border-slate-700/80 rounded-xl px-4 py-2.5 shadow-xl text-xs text-slate-300 pointer-events-auto flex flex-wrap items-center gap-4">
+                <div class="flex items-center gap-2">
+                    <span class="w-6 h-0.5 bg-slate-400 inline-block"></span>
+                    <span>Relación Obligatoria (<span class="mono text-slate-200">NOT NULL</span>)</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <span class="w-6 h-0.5 border-t-2 border-dashed border-amber-400 inline-block"></span>
+                    <span>Relación Condicional / Opcional (<span class="mono text-amber-300">FK NULL</span>)</span>
+                </div>
+            </div>
+
+            <!-- Panel Inspector Dinámico -->
+            <div id="inspector-panel" class="max-w-lg w-full bg-[#1a2236]/95 backdrop-blur-md border border-slate-700/80 rounded-xl p-4 shadow-2xl text-xs text-slate-300 pointer-events-auto transition-all">
+                <div class="flex items-center justify-between mb-1.5">
+                    <span id="inspector-title" class="font-bold text-sm text-sky-400 flex items-center gap-2 mono">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        Haz clic en cualquier tabla para ver sus reglas
+                    </span>
+                    <span id="inspector-badge" class="text-[10px] px-2 py-0.5 rounded bg-slate-800 text-slate-400 mono">ARQUITECTURA</span>
+                </div>
+                <p id="inspector-desc" class="leading-relaxed text-slate-400">
+                    La línea punteada entre <strong class="text-emerald-300 mono">cobro_detalle</strong> y <strong class="text-slate-200 mono">caja_movimiento</strong> representa la regla crítica de arqueo: solo los pagos donde <span class="mono text-amber-300">forma_pago.afecta_caja = true</span> (efectivo) generan movimiento físico en caja. Los gastos manuales tienen <span class="mono text-rose-300">cobro_detalle_id = NULL</span>.
+                </p>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Posiciones por defecto para poder resetear
+        const defaultPositions = {
+            cliente: { x: 60, y: 50 },
+            factura: { x: 60, y: 270 },
+            factura_detalle: { x: 380, y: 270 },
+            cuenta_cobrar: { x: 60, y: 550 },
+            plan_pago: { x: 60, y: 780 },
+            cobro_aplicacion: { x: 410, y: 795 },
+            cobro: { x: 760, y: 760 },
+            cobro_detalle: { x: 1130, y: 760 },
+            banco: { x: 820, y: 490 },
+            forma_pago: { x: 1130, y: 490 },
+            caja: { x: 410, y: 1080 },
+            caja_sesion: { x: 760, y: 1050 },
+            caja_movimiento: { x: 1130, y: 1050 }
+        };
+
+        // Definición de las tablas, módulos, campos y reglas de negocio
+        const tablesData = [
+            // MÓDULO 1: VENTAS Y DEUDAS (Azul/Índigo)
+            {
+                id: 'cliente',
+                name: 'cliente',
+                module: 'ventas',
+                x: 60, y: 50,
+                role: 'Catálogo maestro de clientes. Se vincula tanto a la factura (devengamiento) como al cobro (recibo emitido).',
+                fields: [
+                    { name: 'id', type: 'INT', key: 'PK' },
+                    { name: 'ruc_ci', type: 'VARCHAR(20)' },
+                    { name: 'razon_social', type: 'VARCHAR(150)' },
+                    { name: 'telefono', type: 'VARCHAR(30)' },
+                    { name: 'email', type: 'VARCHAR(100)' }
+                ]
+            },
+            {
+                id: 'factura',
+                name: 'factura',
+                module: 'ventas',
+                x: 60, y: 270,
+                role: 'Cabecera comercial. Tanto si es CONTADO como CREDITO, al emitirse dispara la creación de cuenta_cobrar (1:1) para cubrir el lapso hasta el pago en caja.',
+                fields: [
+                    { name: 'id', type: 'INT', key: 'PK' },
+                    { name: 'cliente_id', type: 'INT', key: 'FK' },
+                    { name: 'numero_factura', type: 'VARCHAR(20)' },
+                    { name: 'condicion', type: 'ENUM(CONT,CRED)' },
+                    { name: 'fecha_emision', type: 'DATETIME' },
+                    { name: 'total', type: 'DECIMAL(12,2)' },
+                    { name: 'estado', type: 'VARCHAR(20)' }
+                ]
+            },
+            {
+                id: 'factura_detalle',
+                name: 'factura_detalle',
+                module: 'ventas',
+                x: 380, y: 270,
+                role: 'Ítems o servicios facturados. Impacta en inventario/stock y determina el total de la cabecera.',
+                fields: [
+                    { name: 'id', type: 'INT', key: 'PK' },
+                    { name: 'factura_id', type: 'INT', key: 'FK' },
+                    { name: 'producto_id', type: 'INT', key: 'FK' },
+                    { name: 'cantidad', type: 'DECIMAL(10,2)' },
+                    { name: 'precio_unitario', type: 'DECIMAL(12,2)' },
+                    { name: 'subtotal', type: 'DECIMAL(12,2)' }
+                ]
+            },
+            {
+                id: 'cuenta_cobrar',
+                name: 'cuenta_cobrar',
+                module: 'ventas',
+                x: 60, y: 550,
+                role: 'Obligación financiera única por factura (1:1). Centraliza el saldo total pendiente de cobro antes de desglosarlo en vencimientos.',
+                fields: [
+                    { name: 'id', type: 'INT', key: 'PK' },
+                    { name: 'factura_id', type: 'INT (UQ)', key: 'FK' },
+                    { name: 'monto_total', type: 'DECIMAL(12,2)' },
+                    { name: 'saldo_pendiente', type: 'DECIMAL(12,2)' },
+                    { name: 'estado', type: 'ENUM(PEND,PAG)' }
+                ]
+            },
+            {
+                id: 'plan_pago',
+                name: 'plan_pago',
+                module: 'ventas',
+                x: 60, y: 780,
+                role: 'Cronograma de cuotas exigibles. Si la factura es CONTADO genera 1 cuota única con vencimiento hoy; si es CREDITO genera N cuotas con sus fechas.',
+                fields: [
+                    { name: 'id', type: 'INT', key: 'PK' },
+                    { name: 'cuenta_cobrar_id', type: 'INT', key: 'FK' },
+                    { name: 'numero_cuota', type: 'INT' },
+                    { name: 'fecha_vencimiento', type: 'DATE' },
+                    { name: 'monto_cuota', type: 'DECIMAL(12,2)' },
+                    { name: 'saldo_cuota', type: 'DECIMAL(12,2)' },
+                    { name: 'estado', type: 'ENUM(PEND,PAG)' }
+                ]
+            },
+
+            // MÓDULO 2: COBROS Y BANCOS (Verde Esmeralda)
+            {
+                id: 'cobro_aplicacion',
+                name: 'cobro_aplicacion',
+                module: 'cobros',
+                badge: 'TABLA PUENTE',
+                x: 410, y: 795,
+                role: 'Resuelve la relación N:M entre recibos y cuotas. Permite cancelar múltiples cuotas (o varias facturas contado) en un solo recibo y soporta pagos parciales.',
+                fields: [
+                    { name: 'id', type: 'INT', key: 'PK' },
+                    { name: 'cobro_id', type: 'INT', key: 'FK' },
+                    { name: 'plan_pago_id', type: 'INT', key: 'FK' },
+                    { name: 'monto_aplicado', type: 'DECIMAL(12,2)' }
+                ]
+            },
+            {
+                id: 'cobro',
+                name: 'cobro',
+                module: 'cobros',
+                x: 760, y: 760,
+                role: 'Cabecera del recibo de dinero. Siempre exige una caja_sesion ABIERTA para registrar qué cajero y turno procesó la cobranza.',
+                fields: [
+                    { name: 'id', type: 'INT', key: 'PK' },
+                    { name: 'cliente_id', type: 'INT', key: 'FK' },
+                    { name: 'caja_sesion_id', type: 'INT', key: 'FK' },
+                    { name: 'numero_recibo', type: 'VARCHAR(20)' },
+                    { name: 'fecha_cobro', type: 'DATETIME' },
+                    { name: 'monto_total', type: 'DECIMAL(12,2)' },
+                    { name: 'estado', type: 'VARCHAR(20)' }
+                ]
+            },
+            {
+                id: 'cobro_detalle',
+                name: 'cobro_detalle',
+                module: 'cobros',
+                x: 1130, y: 760,
+                role: 'Desglose de medios de pago (ej. mitad efectivo, mitad transferencia). Solo las líneas cuya forma_pago tiene afecta_caja=true generan ingreso físico en caja_movimiento.',
+                fields: [
+                    { name: 'id', type: 'INT', key: 'PK' },
+                    { name: 'cobro_id', type: 'INT', key: 'FK' },
+                    { name: 'forma_pago_id', type: 'INT', key: 'FK' },
+                    { name: 'banco_id', type: 'INT', key: 'FK', nullable: true },
+                    { name: 'monto', type: 'DECIMAL(12,2)' },
+                    { name: 'referencia', type: 'VARCHAR(50)' }
+                ]
+            },
+            {
+                id: 'banco',
+                name: 'banco',
+                module: 'cobros',
+                x: 820, y: 490,
+                role: 'Entidades bancarias. Es opcional (NULL) en cobro_detalle porque los pagos en efectivo no involucran bancos.',
+                fields: [
+                    { name: 'id', type: 'INT', key: 'PK' },
+                    { name: 'nombre', type: 'VARCHAR(100)' },
+                    { name: 'numero_cuenta', type: 'VARCHAR(40)' }
+                ]
+            },
+            {
+                id: 'forma_pago',
+                name: 'forma_pago',
+                module: 'cobros',
+                x: 1130, y: 490,
+                role: 'Define el comportamiento financiero: el flag afecta_caja (BOOLEAN) decide automáticamente si el dinero entra al cajón físico del cajero o va directo a conciliación bancaria.',
+                fields: [
+                    { name: 'id', type: 'INT', key: 'PK' },
+                    { name: 'nombre', type: 'VARCHAR(60)' },
+                    { name: 'afecta_caja', type: 'BOOLEAN' }
+                ]
+            },
+
+            // MÓDULO 3: CAJA Y ARQUEO (Gris Pizarra)
+            {
+                id: 'caja',
+                name: 'caja',
+                module: 'caja',
+                x: 410, y: 1080,
+                role: 'Punto de cobro físico o lógico (ej. Caja 01, Caja Mostrador). Una caja puede tener múltiples sesiones a lo largo del día.',
+                fields: [
+                    { name: 'id', type: 'INT', key: 'PK' },
+                    { name: 'nombre', type: 'VARCHAR(60)' },
+                    { name: 'sucursal_id', type: 'INT' },
+                    { name: 'activa', type: 'BOOLEAN' }
+                ]
+            },
+            {
+                id: 'caja_sesion',
+                name: 'caja_sesion',
+                module: 'caja',
+                badge: 'ARQUEO',
+                x: 760, y: 1050,
+                role: 'Control de turno y arqueo ciego. Calcula diferencia = monto_cierre_declarado - monto_cierre_sistema para detectar faltantes o sobrantes del cajero.',
+                fields: [
+                    { name: 'id', type: 'INT', key: 'PK' },
+                    { name: 'caja_id', type: 'INT', key: 'FK' },
+                    { name: 'usuario_id', type: 'INT', key: 'FK' },
+                    { name: 'fecha_apertura', type: 'DATETIME' },
+                    { name: 'fecha_cierre', type: 'DATETIME', nullable: true },
+                    { name: 'monto_apertura', type: 'DECIMAL(12,2)' },
+                    { name: 'monto_cierre_sistema', type: 'DECIMAL(12,2)' },
+                    { name: 'monto_cierre_declarado', type: 'DECIMAL(12,2)' },
+                    { name: 'diferencia', type: 'DECIMAL(12,2)' },
+                    { name: 'estado', type: 'ENUM(ABI,CER)' }
+                ]
+            },
+            {
+                id: 'caja_movimiento',
+                name: 'caja_movimiento',
+                module: 'caja',
+                x: 1130, y: 1050,
+                role: 'Libro mayor del cajón físico. Registra ingresos por cobros en efectivo (cobro_detalle_id con ID) y egresos/ingresos manuales como vales o retiros (cobro_detalle_id = NULL).',
+                fields: [
+                    { name: 'id', type: 'INT', key: 'PK' },
+                    { name: 'caja_sesion_id', type: 'INT', key: 'FK' },
+                    { name: 'cobro_detalle_id', type: 'INT', key: 'FK', nullable: true },
+                    { name: 'tipo', type: 'ENUM(ING,EGR)' },
+                    { name: 'concepto', type: 'VARCHAR(150)' },
+                    { name: 'monto', type: 'DECIMAL(12,2)' },
+                    { name: 'fecha_hora', type: 'DATETIME' }
+                ]
+            }
+        ];
+
+        // Definición de relaciones exactas solicitadas
+        const relationsData = [
+            { from: 'cliente', to: 'factura', label: '1 : N' },
+            { from: 'factura', to: 'factura_detalle', label: '1 : N' },
+            { from: 'factura', to: 'cuenta_cobrar', label: '1 : 1' },
+            { from: 'cuenta_cobrar', to: 'plan_pago', label: '1 : N' },
+            { from: 'cliente', to: 'cobro', label: '1 : N' },
+            { from: 'cobro', to: 'cobro_aplicacion', label: '1 : N' },
+            { from: 'plan_pago', to: 'cobro_aplicacion', label: '1 : N' },
+            { from: 'cobro', to: 'cobro_detalle', label: '1 : N' },
+            { from: 'forma_pago', to: 'cobro_detalle', label: '1 : N' },
+            { from: 'banco', to: 'cobro_detalle', label: '1 : 0..N', dashed: true },
+            { from: 'caja', to: 'caja_sesion', label: '1 : N' },
+            { from: 'caja_sesion', to: 'cobro', label: '1 : N' },
+            { from: 'caja_sesion', to: 'caja_movimiento', label: '1 : N' },
+            { from: 'cobro_detalle', to: 'caja_movimiento', label: '0..1 : 0..1 (afecta_caja)', dashed: true }
+        ];
+
+        // Estilos por módulo
+        const moduleThemes = {
+            ventas: {
+                headerBg: 'bg-indigo-600',
+                border: 'border-indigo-500/40',
+                badgeBg: 'bg-indigo-900/80 text-indigo-200',
+                label: 'VENTAS Y DEUDAS'
+            },
+            cobros: {
+                headerBg: 'bg-emerald-600',
+                border: 'border-emerald-500/40',
+                badgeBg: 'bg-emerald-950/90 text-emerald-200 border border-emerald-400/30',
+                label: 'COBROS Y BANCOS'
+            },
+            caja: {
+                headerBg: 'bg-slate-600',
+                border: 'border-slate-500/40',
+                badgeBg: 'bg-amber-500/20 text-amber-200 border border-amber-400/30',
+                label: 'CAJA Y ARQUEO'
+            }
+        };
+
+        const tablesLayer = document.getElementById('tables-layer');
+        const edgesLayer = document.getElementById('edges-layer');
+        const canvasWorld = document.getElementById('canvas-world');
+        const viewport = document.getElementById('viewport');
+
+        let scale = 0.8;
+        let panX = 20;
+        let panY = 10;
+        let hoveredTableId = null;
+        let selectedTableId = null;
+        let focusMode = 'all';
+
+        // Renderizar tarjetas de tablas
+        function renderTables() {
+            tablesLayer.innerHTML = '';
+            tablesData.forEach(table => {
+                const theme = moduleThemes[table.module];
+                const card = document.createElement('div');
+                card.id = `table-${table.id}`;
+                card.className = `table-card absolute rounded-xl border ${theme.border} w-72 overflow-hidden cursor-move`;
+                card.style.left = `${table.x}px`;
+                card.style.top = `${table.y}px`;
+
+                // Cabecera de la tabla
+                let badgeHtml = table.badge 
+                    ? `<span class="text-[9px] font-bold px-1.5 py-0.5 rounded ${theme.badgeBg} tracking-wider">${table.badge}</span>` 
+                    : '';
+
+                let html = `
+                    <div class="${theme.headerBg} px-3.5 py-2 flex items-center justify-between">
+                        <span class="font-bold text-white text-sm mono tracking-tight">${table.name}</span>
+                        ${badgeHtml}
+                    </div>
+                    <div class="divide-y divide-slate-700/50 py-1 bg-[#1f2940]">
+                `;
+
+                // Filas de campos
+                table.fields.forEach(f => {
+                    let keyBadge = '';
+                    let nameColor = 'text-slate-200';
+                    if (f.key === 'PK') {
+                        keyBadge = `<span class="text-[10px] font-bold text-amber-400 bg-amber-400/10 border border-amber-400/30 px-1 rounded mono w-6 text-center shrink-0">PK</span>`;
+                        nameColor = 'text-amber-200 font-semibold';
+                    } else if (f.key === 'FK') {
+                        keyBadge = `<span class="text-[10px] font-bold text-cyan-400 bg-cyan-400/10 border border-cyan-400/30 px-1 rounded mono w-6 text-center shrink-0">FK</span>`;
+                        nameColor = 'text-cyan-200';
+                    } else {
+                        keyBadge = `<span class="w-6 inline-block shrink-0"></span>`;
+                    }
+
+                    let nullBadge = f.nullable 
+                        ? `<span class="text-[9px] font-semibold text-rose-300 bg-rose-500/15 border border-rose-400/30 px-1 rounded mono ml-1">NULL</span>` 
+                        : '';
+
+                    html += `
+                        <div class="px-3 py-1.5 flex items-center justify-between text-xs hover:bg-slate-800/60 transition-colors">
+                            <div class="flex items-center gap-1.5 overflow-hidden">
+                                ${keyBadge}
+                                <span class="mono truncate ${nameColor}">${f.name}</span>
+                                ${nullBadge}
+                            </div>
+                            <span class="mono text-[10px] text-slate-400 ml-2 shrink-0">${f.type}</span>
+                        </div>
+                    `;
+                });
+
+                html += `</div>`;
+                card.innerHTML = html;
+
+                // Eventos de arrastre y selección
+                makeDraggable(card, table);
+
+                card.addEventListener('mouseenter', () => {
+                    hoveredTableId = table.id;
+                    updateHighlights();
+                });
+                card.addEventListener('mouseleave', () => {
+                    hoveredTableId = null;
+                    updateHighlights();
+                });
+
+                tablesLayer.appendChild(card);
+            });
+        }
+
+        // Actualizar el panel inspector con la explicación de la tabla
+        function inspectTable(table) {
+            selectedTableId = table.id;
+            const theme = moduleThemes[table.module];
+            const titleEl = document.getElementById('inspector-title');
+            const badgeEl = document.getElementById('inspector-badge');
+            const descEl = document.getElementById('inspector-desc');
+
+            titleEl.innerHTML = `<span class="w-2.5 h-2.5 rounded-full ${theme.headerBg} inline-block"></span> Tabla: ${table.name}`;
+            badgeEl.textContent = theme.label;
+            descEl.textContent = table.role;
+            updateHighlights();
+        }
+
+        // Filtros rápidos de flujo
+        function setFocusMode(mode) {
+            focusMode = mode;
+            document.querySelectorAll('.mode-btn').forEach(btn => {
+                btn.classList.remove('bg-indigo-600', 'text-white');
+                btn.classList.add('text-slate-300');
+            });
+            const activeBtn = document.getElementById(`btn-mode-${mode}`);
+            if (activeBtn) {
+                activeBtn.classList.add('bg-indigo-600', 'text-white');
+                activeBtn.classList.remove('text-slate-300');
+            }
+            updateHighlights();
+        }
+
+        // Calcular puntos de conexión óptimos entre dos rectángulos
+        function getAnchorPoints(rectA, rectB) {
+            const centerA = { x: rectA.x + rectA.w / 2, y: rectA.y + rectA.h / 2 };
+            const centerB = { x: rectB.x + rectB.w / 2, y: rectB.y + rectB.h / 2 };
+
+            const dx = centerB.x - centerA.x;
+            const dy = centerB.y - centerA.y;
+
+            let p1 = {}, p2 = {}, dir1 = '', dir2 = '';
+
+            if (Math.abs(dx) > Math.abs(dy)) {
+                if (dx > 0) {
+                    p1 = { x: rectA.x + rectA.w, y: centerA.y };
+                    p2 = { x: rectB.x, y: centerB.y };
+                    dir1 = 'right'; dir2 = 'left';
+                } else {
+                    p1 = { x: rectA.x, y: centerA.y };
+                    p2 = { x: rectB.x + rectB.w, y: centerB.y };
+                    dir1 = 'left'; dir2 = 'right';
+                }
+            } else {
+                if (dy > 0) {
+                    p1 = { x: centerA.x, y: rectA.y + rectA.h };
+                    p2 = { x: centerB.x, y: rectB.y };
+                    dir1 = 'bottom'; dir2 = 'top';
+                } else {
+                    p1 = { x: centerA.x, y: rectA.y };
+                    p2 = { x: centerB.x, y: rectB.y + rectB.h };
+                    dir1 = 'top'; dir2 = 'bottom';
+                }
+            }
+            return { p1, p2, dir1, dir2 };
+        }
+
+        // Renderizar líneas SVG con curvas Bézier suaves y etiquetas
+        function renderEdges() {
+            edgesLayer.innerHTML = '';
+            const activeId = hoveredTableId || selectedTableId;
+
+            const modeSets = {
+                contado: new Set(['cliente', 'factura', 'cuenta_cobrar', 'plan_pago', 'cobro_aplicacion', 'cobro', 'cobro_detalle', 'forma_pago']),
+                caja: new Set(['caja', 'caja_sesion', 'caja_movimiento', 'cobro', 'cobro_detalle', 'forma_pago'])
+            };
+
+            relationsData.forEach((rel) => {
+                const elFrom = document.getElementById(`table-${rel.from}`);
+                const elTo = document.getElementById(`table-${rel.to}`);
+                if (!elFrom || !elTo) return;
+
+                const dataFrom = tablesData.find(t => t.id === rel.from);
+                const dataTo = tablesData.find(t => t.id === rel.to);
+
+                const rectA = { x: dataFrom.x, y: dataFrom.y, w: elFrom.offsetWidth, h: elFrom.offsetHeight };
+                const rectB = { x: dataTo.x, y: dataTo.y, w: elTo.offsetWidth, h: elTo.offsetHeight };
+
+                const { p1, p2, dir1, dir2 } = getAnchorPoints(rectA, rectB);
+
+                const dist = Math.hypot(p2.x - p1.x, p2.y - p1.y) * 0.45;
+                let cp1 = { x: p1.x, y: p1.y };
+                let cp2 = { x: p2.x, y: p2.y };
+
+                if (dir1 === 'right') cp1.x += dist;
+                if (dir1 === 'left') cp1.x -= dist;
+                if (dir1 === 'bottom') cp1.y += dist;
+                if (dir1 === 'top') cp1.y -= dist;
+
+                if (dir2 === 'right') cp2.x += dist;
+                if (dir2 === 'left') cp2.x -= dist;
+                if (dir2 === 'bottom') cp2.y += dist;
+                if (dir2 === 'top') cp2.y -= dist;
+
+                const pathD = `M ${p1.x} ${p1.y} C ${cp1.x} ${cp1.y}, ${cp2.x} ${cp2.y}, ${p2.x} ${p2.y}`;
+
+                const midX = 0.125 * p1.x + 0.375 * cp1.x + 0.375 * cp2.x + 0.125 * p2.x;
+                const midY = 0.125 * p1.y + 0.375 * cp1.y + 0.375 * cp2.y + 0.125 * p2.y;
+
+                let isHighlighted = false;
+                let isDimmed = false;
+
+                if (activeId) {
+                    isHighlighted = (rel.from === activeId || rel.to === activeId);
+                    isDimmed = !isHighlighted;
+                } else if (focusMode !== 'all') {
+                    const set = modeSets[focusMode];
+                    isHighlighted = set.has(rel.from) && set.has(rel.to);
+                    isDimmed = !isHighlighted;
+                }
+
+                const defaultStroke = rel.dashed ? '#fbbf24' : '#64748b';
+                const strokeColor = isHighlighted ? '#38bdf8' : defaultStroke;
+                const strokeWidth = isHighlighted ? '2.5' : '1.75';
+                const opacity = isDimmed ? '0.18' : '1';
+
+                const group = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+
+                const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                path.setAttribute('d', pathD);
+                path.setAttribute('fill', 'none');
+                path.setAttribute('stroke', strokeColor);
+                path.setAttribute('stroke-width', strokeWidth);
+                path.setAttribute('opacity', opacity);
+                if (rel.dashed) {
+                    path.setAttribute('stroke-dasharray', '6,5');
+                }
+                path.setAttribute('marker-start', isHighlighted ? 'url(#dot-1-active)' : 'url(#dot-1)');
+                path.setAttribute('marker-end', isHighlighted ? 'url(#arrow-n-active)' : 'url(#arrow-n)');
+
+                // Etiqueta de cardinalidad (Badge)
+                const badgeW = rel.label.length * 6.5 + 14;
+                const badgeH = 20;
+                const rectBg = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+                rectBg.setAttribute('x', midX - badgeW / 2);
+                rectBg.setAttribute('y', midY - badgeH / 2);
+                rectBg.setAttribute('width', badgeW);
+                rectBg.setAttribute('height', badgeH);
+                rectBg.setAttribute('rx', '6');
+                rectBg.setAttribute('fill', isHighlighted ? '#0284c7' : (rel.dashed ? '#451a03' : '#1e293b'));
+                rectBg.setAttribute('stroke', isHighlighted ? '#38bdf8' : (rel.dashed ? '#d97706' : '#475569'));
+                rectBg.setAttribute('stroke-width', '1');
+                rectBg.setAttribute('opacity', opacity);
+
+                const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                text.setAttribute('x', midX);
+                text.setAttribute('y', midY + 4);
+                text.setAttribute('text-anchor', 'middle');
+                text.setAttribute('fill', isHighlighted ? '#ffffff' : (rel.dashed ? '#fde68a' : '#cbd5e1'));
+                text.setAttribute('font-size', '10.5');
+                text.setAttribute('font-family', 'JetBrains Mono, monospace');
+                text.setAttribute('font-weight', '600');
+                text.setAttribute('opacity', opacity);
+                text.textContent = rel.label;
+
+                group.appendChild(path);
+                group.appendChild(rectBg);
+                group.appendChild(text);
+                edgesLayer.appendChild(group);
+            });
+        }
+
+        // Actualizar estados visuales al pasar el cursor, seleccionar o filtrar
+        function updateHighlights() {
+            const activeId = hoveredTableId || selectedTableId;
+            const relatedIds = new Set();
+
+            const modeSets = {
+                contado: new Set(['cliente', 'factura', 'cuenta_cobrar', 'plan_pago', 'cobro_aplicacion', 'cobro', 'cobro_detalle', 'forma_pago']),
+                caja: new Set(['caja', 'caja_sesion', 'caja_movimiento', 'cobro', 'cobro_detalle', 'forma_pago'])
+            };
+
+            if (activeId) {
+                relatedIds.add(activeId);
+                relationsData.forEach(r => {
+                    if (r.from === activeId) relatedIds.add(r.to);
+                    if (r.to === activeId) relatedIds.add(r.from);
+                });
+            }
+
+            tablesData.forEach(t => {
+                const el = document.getElementById(`table-${t.id}`);
+                if (!el) return;
+
+                if (activeId) {
+                    if (relatedIds.has(t.id)) {
+                        el.classList.add('active-highlight');
+                        el.classList.remove('dimmed');
+                    } else {
+                        el.classList.remove('active-highlight');
+                        el.classList.add('dimmed');
+                    }
+                } else if (focusMode !== 'all') {
+                    if (modeSets[focusMode].has(t.id)) {
+                        el.classList.add('active-highlight');
+                        el.classList.remove('dimmed');
+                    } else {
+                        el.classList.remove('active-highlight');
+                        el.classList.add('dimmed');
+                    }
+                } else {
+                    el.classList.remove('active-highlight', 'dimmed');
+                }
+            });
+
+            renderEdges();
+        }
+
+        // Lógica para arrastrar tarjetas individualmente y detectar clic
+        function makeDraggable(element, tableObj) {
+            let isDragging = false;
+            let hasMoved = false;
+            let startX, startY, initialX, initialY;
+
+            const onStart = (clientX, clientY) => {
+                isDragging = true;
+                hasMoved = false;
+                startX = clientX;
+                startY = clientY;
+                initialX = tableObj.x;
+                initialY = tableObj.y;
+                element.style.zIndex = 50;
+            };
+
+            const onMove = (clientX, clientY) => {
+                if (!isDragging) return;
+                const dx = (clientX - startX) / scale;
+                const dy = (clientY - startY) / scale;
+                if (Math.abs(dx) > 3 || Math.abs(dy) > 3) {
+                    hasMoved = true;
+                }
+                tableObj.x = Math.max(0, initialX + dx);
+                tableObj.y = Math.max(0, initialY + dy);
+                element.style.left = `${tableObj.x}px`;
+                element.style.top = `${tableObj.y}px`;
+                renderEdges();
+            };
+
+            const onEnd = () => {
+                if (isDragging) {
+                    isDragging = false;
+                    element.style.zIndex = '';
+                    if (!hasMoved) {
+                        inspectTable(tableObj);
+                    }
+                }
+            };
+
+            element.addEventListener('mousedown', (e) => {
+                e.stopPropagation();
+                onStart(e.clientX, e.clientY);
+            });
+            window.addEventListener('mousemove', (e) => onMove(e.clientX, e.clientY));
+            window.addEventListener('mouseup', onEnd);
+
+            // Soporte táctil
+            element.addEventListener('touchstart', (e) => {
+                if (e.touches.length === 1) {
+                    e.stopPropagation();
+                    onStart(e.touches[0].clientX, e.touches[0].clientY);
+                }
+            }, { passive: true });
+            window.addEventListener('touchmove', (e) => {
+                if (isDragging && e.touches.length === 1) {
+                    onMove(e.touches[0].clientX, e.touches[0].clientY);
+                }
+            }, { passive: true });
+            window.addEventListener('touchend', onEnd);
+        }
+
+        // Deseleccionar al hacer clic en el fondo vacío
+        viewport.addEventListener('click', (e) => {
+            if (e.target === viewport || e.target === canvasWorld) {
+                selectedTableId = null;
+                updateHighlights();
+            }
+        });
+
+        // Lógica de Pan & Zoom del Lienzo
+        function applyTransform() {
+            canvasWorld.style.transform = `translate(${panX}px, ${panY}px) scale(${scale})`;
+            document.getElementById('zoom-level').textContent = `${Math.round(scale * 100)}%`;
+        }
+
+        let isPanning = false;
+        let panStartX, panStartY;
+
+        viewport.addEventListener('mousedown', (e) => {
+            isPanning = true;
+            panStartX = e.clientX - panX;
+            panStartY = e.clientY - panY;
+        });
+
+        window.addEventListener('mousemove', (e) => {
+            if (!isPanning) return;
+            panX = e.clientX - panStartX;
+            panY = e.clientY - panStartY;
+            applyTransform();
+        });
+
+        window.addEventListener('mouseup', () => {
+            isPanning = false;
+        });
+
+        viewport.addEventListener('wheel', (e) => {
+            e.preventDefault();
+            const zoomFactor = 0.08;
+            const delta = e.deltaY < 0 ? 1 : -1;
+            const newScale = Math.min(Math.max(0.4, scale + delta * zoomFactor), 1.6);
+
+            // Zoom hacia el cursor
+            const rect = viewport.getBoundingClientRect();
+            const mouseX = e.clientX - rect.left;
+            const mouseY = e.clientY - rect.top;
+
+            panX = mouseX - (mouseX - panX) * (newScale / scale);
+            panY = mouseY - (mouseY - panY) * (newScale / scale);
+            scale = newScale;
+            applyTransform();
+        }, { passive: false });
+
+        function zoomIn() {
+            scale = Math.min(1.6, scale + 0.1);
+            applyTransform();
+        }
+
+        function zoomOut() {
+            scale = Math.max(0.4, scale - 0.1);
+            applyTransform();
+        }
+
+        function resetView() {
+            const vw = window.innerWidth;
+            scale = vw < 768 ? 0.48 : (vw < 1280 ? 0.68 : 0.78);
+            panX = 20;
+            panY = 10;
+            applyTransform();
+        }
+
+        function resetLayout() {
+            tablesData.forEach(t => {
+                if (defaultPositions[t.id]) {
+                    t.x = defaultPositions[t.id].x;
+                    t.y = defaultPositions[t.id].y;
+                    const el = document.getElementById(`table-${t.id}`);
+                    if (el) {
+                        el.style.left = `${t.x}px`;
+                        el.style.top = `${t.y}px`;
+                    }
+                }
+            });
+            selectedTableId = null;
+            setFocusMode('all');
+            resetView();
+            renderEdges();
+        }
+
+        // Inicialización
+        window.addEventListener('DOMContentLoaded', () => {
+            renderTables();
+            resetView();
+            requestAnimationFrame(() => {
+                renderEdges();
+            });
+        });
+
+        window.addEventListener('resize', renderEdges);
+    </script>
+</body>
+</html>
