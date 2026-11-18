@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DER Interactivo - Ventas, Cuentas por Cobrar y Caja</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #141b2d;
+            color: #e2e8f0;
+            overflow: hidden;
+            user-select: none;
+        }
+        .mono {
+            font-family: 'JetBrains Mono', monospace;
+        }
+        .canvas-grid {
+            background-image: radial-gradient(rgba(148, 163, 184, 0.15) 1px, transparent 1px);
+            background-size: 24px 24px;
+        }
+        .table-card {
+            background-color: #1f2940;
+            transition: box-shadow 0.2s ease, transform 0.05s ease, opacity 0.25s ease;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.4), 0 8px 10px -6px rgba(0, 0, 0, 0.2);
+        }
+        .table-card:hover {
+            z-index: 30;
+        }
+        .table-card.active-highlight {
+            box-shadow: 0 0 0 2px #38bdf8, 0 20px 25px -5px rgba(0, 0, 0, 0.6);
+            z-index: 40;
+        }
+        .table-card.dimmed {
+            opacity: 0.3;
+        }
+        svg path {
+            transition: stroke 0.25s ease, stroke-width 0.25s ease, opacity 0.25s ease;
+        }
+        /* Sidebar deslizante derecho */
+        aside.sidebar {
+            width: 380px;
+            background: rgba(17, 24, 39, 0.98);
+            border-left: 1px solid #1f2937;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: absolute;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            z-index: 100;
+            box-shadow: -10px 0 30px rgba(0,0,0,0.5);
+        }
+        aside.sidebar.hidden {
+            transform: translateX(100%);
+        }
+    </style>
+</head>
+<body class="h-screen w-screen flex flex-col relative overflow-hidden">
+
+    <!-- Barra Superior -->
+    <header class="bg-[#1a2236] border-b border-slate-700/70 px-4 py-3 flex flex-wrap items-center justify-between gap-4 z-50 shadow-md">
+        <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-lg bg-indigo-500/20 border border-indigo-400/40 flex items-center justify-center text-indigo-400 font-bold">
+                ER
+            </div>
+            <div>
+                <h1 class="text-sm sm:text-base font-bold text-white tracking-tight">Arquitectura DER: Ventas, Cobranzas y Caja</h1>
+                <p class="text-xs text-slate-400 hidden sm:block">Haz clic en cualquier tarjeta para abrir sus reglas de negocio en el Sidenav lateral</p>
+            </div>
+        </div>
+
+        <!-- Leyenda de Módulos -->
+        <div class="flex flex-wrap items-center gap-3 sm:gap-5 text-xs">
+            <div class="flex items-center gap-1.5">
+                <span class="w-3 h-3 rounded-sm bg-indigo-500 inline-block"></span>
+                <span class="text-slate-300 font-medium">Ventas y Deudas</span>
+            </div>
+            <div class="flex items-center gap-1.5">
+                <span class="w-3 h-3 rounded-sm bg-emerald-500 inline-block"></span>
+                <span class="text-slate-300 font-medium">Cobros y Bancos</span>
+            </div>
+            <div class="flex items-center gap-1.5">
+                <span class="w-3 h-3 rounded-sm bg-slate-500 inline-block"></span>
+                <span class="text-slate-300 font-medium">Caja</span>
+            </div>
+        </div>
+
+        <!-- Controles -->
+        <div class="flex flex-wrap items-center gap-2">
+            <button onclick="zoomOut()" class="p-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition" title="Alejar">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"/></svg>
+            </button>
+            <span id="zoom-level" class="text-xs mono text-slate-300 w-12 text-center">80%</span>
+            <button onclick="zoomIn()" class="p-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition" title="Acercar">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+            </button>
+            <button onclick="resetLayout()" class="px-3 py-1.5 rounded-lg bg-slate-700 hover:bg-slate-600 text-white text-xs font-medium transition shadow-sm ml-1">
+                Resetear
+            </button>
+        </div>
+    </header>
+
+    <!-- Lienzo Principal -->
+    <main id="viewport" class="flex-1 relative overflow-hidden canvas-grid cursor-grab active:cursor-grabbing">
+        <div id="canvas-world" class="absolute top-0 left-0 origin-top-left" style="width: 2400px; height: 1600px;">
+            <svg id="connections-svg" class="w-full h-full pointer-events-none absolute top-0 left-0 z-10">
+                <defs>
+                    <marker id="arrow-n" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                        <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#64748b" />
+                    </marker>
+                    <marker id="arrow-n-active" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                        <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#38bdf8" />
+                    </marker>
+                    <marker id="dot-1" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="5" markerHeight="5">
+                        <circle cx="5" cy="5" r="3.5" fill="#94a3b8" />
+                    </marker>
+                    <marker id="dot-1-active" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="5" markerHeight="5">
+                        <circle cx="5" cy="5" r="3.5" fill="#38bdf8" />
+                    </marker>
+                </defs>
+                <g id="edges-layer"></g>
+            </svg>
+
+            <!-- Tarjetas de Tablas -->
+            <div id="tables-layer" class="relative z-20 w-full h-full"></div>
+        </div>
+    </main>
+
+    <!-- Sidenav Lateral Derecho para las Reglas e Información de la Tabla -->
+    <aside id="info-sidebar" class="sidebar hidden">
+        <div class="p-4 border-b border-slate-800 flex items-center justify-between bg-[#111827]">
+            <div>
+                <span id="sb-module-badge" class="text-[10px] font-bold px-2 py-0.5 rounded tracking-wider uppercase mb-1 inline-block">MÓDULO</span>
+                <h2 id="sb-title" class="text-base font-bold text-white mono">tabla_nombre</h2>
+            </div>
+            <button onclick="closeSidebar()" class="text-slate-400 hover:text-white p-2 rounded-lg hover:bg-slate-800 transition">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+            </button>
+        </div>
+        <div class="p-5 flex-1 overflow-y-auto space-y-5 text-xs text-slate-300">
+            <div>
+                <h3 class="text-slate-400 font-semibold uppercase tracking-wider mb-2 text-[11px]">Reglas de Negocio & Conceptualización</h3>
+                <p id="sb-role" class="leading-relaxed bg-slate-900/60 p-3 rounded-lg border border-slate-800 text-slate-200">
+                    Selecciona una tabla para ver su descripción detallada.
+                </p>
+            </div>
+            <div>
+                <h3 class="text-slate-400 font-semibold uppercase tracking-wider mb-2 text-[11px]">Estructura de Columnas</h3>
+                <div id="sb-fields" class="space-y-1.5">
+                    <!-- Inyectado por JS -->
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <script>
+        const tablesData = [
+            {
+                id: 'cliente',
+                name: 'cliente',
+                module: 'ventas',
+                x: 60, y: 50,
+                role: 'Catálogo maestro de clientes. Almacena RUC/CI y datos de contacto para asociarlos tanto al momento de emitir la factura como al registrar el recibo de cobro.',
+                fields: [
+                    { name: 'id', type: 'INT', key: 'PK' },
+                    { name: 'ruc_ci', type: 'VARCHAR(20)' },
+                    { name: 'razon_social', type: 'VARCHAR(150)' },
+                    { name: 'telefono', type: 'VARCHAR(30)' },
+                    { name: 'email', type: 'VARCHAR(100)' }
+                ]
+            },
+            {
+                id: 'factura',
+                name: 'factura',
+                module: 'ventas',
+                x: 60, y: 270,
+                role: 'Cabecera de venta. Soporta contado y crédito. Al emitirse, genera automáticamente una cuenta_cobrar (1:1) para mantener el estado transitorio antes del pago en caja.',
+                fields: [
+                    { name: 'id', type: 'INT', key: 'PK' },
+                    { name: 'cliente_id', type: 'INT', key: 'FK' },
+                    { name: 'numero_factura', type: 'VARCHAR(20)' },
+                    { name: 'condicion', type: 'ENUM(CONT,CRED)' },
+                    { name: 'fecha_emision', type: 'DATETIME' },
+                    { name: 'total', type: 'DECIMAL(12,2)' },
+                    { name: 'estado', type: 'VARCHAR(20)' }
+                ]
+            },
+            {
+                id: 'factura_detalle',
+                name: 'factura_detalle',
+                module: 'ventas',
+                x: 380, y: 270,
+                role: 'Detalle de los ítems o servicios comercializados en la factura. Mantiene integridad referencial estricta.',
+                fields: [
+                    { name: 'id', type: 'INT', key: 'PK' },
+                    { name: 'factura_id', type: 'INT', key: 'FK' },
+                    { name: 'producto_id', type: 'INT', key: 'FK' },
+                    { name: 'cantidad', type: 'DECIMAL(10,2)' },
+                    { name: 'precio_unitario', type: 'DECIMAL(12,2)' },
+                    { name: 'subtotal', type: 'DECIMAL(12,2)' }
+                ]
+            },
+            {
+                id: 'cuenta_cobrar',
+                name: 'cuenta_cobrar',
+                module: 'ventas',
+                x: 60, y: 550,
+                role: 'Obligación financiera generada por cada factura (relación 1:1). Agrupa el saldo total pendiente.',
+                fields: [
+                    { name: 'id', type: 'INT', key: 'PK' },
+                    { name: 'factura_id', type: 'INT (UQ)', key: 'FK' },
+                    { name: 'monto_total', type: 'DECIMAL(12,2)' },
+                    { name: 'saldo_pendiente', type: 'DECIMAL(12,2)' },
+                    { name: 'estado', type: 'ENUM(PEND,PAG)' }
+                ]
+            },
+            {
+                id: 'plan_pago',
+                name: 'plan_pago',
+                module: 'ventas',
+                x: 60, y: 780,
+                role: 'Cronograma de cuotas. Si es contado, genera 1 cuota única con vencimiento inmediato; si es crédito, genera N cuotas con fechas pactadas.',
+                fields: [
+                    { name: 'id', type: 'INT', key: 'PK' },
+                    { name: 'cuenta_cobrar_id', type: 'INT', key: 'FK' },
+                    { name: 'numero_cuota', type: 'INT' },
+                    { name: 'fecha_vencimiento', type: 'DATE' },
+                    { name: 'monto_cuota', type: 'DECIMAL(12,2)' },
+                    { name: 'saldo_cuota', type: 'DECIMAL(12,2)' },
+                    { name: 'estado', type: 'ENUM(PEND,PAG)' }
+                ]
+            },
+            {
+                id: 'cobro_aplicacion',
+                name: 'cobro_aplicacion',
+                module: 'cobros',
+                badge: 'TABLA PUENTE',
+                x: 410, y: 795,
+                role: 'Tabla puente N:M fundamental. Conecta un recibo de cobro con una o varias cuotas del plan de pagos, permitiendo pagos agrupados o parciales.',
+                fields: [
+                    { name: 'id', type: 'INT', key: 'PK' },
+                    { name: 'cobro_id', type: 'INT', key: 'FK' },
+                    { name: 'plan_pago_id', type: 'INT', key: 'FK' },
+                    { name: 'monto_aplicado', type: 'DECIMAL(12,2)' }
+                ]
+            },
+            {
+                id: 'cobro',
+                name: 'cobro',
+                module: 'cobros',
+                x: 760, y: 760,
+                role: 'Cabecera del recibo de pago. Requiere obligatoriamente una caja_sesion abierta para registrar el turno y cajero responsable.',
+                fields: [
+                    { name: 'id', type: 'INT', key: 'PK' },
+                    { name: 'cliente_id', type: 'INT', key: 'FK' },
+                    { name: 'caja_sesion_id', type: 'INT', key: 'FK' },
+                    { name: 'numero_recibo', type: 'VARCHAR(20)' },
+                    { name: 'fecha_cobro', type: 'DATETIME' },
+                    { name: 'monto_total', type: 'DECIMAL(12,2)' },
+                    { name: 'estado', type: 'VARCHAR(20)' }
+                ]
+            },
+            {
+                id: 'cobro_detalle',
+                name: 'cobro_detalle',
+                module: 'cobros',
+                x: 1130, y: 760,
+                role: 'Detalle de formas de pago utilizadas en el recibo (ej. efectivo, tarjeta). Condiciona el impacto físico en caja mediante la bandera afecta_caja.',
+                fields: [
+                    { name: 'id', type: 'INT', key: 'PK' },
+                    { name: 'cobro_id', type: 'INT', key: 'FK' },
+                    { name: 'forma_pago_id', type: 'INT', key: 'FK' },
+                    { name: 'banco_id', type: 'INT', key: 'FK', nullable: true },
+                    { name: 'monto', type: 'DECIMAL(12,2)' },
+                    { name: 'referencia', type: 'VARCHAR(50)' }
+                ]
+            },
+            {
+                id: 'banco',
+                name: 'banco',
+                module: 'cobros',
+                x: 820, y: 490,
+                role: 'Catálogo bancario. Es opcional (NULL) en cobro_detalle cuando el pago se realiza en efectivo.',
+                fields: [
+                    { name: 'id', type: 'INT', key: 'PK' },
+                    { name: 'nombre', type: 'VARCHAR(100)' },
+                    { name: 'numero_cuenta', type: 'VARCHAR(40)' }
+                ]
+            },
+            {
+                id: 'forma_pago',
+                name: 'forma_pago',
+                module: 'cobros',
+                x: 1130, y: 490,
+                role: 'Catálogo de medios de pago. Posee el atributo booleano afecta_caja para distinguir entre efectivo físico y transferencias bancarias.',
+                fields: [
+                    { name: 'id', type: 'INT', key: 'PK' },
+                    { name: 'nombre', type: 'VARCHAR(60)' },
+                    { name: 'afecta_caja', type: 'BOOLEAN' }
+                ]
+            },
+            {
+                id: 'caja',
+                name: 'caja',
+                module: 'caja',
+                x: 410, y: 1080,
+                role: 'Catálogo maestro de puestos físicos o lógicos de caja registrados en la empresa.',
+                fields: [
+                    { name: 'id', type: 'INT', key: 'PK' },
+                    { name: 'nombre', type: 'VARCHAR(60)' },
+                    { name: 'sucursal_id', type: 'INT' },
+                    { name: 'activa', type: 'BOOLEAN' }
+                ]
+            },
+            {
+                id: 'caja_sesion',
+                name: 'caja_sesion',
+                module: 'caja',
+                badge: 'ARQUEO',
+                x: 760, y: 1050,
+                role: 'Control de turnos de caja y arqueo ciego. Compara el cierre de sistema con el cierre declarado por el cajero para hallar diferencias.',
+                fields: [
+                    { name: 'id', type: 'INT', key: 'PK' },
+                    { name: 'caja_id', type: 'INT', key: 'FK' },
+                    { name: 'usuario_id', type: 'INT', key: 'FK' },
+                    { name: 'fecha_apertura', type: 'DATETIME' },
+                    { name: 'fecha_cierre', type: 'DATETIME', nullable: true },
+                    { name: 'monto_apertura', type: 'DECIMAL(12,2)' },
+                    { name: 'monto_cierre_sistema', type: 'DECIMAL(12,2)' },
+                    { name: 'monto_cierre_declarado', type: 'DECIMAL(12,2)' },
+                    { name: 'diferencia', type: 'DECIMAL(12,2)' },
+                    { name: 'estado', type: 'ENUM(ABI,CER)' }
+                ]
+            },
+            {
+                id: 'caja_movimiento',
+                name: 'caja_movimiento',
+                module: 'caja',
+                x: 1130, y: 1050,
+                role: 'Registro de entradas y salidas de efectivo físico. Conecta con cobro_detalle cuando es por cobro en efectivo, o queda en NULL para vales y gastos de caja chica.',
+                fields: [
+                    { name: 'id', type: 'INT', key: 'PK' },
+                    { name: 'caja_sesion_id', type: 'INT', key: 'FK' },
+                    { name: 'cobro_detalle_id', type: 'INT', key: 'FK', nullable: true },
+                    { name: 'tipo', type: 'ENUM(ING,EGR)' },
+                    { name: 'concepto', type: 'VARCHAR(150)' },
+                    { name: 'monto', type: 'DECIMAL(12,2)' },
+                    { name: 'fecha_hora', type: 'DATETIME' }
+                ]
+            }
+        ];
+
+        const relationsData = [
+            { from: 'cliente', to: 'factura', label: '1 : N' },
+            { from: 'factura', to: 'factura_detalle', label: '1 : N' },
+            { from: 'factura', to: 'cuenta_cobrar', label: '1 : 1' },
+            { from: 'cuenta_cobrar', to: 'plan_pago', label: '1 : N' },
+            { from: 'cliente', to: 'cobro', label: '1 : N' },
+            { from: 'cobro', to: 'cobro_aplicacion', label: '1 : N' },
+            { from: 'plan_pago', to: 'cobro_aplicacion', label: '1 : N' },
+            { from: 'cobro', to: 'cobro_detalle', label: '1 : N' },
+            { from: 'forma_pago', to: 'cobro_detalle', label: '1 : N' },
+            { from: 'banco', to: 'cobro_detalle', label: '1 : 0..N', dashed: true },
+            { from: 'caja', to: 'caja_sesion', label: '1 : N' },
+            { from: 'caja_sesion', to: 'cobro', label: '1 : N' },
+            { from: 'caja_sesion', to: 'caja_movimiento', label: '1 : N' },
+            { from: 'cobro_detalle', to: 'caja_movimiento', label: '0..1 : 0..1', dashed: true }
+        ];
+
+        const moduleThemes = {
+            ventas: { headerBg: 'bg-indigo-600', border: 'border-indigo-500/40', badgeBg: 'bg-indigo-900/80 text-indigo-200', label: 'VENTAS Y DEUDAS' },
+            cobros: { headerBg: 'bg-emerald-600', border: 'border-emerald-500/40', badgeBg: 'bg-emerald-950/90 text-emerald-200 border border-emerald-400/30', label: 'COBROS Y BANCOS' },
+            caja: { headerBg: 'bg-slate-600', border: 'border-slate-500/40', badgeBg: 'bg-amber-500/20 text-amber-200 border border-amber-400/30', label: 'CAJA Y ARQUEO' }
+        };
+
+        const tablesLayer = document.getElementById('tables-layer');
+        const edgesLayer = document.getElementById('edges-layer');
+        const canvasWorld = document.getElementById('canvas-world');
+        const viewport = document.getElementById('viewport');
+        const sidebar = document.getElementById('info-sidebar');
+
+        let scale = 0.8;
+        let panX = 40;
+        let panY = 20;
+        let isPanning = false;
+        let startX = 0, startY = 0;
+        let activeTableId = null;
+        let hoveredTableId = null;
+
+        function renderTables() {
+            tablesLayer.innerHTML = '';
+            tablesData.forEach(table => {
+                const theme = moduleThemes[table.module];
+                const card = document.createElement('div');
+                card.id = `table-${table.id}`;
+                card.className = `table-card absolute rounded-xl border ${theme.border} w-72 overflow-hidden cursor-move select-none`;
+                card.style.left = `${table.x}px`;
+                card.style.top = `${table.y}px`;
+
+                let badgeHtml = table.badge ? `<span class="text-[9px] font-bold px-1.5 py-0.5 rounded ${theme.badgeBg} tracking-wider">${table.badge}</span>` : '';
+
+                let html = `
+                    <div class="${theme.headerBg} px-3.5 py-2 flex items-center justify-between cursor-pointer">
+                        <span class="font-bold text-white text-sm mono tracking-tight">${table.name}</span>
+                        ${badgeHtml}
+                    </div>
+                    <div class="divide-y divide-slate-700/50 py-1 bg-[#1f2940]">
+                `;
+
+                table.fields.forEach(f => {
+                    let keyBadge = f.key === 'PK' ? `<span class="text-[10px] font-bold text-amber-400 bg-amber-400/10 border border-amber-400/30 px-1 rounded mono w-6 text-center shrink-0">PK</span>` :
+                                   f.key === 'FK' ? `<span class="text-[10px] font-bold text-cyan-400 bg-cyan-400/10 border border-cyan-400/30 px-1 rounded mono w-6 text-center shrink-0">FK</span>` :
+                                   `<span class="w-6 inline-block shrink-0"></span>`;
+                    let nameColor = f.key === 'PK' ? 'text-amber-200 font-semibold' : f.key === 'FK' ? 'text-cyan-200' : 'text-slate-200';
+                    let nullBadge = f.nullable ? `<span class="text-[9px] font-semibold text-rose-300 bg-rose-500/15 border border-rose-400/30 px-1 rounded mono ml-1">NULL</span>` : '';
+
+                    html += `
+                        <div class="px-3 py-1.5 flex items-center justify-between text-xs hover:bg-slate-800/60 transition-colors">
+                            <div class="flex items-center gap-1.5 overflow-hidden">
+                                ${keyBadge}
+                                <span class="mono truncate ${nameColor}">${f.name}</span>
+                                ${nullBadge}
+                            </div>
+                            <span class="mono text-[10px] text-slate-400 ml-2 shrink-0">${f.type}</span>
+                        </div>
+                    `;
+                });
+
+                html += `</div>`;
+                card.innerHTML = html;
+
+                makeDraggable(card, table);
+
+                // Clic en la tarjeta abre el Sidenav lateral
+                card.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    openSidebar(table);
+                });
+
+                card.addEventListener('mouseenter', () => { hoveredTableId = table.id; updateEdges(); });
+                card.addEventListener('mouseleave', () => { hoveredTableId = null; updateEdges(); });
+
+                tablesLayer.appendChild(card);
+            });
+        }
+
+        function openSidebar(table) {
+            activeTableId = table.id;
+            const theme = moduleThemes[table.module];
+            
+            document.getElementById('sb-module-badge').textContent = theme.label;
+            document.getElementById('sb-module-badge').className = `text-[10px] font-bold px-2 py-0.5 rounded tracking-wider uppercase mb-1 inline-block ${theme.badgeBg}`;
+            document.getElementById('sb-title').textContent = table.name;
+            document.getElementById('sb-role').textContent = table.role;
+
+            const fieldsContainer = document.getElementById('sb-fields');
+            fieldsContainer.innerHTML = '';
+            table.fields.forEach(f => {
+                const badge = f.key ? `<span class="px-1.5 py-0.5 rounded text-[10px] font-bold mono ${f.key === 'PK' ? 'bg-amber-400/20 text-amber-300 border border-amber-400/30' : 'bg-cyan-400/20 text-cyan-300 border border-cyan-400/30'}">${f.key}</span>` : '';
+                const div = document.createElement('div');
+                div.className = 'flex items-center justify-between p-2 rounded bg-slate-900/60 border border-slate-800 mono text-xs';
+                div.innerHTML = `<div class="flex items-center gap-2"><span>${f.name}</span>${badge}</div><span class="text-slate-400 text-[11px]">${f.type}</span>`;
+                fieldsContainer.appendChild(div);
+            });
+
+            sidebar.classList.remove('hidden');
+            updateEdges();
+        }
+
+        function closeSidebar() {
+            sidebar.classList.add('hidden');
+            activeTableId = null;
+            updateEdges();
+        }
+
+        function makeDraggable(card, tableObj) {
+            let isDragging = false;
+            let startX, startY;
+
+            card.addEventListener('mousedown', (e) => {
+                if (e.target.closest('input') || e.target.closest('button')) return;
+                isDragging = true;
+                startX = e.clientX - tableObj.x * scale;
+                startY = e.clientY - tableObj.y * scale;
+                e.stopPropagation();
+            });
+
+            window.addEventListener('mousemove', (e) => {
+                if (!isDragging) return;
+                tableObj.x = (e.clientX - startX) / scale;
+                tableObj.y = (e.clientY - startY) / scale;
+                card.style.left = `${tableObj.x}px`;
+                card.style.top = `${tableObj.y}px`;
+                updateEdges();
+            });
+
+            window.addEventListener('mouseup', () => { isDragging = false; });
+        }
+
+        function getAnchorPoints(rectA, rectB) {
+            const centerA = { x: rectA.x + rectA.w / 2, y: rectA.y + rectA.h / 2 };
+            const centerB = { x: rectB.x + rectB.w / 2, y: rectB.y + rectB.h / 2 };
+            const dx = centerB.x - centerA.x;
+            const dy = centerB.y - centerA.y;
+
+            let p1 = {}, p2 = {}, dir1 = '', dir2 = '';
+            if (Math.abs(dx) > Math.abs(dy)) {
+                if (dx > 0) { p1 = { x: rectA.x + rectA.w, y: centerA.y }; p2 = { x: rectB.x, y: centerB.y }; dir1 = 'right'; dir2 = 'left'; }
+                else { p1 = { x: rectA.x, y: centerA.y }; p2 = { x: rectB.x + rectB.w, y: centerB.y }; dir1 = 'left'; dir2 = 'right'; }
+            } else {
+                if (dy > 0) { p1 = { x: centerA.x, y: rectA.y + rectA.h }; p2 = { x: centerB.x, y: rectB.y }; dir1 = 'bottom'; dir2 = 'top'; }
+                else { p1 = { x: centerA.x, y: rectA.y }; p2 = { x: centerB.x, y: rectB.y + rectB.h }; dir1 = 'top'; dir2 = 'bottom'; }
+            }
+            return { p1, p2, dir1, dir2 };
+        }
+
+        function updateEdges() {
+            edgesLayer.innerHTML = '';
+            const activeId = hoveredTableId || activeTableId;
+
+            relationsData.forEach(rel => {
+                const elFrom = document.getElementById(`table-${rel.from}`);
+                const elTo = document.getElementById(`table-${rel.to}`);
+                if (!elFrom || !elTo) return;
+
+                const dataFrom = tablesData.find(t => t.id === rel.from);
+                const dataTo = tablesData.find(t => t.id === rel.to);
+
+                const rectA = { x: dataFrom.x, y: dataFrom.y, w: elFrom.offsetWidth, h: elFrom.offsetHeight };
+                const rectB = { x: dataTo.x, y: dataTo.y, w: elTo.offsetWidth, h: elTo.offsetHeight };
+
+                const { p1, p2, dir1, dir2 } = getAnchorPoints(rectA, rectB);
+                const dist = Math.hypot(p2.x - p1.x, p2.y - p1.y) * 0.45;
+                let cp1 = { x: p1.x, y: p1.y };
+                let cp2 = { x: p2.x, y: p2.y };
+
+                if (dir1 === 'right') cp1.x += dist;
+                if (dir1 === 'left') cp1.x -= dist;
+                if (dir1 === 'bottom') cp1.y += dist;
+                if (dir1 === 'top') cp1.y -= dist;
+                if (dir2 === 'right') cp2.x += dist;
+                if (dir2 === 'left') cp2.x -= dist;
+                if (dir2 === 'bottom') cp2.y += dist;
+                if (dir2 === 'top') cp2.y -= dist;
+
+                const pathD = `M ${p1.x} ${p1.y} C ${cp1.x} ${cp1.y}, ${cp2.x} ${cp2.y}, ${p2.x} ${p2.y}`;
+                const midX = 0.125 * p1.x + 0.375 * cp1.x + 0.375 * cp2.x + 0.125 * p2.x;
+                const midY = 0.125 * p1.y + 0.375 * cp1.y + 0.375 * cp2.y + 0.125 * p2.y;
+
+                const isHighlighted = activeId && (rel.from === activeId || rel.to === activeId);
+                const strokeColor = isHighlighted ? '#38bdf8' : '#64748b';
+                const strokeWidth = isHighlighted ? '2.5' : '1.5';
+                const opacity = activeId && !isHighlighted ? '0.25' : '0.9';
+
+                const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+                g.setAttribute('opacity', opacity);
+
+                const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                path.setAttribute('d', pathD);
+                path.setAttribute('fill', 'none');
+                path.setAttribute('stroke', strokeColor);
+                path.setAttribute('stroke-width', strokeWidth);
+                if (rel.dashed) path.setAttribute('stroke-dasharray', '5,5');
+                path.setAttribute('marker-end', isHighlighted ? 'url(#arrow-n-active)' : 'url(#arrow-n)');
+                path.setAttribute('marker-start', isHighlighted ? 'url(#dot-1-active)' : 'url(#dot-1)');
+                g.appendChild(path);
+
+                if (rel.label) {
+                    const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                    text.setAttribute('x', midX);
+                    text.setAttribute('y', midY - 6);
+                    text.setAttribute('fill', isHighlighted ? '#38bdf8' : '#94a3b8');
+                    text.setAttribute('font-size', '10px');
+                    text.setAttribute('font-family', 'JetBrains Mono, monospace');
+                    text.setAttribute('text-anchor', 'middle');
+                    text.setAttribute('class', 'select-none font-semibold');
+                    text.textContent = rel.label;
+                    g.appendChild(text);
+                }
+
+                edgesLayer.appendChild(g);
+            });
+        }
+
+        // Panning y Zoom del lienzo
+        function updateTransform() {
+            canvasWorld.style.transform = `translate(${panX}px, ${panY}px) scale(${scale})`;
+            document.getElementById('zoom-level').textContent = `${Math.round(scale * 100)}%`;
+        }
+
+        viewport.addEventListener('mousedown', (e) => {
+            if (e.target.closest('.table-card')) return;
+            isPanning = true;
+            startX = e.clientX - panX;
+            startY = e.clientY - panY;
+            viewport.classList.add('cursor-grabbing');
+        });
+
+        window.addEventListener('mousemove', (e) => {
+            if (!isPanning) return;
+            panX = e.clientX - startX;
+            panY = e.clientY - startY;
+            updateTransform();
+        });
+
+        window.addEventListener('mouseup', () => {
+            isPanning = false;
+            viewport.classList.remove('cursor-grabbing');
+        });
+
+        viewport.addEventListener('wheel', (e) => {
+            e.preventDefault();
+            const zoomFactor = 1.1;
+            const oldScale = scale;
+            if (e.deltaY < 0) {
+                scale = Math.min(scale * zoomFactor, 1.6);
+            } else {
+                scale = Math.max(scale / zoomFactor, 0.4);
+            }
+
+            const rect = viewport.getBoundingClientRect();
+            const mouseX = e.clientX - rect.left;
+            const mouseY = e.clientY - rect.top;
+
+            panX = mouseX - (mouseX - panX) * (scale / oldScale);
+            panY = mouseY - (mouseY - panY) * (scale / oldScale);
+
+            updateTransform();
+        }, { passive: false });
+
+        function zoomIn() { scale = Math.min(scale * 1.15, 1.6); updateTransform(); }
+        function zoomOut() { scale = Math.max(scale / 1.15, 0.4); updateTransform(); }
+        function resetLayout() {
+            scale = 0.8;
+            panX = 40;
+            panY = 20;
+            tablesData.forEach(t => { t.x = defaultPositions[t.id].x; t.y = defaultPositions[t.id].y; });
+            renderTables();
+            updateEdges();
+            updateTransform();
+            closeSidebar();
+        }
+
+        // Inicialización
+        renderTables();
+        updateEdges();
+        updateTransform();
+    </script>
+</body>
+</html>
