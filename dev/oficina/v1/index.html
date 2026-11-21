@@ -1,0 +1,1322 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Oficina Digital — Demo de interfaz</title>
+<style>
+  :root{
+    --bg:#F7F8FA; --card:#FFFFFF; --ink:#0F172A; --muted:#64748B;
+    --line:#E2E8F0; --accent:#2563EB; --accent-soft:#EFF4FF;
+    --green:#16A34A; --green-soft:rgba(22,163,74,.12);
+    --amber:#D97706; --amber-soft:rgba(217,119,6,.13);
+    --red:#DC2626; --red-soft:rgba(220,38,38,.10);
+    --topbar:rgba(247,248,250,.88);
+    --shadow:0 1px 3px rgba(15,23,42,.08),0 8px 24px rgba(15,23,42,.06);
+    --radius:14px;
+  }
+  html[data-theme="dark"]{
+    --bg:#0B111E; --card:#131C2E; --ink:#E7ECF5; --muted:#94A3B8;
+    --line:#223049; --accent:#3B82F6; --accent-soft:#16233B;
+    --topbar:rgba(11,17,30,.88);
+    --shadow:0 1px 3px rgba(0,0,0,.45),0 10px 28px rgba(0,0,0,.38);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{background:var(--bg);color:var(--ink);font-family:Inter,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased;min-height:100vh}
+  button{font-family:inherit;cursor:pointer}
+  input{font-family:inherit}
+  .hide{display:none!important}
+  svg{display:block}
+
+  /* ---------- Topbar ---------- */
+  .topwrap{position:sticky;top:0;z-index:40;background:var(--topbar);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+  .topbar{max-width:1080px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 16px;flex-wrap:wrap}
+  .brand{display:flex;align-items:center;gap:11px;min-width:0}
+  .logo{width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,var(--accent),#1D4ED8);display:grid;place-items:center;color:#fff;flex:none}
+  .brand-name{font-weight:800;font-size:16px;letter-spacing:-.2px}
+  .brand-sub{font-size:11.5px;color:var(--muted);margin-top:1px}
+  .top-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  .badge24{display:inline-flex;align-items:center;gap:7px;color:var(--green);background:var(--green-soft);padding:6px 12px;border-radius:999px;font-size:12.5px;font-weight:700}
+  .badge24 .bdot{width:8px;height:8px;border-radius:50%;background:var(--green);animation:breathe 2.4s ease-in-out infinite}
+  .clock{font-size:12.5px;color:var(--muted);font-weight:600;font-variant-numeric:tabular-nums}
+  .iconbtn{display:inline-flex;align-items:center;gap:7px;background:var(--card);border:1px solid var(--line);color:var(--ink);border-radius:999px;padding:7px 13px;font-size:12.5px;font-weight:600}
+  .iconbtn:hover{border-color:var(--accent);color:var(--accent)}
+
+  /* ---------- Tabs ---------- */
+  .tabs{max-width:1080px;margin:0 auto;display:flex;gap:6px;overflow-x:auto;padding:8px 16px 10px;scrollbar-width:none}
+  .tabs::-webkit-scrollbar{display:none}
+  .tab{display:inline-flex;align-items:center;gap:7px;padding:8px 14px;border-radius:999px;border:1px solid transparent;color:var(--muted);font-weight:600;font-size:13.5px;white-space:nowrap;background:transparent;flex:none}
+  .tab.on{background:var(--card);color:var(--accent);border-color:var(--line);box-shadow:var(--shadow)}
+  .count{background:var(--amber);color:#fff;border-radius:999px;font-size:11px;padding:1px 7px;font-weight:800}
+
+  /* ---------- Main ---------- */
+  main{max-width:1080px;margin:0 auto;padding:18px 16px 30px}
+  .view{animation:fadeUp .35s ease both}
+  .plan-head h2{margin:2px 0 4px;font-size:19px;letter-spacing:-.3px}
+  .plan-head p{margin:0 0 16px;color:var(--muted);font-size:13.5px}
+  .plan{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px}
+  .area{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:15px 16px;box-shadow:var(--shadow);animation:fadeUp .4s ease both}
+  .area-h{display:flex;align-items:center;gap:9px;margin-bottom:12px}
+  .area-ic{width:32px;height:32px;border-radius:9px;background:var(--accent-soft);color:var(--accent);display:grid;place-items:center;flex:none}
+  .area-name{font-weight:800;font-size:14.5px}
+  .area-tag{margin-left:auto;font-size:11px;font-weight:700;color:var(--muted);background:var(--bg);border:1px solid var(--line);padding:3px 9px;border-radius:999px;white-space:nowrap;flex:none}
+  .arow{display:flex;align-items:center;gap:11px;padding:10px 0;border-top:1px solid var(--line);flex-wrap:wrap}
+  .arow-btns{display:flex;gap:6px;flex:none;align-items:center;margin-left:auto}
+  .arow:first-of-type{border-top:0}
+  .ava-wrap{position:relative;flex:none}
+  .ava{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;color:#fff;font-weight:800;font-size:13px;letter-spacing:.5px}
+  .dot{position:absolute;right:-1px;bottom:-1px;width:13px;height:13px;border-radius:50%;border:2.5px solid var(--card)}
+  .dot.g{background:var(--green)} .dot.b{background:var(--accent)} .dot.s{background:#64748B} .dot.a{background:var(--amber);animation:breathe 1.6s ease-in-out infinite}
+  .ainfo{min-width:150px;flex:1}
+  .aname{font-weight:700;font-size:14px}
+  .arole{font-size:12px;color:var(--muted)}
+  .astatus{font-size:12px;margin-top:3px;font-weight:600}
+  .astatus.g{color:var(--green)} .astatus.b{color:var(--accent)} .astatus.s{color:var(--muted)} .astatus.a{color:var(--amber)}
+  .astats{font-size:11.5px;color:var(--muted);margin-top:2px}
+  .btn{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:8px 15px;font-size:13px;font-weight:700;transition:.15s}
+  .btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+  .btn.primary:hover{filter:brightness(1.08)}
+  .btn.ok{background:var(--green);border-color:var(--green);color:#fff}
+  .btn.danger{background:transparent;border-color:var(--red);color:var(--red)}
+  .btn.sm{padding:6px 12px;font-size:12.5px}
+  .btn:disabled{opacity:.5;cursor:not-allowed}
+
+  /* ---------- Archivo ---------- */
+  .folder{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:16px;box-shadow:var(--shadow);margin-bottom:14px;animation:fadeUp .4s ease both}
+  .folder-h{display:flex;align-items:center;gap:10px;margin-bottom:6px}
+  .folder-ic{width:34px;height:34px;border-radius:9px;background:var(--amber-soft);color:var(--amber);display:grid;place-items:center}
+  .folder-title{font-weight:800;font-size:14.5px}
+  .folder-sub{font-size:12px;color:var(--muted)}
+  .docrow{display:flex;align-items:center;gap:11px;padding:11px 0;border-top:1px solid var(--line);flex-wrap:wrap}
+  .docrow .f-ic{color:var(--accent);flex:none}
+  .doc-name{font-size:13.5px;font-weight:600;flex:1;min-width:150px}
+  .chip{font-size:11px;font-weight:800;padding:3px 10px;border-radius:999px;white-space:nowrap}
+  .chip.listo{background:var(--green-soft);color:var(--green)}
+  .chip.pend{background:var(--amber-soft);color:var(--amber)}
+  .chip.rech{background:var(--red-soft);color:var(--red)}
+  .doc-time{font-size:11.5px;color:var(--muted)}
+  .empty{color:var(--muted);font-size:13.5px;padding:14px 0 4px;border-top:1px solid var(--line);margin-top:6px}
+
+  /* ---------- Tablón ---------- */
+  .notice{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--accent);border-radius:12px;padding:14px 16px;margin-bottom:12px;box-shadow:var(--shadow);animation:fadeUp .4s ease both}
+  .notice.warn{border-left-color:var(--amber)}
+  .notice-h{display:flex;align-items:center;gap:9px;font-weight:800;font-size:14.5px}
+  .notice-h .f-ic{color:var(--accent)} .notice.warn .notice-h .f-ic{color:var(--amber)}
+  .notice p{margin:7px 0 0;color:var(--muted);font-size:13.5px}
+
+  /* ---------- Bitácora / Aprobaciones ---------- */
+  .logrow{display:flex;gap:12px;padding:11px 0;border-top:1px dashed var(--line);align-items:flex-start}
+  .logrow:first-child{border-top:0}
+  .log-time{font-size:12px;color:var(--muted);font-weight:700;width:46px;flex:none;font-variant-numeric:tabular-nums;padding-top:2px}
+  .log-ic{color:var(--accent);flex:none;padding-top:1px}
+  .log-text{font-size:13.5px}
+  .log-text b{font-weight:700}
+  .apcard{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--amber);border-radius:12px;padding:15px 16px;margin-bottom:12px;box-shadow:var(--shadow);animation:fadeUp .4s ease both}
+  .apcard.ok{border-left-color:var(--green)} .apcard.no{border-left-color:var(--red)}
+  .ap-title{font-weight:800;font-size:14.5px}
+  .ap-meta{font-size:12.5px;color:var(--muted);margin:3px 0 8px}
+  .ap-amount{font-size:17px;font-weight:800;letter-spacing:-.3px}
+  .ap-actions{display:flex;gap:8px;margin-top:11px;flex-wrap:wrap}
+  .linkbtn{background:none;border:0;color:var(--accent);font-weight:700;font-size:12.5px;padding:0;text-decoration:underline;text-underline-offset:3px}
+
+  /* ---------- Chat ---------- */
+  .scrim{position:fixed;inset:0;background:rgba(2,6,23,.45);z-index:50;opacity:0;transition:.2s;pointer-events:none}
+  .scrim.show{opacity:1;pointer-events:auto}
+  .chat{position:fixed;top:0;right:0;height:100%;width:min(400px,100%);background:var(--bg);border-left:1px solid var(--line);z-index:60;display:flex;flex-direction:column;transform:translateX(102%);transition:transform .25s ease;box-shadow:-12px 0 40px rgba(2,6,23,.18)}
+  .chat.open{transform:translateX(0)}
+  .chat-head{display:flex;align-items:center;gap:11px;padding:13px 15px;border-bottom:1px solid var(--line);background:var(--card);flex:none}
+  .chat-title{flex:1;min-width:0}
+  .chat-name{font-weight:800;font-size:14.5px}
+  .chat-sub{font-size:11.5px;color:var(--muted);margin-top:1px}
+  .msgs{flex:1;overflow-y:auto;padding:16px 14px;display:flex;flex-direction:column;gap:10px}
+  .msg{display:flex;gap:8px;max-width:88%;align-items:flex-end;animation:fadeUp .25s ease both}
+  .msg.user{align-self:flex-end;flex-direction:row-reverse}
+  .msg .ava{width:30px;height:30px;font-size:10.5px}
+  .bubble{padding:10px 14px;border-radius:15px;font-size:14px;white-space:pre-wrap;word-break:break-word}
+  .msg.agent .bubble{background:var(--card);border:1px solid var(--line);border-top-left-radius:5px}
+  .msg.user .bubble{background:var(--accent);color:#fff;border-top-right-radius:5px}
+  .msg .time{font-size:10px;color:var(--muted);margin-top:4px;text-align:right}
+  .msg.user .time{text-align:left}
+  .pill{align-self:center;max-width:92%;background:var(--accent-soft);color:var(--accent);font-size:12.5px;font-weight:700;padding:7px 14px;border-radius:999px;display:flex;gap:8px;align-items:center;animation:fadeUp .25s ease both}
+  .pill.sys{background:var(--green-soft);color:var(--green)}
+  .doccard{align-self:flex-start;max-width:88%;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:11px 13px;display:flex;gap:11px;align-items:center;animation:fadeUp .25s ease both}
+  .doccard .f-ic{color:var(--accent)}
+  .doccard-name{font-size:13px;font-weight:700}
+  .doccard-foot{display:flex;gap:8px;align-items:center;margin-top:4px;flex-wrap:wrap}
+  .quick{display:flex;flex-wrap:wrap;gap:8px;padding:4px 14px 10px}
+  .chipbtn{border:1.5px solid var(--accent);color:var(--accent);background:var(--accent-soft);border-radius:999px;padding:8px 14px;font-size:13px;font-weight:700}
+  .chipbtn:hover{background:var(--accent);color:#fff}
+  .chat-input{display:flex;gap:9px;padding:11px 14px calc(11px + env(safe-area-inset-bottom));border-top:1px solid var(--line);background:var(--card);flex:none}
+  .chat-input input{flex:1;border:1px solid var(--line);border-radius:999px;padding:11px 16px;font-size:14px;background:var(--bg);color:var(--ink);outline:none;min-width:0}
+  .chat-input input:focus{border-color:var(--accent)}
+  .send{width:44px;height:44px;border-radius:50%;border:0;background:var(--accent);color:#fff;display:grid;place-items:center;flex:none}
+  .send:disabled{opacity:.45;cursor:not-allowed}
+  .typing .d{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--muted);margin:0 1.5px;animation:tb 1.1s infinite}
+  .typing .d:nth-child(2){animation-delay:.15s}.typing .d:nth-child(3){animation-delay:.3s}
+  .resume{position:fixed;right:16px;bottom:16px;z-index:45;display:flex;align-items:center;gap:8px;background:var(--accent);color:#fff;border:0;border-radius:999px;padding:12px 18px;font-size:13.5px;font-weight:700;box-shadow:0 10px 26px rgba(37,99,235,.4);animation:fadeUp .3s ease both}
+
+  /* ---------- Overlays ---------- */
+  .overlay{position:fixed;inset:0;z-index:70;background:rgba(2,6,23,.5);display:grid;place-items:center;padding:16px}
+  .panel{width:min(480px,100%);max-height:86vh;overflow-y:auto;background:var(--bg);border-radius:16px;padding:18px;box-shadow:0 24px 60px rgba(2,6,23,.35);animation:fadeUp .25s ease both}
+  .panel-h{display:flex;align-items:center;gap:10px;margin-bottom:6px}
+  .panel-title{font-weight:800;font-size:16px;flex:1}
+  .panel-x{background:var(--card);border:1px solid var(--line);border-radius:50%;width:32px;height:32px;display:grid;place-items:center;color:var(--muted)}
+  .tcard{display:flex;align-items:center;gap:11px;padding:11px 0;border-top:1px dashed var(--line)}
+  .tcard:first-child{border-top:0}
+  .tdel{border:1px solid var(--line);background:var(--card);color:var(--muted);border-radius:8px;width:26px;height:26px;display:grid;place-items:center;flex:none}
+  .tdel:hover{color:var(--red);border-color:var(--red)}
+  .welcome-note{background:var(--accent-soft);color:var(--accent);border-radius:10px;padding:10px 12px;font-size:12.5px;font-weight:600;margin-bottom:14px}
+  .mmsg{display:flex;gap:8px;align-items:flex-end;max-width:95%}
+  .mmsg .ava{width:30px;height:30px;font-size:10.5px}
+  .conclusion{background:var(--green-soft);border:1px solid var(--green);border-radius:12px;padding:13px 15px;font-size:13.5px;color:var(--ink);margin:6px 0 12px}
+  .conclusion b{color:var(--green)}
+  .panel-foot{display:flex;justify-content:flex-end;gap:8px;flex-wrap:wrap}
+
+  /* ---------- Toast / footer ---------- */
+  .toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%);background:#0F172A;color:#fff;padding:11px 18px;border-radius:999px;font-size:13.5px;font-weight:600;z-index:90;box-shadow:0 10px 30px rgba(0,0,0,.35);animation:fadeUp .25s ease both}
+  .foot{max-width:1080px;margin:0 auto;padding:0 16px 34px;color:var(--muted);font-size:12px}
+
+  /* ---------- Onboarding / Tour ---------- */
+  .welcome{position:fixed;inset:0;z-index:85;background:rgba(2,6,23,.55);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);display:grid;place-items:center;padding:16px}
+  .welcome .panel{max-height:92vh}
+  .welcome h3{margin:12px 0 4px;font-size:20px;letter-spacing:-.3px}
+  .welcome ul{margin:12px 0 16px;padding:0;list-style:none;display:flex;flex-direction:column;gap:9px}
+  .welcome li{display:flex;gap:9px;align-items:flex-start;font-size:13.5px}
+  .welcome li svg{flex:none;margin-top:2px;color:var(--green)}
+  .tourblock{position:fixed;inset:0;z-index:83}
+  .spot{position:fixed;z-index:84;pointer-events:none;border-radius:14px;box-shadow:0 0 0 3px rgba(37,99,235,.6),0 0 0 9999px rgba(2,6,23,.52);transition:all .25s ease}
+  .tourcard{position:fixed;z-index:86;width:min(300px,88vw);background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;box-shadow:var(--shadow);animation:fadeUp .25s ease both}
+  .tourcard h4{margin:0 0 4px;font-size:14.5px}
+  .tourcard p{margin:0 0 10px;font-size:12.5px;color:var(--muted)}
+  .ava.flash{animation:ringflash 1.3s ease}
+  button:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+  @keyframes breathe{0%,100%{opacity:1}50%{opacity:.45}}
+  @keyframes tb{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-4px)}}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+  @keyframes ringflash{0%{box-shadow:0 0 0 0 rgba(37,99,235,.55)}100%{box-shadow:0 0 0 16px rgba(37,99,235,0)}}
+  @media (max-width:640px){
+    .clock{display:none}
+    .topbar{padding:10px 12px}
+    .badge24{font-size:11.5px;padding:5px 10px}
+    .plan{grid-template-columns:1fr}
+    .chat{width:100%}
+    .panel{max-height:92vh}
+    .topwrap{backdrop-filter:none;-webkit-backdrop-filter:none;background:var(--bg)}
+    .tabs{position:fixed;bottom:0;top:auto;left:0;right:0;z-index:40;background:var(--topbar);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-top:1px solid var(--line);border-bottom:0;padding:8px 10px calc(8px + env(safe-area-inset-bottom));margin:0}
+    main{padding:14px 12px 96px}
+    .foot{padding:0 16px 96px}
+    .resume{bottom:80px}
+    .toast{bottom:86px}
+  }
+</style>
+</head>
+<body>
+
+<div class="topwrap">
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16"/><path d="M9 7h1M14 7h1M9 11h1M14 11h1M9 15v6M14 15v6"/></svg>
+      </div>
+      <div>
+        <div class="brand-name">Tu Oficina Virtual</div>
+        <div class="brand-sub">Tu equipo completo, sin contratar · Comercial Ítalo</div>
+      </div>
+    </div>
+    <div class="top-actions">
+      <span class="badge24"><span class="bdot"></span>Trabajando 24/7</span>
+      <span class="clock" id="clock">--:--</span>
+      <button class="iconbtn" id="themeBtn" title="Cambiar tema"><span id="themeIcon"></span><span id="themeLabel">Auto</span></button>
+    </div>
+  </header>
+  <nav class="tabs" id="tabs">
+    <button class="tab on" data-view="oficina"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16M9 7h1M14 7h1M9 11h1M14 11h1"/></svg>Oficina</button>
+    <button class="tab" data-view="archivo"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7z"/></svg>Archivo <span class="count hide" id="archCount" style="background:var(--accent)"></span></button>
+    <button class="tab" data-view="tareas"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="4" width="14" height="17" rx="2"/><rect x="9" y="2" width="6" height="4" rx="1"/><path d="M9 11l2 2 4-4"/></svg>Tareas <span class="count hide" id="tareasCount" style="background:var(--accent)"></span></button>
+    <button class="tab" data-view="tablon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="4" width="14" height="18" rx="2"/><rect x="9" y="2" width="6" height="4" rx="1"/><path d="M9 11h6M9 15h6"/></svg>Tablón</button>
+    <button class="tab" data-view="bitacora"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6h13M8 12h13M8 18h13M3.5 6h.01M3.5 12h.01M3.5 18h.01"/></svg>Bitácora</button>
+    <button class="tab" data-view="aprobaciones"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.5 2.5L16 9.5"/></svg>Aprobaciones <span class="count" id="apCount">0</span></button>
+  </nav>
+</div>
+
+<main>
+  <section class="view" id="view-oficina">
+    <div class="plan-head">
+      <h2>Plano de la oficina</h2>
+      <p id="planSub"></p>
+    </div>
+    <div class="plan" id="plan"></div>
+  </section>
+
+  <section class="view" id="view-archivo" hidden>
+    <div class="plan-head">
+      <h2>Archivo — expedientes</h2>
+      <p>Todo lo que tus agentes generan queda archivado: lo de tu negocio y lo de tus clientes.</p>
+    </div>
+    <div id="archivoList"></div>
+  </section>
+
+  <section class="view" id="view-tareas" hidden>
+    <div class="plan-head" style="display:flex;align-items:flex-end;justify-content:space-between;gap:10px;flex-wrap:wrap">
+      <div>
+        <h2>Pizarrón de tareas</h2>
+        <p>Cada agente tiene su propia lista: asigná y borrá tareas, y seguí el avance en vivo. También podés activar o desactivar empleados, contratar más o despedir.</p>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px">
+        <button class="btn" id="hireBtn">+ Contratar agente</button>
+        <button class="btn primary" id="newTaskBtn">+ Nueva tarea</button>
+      </div>
+    </div>
+    <div id="tareasList"></div>
+  </section>
+
+  <section class="view" id="view-tablon" hidden>
+    <div class="plan-head">
+      <h2>Tablón de avisos</h2>
+      <p>Lo que tu equipo publica para tus clientes, actualizado por los agentes.</p>
+    </div>
+    <div id="tablonList"></div>
+  </section>
+
+  <section class="view" id="view-bitacora" hidden>
+    <div class="plan-head">
+      <h2>Bitácora de la oficina</h2>
+      <p>Registro completo de la actividad de tus agentes, en tiempo real.</p>
+    </div>
+    <div class="folder" id="bitacoraList"></div>
+  </section>
+
+  <section class="view" id="view-aprobaciones" hidden>
+    <div class="plan-head">
+      <h2>Aprobaciones — consultas de tus agentes</h2>
+      <p>Acciones sensibles que no ejecutan sin tu OK: tú decides.</p>
+    </div>
+    <div id="apList"></div>
+  </section>
+</main>
+
+<footer class="foot">Prototipo demo — datos y conversaciones simulados. Los montos y porcentajes son ilustrativos y configurables según el país.</footer>
+
+<div class="welcome hide" id="welcomeOv">
+  <div class="panel">
+    <div class="logo" style="width:48px;height:48px"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16"/><path d="M9 7h1M14 7h1M9 11h1M14 11h1M9 15v6M14 15v6"/></svg></div>
+    <h3>Bienvenido a tu oficina</h3>
+    <p style="font-size:13.5px;color:var(--muted);margin:4px 0 0">Tres empleados virtuales trabajan para tu negocio 24/7: en vez de contratar un equipo, lo tienes aquí.</p>
+    <ul>
+      <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.5 2.5L16 9.5"/></svg>Pulsa «Hablar» para darles instrucciones, gestioná las tareas de cada empleado en el pizarrón, o mira cómo atienden a tus clientes.</li>
+      <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.5 2.5L16 9.5"/></svg>Todo lo que generen queda archivado: lo de tu negocio y lo de tus clientes.</li>
+      <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.5 2.5L16 9.5"/></svg>Nada sale de tu oficina sin tu OK: te consultan antes de acciones sensibles.</li>
+      <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.5 2.5L16 9.5"/></svg>Trabajan sobre tu sistema vía API: leen clientes y pedidos de tu ERP y ejecutan ahí mismo, sea el nuestro o el que ya uses.</li>
+    </ul>
+    <div class="welcome-note">Tres agentes trabajando 24/7 cuestan una fracción de un sueldo: el equipo más rentable que vas a contratar.</div>
+    <div class="panel-foot">
+      <button class="btn" id="tourBtn">Tour guiado (30 s)</button>
+      <button class="btn primary" id="enterBtn">Entrar a la oficina</button>
+    </div>
+  </div>
+</div>
+
+<div class="scrim" id="scrim"></div>
+<button class="resume hide" id="resumeBtn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-8.5 8.3c-1.4 0-2.8-.3-4-.9L3 20l1.1-4.1A8.3 8.3 0 1 1 21 11.5z"/></svg>Volver a la conversación</button>
+
+<aside class="chat" id="chatPanel" aria-label="Chat con agentes">
+  <div class="chat-head" id="chatHead"></div>
+  <div class="msgs" id="msgs"></div>
+  <div class="quick" id="quick"></div>
+  <form class="chat-input" id="chatForm">
+    <input id="chatInput" placeholder="Escribe tu mensaje…" autocomplete="off">
+    <button class="send" type="submit" aria-label="Enviar"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg></button>
+  </form>
+</aside>
+
+<div class="overlay hide" id="agentOv">
+  <div class="panel" id="agentPanel"></div>
+</div>
+
+<script>
+"use strict";
+/* ================= Utilidades ================= */
+const $ = s => document.querySelector(s);
+const esc = t => String(t).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const norm = t => t.toLowerCase().normalize('NFD').replace(/\p{Diacritic}/gu,'');
+const now = () => new Date().toLocaleTimeString('es',{hour:'2-digit',minute:'2-digit'});
+const fmt = n => '$ ' + n.toLocaleString('es-AR');
+const MESES = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+const mesActual = () => { const d = new Date(); return MESES[d.getMonth()] + ' ' + d.getFullYear(); };
+const saludoHorario = () => { const h = new Date().getHours(); return h < 12 ? 'Buenos días' : (h < 19 ? 'Buenas tardes' : 'Buenas noches'); };
+let seq = 1; const uid = () => 'ap' + (seq++);
+
+const I = {
+  door:'<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M4 21h16"/><circle cx="14.5" cy="12" r="1" fill="currentColor" stroke="none"/></svg>',
+  calc:'<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 7h6M9 11h.01M12 11h.01M15 11h.01M9 14h.01M12 14h.01M15 14h.01M9 17.5h6"/></svg>',
+  box:'<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8l-9-5-9 5v8l9 5 9-5V8zM3 8l9 5 9-5M12 13v8"/></svg>',
+  clip:'<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="4" width="14" height="17" rx="2"/><rect x="9" y="2" width="6" height="4" rx="1"/><path d="M9 11l2 2 4-4"/></svg>',
+  users:'<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3"/><path d="M3 20c0-3 2.7-4.5 6-4.5s6 1.5 6 4.5"/><circle cx="17" cy="9" r="2.5"/><path d="M17 15.5c2.5 0 4.5 1.5 4.5 4"/></svg>',
+  file:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8l-5-5z"/><path d="M14 3v5h5M9 13h6M9 17h4"/></svg>',
+  folder:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7z"/></svg>',
+  dl:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v10M8 9l4 4 4-4M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>',
+  clock:'<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>',
+  bell:'<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 9a6 6 0 1 0-12 0c0 6-2 7-2 7h16s-2-1-2-7"/><path d="M10.5 20a2 2 0 0 0 3 0"/></svg>',
+  shield:'<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 3v6c0 5-3.5 7.5-8 9-4.5-1.5-8-4-8-9V6l8-3z"/></svg>',
+  check:'<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.5 2.5L16 9.5"/></svg>',
+  chat:'<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-8.5 8.3c-1.4 0-2.8-.3-4-.9L3 20l1.1-4.1A8.3 8.3 0 1 1 21 11.5z"/></svg>',
+  arrow:'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>',
+  user:'<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-6 8-6s8 2 8 6"/></svg>'
+};
+
+/* ================= Estado ================= */
+const AGENTS = {
+  ana:   {id:'ana',   ini:'AN', name:'Ana',         role:'Recepcionista',          grad:['#60A5FA','#2563EB'], status:'atendiendo', with:'Carla R. (cliente)', task:null, today:'2 consultas · 1 cita agendada', core:true},
+  garcia:{id:'garcia',ini:'RG', name:'Lic. García', role:'Contador senior',        grad:['#34D399','#059669'], status:'libre', with:null, task:null, today:'2 declaraciones · 1 balance', core:true},
+  luis:  {id:'luis',  ini:'LP', name:'Luis',        role:'Auxiliar administrativo',grad:['#FBBF24','#D97706'], status:'ocupado', with:null, task:'Planilla de Distribuidora Sur', today:'7 facturas · 1 planilla', core:true}
+};
+
+let thread = null;   // conversación única de la oficina (los agentes rotan en el mismo chat)
+let chatOpen = false;
+let themeMode = 'auto';
+
+const docs = {
+  negocio: [
+    {name:'Balance resumen — septiembre', status:'listo', time:'30/09 17:05'},
+    {name:'Planilla de sueldos — octubre', status:'listo', time:'08:20'}
+  ],
+  clientes: [
+    {name:'Cotización — pedido #1042 (Carla R.)', status:'listo', time:'10:35'}
+  ]
+};
+
+let tasks = {
+  ana:   [{id:uid(), text:'Responder consultas pendientes de WhatsApp', status:'lista', time:'09:12'}],
+  garcia:[{id:uid(), text:'Conciliar caja de octubre', status:'lista', time:'08:45'}],
+  luis:  [{id:uid(), text:'Planilla de ventas — Distribuidora Sur', status:'curso', time:'10:05'}]
+};
+
+let approvals = [
+  {id:uid(), title:'Declaración IVA — octubre', client:'Mi negocio', amount:Math.round(340000000*10/110), by:'Lic. García', time:'10:32', status:'pend'},
+  {id:uid(), title:'Reintegro de gastos — Distribuidora Sur', client:'Mi negocio', amount:1250000, by:'Luis', time:'09:47', status:'pend'},
+  {id:uid(), title:'Descuento 10% para Carla R. — pedido #1042', client:'Carla R.', amount:425000, by:'Ana', time:'10:35', status:'aprobado', transcript:true}
+];
+
+let bitacora = [
+  {time:'08:12', who:'Ana',         text:'Recibió 3 consultas de clientes desde WhatsApp'},
+  {time:'08:20', who:'Luis',        text:'Generó la planilla de sueldos de octubre (aprobada por ti)'},
+  {time:'09:47', who:'Luis',        text:'Solicitó tu OK: reintegro de gastos de Distribuidora Sur — $ 1.250.000'},
+  {time:'10:14', who:'Luis',        text:'Archivó 7 facturas de Distribuidora Sur'},
+  {time:'10:31', who:'Ana',         text:'Atendió a Carla R. (cliente): consulta de pedido y despacho'},
+  {time:'10:32', who:'Lic. García', text:'Solicitó tu OK: IVA de octubre — $ 30.909.091'}
+];
+
+const tablon = [
+  {ic:'box', warn:false, title:'Conectado a tu sistema de gestión', text:'Los agentes leen clientes, pedidos y facturación a través de la API de tu ERP — sea el nuestro o el sistema que ya uses. No duplican datos: tu ERP sigue siendo la fuente de verdad, y toda escritura pasa por tu OK.'},
+  {ic:'clock', warn:true, title:'Vence la presentación del IVA', text:'El día 25 de cada mes. Los agentes ya tienen los períodos cargados y prepararán las declaraciones con anticipación.'},
+  {ic:'bell', warn:false, title:'Actualización salarial', text:'Con el nuevo ajuste del salario mínimo, las planillas de nómina afectadas se revisan automáticamente.'},
+  {ic:'shield', warn:false, title:'Disponibilidad 24/7', text:'La oficina no cierra nunca: los agentes atienden consultas, generan documentos y dejan pendientes listos para el día siguiente.'}
+];
+
+const T_CARLA = [
+  {f:'user', t:'Hola! ¿Vienen los repuestos que pedí el viernes? (pedido #1042)'},
+  {f:'agent', t:'¡Hola Carla! Un momento, verifico tu pedido #1042 en el sistema… Sí, llegó ayer. ¿Se los despachamos o pasa a buscarlos?'},
+  {f:'user', t:'Despáchenlos por favor. ¿Hay recargo?'},
+  {f:'agent', t:'Con el descuento que le solicitamos al dueño, le queda en $ 3.825.000. Registro el despacho en el sistema y le envío el seguimiento por WhatsApp.'}
+];
+
+const AREAS = [
+  {id:'recepcion', name:'Recepción', icon:I.door, agents:['ana']},
+  {id:'contabilidad', name:'Contabilidad', icon:I.calc, agents:['garcia']},
+  {id:'administracion', name:'Administración', icon:I.box, agents:['luis']},
+  {id:'pizarron', name:'Pizarrón de tareas', icon:I.clip, tab:'tareas'}
+];
+
+/* ================= Tema y reloj ================= */
+function applyTheme(){
+  const h = new Date().getHours();
+  const dark = themeMode === 'dark' || (themeMode === 'auto' && (h >= 19 || h < 7));
+  document.documentElement.dataset.theme = dark ? 'dark' : 'light';
+  const sun = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>';
+  const moon = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A8.5 8.5 0 1 1 11.2 3a6.5 6.5 0 0 0 9.8 9.8z"/></svg>';
+  const auto = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 3v18"/></svg>';
+  const isDark = dark;
+  $('#themeIcon').innerHTML = themeMode === 'auto' ? auto : (themeMode === 'light' ? sun : moon);
+  $('#themeLabel').textContent = themeMode === 'auto' ? ('Auto · ' + (isDark ? 'Noche' : 'Día')) : (themeMode === 'light' ? 'Claro' : 'Oscuro');
+}
+function tickClock(){ $('#clock').textContent = now(); }
+
+/* ================= Vistas y tabs ================= */
+function showView(v){
+  document.querySelectorAll('.tab').forEach(b => b.classList.toggle('on', b.dataset.view === v));
+  ['oficina','archivo','tareas','tablon','bitacora','aprobaciones'].forEach(x => { $('#view-' + x).hidden = (x !== v); });
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+$('#tabs').addEventListener('click', e => { const b = e.target.closest('.tab'); if(b) showView(b.dataset.view); });
+
+function renderTabs(){
+  const n = approvals.filter(a => a.status === 'pend').length;
+  const el = $('#apCount'); el.textContent = n; el.classList.toggle('hide', n === 0);
+  const nt = Object.values(tasks).reduce((s, l) => s + l.filter(t => t.status !== 'lista').length, 0);
+  const te = $('#tareasCount'); te.textContent = nt; te.classList.toggle('hide', nt === 0);
+}
+
+/* ================= Plano de oficina ================= */
+const STATUS_META = {
+  libre:      {cls:'g', label:()=>'Disponible'},
+  atendiendo: {cls:'b', label:a=> a.with === 'dueño' ? 'Te está atendiendo' : 'Atendiendo a ' + a.with},
+  ocupado:    {cls:'s', label:a=>'Ocupado: ' + a.task},
+  esperando:  {cls:'a', label:()=>'Esperando tu visto bueno'},
+  inactivo:   {cls:'s', label:()=>'Desactivado'}
+};
+function renderOffice(){
+  $('#planSub').textContent = 'Tus empleados virtuales, en su puesto 24/7. Pulsa «Hablar» para darles instrucciones, o «Ver» para mirar cómo trabajan.';
+  $('#plan').innerHTML = AREAS.map(a => {
+    if(a.agents && a.agents.length === 0) return '';
+    if(a.tab){
+      const act = Object.values(tasks).reduce((s, l) => s + l.filter(t => t.status !== 'lista').length, 0);
+      return '<div class="area"><div class="area-h"><div class="area-ic">' + a.icon + '</div><div class="area-name">' + a.name + '</div><span class="area-tag">' + act + ' activa' + (act === 1 ? '' : 's') + '</span></div>' +
+        '<div class="arow"><div class="ava" style="width:34px;height:34px;background:var(--accent-soft);color:var(--muted)">' + a.icon + '</div><div class="ainfo"><div class="aname">Las tareas de cada empleado, en listas separadas</div><div class="arole">Asigná y borrá tareas, activá o desactivá agentes, contratá más o despedí.</div></div><button class="btn sm primary" data-gotab="tareas">Abrir pizarrón</button></div></div>';
+    }
+    const rows = a.agents.map(id => {
+      const g = AGENTS[id];
+      const st = STATUS_META[g.status];
+      const inact = g.status === 'inactivo';
+      const verBtn = (g.status === 'atendiendo' && g.with && g.with !== 'dueño')
+        ? '<button class="btn sm" data-ver="' + id + '">Ver</button>' : '';
+      const main = inact
+        ? '<button class="btn sm" data-activar="' + id + '">Activar</button>'
+        : '<button class="btn sm primary" data-talk="' + id + '">Hablar</button>';
+      return '<div class="arow"' + (inact ? ' style="opacity:.55"' : '') + '><div class="ava-wrap"><div class="ava" style="background:linear-gradient(135deg,' + g.grad[0] + ',' + g.grad[1] + (inact ? ');opacity:.5' : ')') + '">' + g.ini + '</div><span class="dot ' + st.cls + '"></span></div>' +
+        '<div class="ainfo"><div class="aname">' + esc(g.name) + '</div><div class="arole">' + esc(g.role) + '</div><div class="astatus ' + st.cls + '">' + esc(st.label(g)) + '</div>' +
+        '<div class="astats">Hoy: ' + esc(g.today) + '</div></div>' +
+        '<div class="arow-btns">' + verBtn + main + '</div></div>';
+    }).join('');
+    const tag = a.agents.length + (a.agents.length === 1 ? ' agente' : ' agentes');
+    return '<div class="area"><div class="area-h"><div class="area-ic">' + a.icon + '</div><div class="area-name">' + a.name + '</div><span class="area-tag">' + tag + '</span></div>' + rows + '</div>';
+  }).join('');
+}
+$('#plan').addEventListener('click', e => {
+  const talk = e.target.closest('[data-talk]');
+  const ver = e.target.closest('[data-ver]');
+  const gt = e.target.closest('[data-gotab]');
+  const ac = e.target.closest('[data-activar]');
+  if(talk) openChat(talk.dataset.talk);
+  if(ver) openAgentOv(ver.dataset.ver);
+  if(gt) showView(gt.dataset.gotab);
+  if(ac) toggleAgent(ac.dataset.activar, true);
+});
+
+/* ================= Archivo / Tablón / Bitácora / Aprobaciones ================= */
+const CHIP = {listo:'<span class="chip listo">Listo</span>', aprobado:'<span class="chip listo">Aprobado</span>', pend:'<span class="chip pend">Pendiente de aprobación</span>', rech:'<span class="chip rech">Rechazado</span>'};
+
+function renderArchivo(){
+  const folders = [
+    {key:'negocio', title:'Mi negocio — Comercial Ítalo', sub:'Los documentos de tu operación, generados por tus agentes'},
+    {key:'clientes', title:'Clientes atendidos', sub:'Lo que tus agentes preparan para tus clientes'}
+  ];
+  $('#archivoList').innerHTML = folders.map(f => {
+    const list = docs[f.key];
+    const rows = list.length ? list.map(d =>
+      '<div class="docrow"><span class="f-ic">' + I.file + '</span><span class="doc-name">' + esc(d.name) + '</span>' + CHIP[d.status] + '<span class="doc-time">' + esc(d.time) + '</span><button class="btn sm" data-dl="1">' + I.dl + '</button></div>'
+    ).join('') : '<div class="empty">Aún no hay documentos. Conversa con tus agentes y todo lo que generen quedará archivado aquí.</div>';
+    return '<div class="folder"><div class="folder-h"><div class="folder-ic">' + I.folder + '</div><div><div class="folder-title">' + f.title + '</div><div class="folder-sub">' + f.sub + '</div></div></div>' + rows + '</div>';
+  }).join('');
+  const nv = docs.negocio.length;
+  const badge = $('#archCount');
+  if(badge){ badge.textContent = nv; badge.classList.toggle('hide', nv === 0); }
+}
+$('#archivoList').addEventListener('click', e => { if(e.target.closest('[data-dl]')) toast('Descarga simulada — es una demo'); });
+
+function renderTablon(){
+  $('#tablonList').innerHTML = tablon.map(n =>
+    '<div class="notice' + (n.warn ? ' warn' : '') + '"><div class="notice-h"><span class="f-ic">' + I[n.ic] + '</span>' + esc(n.title) + '</div><p>' + esc(n.text) + '</p></div>'
+  ).join('');
+}
+
+function bitacoraAdd(who, text){
+  bitacora.unshift({time:now(), who, text});
+  renderBitacora();
+}
+function renderBitacora(){
+  $('#bitacoraList').innerHTML = bitacora.map(b =>
+    '<div class="logrow"><span class="log-time">' + esc(b.time) + '</span><span class="log-ic">' + I.chat + '</span><span class="log-text"><b>' + esc(b.who) + '</b> — ' + esc(b.text) + '</span></div>'
+  ).join('');
+}
+
+function renderAprobaciones(){
+  $('#apList').innerHTML = approvals.map(a => {
+    const cls = a.status === 'pend' ? '' : (a.status === 'aprobado' ? ' ok' : ' no');
+    const chip = a.status === 'pend' ? '<span class="chip pend">Pendiente</span>' : (a.status === 'aprobado' ? '<span class="chip listo">Aprobada</span>' : '<span class="chip rech">Rechazada</span>');
+    const actions = a.status === 'pend'
+      ? '<div class="ap-actions"><button class="btn ok sm" data-ok="' + a.id + '">Aprobar</button><button class="btn danger sm" data-no="' + a.id + '">Rechazar</button>' + (a.transcript ? '<button class="linkbtn" data-tr="1" style="align-self:center">Ver conversación</button>' : '') + '</div>'
+      : '<div class="ap-actions"><span class="doc-time">Resuelta a las ' + esc(a.time) + '</span>' + (a.transcript ? '<button class="linkbtn" data-tr="1" style="align-self:center">Ver conversación</button>' : '') + '</div>';
+    return '<div class="apcard' + cls + '"><div style="display:flex;gap:10px;align-items:flex-start;justify-content:space-between;flex-wrap:wrap"><div><div class="ap-title">' + esc(a.title) + '</div><div class="ap-meta">Para: ' + esc(a.client) + ' · Solicitó: ' + esc(a.by) + ' · ' + esc(a.time) + '</div></div>' + chip + '</div><div class="ap-amount">' + fmt(a.amount) + '</div>' + actions + '</div>';
+  }).join('');
+}
+$('#apList').addEventListener('click', e => {
+  const ok = e.target.closest('[data-ok]'), no = e.target.closest('[data-no]'), tr = e.target.closest('[data-tr]');
+  if(ok) resolveApproval(ok.dataset.ok, true);
+  if(no) resolveApproval(no.dataset.no, false);
+  if(tr) showTranscript();
+});
+function resolveApproval(id, isOk){
+  const a = approvals.find(x => x.id === id);
+  if(!a || a.status !== 'pend') return;
+  a.status = isOk ? 'aprobado' : 'rechazado';
+  a.time = now();
+  bitacoraAdd('Usted (dueño)', (isOk ? 'Aprobó' : 'Rechazó') + ' — ' + a.title + ' (' + fmt(a.amount) + ')');
+  if(a.docRef) a.docRef.status = isOk ? 'aprobado' : 'rechazado';
+  if(a.boss && thread){
+    pushMsg({from:'system', text: isOk ? 'Aprobaste la operación: ' + a.title + '. Tus agentes ya la están ejecutando.' : 'Rechazaste ' + a.title + '. El agente ajustará el caso y te consultará de nuevo.'});
+    if(a.docRef) pushDocCard(a.docRef);
+    if(AGENTS.garcia && AGENTS.garcia.status !== 'inactivo') setStatus('garcia', thread.agent === 'garcia' ? 'atendiendo' : 'libre', thread.agent === 'garcia' ? 'dueño' : null);
+  }
+  renderAprobaciones(); renderTabs(); renderArchivo(); renderOffice();
+  toast(isOk ? 'Aprobado — tus agentes ya lo ejecutan' : 'Rechazado — el agente lo ajustará');
+}
+
+/* ================= Chat ================= */
+const GREET = {
+  ana:   {text:()=>'¡' + saludoHorario() + '! Soy Ana, recepcionista de la oficina. Somos su equipo virtual: recepción, contabilidad y administración, 24/7. ¿En qué le puedo ayudar?', quick:['Declaración de impuestos','Nómina y sueldos','Asesoría fiscal'], stage:'root'},
+  garcia:{text:()=>'Buenas, soy Lic. García, su contador. ¿En qué le puedo ayudar?', quick:['Declaración de impuestos','Asesoría fiscal','Hablar con recepción'], stage:'garcia-root'},
+  luis:  {text:()=>'¡Hola! Soy Luis, su auxiliar de Administración. ¿En qué le puedo ayudar?', quick:['Nómina y sueldos','Enviar facturas','Hablar con recepción'], stage:'luis-root'}
+};
+const BUSY = {
+  ana:()=>'Un momento por favor, atiendo a otro cliente… listo, ¿en qué le puedo ayudar?',
+  garcia:()=>'Un momento, estoy finalizando con otro cliente… listo, ¿en qué le puedo ayudar?',
+  luis:()=>'Un momento, estoy terminando una planilla… listo, ¿en qué le puedo ayudar?'
+};
+function greetFor(id){
+  if(GREET[id]) return GREET[id];
+  const a = AGENTS[id];
+  return {
+    text:()=>'¡' + saludoHorario() + '! Soy ' + a.name + ', ' + a.role.toLowerCase() + '. Asigname tareas desde el pizarrón o consultame lo que necesites.',
+    quick:['¿Qué tareas tenés?','Hablar con recepción','Nada por ahora'],
+    stage:'custom'
+  };
+}
+
+function setStatus(id, status, withWho){
+  const a = AGENTS[id];
+  a.status = status;
+  if(status === 'atendiendo') a.with = withWho || a.with;
+  if(status === 'libre'){ a.with = null; a.task = null; }
+  renderOffice();
+  flashAgent(id);
+  if(chatOpen && thread && thread.agent === id) renderChatHead();
+}
+
+function openChat(agentId){
+  if(!thread) thread = {agent:'ana', stage:'root', data:{}, msgs:[], waiting:false, greeted:false, quick:null};
+  chatOpen = true;
+  $('#chatPanel').classList.add('open');
+  $('#scrim').classList.add('show');
+  $('#resumeBtn').classList.add('hide');
+  const wasBusy = AGENTS[agentId].status !== 'libre' && AGENTS[agentId].with !== 'dueño';
+  if(thread.msgs.length === 0){
+    thread.agent = agentId;
+    setStatus(agentId, 'atendiendo', 'dueño');
+    renderChatHead(); renderMsgs();
+    startGreeting(agentId);
+  } else if(thread.agent !== agentId){
+    pushMsg({from:'handoff', text:'Pasaste a hablar con ' + AGENTS[agentId].name});
+    const prev = thread.agent;
+    if(prev !== agentId) setStatus(prev, 'libre');
+    thread.agent = agentId;
+    setStatus(agentId, 'atendiendo', 'dueño');
+    renderChatHead(); renderMsgs();
+    greetDirect(agentId, wasBusy);
+  } else {
+    setStatus(agentId, 'atendiendo', 'dueño');
+    renderChatHead(); renderMsgs();
+    setQuick(thread.quick);
+  }
+  $('#chatInput').focus();
+}
+function closeChat(){
+  chatOpen = false;
+  $('#chatPanel').classList.remove('open');
+  $('#scrim').classList.remove('show');
+  if(thread && thread.msgs.length) $('#resumeBtn').classList.remove('hide');
+}
+$('#scrim').addEventListener('click', () => { if(chatOpen) closeChat(); });
+$('#resumeBtn').addEventListener('click', () => openChat(thread.agent));
+
+function renderChatHead(){
+  const a = AGENTS[thread.agent];
+  const st = STATUS_META[a.status];
+  $('#chatHead').innerHTML =
+    '<div class="ava-wrap"><div class="ava" style="background:linear-gradient(135deg,' + a.grad[0] + ',' + a.grad[1] + ')">' + a.ini + '</div><span class="dot ' + st.cls + '"></span></div>' +
+    '<div class="chat-title"><div class="chat-name">' + esc(a.name) + '</div><div class="chat-sub">' + esc(a.role) + ' · en línea 24/7</div></div>' +
+    '<button class="panel-x" id="chatX" aria-label="Cerrar chat"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button>';
+  $('#chatX').addEventListener('click', closeChat);
+}
+
+function startGreeting(agentId){
+  thread.greeted = true;
+  const g = greetFor(agentId);
+  agentSay(g.text(), {quick:g.quick, stage:g.stage});
+}
+function greetDirect(agentId, wasBusy){
+  const g = greetFor(agentId);
+  const busy = (BUSY[agentId] || (()=>'Un momento, por favor… listo, ¿en qué le puedo ayudar?'))();
+  if(wasBusy) agentSay(busy, {after:() => agentSay(g.text(), {quick:g.quick, stage:g.stage}), delay:1500});
+  else agentSay(g.text(), {quick:g.quick, stage:g.stage});
+}
+
+function renderMsgs(){
+  const m = $('#msgs');
+  m.innerHTML = '';
+  if(thread) thread.msgs.forEach(x => m.appendChild(buildMsgNode(x)));
+  scrollBottom();
+  setQuick(thread ? thread.quick : null);
+}
+function scrollBottom(){ const m = $('#msgs'); m.scrollTop = m.scrollHeight; }
+
+function buildMsgNode(x){
+  if(x.from === 'handoff' || x.from === 'system'){
+    const d = document.createElement('div');
+    d.className = 'pill' + (x.from === 'system' ? ' sys' : '');
+    d.innerHTML = (x.from === 'handoff' ? I.arrow : I.check) + '<span>' + esc(x.text) + '</span>';
+    return d;
+  }
+  if(x.from === 'doc'){ return buildDocCard(x.doc); }
+  const wrap = document.createElement('div');
+  wrap.className = 'msg ' + x.from;
+  let inner = '';
+  if(x.from === 'agent'){
+    const a = AGENTS[x.agent];
+    if(a) inner += '<div class="ava" style="background:linear-gradient(135deg,' + a.grad[0] + ',' + a.grad[1] + ')">' + a.ini + '</div>';
+  }
+  inner += '<div><div class="bubble">' + esc(x.text) + '</div><div class="time">' + esc(x.time) + '</div></div>';
+  wrap.innerHTML = inner;
+  return wrap;
+}
+function buildDocCard(d){
+  const card = document.createElement('div');
+  card.className = 'doccard';
+  card.innerHTML = '<span class="f-ic">' + I.file + '</span><div><div class="doccard-name">' + esc(d.name) + '</div><div class="doccard-foot">' + CHIP[d.status] + '<button class="linkbtn" data-goarch="1">Ver en Archivo</button></div></div>';
+  card.querySelector('[data-goarch]').addEventListener('click', () => showView('archivo'));
+  return card;
+}
+
+function pushMsg(x){
+  x.time = x.time || now();
+  if(!x.agent && (x.from === 'agent')) x.agent = thread.agent;
+  thread.msgs.push(x);
+  if(chatOpen){ $('#msgs').appendChild(buildMsgNode(x)); scrollBottom(); }
+}
+function pushDocCard(d){ pushMsg({from:'doc', doc:d}); }
+
+function setQuick(list){
+  thread && (thread.quick = list);
+  const q = $('#quick');
+  q.innerHTML = '';
+  (list || []).forEach(t => {
+    const b = document.createElement('button');
+    b.className = 'chipbtn'; b.textContent = t; b.type = 'button';
+    b.addEventListener('click', () => { if(thread.waiting) return; pushMsg({from:'user', text:t}); respond(t); });
+    q.appendChild(b);
+  });
+}
+function showTyping(){
+  hideTyping();
+  const d = document.createElement('div');
+  d.className = 'msg agent'; d.id = 'typingRow';
+  d.innerHTML = '<div class="bubble typing"><span class="d"></span><span class="d"></span><span class="d"></span></div>';
+  $('#msgs').appendChild(d); scrollBottom();
+}
+function hideTyping(){ const t = $('#typingRow'); if(t) t.remove(); }
+
+function agentSay(text, opts = {}){
+  const c = thread;
+  c.waiting = true;
+  renderChatHead(); updateInput();
+  showTyping();
+  const delay = opts.delay != null ? opts.delay : Math.min(2600, 800 + text.length * 16);
+  setTimeout(() => {
+    if(thread !== c) { return; }
+    hideTyping();
+    pushMsg({from:'agent', text});
+    c.waiting = false;
+    if(opts.doc) pushDocCard(opts.doc);
+    if(opts.quick) setQuick(opts.quick); else setQuick(null);
+    if(opts.stage) c.stage = opts.stage;
+    if(opts.after) opts.after();
+    updateInput();
+    scrollBottom();
+  }, delay);
+}
+function updateInput(){
+  const waiting = !!(thread && thread.waiting);
+  $('#chatInput').disabled = waiting;
+  $('#chatForm .send').disabled = waiting;
+  $('#chatInput').placeholder = waiting ? 'Esperando respuesta…' : 'Escribe tu mensaje…';
+}
+
+$('#chatForm').addEventListener('submit', e => {
+  e.preventDefault();
+  const inp = $('#chatInput');
+  const t = inp.value.trim();
+  if(!t || !thread || thread.waiting) return;
+  inp.value = '';
+  pushMsg({from:'user', text:t});
+  respond(t);
+});
+
+/* ---------- Lógica conversacional ---------- */
+function respond(raw){
+  const t = norm(raw);
+  const c = thread;
+  const G = greetFor(c.agent);
+
+  // Palabras clave globales
+  if(/\b(hola|buenas|buenos dias|buenas tardes|buenas noches|hey)\b/.test(t)){
+    return agentSay('¡Hola! ¿En qué le puedo ayudar?', {quick:G.quick, stage:G.stage});
+  }
+  if(/(horario|abierto|cerrado|cierran|atencion|24\/7)/.test(t)){
+    return agentSay('Somos una oficina digital: los agentes atendemos 24/7, los 365 días. No cerramos nunca.', {quick:G.quick, stage:G.stage});
+  }
+  if(/(precio|costo|honorario|tarifa|cuanto cobran)/.test(t) && c.stage !== 'custom'){
+    return agentSay('Puedo estimarle costos fiscales y de nómina con los datos de su oficina. ¿Qué le calculo?', {quick:['Estimar IVA','Nómina y sueldos','Seguir consultando'], stage:'root'});
+  }
+  if(/gracias/.test(t)){
+    return agentSay('¡Con gusto! Estoy aquí las 24 horas cuando me necesite.', {quick:G.quick, stage:G.stage});
+  }
+
+  switch(c.stage){
+    case 'root': {
+      if(/(declara|iva|renta|impuest)/.test(t)) return askDeclTipo();
+      if(/(nomina|sueldo|planilla)/.test(t)) return flowNomina();
+      if(/(asesor|consulta|duda|factura|timbrado|monotribut)/.test(t)) return flowAsesoria();
+      return agentSay('Puedo ayudarle con declaraciones de impuestos, nómina y sueldos, o asesoría fiscal. ¿Qué necesita?', {quick:GREET.ana.quick, stage:'root'});
+    }
+    case 'garcia-root': {
+      if(/(declara|iva|renta|impuest)/.test(t)) return agentSay('Perfecto. ¿Qué tipo de declaración necesita?', {quick:['IVA','Renta'], stage:'decl-tipo'});
+      if(/(asesor|consulta|duda|factura|timbrado)/.test(t)) return flowAsesoria();
+      if(/recepcion|ana/.test(t)) return handoffTo('ana', 'Lic. García te comunicó con Ana — Recepción');
+      return agentSay('Puedo ayudarle con declaraciones de impuestos o asesoría fiscal. ¿Qué necesita?', {quick:GREET.garcia.quick, stage:'garcia-root'});
+    }
+    case 'luis-root': {
+      if(/(nomina|sueldo|planilla)/.test(t)) return agentSay('¡Perfecto! ¿Para cuántos empleados preparo la nómina?', {quick:['5 empleados','12 empleados','Escribir la cantidad'], stage:'nom-cant'});
+      if(/factura/.test(t)) return doFacturas();
+      if(/recepcion|ana/.test(t)) return handoffTo('ana', 'Luis te comunicó con Ana — Recepción');
+      return agentSay('Puedo ayudarle con nómina y sueldos o con la recepción de facturas. ¿Qué necesita?', {quick:GREET.luis.quick, stage:'luis-root'});
+    }
+    case 'decl-tipo': {
+      let tipo = null;
+      if(/iva/.test(t)) tipo = 'IVA';
+      else if(/(renta|irp|ire)/.test(t)) tipo = 'Renta';
+      if(!tipo) return agentSay('¿La declaración es de IVA o de renta?', {quick:['IVA','Renta'], stage:'decl-tipo'});
+      c.data.tipo = tipo;
+      if(c.agent === 'ana'){
+        return flowDeclHandoff(tipo);
+      }
+      return askMonto();
+    }
+    case 'decl-monto': {
+      const n = parseInt(t.replace(/\D/g,''), 10);
+      if(!n || n < 1000){
+        return agentSay('Necesito el monto aproximado de su facturación del período. Puede escribirlo, por ejemplo: 850.000', {quick:['$ 850.000','$ 2.400.000','Escribir el monto'], stage:'decl-monto'});
+      }
+      c.data.monto = n;
+      return previewDecl();
+    }
+    case 'decl-generar': {
+      if(/^(si|sí|dale|ok|va|genera|genial|perfecto)/.test(t)) return generarDecl();
+      if(/^(no|todavia|luego|pause)/.test(t)) return agentSay('Sin problema, la dejo pausada. Puede pedírmela cuando quiera.', {quick:['Otra consulta','Finalizar'], stage:'done'});
+      return agentSay('¿Genero su ' + ('Declaración ' + c.data.tipo).toLowerCase() + '? Responda con los botones o escríbame.', {quick:['Sí, generar','No, gracias'], stage:'decl-generar'});
+    }
+    case 'decl-espera': {
+      return agentSay('Su declaración sigue esperando su visto bueno, en la cola de aprobaciones. Mientras espera, ¿le ayudo con algo más?', {quick:['Otra consulta','Finalizar'], stage:'decl-espera'});
+    }
+    case 'nom-cant': {
+      const n = parseInt(t.replace(/\D/g,''), 10);
+      if(!n || n < 1 || n > 999){
+        return agentSay('¿Para cuántos empleados preparo la nómina? Puede escribir la cantidad.', {quick:['5 empleados','12 empleados','Escribir la cantidad'], stage:'nom-cant'});
+      }
+      c.data.empleados = n;
+      return agentSay('Perfecto, ' + n + ' empleados. Preparo sueldos, cargas sociales y aportes del período. ¿Genero la planilla?', {quick:['Sí, generar','No, gracias'], stage:'nom-generar'});
+    }
+    case 'nom-generar': {
+      if(/^(si|sí|dale|ok|va|genera)/.test(t)) return generarNom();
+      return agentSay('Sin problema, queda para cuando indique.', {quick:['Otra consulta','Finalizar'], stage:'done'});
+    }
+    case 'asesoria-free': {
+      return asesoriaAnswer(t);
+    }
+    case 'done': {
+      if(/(otra|algo|si|sí|nueva)/.test(t)) return agentSay('Claro, ¿en qué más le puedo ayudar?', {quick:G.quick, stage:G.stage});
+      if(/(recepcion|ana)/.test(t) && c.agent !== 'ana') return handoffTo('ana', 'Le comunico con Ana — Recepción');
+      return agentSay('La conversación queda abierta: escríbame cuando quiera, atendemos 24/7. También puede usar los botones.', {quick:G.quick, stage:G.stage});
+    }
+    case 'custom': {
+      if(/(tareas|lista|que tenes)/.test(t)){
+        const l = tasks[c.agent] || [];
+        const act = l.filter(x => x.status !== 'lista');
+        return agentSay(act.length
+          ? 'Ahora mismo tengo ' + act.length + (act.length === 1 ? ' tarea activa' : ' tareas activas') + ': ' + act.map(x => '«' + x.text + '»').join(', ') + '. Seguí el avance en el pizarrón de tareas.'
+          : 'No tengo tareas activas — el pizarrón está libre para asignarme trabajo.', {quick:G.quick, stage:'custom'});
+      }
+      if(/(recepcion|ana)/.test(t) && AGENTS.ana) return handoffTo('ana', 'Te comunico con Ana — Recepción');
+      return agentSay('En esta demo mi rol es de apoyo: asigname tareas desde el pizarrón y seguí su avance en vivo. Para los trámites de la oficina, comunicate con la recepción.', {quick:G.quick, stage:'custom'});
+    }
+    default: {
+      return agentSay('¿En qué le puedo ayudar? Puede usar los botones o escribirme.', {quick:G.quick, stage:G.stage});
+    }
+  }
+}
+
+function askDeclTipo(){
+  agentSay('¡Perfecto! ¿Qué tipo de declaración necesita?', {quick:['IVA','Renta'], stage:'decl-tipo'});
+}
+function flowDeclHandoff(tipo){
+  if(!AGENTS.garcia) return handoffTo('garcia', 'Ana te comunicó con Lic. García — Contador');
+  const wasBusy = AGENTS.garcia.status !== 'libre' && AGENTS.garcia.with !== 'dueño';
+  handoffTo('garcia', 'Ana te comunicó con Lic. García — Contador', () => {
+    const ask = () => askMonto();
+    if(wasBusy) agentSay('Un momento, que finalizo con otro cliente… listo, ¿en qué le puedo ayudar?', {after:ask, delay:1600});
+    else ask();
+  });
+}
+function askMonto(){
+  const tipo = thread.data.tipo;
+  agentSay('Buenas, Lic. García a su servicio. Con tu sistema de gestión conectado vía API, la facturación del período la tomaría directamente de ahí; para esta demo indícamela. ¿Cuál fue tu facturación?', {quick:['$ 850.000','$ 2.400.000','Escribir el monto'], stage:'decl-monto'});
+}
+function previewDecl(){
+  const c = thread;
+  const m = c.data.monto;
+  const iva = Math.round(m * 10 / 110);
+  c.data.iva = iva;
+  agentSay('Gracias. Con una facturación de ' + fmt(m) + ', el impuesto estimado es ' + fmt(iva) + ' (calculado sobre el precio neto). ¿Genero la Declaración ' + c.data.tipo + ' y la dejo en su expediente?', {quick:['Sí, generar','No, gracias'], stage:'decl-generar'});
+}
+function generarDecl(){
+  const c = thread;
+  const iva = c.data.iva;
+  const peer = ['luis','garcia','ana'].find(x => AGENTS[x] && x !== c.agent);
+  const peerA = peer ? AGENTS[peer] : null;
+  const me = AGENTS[c.agent];
+  c.waiting = true; updateInput();
+  if(peerA){
+    pushMsg({from:'handoff', text:'Conversación interna — ' + me.name + ' consulta a ' + peerA.name});
+    setTimeout(() => {
+      if(thread !== c) return;
+      pushMsg({from:'agent', agent:peer, text:'Revisado: impuesto estimado de ' + fmt(iva) + ', sobre precio neto y sin retenciones adicionales. De acuerdo.'});
+      scrollBottom();
+    }, 1400);
+    setTimeout(() => {
+      if(thread !== c) return;
+      bitacoraAdd(me.name, 'Con ' + peerA.name + ' revisaron la declaración — cálculo confirmado');
+    }, 2700);
+  }
+  setTimeout(() => { if(thread === c) finishDecl(c); }, peerA ? 3600 : 1200);
+}
+function finishDecl(c){
+  const m = c.data.monto, iva = c.data.iva, tipo = c.data.tipo;
+  const name = 'Declaración ' + tipo + ' — ' + mesActual();
+  const nameLc = name.toLowerCase().replace('iva', 'IVA');
+  const needsAp = m >= 2000000;
+  const doc = {name, status: needsAp ? 'pend' : 'listo', time: now()};
+  docs.negocio.push(doc);
+  bitacoraAdd('Lic. García', 'Generó ' + name + ' — ' + fmt(m));
+  renderArchivo();
+  if(needsAp){
+    approvals.unshift({id:uid(), title:name, client:'Mi negocio', amount:iva, by:'Lic. García', time:now(), status:'pend', boss:true, docRef:doc});
+    setStatus('garcia', 'esperando');
+    renderAprobaciones(); renderTabs();
+    toast(name + ' espera tu visto bueno');
+    agentSay('Su ' + nameLc + ' quedó generada. Como es una presentación ante el fisco, necesita su visto bueno: está en su cola de aprobaciones. Le aviso apenas la revise.', {stage:'decl-espera', doc});
+  } else {
+    toast(name + ' archivado en tu expediente');
+    agentSay('Listo. Su ' + nameLc + ' quedó archivada en el expediente del negocio, con un impuesto estimado de ' + fmt(iva) + '.', {stage:'done', doc, quick:['Otra consulta','Finalizar']});
+  }
+}
+function flowNomina(){
+  if(!AGENTS.luis) return handoffTo('luis', 'Ana te comunicó con Luis — Administración');
+  const wasBusy = AGENTS.luis.status !== 'libre' && AGENTS.luis.with !== 'dueño';
+  agentSay('Con gusto, le comunico con Luis de Administración.', {after:() => {
+    handoffTo('luis', 'Ana te comunicó con Luis — Administración', () => {
+      const ask = () => agentSay('Buenas, Luis de Administración. ¿Para cuántos empleados preparo la nómina?', {quick:['5 empleados','12 empleados','Escribir la cantidad'], stage:'nom-cant'});
+      if(wasBusy) agentSay('Un momento, estoy terminando una planilla… listo, ¿en qué le puedo ayudar?', {after:ask, delay:1600});
+      else ask();
+    });
+  }});
+}
+function generarNom(){
+  const c = thread;
+  const name = 'Planilla de sueldos — ' + mesActual();
+  const doc = {name, status:'listo', time: now()};
+  docs.negocio.push(doc);
+  bitacoraAdd('Luis', 'Generó ' + name + ' (' + c.data.empleados + ' empleados)');
+  renderArchivo();
+  toast(name + ' archivado en tu expediente');
+  agentSay('Listo, su ' + name.toLowerCase() + ' para ' + c.data.empleados + ' empleados quedó archivada en el expediente del negocio.', {stage:'done', doc, quick:['Otra consulta','Finalizar']});
+}
+function doFacturas(){
+  const name = 'Facturas recibidas — ' + mesActual();
+  const doc = {name, status:'listo', time: now()};
+  docs.negocio.push(doc);
+  bitacoraAdd('Luis', 'Recibió y archivó las facturas del período');
+  renderArchivo();
+  toast(name + ' archivado en tu expediente');
+  agentSay('Perfecto. Recibidas y archivadas en el expediente del negocio.', {stage:'done', doc, quick:['Otra consulta','Finalizar']});
+}
+function flowAsesoria(){
+  if(thread.agent !== 'garcia'){
+    agentSay('Con gusto, le comunico con el contador.', {after:() => {
+      handoffTo('garcia', 'Ana te comunicó con Lic. García — Contador', () => {
+        agentSay('Consulte con confianza. ¿Sobre qué tema tiene la duda?', {quick:['IVA','Renta / IRP','Facturación','Otra duda'], stage:'asesoria-free'});
+      });
+    }});
+  } else {
+    agentSay('Consulte con confianza. ¿Sobre qué tema tiene la duda?', {quick:['IVA','Renta / IRP','Facturación','Otra duda'], stage:'asesoria-free'});
+  }
+}
+function asesoriaAnswer(t){
+  let ans;
+  if(/iva/.test(t)) ans = 'El IVA grava la venta de bienes y servicios: en general se calcula sobre el precio neto y el contribuyente lo declara por período mensual. En la demo uso valores ilustrativos; en producción, el agente calcularía con las tasas de tu país cargadas en la base de conocimiento.';
+  else if(/(renta|irp|ire|impuesto a la)/.test(t)) ans = 'La renta grava las utilidades o ingresos de las personas y empresas, se declara por ejercicio y suele admitir deducciones de gastos. Este es un resumen orientativo de la demo; con tus datos reales, el agente lo calcularía caso por caso.';
+  else if(/(factura|timbrado|monotribut)/.test(t)) ans = 'Sobre facturación: los agentes pueden registrar comprobantes, verificar que cumplan los requisitos formales y archivarlos en el expediente. La habilitación para emitir (y sus regímenes simplificados) depende de la normativa local, que cargaríamos en la base de conocimiento.';
+  else ans = 'Puedo orientarle sobre IVA, renta, facturación y nómina. Recuerde: en esta demo respondo con valores ilustrativos; en producción, todo saldría de la base de conocimiento de tu oficina.';
+  agentSay(ans, {quick:['Otra consulta','Finalizar'], stage:'asesoria-free'});
+}
+
+function handoffTo(agentId, note, then){
+  if(!AGENTS[agentId]){
+    agentSay('Ese puesto está vacío en este momento. En la demo los trámites están conectados al equipo inicial; los agentes que contrates se gestionan desde el pizarrón de tareas.', {quick:greetFor(thread.agent).quick, stage:greetFor(thread.agent).stage});
+    return;
+  }
+  pushMsg({from:'handoff', text:note});
+  const prev = thread.agent;
+  if(prev !== agentId) setStatus(prev, 'libre');
+  thread.agent = agentId;
+  setStatus(agentId, 'atendiendo', 'dueño');
+  renderChatHead();
+  if(then) then();
+  else agentSay(greetFor(agentId).text(), {quick:greetFor(agentId).quick, stage:greetFor(agentId).stage});
+}
+
+/* ================= Pizarrón de tareas ================= */
+const TASK_CHIP = {pend:'<span class="chip pend">Encolada</span>', curso:'<span class="chip pend">En curso</span>', lista:'<span class="chip listo">Lista</span>'};
+const XIC = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>';
+function renderTareas(){
+  $('#tareasList').innerHTML = Object.keys(AGENTS).map(agentCard).join('');
+}
+function agentCard(id){
+  const a = AGENTS[id];
+  const list = tasks[id] || [];
+  const inact = a.status === 'inactivo';
+  const st = STATUS_META[a.status];
+  const rows = list.length ? list.map(t =>
+      '<div class="tcard"><div style="flex:1;min-width:130px"><div class="doc-name">' + esc(t.text) + '</div><div class="arole">asignada ' + esc(t.time) + '</div></div>' + TASK_CHIP[t.status] +
+      '<button class="tdel" data-tdel="' + id + '|' + t.id + '" aria-label="Borrar tarea">' + XIC + '</button></div>'
+    ).join('') : '<div class="empty">Sin tareas — usá «+ tarea» para asignarle trabajo.</div>';
+  return '<div class="folder"' + (inact ? ' style="opacity:.6"' : '') + '>' +
+    '<div class="folder-h"><div class="ava-wrap"><div class="ava" style="width:38px;height:38px;font-size:12px;background:linear-gradient(135deg,' + a.grad[0] + ',' + a.grad[1] + (inact ? ');opacity:.5' : ')') + '">' + a.ini + '</div><span class="dot ' + st.cls + '"></span></div>' +
+    '<div style="flex:1;min-width:120px"><div class="folder-title">' + esc(a.name) + (a.core ? '' : ' <span class="chip pend" style="margin-left:6px">contratado</span>') + '</div>' +
+    '<div class="folder-sub">' + esc(a.role) + ' · ' + esc(st.label(a)) + '</div></div>' +
+    '<div style="display:flex;gap:6px;flex-wrap:wrap">' +
+    '<button class="btn sm' + (inact ? ' primary' : '') + '" data-toggle="' + id + '">' + (inact ? 'Activar' : 'Desactivar') + '</button>' +
+    '<button class="btn sm primary" data-addtask="' + id + '">+ tarea</button>' +
+    '<button class="btn sm danger" data-fire="' + id + '">Despedir</button></div></div>' + rows + '</div>';
+}
+$('#tareasList').addEventListener('click', e => {
+  const del = e.target.closest('[data-tdel]');
+  const tog = e.target.closest('[data-toggle]');
+  const add = e.target.closest('[data-addtask]');
+  const fire = e.target.closest('[data-fire]');
+  if(del){
+    const p = del.dataset.tdel.split('|');
+    if(tasks[p[0]]){ tasks[p[0]] = tasks[p[0]].filter(t => t.id !== p[1]); renderTareas(); renderTabs(); }
+  }
+  if(tog){ const id = tog.dataset.toggle; if(AGENTS[id]) toggleAgent(id, AGENTS[id].status === 'inactivo'); }
+  if(add) openNewTask(add.dataset.addtask);
+  if(fire) handleFire(fire);
+});
+function handleFire(btn){
+  const id = btn.dataset.fire;
+  if(btn.dataset.armed === '1') return deleteAgent(id);
+  btn.dataset.armed = '1'; btn.textContent = '¿Confirmar?';
+  setTimeout(() => { if(document.body.contains(btn) && btn.dataset.armed === '1'){ btn.dataset.armed = '0'; btn.textContent = 'Despedir'; } }, 3000);
+}
+function toggleAgent(id, on){
+  const a = AGENTS[id]; if(!a) return;
+  if(on){
+    a.status = 'libre'; a.with = null; a.task = null;
+    bitacoraAdd('Usted (dueño)', 'Activó a ' + a.name);
+    toast(a.name + ' de vuelta en la oficina');
+  } else {
+    if(a.status === 'atendiendo' && a.with === 'dueño'){ toast(a.name + ' está conversando con vos — cerrá el chat primero'); return; }
+    a.status = 'inactivo'; a.with = null;
+    bitacoraAdd('Usted (dueño)', 'Desactivó a ' + a.name + ' — su lista de tareas queda en pausa');
+    toast(a.name + ' desactivado');
+  }
+  renderOffice(); renderTareas(); renderTabs(); flashAgent(id);
+}
+function deleteAgent(id){
+  const a = AGENTS[id]; if(!a) return;
+  delete AGENTS[id];
+  delete tasks[id];
+  const area = AREAS.find(x => x.agents && x.agents.includes(id));
+  if(area) area.agents = area.agents.filter(x => x !== id);
+  if(thread && thread.agent === id){ thread = null; $('#resumeBtn').classList.add('hide'); if(chatOpen) closeChat(); }
+  bitacoraAdd('Usted (dueño)', 'Despidió a ' + a.name + ' — se borró su lista de tareas');
+  toast(a.name + ' despedido');
+  renderOffice(); renderTareas(); renderTabs();
+}
+const closeAgentOv = () => $('#agentOv').classList.add('hide');
+let newWho = null;
+function openNewTask(pre){
+  const ids = Object.keys(AGENTS);
+  if(!ids.length){ toast('No hay agentes en la oficina — contratá uno primero'); return; }
+  newWho = pre && AGENTS[pre] ? pre : (ids.includes('luis') ? 'luis' : ids[0]);
+  $('#agentPanel').innerHTML =
+    '<div class="panel-h"><div class="panel-title">Nueva tarea</div><button class="panel-x" id="taskX" aria-label="Cerrar"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>' +
+    '<div style="font-size:12.5px;color:var(--muted);margin-bottom:8px">¿A quién se la asigno?</div>' +
+    '<div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px" id="whoRow">' + ids.map(id =>
+      '<button class="btn sm" data-who="' + id + '"' + (id === newWho ? ' style="border-color:var(--accent);color:var(--accent)"' : '') + '>' + AGENTS[id].name + '</button>').join('') + '</div>' +
+    '<input id="taskText" placeholder="¿Qué tiene que hacer?" style="width:100%;border:1px solid var(--line);border-radius:10px;padding:11px 13px;font-size:14px;background:var(--card);color:var(--ink);outline:none">' +
+    '<div style="display:flex;gap:7px;flex-wrap:wrap;margin:10px 0 14px" id="taskEx">' + ['Archivar facturas del mes','Agendar cita con el proveedor','Preparar resumen de caja'].map(s => '<button class="chipbtn" data-ex="' + s + '">' + s + '</button>').join('') + '</div>' +
+    '<div class="panel-foot"><button class="btn" id="taskCancel">Cancelar</button><button class="btn primary" id="taskGo">Asignar tarea</button></div>';
+  $('#agentOv').classList.remove('hide');
+  $('#taskX').addEventListener('click', closeAgentOv);
+  $('#taskCancel').addEventListener('click', closeAgentOv);
+  $('#whoRow').addEventListener('click', e => {
+    const b = e.target.closest('[data-who]'); if(!b) return;
+    newWho = b.dataset.who;
+    $('#whoRow').querySelectorAll('button').forEach(x => { x.style.borderColor = ''; x.style.color = ''; });
+    b.style.borderColor = 'var(--accent)'; b.style.color = 'var(--accent)';
+  });
+  $('#taskEx').addEventListener('click', e => {
+    const b = e.target.closest('[data-ex]'); if(b) $('#taskText').value = b.dataset.ex;
+  });
+  $('#taskGo').addEventListener('click', () => {
+    const v = $('#taskText').value.trim();
+    if(!v || !AGENTS[newWho]){ if(!v) $('#taskText').focus(); return; }
+    closeAgentOv();
+    assignTask(newWho, v);
+  });
+}
+function assignTask(who, text){
+  const a = AGENTS[who]; if(!a) return;
+  const t = {id:uid(), text, status:'pend', time:now()};
+  (tasks[who] = tasks[who] || []).unshift(t);
+  bitacoraAdd('Usted (dueño)', 'Asignó tarea a ' + a.name + ': «' + text + '»');
+  renderTareas(); renderTabs();
+  toast('Tarea asignada a ' + a.name);
+  const prev = {status:a.status, with:a.with, task:a.task};
+  const canOwn = prev.status !== 'atendiendo' && prev.status !== 'inactivo';
+  setTimeout(() => {
+    if(t.status !== 'pend' || !AGENTS[who]) return;
+    t.status = 'curso'; renderTareas(); renderTabs();
+    if(canOwn && AGENTS[who].status !== 'inactivo'){ AGENTS[who].task = text; setStatus(who, 'ocupado'); }
+    bitacoraAdd(AGENTS[who].name, 'Empezó la tarea: «' + text + '»');
+    flashAgent(who);
+    toast(AGENTS[who].name + ' está en la tarea');
+  }, 1400);
+  setTimeout(() => {
+    if(t.status !== 'curso' || !AGENTS[who]) return;
+    t.status = 'lista'; renderTareas(); renderTabs();
+    if(AGENTS[who].status === 'ocupado'){ AGENTS[who].status = prev.status; AGENTS[who].with = prev.with; AGENTS[who].task = prev.task; renderOffice(); }
+    bitacoraAdd(AGENTS[who].name, 'Completó la tarea: «' + text + '»');
+    flashAgent(who);
+    toast(AGENTS[who].name + ' completó la tarea — queda en la bitácora');
+  }, 8000);
+}
+$('#newTaskBtn').addEventListener('click', () => openNewTask());
+$('#hireBtn').addEventListener('click', openHire);
+
+let hireArea = 'recepcion';
+let colorSeq = 0;
+const PALETTE = [['#F472B6','#DB2777'],['#A78BFA','#7C3AED'],['#4ADE80','#16A34A'],['#38BDF8','#0284C7'],['#FB923C','#EA580C'],['#FACC15','#CA8A04']];
+const ROLE_BY_AREA = {recepcion:'Recepcionista', contabilidad:'Contador', administracion:'Auxiliar administrativo'};
+function openHire(){
+  hireArea = 'recepcion';
+  $('#agentPanel').innerHTML =
+    '<div class="panel-h"><div class="panel-title">Contratar agente</div><button class="panel-x" id="hireX" aria-label="Cerrar"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>' +
+    '<div style="font-size:12.5px;color:var(--muted);margin-bottom:8px">Nombre del empleado</div>' +
+    '<input id="hireName" placeholder="Ej.: Marta" style="width:100%;border:1px solid var(--line);border-radius:10px;padding:11px 13px;font-size:14px;background:var(--card);color:var(--ink);outline:none">' +
+    '<div style="font-size:12.5px;color:var(--muted);margin:12px 0 8px">¿En qué área va a trabajar?</div>' +
+    '<div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px" id="hireAreaRow">' + AREAS.filter(x => x.agents).map(x =>
+      '<button class="btn sm" data-area="' + x.id + '"' + (x.id === hireArea ? ' style="border-color:var(--accent);color:var(--accent)"' : '') + '>' + x.name + '</button>').join('') + '</div>' +
+    '<div class="panel-foot"><button class="btn" id="hireCancel">Cancelar</button><button class="btn primary" id="hireGo">Contratar</button></div>';
+  $('#agentOv').classList.remove('hide');
+  $('#hireX').addEventListener('click', closeAgentOv);
+  $('#hireCancel').addEventListener('click', closeAgentOv);
+  $('#hireAreaRow').addEventListener('click', e => {
+    const b = e.target.closest('[data-area]'); if(!b) return;
+    hireArea = b.dataset.area;
+    $('#hireAreaRow').querySelectorAll('button').forEach(x => { x.style.borderColor = ''; x.style.color = ''; });
+    b.style.borderColor = 'var(--accent)'; b.style.color = 'var(--accent)';
+  });
+  $('#hireGo').addEventListener('click', () => {
+    const name = $('#hireName').value.trim();
+    if(!name){ $('#hireName').focus(); return; }
+    closeAgentOv();
+    hireAgent(name, hireArea);
+  });
+  $('#hireName').focus();
+}
+function hireAgent(name, areaId){
+  const id = 'ax' + (seq++);
+  const words = name.split(/\s+/).filter(Boolean);
+  const ini = (words.length > 1 ? words[0][0] + words[1][0] : name.slice(0,2)).toUpperCase();
+  const area = AREAS.find(x => x.id === areaId);
+  AGENTS[id] = {id, ini, name, role: ROLE_BY_AREA[areaId] || 'Asistente', grad: PALETTE[colorSeq++ % PALETTE.length], status:'libre', with:null, task:null, today:'Sin actividad aún', core:false};
+  if(area) area.agents.push(id);
+  tasks[id] = [];
+  bitacoraAdd('Usted (dueño)', 'Contrató a ' + name + ' — ' + (ROLE_BY_AREA[areaId] || 'Asistente'));
+  toast(name + ' se suma a la oficina');
+  renderOffice(); renderTareas(); renderTabs();
+}
+
+let proactiveDone = false;
+function proactiveNudge(){
+  if(proactiveDone) return;
+  const id = ['garcia','luis','ana'].find(x => AGENTS[x] && AGENTS[x].status !== 'inactivo');
+  if(!id) return;
+  proactiveDone = true;
+  const name = AGENTS[id].name;
+  bitacoraAdd(name, 'Te avisó sin que se lo pidieras: vence el IVA el 25 y ya tiene los datos listos — solo falta tu OK');
+  flashAgent(id);
+  toast(name + ': «Vence el IVA el 25. ¿Preparo tu declaración?»');
+}
+
+/* ================= Vista del dueño ================= */
+function openAgentOv(id){
+  const a = AGENTS[id];
+  const st = STATUS_META[a.status];
+  let body = '<div style="display:flex;gap:12px;align-items:center;margin:10px 0 14px">' +
+    '<div class="ava-wrap"><div class="ava" style="background:linear-gradient(135deg,' + a.grad[0] + ',' + a.grad[1] + ')">' + a.ini + '</div><span class="dot ' + st.cls + '"></span></div>' +
+    '<div><div class="aname" style="font-size:16px">' + esc(a.name) + '</div><div class="arole">' + esc(a.role) + '</div></div></div>' +
+    '<div class="astatus ' + st.cls + '" style="font-size:13px;margin-bottom:10px">' + esc(st.label(a)) + '</div>' +
+    '<div class="astats" style="margin-bottom:14px">Hoy: ' + esc(a.today) + '</div>';
+  if(a.status === 'atendiendo' && a.with === 'Carla R. (cliente)'){
+    body += '<div style="font-weight:800;font-size:13px;margin:6px 0 8px">Atendiendo a tu cliente (modo observador)</div>' +
+      T_CARLA.map(m => '<div class="mmsg" style="' + (m.f === 'user' ? 'flex-direction:row-reverse' : '') + '">' +
+        '<div class="bubble" style="' + (m.f === 'user' ? 'background:var(--accent);color:#fff;border-top-right-radius:5px' : 'background:var(--card);border:1px solid var(--line);border-top-left-radius:5px') + '">' + esc(m.t) + '</div></div>').join('');
+  } else if(a.status === 'atendiendo' && a.with === 'dueño' && thread){
+    body += '<div style="font-weight:800;font-size:13px;margin:6px 0 8px">Tu conversación con este agente</div>';
+    const ult = thread.msgs.slice(-6);
+    body += ult.length ? ult.map(m => m.from === 'agent' || m.from === 'user'
+      ? '<div class="mmsg" style="' + (m.from === 'user' ? 'flex-direction:row-reverse' : '') + '"><div class="bubble" style="' + (m.from === 'user' ? 'background:var(--accent);color:#fff;border-top-right-radius:5px' : 'background:var(--card);border:1px solid var(--line);border-top-left-radius:5px') + '">' + esc(m.text) + '</div></div>'
+      : '').join('') : '<div class="arole">Sin mensajes aún.</div>';
+  }
+  $('#agentPanel').innerHTML =
+    '<div class="panel-h"><div class="panel-title">' + esc(a.name) + ' — vista observador</div><button class="panel-x" id="agentX" aria-label="Cerrar"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>' +
+    body + '<div class="panel-foot"><button class="btn primary sm" id="agentClose">Cerrar</button></div>';
+  $('#agentOv').classList.remove('hide');
+  $('#agentX').addEventListener('click', () => $('#agentOv').classList.add('hide'));
+  $('#agentClose').addEventListener('click', () => $('#agentOv').classList.add('hide'));
+}
+function showTranscript(){
+  const a = AGENTS.ana;
+  $('#agentPanel').innerHTML =
+    '<div class="panel-h"><div class="panel-title">Conversación — Ana y Carla R. (tu cliente)</div><button class="panel-x" id="agentX2" aria-label="Cerrar"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>' +
+    '<div style="font-size:12.5px;color:var(--muted);margin-bottom:8px">Modo observador — lectura solamente</div>' +
+    T_CARLA.map(m => '<div class="mmsg" style="' + (m.f === 'user' ? 'flex-direction:row-reverse' : '') + '"><div class="bubble" style="' + (m.f === 'user' ? 'background:var(--accent);color:#fff;border-top-right-radius:5px' : 'background:var(--card);border:1px solid var(--line);border-top-left-radius:5px') + '">' + esc(m.t) + '</div></div>').join('') +
+    '<div class="panel-foot" style="margin-top:12px"><button class="btn primary sm" id="agentClose2">Cerrar</button></div>';
+  $('#agentOv').classList.remove('hide');
+  $('#agentX2').addEventListener('click', () => $('#agentOv').classList.add('hide'));
+  $('#agentClose2').addEventListener('click', () => $('#agentOv').classList.add('hide'));
+}
+$('#agentOv').addEventListener('click', e => { if(e.target === $('#agentOv')) $('#agentOv').classList.add('hide'); });
+
+/* ================= Toast / tema / modo ================= */
+let toastTimer = null;
+function toast(msg){
+  let t = $('#toastEl');
+  if(!t){ t = document.createElement('div'); t.id = 'toastEl'; t.className = 'toast'; document.body.appendChild(t); }
+  t.textContent = msg;
+  t.style.display = 'block';
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => { t.style.display = 'none'; }, 2400);
+}
+$('#themeBtn').addEventListener('click', () => {
+  themeMode = themeMode === 'auto' ? 'light' : (themeMode === 'light' ? 'dark' : 'auto');
+  applyTheme();
+});
+
+/* ================= Bienvenida y tour guiado ================= */
+function showWelcome(){ $('#welcomeOv').classList.remove('hide'); }
+$('#enterBtn').addEventListener('click', () => $('#welcomeOv').classList.add('hide'));
+$('#tourBtn').addEventListener('click', () => { $('#welcomeOv').classList.add('hide'); startTour(); });
+
+const TOUR = [
+  {sel:'#plan .area', title:'Tus empleados virtuales', text:'Cada agente está en su puesto con su estado en vivo. Pulsa «Hablar» para darles instrucciones, o «Ver» para mirar cómo trabajan.'},
+  {sel:'#themeBtn', title:'Luces automáticas', text:'El tema cambia de día a noche según tu hora local: la oficina nunca cierra. Puedes forzarlo aquí.'},
+  {sel:'[data-view="archivo"]', title:'Todo queda archivado', text:'Lo que tus agentes generen —para tu negocio o para tus clientes— queda en el Archivo, listo para descargar.'},
+  {sel:'[data-view="tareas"]', title:'Pizarrón de tareas', text:'Cada empleado tiene su propia lista de tareas. Además podés activar o desactivar agentes, contratar más o despedir.'},
+  {sel:'[data-view="aprobaciones"]', title:'Tú tienes el control', text:'Acciones sensibles (envíos al fisco, gastos, descuentos a clientes): tus agentes te consultan antes de ejecutar. Decide aquí.'}
+];
+let tourIdx = -1, tourEls = null;
+function startTour(){
+  endTour();
+  tourEls = {spot:document.createElement('div'), card:document.createElement('div'), block:document.createElement('div')};
+  tourEls.spot.className = 'spot'; tourEls.card.className = 'tourcard'; tourEls.block.className = 'tourblock';
+  document.body.append(tourEls.block, tourEls.spot, tourEls.card);
+  tourIdx = -1;
+  nextTour();
+}
+function nextTour(){
+  tourIdx++;
+  if(tourIdx >= TOUR.length){ endTour(); return; }
+  const s = TOUR[tourIdx];
+  const el = document.querySelector(s.sel);
+  if(!el){ nextTour(); return; }
+  el.scrollIntoView({block:'center'});
+  const r = el.getBoundingClientRect(), pad = 8;
+  Object.assign(tourEls.spot.style, {top:(r.top-pad)+'px', left:(r.left-pad)+'px', width:(r.width+pad*2)+'px', height:(r.height+pad*2)+'px'});
+  const cardH = 190;
+  let top = r.bottom + 14;
+  if(top + cardH > window.innerHeight - 10) top = r.top - cardH - 14;
+  if(top < 10) top = 10;
+  const left = Math.min(Math.max(10, r.left), Math.max(10, window.innerWidth - 320));
+  Object.assign(tourEls.card.style, {top:top+'px', left:left+'px'});
+  tourEls.card.innerHTML = '<h4>' + esc(s.title) + '</h4><p>' + esc(s.text) + '</p><div class="panel-foot"><button class="btn sm" id="tourEnd">Salir</button><button class="btn primary sm" id="tourNext">' + (tourIdx === TOUR.length-1 ? 'Terminar' : 'Siguiente') + '</button></div>';
+  $('#tourEnd').addEventListener('click', endTour);
+  $('#tourNext').addEventListener('click', nextTour);
+}
+function endTour(){
+  if(tourEls){ tourEls.spot.remove(); tourEls.card.remove(); tourEls.block.remove(); tourEls = null; }
+}
+
+/* ================= Oficina viva (actividad ambiental) ================= */
+const AMBIENT = [
+  {who:'Ana', text:'Atendió una consulta de cliente por WhatsApp', id:'ana'},
+  {who:'Ana', text:'Agendó una cita con un proveedor (mañana 9:00)', id:'ana'},
+  {who:'Luis', text:'Archivó 2 facturas de Distribuidora Sur', id:'luis'},
+  {who:'Luis', text:'Actualizó el tablón de avisos', id:'luis'},
+  {who:'Lic. García', text:'Concilió la caja de octubre', id:'garcia'}
+];
+function ambientTick(){
+  const ev = AMBIENT[Math.floor(Math.random() * AMBIENT.length)];
+  if(AGENTS[ev.id] && AGENTS[ev.id].status !== 'inactivo'){
+    bitacoraAdd(AGENTS[ev.id].name, ev.text);
+    flashAgent(ev.id);
+    toast('Actividad: ' + AGENTS[ev.id].name + ' — ' + ev.text);
+  }
+  setTimeout(ambientTick, 22000 + Math.random() * 20000);
+}
+function flashAgent(id){
+  const btn = document.querySelector('[data-talk="' + id + '"],[data-ver="' + id + '"]');
+  const row = btn ? btn.closest('.arow') : null;
+  const ava = row ? row.querySelector('.ava') : null;
+  if(ava){ ava.classList.remove('flash'); void ava.offsetWidth; ava.classList.add('flash'); }
+}
+
+/* ================= Init ================= */
+applyTheme();
+tickClock();
+setInterval(tickClock, 30000);
+renderOffice();
+renderArchivo();
+renderTablon();
+renderBitacora();
+renderTareas();
+renderAprobaciones();
+renderTabs();
+showWelcome();
+setTimeout(ambientTick, 15000);
+setTimeout(proactiveNudge, 32000);
+</script>
+</body>
+</html>
