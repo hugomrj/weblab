@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DER ERP - Ventas, Cobranzas, Caja y Maestros</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+body{font-family:'Inter',sans-serif;background:#141b2d;color:#e2e8f0;overflow:hidden;user-select:none}
+.mono{font-family:'JetBrains Mono',monospace}
+.canvas-grid{background-image:radial-gradient(rgba(148,163,184,.15) 1px,transparent 1px);background-size:24px 24px;touch-action:none}
+.table-card{background:#1f2940;touch-action:none;transition:box-shadow .2s,opacity .25s;box-shadow:0 10px 25px -5px rgba(0,0,0,.4)}
+.table-card:hover{z-index:30}
+.table-card.dimmed{opacity:.25}
+.table-card.hl{box-shadow:0 0 0 2px #38bdf8,0 20px 25px -5px rgba(0,0,0,.6);z-index:40}
+svg path{transition:stroke .25s,opacity .25s}
+aside.sidebar{width:min(380px,100vw);background:rgba(17,24,39,.98);border-left:1px solid #1f2937;display:flex;flex-direction:column;transition:transform .3s;position:absolute;right:0;top:0;bottom:0;z-index:100;box-shadow:-10px 0 30px rgba(0,0,0,.5)}
+aside.sidebar.hidden{transform:translateX(100%)}
+</style>
+</head>
+<body class="h-screen w-screen flex flex-col relative overflow-hidden">
+<header class="bg-[#1a2236] border-b border-slate-700/70 px-4 py-3 flex flex-wrap items-center justify-between gap-3 z-50 shadow-md">
+  <div>
+    <h1 class="text-sm sm:text-base font-bold text-white">DER ERP: Maestros, Ventas, Cobros, Caja, Inventario, Compras, Preventa y Contabilidad</h1>
+    <p class="text-xs text-slate-400 hidden sm:block">Toca una tarjeta para ver reglas y relaciones. Arrastra para mover.</p>
+  </div>
+  <div id="legend" class="flex flex-wrap gap-3 text-xs"></div>
+  <div class="flex items-center gap-2">
+    <button onclick="zoomBy(1/1.15)" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700">−</button>
+    <span id="zoom-level" class="text-xs mono w-12 text-center"></span>
+    <button onclick="zoomBy(1.15)" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700">+</button>
+    <button onclick="resetLayout()" class="px-3 py-1.5 rounded-lg bg-slate-700 hover:bg-slate-600 text-white text-xs font-medium">Resetear</button>
+  </div>
+</header>
+
+<main id="viewport" class="flex-1 relative overflow-hidden canvas-grid cursor-grab">
+  <div id="canvas-world" class="absolute top-0 left-0 origin-top-left" style="width:2960px;height:2000px">
+    <svg class="w-full h-full pointer-events-none absolute top-0 left-0 z-10">
+      <defs>
+        <marker id="a0" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 1.5L8 5L0 8.5z" fill="#64748b"/></marker>
+        <marker id="a1" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 1.5L8 5L0 8.5z" fill="#38bdf8"/></marker>
+        <marker id="d0" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="5" markerHeight="5"><circle cx="5" cy="5" r="3.5" fill="#94a3b8"/></marker>
+        <marker id="d1" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="5" markerHeight="5"><circle cx="5" cy="5" r="3.5" fill="#38bdf8"/></marker>
+      </defs>
+      <g id="edges-layer"></g>
+    </svg>
+    <div id="tables-layer" class="relative z-20 w-full h-full"></div>
+  </div>
+</main>
+
+<aside id="info-sidebar" class="sidebar hidden">
+  <div class="p-4 border-b border-slate-800 flex items-center justify-between bg-[#111827]">
+    <div>
+      <span id="sb-badge" class="text-[10px] font-bold px-2 py-0.5 rounded tracking-wider uppercase mb-1 inline-block"></span>
+      <h2 id="sb-title" class="text-base font-bold text-white mono"></h2>
+    </div>
+    <button onclick="closeSidebar()" class="text-slate-400 hover:text-white px-3 py-1 rounded-lg hover:bg-slate-800 text-lg">✕</button>
+  </div>
+  <div class="p-5 flex-1 overflow-y-auto space-y-5 text-xs text-slate-300">
+    <div><h3 class="text-slate-400 font-semibold uppercase tracking-wider mb-2 text-[11px]">Reglas de negocio</h3>
+      <p id="sb-role" class="leading-relaxed bg-slate-900/60 p-3 rounded-lg border border-slate-800 text-slate-200"></p></div>
+    <div><h3 class="text-slate-400 font-semibold uppercase tracking-wider mb-2 text-[11px]">Columnas</h3><div id="sb-fields" class="space-y-1.5"></div></div>
+    <div><h3 class="text-slate-400 font-semibold uppercase tracking-wider mb-2 text-[11px]">Relaciones</h3><div id="sb-rels" class="space-y-1.5"></div></div>
+  </div>
+</aside>
+
+<script>
+// Módulos: [color header, borde, badge, etiqueta]
+const MOD = {
+  maestros:{h:'bg-amber-600',b:'border-amber-500/40',bd:'bg-amber-900/80 text-amber-200',l:'MAESTROS Y SEGURIDAD',c:'bg-amber-500'},
+  ventas:{h:'bg-indigo-600',b:'border-indigo-500/40',bd:'bg-indigo-900/80 text-indigo-200',l:'VENTAS Y DEUDAS',c:'bg-indigo-500'},
+  cobros:{h:'bg-emerald-600',b:'border-emerald-500/40',bd:'bg-emerald-950/90 text-emerald-200',l:'COBROS Y BANCOS',c:'bg-emerald-500'},
+  caja:{h:'bg-slate-600',b:'border-slate-500/40',bd:'bg-slate-800 text-slate-200',l:'CAJA Y ARQUEO',c:'bg-slate-500'},
+  inventario:{h:'bg-sky-600',b:'border-sky-500/40',bd:'bg-sky-950/90 text-sky-200',l:'INVENTARIO Y STOCK',c:'bg-sky-500'},
+  compras:{h:'bg-rose-600',b:'border-rose-500/40',bd:'bg-rose-950/90 text-rose-200',l:'COMPRAS Y CUENTAS A PAGAR',c:'bg-rose-500'},
+  preventa:{h:'bg-orange-600',b:'border-orange-500/40',bd:'bg-orange-950/90 text-orange-200',l:'PREVENTA Y DESPACHO',c:'bg-orange-500'},
+  contabilidad:{h:'bg-teal-600',b:'border-teal-500/40',bd:'bg-teal-950/90 text-teal-200',l:'CONTABILIDAD',c:'bg-teal-500'}
+};
+const COLX = {maestros:40, ventas:400, cobros:760, caja:1120, inventario:1480, compras:1840, preventa:2200, contabilidad:2560};
+
+// Campos: "nombre|TIPO|flags" (P=PK, F=FK, N=NULL, U=unique)
+// Tabla: [id, módulo, rol, campos, badge?]
+const T = [
+ // ---------- MAESTROS ----------
+ ['empresa','maestros','Entidad legal propietaria de los datos. Si el ERP es multiempresa, casi todas las tablas llevan empresa_id.',
+  ['id|INT|P','razon_social|VARCHAR(150)','ruc|VARCHAR(20)|U','moneda_base_id|INT|F','activa|BOOLEAN']],
+ ['sucursal','maestros','Establecimiento físico. Se vincula al código de establecimiento (001) del timbrado.',
+  ['id|INT|P','empresa_id|INT|F','nombre|VARCHAR(80)','cod_establecimiento|CHAR(3)','direccion|VARCHAR(200)','activa|BOOLEAN']],
+ ['usuario','maestros','Usuarios del sistema. Los cajeros y vendedores se identifican aquí. Permisos vía rol.',
+  ['id|INT|P','empresa_id|INT|F','rol_id|INT|F','nombre|VARCHAR(100)','email|VARCHAR(100)|U','password_hash|VARCHAR(255)','activo|BOOLEAN'],'SEGURIDAD'],
+ ['rol','maestros','Agrupa permisos (cajero, vendedor, admin). Relación con permisos por tabla rol_permiso.',
+  ['id|INT|P','nombre|VARCHAR(50)','descripcion|VARCHAR(150)']],
+ ['producto','maestros','Catálogo de productos y servicios. Cada uno define su tasa de IVA por defecto y su unidad.',
+  ['id|INT|P','codigo|VARCHAR(30)|U','descripcion|VARCHAR(200)','impuesto_id|INT|F','categoria_id|INT|F','unidad_id|INT|F','precio_venta|DECIMAL(12,2)','costo_promedio|DECIMAL(12,2)','stock_minimo|DECIMAL(10,2)','es_servicio|BOOLEAN','activo|BOOLEAN']],
+ ['impuesto','maestros','Tasas de IVA: 10 %, 5 % y exenta. Se copia a factura_detalle para conservar el histórico.',
+  ['id|INT|P','nombre|VARCHAR(30)','tasa|DECIMAL(5,2)','base_calculo|DECIMAL(5,2)']],
+ ['moneda','maestros','Catálogo de monedas (PYG, USD). Las transacciones guardan moneda y cotización del día.',
+  ['id|INT|P','codigo|CHAR(3)|U','nombre|VARCHAR(40)','decimales|INT']],
+ ['timbrado','maestros','Autorización de la SET para numerar documentos: vigencia, establecimiento, punto de expedición y rango. El número de factura se valida contra este rango.',
+  ['id|INT|P','sucursal_id|INT|F','numero_timbrado|VARCHAR(10)','tipo_documento|ENUM(FAC,NC,ND,REC,REM)','punto_expedicion|CHAR(3)','nro_desde|INT','nro_hasta|INT','nro_actual|INT','vigencia_desde|DATE','vigencia_hasta|DATE'],'FISCAL'],
+
+ // ---------- VENTAS ----------
+ ['cliente','ventas','Maestro de clientes. Guarda RUC/CI, límite de crédito y condición de pago por defecto. Direcciones y contactos múltiples irían en tablas hijas.',
+  ['id|INT|P','empresa_id|INT|F','ruc_ci|VARCHAR(20)','razon_social|VARCHAR(150)','tipo_contribuyente|ENUM(FIS,JUR,EXT)','telefono|VARCHAR(30)','email|VARCHAR(100)','limite_credito|DECIMAL(12,2)','activo|BOOLEAN']],
+ ['factura','ventas','Cabecera de venta (contado o crédito). Usa un timbrado, desglosa IVA y puede ser electrónica (SIFEN). Al emitirse genera su cuenta_cobrar.',
+  ['id|INT|P','cliente_id|INT|F','pedido_venta_id|INT|F|N','remision_id|INT|F|N','timbrado_id|INT|F','usuario_id|INT|F','moneda_id|INT|F','numero_factura|VARCHAR(17)','condicion|ENUM(CONT,CRED)','fecha_emision|DATETIME','cotizacion|DECIMAL(12,4)','gravado_10|DECIMAL(12,2)','gravado_5|DECIMAL(12,2)','exento|DECIMAL(12,2)','iva_10|DECIMAL(12,2)','iva_5|DECIMAL(12,2)','total|DECIMAL(12,2)','cdc_sifen|CHAR(44)|N','estado|ENUM(EMI,APR,ANU)']],
+ ['factura_detalle','ventas','Ítems de la factura. Copia precio y tasa de IVA vigentes al momento de vender.',
+  ['id|INT|P','factura_id|INT|F','pedido_venta_detalle_id|INT|F|N','producto_id|INT|F','impuesto_id|INT|F','cantidad|DECIMAL(10,2)','precio_unitario|DECIMAL(12,2)','descuento|DECIMAL(12,2)','subtotal|DECIMAL(12,2)']],
+ ['nota_credito','ventas','Devoluciones, descuentos posteriores y anulaciones parciales. Reduce el saldo de la cuenta_cobrar vinculada. Requiere motivo.',
+  ['id|INT|P','factura_id|INT|F','timbrado_id|INT|F','numero|VARCHAR(17)','fecha|DATETIME','motivo|VARCHAR(150)','total|DECIMAL(12,2)','cdc_sifen|CHAR(44)|N','estado|ENUM(EMI,APR,ANU)']],
+ ['cuenta_cobrar','ventas','Obligación generada por cada factura (1:1). saldo_pendiente es derivable de plan_pago: mantener con trigger o calcular.',
+  ['id|INT|P','factura_id|INT|F','monto_total|DECIMAL(12,2)','saldo_pendiente|DECIMAL(12,2)','estado|ENUM(PEND,PAG)']],
+ ['plan_pago','ventas','Cronograma de cuotas. Contado: 1 cuota inmediata. Crédito: N cuotas. Incluye mora e intereses.',
+  ['id|INT|P','cuenta_cobrar_id|INT|F','numero_cuota|INT','fecha_vencimiento|DATE','monto_cuota|DECIMAL(12,2)','saldo_cuota|DECIMAL(12,2)','tasa_mora|DECIMAL(5,2)','interes_acumulado|DECIMAL(12,2)','estado|ENUM(PEND,PAG)']],
+
+ // ---------- COBROS ----------
+ ['cobro','cobros','Recibo de pago. caja_sesion_id es NULL para transferencias o cobros online que no pasan por caja. Puede generar saldo a favor (anticipo).',
+  ['id|INT|P','cliente_id|INT|F','caja_sesion_id|INT|F|N','moneda_id|INT|F','numero_recibo|VARCHAR(20)','fecha_cobro|DATETIME','cotizacion|DECIMAL(12,4)','monto_total|DECIMAL(12,2)','saldo_a_favor|DECIMAL(12,2)','estado|ENUM(REG,ANU)']],
+ ['cobro_aplicacion','cobros','Puente N:M entre cobro y cuotas. Regla: SUM(monto_aplicado) ≤ SUM(cobro_detalle.monto) del cobro; la diferencia es anticipo.',
+  ['id|INT|P','cobro_id|INT|F','plan_pago_id|INT|F','monto_aplicado|DECIMAL(12,2)'],'TABLA PUENTE'],
+ ['cobro_detalle','cobros','Formas de pago del recibo. Si forma_pago.afecta_caja = true, genera un caja_movimiento.',
+  ['id|INT|P','cobro_id|INT|F','forma_pago_id|INT|F','cuenta_bancaria_id|INT|F|N','cheque_id|INT|F|N','monto|DECIMAL(12,2)','referencia|VARCHAR(50)|N','nro_voucher|VARCHAR(30)|N','fecha_acreditacion|DATE|N']],
+ ['forma_pago','cobros','Medios de pago (efectivo, tarjeta, cheque, transferencia). afecta_caja distingue efectivo físico de dinero bancario.',
+  ['id|INT|P','nombre|VARCHAR(60)','tipo|ENUM(EFE,TAR,CHE,TRA)','afecta_caja|BOOLEAN']],
+ ['banco','cobros','Catálogo de entidades bancarias (solo el banco, no la cuenta).',
+  ['id|INT|P','nombre|VARCHAR(100)','codigo|VARCHAR(10)']],
+ ['cuenta_bancaria','cobros','Cuenta de la empresa en un banco. Base para tesorería y conciliación bancaria.',
+  ['id|INT|P','banco_id|INT|F','empresa_id|INT|F','moneda_id|INT|F','numero_cuenta|VARCHAR(40)','titular|VARCHAR(100)']],
+ ['cheque','cobros','Cartera de cheques: recibido, depositado, cobrado o rechazado. Soporta fecha diferida.',
+  ['id|INT|P','banco_id|INT|F','numero|VARCHAR(20)','librador|VARCHAR(100)','monto|DECIMAL(12,2)','fecha_emision|DATE','fecha_cobro|DATE','estado|ENUM(CART,DEP,COB,RECH)']],
+
+ // ---------- CAJA ----------
+ ['caja','caja','Puestos de caja por sucursal.',
+  ['id|INT|P','sucursal_id|INT|F','nombre|VARCHAR(60)','activa|BOOLEAN']],
+ ['caja_sesion','caja','Turno de caja con arqueo ciego: compara el cierre del sistema con lo declarado por el cajero. Las diferencias requieren motivo y autorización.',
+  ['id|INT|P','caja_id|INT|F','usuario_id|INT|F','autorizado_por|INT|F|N','fecha_apertura|DATETIME','fecha_cierre|DATETIME|N','monto_apertura|DECIMAL(12,2)','monto_cierre_sistema|DECIMAL(12,2)','monto_cierre_declarado|DECIMAL(12,2)','diferencia|DECIMAL(12,2)','motivo_diferencia|VARCHAR(200)|N','estado|ENUM(ABI,CER)'],'ARQUEO'],
+ ['caja_movimiento','caja','Entradas y salidas de efectivo. cobro_detalle_id es NULL en gastos, retiros, depósitos a banco y traspasos entre cajas.',
+  ['id|INT|P','caja_sesion_id|INT|F','cobro_detalle_id|INT|F|N','cuenta_bancaria_id|INT|F|N','pago_proveedor_id|INT|F|N','tipo|ENUM(ING,EGR,RET,DEP,TRA)','concepto|VARCHAR(150)','monto|DECIMAL(12,2)','fecha_hora|DATETIME']],
+ ['caja_arqueo_detalle','caja','Conteo por denominación (billetes y monedas) al cerrar el turno.',
+  ['id|INT|P','caja_sesion_id|INT|F','denominacion|INT','cantidad|INT','subtotal|DECIMAL(12,2)']],
+
+ // ---------- INVENTARIO ----------
+ ['deposito','inventario','Almacén físico de una sucursal. El stock siempre se lleva por producto y depósito.',
+  ['id|INT|P','sucursal_id|INT|F','nombre|VARCHAR(80)','es_principal|BOOLEAN','activo|BOOLEAN']],
+ ['categoria','inventario','Clasificación jerárquica de productos (padre_id NULL = categoría raíz).',
+  ['id|INT|P','padre_id|INT|F|N','nombre|VARCHAR(80)']],
+ ['unidad_medida','inventario','Unidades de medida (UN, KG, LT, CJ) usadas en producto y documentos.',
+  ['id|INT|P','codigo|VARCHAR(10)|U','nombre|VARCHAR(40)']],
+ ['stock','inventario','Existencia actual por producto y depósito (único por par). Es un saldo derivado: solo debe cambiar a través de movimiento_stock.',
+  ['id|INT|P','producto_id|INT|F','deposito_id|INT|F','cantidad|DECIMAL(12,2)','cantidad_reservada|DECIMAL(12,2)','ultimo_movimiento|DATETIME'],'SALDO'],
+ ['movimiento_stock','inventario','Kardex. Toda entrada o salida deja una fila: compras (recepcion_detalle), ventas (remision_detalle, o factura_detalle si no hubo remisión) y ajustes. Guarda el costo para el costo promedio. Es solo de inserción; no se edita.',
+  ['id|INT|P','producto_id|INT|F','deposito_id|INT|F','deposito_destino_id|INT|F|N','usuario_id|INT|F','tipo|ENUM(ENT,SAL,AJU,TRA)','cantidad|DECIMAL(12,2)','costo_unitario|DECIMAL(12,2)','recepcion_detalle_id|INT|F|N','factura_detalle_id|INT|F|N','remision_detalle_id|INT|F|N','ajuste_id|INT|F|N','fecha_hora|DATETIME'],'KARDEX'],
+ ['ajuste_inventario','inventario','Corrección por toma física: compara lo contado con el stock del sistema. Al aplicarse genera un movimiento_stock tipo AJU. Requiere motivo y usuario.',
+  ['id|INT|P','deposito_id|INT|F','producto_id|INT|F','usuario_id|INT|F','cantidad_sistema|DECIMAL(12,2)','cantidad_contada|DECIMAL(12,2)','diferencia|DECIMAL(12,2)','motivo|VARCHAR(150)','fecha|DATETIME','estado|ENUM(BOR,APL)']],
+
+ // ---------- COMPRAS ----------
+ ['proveedor','compras','Maestro de proveedores con RUC y plazo de pago por defecto.',
+  ['id|INT|P','empresa_id|INT|F','ruc|VARCHAR(20)','razon_social|VARCHAR(150)','telefono|VARCHAR(30)','email|VARCHAR(100)','plazo_pago_dias|INT','activo|BOOLEAN']],
+ ['orden_compra','compras','Pedido al proveedor. No mueve stock ni genera deuda; solo es un compromiso.',
+  ['id|INT|P','proveedor_id|INT|F','moneda_id|INT|F','usuario_id|INT|F','numero|VARCHAR(20)','fecha|DATE','total|DECIMAL(12,2)','estado|ENUM(BOR,ENV,PAR,CER)']],
+ ['orden_compra_detalle','compras','Ítems pedidos. cantidad_recibida se actualiza con cada recepción, así se detectan entregas parciales.',
+  ['id|INT|P','orden_compra_id|INT|F','producto_id|INT|F','cantidad|DECIMAL(10,2)','precio_unitario|DECIMAL(12,2)','cantidad_recibida|DECIMAL(10,2)']],
+ ['recepcion','compras','Ingreso físico de mercadería (nota de remisión del proveedor). orden_compra_id es NULL si se compra sin orden previa. Al registrarse, suma stock.',
+  ['id|INT|P','orden_compra_id|INT|F|N','deposito_id|INT|F','usuario_id|INT|F','nro_remision|VARCHAR(20)','fecha|DATETIME','estado|ENUM(REG,ANU)'],'ENTRADA'],
+ ['recepcion_detalle','compras','Cantidad y costo realmente recibidos. Cada fila genera un movimiento_stock de entrada.',
+  ['id|INT|P','recepcion_id|INT|F','producto_id|INT|F','cantidad|DECIMAL(10,2)','costo_unitario|DECIMAL(12,2)']],
+ ['factura_compra','compras','Factura del proveedor, con su timbrado y desglose de IVA (base del libro IVA compras). Al registrarse genera su cuenta_pagar.',
+  ['id|INT|P','proveedor_id|INT|F','moneda_id|INT|F','recepcion_id|INT|F|N','timbrado_proveedor|VARCHAR(10)','numero_factura|VARCHAR(17)','condicion|ENUM(CONT,CRED)','fecha_emision|DATE','cotizacion|DECIMAL(12,4)','gravado_10|DECIMAL(12,2)','gravado_5|DECIMAL(12,2)','exento|DECIMAL(12,2)','iva_10|DECIMAL(12,2)','iva_5|DECIMAL(12,2)','total|DECIMAL(12,2)','estado|ENUM(REG,ANU)']],
+ ['factura_compra_detalle','compras','Ítems facturados por el proveedor, con su tasa de IVA.',
+  ['id|INT|P','factura_compra_id|INT|F','producto_id|INT|F','impuesto_id|INT|F','cantidad|DECIMAL(10,2)','costo_unitario|DECIMAL(12,2)','subtotal|DECIMAL(12,2)']],
+ ['cuenta_pagar','compras','Deuda con el proveedor (1:1 con la factura de compra). Espejo de cuenta_cobrar.',
+  ['id|INT|P','factura_compra_id|INT|F','monto_total|DECIMAL(12,2)','saldo_pendiente|DECIMAL(12,2)','fecha_vencimiento|DATE','estado|ENUM(PEND,PAG)']],
+ ['pago_proveedor','compras','Pago de una deuda. Si es en efectivo sale de caja (caja_movimiento); si es transferencia, de una cuenta_bancaria. Para pagos agrupados haría falta una tabla puente como cobro_aplicacion.',
+  ['id|INT|P','cuenta_pagar_id|INT|F','forma_pago_id|INT|F','cuenta_bancaria_id|INT|F|N','numero_comprobante|VARCHAR(20)','fecha_pago|DATETIME','monto|DECIMAL(12,2)','referencia|VARCHAR(50)|N']]
+
+ // ---------- PREVENTA ----------
+ ,['cotizacion','preventa','Oferta al cliente con validez limitada. No reserva stock ni genera deuda. Si se acepta, se convierte en pedido_venta.',
+  ['id|INT|P','cliente_id|INT|F','usuario_id|INT|F','moneda_id|INT|F','numero|VARCHAR(20)','fecha|DATE','validez_hasta|DATE','total|DECIMAL(12,2)','estado|ENUM(BOR,ENV,ACE,VEN,REC)']],
+ ['cotizacion_detalle','preventa','Ítems cotizados con precio y descuento propuestos.',
+  ['id|INT|P','cotizacion_id|INT|F','producto_id|INT|F','impuesto_id|INT|F','cantidad|DECIMAL(10,2)','precio_unitario|DECIMAL(12,2)','descuento|DECIMAL(12,2)','subtotal|DECIMAL(12,2)']],
+ ['pedido_venta','preventa','Compromiso firme con el cliente. Al confirmarse reserva stock (stock.cantidad_reservada) en el depósito indicado. cotizacion_id es NULL si el pedido nació directo.',
+  ['id|INT|P','cliente_id|INT|F','cotizacion_id|INT|F|N','usuario_id|INT|F','deposito_id|INT|F','moneda_id|INT|F','numero|VARCHAR(20)','fecha|DATE','fecha_entrega|DATE|N','condicion|ENUM(CONT,CRED)','total|DECIMAL(12,2)','estado|ENUM(PEN,PAR,COM,ANU)'],'RESERVA'],
+ ['pedido_venta_detalle','preventa','Ítems del pedido. Lleva cantidad entregada y facturada por separado, así soporta entregas y facturaciones parciales.',
+  ['id|INT|P','pedido_venta_id|INT|F','producto_id|INT|F','cantidad|DECIMAL(10,2)','cantidad_entregada|DECIMAL(10,2)','cantidad_facturada|DECIMAL(10,2)','precio_unitario|DECIMAL(12,2)','descuento|DECIMAL(12,2)']],
+ ['remision','preventa','Nota de remisión: respalda el traslado de mercadería (usa timbrado tipo REM). Al emitirse descuenta stock y libera la reserva. pedido_venta_id es NULL si no hubo pedido.',
+  ['id|INT|P','pedido_venta_id|INT|F|N','deposito_id|INT|F','timbrado_id|INT|F','usuario_id|INT|F','numero|VARCHAR(17)','fecha|DATETIME','motivo_traslado|VARCHAR(80)','estado|ENUM(EMI,ANU)'],'DESPACHO'],
+ ['remision_detalle','preventa','Cantidades despachadas. Cada fila genera un movimiento_stock de salida. Si la factura referencia la remisión, su detalle NO vuelve a descontar stock.',
+  ['id|INT|P','remision_id|INT|F','pedido_venta_detalle_id|INT|F|N','producto_id|INT|F','cantidad|DECIMAL(10,2)']]
+
+ // ---------- SEGURIDAD Y TRANSVERSALES ----------
+ ,['permiso','maestros','Acciones atómicas del sistema (ej. factura.anular, caja.cerrar). Se asignan a roles.',
+  ['id|INT|P','codigo|VARCHAR(60)|U','modulo|VARCHAR(30)','descripcion|VARCHAR(150)']],
+ ['rol_permiso','maestros','Puente N:M entre roles y permisos.',
+  ['id|INT|P','rol_id|INT|F','permiso_id|INT|F'],'TABLA PUENTE'],
+ ['audit_log','maestros','Bitácora de cambios sensibles (anulaciones, precios, diferencias de caja). Solo inserción: guarda el estado antes y después.',
+  ['id|INT|P','usuario_id|INT|F','tabla|VARCHAR(60)','registro_id|INT','accion|ENUM(INS,UPD,DEL)','datos_antes|JSON|N','datos_despues|JSON|N','ip|VARCHAR(45)|N','fecha_hora|DATETIME'],'AUDITORÍA'],
+ ['cliente_direccion','ventas','Direcciones múltiples del cliente (fiscal, entrega, cobranza). Solo una puede ser principal.',
+  ['id|INT|P','cliente_id|INT|F','tipo|ENUM(FIS,ENT,COB)','direccion|VARCHAR(200)','ciudad|VARCHAR(60)','telefono|VARCHAR(30)|N','principal|BOOLEAN']],
+
+ // ---------- CONTABILIDAD ----------
+ ['ejercicio_contable','contabilidad','Período anual de la empresa. Un asiento solo se puede registrar en un ejercicio abierto; al cerrarse queda bloqueado.',
+  ['id|INT|P','empresa_id|INT|F','anio|INT','fecha_inicio|DATE','fecha_fin|DATE','estado|ENUM(ABI,CER)']],
+ ['plan_cuenta','contabilidad','Plan de cuentas jerárquico (padre_id NULL = cuenta raíz). Solo las cuentas con acepta_movimiento reciben asientos.',
+  ['id|INT|P','empresa_id|INT|F','padre_id|INT|F|N','codigo|VARCHAR(20)|U','nombre|VARCHAR(120)','tipo|ENUM(ACT,PAS,PAT,ING,EGR)','acepta_movimiento|BOOLEAN','activa|BOOLEAN']],
+ ['configuracion_contable','contabilidad','Reglas que traducen eventos del ERP en cuentas (ej. VENTA_CREDITO: debe Clientes, haber Ventas e IVA). Permite generar asientos automáticos.',
+  ['id|INT|P','empresa_id|INT|F','evento|VARCHAR(40)','concepto|VARCHAR(40)','cuenta_id|INT|F','lado|ENUM(DEB,HAB)'],'AUTOMÁTICO'],
+ ['asiento','contabilidad','Cabecera del asiento. origen_tipo y origen_id apuntan al documento que lo generó (factura, cobro, factura_compra, etc.); es una referencia polimórfica, sin FK. Regla: total_debe = total_haber.',
+  ['id|INT|P','empresa_id|INT|F','ejercicio_id|INT|F','usuario_id|INT|F','numero|INT','fecha|DATE','glosa|VARCHAR(200)','origen_tipo|VARCHAR(30)|N','origen_id|INT|N','total_debe|DECIMAL(14,2)','total_haber|DECIMAL(14,2)','estado|ENUM(BOR,CON,ANU)']],
+ ['asiento_detalle','contabilidad','Líneas del asiento. Cada línea tiene debe o haber, nunca ambos.',
+  ['id|INT|P','asiento_id|INT|F','cuenta_id|INT|F','debe|DECIMAL(14,2)','haber|DECIMAL(14,2)','glosa|VARCHAR(150)|N']]
+];
+
+const R = [ // [origen(1), destino(N), etiqueta, punteada]
+ ['empresa','sucursal','1 : N'],['empresa','usuario','1 : N'],['rol','usuario','1 : N'],['sucursal','timbrado','1 : N'],
+ ['impuesto','producto','1 : N'],['impuesto','factura_detalle','1 : N'],['producto','factura_detalle','1 : N'],
+ ['timbrado','factura','1 : N'],['timbrado','nota_credito','1 : N'],['moneda','factura','1 : N'],['moneda','cobro','1 : N'],
+ ['usuario','factura','1 : N'],['usuario','caja_sesion','1 : N'],
+ ['cliente','factura','1 : N'],['factura','factura_detalle','1 : N'],['factura','nota_credito','1 : N'],['factura','cuenta_cobrar','1 : 1'],
+ ['cuenta_cobrar','plan_pago','1 : N'],['cliente','cobro','1 : N'],['cobro','cobro_aplicacion','1 : N'],['plan_pago','cobro_aplicacion','1 : N'],
+ ['cobro','cobro_detalle','1 : N'],['forma_pago','cobro_detalle','1 : N'],['cuenta_bancaria','cobro_detalle','1 : 0..N',1],['cheque','cobro_detalle','1 : 0..1',1],
+ ['banco','cuenta_bancaria','1 : N'],['banco','cheque','1 : N'],['sucursal','caja','1 : N'],['caja','caja_sesion','1 : N'],
+ ['caja_sesion','cobro','1 : 0..N',1],['caja_sesion','caja_movimiento','1 : N'],['caja_sesion','caja_arqueo_detalle','1 : N'],
+ ['cobro_detalle','caja_movimiento','0..1 : 0..1',1],['cuenta_bancaria','caja_movimiento','1 : 0..N',1],
+ // inventario
+ ['categoria','producto','1 : N'],['unidad_medida','producto','1 : N'],['sucursal','deposito','1 : N'],['producto','stock','1 : N'],['deposito','stock','1 : N'],
+ ['producto','movimiento_stock','1 : N'],['deposito','movimiento_stock','1 : N'],['deposito','ajuste_inventario','1 : N'],['ajuste_inventario','movimiento_stock','1 : 0..N',1],
+ ['factura_detalle','movimiento_stock','1 : 0..1',1],['recepcion_detalle','movimiento_stock','1 : 0..1',1],
+ // compras
+ ['empresa','proveedor','1 : N'],['proveedor','orden_compra','1 : N'],['orden_compra','orden_compra_detalle','1 : N'],['producto','orden_compra_detalle','1 : N'],
+ ['orden_compra','recepcion','1 : 0..N',1],['deposito','recepcion','1 : N'],['recepcion','recepcion_detalle','1 : N'],['producto','recepcion_detalle','1 : N'],
+ ['proveedor','factura_compra','1 : N'],['recepcion','factura_compra','1 : 0..N',1],['moneda','factura_compra','1 : N'],['factura_compra','factura_compra_detalle','1 : N'],
+ ['producto','factura_compra_detalle','1 : N'],['impuesto','factura_compra_detalle','1 : N'],['factura_compra','cuenta_pagar','1 : 1'],['cuenta_pagar','pago_proveedor','1 : N'],
+ ['forma_pago','pago_proveedor','1 : N'],['cuenta_bancaria','pago_proveedor','1 : 0..N',1],['pago_proveedor','caja_movimiento','0..1 : 0..1',1],
+ // preventa
+ ['cliente','cotizacion','1 : N'],['usuario','cotizacion','1 : N'],['cotizacion','cotizacion_detalle','1 : N'],['producto','cotizacion_detalle','1 : N'],['impuesto','cotizacion_detalle','1 : N'],
+ ['cotizacion','pedido_venta','1 : 0..N',1],['cliente','pedido_venta','1 : N'],['deposito','pedido_venta','1 : N'],['pedido_venta','pedido_venta_detalle','1 : N'],['producto','pedido_venta_detalle','1 : N'],
+ ['pedido_venta','remision','1 : 0..N',1],['deposito','remision','1 : N'],['timbrado','remision','1 : N'],['remision','remision_detalle','1 : N'],['pedido_venta_detalle','remision_detalle','1 : 0..N',1],
+ ['producto','remision_detalle','1 : N'],['remision_detalle','movimiento_stock','1 : 0..1',1],
+ ['pedido_venta','factura','1 : 0..N',1],['remision','factura','1 : 0..N',1],['pedido_venta_detalle','factura_detalle','1 : 0..N',1],
+ // seguridad y contabilidad
+ ['rol','rol_permiso','1 : N'],['permiso','rol_permiso','1 : N'],['usuario','audit_log','1 : N'],['cliente','cliente_direccion','1 : N'],
+ ['empresa','ejercicio_contable','1 : N'],['ejercicio_contable','asiento','1 : N'],['usuario','asiento','1 : N'],['asiento','asiento_detalle','1 : N'],
+ ['plan_cuenta','asiento_detalle','1 : N'],['plan_cuenta','configuracion_contable','1 : N']
+];
+
+// Parseo y layout automático por columnas de módulo
+const tables = T.map(([id, module, role, f, badge]) => ({
+  id, module, role, badge,
+  fields: f.map(s => { const [name, type, fl = ''] = s.split('|'); return {name, type, key: fl.includes('P') ? 'PK' : fl.includes('F') ? 'FK' : '', nullable: s.split('|').slice(2).join('').includes('N')}; })
+}));
+const cursor = {};
+tables.forEach(t => {
+  cursor[t.module] = cursor[t.module] ?? 30;
+  t.x = COLX[t.module]; t.y = cursor[t.module];
+  cursor[t.module] += 40 + t.fields.length * 29 + 40;
+});
+const defaultPositions = Object.fromEntries(tables.map(t => [t.id, {x: t.x, y: t.y}]));
+const byId = Object.fromEntries(tables.map(t => [t.id, t]));
+
+const $ = id => document.getElementById(id);
+const tablesLayer = $('tables-layer'), edgesLayer = $('edges-layer'), world = $('canvas-world'), viewport = $('viewport'), sidebar = $('info-sidebar');
+let scale = 0.5, panX = 20, panY = 10, activeId = null, hoverId = null;
+let drag = null; // {type:'card'|'pan', ...}
+
+$('legend').innerHTML = Object.values(MOD).map(m => `<span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-sm ${m.c}"></span><span class="text-slate-300 font-medium">${m.l}</span></span>`).join('');
+world.style.height = Math.max(...Object.values(cursor)) + 60 + 'px';
+
+function renderTables() {
+  tablesLayer.innerHTML = '';
+  tables.forEach(t => {
+    const m = MOD[t.module], card = document.createElement('div');
+    card.id = 'table-' + t.id;
+    card.className = `table-card absolute rounded-xl border ${m.b} w-72 overflow-hidden cursor-move`;
+    card.style.left = t.x + 'px'; card.style.top = t.y + 'px';
+    const badge = t.badge ? `<span class="text-[9px] font-bold px-1.5 py-0.5 rounded ${m.bd} tracking-wider">${t.badge}</span>` : '';
+    card.innerHTML = `<div class="${m.h} px-3.5 py-2 flex items-center justify-between"><span class="font-bold text-white text-sm mono">${t.id}</span>${badge}</div><div class="divide-y divide-slate-700/50 py-1">` +
+      t.fields.map(f => {
+        const kb = f.key === 'PK' ? `<span class="text-[10px] font-bold text-amber-400 bg-amber-400/10 border border-amber-400/30 px-1 rounded mono w-6 text-center shrink-0">PK</span>`
+          : f.key === 'FK' ? `<span class="text-[10px] font-bold text-cyan-400 bg-cyan-400/10 border border-cyan-400/30 px-1 rounded mono w-6 text-center shrink-0">FK</span>` : `<span class="w-6 shrink-0"></span>`;
+        const nc = f.key === 'PK' ? 'text-amber-200 font-semibold' : f.key === 'FK' ? 'text-cyan-200' : 'text-slate-200';
+        const nb = f.nullable ? `<span class="text-[9px] font-semibold text-rose-300 bg-rose-500/15 border border-rose-400/30 px-1 rounded mono ml-1">NULL</span>` : '';
+        return `<div class="px-3 py-1.5 flex items-center justify-between text-xs"><div class="flex items-center gap-1.5 overflow-hidden">${kb}<span class="mono truncate ${nc}">${f.name}</span>${nb}</div><span class="mono text-[10px] text-slate-400 ml-2 shrink-0">${f.type}</span></div>`;
+      }).join('') + `</div>`;
+    card.addEventListener('pointerdown', e => {
+      drag = {type: 'card', t, card, sx: e.clientX, sy: e.clientY, ox: t.x, oy: t.y, moved: false};
+      e.stopPropagation();
+    });
+    card.addEventListener('mouseenter', () => { hoverId = t.id; refresh(); });
+    card.addEventListener('mouseleave', () => { hoverId = null; refresh(); });
+    tablesLayer.appendChild(card);
+  });
+}
+
+window.addEventListener('pointermove', e => {
+  if (!drag) return;
+  if (drag.type === 'card') {
+    const dx = e.clientX - drag.sx, dy = e.clientY - drag.sy;
+    if (!drag.moved && Math.hypot(dx, dy) < 4) return; // umbral: evita abrir sidebar al arrastrar
+    drag.moved = true;
+    drag.t.x = drag.ox + dx / scale; drag.t.y = drag.oy + dy / scale;
+    drag.card.style.left = drag.t.x + 'px'; drag.card.style.top = drag.t.y + 'px';
+    updateEdges();
+  } else { panX = drag.px + e.clientX - drag.sx; panY = drag.py + e.clientY - drag.sy; updateTransform(); }
+});
+window.addEventListener('pointerup', () => {
+  if (drag && drag.type === 'card' && !drag.moved) openSidebar(drag.t);
+  drag = null; viewport.classList.remove('cursor-grabbing');
+});
+viewport.addEventListener('pointerdown', e => {
+  if (e.target.closest('.table-card')) return;
+  drag = {type: 'pan', sx: e.clientX, sy: e.clientY, px: panX, py: panY};
+  viewport.classList.add('cursor-grabbing');
+});
+
+function relsOf(id) { return R.filter(r => r[0] === id || r[1] === id); }
+function related(id) { const s = new Set([id]); relsOf(id).forEach(r => { s.add(r[0]); s.add(r[1]); }); return s; }
+
+function refresh() { updateEdges(); const a = hoverId || activeId, rel = a ? related(a) : null;
+  tables.forEach(t => { const el = $('table-' + t.id); el.classList.toggle('dimmed', !!rel && !rel.has(t.id)); el.classList.toggle('hl', t.id === activeId); }); }
+
+function openSidebar(t) {
+  activeId = t.id; const m = MOD[t.module];
+  $('sb-badge').textContent = m.l; $('sb-badge').className = `text-[10px] font-bold px-2 py-0.5 rounded tracking-wider uppercase mb-1 inline-block ${m.bd}`;
+  $('sb-title').textContent = t.id; $('sb-role').textContent = t.role;
+  $('sb-fields').innerHTML = t.fields.map(f => {
+    const kb = f.key ? `<span class="px-1.5 py-0.5 rounded text-[10px] font-bold mono ${f.key === 'PK' ? 'bg-amber-400/20 text-amber-300' : 'bg-cyan-400/20 text-cyan-300'}">${f.key}</span>` : '';
+    const nb = f.nullable ? `<span class="px-1.5 py-0.5 rounded text-[10px] font-bold mono bg-rose-500/15 text-rose-300">NULL</span>` : '';
+    return `<div class="flex items-center justify-between p-2 rounded bg-slate-900/60 border border-slate-800 mono"><div class="flex items-center gap-2 flex-wrap"><span>${f.name}</span>${kb}${nb}</div><span class="text-slate-400 text-[11px]">${f.type}</span></div>`;
+  }).join('');
+  $('sb-rels').innerHTML = relsOf(t.id).map(r => {
+    const other = r[0] === t.id ? r[1] : r[0];
+    return `<div class="flex items-center justify-between p-2 rounded bg-slate-900/60 border border-slate-800 mono"><span>${r[0] === t.id ? '→' : '←'} ${other}</span><span class="text-sky-300">${r[2]}${r[3] ? ' (opc.)' : ''}</span></div>`;
+  }).join('');
+  sidebar.classList.remove('hidden'); refresh();
+}
+function closeSidebar() { sidebar.classList.add('hidden'); activeId = null; refresh(); }
+
+function anchors(A, B) {
+  const ca = {x: A.x + A.w / 2, y: A.y + A.h / 2}, cb = {x: B.x + B.w / 2, y: B.y + B.h / 2}, dx = cb.x - ca.x, dy = cb.y - ca.y;
+  if (Math.abs(dx) > Math.abs(dy)) return dx > 0 ? {p1: {x: A.x + A.w, y: ca.y}, p2: {x: B.x, y: cb.y}, d1: 'r', d2: 'l'} : {p1: {x: A.x, y: ca.y}, p2: {x: B.x + B.w, y: cb.y}, d1: 'l', d2: 'r'};
+  return dy > 0 ? {p1: {x: ca.x, y: A.y + A.h}, p2: {x: cb.x, y: B.y}, d1: 'b', d2: 't'} : {p1: {x: ca.x, y: A.y}, p2: {x: cb.x, y: B.y + B.h}, d1: 't', d2: 'b'};
+}
+function updateEdges() {
+  edgesLayer.innerHTML = ''; const a = hoverId || activeId, NS = 'http://www.w3.org/2000/svg';
+  R.forEach(([from, to, label, dashed]) => {
+    const ef = $('table-' + from), et = $('table-' + to); if (!ef || !et) return;
+    const A = {x: byId[from].x, y: byId[from].y, w: ef.offsetWidth, h: ef.offsetHeight}, B = {x: byId[to].x, y: byId[to].y, w: et.offsetWidth, h: et.offsetHeight};
+    const {p1, p2, d1, d2} = anchors(A, B), dist = Math.hypot(p2.x - p1.x, p2.y - p1.y) * .45;
+    const c1 = {...p1}, c2 = {...p2};
+    ({r: () => c1.x += dist, l: () => c1.x -= dist, b: () => c1.y += dist, t: () => c1.y -= dist})[d1]();
+    ({r: () => c2.x += dist, l: () => c2.x -= dist, b: () => c2.y += dist, t: () => c2.y -= dist})[d2]();
+    const hl = a && (from === a || to === a), g = document.createElementNS(NS, 'g');
+    g.setAttribute('opacity', a && !hl ? '.15' : '.9');
+    const p = document.createElementNS(NS, 'path');
+    p.setAttribute('d', `M${p1.x} ${p1.y}C${c1.x} ${c1.y},${c2.x} ${c2.y},${p2.x} ${p2.y}`);
+    p.setAttribute('fill', 'none'); p.setAttribute('stroke', hl ? '#38bdf8' : '#64748b'); p.setAttribute('stroke-width', hl ? 2.5 : 1.5);
+    if (dashed) p.setAttribute('stroke-dasharray', '5,5');
+    p.setAttribute('marker-end', `url(#a${hl ? 1 : 0})`); p.setAttribute('marker-start', `url(#d${hl ? 1 : 0})`);
+    g.appendChild(p);
+    if (hl) { // etiquetas solo en relaciones resaltadas para no saturar
+      const tx = document.createElementNS(NS, 'text');
+      tx.setAttribute('x', .125 * p1.x + .375 * c1.x + .375 * c2.x + .125 * p2.x); tx.setAttribute('y', .125 * p1.y + .375 * c1.y + .375 * c2.y + .125 * p2.y - 6);
+      tx.setAttribute('fill', '#38bdf8'); tx.setAttribute('font-size', '11'); tx.setAttribute('font-family', 'JetBrains Mono,monospace'); tx.setAttribute('text-anchor', 'middle');
+      tx.textContent = label; g.appendChild(tx);
+    }
+    edgesLayer.appendChild(g);
+  });
+}
+
+function updateTransform() { world.style.transform = `translate(${panX}px,${panY}px) scale(${scale})`; $('zoom-level').textContent = Math.round(scale * 100) + '%'; }
+function zoomBy(f, cx, cy) {
+  const old = scale; scale = Math.min(1.6, Math.max(.3, scale * f));
+  const r = viewport.getBoundingClientRect(); cx = cx ?? r.width / 2; cy = cy ?? r.height / 2;
+  panX = cx - (cx - panX) * scale / old; panY = cy - (cy - panY) * scale / old; updateTransform();
+}
+viewport.addEventListener('wheel', e => { e.preventDefault(); const r = viewport.getBoundingClientRect(); zoomBy(e.deltaY < 0 ? 1.1 : 1 / 1.1, e.clientX - r.left, e.clientY - r.top); }, {passive: false});
+
+function resetLayout() {
+  scale = .5; panX = 20; panY = 10;
+  tables.forEach(t => { t.x = defaultPositions[t.id].x; t.y = defaultPositions[t.id].y; });
+  renderTables(); closeSidebar(); updateTransform();
+}
+
+renderTables(); refresh(); updateTransform();
+</script>
+</body>
+</html>
