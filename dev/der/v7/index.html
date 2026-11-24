@@ -28,20 +28,26 @@ aside.sidebar.hidden{transform:translateX(100%)}
 
 
 
-<a href="schema.sql" download class="btn btn-primary">
-    <i class="fas fa-download"></i> Descargar schema.sql
-</a>
-
-
 
   </div>
   <div id="legend" class="flex flex-wrap gap-3 text-xs"></div>
-  <div class="flex items-center gap-2">
+
+
+
+<div class="flex items-center gap-2">
     <button onclick="zoomBy(1/1.15)" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700">−</button>
     <span id="zoom-level" class="text-xs mono w-12 text-center"></span>
     <button onclick="zoomBy(1.15)" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700">+</button>
     <button onclick="resetLayout()" class="px-3 py-1.5 rounded-lg bg-slate-700 hover:bg-slate-600 text-white text-xs font-medium">Resetear</button>
-  </div>
+
+    <a href="schema.sql" download
+       class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-xs font-medium">
+        <i class="fas fa-download"></i> schema.sql
+    </a>
+</div>
+
+
+
 </header>
 
 <main id="viewport" class="flex-1 relative overflow-hidden canvas-grid cursor-grab">
