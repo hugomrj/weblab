@@ -1,544 +1,1480 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<meta name="theme-color" content="#FF7A59">
-<title>Mundo Patitas · Veterinaria</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<meta name="theme-color" content="#FF6B6B" />
+<title>Mundo Patitas · Cuidamos a tu mejor amigo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-  :root{
-    --primary:#FF7A59;
-    --primary-dark:#E85F3E;
-    --primary-soft:#FFE9E2;
-    --green:#2BB673;
-    --green-soft:#E3F7ED;
-    --cream:#FFF9F5;
-    --ink:#2D2A26;
-    --ink-soft:#7A736B;
-    --line:#F0E5DE;
-    --white:#FFFFFF;
-    --radius:18px;
-    --shadow:0 8px 24px rgba(45,42,38,.08);
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  :root {
+    --primary: #FF6B6B;
+    --primary-dark: #E85555;
+    --secondary: #4ECDC4;
+    --accent: #FFD166;
+    --violet: #8B5CF6;
+    --bg: #FFF9F5;
+    --bg-soft: #FFF3EC;
+    --card: rgba(255, 255, 255, 0.85);
+    --card-solid: #ffffff;
+    --text: #1A1A2E;
+    --text-soft: #6B7280;
+    --border: rgba(0, 0, 0, 0.06);
+    --shadow-sm: 0 2px 8px rgba(255, 107, 107, 0.08);
+    --shadow: 0 8px 32px rgba(255, 107, 107, 0.12);
+    --shadow-lg: 0 20px 60px rgba(255, 107, 107, 0.18);
+    --radius: 20px;
+    --radius-lg: 28px;
   }
-  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-  html,body{height:100%}
-  body{
-    font-family:'Segoe UI',system-ui,-apple-system,sans-serif;
-    background:linear-gradient(160deg,#fdf1ea,#fbe3d8);
-    color:var(--ink);
-    display:flex;justify-content:center;
+  html, body {
+    height: 100%;
+    font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    overflow: hidden;
+    font-feature-settings: "ss01", "cv11";
   }
-  /* ====== APP SHELL ====== */
-  .app{
-    width:100%;max-width:430px;min-height:100dvh;
-    background:var(--cream);
-    display:flex;flex-direction:column;
-    position:relative;
-    box-shadow:0 0 40px rgba(45,42,38,.15);
+  body::before {
+    content: '';
+    position: fixed;
+    top: -100px; right: -100px;
+    width: 300px; height: 300px;
+    background: radial-gradient(circle, rgba(255,107,107,0.15), transparent 70%);
+    border-radius: 50%;
+    z-index: 0;
+    pointer-events: none;
   }
-  /* ====== HEADER ====== */
-  header{
-    position:sticky;top:0;z-index:50;
-    background:linear-gradient(135deg,var(--primary),#FF9A76);
-    color:#fff;padding:18px 20px 22px;
-    border-radius:0 0 26px 26px;
-    display:flex;align-items:center;gap:12px;
+  body::after {
+    content: '';
+    position: fixed;
+    bottom: -100px; left: -100px;
+    width: 300px; height: 300px;
+    background: radial-gradient(circle, rgba(78,205,196,0.15), transparent 70%);
+    border-radius: 50%;
+    z-index: 0;
+    pointer-events: none;
   }
-  .logo{
-    width:46px;height:46px;border-radius:14px;
-    background:rgba(255,255,255,.22);
-    display:flex;align-items:center;justify-content:center;
-    font-size:24px;flex-shrink:0;
+  .app {
+    max-width: 480px;
+    margin: 0 auto;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    z-index: 1;
   }
-  .brand h1{font-size:19px;font-weight:800;letter-spacing:.2px}
-  .brand p{font-size:12px;opacity:.9}
-  .bell{margin-left:auto;background:rgba(255,255,255,.2);border:none;color:#fff;
-    width:40px;height:40px;border-radius:12px;font-size:18px;cursor:pointer}
-  /* ====== SCREENS ====== */
-  main{flex:1;padding:18px 16px 96px;overflow-y:auto}
-  .screen{display:none;animation:fade .3s ease}
-  .screen.active{display:block}
-  @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
-  .section-title{font-size:16px;font-weight:800;margin:20px 0 12px;display:flex;align-items:center;justify-content:space-between}
-  .section-title span{font-size:12px;color:var(--primary-dark);font-weight:600;cursor:pointer}
-  /* ====== CARDS ====== */
-  .card{
-    background:var(--white);border-radius:var(--radius);
-    padding:16px;box-shadow:var(--shadow);margin-bottom:12px;
-    border:1px solid var(--line);
+
+  /* HEADER */
+  .header {
+    padding: 18px 20px 14px;
+    padding-top: max(18px, env(safe-area-inset-top));
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+    z-index: 10;
   }
-  .quick-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
-  .quick{
-    background:var(--white);border:1px solid var(--line);border-radius:16px;
-    padding:14px 6px;text-align:center;cursor:pointer;transition:.2s;
-    box-shadow:var(--shadow);
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
   }
-  .quick:active{transform:scale(.95)}
-  .quick .ico{font-size:26px;margin-bottom:6px}
-  .quick b{font-size:11.5px;display:block;color:var(--ink)}
-  .hero{
-    background:linear-gradient(135deg,var(--primary),#FFA37A);
-    border:none;color:#fff;
+  .brand-logo {
+    width: 44px; height: 44px;
+    background: linear-gradient(135deg, var(--primary), #FF8E8E);
+    border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 8px 20px rgba(255, 107, 107, 0.35);
+    position: relative;
   }
-  .hero h2{font-size:17px;font-weight:800;margin-bottom:6px}
-  .hero p{font-size:12.5px;opacity:.95;line-height:1.5}
-  .hero button{
-    margin-top:12px;background:#fff;color:var(--primary-dark);
-    border:none;padding:10px 18px;border-radius:12px;font-weight:700;font-size:13px;cursor:pointer;
+  .brand-logo::after {
+    content: '';
+    position: absolute;
+    inset: 2px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, rgba(255,255,255,0.25), transparent);
   }
-  /* next appointment */
-  .next-appt{display:flex;gap:12px;align-items:center}
-  .next-appt .date-chip{
-    background:var(--primary-soft);color:var(--primary-dark);
-    border-radius:14px;padding:8px 12px;text-align:center;font-weight:800;font-size:13px;
-    flex-shrink:0;
+  .brand-logo svg { width: 24px; height: 24px; position: relative; z-index: 1; }
+  .brand-text h1 {
+    font-size: 17px;
+    font-weight: 800;
+    letter-spacing: -0.3px;
+    background: linear-gradient(135deg, var(--text), var(--primary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
   }
-  .next-appt .date-chip small{display:block;font-size:10px;font-weight:600;opacity:.8}
-  .badge{
-    display:inline-flex;align-items:center;gap:5px;
-    font-size:11px;font-weight:700;padding:4px 10px;border-radius:99px;
+  .brand-text p {
+    font-size: 11px;
+    color: var(--text-soft);
+    font-weight: 500;
   }
-  .badge.ok{background:var(--green-soft);color:var(--green)}
-  .badge.wait{background:#FFF3DF;color:#C98A00}
-  /* vets */
-  .vet-card{display:flex;gap:12px;align-items:center}
-  .avatar{
-    width:52px;height:52px;border-radius:50%;
-    display:flex;align-items:center;justify-content:center;
-    font-size:24px;flex-shrink:0;
-    background:var(--primary-soft);
+  .header-actions {
+    display: flex; gap: 8px;
   }
-  .avatar.g{background:var(--green-soft)}
-  .vet-info{flex:1;min-width:0}
-  .vet-info b{font-size:14.5px;display:block}
-  .vet-info small{font-size:12px;color:var(--ink-soft)}
-  .btn{
-    border:none;border-radius:12px;padding:10px 16px;
-    font-weight:700;font-size:13px;cursor:pointer;transition:.2s;
+  .icon-btn {
+    width: 42px; height: 42px;
+    background: var(--card-solid);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    position: relative;
+    transition: transform 0.2s;
   }
-  .btn:active{transform:scale(.96)}
-  .btn-primary{background:var(--primary);color:#fff}
-  .btn-primary:disabled{background:#E8D6CD;color:#fff;cursor:not-allowed}
-  .btn-ghost{background:var(--primary-soft);color:var(--primary-dark)}
-  .btn-green{background:var(--green);color:#fff}
-  .btn-block{width:100%;padding:14px;font-size:14.5px}
-  /* ====== FORM (agendar) ====== */
-  .field{margin-bottom:14px}
-  .field label{display:block;font-size:12.5px;font-weight:700;margin-bottom:6px;color:var(--ink)}
-  .chips{display:flex;gap:8px;flex-wrap:wrap}
-  .chip{
-    padding:9px 14px;border-radius:99px;border:1.5px solid var(--line);
-    background:#fff;font-size:13px;font-weight:600;cursor:pointer;transition:.15s;
-    color:var(--ink-soft);
+  .icon-btn:active { transform: scale(0.92); }
+  .icon-btn .badge {
+    position: absolute;
+    top: 8px; right: 8px;
+    width: 8px; height: 8px;
+    background: var(--primary);
+    border-radius: 50%;
+    border: 2px solid white;
   }
-  .chip.sel{background:var(--primary);border-color:var(--primary);color:#fff}
-  .chip.g-sel{background:var(--green);border-color:var(--green);color:#fff}
-  input[type=date],input[type=text],select,textarea{
-    width:100%;padding:12px 14px;border-radius:14px;
-    border:1.5px solid var(--line);background:#fff;
-    font-size:14px;font-family:inherit;color:var(--ink);outline:none;
+
+  /* CONTENT */
+  .content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 0 20px 100px;
+    -webkit-overflow-scrolling: touch;
   }
-  input:focus,select:focus,textarea:focus{border-color:var(--primary)}
-  .slots{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-  .slot{
-    padding:10px 4px;text-align:center;border-radius:12px;
-    border:1.5px solid var(--line);background:#fff;
-    font-size:13px;font-weight:700;cursor:pointer;color:var(--ink);
+  .content::-webkit-scrollbar { display: none; }
+  .screen { display: none; animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
+  .screen.active { display: block; }
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
   }
-  .slot.sel{background:var(--green);border-color:var(--green);color:#fff}
-  .slot:disabled{opacity:.35;cursor:not-allowed;text-decoration:line-through}
-  .summary{background:var(--green-soft);border-color:#BFE9D2;display:none}
-  .summary.show{display:block;animation:fade .3s}
-  /* ====== CHAT ====== */
-  .chat-box{
-    background:var(--white);border:1px solid var(--line);
-    border-radius:var(--radius);box-shadow:var(--shadow);
-    display:flex;flex-direction:column;height:62dvh;overflow:hidden;
+
+  /* HERO */
+  .hero {
+    background: linear-gradient(135deg, #FFE5E0 0%, #FFD4CC 50%, #FFC4B8 100%);
+    border-radius: var(--radius-lg);
+    padding: 22px;
+    margin-bottom: 20px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: var(--shadow);
   }
-  .chat-head{
-    padding:12px 14px;background:var(--primary);color:#fff;
-    display:flex;align-items:center;gap:10px;flex-shrink:0;
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -30px; right: -30px;
+    width: 140px; height: 140px;
+    background: radial-gradient(circle, rgba(255,255,255,0.6), transparent 70%);
+    border-radius: 50%;
   }
-  .chat-head.ai{background:var(--green)}
-  .chat-head .avatar{width:38px;height:38px;font-size:18px;background:rgba(255,255,255,.25)}
-  .chat-head b{font-size:14px;display:block}
-  .chat-head small{font-size:11px;opacity:.9}
-  .msgs{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:10px;background:var(--cream)}
-  .msg{max-width:82%;padding:10px 14px;border-radius:16px;font-size:13.5px;line-height:1.5;animation:fade .25s}
-  .msg.bot{background:#fff;border:1px solid var(--line);align-self:flex-start;border-bottom-left-radius:5px}
-  .msg.me{background:var(--primary);color:#fff;align-self:flex-end;border-bottom-right-radius:5px}
-  .msg.time{font-size:10px;opacity:.55;text-align:center;max-width:100%;background:none;border:none;align-self:center}
-  .typing{display:flex;gap:5px;padding:12px 16px;align-self:flex-start;background:#fff;border:1px solid var(--line);border-radius:16px;border-bottom-left-radius:5px}
-  .typing i{width:7px;height:7px;background:var(--ink-soft);border-radius:50%;animation:blink 1.2s infinite}
-  .typing i:nth-child(2){animation-delay:.2s}
-  .typing i:nth-child(3){animation-delay:.4s}
-  @keyframes blink{0%,80%,100%{opacity:.25}40%{opacity:1}}
-  .chat-input{
-    display:flex;gap:8px;padding:10px;border-top:1px solid var(--line);background:#fff;flex-shrink:0;
+  .hero-content {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
   }
-  .chat-input input{flex:1;border-radius:99px;border:1.5px solid var(--line);padding:11px 16px;font-size:13.5px}
-  .chat-input button{
-    width:46px;height:46px;border-radius:50%;border:none;flex-shrink:0;
-    background:var(--primary);color:#fff;font-size:18px;cursor:pointer;
+  .hero-text { flex: 1; }
+  .hero-greeting {
+    font-size: 13px;
+    color: var(--primary-dark);
+    font-weight: 600;
+    margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
   }
-  .chat-input.ai-btn button{background:var(--green)}
-  /* ====== BOTTOM NAV (sticky footer) ====== */
-  nav.bottom{
-    position:fixed;bottom:0;left:50%;transform:translateX(-50%);
-    width:100%;max-width:430px;z-index:60;
-    background:#fff;border-top:1px solid var(--line);
-    display:flex;justify-content:space-around;
-    padding:8px 4px calc(10px + env(safe-area-inset-bottom));
-    box-shadow:0 -6px 20px rgba(45,42,38,.07);
+  .hero h2 {
+    font-size: 24px;
+    font-weight: 800;
+    line-height: 1.15;
+    color: var(--text);
+    letter-spacing: -0.5px;
+    margin-bottom: 8px;
   }
-  nav.bottom button{
-    background:none;border:none;display:flex;flex-direction:column;align-items:center;gap:3px;
-    font-size:10.5px;font-weight:600;color:var(--ink-soft);cursor:pointer;
-    padding:6px 10px;border-radius:12px;transition:.2s;font-family:inherit;
+  .hero h2 span {
+    background: linear-gradient(135deg, var(--primary), var(--violet));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
   }
-  nav.bottom button .nico{font-size:21px}
-  nav.bottom button.active{color:var(--primary-dark);background:var(--primary-soft)}
-  /* toast */
-  #toast{
-    position:fixed;left:50%;bottom:110px;transform:translateX(-50%) translateY(20px);
-    background:var(--ink);color:#fff;padding:12px 20px;border-radius:99px;
-    font-size:13px;font-weight:600;opacity:0;pointer-events:none;transition:.3s;z-index:99;
-    max-width:85%;text-align:center;
+  .hero p {
+    font-size: 13px;
+    color: var(--text-soft);
+    line-height: 1.5;
+    max-width: 200px;
   }
-  #toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
-  ::-webkit-scrollbar{width:0}
+  .hero-illustration {
+    width: 100px; height: 100px;
+    flex-shrink: 0;
+    position: relative;
+  }
+  .hero-illustration .pet-circle {
+    width: 100%; height: 100%;
+    background: white;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 10px 30px rgba(255, 107, 107, 0.25);
+    animation: float 3s ease-in-out infinite;
+  }
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+  }
+
+  /* QUICK STATS */
+  .quick-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-bottom: 24px;
+  }
+  .stat-card {
+    background: var(--card-solid);
+    border-radius: 18px;
+    padding: 14px 10px;
+    text-align: center;
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-sm);
+  }
+  .stat-icon {
+    width: 36px; height: 36px;
+    border-radius: 12px;
+    margin: 0 auto 8px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .stat-icon.s1 { background: linear-gradient(135deg, #FFE5E0, #FFD4CC); }
+  .stat-icon.s2 { background: linear-gradient(135deg, #D4F5F2, #B8EDE9); }
+  .stat-icon.s3 { background: linear-gradient(135deg, #F3E8FF, #E9D5FF); }
+  .stat-value { font-size: 16px; font-weight: 800; color: var(--text); }
+  .stat-label { font-size: 10px; color: var(--text-soft); font-weight: 500; margin-top: 2px; }
+
+  /* SECTION HEADER */
+  .section-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 14px;
+  }
+  .section-head h3 {
+    font-size: 17px;
+    font-weight: 700;
+    letter-spacing: -0.3px;
+  }
+  .section-head a {
+    font-size: 12px;
+    color: var(--primary);
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  /* SERVICES */
+  .services {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+  .service-card {
+    background: var(--card-solid);
+    border-radius: var(--radius);
+    padding: 18px 16px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    min-height: 140px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .service-card:active { transform: scale(0.97); }
+  .service-card.featured {
+    grid-column: span 2;
+    background: linear-gradient(135deg, var(--primary), #FF8E8E);
+    color: white;
+    border: none;
+    flex-direction: row;
+    align-items: center;
+    gap: 16px;
+    min-height: 110px;
+  }
+  .service-card.featured::before {
+    content: '';
+    position: absolute;
+    top: -40px; right: -40px;
+    width: 140px; height: 140px;
+    background: radial-gradient(circle, rgba(255,255,255,0.2), transparent 70%);
+    border-radius: 50%;
+  }
+  .service-icon-wrap {
+    width: 48px; height: 48px;
+    border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 12px;
+  }
+  .service-icon-wrap.c1 { background: linear-gradient(135deg, #FFE5E0, #FFD4CC); }
+  .service-icon-wrap.c2 { background: linear-gradient(135deg, #D4F5F2, #B8EDE9); }
+  .service-icon-wrap.c3 { background: linear-gradient(135deg, #F3E8FF, #E9D5FF); }
+  .service-card h4 {
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 4px;
+    letter-spacing: -0.2px;
+  }
+  .service-card p {
+    font-size: 11px;
+    color: var(--text-soft);
+    line-height: 1.4;
+  }
+  .service-card.featured p { color: rgba(255,255,255,0.85); }
+  .service-card.featured .service-icon-wrap {
+    background: rgba(255,255,255,0.2);
+    backdrop-filter: blur(10px);
+    margin-bottom: 0;
+    flex-shrink: 0;
+  }
+  .service-card.featured .service-text { flex: 1; }
+  .service-arrow {
+    position: absolute;
+    bottom: 14px; right: 14px;
+    width: 28px; height: 28px;
+    background: rgba(0,0,0,0.05);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .service-card.featured .service-arrow {
+    background: rgba(255,255,255,0.25);
+  }
+
+  /* TIPS */
+  .tips-scroll {
+    display: flex;
+    gap: 12px;
+    overflow-x: auto;
+    padding-bottom: 4px;
+    margin: 0 -20px;
+    padding-left: 20px;
+    padding-right: 20px;
+    scroll-snap-type: x mandatory;
+  }
+  .tips-scroll::-webkit-scrollbar { display: none; }
+  .tip-card {
+    flex: 0 0 220px;
+    background: var(--card-solid);
+    border-radius: var(--radius);
+    padding: 16px;
+    border: 1px solid var(--border);
+    scroll-snap-align: start;
+    position: relative;
+    overflow: hidden;
+  }
+  .tip-card::before {
+    content: '';
+    position: absolute;
+    top: 0; right: 0;
+    width: 80px; height: 80px;
+    background: radial-gradient(circle, var(--tip-color, #FFE5E0), transparent 70%);
+    opacity: 0.5;
+  }
+  .tip-emoji {
+    width: 44px; height: 44px;
+    border-radius: 12px;
+    background: var(--tip-color, #FFE5E0);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px;
+    margin-bottom: 10px;
+    position: relative;
+  }
+  .tip-card h5 {
+    font-size: 13px;
+    font-weight: 700;
+    margin-bottom: 4px;
+    position: relative;
+  }
+  .tip-card p {
+    font-size: 11px;
+    color: var(--text-soft);
+    line-height: 1.4;
+    position: relative;
+  }
+
+  /* FORMS */
+  .form-header {
+    margin-bottom: 20px;
+  }
+  .form-header h2 {
+    font-size: 24px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    margin-bottom: 4px;
+  }
+  .form-header p {
+    font-size: 13px;
+    color: var(--text-soft);
+  }
+  .form-group { margin-bottom: 18px; }
+  .form-group label {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: var(--text);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    width: 100%;
+    padding: 14px 16px;
+    border: 1.5px solid var(--border);
+    border-radius: 14px;
+    font-size: 14px;
+    background: var(--card-solid);
+    font-family: inherit;
+    color: var(--text);
+    transition: all 0.2s;
+  }
+  .form-group input:focus,
+  .form-group select:focus,
+  .form-group textarea:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px rgba(255, 107, 107, 0.1);
+  }
+  .form-group textarea { resize: none; min-height: 80px; }
+
+  .vet-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  .vet-card {
+    background: var(--card-solid);
+    border: 2px solid var(--border);
+    border-radius: 16px;
+    padding: 14px 10px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    position: relative;
+  }
+  .vet-card.selected {
+    border-color: var(--primary);
+    background: linear-gradient(135deg, #FFF5F3, #FFECE8);
+  }
+  .vet-card.selected::after {
+    content: '✓';
+    position: absolute;
+    top: 8px; right: 8px;
+    width: 20px; height: 20px;
+    background: var(--primary);
+    color: white;
+    border-radius: 50%;
+    font-size: 11px;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700;
+  }
+  .vet-avatar {
+    width: 48px; height: 48px;
+    border-radius: 14px;
+    margin: 0 auto 8px;
+    display: flex; align-items: center; justify-content: center;
+    color: white;
+    font-weight: 700;
+    font-size: 15px;
+  }
+  .vet-avatar.v1 { background: linear-gradient(135deg, #FF6B6B, #FF8E8E); }
+  .vet-avatar.v2 { background: linear-gradient(135deg, #4ECDC4, #6ED9D2); }
+  .vet-avatar.v3 { background: linear-gradient(135deg, #8B5CF6, #A78BFA); }
+  .vet-avatar.v4 { background: linear-gradient(135deg, #FFD166, #FFDC85); }
+  .vet-card .name { font-size: 12px; font-weight: 700; margin-bottom: 2px; }
+  .vet-card .spec { font-size: 10px; color: var(--text-soft); }
+
+  .btn {
+    width: 100%;
+    padding: 16px;
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    color: white;
+    border: none;
+    border-radius: 16px;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: inherit;
+    box-shadow: 0 10px 25px rgba(255, 107, 107, 0.35);
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+  .btn:active { transform: scale(0.98); box-shadow: 0 5px 15px rgba(255, 107, 107, 0.35); }
+  .btn-ghost {
+    background: transparent;
+    color: var(--text);
+    border: 1.5px solid var(--border);
+    box-shadow: none;
+  }
+
+  /* VIDEO CALL */
+  .video-wrap {
+    background: linear-gradient(135deg, #1A1A2E, #2D2D44);
+    border-radius: var(--radius-lg);
+    aspect-ratio: 4/3;
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 16px;
+    box-shadow: var(--shadow-lg);
+  }
+  .video-wrap::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 30% 40%, rgba(255,107,107,0.2), transparent 50%),
+                radial-gradient(circle at 70% 60%, rgba(78,205,196,0.15), transparent 50%);
+  }
+  .call-info {
+    position: absolute;
+    top: 16px; left: 16px;
+    background: rgba(0,0,0,0.5);
+    backdrop-filter: blur(10px);
+    color: white;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    z-index: 2;
+  }
+  .call-info .live-dot {
+    width: 6px; height: 6px;
+    background: #FF6B6B;
+    border-radius: 50%;
+    animation: pulse 1.5s infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(1.3); }
+  }
+  .doctor-view {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    z-index: 1;
+  }
+  .doctor-avatar-big {
+    width: 110px; height: 110px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--primary), #FF8E8E);
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 14px;
+    box-shadow: 0 10px 40px rgba(255, 107, 107, 0.4);
+    position: relative;
+  }
+  .doctor-avatar-big::after {
+    content: '';
+    position: absolute;
+    inset: -8px;
+    border-radius: 50%;
+    border: 2px solid rgba(255, 107, 107, 0.3);
+    animation: ring 2s infinite;
+  }
+  @keyframes ring {
+    0% { transform: scale(1); opacity: 1; }
+    100% { transform: scale(1.3); opacity: 0; }
+  }
+  .doctor-view h3 { font-size: 17px; font-weight: 700; margin-bottom: 4px; }
+  .doctor-view p { font-size: 12px; opacity: 0.7; }
+  .self-view {
+    position: absolute;
+    bottom: 16px; right: 16px;
+    width: 72px; height: 96px;
+    background: linear-gradient(135deg, #4ECDC4, #6ED9D2);
+    border-radius: 14px;
+    border: 3px solid white;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 28px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+    z-index: 2;
+  }
+
+  .call-controls {
+    display: flex;
+    justify-content: space-around;
+    background: var(--card-solid);
+    padding: 14px;
+    border-radius: 22px;
+    box-shadow: var(--shadow);
+    margin-bottom: 16px;
+    border: 1px solid var(--border);
+  }
+  .ctrl-btn {
+    width: 52px; height: 52px;
+    border-radius: 16px;
+    border: none;
+    background: var(--bg-soft);
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .ctrl-btn:active { transform: scale(0.92); }
+  .ctrl-btn.active { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: white; }
+  .ctrl-btn.end { background: linear-gradient(135deg, #EF4444, #DC2626); color: white; }
+
+  .chat-panel {
+    background: var(--card-solid);
+    border-radius: var(--radius);
+    padding: 16px;
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-sm);
+  }
+  .chat-panel h4 {
+    font-size: 13px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .chat-messages {
+    max-height: 180px;
+    overflow-y: auto;
+    margin-bottom: 12px;
+  }
+  .chat-messages::-webkit-scrollbar { width: 4px; }
+  .chat-messages::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+  .msg {
+    padding: 10px 14px;
+    border-radius: 16px;
+    margin-bottom: 8px;
+    font-size: 13px;
+    line-height: 1.4;
+    max-width: 85%;
+    animation: msgIn 0.3s ease;
+  }
+  @keyframes msgIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .msg.doctor {
+    background: var(--bg-soft);
+    border-bottom-left-radius: 4px;
+    margin-right: auto;
+  }
+  .msg.me {
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    color: white;
+    border-bottom-right-radius: 4px;
+    margin-left: auto;
+  }
+  .chat-input {
+    display: flex;
+    gap: 8px;
+    background: var(--bg-soft);
+    padding: 6px;
+    border-radius: 18px;
+  }
+  .chat-input input {
+    flex: 1;
+    border: none;
+    background: transparent;
+    padding: 10px 12px;
+    font-size: 13px;
+    font-family: inherit;
+    outline: none;
+  }
+  .chat-input button {
+    width: 40px; height: 40px;
+    border-radius: 14px;
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    color: white;
+    border: none;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  /* AI ASSISTANT */
+  .ai-hero {
+    background: linear-gradient(135deg, #F3E8FF, #E9D5FF);
+    border-radius: var(--radius-lg);
+    padding: 20px;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+  }
+  .ai-hero::before {
+    content: '';
+    position: absolute;
+    top: -30px; right: -30px;
+    width: 120px; height: 120px;
+    background: radial-gradient(circle, rgba(139,92,246,0.3), transparent 70%);
+    border-radius: 50%;
+  }
+  .ai-avatar {
+    width: 56px; height: 56px;
+    border-radius: 18px;
+    background: linear-gradient(135deg, #8B5CF6, #A78BFA);
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 8px 20px rgba(139, 92, 246, 0.35);
+    position: relative;
+    flex-shrink: 0;
+  }
+  .ai-avatar::after {
+    content: '';
+    position: absolute;
+    bottom: -2px; right: -2px;
+    width: 14px; height: 14px;
+    background: #10B981;
+    border: 2px solid white;
+    border-radius: 50%;
+  }
+  .ai-info h3 {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 2px;
+    position: relative;
+  }
+  .ai-info p {
+    font-size: 12px;
+    color: var(--text-soft);
+    position: relative;
+  }
+
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 14px;
+  }
+  .chip {
+    background: var(--card-solid);
+    border: 1.5px solid var(--border);
+    color: var(--text);
+    padding: 8px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+  }
+  .chip:active {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+    transform: scale(0.96);
+  }
+
+  .ai-chat {
+    background: var(--card-solid);
+    border-radius: var(--radius);
+    padding: 16px;
+    min-height: 280px;
+    max-height: 45vh;
+    overflow-y: auto;
+    border: 1px solid var(--border);
+    margin-bottom: 14px;
+    box-shadow: var(--shadow-sm);
+  }
+  .ai-chat::-webkit-scrollbar { width: 4px; }
+  .ai-chat::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+  .ai-msg {
+    margin-bottom: 12px;
+    display: flex;
+    gap: 8px;
+    animation: msgIn 0.3s ease;
+  }
+  .ai-msg.user { flex-direction: row-reverse; }
+  .ai-msg .bubble {
+    max-width: 80%;
+    padding: 12px 16px;
+    border-radius: 18px;
+    font-size: 13px;
+    line-height: 1.5;
+  }
+  .ai-msg.bot .bubble {
+    background: var(--bg-soft);
+    border-bottom-left-radius: 4px;
+  }
+  .ai-msg.user .bubble {
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    color: white;
+    border-bottom-right-radius: 4px;
+  }
+  .typing {
+    display: inline-flex;
+    gap: 4px;
+    padding: 4px 0;
+  }
+  .typing span {
+    width: 6px; height: 6px;
+    background: var(--text-soft);
+    border-radius: 50%;
+    animation: typing 1.4s infinite;
+  }
+  .typing span:nth-child(2) { animation-delay: 0.2s; }
+  .typing span:nth-child(3) { animation-delay: 0.4s; }
+  @keyframes typing {
+    0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
+    30% { transform: translateY(-6px); opacity: 1; }
+  }
+
+  .ai-input-wrap {
+    display: flex;
+    gap: 8px;
+    background: var(--card-solid);
+    padding: 8px;
+    border-radius: 22px;
+    border: 1.5px solid var(--border);
+    box-shadow: var(--shadow-sm);
+  }
+  .ai-input-wrap input {
+    flex: 1;
+    border: none;
+    padding: 10px 12px;
+    font-size: 14px;
+    outline: none;
+    background: transparent;
+    font-family: inherit;
+  }
+  .ai-input-wrap button {
+    width: 44px; height: 44px;
+    border-radius: 16px;
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    color: white;
+    border: none;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 6px 15px rgba(255, 107, 107, 0.35);
+  }
+
+  /* BOTTOM NAV */
+  .bottom-nav {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    display: flex;
+    justify-content: space-around;
+    padding: 10px 16px;
+    padding-bottom: max(10px, env(safe-area-inset-bottom));
+    border-top: 1px solid var(--border);
+    z-index: 10;
+  }
+  .nav-item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    padding: 8px 4px;
+    cursor: pointer;
+    color: var(--text-soft);
+    font-size: 10px;
+    font-weight: 600;
+    transition: color 0.2s;
+    position: relative;
+  }
+  .nav-item .nav-icon {
+    width: 24px; height: 24px;
+    display: flex; align-items: center; justify-content: center;
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .nav-item.active { color: var(--primary); }
+  .nav-item.active .nav-icon { transform: translateY(-2px) scale(1.1); }
+  .nav-item.active::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 50%;
+    transform: translateX(-50%);
+    width: 24px; height: 3px;
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    border-radius: 0 0 4px 4px;
+  }
+
+  /* MODAL */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(26, 26, 46, 0.5);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    display: none;
+    align-items: flex-end;
+    justify-content: center;
+    z-index: 100;
+    padding: 20px;
+  }
+  .modal-overlay.show { display: flex; animation: fadeIn 0.3s; }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  .modal {
+    background: white;
+    border-radius: 28px 28px 20px 20px;
+    padding: 28px 24px;
+    max-width: 400px;
+    width: 100%;
+    text-align: center;
+    animation: slideUpModal 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  @keyframes slideUpModal {
+    from { transform: translateY(100%); }
+    to { transform: translateY(0); }
+  }
+  .modal .success-icon {
+    width: 72px; height: 72px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #D4F5F2, #B8EDE9);
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 18px;
+    position: relative;
+  }
+  .modal .success-icon::after {
+    content: '';
+    position: absolute;
+    inset: -6px;
+    border-radius: 50%;
+    border: 2px dashed var(--secondary);
+    opacity: 0.4;
+    animation: rotate 10s linear infinite;
+  }
+  @keyframes rotate {
+    to { transform: rotate(360deg); }
+  }
+  .modal h3 {
+    font-size: 20px;
+    font-weight: 800;
+    margin-bottom: 8px;
+    letter-spacing: -0.3px;
+  }
+  .modal p {
+    font-size: 13px;
+    color: var(--text-soft);
+    margin-bottom: 20px;
+    line-height: 1.5;
+  }
 </style>
 </head>
 <body>
+
 <div class="app">
 
   <!-- HEADER -->
-  <header>
-    <div class="logo">🐾</div>
+  <div class="header">
     <div class="brand">
-      <h1>Mundo Patitas</h1>
-      <p>Cuidamos a quien más quieres</p>
+      <div class="brand-logo">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M7.5 4.5C8.5 4.5 9.2 5.5 9.2 6.8C9.2 8.1 8.5 9.1 7.5 9.1C6.5 9.1 5.8 8.1 5.8 6.8C5.8 5.5 6.5 4.5 7.5 4.5Z" fill="white"/>
+          <path d="M16.5 4.5C17.5 4.5 18.2 5.5 18.2 6.8C18.2 8.1 17.5 9.1 16.5 9.1C15.5 9.1 14.8 8.1 14.8 6.8C14.8 5.5 15.5 4.5 16.5 4.5Z" fill="white"/>
+          <path d="M4.5 11C5.6 11 6.4 12.2 6.4 13.7C6.4 15.2 5.6 16.4 4.5 16.4C3.4 16.4 2.6 15.2 2.6 13.7C2.6 12.2 3.4 11 4.5 11Z" fill="white"/>
+          <path d="M19.5 11C20.6 11 21.4 12.2 21.4 13.7C21.4 15.2 20.6 16.4 19.5 16.4C18.4 16.4 17.6 15.2 17.6 13.7C17.6 12.2 18.4 11 19.5 11Z" fill="white"/>
+          <path d="M12 11.5C14.5 11.5 16.5 13.5 16.5 16C16.5 18.5 14.5 20.5 12 20.5C9.5 20.5 7.5 18.5 7.5 16C7.5 13.5 9.5 11.5 12 11.5Z" fill="white"/>
+        </svg>
+      </div>
+      <div class="brand-text">
+        <h1>Mundo Patitas</h1>
+        <p>Cuidamos a tu mejor amigo</p>
+      </div>
     </div>
-    <button class="bell" aria-label="Notificaciones">🔔</button>
-  </header>
-
-  <main>
-
-    <!-- ============ INICIO ============ -->
-    <section class="screen active" id="scr-home">
-      <div class="card hero">
-        <h2>Hola, humano de Firulais 🐶</h2>
-        <p>Agenda una consulta, chatea con nuestros veterinarios o pregunta lo que quieras a nuestro asistente con IA.</p>
-        <button onclick="go('agendar')">📅 Agendar cita</button>
+    <div class="header-actions">
+      <div class="icon-btn">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1A1A2E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+          <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+        </svg>
+        <span class="badge"></span>
       </div>
+    </div>
+  </div>
 
-      <h3 class="section-title">Servicios</h3>
-      <div class="quick-grid">
-        <div class="quick" onclick="go('agendar')"><div class="ico">📅</div><b>Agendar</b></div>
-        <div class="quick" onclick="go('consultas')"><div class="ico">🩺</div><b>Consulta en línea</b></div>
-        <div class="quick" onclick="go('asistente')"><div class="ico">🤖</div><b>Asistente IA</b></div>
-      </div>
+  <!-- CONTENT -->
+  <div class="content">
 
-      <h3 class="section-title">Próxima cita <span onclick="go('agendar')">Ver todas</span></h3>
-      <div class="card next-appt">
-        <div class="date-chip">12<small>MAY</small></div>
-        <div style="flex:1">
-          <b>Control general — Firulais</b><br>
-          <small style="color:var(--ink-soft)">10:30 a.m. · Dra. Camila Rojas</small><br>
-          <span class="badge ok" style="margin-top:6px">● Confirmada</span>
-        </div>
-      </div>
-
-      <h3 class="section-title">Nuestros veterinarios</h3>
-      <div class="card vet-card">
-        <div class="avatar">👩‍⚕️</div>
-        <div class="vet-info">
-          <b>Dra. Camila Rojas</b>
-          <small>Medicina general · 8 años exp.</small>
-        </div>
-        <span class="badge ok">En línea</span>
-      </div>
-      <div class="card vet-card">
-        <div class="avatar g">👨‍⚕️</div>
-        <div class="vet-info">
-          <b>Dr. Andrés Silva</b>
-          <small>Cirugía y traumatología · 12 años exp.</small>
-        </div>
-        <span class="badge wait">Ocupado</span>
-      </div>
-      <div class="card vet-card">
-        <div class="avatar">👩‍⚕️</div>
-        <div class="vet-info">
-          <b>Dra. Valeria Paz</b>
-          <small>Dermatología veterinaria · 6 años exp.</small>
-        </div>
-        <span class="badge ok">En línea</span>
-      </div>
-    </section>
-
-    <!-- ============ AGENDAR ============ -->
-    <section class="screen" id="scr-agendar">
-      <h3 class="section-title" style="margin-top:0">📅 Agendar consulta</h3>
-
-      <div class="card">
-        <div class="field">
-          <label>1. ¿A quién atendemos?</label>
-          <div class="chips" id="petType">
-            <button class="chip" onclick="pick(this,'perro')">🐶 Perro</button>
-            <button class="chip" onclick="pick(this,'gato')">🐱 Gato</button>
-            <button class="chip" onclick="pick(this,'ave')">🦜 Ave</button>
-            <button class="chip" onclick="pick(this,'otro')">🐹 Otro</button>
+    <!-- HOME -->
+    <div class="screen active" id="screen-home">
+      <div class="hero">
+        <div class="hero-content">
+          <div class="hero-text">
+            <div class="hero-greeting">👋 Hola, María</div>
+            <h2>¿Cómo está <span>Luna</span> hoy?</h2>
+            <p>Estamos aquí para cuidar cada patita de tu mejor amigo.</p>
           </div>
-        </div>
-
-        <div class="field">
-          <label>2. Nombre de la mascota</label>
-          <input type="text" id="petName" placeholder="Ej. Firulais">
-        </div>
-
-        <div class="field">
-          <label>3. Servicio</label>
-          <select id="service">
-            <option>Control general</option>
-            <option>Vacunación</option>
-            <option>Desparasitación</option>
-            <option>Consulta dermatológica</option>
-            <option>Urgencia</option>
-          </select>
-        </div>
-
-        <div class="field">
-          <label>4. Fecha</label>
-          <input type="date" id="date" onchange="renderSlots()">
-        </div>
-
-        <div class="field">
-          <label>5. Horario</label>
-          <div class="slots" id="slots"></div>
-        </div>
-
-        <button class="btn btn-primary btn-block" id="btnBook" onclick="book()">Confirmar cita</button>
-      </div>
-
-      <div class="card summary" id="summary">
-        <b style="color:var(--green)">✅ ¡Cita agendada con éxito!</b>
-        <p id="summaryText" style="font-size:13px;margin-top:8px;line-height:1.6"></p>
-      </div>
-    </section>
-
-    <!-- ============ CONSULTAS EN LÍNEA ============ -->
-    <section class="screen" id="scr-consultas">
-      <h3 class="section-title" style="margin-top:0">🩺 Consulta en línea</h3>
-
-      <div id="vetList">
-        <div class="card vet-card">
-          <div class="avatar">👩‍⚕️</div>
-          <div class="vet-info">
-            <b>Dra. Camila Rojas</b>
-            <small>Medicina general</small>
-          </div>
-          <button class="btn btn-primary" onclick="startChat('Dra. Camila Rojas','👩‍⚕️')">Chatear</button>
-        </div>
-        <div class="card vet-card">
-          <div class="avatar">👩‍⚕️</div>
-          <div class="vet-info">
-            <b>Dra. Valeria Paz</b>
-            <small>Dermatología</small>
-          </div>
-          <button class="btn btn-primary" onclick="startChat('Dra. Valeria Paz','👩‍⚕️')">Chatear</button>
-        </div>
-        <div class="card vet-card">
-          <div class="avatar g">👨‍⚕️</div>
-          <div class="vet-info">
-            <b>Dr. Andrés Silva</b>
-            <small>Cirugía y traumatología</small>
-          </div>
-          <button class="btn btn-ghost" onclick="toast('El Dr. Andrés está ocupado, te avisaremos cuando esté disponible')">Ocupado</button>
-        </div>
-      </div>
-
-      <div id="chatVet" style="display:none">
-        <div class="chat-box">
-          <div class="chat-head">
-            <div class="avatar" id="vetAvatar">👩‍⚕️</div>
-            <div><b id="vetName"></b><small>En línea · responde rápido</small></div>
-            <button class="btn btn-ghost" style="margin-left:auto;padding:8px 12px" onclick="endChat()">←</button>
-          </div>
-          <div class="msgs" id="vetMsgs"></div>
-          <div class="chat-input">
-            <input type="text" id="vetInput" placeholder="Describe el problema de tu mascota…" onkeydown="if(event.key==='Enter')sendVet()">
-            <button onclick="sendVet()" aria-label="Enviar">➤</button>
+          <div class="hero-illustration">
+            <div class="pet-circle">
+              <svg width="60" height="60" viewBox="0 0 64 64" fill="none">
+                <circle cx="32" cy="32" r="24" fill="#FFD4CC"/>
+                <ellipse cx="22" cy="22" rx="4" ry="5" fill="#FF6B6B"/>
+                <ellipse cx="42" cy="22" rx="4" ry="5" fill="#FF6B6B"/>
+                <ellipse cx="16" cy="34" rx="3" ry="4" fill="#FF6B6B"/>
+                <ellipse cx="48" cy="34" rx="3" ry="4" fill="#FF6B6B"/>
+                <ellipse cx="32" cy="40" rx="8" ry="7" fill="#FF6B6B"/>
+                <circle cx="28" cy="38" r="1.5" fill="white"/>
+                <circle cx="36" cy="38" r="1.5" fill="white"/>
+                <path d="M30 43 Q32 45 34 43" stroke="white" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+              </svg>
+            </div>
           </div>
         </div>
       </div>
-    </section>
 
-    <!-- ============ ASISTENTE IA ============ -->
-    <section class="screen" id="scr-asistente">
-      <h3 class="section-title" style="margin-top:0">🤖 Asistente virtual IA</h3>
-      <div class="chat-box">
-        <div class="chat-head ai">
-          <div class="avatar">🤖</div>
-          <div><b>Patitas AI</b><small>Disponible 24/7 · cuidado de mascotas</small></div>
+      <div class="quick-stats">
+        <div class="stat-card">
+          <div class="stat-icon s1">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FF6B6B" stroke-width="2.5" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          </div>
+          <div class="stat-value">2</div>
+          <div class="stat-label">Próximas citas</div>
         </div>
-        <div class="msgs" id="aiMsgs">
-          <div class="msg time">Hoy</div>
-          <div class="msg bot">¡Hola! 🐾 Soy <b>Patitas AI</b>, el asistente virtual de Mundo Patitas. Pregúntame sobre alimentación, vacunas, cuidados, conducta o síntomas de tu mascota.</div>
+        <div class="stat-card">
+          <div class="stat-icon s2">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#4ECDC4" stroke-width="2.5" stroke-linecap="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          </div>
+          <div class="stat-value">100%</div>
+          <div class="stat-label">Vacunas al día</div>
         </div>
-        <div class="chat-input ai-btn">
-          <input type="text" id="aiInput" placeholder="Ej. ¿cada cuánto vacuno a mi gato?" onkeydown="if(event.key==='Enter')sendAI()">
-          <button onclick="sendAI()" aria-label="Enviar">➤</button>
+        <div class="stat-card">
+          <div class="stat-icon s3">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8B5CF6" stroke-width="2.5" stroke-linecap="round"><path d="M12 2L15 8L22 9L17 14L18 21L12 18L6 21L7 14L2 9L9 8L12 2Z"/></svg>
+          </div>
+          <div class="stat-value">4.9</div>
+          <div class="stat-label">Calificación</div>
         </div>
       </div>
-      <p style="font-size:11px;color:var(--ink-soft);text-align:center;margin-top:10px">
-        ⚠️ Patitas AI es orientativo y no reemplaza la consulta con un veterinario.
-      </p>
-    </section>
 
-  </main>
+      <div class="section-head">
+        <h3>Nuestros servicios</h3>
+        <a href="#">Ver todos</a>
+      </div>
+
+      <div class="services">
+        <div class="service-card" onclick="goTo('schedule')">
+          <div class="service-icon-wrap c1">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#FF6B6B" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><circle cx="12" cy="15" r="1.5" fill="#FF6B6B"/></svg>
+          </div>
+          <div>
+            <h4>Agendar cita</h4>
+            <p>Reserva con nuestros especialistas</p>
+          </div>
+          <div class="service-arrow">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </div>
+        </div>
+
+        <div class="service-card" onclick="goTo('online')">
+          <div class="service-icon-wrap c2">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#4ECDC4" stroke-width="2" stroke-linecap="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>
+          </div>
+          <div>
+            <h4>Consulta online</h4>
+            <p>Videollamada al instante</p>
+          </div>
+          <div class="service-arrow">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </div>
+        </div>
+
+        <div class="service-card featured" onclick="goTo('ai')">
+          <div class="service-icon-wrap">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round"><rect x="3" y="11" width="18" height="10" rx="2"/><circle cx="12" cy="5" r="2"/><line x1="12" y1="7" x2="12" y2="11"/><line x1="8" y1="16" x2="8" y2="16"/><line x1="16" y1="16" x2="16" y2="16"/></svg>
+          </div>
+          <div class="service-text">
+            <h4>Asistente IA 24/7</h4>
+            <p>Resuelve tus dudas al instante con nuestro asistente inteligente</p>
+          </div>
+          <div class="service-arrow">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-head">
+        <h3>Consejos para Luna 🐾</h3>
+        <a href="#">Ver más</a>
+      </div>
+
+      <div class="tips-scroll">
+        <div class="tip-card" style="--tip-color: #FFE5E0;">
+          <div class="tip-emoji">💧</div>
+          <h5>Hidratación</h5>
+          <p>Agua fresca siempre disponible, cambia el bowl 2 veces al día.</p>
+        </div>
+        <div class="tip-card" style="--tip-color: #D4F5F2;">
+          <div class="tip-emoji">🦴</div>
+          <h5>Ejercicio diario</h5>
+          <p>30 minutos de paseo mantienen a Luna sana y feliz.</p>
+        </div>
+        <div class="tip-card" style="--tip-color: #F3E8FF;">
+          <div class="tip-emoji">💉</div>
+          <h5>Vacunas al día</h5>
+          <p>Revisa el calendario y no olvides los refuerzos anuales.</p>
+        </div>
+        <div class="tip-card" style="--tip-color: #FEF3C7;">
+          <div class="tip-emoji">🦷</div>
+          <h5>Salud dental</h5>
+          <p>Cepilla sus dientes 2-3 veces por semana para evitar problemas.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- AGENDAR -->
+    <div class="screen" id="screen-schedule">
+      <div class="form-header">
+        <h2>Agendar cita 📅</h2>
+        <p>Reserva en menos de 1 minuto</p>
+      </div>
+
+      <div class="form-group">
+        <label>Elige tu veterinario</label>
+        <div class="vet-grid">
+          <div class="vet-card selected" onclick="selectVet(this)">
+            <div class="vet-avatar v1">AL</div>
+            <div class="name">Dra. Ana López</div>
+            <div class="spec">Medicina general</div>
+          </div>
+          <div class="vet-card" onclick="selectVet(this)">
+            <div class="vet-avatar v2">CR</div>
+            <div class="name">Dr. Carlos Ruiz</div>
+            <div class="spec">Cirugía</div>
+          </div>
+          <div class="vet-card" onclick="selectVet(this)">
+            <div class="vet-avatar v3">SP</div>
+            <div class="name">Dra. Sofía Pérez</div>
+            <div class="spec">Dermatología</div>
+          </div>
+          <div class="vet-card" onclick="selectVet(this)">
+            <div class="vet-avatar v4">LM</div>
+            <div class="name">Dr. Luis Martín</div>
+            <div class="spec">Cardiología</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Nombre de la mascota</label>
+        <input type="text" placeholder="Ej: Luna" value="Luna" />
+      </div>
+
+      <div class="form-group">
+        <label>Tipo de mascota</label>
+        <select>
+          <option>🐕 Perro</option>
+          <option>🐈 Gato</option>
+          <option>🐦 Ave</option>
+          <option>🐰 Conejo</option>
+          <option>🐹 Otro</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Fecha</label>
+        <input type="date" id="dateInput" />
+      </div>
+
+      <div class="form-group">
+        <label>Horario disponible</label>
+        <select>
+          <option>09:00 AM</option>
+          <option>10:30 AM</option>
+          <option>12:00 PM</option>
+          <option>03:00 PM</option>
+          <option>05:00 PM</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Motivo de la consulta</label>
+        <textarea placeholder="Cuéntanos qué le pasa a tu mascota..."></textarea>
+      </div>
+
+      <button class="btn" onclick="confirmAppointment()">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+        Confirmar cita
+      </button>
+    </div>
+
+    <!-- CONSULTA ONLINE -->
+    <div class="screen" id="screen-online">
+      <div class="form-header">
+        <h2>Consulta en línea 📹</h2>
+        <p>Conectada con tu veterinaria</p>
+      </div>
+
+      <div class="video-wrap">
+        <div class="call-info">
+          <span class="live-dot"></span>
+          <span id="callTimer">En llamada · 00:00</span>
+        </div>
+        <div class="doctor-view">
+          <div class="doctor-avatar-big">
+            <svg width="50" height="50" viewBox="0 0 24 24" fill="white">
+              <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+            </svg>
+          </div>
+          <h3>Dra. Ana López</h3>
+          <p>Medicina general</p>
+        </div>
+        <div class="self-view">🙋‍♀️</div>
+      </div>
+
+      <div class="call-controls">
+        <button class="ctrl-btn active" onclick="toggleBtn(this)">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/></svg>
+        </button>
+        <button class="ctrl-btn active" onclick="toggleBtn(this)">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+        </button>
+        <button class="ctrl-btn" onclick="toggleBtn(this)">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+        </button>
+        <button class="ctrl-btn end" onclick="endCall()">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" transform="rotate(135 12 12)"/></svg>
+        </button>
+      </div>
+
+      <div class="chat-panel">
+        <h4>💬 Chat en vivo</h4>
+        <div class="chat-messages" id="callChat">
+          <div class="msg doctor">Hola María, ¿cómo se encuentra Luna hoy? Cuéntame qué síntomas presenta.</div>
+        </div>
+        <div class="chat-input">
+          <input type="text" id="callChatInput" placeholder="Escribe un mensaje..." onkeypress="if(event.key==='Enter') sendCallMsg()" />
+          <button onclick="sendCallMsg()">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- IA -->
+    <div class="screen" id="screen-ai">
+      <div class="ai-hero">
+        <div class="ai-avatar">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="white">
+            <rect x="3" y="11" width="18" height="10" rx="2"/>
+            <circle cx="12" cy="5" r="2"/>
+            <line x1="12" y1="7" x2="12" y2="11" stroke="white" stroke-width="2"/>
+            <circle cx="8" cy="16" r="1" fill="#8B5CF6"/>
+            <circle cx="16" cy="16" r="1" fill="#8B5CF6"/>
+          </svg>
+        </div>
+        <div class="ai-info">
+          <h3>PetBot IA</h3>
+          <p>En línea · Responde al instante</p>
+        </div>
+      </div>
+
+      <div class="chips" id="suggestions">
+        <button class="chip" onclick="askSuggestion(this)">¿Cuándo vacunar?</button>
+        <button class="chip" onclick="askSuggestion(this)">Mi gato no come</button>
+        <button class="chip" onclick="askSuggestion(this)">¿Cada cuánto bañar?</button>
+        <button class="chip" onclick="askSuggestion(this)">Síntomas de parásitos</button>
+      </div>
+
+      <div class="ai-chat" id="aiChat">
+        <div class="ai-msg bot">
+          <div class="bubble">¡Hola María! 👋 Soy <strong>PetBot</strong>, tu asistente virtual de Mundo Patitas. Puedo ayudarte con dudas sobre alimentación, salud, vacunas y cuidados de Luna. ¿En qué te puedo ayudar?</div>
+        </div>
+      </div>
+
+      <div class="ai-input-wrap">
+        <input type="text" id="aiInput" placeholder="Pregúntame lo que quieras..." onkeypress="if(event.key==='Enter') sendAiMsg()" />
+        <button onclick="sendAiMsg()">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        </button>
+      </div>
+    </div>
+
+  </div>
 
   <!-- BOTTOM NAV -->
-  <nav class="bottom">
-    <button class="active" data-t="home" onclick="go('home')"><span class="nico">🏠</span>Inicio</button>
-    <button data-t="agendar" onclick="go('agendar')"><span class="nico">📅</span>Agendar</button>
-    <button data-t="consultas" onclick="go('consultas')"><span class="nico">🩺</span>Consultas</button>
-    <button data-t="asistente" onclick="go('asistente')"><span class="nico">🤖</span>Asistente IA</button>
-  </nav>
+  <div class="bottom-nav">
+    <div class="nav-item active" data-screen="home" onclick="goTo('home')">
+      <div class="nav-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      </div>
+      <div>Inicio</div>
+    </div>
+    <div class="nav-item" data-screen="schedule" onclick="goTo('schedule')">
+      <div class="nav-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      </div>
+      <div>Agendar</div>
+    </div>
+    <div class="nav-item" data-screen="online" onclick="goTo('online')">
+      <div class="nav-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>
+      </div>
+      <div>Consulta</div>
+    </div>
+    <div class="nav-item" data-screen="ai" onclick="goTo('ai')">
+      <div class="nav-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"/><circle cx="12" cy="5" r="2"/><line x1="12" y1="7" x2="12" y2="11"/></svg>
+      </div>
+      <div>Asistente</div>
+    </div>
+  </div>
 
-  <div id="toast"></div>
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modal">
+  <div class="modal">
+    <div class="success-icon">
+      <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#4ECDC4" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+    </div>
+    <h3 id="modalTitle">¡Cita confirmada!</h3>
+    <p id="modalText">Tu cita ha sido agendada correctamente.</p>
+    <button class="btn" onclick="closeModal()">Perfecto</button>
+  </div>
 </div>
 
 <script>
-/* ================= NAV ================= */
-function go(t){
-  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
-  document.getElementById('scr-'+t).classList.add('active');
-  document.querySelectorAll('nav.bottom button').forEach(b=>b.classList.toggle('active',b.dataset.t===t));
-  window.scrollTo({top:0});
-}
-
-/* ================= TOAST ================= */
-let toastTimer;
-function toast(m){
-  const el=document.getElementById('toast');
-  el.textContent=m; el.classList.add('show');
-  clearTimeout(toastTimer);
-  toastTimer=setTimeout(()=>el.classList.remove('show'),2600);
-}
-
-/* ================= AGENDAR ================= */
-let selPet='', selSlot='';
-function pick(btn,pet){
-  btn.parentElement.querySelectorAll('.chip').forEach(c=>c.classList.remove('sel'));
-  btn.classList.add('sel'); selPet=pet;
-}
-document.getElementById('date').valueAsDate=new Date();
-
-function renderSlots(){
-  const box=document.getElementById('slots'); box.innerHTML=''; selSlot='';
-  ['09:00','10:30','12:00','15:00','16:30','18:00'].forEach((h,i)=>{
-    const b=document.createElement('button');
-    b.className='slot'; b.textContent=h;
-    if(i===1||i===4){ b.disabled=true; } // horarios ocupados (demo)
-    b.onclick=()=>{ box.querySelectorAll('.slot').forEach(s=>s.classList.remove('sel')); b.classList.add('sel'); selSlot=h; };
-    box.appendChild(b);
-  });
-}
-renderSlots();
-
-function book(){
-  const name=document.getElementById('petName').value.trim();
-  const date=document.getElementById('date').value;
-  const svc=document.getElementById('service').value;
-  if(!selPet)      return toast('Elige el tipo de mascota 🐾');
-  if(!name)        return toast('Escribe el nombre de tu mascota');
-  if(!date)        return toast('Selecciona una fecha');
-  if(!selSlot)     return toast('Selecciona un horario disponible');
-  const petLabel={perro:'Perro 🐶',gato:'Gato 🐱',ave:'Ave 🦜',otro:'Otro 🐹'}[selPet];
-  const f=new Date(date+'T12:00:00').toLocaleDateString('es-ES',{day:'numeric',month:'long',year:'numeric'});
-  document.getElementById('summaryText').innerHTML =
-    `<b>${svc}</b> para <b>${name}</b> (${petLabel})<br>📅 ${f} · 🕐 ${selSlot} h<br>👨‍⚕️ Atenderá: Dra. Camila Rojas`;
-  const s=document.getElementById('summary');
-  s.classList.remove('show'); void s.offsetWidth; s.classList.add('show');
-  toast('✅ Cita confirmada. ¡Te esperamos!');
-  s.scrollIntoView({behavior:'smooth'});
-}
-
-/* ================= CHAT VETERINARIO ================= */
-let chatOpen=false;
-function startChat(name,ico){
-  document.getElementById('vetList').style.display='none';
-  document.getElementById('chatVet').style.display='block';
-  document.getElementById('vetName').textContent=name;
-  document.getElementById('vetAvatar').textContent=ico;
-  const m=document.getElementById('vetMsgs'); m.innerHTML='';
-  addMsg(m,'bot','Hola 👋 soy '+name+' de Mundo Patitas. Cuéntame qué le pasa a tu mascota.');
-  chatOpen=true;
-}
-function endChat(){
-  document.getElementById('chatVet').style.display='none';
-  document.getElementById('vetList').style.display='block';
-  chatOpen=false;
-}
-function now(){return new Date().toLocaleTimeString('es-ES',{hour:'2-digit',minute:'2-digit'})}
-function addMsg(box,who,text){
-  const d=document.createElement('div');
-  d.className='msg '+who; d.textContent=text; box.appendChild(d);
-  box.scrollTop=box.scrollHeight;
-}
-function typingOn(box){
-  const t=document.createElement('div'); t.className='typing'; t.id='typing';
-  t.innerHTML='<i></i><i></i><i></i>'; box.appendChild(t); box.scrollTop=box.scrollHeight;
-}
-function typingOff(){const t=document.getElementById('typing'); if(t)t.remove()}
-
-function sendVet(){
-  const inp=document.getElementById('vetInput');
-  const txt=inp.value.trim(); if(!txt)return;
-  const m=document.getElementById('vetMsgs');
-  addMsg(m,'me',txt); inp.value='';
-  typingOn(m);
-  setTimeout(()=>{
-    typingOff();
-    addMsg(m,'bot','Entiendo, gracias por contarme 📝. Con base en lo que describes te recomiendo traerlo para una valoración presencial. ¿Te gustaría que te aparte un turno hoy mismo?');
-    addMsg(m,'bot','Puedes agendar desde la pestaña 📅 <b>Agendar</b> o si es urgente preséntate directo en Mundo Patitas.');
-  },1400);
-}
-
-/* ================= ASISTENTE IA ================= */
-const aiKnowledge=[
-  {k:['vacuna','vacun'],a:'Las vacunas esenciales para <b>perros</b> son: parvovirus, distemper y rabia (primera dosis a las 6-8 semanas, refuerzos cada año). Para <b>gatos</b>: triple felina y rabia. En Mundo Patitas tenemos el plan de vacunación completo 📅 ¿quieres agendar una cita?'},
-  {k:['aliment','comida','comer','dieta','comid'],a:'La alimentación depende de edad, tamaño y actividad: los <b>cachorros</b> comen 3-4 veces al día, los <b>adultos</b> 2 veces. Evita siempre chocolate, cacao, uvas, cebolla, ajo, aguacate y huesos cocidos 🚫 ¿Para qué especie es la consulta?'},
-  {k:['garrapata','pulga','pica','rasc'],a:'Para pulgas y garrapatas recomiendo pipetas o collares antiparasitarios cada 30 días 🛡️ Revisa entre los dedos, orejas y cuello. Si ya tiene garrapatas, no las arrastres: usa pinzas y retíralas recto. Puedo ayudarte a agendar una consulta dermatológica.'},
-  {k:['vomit','diarr','mal del'],a:'Ante vómitos o diarrea leves: ayuno de 6-8 h (con agua disponible) y dieta blanda después 🍚. Pero <b>acude de inmediato</b> si hay sangre, apatía, o si no mejora en 24 h. ¿Quieres que te pase con un veterinario en línea?'},
-  {k:['bañ','higiene','cepill'],a:'A los <b>perros</b> se los baña cada 3-4 semanas con shampoo especial 🛁 y a los <b>gatos</b> casi nunca se bañan (ellos se asean solos). El cepillado diario reduce pellos y bolas de pelo, sobre todo en gatos de pelo largo.'},
-  {k:['addest','adiest','obede','entren'],a:'El refuerzo positivo es la clave 🦴: premia el buen comportamiento en los primeros 3 segundos, sesiones cortas de 10-15 minutos y mucha paciencia. Nunca grites ni castigues físico: genera miedo, no aprendizaje.'},
-  {k:['cachorro','cachor','bebé','bebe'],a:'Para un cachorro 🐶: vacunas desde las 6 semanas, desparasitación cada 15 días hasta los 3 meses, comida específica para cachorros y socialización positiva con gente y otros perros antes de los 4 meses.'},
-  {k:['gato','minino','felino','miau'],a:'Los gatos 🐱 necesitan: arenero limpio (uno por gato + 1 extra), rascadores para sus uñas, agua fresca siempre y juego diario de 15 min. Si deja de usar el arenero o no orina, ¡es urgencia veterinaria!'},
-  {k:['urgen','sangre','no respira','accidente','intox'],a:'🚨 Si es una <b>emergencia</b> (sangrado, dificultad respiratoria, convulsiones, ingestión de tóxicos) ve <b>de inmediato</b> a Mundo Patitas o llama a nuestra línea de urgencias. La atención rápida salva vidas.'},
-  {k:['hola','buenas','hey'],a:'¡Hola! 👋 ¿En qué puedo ayudarte hoy? Pregúntame sobre vacunas, alimentación, cuidados, conducta o síntomas de tu mascota.'},
-  {k:['gracias','genial','ok'],a:'¡Con gusto! 🐾 Estoy aquí 24/7. Si necesitas una consulta con un veterinario humano, revisa la pestaña 🩺 Consultas.'}
-];
-function aiReply(q){
-  const l=q.toLowerCase();
-  for(const it of aiKnowledge){
-    if(it.k.some(k=>l.includes(k))) return it.a;
+  function goTo(screen) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById('screen-' + screen).classList.add('active');
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    document.querySelector(`.nav-item[data-screen="${screen}"]`).classList.add('active');
+    document.querySelector('.content').scrollTop = 0;
+    if (screen === 'online') startCallTimer();
+    else stopCallTimer();
   }
-  return 'Buena pregunta 🤔 Aunque no tengo la respuesta exacta para eso, un veterinario de <b>Mundo Patitas</b> puede ayudarte con precisión. ¿Quieres que abras la pestaña 🩺 <b>Consultas en línea</b> o agendes una cita presencial en 📅 <b>Agendar</b>?';
-}
-function sendAI(){
-  const inp=document.getElementById('aiInput');
-  const txt=inp.value.trim(); if(!txt)return;
-  const m=document.getElementById('aiMsgs');
-  addMsg(m,'me',txt); inp.value='';
-  typingOn(m);
-  setTimeout(()=>{
-    typingOff();
-    const d=document.createElement('div');
-    d.className='msg bot'; d.innerHTML=aiReply(txt);
-    m.appendChild(d); m.scrollTop=m.scrollHeight;
-  },1100);
-}
+
+  function selectVet(el) {
+    document.querySelectorAll('.vet-card').forEach(v => v.classList.remove('selected'));
+    el.classList.add('selected');
+  }
+
+  document.getElementById('dateInput').min = new Date().toISOString().split('T')[0];
+  document.getElementById('dateInput').value = new Date(Date.now() + 86400000).toISOString().split('T')[0];
+
+  function confirmAppointment() {
+    showModal('¡Cita confirmada! 🎉', 'Te enviaremos un recordatorio por correo y WhatsApp 24h antes. ¡Nos vemos en Mundo Patitas!');
+  }
+
+  function showModal(title, text) {
+    document.getElementById('modalTitle').textContent = title;
+    document.getElementById('modalText').textContent = text;
+    document.getElementById('modal').classList.add('show');
+  }
+  function closeModal() {
+    document.getElementById('modal').classList.remove('show');
+  }
+
+  let callSeconds = 0, callInterval = null;
+  function startCallTimer() {
+    callSeconds = 0;
+    clearInterval(callInterval);
+    callInterval = setInterval(() => {
+      callSeconds++;
+      const m = String(Math.floor(callSeconds/60)).padStart(2,'0');
+      const s = String(callSeconds%60).padStart(2,'0');
+      document.getElementById('callTimer').textContent = `En llamada · ${m}:${s}`;
+    }, 1000);
+  }
+  function stopCallTimer() { clearInterval(callInterval); }
+
+  function toggleBtn(btn) { btn.classList.toggle('active'); }
+
+  function endCall() {
+    stopCallTimer();
+    showModal('Llamada finalizada', 'Gracias por confiar en Mundo Patitas. Si necesitas otra consulta, estamos disponibles 24/7.');
+    setTimeout(() => goTo('home'), 100);
+  }
+
+  function sendCallMsg() {
+    const input = document.getElementById('callChatInput');
+    const msg = input.value.trim();
+    if (!msg) return;
+    const chat = document.getElementById('callChat');
+    chat.innerHTML += `<div class="msg me">${msg}</div>`;
+    input.value = '';
+    chat.scrollTop = chat.scrollHeight;
+    setTimeout(() => {
+      chat.innerHTML += `<div class="msg doctor">Entiendo. ¿Podrías contarme más detalles? Así puedo orientarte mejor.</div>`;
+      chat.scrollTop = chat.scrollHeight;
+    }, 1200);
+  }
+
+  const aiResponses = {
+    vacuna: '🩺 Las vacunas esenciales en perros incluyen: parvovirus, moquillo, hepatitis y rabia (a los 2 meses, con refuerzos). En gatos: triple felina y rabia. En Mundo Patitas te ayudamos con el calendario personalizado.',
+    come: '😿 Si tu gato no come por más de 24 horas, puede ser estrés, cambio de alimento o un problema de salud. Observa si tiene vómitos o decaimiento. Si persiste, te recomiendo agendar una consulta con nosotros.',
+    baño: '🛁 Los perros pueden bañarse cada 3-4 semanas. Bañarlos muy seguido puede resecar su piel. Usa siempre shampoo especial para mascotas, nunca productos humanos.',
+    parasito: '🐛 Los síntomas comunes de parásitos: pérdida de peso, vientre hinchado, diarrea, vómitos, lamido excesivo del ano. La desparasitación debe hacerse cada 3-6 meses.',
+    comida: '🍖 La alimentación depende de edad, tamaño y raza. Cachorros 3-4 veces al día, adultos 2 veces. Evita chocolate, uvas, cebolla y ajo (son tóxicos).',
+    perro: '🐕 Los perros necesitan ejercicio diario (30-60 min), alimentación balanceada, vacunas al día y mucho cariño. ¿Sobre qué aspecto quieres saber más?',
+    gato: '🐈 Los gatos necesitan estimulación mental, agua fresca siempre, arena limpia y revisiones anuales. ¿Tienes alguna duda específica?',
+    vomit: '🤢 El vómito ocasional puede ser normal, pero si es frecuente, con sangre, o con decaimiento, debes acudir al veterinario de inmediato.',
+    pelo: '✨ La caída de pelo puede deberse a estrés, alimentación, alergias o problemas hormonales. Un cepillado regular y buena nutrición ayudan mucho.',
+    default: '🤔 Entiendo tu consulta. Para darte una respuesta más precisa, ¿podrías contarme qué tipo de mascota tienes y qué síntomas presenta? También puedo ayudarte con vacunación, alimentación, higiene y cuidados generales.'
+  };
+
+  function getAiResponse(text) {
+    const t = text.toLowerCase();
+    if (t.includes('vacun')) return aiResponses.vacuna;
+    if (t.includes('no come') || t.includes('comer')) return aiResponses.come;
+    if (t.includes('bañ') || t.includes('bano')) return aiResponses.baño;
+    if (t.includes('parasit') || t.includes('gusano') || t.includes('pulga')) return aiResponses.parasito;
+    if (t.includes('comid') || t.includes('aliment')) return aiResponses.comida;
+    if (t.includes('perr')) return aiResponses.perro;
+    if (t.includes('gat')) return aiResponses.gato;
+    if (t.includes('vomit')) return aiResponses.vomit;
+    if (t.includes('pelo') || t.includes('pelaje')) return aiResponses.pelo;
+    return aiResponses.default;
+  }
+
+  function addAiMsg(text, isUser) {
+    const chat = document.getElementById('aiChat');
+    const div = document.createElement('div');
+    div.className = 'ai-msg ' + (isUser ? 'user' : 'bot');
+    div.innerHTML = `<div class="bubble">${text}</div>`;
+    chat.appendChild(div);
+    chat.scrollTop = chat.scrollHeight;
+  }
+
+  function addTyping() {
+    const chat = document.getElementById('aiChat');
+    const div = document.createElement('div');
+    div.className = 'ai-msg bot';
+    div.id = 'typingIndicator';
+    div.innerHTML = `<div class="bubble"><div class="typing"><span></span><span></span><span></span></div></div>`;
+    chat.appendChild(div);
+    chat.scrollTop = chat.scrollHeight;
+  }
+
+  function sendAiMsg() {
+    const input = document.getElementById('aiInput');
+    const msg = input.value.trim();
+    if (!msg) return;
+    addAiMsg(msg, true);
+    input.value = '';
+    addTyping();
+    setTimeout(() => {
+      const typing = document.getElementById('typingIndicator');
+      if (typing) typing.remove();
+      addAiMsg(getAiResponse(msg), false);
+    }, 1200);
+  }
+
+  function askSuggestion(chip) {
+    document.getElementById('aiInput').value = chip.textContent;
+    sendAiMsg();
+  }
 </script>
+
 </body>
 </html>
